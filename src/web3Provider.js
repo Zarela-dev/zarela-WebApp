@@ -4,7 +4,7 @@ import getWeb3 from './getWeb3';
 const initialState = {
 	web3: null,
 	contract: null,
-	accounts: null,
+	accounts: [],
 	error: null
 };
 
@@ -58,6 +58,23 @@ const Web3Provider = ({ children }) => {
 				);
 				// Set web3, accounts, and contract to the state, and then proceed with an
 				// example of interacting with the contract's methods.
+				
+				window.ethereum.on('accountsChanged', (accounts) => {
+					// Handle the new accounts, or lack thereof.
+					// "accounts" will always be an array, but it can be empty.
+					console.log('account changed', accounts);
+					dispatch({
+						type: 'SET_ACCOUNTS',
+						payload: accounts
+					});
+				});
+
+				//   ethereum.on('chainChanged', (chainId) => {
+				// 	// Handle the new chain.
+				// 	// Correctly handling chain changes can be complicated.
+				// 	// We recommend reloading the page unless you have good reason not to.
+				// 	window.location.reload();
+				//   });
 
 				dispatch({
 					type: 'SET_WEB3',
