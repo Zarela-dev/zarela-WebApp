@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { web3Context } from '../web3Provider';
-import OrderCard from '../components/Elements/OrderCard';
+import OrderCard from '../components/OrderCard';
 import styled from 'styled-components';
 import { SearchBar } from '../components/SearchBar';
 

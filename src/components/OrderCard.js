@@ -12,11 +12,11 @@ import OrderCardWrapper, {
 	ContributorsIcon,
 	TokenBadge,
 	TokenIcon
-} from '../OrderCard';
-import bookmarkIcon from '../../assets/icons/bookmark.svg';
-import biobitIcon from '../../assets/icons/biobit.svg';
-import avatarImage from '../../assets/icons/avatar.png';
-import contributorIcon from '../../assets/icons/contributor.png';
+} from './Elements/OrderCard';
+import bookmarkIcon from '../assets/icons/bookmark.svg';
+import biobitIcon from '../assets/icons/biobit.svg';
+import avatarImage from '../assets/icons/avatar.png';
+import contributorIcon from '../assets/icons/contributor.png';
 
 const OrderCard = (props) => {
 	return (

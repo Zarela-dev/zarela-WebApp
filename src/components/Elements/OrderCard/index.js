@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Typography } from '../Elements/Typography';
+import { Typography } from '../Typography';
 
 export const OrderCardWrapper = styled.div`
 	display: flex;
