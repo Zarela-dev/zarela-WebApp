@@ -4,6 +4,7 @@ import OrderCard from '../components/OrderCard';
 import styled from 'styled-components';
 import { SearchBar } from '../components/SearchBar';
 import Sidebar from '../components/Sidebar';
+import Pagination from '../components/Pagination';
 
 const OrderListWrapper = styled.div`
 	width: 100%;
@@ -95,6 +96,7 @@ const OrderList = () => {
 					}
 				</OrderListContentWrapper>
 			</OrderListLayout>
+			<Pagination />
 		</OrderListWrapper>
 	);
 };
