@@ -47,6 +47,7 @@ const OrderList = () => {
 				}
 			});
 
+			console.log(orders)
 			for (let i = 0; i < ordersCount; i++) {
 				Web3.contract.methods.ord_file(i).call((error, result) => {
 					if (!error) {

@@ -17,5 +17,8 @@ export const theme = {
 	light: 300,
 	textPrimary: '#121213',
 	textSecondary: '#6DA5BF',
-	textToken: '#3C87AA'
+	textToken: '#3C87AA',
+	navLinkColor: '#8B72DE',
+	navLinkDisabled: '#E3DDFA',
+	notificationColor: '#2EECA8'
 }
