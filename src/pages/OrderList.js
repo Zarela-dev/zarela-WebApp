@@ -3,6 +3,8 @@ import { web3Context } from '../web3Provider';
 import OrderCard from '../components/OrderCard';
 import styled from 'styled-components';
 import { SearchBar } from '../components/SearchBar';
+import Sidebar from '../components/Sidebar';
+import Pagination from '../components/Pagination';
 
 const OrderListWrapper = styled.div`
 	width: 100%;
@@ -47,7 +49,7 @@ const OrderList = () => {
 				}
 			});
 
-			console.log(orders)
+			console.log(orders);
 			for (let i = 0; i < ordersCount; i++) {
 				Web3.contract.methods.ord_file(i).call((error, result) => {
 					if (!error) {
@@ -80,9 +82,7 @@ const OrderList = () => {
 		<OrderListWrapper>
 			<SearchBar></SearchBar>
 			<OrderListLayout>
-				<OrderListSidebarWrapper>
-					sidebar
-				</OrderListSidebarWrapper>
+				<Sidebar></Sidebar>
 				<OrderListContentWrapper>
 					{
 						Object.values(orders).map(item => (
@@ -96,6 +96,7 @@ const OrderList = () => {
 					}
 				</OrderListContentWrapper>
 			</OrderListLayout>
+			<Pagination />
 		</OrderListWrapper>
 	);
 };
