@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import logo from '../../assets/icons/logo.svg';
+import styled ,{ css } from 'styled-components';
+import logo from '../../assets/icons/logo.png';
 import home from '../../assets/icons/home.svg';
 import inbox from '../../assets/icons/inbox.svg';
 import user from '../../assets/icons/user.svg';
@@ -7,6 +7,7 @@ import bell from '../../assets/icons/bell.svg';
 import wallet from '../../assets/icons/wallet.svg';
 import { Link } from 'react-router-dom';
 import { Typography } from '../Elements/Typography';
+import { Button } from '../Elements/Button';
 
 const NavItem = styled(Link)`
 	position: relative;
@@ -32,7 +33,7 @@ const NavIcon = styled.img`
 `;
 
 const Logo = styled.img`
-	height: 50px;
+	height: 40px;
 	margin-right: ${props => props.theme.spacing(8)};
 `;
 const NotificationBadge = styled.div`
@@ -53,19 +54,7 @@ const Spacer = styled.div`
 `;
 
 const SubmitRequestButton = styled(Link)`
-  	background: linear-gradient(256.48deg, #A2F0EA -37.74%, #75F0E7 -37.73%, #A981FE 103.72%);
-	box-shadow: 0px 4px 18px #DFECFF;
-	border-radius: 4px;
-	min-width: 190px;
-	text-align: center;
-	font-weight: 500;
-	font-size: 20px;
-	border: none;
-	height: 50px;
-	padding: 14px 0;
-    text-decoration: none;
-	color: ${props => props.theme.textPrimary};
-	margin-right: ${props => props.theme.spacing(3)};
+	${Button};
 `;
 
 const HeaderWrapper = styled.header`

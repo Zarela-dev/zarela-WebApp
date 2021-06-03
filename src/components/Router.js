@@ -7,11 +7,13 @@ import Header from './Header';
 const AppRouter = () => {
 	return (
 		<Router>
-			<Header />
-			<Switch>
-				<Route exact path='/' component={OrderList} />
-				<Route exact path='/createOrder' component={CreateOrder} />
-			</Switch>
+			<div>
+				<Header />
+				<Switch>
+					<Route exact path='/' component={OrderList} />
+					<Route exact path='/createOrder' component={CreateOrder} />
+				</Switch>
+			</div>
 		</Router>
 	);
 };
