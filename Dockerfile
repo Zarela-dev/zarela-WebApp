@@ -1,6 +1,7 @@
 # build stage
 FROM node:lts-alpine as build-stage
 WORKDIR /app
+RUN apk update && apk add git
 COPY package.json ./
 COPY package-lock.json ./
 RUN npm install
