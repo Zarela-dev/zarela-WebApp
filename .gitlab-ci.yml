@@ -3,6 +3,8 @@ stages:
 
 deploy:
   stage: deploy
+  services:
+  - docker:18.09-dind
   only:
     - master
   image: docker:dind
