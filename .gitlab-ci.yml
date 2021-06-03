@@ -1,0 +1,15 @@
+stages:
+- deploy
+
+deploy:
+  stage: deploy
+  services:
+  - docker:18.09-dind
+  only:
+    - master
+  image: docker:dind
+  script:
+    - docker info
+    - docker login registry.gitlab.com -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - docker build -t registry.gitlab.com/amirdaly/front-end:latest .
+    - docker push registry.gitlab.com/amirdaly/front-end:latest
