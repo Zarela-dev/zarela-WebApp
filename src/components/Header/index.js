@@ -1,0 +1,121 @@
+import styled from 'styled-components';
+import logo from '../../assets/icons/logo.svg';
+import home from '../../assets/icons/home.svg';
+import inbox from '../../assets/icons/inbox.svg';
+import user from '../../assets/icons/user.svg';
+import bell from '../../assets/icons/bell.svg';
+import wallet from '../../assets/icons/wallet.svg';
+import { Link } from 'react-router-dom';
+import { Typography } from '../Elements/Typography';
+
+const NavItem = styled(Link)`
+	position: relative;
+	height: 50px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	align-content: center;
+	justify-content: flex-end;
+	text-decoration: none;
+	margin-right: ${props => props.theme.spacing(10)};
+`;
+
+const NavLink = styled(Typography)`
+	color: ${props => props.theme.navLinkColor};
+	font-weight: 500;
+	font-size: ${props => props.theme.body};
+`;
+
+const NavIcon = styled.img`
+	height: 30px;
+	margin-bottom: ${props => props.theme.spacing(1)};
+`;
+
+const Logo = styled.img`
+	height: 50px;
+	margin-right: ${props => props.theme.spacing(8)};
+`;
+const NotificationBadge = styled.div`
+	position: absolute;
+	top: -12px;
+    left: 8px;
+	min-width: 24px;
+	height: 24px;
+	border-radius: 24px;
+	padding: 3px 6px;
+	text-align: center;
+	background: ${props => props.theme.notificationColor};
+	color: white;
+`;
+
+const Spacer = styled.div`
+	flex: 1;
+`;
+
+const SubmitRequestButton = styled(Link)`
+  	background: linear-gradient(256.48deg, #A2F0EA -37.74%, #75F0E7 -37.73%, #A981FE 103.72%);
+	box-shadow: 0px 4px 18px #DFECFF;
+	border-radius: 4px;
+	min-width: 190px;
+	text-align: center;
+	font-weight: 500;
+	font-size: 20px;
+	border: none;
+	height: 50px;
+	padding: 14px 0;
+    text-decoration: none;
+	color: ${props => props.theme.textPrimary};
+	margin-right: ${props => props.theme.spacing(3)};
+`;
+
+const HeaderWrapper = styled.header`
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	width: 100%;
+	max-width: ${props => props.theme.maxWidth};
+	margin: 0 auto;
+	height: 94px;
+	padding: ${props => props.theme.spacing(3)} 0;
+`;
+
+export default function Header() {
+	return (
+		<HeaderWrapper>
+			<Logo src={logo} />
+			<NavItem to='/'>
+				<NavIcon src={home} />
+				<NavLink>
+					Home
+				</NavLink>
+			</NavItem>
+			<NavItem to='/'>
+				<NavIcon src={inbox} />
+				<NavLink>
+					Inbox
+				</NavLink>
+				<NotificationBadge>5</NotificationBadge>
+			</NavItem>
+			<NavItem to='/'>
+				<NavIcon src={user} />
+				<NavLink>
+					Account
+				</NavLink>
+			</NavItem>
+			<NavItem to='/'>
+				<NavIcon src={wallet} />
+				<NavLink>
+					Wallet
+				</NavLink>
+			</NavItem>
+			<Spacer />
+			<SubmitRequestButton to='/createOrder'>
+				New Request
+			</SubmitRequestButton>
+			<NavItem to='/account'>
+				<NavIcon src={bell} />
+				<NotificationBadge>321</NotificationBadge>
+			</NavItem>
+		</HeaderWrapper>
+	);
+};
