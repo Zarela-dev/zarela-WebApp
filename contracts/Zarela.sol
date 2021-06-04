@@ -161,18 +161,21 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
         
     }
 
-    function ConfirmContributer(uint _Order_Number,address User_Address)public OnlyRequester(_Order_Number) CheckID(_Order_Number) Notnull(User_Address){
+    function ConfirmContributer(uint _Order_Number,address[]memory User_Address)public OnlyRequester(_Order_Number) CheckID(_Order_Number) {
         OrderFile storage myorder = ord_file[_Order_Number];
+        require(User_Address.length <= myorder.Instance_Remains);
         require(!myorder.Status,"Your Order Is Done, And You Sent All of Rewards to Users");
-        _balances[address(this)] = _balances[address(this)].sub(myorder.Token_Pay);
-        _balances[User_Address] = _balances[User_Address].add(myorder.Token_Pay);
-        User_Map[User_Address].Token_Gained_from_Requester+=myorder.Token_Pay;
-        myorder.Instance_Remains = myorder.Instance_Remains.sub(1);
+        myorder.Instance_Remains = myorder.Instance_Remains.sub(User_Address.length);
+        for(uint i;i< User_Address.length ; i++){
+            _balances[address(this)] = _balances[address(this)].sub(myorder.Token_Pay);
+            _balances[User_Address[i]] = _balances[User_Address[i]].add(myorder.Token_Pay);
+            User_Map[User_Address[i]].Token_Gained_from_Requester += myorder.Token_Pay;
+            emit TokenSent(msg.sender,User_Address[i],myorder.Token_Pay);
+        }
         if (myorder.Instance_Remains == 0){
             myorder.Status = true;
             emit OrderFinish(_Order_Number);
         }
-        emit TokenSent(msg.sender,User_Address,myorder.Token_Pay);
     }
     
     function GetOrderFiles(uint _Order_Number)public OnlyRequester(_Order_Number) CheckID(_Order_Number) view returns(string[] memory,address[] memory){
