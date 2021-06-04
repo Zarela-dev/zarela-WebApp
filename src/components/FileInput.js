@@ -3,15 +3,16 @@ import styled, { css } from 'styled-components';
 import fileDownloadIcon from '../assets/icons/file-download.svg';
 import fileUploadIcon from '../assets/icons/file-upload.svg';
 
-const withBorder = css`
+export const FileInputWithBorder = css`
 	background: #FFFFFF;
 	border: 0.5px dashed rgba(133, 206, 238, 0.5);
 	box-shadow: 0px 4px 18px rgba(223, 236, 255, 0.3);
 	border-radius: 5px;
+	padding: ${props => props.theme.spacing(2)}  ${props => props.theme.spacing(3)};
 `;
 
-const Wrapper = styled.div`
-	${props => props.hasBorder ? withBorder : ''}
+export const FileInputWrapper = styled.div`
+	${props => props.hasBorder ? FileInputWithBorder : ''}
 	display: flex;
 	flex-direction: row-reverse;
 	justify-content: space-between;
@@ -19,66 +20,80 @@ const Wrapper = styled.div`
 	margin: ${props => props.theme.spacing(2)} 0 ${props => props.theme.spacing(4)};
 `;
 
-const Title = styled.div`
+export const FileInputTitle = styled.div`
 	color:${props => props.theme.textPrimary};
 `;
 
-const InputLabel = styled.label`
+export const FileInputLabel = styled.label`
 	background: #FFFFFF;
 	box-shadow: 0px 5.46667px 18px rgba(223, 236, 255, 0.5);
 	border-radius: 5.46667px;
 	border: 1px solid #BBBEE6;
 	padding: ${props => props.theme.spacing(1)} ${props => props.theme.spacing(4)};
 	color: #7246D0;
+	cursor: pointer;
 `;
 
-const Icon = styled.img`
+export const FileInputLink = styled.a`
+	background: #FFFFFF;
+	box-shadow: 0px 5.46667px 18px rgba(223, 236, 255, 0.5);
+	border-radius: 5.46667px;
+	border: 1px solid #BBBEE6;
+	text-decoration: none;
+	padding: ${props => props.theme.spacing(1)} ${props => props.theme.spacing(4)};
+	color: #7246D0;
+`;
+
+export const FileInputIcon = styled.img`
 	width: 42px;
 	margin-right: ${props => props.theme.spacing(1)};
 `;
 
-const getFileName = (input, fallbackLabel) => {
-	if (input)
-		if (input.files)
-			if (input.files[0])
-				return input.files[0].name;
+export const getFileName = (inputRef, fallbackLabel) => {
+	if (inputRef && inputRef.current)
+		if (inputRef.current.files)
+			if (inputRef.current.files[0])
+				return inputRef.current.files[0].name;
 	return fallbackLabel;
 };
 
-const FileInput = forwardRef(({ hasBorder, showSelected, value, buttonLabel, icon, label, ...rest }, ref) => {
-
+const FileInput = forwardRef(({ disableUpload,className, hasBorder, showSelected, value, buttonLabel, icon, label, ...rest }, ref) => {
 	return (
-		<Wrapper hasBorder={hasBorder}>
-			<InputLabel>
+		<FileInputWrapper hasBorder={hasBorder} className={className}>
+			<FileInputLabel>
 				{buttonLabel}
-				<input ref={ref} type='file' style={{ display: 'none' }} {...rest} />
-			</InputLabel>
+				{
+					!disableUpload ?
+						<input ref={ref} type='file' style={{ display: 'none' }} {...rest} />
+						: null
+				}
+			</FileInputLabel>
 			{
 				showSelected ?
 					(
-						<Title>
+						<FileInputTitle>
 							{
 								icon === 'download' ?
-									<Icon src={fileDownloadIcon} /> :
-									<Icon src={fileUploadIcon} />
+									<FileInputIcon src={fileDownloadIcon} /> :
+									<FileInputIcon src={fileUploadIcon} />
 							}
 							{
-								getFileName(ref.current, label)
+								getFileName(ref, label)
 							}
-						</Title>
+						</FileInputTitle>
 					)
 					: (
-						<Title>
+						<FileInputTitle>
 							{
 								icon === 'download' ?
-									<Icon src={fileDownloadIcon} /> :
-									<Icon src={fileUploadIcon} />
+									<FileInputIcon src={fileDownloadIcon} /> :
+									<FileInputIcon src={fileUploadIcon} />
 							}
 							{label}
-						</Title>
+						</FileInputTitle>
 					)
 			}
-		</Wrapper>
+		</FileInputWrapper>
 	);
 });
 

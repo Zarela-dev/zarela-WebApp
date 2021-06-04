@@ -11,6 +11,7 @@ export const theme = {
 
 	title: '28px',
 	body: '14px',
+	bod2: '16px',
 	badge: '12px',
 	bold: 700,
 	semiBold: 500,
