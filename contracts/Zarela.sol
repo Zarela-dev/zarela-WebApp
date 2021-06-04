@@ -17,8 +17,8 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
     uint smart_contract_started = block.timestamp;
     uint start_date_monthly= block.timestamp; 
     uint start_date_Daily = block.timestamp;
-    uint time_in_month = 5 minutes; // = 18 month
-    uint time_in_day = 2 minutes; // 24 hours
+    uint time_in_month = 5 days; // = 18 month
+    uint time_in_day = 24 hours; // 24 hours
     uint total_daily =  14400000000000;  // 14400 token per day
     uint multi_x = 2;  // 1.9
     uint public bank ;
@@ -130,7 +130,7 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
     }
 
     function ShareReward()internal {
-        if(block.timestamp > 2 days + smart_contract_started ){
+        if(block.timestamp > 3 days + smart_contract_started ){
             bank = 0 ;
             smart_contract_started = block.timestamp;
         }
