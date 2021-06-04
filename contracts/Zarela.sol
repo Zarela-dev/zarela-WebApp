@@ -4,19 +4,21 @@ pragma solidity >=0.6.0 <0.8.0;
 import "./ERC20.sol";
 import "./SafeMath.sol";
 import "./CheckPrice.sol";
+import "./ERC20Burnable.sol";
 // Initiate Biobit Token With 20M Total Supply And Set Name, Symbol
 
-contract ZarelaSmartContract is ERC20 , PriceConsumerV3{
+contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
     constructor() {
         _mint(msg.sender , 20000000000000000);
     }
     
     using SafeMath for uint;
+    
     uint smart_contract_started = block.timestamp;
     uint start_date_monthly= block.timestamp; 
     uint start_date_Daily = block.timestamp;
-    uint time_in_month = 1 minutes; // = 18 month
-    uint time_in_day = 20 seconds; // 24 hours
+    uint time_in_month = 5 minutes; // = 18 month
+    uint time_in_day = 2 minutes; // 24 hours
     uint total_daily =  14400000000000;  // 14400 token per day
     uint multi_x = 2;  // 1.9
     uint public bank ;
@@ -47,7 +49,6 @@ contract ZarelaSmartContract is ERC20 , PriceConsumerV3{
     }
     
     struct User{
-        address User_Address;
         uint Token_Gained_from_SC;
         uint Token_Gained_from_Requester;
         uint[] orders_contributed;
@@ -65,7 +66,7 @@ contract ZarelaSmartContract is ERC20 , PriceConsumerV3{
     uint[] public reward;
     uint[] private null_reward;
     
-    mapping(uint => Data)public Data_Map;
+    mapping(uint => Data) Data_Map;
     mapping(address=>User)public User_Map;
     mapping(address=>Requester)public Requester_Map;
     OrderFile[]public ord_file;
@@ -105,15 +106,14 @@ contract ZarelaSmartContract is ERC20 , PriceConsumerV3{
         Origin_User_Address.push(msg.sender);
         Data_Map[_Order_Number].Data.push(_Data);
         Data_Map[_Order_Number].Contributer_address.push(msg.sender);
-        uint max_user_reward =  (multi_x * (tx.gasprice *  1000000000  * 500000) * (uint(getLatestPrice()) / 100000000))/1000000000000000000;
+        getLatestPrice();
         contributer_count ++;
-        reward.push(max_user_reward);
-        sum_of_reward_per_contributer +=  max_user_reward;
+        reward.push(multi_x * LastPrice);
+        sum_of_reward_per_contributer +=  multi_x * LastPrice;
         if(block.timestamp > start_date_Daily  + time_in_day){
             start_date_Daily = block.timestamp;
             DailyShare();
         }
-        User_Map[msg.sender].User_Address = msg.sender;
         User_Map[msg.sender].orders_contributed.push(_Order_Number);
         emit Contributed(msg.sender , _Order_Number , _Requester);
     }
