@@ -8,6 +8,7 @@ import wallet from '../../assets/icons/wallet.svg';
 import { Link } from 'react-router-dom';
 import { Typography } from '../Elements/Typography';
 import { Button } from '../Elements/Button';
+import maxWidthWrapper from '../Elements/MaxWidth';
 
 const NavItem = styled(Link)`
 	position: relative;
@@ -58,12 +59,11 @@ const SubmitRequestButton = styled(Link)`
 `;
 
 const HeaderWrapper = styled.header`
+	${maxWidthWrapper};
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-start;
 	width: 100%;
-	max-width: ${props => props.theme.maxWidth};
-	margin: 0 auto;
 	height: 94px;
 	padding: ${props => props.theme.spacing(3)} 0;
 `;
@@ -78,10 +78,10 @@ export default function Header() {
 					Home
 				</NavLink>
 			</NavItem>
-			<NavItem to='/'>
+			<NavItem to='/my-orders'>
 				<NavIcon src={inbox} />
 				<NavLink>
-					Inbox
+					My Orders
 				</NavLink>
 				<NotificationBadge>5</NotificationBadge>
 			</NavItem>

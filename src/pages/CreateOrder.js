@@ -5,10 +5,10 @@ import { create } from 'ipfs-http-client';
 import styled from 'styled-components';
 import TitleBar from '../components/TitleBar';
 import CreateOrderForm from '../components/CreateOrderForm';
+import maxWidthWrapper from '../components/Elements/MaxWidth';
 
 const Wrapper = styled.div`
-	max-width: ${props => props.theme.maxWidth};
-	margin: 0 auto;
+	${maxWidthWrapper}
 `;
 
 // #todo sync form data with localStorage
@@ -71,7 +71,9 @@ const CreateOrder = () => {
 
 	return (
 		<>
-			<TitleBar />
+			<TitleBar>
+				Create Request
+			</TitleBar>
 			<Wrapper>
 				{
 					Web3.accounts.length === 0 ?

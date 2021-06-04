@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { SearchBar } from '../components/SearchBar';
 import Sidebar from '../components/Sidebar';
 import Pagination from '../components/Pagination';
+import maxWidthWrapper from '../components/Elements/MaxWidth';
 
 const OrderListWrapper = styled.div`
 	width: 100%;
@@ -16,8 +17,7 @@ const OrderListLayout = styled.aside`
 	flex-wrap: nowrap;
 	width: 100%;
 	padding-top: ${props => props.theme.spacing(4)};
-	max-width: ${props => props.theme.maxWidth};
-	margin: 0 auto;
+	${maxWidthWrapper};
 `;
 
 const OrderListSidebarWrapper = styled.aside`

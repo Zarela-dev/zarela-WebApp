@@ -20,13 +20,10 @@ import {
 	ContributorBadge,
 	ContributorsIcon
 } from './Elements/OrderCard';
+import maxWidthWrapper from './Elements/MaxWidth';
 
 const PageWrapper = styled.div`
 	
-`;
-const maxWidthWrapper = css`
-	max-width: ${props => props.theme.maxWidth};
-	margin: 0 auto;
 `;
 
 const HeaderContainer = styled.header`
