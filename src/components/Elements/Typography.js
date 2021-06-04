@@ -6,6 +6,8 @@ export const Typography = styled.div`
 			return props.theme.title;
 		if (props.variant === 'body')
 			return props.theme.body;
+		if (props.variant === 'body2')
+			return props.theme.body2;
 		if (props.variant === 'badge')
 			return props.theme.badge;
 	}};
