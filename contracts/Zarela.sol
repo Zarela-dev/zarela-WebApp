@@ -40,6 +40,7 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
         uint Instance_Remains;
         string What_Type; //category
         bool Status;
+        uint Order_Contribute_Count;
     }
     
     struct Data{
@@ -58,7 +59,7 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
         address Requester_Address;
         uint[] Order_Owned;
     }
-   
+    
     address[] public Origin_User_Address;
     address[] private Null_User_Address;
     uint public contributer_count;
@@ -93,7 +94,7 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
         require(_balances[msg.sender] >= (_Token_Pay*_Instance_Count) , "Your Token Is Not Enough");
         ERC20.transfer(address(this),(_Token_Pay*_Instance_Count));
         uint order_id = ord_file.length;
-        ord_file.push(OrderFile(order_id,_Title,msg.sender,_Token_Pay,_Instance_Count,_White_Paper,_Description,_Instance_Count,_Category,false));
+        ord_file.push(OrderFile(order_id,_Title,msg.sender,_Token_Pay,_Instance_Count,_White_Paper,_Description,_Instance_Count,_Category,false,0));
         Requester_Map[msg.sender].Requester_Address = msg.sender;
         Requester_Map[msg.sender].Order_Owned.push(order_id);
         emit OrderRegistered(msg.sender, order_id);
@@ -103,6 +104,7 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
         require(! ord_file[_Order_Number].Status ,"Order Was Finished");
         require(_Requester ==  ord_file[_Order_Number].Requester_Address_Creator , "Address Requester Is Not True");
         Data_Map[_Order_Number].Order_Number = _Order_Number;
+        ord_file[_Order_Number].Order_Contribute_Count ++ ;
         Origin_User_Address.push(msg.sender);
         Data_Map[_Order_Number].Data.push(_Data);
         Data_Map[_Order_Number].Contributer_address.push(msg.sender);
