@@ -7,7 +7,7 @@ import TextField from './Elements/TextField';
 
 const SubmitButton = styled.button`
 	${Button};
-	width: 260px;
+	width: 190px;
 	height: 50px;
 	margin-bottom: ${props => props.theme.spacing(4)};
 	font-size: 20px;
@@ -20,7 +20,7 @@ const Divider = styled.div`
 	background: rgba(144, 144, 144, 0.3);
 	border-radius: 24px;
 	height: 3px;
-	margin: ${props => props.theme.spacing(4)}  0;
+	margin: ${props => props.theme.spacing(5)} 0 ${props => props.theme.spacing(6)};
 `;
 
 const CreateOrderForm = React.forwardRef(({onSubmit, formValues, setFormValues}, ref) => {
@@ -109,10 +109,10 @@ const CreateOrderForm = React.forwardRef(({onSubmit, formValues, setFormValues},
 			{/* <button type='submit'>
 								submit
 							</button> */}
-			<Divider />
 			<Checkbox checked={formValues.agreement} onChange={(e) => setFormValues(data => ({ ...data, agreement: e.target.checked }))}>
 				Your request won’t be able to be edited, make sure every data you added is correct and final. By marking this box you claim your agreement towards policies.
 			</Checkbox>
+			<Divider />
 			<SubmitButton>
 				Submit
 			</SubmitButton>

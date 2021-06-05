@@ -1,9 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
-import TitleBar from './TitleBar';
+import TitleBar from '../components/TitleBar';
 import styled from 'styled-components';
-import maxWidthWrapper from './Elements/MaxWidth';
+import maxWidthWrapper from '../components/Elements/MaxWidth';
 import { web3Context } from '../web3Provider';
-import OrderListItem from './OrderListItem';
+import OrderListItem from '../components/OrderListItem';
+import ConnectDialog from '../components/Dialog/ConnectDialog';
 
 const PageWrapper = styled.div`
 	
@@ -15,7 +16,6 @@ const ContentWrapper = styled.div`
 `;
 
 const MyOrders = () => {
-
 	const { Web3 } = useContext(web3Context);
 	const PAGE_SIZE = 3;
 	const [orders, setOrders] = useState({});
@@ -51,7 +51,7 @@ const MyOrders = () => {
 				}
 			});
 			if (Web3.accounts.length !== 0) {
-				Web3.contract.methods.Order_Details().call({from: Web3.accounts[0]},(error, result) => {
+				Web3.contract.methods.Order_Details().call({ from: Web3.accounts[0] }, (error, result) => {
 					if (!error) {
 						const myOrders = result[0];
 						for (let i = myOrders[0]; i < myOrders.length; i++) {
@@ -95,17 +95,19 @@ const MyOrders = () => {
 			</TitleBar>
 			<ContentWrapper>
 				{
-					Object.values(orders).map(item => (
-						<OrderListItem
-							key={item.orderId}
-							orderId={item.orderId}
-							title={item.title}
-							tokenPay={item.tokenPay}
-							total={item.totalContributedCount}
-							contributors={`${item.totalContributed}/${item.totalContributors}`}
-							handleConfirm={handleConfirm}
-						/>
-					))
+					Web3.accounts.length === 0 ?
+						<ConnectDialog /> :
+						Object.values(orders).length > 0 ? Object.values(orders).map(item => (
+							<OrderListItem
+								key={item.orderId}
+								orderId={item.orderId}
+								title={item.title}
+								tokenPay={item.tokenPay}
+								total={item.totalContributedCount}
+								contributors={`${item.totalContributed}/${item.totalContributors}`}
+								handleConfirm={handleConfirm}
+							/>
+						)) : 'You don\'t have any orders on this account'
 				}
 			</ContentWrapper>
 		</PageWrapper>

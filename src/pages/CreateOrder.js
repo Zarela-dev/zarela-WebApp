@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import TitleBar from '../components/TitleBar';
 import CreateOrderForm from '../components/CreateOrderForm';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
+import ConnectDialog from '../components/Dialog/ConnectDialog';
 
 const Wrapper = styled.div`
 	${maxWidthWrapper}
@@ -63,9 +64,6 @@ const CreateOrder = () => {
 	};
 
 	useEffect(() => {
-		window.ethereum.enable();
-	}, []);
-	useEffect(() => {
 		console.log('accounts', Web3.accounts);
 	}, [Web3.accounts]);
 
@@ -76,16 +74,19 @@ const CreateOrder = () => {
 			</TitleBar>
 			<Wrapper>
 				{
-					Web3.accounts.length === 0 ?
-						<div>
-							please connect
-						</div> :
+
+					<>
+						{
+							Web3.accounts.length === 0 ?
+								<ConnectDialog/> : null
+						}
 						<CreateOrderForm
 							onSubmit={onSubmit}
 							formValues={formValues}
 							setFormValues={setFormValues}
 							ref={fileRef}
 						/>
+					</>
 				}
 			</Wrapper>
 		</>

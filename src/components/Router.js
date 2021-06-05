@@ -4,7 +4,7 @@ import CreateOrder from '../pages/CreateOrder';
 import OrderList from '../pages/OrderList';
 import Header from './Header';
 import OrderDetails from '../pages/OrderDetails';
-import MyOrders from './MyOrders';
+import MyOrders from '../pages/MyOrders';
 
 const AppRouter = () => {
 	return (
