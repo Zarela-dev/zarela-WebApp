@@ -4,6 +4,8 @@ import { SmallCheckbox } from './Elements/Checkbox';
 import { AvatarImage, Avatar } from './Elements/OrderCard';
 import avatarIcon from '../assets/icons/avatar.png';
 import downloadIcon from '../assets/icons/download.svg';
+import { Spacer } from './Elements/Spacer';
+import { Scrollbar } from './Elements/Scrollbar';
 
 const Table = styled.div`
 	display: flex;
@@ -71,6 +73,7 @@ const FilesListWrapper = styled.div`
 	flex-direction: column;
 	padding: ${props => props.theme.spacing(1)};
 	margin-bottom: ${props => props.theme.spacing(2)};
+	height: 100%;
 `;
 
 const FilesList = styled.div`
@@ -81,6 +84,8 @@ const FilesList = styled.div`
 	max-height: 238px;
 	min-height: 27px;
     overflow: auto;
+
+	${Scrollbar};
 `;
 
 const FileItem = styled.div`
@@ -101,7 +106,6 @@ const FileCheckbox = styled(SmallCheckbox)`
 `;
 
 const FileName = styled.div`
-	margin-right: ${props => props.theme.spacing(4)};
 `;
 
 const DownloadButton = styled.img`
@@ -109,16 +113,25 @@ const DownloadButton = styled.img`
 `;
 
 const DownloadLink = styled.a`
-
+	margin-right: ${props => props.theme.spacing(2)};
 `;
 
-const OrderFilesTable = ({ data, selected, onChange }) => {
+const OrderFilesTable = ({ data, selected, onChange, onBulkChange, isAllChecked, changeAll }) => {
 	return (
 		<Table>
 			<Row>
 				<CellWrapper>
 					<Cell>
-						<CustomCheckbox checked={false} onChange={() => { }} />
+						<CustomCheckbox
+							checked={isAllChecked()}
+							onChange={(e) => {
+								if (e.target.checked === true) {
+									changeAll('check');
+								} else {
+									changeAll('uncheck');
+								}
+							}}
+						/>
 					</Cell>
 				</CellWrapper>
 				<CellWrapper>
@@ -137,8 +150,15 @@ const OrderFilesTable = ({ data, selected, onChange }) => {
 					<Row key={reqAddress}>
 						<CellWrapper>
 							<Cell>
-								<CustomCheckbox checked={selected[reqAddress].length === data[reqAddress].length} onChange={() => {
-								}} />
+								<CustomCheckbox
+									checked={selected[reqAddress].length === data[reqAddress].length}
+									onChange={(e) => {
+										if (e.target.checked === true) {
+											onBulkChange('check', reqAddress);
+										} else {
+											onBulkChange('uncheck', reqAddress);
+										}
+									}} />
 							</Cell>
 						</CellWrapper>
 						<CellWrapper>
@@ -172,6 +192,7 @@ const OrderFilesTable = ({ data, selected, onChange }) => {
 															file + `  (File #${fileIndex + 1})`
 														}
 													</FileName>
+													<Spacer />
 													<DownloadLink target='_blank' href={`${process.env.REACT_APP_IPFS_LINK + file}`}>
 														<DownloadButton src={downloadIcon} />
 													</DownloadLink>

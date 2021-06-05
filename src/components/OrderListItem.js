@@ -62,7 +62,7 @@ const Footer = styled.footer`
 
 const SubmitButton = styled.button`
 	${Button};
-	width: 107px;
+	width: 133px;
 	height: 35px;
 	margin-right: 0;
 	margin-top: ${props => props.theme.spacing(3)};
@@ -78,7 +78,43 @@ const OrderListItem = ({ total, orderId, title, tokenPay, contributors, handleCo
 	const [formatted, setFormatted] = useState({});
 	const [selected, setSelected] = useState({});
 
-	const onChange = (type, address, fileHash ) => {
+	const isAllChecked = () => {
+		const chosen = Object.values(selected).reduce((acc, curr) => acc.concat(...curr), []);
+		const total = Object.values(formatted).reduce((acc, curr) => acc.concat(...curr), []);
+		return chosen.length === total.length;
+	};
+
+	const changeAll = (type) => {
+		if (type === 'check')
+			setSelected(formatted);
+		if (type === 'uncheck')
+			setSelected(values => {
+				let result = {};
+
+				Object.keys(values).forEach(address => {
+					result[address] = [];
+				});
+
+				return result;
+			});
+	};
+
+	const onBulkChange = (type, address, allOrders) => {
+		if (type === 'check')
+			setSelected(values => ({
+				...values,
+				[address]: formatted[address]
+			}));
+		if (type === 'uncheck')
+			setSelected(values => {
+				return {
+					...values,
+					[address]: []
+				};
+			});
+	};
+
+	const onChange = (type, address, fileHash) => {
 		if (type === 'check')
 			setSelected(values => ({
 				...values,
@@ -163,7 +199,14 @@ const OrderListItem = ({ total, orderId, title, tokenPay, contributors, handleCo
 				isOpen ?
 					<>
 						<Body>
-							<OrderFilesTable data={formatted} selected={selected} onChange={onChange} />
+							<OrderFilesTable
+								data={formatted}
+								selected={selected}
+								onChange={onChange}
+								onBulkChange={onBulkChange}
+								isAllChecked={isAllChecked}
+								changeAll={changeAll}
+							/>
 						</Body>
 						<Footer>
 							<SubmitButton onClick={() => {
@@ -178,7 +221,7 @@ const OrderListItem = ({ total, orderId, title, tokenPay, contributors, handleCo
 								if (payload.length > 0)
 									handleConfirm(orderId, payload);
 							}}>
-								Confirm
+								Send Tokens
 							</SubmitButton>
 						</Footer>
 					</>
