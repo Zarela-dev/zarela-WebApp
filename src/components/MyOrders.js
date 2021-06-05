@@ -20,27 +20,26 @@ const MyOrders = () => {
 	const PAGE_SIZE = 3;
 	const [orders, setOrders] = useState({});
 	const [ordersCount, setOrdersCount] = useState(0);
-	const [selected, setSelected] = useState([]);
 
-	// const handleConfirm = (e) => {
-	// 	Web3.contract.methods.ConfirmContributer($("#_Order_Number").val(), ($("#User_Address").val())).send({ from: accounts[0] }, (error, result) => {
-	// 		if (!error) {
-	// 			alert(JSON.stringify('Transaction Hash is :  ' + result));
-	// 		}
-	// 		else {
-	// 			alert(error.message);
-	// 		}
-	// 	});
-	// 	Web3.contract.events.TokenSent({}, function (error, result) {
-	// 		if (!error) {
-	// 			returnValues = result.returnValues;
-	// 			alert(JSON.stringify('Your Mission Is Complete! ' + returnValues[0] + '  Address Sending  ' + returnValues[2] + '    Token To Account  :  << ' + returnValues[1] + ' >>'));
-	// 		}
-	// 		else {
-	// 			alert(error.message);
-	// 		}
-	// 	});
-	// };
+	const handleConfirm = (orderId, addresses) => {
+		Web3.contract.methods.ConfirmContributer(orderId, addresses).send({ from: Web3.accounts[0] }, (error, result) => {
+			if (!error) {
+				alert(JSON.stringify('Transaction Hash is :  ' + result));
+			}
+			else {
+				alert(error.message);
+			}
+		});
+		Web3.contract.events.TokenSent({}, function (error, result) {
+			if (!error) {
+				let returnValues = result.returnValues;
+				alert(JSON.stringify('Your Mission Is Complete! ' + returnValues[0] + '  Address Sending  ' + returnValues[2] + '    Token To Account  :  << ' + returnValues[1] + ' >>'));
+			}
+			else {
+				alert(error.message);
+			}
+		});
+	};
 	// pagination hook
 	useEffect(() => {
 		if (Web3.contract !== null) {
@@ -51,34 +50,42 @@ const MyOrders = () => {
 					console.error(error.message);
 				}
 			});
-
-			for (let i = 0; i < ordersCount; i++) {
-				Web3.contract.methods.ord_file(i).call((error, result) => {
+			if (Web3.accounts.length !== 0) {
+				Web3.contract.methods.Order_Details().call({from: Web3.accounts[0]},(error, result) => {
 					if (!error) {
-						const orderTemplate = {
-							orderId: result[0],
-							title: result[1],
-							description: result[6],
-							requesterAddress: result[2],
-							tokenPay: result[3] / Math.pow(10, 9),
-							totalContributors: result[4], // total contributors required
-							totalContributed: +result[4] - +result[7],
-							categories: result[8], // NOT TO BE USED IN DEMO
-							whitePaper: result[5],
-							status: result[9], // order status inprogress(false)/done(true)
-							totalContributedCount: result[10] // order status inprogress(false)/done(true)
-						};
-						setOrders(orders => ({
-							...orders,
-							[orderTemplate.orderId]: orderTemplate
-						}));
+						const myOrders = result[0];
+						for (let i = myOrders[0]; i < myOrders.length; i++) {
+							Web3.contract.methods.ord_file(i).call((error, result) => {
+								if (!error) {
+									const orderTemplate = {
+										orderId: result[0],
+										title: result[1],
+										description: result[6],
+										requesterAddress: result[2],
+										tokenPay: result[3] / Math.pow(10, 9),
+										totalContributors: result[4], // total contributors required
+										totalContributed: +result[4] - +result[7],
+										categories: result[8], // NOT TO BE USED IN DEMO
+										whitePaper: result[5],
+										status: result[9], // order status inprogress(false)/done(true)
+										totalContributedCount: result[10] // order status inprogress(false)/done(true)
+									};
+									setOrders(orders => ({
+										...orders,
+										[orderTemplate.orderId]: orderTemplate
+									}));
+								} else {
+									console.error(error.message);
+								}
+							});
+						}
 					} else {
 						console.error(error.message);
 					}
 				});
 			}
 		}
-	}, [Web3.contract, ordersCount]);
+	}, [Web3.contract, ordersCount, Web3.accounts]);
 
 
 	return (
@@ -96,6 +103,7 @@ const MyOrders = () => {
 							tokenPay={item.tokenPay}
 							total={item.totalContributedCount}
 							contributors={`${item.totalContributed}/${item.totalContributors}`}
+							handleConfirm={handleConfirm}
 						/>
 					))
 				}

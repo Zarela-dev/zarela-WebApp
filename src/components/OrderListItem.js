@@ -75,20 +75,30 @@ const SubmitButton = styled.button`
 const OrderListItem = ({ total, orderId, title, tokenPay, contributors, handleConfirm }) => {
 	const [isOpen, setOpen] = useState(false);
 	const { Web3 } = useContext(web3Context);
-	const [orderFiles, setOrderFiles] = useState([]);
-	const [addresses, setAddresses] = useState([]);
 	const [formatted, setFormatted] = useState({});
+	const [selected, setSelected] = useState({});
+
+	const onChange = (type, address, fileHash ) => {
+		if (type === 'check')
+			setSelected(values => ({
+				...values,
+				[address]: [...values[address], fileHash]
+			}));
+		if (type === 'uncheck')
+			setSelected(values => {
+				return {
+					...values,
+					[address]: values[address].filter(item => item !== fileHash)
+				};
+			});
+	};
 
 	useEffect(() => {
 		if (Web3.contract !== null) {
 			Web3.contract.methods.GetOrderFiles(orderId).call({ from: Web3.accounts[0] }, (error, result) => {
 				if (!error) {
-					const orderTemplate = {
-						files: result[0],
-						contributors: result[1] // order status inprogress(false)/done(true)
-					};
-
 					let formatted = {};
+					let selected = {};
 					let uniqueAddresses = [...new Set(result[1])];
 					let pairs = [];
 
@@ -107,13 +117,13 @@ const OrderListItem = ({ total, orderId, title, tokenPay, contributors, handleCo
 								} else {
 									formatted[uAddress] = [tempItem.file];
 								}
+								selected[uAddress] = [];
 							}
 						});
 					});
 
 					setFormatted(formatted);
-					setOrderFiles(orderTemplate.files);
-					setAddresses(orderTemplate.contributors);
+					setSelected(selected);
 				} else {
 					console.error(error.message);
 				}
@@ -153,10 +163,21 @@ const OrderListItem = ({ total, orderId, title, tokenPay, contributors, handleCo
 				isOpen ?
 					<>
 						<Body>
-							<OrderFilesTable data={formatted} />
+							<OrderFilesTable data={formatted} selected={selected} onChange={onChange} />
 						</Body>
 						<Footer>
-							<SubmitButton onClick={handleConfirm}>
+							<SubmitButton onClick={() => {
+								let payload = [];
+
+								Object.keys(selected).forEach(item => {
+									payload.push(...selected[item].map(fileHash => {
+										// we need the duplicated addresses here
+										return item;
+									}));
+								});
+								if (payload.length > 0)
+									handleConfirm(orderId, payload);
+							}}>
 								Confirm
 							</SubmitButton>
 						</Footer>

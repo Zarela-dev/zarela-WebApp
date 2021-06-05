@@ -79,6 +79,7 @@ const FilesList = styled.div`
     margin-left: -21px;
     padding-left: 20px;
 	max-height: 238px;
+	min-height: 27px;
     overflow: auto;
 `;
 
@@ -105,16 +106,19 @@ const FileName = styled.div`
 
 const DownloadButton = styled.img`
 	width: 	20px;
-	cursor: pointer;
 `;
 
-const OrderFilesTable = ({ data, checked, onChange }) => {
+const DownloadLink = styled.a`
+
+`;
+
+const OrderFilesTable = ({ data, selected, onChange }) => {
 	return (
 		<Table>
 			<Row>
 				<CellWrapper>
 					<Cell>
-						<CustomCheckbox checked={checked} onChange={onChange} />
+						<CustomCheckbox checked={false} onChange={() => { }} />
 					</Cell>
 				</CellWrapper>
 				<CellWrapper>
@@ -129,11 +133,12 @@ const OrderFilesTable = ({ data, checked, onChange }) => {
 				</CellWrapper>
 			</Row>
 			{
-				Object.keys(data).map((item, index) => (
-					<Row key={item}>
+				Object.keys(data).map((reqAddress, index) => (
+					<Row key={reqAddress}>
 						<CellWrapper>
 							<Cell>
-								<CustomCheckbox checked={checked} onChange={onChange} />
+								<CustomCheckbox checked={selected[reqAddress].length === data[reqAddress].length} onChange={() => {
+								}} />
 							</Cell>
 						</CellWrapper>
 						<CellWrapper>
@@ -141,26 +146,35 @@ const OrderFilesTable = ({ data, checked, onChange }) => {
 								<SmallAvatar>
 									<AvatarImage src={avatarIcon} />
 								</SmallAvatar>
-								{item}
+								{reqAddress}
 							</Cell>
 						</CellWrapper>
 						<CellWrapper>
 							<FilesListWrapper>
 								<FilesCount>
-									{`${data[item].length} files`}
+									{`${data[reqAddress].length} files`}
 								</FilesCount>
 								<FilesList>
 									{
-										data[item].map((file, fileIndex) => {
+										data[reqAddress].map((file, fileIndex) => {
 											return (
-												<FileItem>
-													<FileCheckbox />
+												<FileItem key={fileIndex}>
+													<FileCheckbox checked={selected[reqAddress].includes(file)} onChange={(e) => {
+														if (e.target.checked === true) {
+															onChange('check', reqAddress, file);
+														} else {
+															onChange('uncheck', reqAddress, file);
+														}
+													}} />
 													<FileName>
 														{
-															item.substr(0, 4) + '...' + item.substr(item.length - 4) + `  (File #${fileIndex + 1})`
+															// file.substr(0, 4) + '...' + file.substr(file.length - 4) + `  (File #${fileIndex + 1})`
+															file + `  (File #${fileIndex + 1})`
 														}
 													</FileName>
-													<DownloadButton src={downloadIcon} />
+													<DownloadLink target='_blank' href={`${process.env.REACT_APP_IPFS_LINK + file}`}>
+														<DownloadButton src={downloadIcon} />
+													</DownloadLink>
 												</FileItem>
 											);
 										})

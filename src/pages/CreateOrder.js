@@ -38,7 +38,7 @@ const CreateOrder = () => {
 
 				// const doc = document.getElementById("_White_Paper");
 				Web3.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, tokenPay, instanceCount, category)
-					.send({ from: Web3.accounts[0], to: "0xBf23D9f1e75439657c2Cc5ddd200120e265a2ed4" }, (error, result) => {
+					.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZarelaContractAddress }, (error, result) => {
 						if (!error) {
 							alert(JSON.stringify('Transaction Hash is :  ' + result));
 						}
