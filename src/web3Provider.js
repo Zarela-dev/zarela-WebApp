@@ -5,7 +5,9 @@ const initialState = {
 	web3: null,
 	contract: null,
 	accounts: [],
-	error: null
+	error: null,
+	biobitBalance: 0,
+	etherBalance: 0
 };
 
 const web3Context = React.createContext(initialState);
@@ -24,6 +26,16 @@ const Web3Provider = ({ children }) => {
 				return {
 					...state,
 					contract: action.payload
+				};
+			case 'SET_BIOBIT_BALANCE':
+				return {
+					...state,
+					biobitBalance: action.payload
+				};
+			case 'SET_ETHER_BALANCE':
+				return {
+					...state,
+					etherBalance: action.payload
 				};
 			case 'SET_ACCOUNTS':
 				return {
@@ -58,7 +70,7 @@ const Web3Provider = ({ children }) => {
 				);
 				// Set web3, accounts, and contract to the state, and then proceed with an
 				// example of interacting with the contract's methods.
-				
+
 				window.ethereum.on('accountsChanged', (accounts) => {
 					// Handle the new accounts, or lack thereof.
 					// "accounts" will always be an array, but it can be empty.
@@ -67,6 +79,27 @@ const Web3Provider = ({ children }) => {
 						type: 'SET_ACCOUNTS',
 						payload: accounts
 					});
+				});
+
+				ZarelaContract.methods.balanceOf(accounts[0]).call((error, result) => {
+					if (!error) {
+						dispatch({
+							type: 'SET_BIOBIT_BALANCE',
+							payload: result
+						});
+					}
+					else {
+						console.error(error.message);
+					}
+				});
+
+				web3.eth.getBalance(accounts[0]).then(function (result) {
+					dispatch({
+						type: 'SET_ETHER_BALANCE',
+						payload: web3.utils.fromWei(result, "ether") + " ETH"
+					});
+				}).catch(error => {
+					console.error(error.message);
 				});
 
 				//   ethereum.on('chainChanged', (chainId) => {

@@ -40,7 +40,7 @@ const Button = styled.button`
 const Pagination = () => {
 	return (
 		<Wrapper>
-			<ArrowButtonPrev>
+			<ArrowButtonPrev to='/'>
 				<Icon src={prevIcon} />
 			</ArrowButtonPrev>
 			<Button active>
@@ -55,7 +55,7 @@ const Pagination = () => {
 			<Button>
 				...
 			</Button>
-			<ArrowButtonNext>
+			<ArrowButtonNext to='/'>
 				<Icon src={nextIcon} />
 			</ArrowButtonNext>
 		</Wrapper>
