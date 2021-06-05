@@ -86,6 +86,8 @@ const OrderList = () => {
 					{
 						Object.values(orders).map(item => (
 							<OrderCard
+								key={item.orderId}
+								orderId={item.orderId}
 								title={item.title}
 								description={item.description}
 								tokenPay={item.tokenPay}

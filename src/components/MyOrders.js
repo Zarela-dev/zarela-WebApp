@@ -20,7 +20,27 @@ const MyOrders = () => {
 	const PAGE_SIZE = 3;
 	const [orders, setOrders] = useState({});
 	const [ordersCount, setOrdersCount] = useState(0);
+	const [selected, setSelected] = useState([]);
 
+	// const handleConfirm = (e) => {
+	// 	Web3.contract.methods.ConfirmContributer($("#_Order_Number").val(), ($("#User_Address").val())).send({ from: accounts[0] }, (error, result) => {
+	// 		if (!error) {
+	// 			alert(JSON.stringify('Transaction Hash is :  ' + result));
+	// 		}
+	// 		else {
+	// 			alert(error.message);
+	// 		}
+	// 	});
+	// 	Web3.contract.events.TokenSent({}, function (error, result) {
+	// 		if (!error) {
+	// 			returnValues = result.returnValues;
+	// 			alert(JSON.stringify('Your Mission Is Complete! ' + returnValues[0] + '  Address Sending  ' + returnValues[2] + '    Token To Account  :  << ' + returnValues[1] + ' >>'));
+	// 		}
+	// 		else {
+	// 			alert(error.message);
+	// 		}
+	// 	});
+	// };
 	// pagination hook
 	useEffect(() => {
 		if (Web3.contract !== null) {
@@ -45,9 +65,9 @@ const MyOrders = () => {
 							totalContributed: +result[4] - +result[7],
 							categories: result[8], // NOT TO BE USED IN DEMO
 							whitePaper: result[5],
-							status: result[9] // order status inprogress(false)/done(true)
+							status: result[9], // order status inprogress(false)/done(true)
+							totalContributedCount: result[10] // order status inprogress(false)/done(true)
 						};
-						console.log(orderTemplate);
 						setOrders(orders => ({
 							...orders,
 							[orderTemplate.orderId]: orderTemplate
@@ -74,6 +94,7 @@ const MyOrders = () => {
 							orderId={item.orderId}
 							title={item.title}
 							tokenPay={item.tokenPay}
+							total={item.totalContributedCount}
 							contributors={`${item.totalContributed}/${item.totalContributors}`}
 						/>
 					))

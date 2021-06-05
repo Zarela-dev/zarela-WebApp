@@ -13,6 +13,7 @@ import OrderCardWrapper, {
 	TokenBadge,
 	TokenIcon
 } from './Elements/OrderCard';
+import { Link } from 'react-router-dom';
 import bookmarkIcon from '../assets/icons/bookmark.svg';
 import biobitIcon from '../assets/icons/biobit.svg';
 import avatarImage from '../assets/icons/avatar.png';
@@ -25,9 +26,11 @@ const OrderCard = (props) => {
 				<Avatar>
 					<AvatarImage src={avatarImage} />
 				</Avatar>
-				<Typography weight='bold' variant='title'>
-					{props.title}
-				</Typography>
+				<Link to={`/order/${props.orderId}`}>
+					<Typography weight='bold' variant='title'>
+						{props.title}
+					</Typography>
+				</Link>
 				<Spacer />
 				<Typography nowrap variant='caption'>
 					6 hours ago

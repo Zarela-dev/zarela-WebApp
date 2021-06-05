@@ -55,7 +55,7 @@ const OrderDetailsPage = () => {
 
 	useEffect(() => {
 		if (Web3.contract !== null) {
-			Web3.contract.methods.ord_file(id).call(async (error, result) => {
+			Web3.contract.methods.ord_file(id).call((error, result) => {
 				if (!error) {
 					const orderTemplate = {
 						orderId: result[0],
