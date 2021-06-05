@@ -8,14 +8,17 @@ const CheckboxContainer = styled.div`
 `;
 
 const Icon = styled.img`
-	width: ${props => props.small ? '20px' : '40px'};
+	margin: 0 auto;
+	width: ${props => props.small ? '10px' : '40px'};
+	position: 'relative';
+	top: ${props => props.small ? '2px' : 0};
 `;
 // Hide checkbox visually but remain accessible to screen readers.
 // Source: https://polished.js.org/docs/#hidevisually
 const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
 	border: 0;
 	clip: rect(0 0 0 0);
-	clippath: inset(50%);
+	clip-path: inset(50%);
 	height: 1px;
 	margin: -1px;
 	overflow: hidden;
@@ -35,6 +38,8 @@ const StyledCheckbox = styled.div`
 	box-sizing: border-box;
 	border-radius: 4px;
 	transition: all 150ms;
+	background: ${props => props.checked ? '#2EECA8' : '#fff'};
+	text-align: center;
 
 	${HiddenCheckbox}:focus + & {
 		box-shadow: 0 0 0 3px ${props => props.theme.primaryFaded};
