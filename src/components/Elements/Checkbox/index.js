@@ -3,19 +3,22 @@ import styled from 'styled-components';
 import tick from '../../../assets/icons/tick.svg';
 
 const CheckboxContainer = styled.div`
-	margin-right: ${props => props.theme.spacing(1.5)};
-	margin-bottom: ${props => props.theme.spacing(2.5)};
+	margin-right: ${props => !props.small ? props.theme.spacing(1.5) : 0};
+	margin-bottom: ${props => !props.small ? props.theme.spacing(2.5) : 0};
 `;
 
 const Icon = styled.img`
-	width: 40px;
+	margin: 0 auto;
+	width: ${props => props.small ? '10px' : '18px'};
+	position: relative;
+	top: ${props => props.small ? '0px' : '5px'};
 `;
 // Hide checkbox visually but remain accessible to screen readers.
 // Source: https://polished.js.org/docs/#hidevisually
 const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
 	border: 0;
 	clip: rect(0 0 0 0);
-	clippath: inset(50%);
+	clip-path: inset(50%);
 	height: 1px;
 	margin: -1px;
 	overflow: hidden;
@@ -26,23 +29,38 @@ const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
 `;
 
 
-const StyledCheckbox = styled.div`
+const StyledCheckboxWrapper = styled.div`
 	display: inline-block;
-	width: 40px;
-	height: 40px;
+	position: relative;
+	width: ${props => props.small ? '20px' : '40px'};
+	height: ${props => props.small ? '20px' : '40px'};
 	background: white;
-	border: 1px solid #A78BE2;
 	box-sizing: border-box;
 	border-radius: 4px;
 	transition: all 150ms;
+	text-align: center;
 
-	${HiddenCheckbox}:focus + & {
-		box-shadow: 0 0 0 3px ${props => props.theme.primaryFaded};
-	}
+	border: 3px solid ${props => props.theme.primaryFaded};
 
 	${Icon} {
 		visibility: ${props => (props.checked ? 'visible' : 'hidden')}
 	}
+`;
+
+const StyledCheckbox = styled.div`
+	display: inline-block;
+	position: absolute;
+	z-index: 1;
+	top: ${props => props.small ? '-3px' : '2px'};
+	left: ${props => props.small ? '-3px' : '2px'};
+	width: ${props => props.small ? '20px' : '30px'};
+	height: ${props => props.small ? '20px' : '30px'};
+	background: white;
+	box-sizing: border-box;
+	border-radius: 4px;
+	transition: all 150ms;
+	background: ${props => props.checked ? '#2EECA8' : 'transparent'};
+	text-align: center;
 `;
 
 const Label = styled.label`
@@ -56,9 +74,25 @@ const Checkbox = ({ children, checked, ...props }) => (
 	<Label>
 		<CheckboxContainer>
 			<HiddenCheckbox checked={checked} {...props} />
-			<StyledCheckbox checked={checked}>
-				<Icon src={tick} />
-			</StyledCheckbox>
+			<StyledCheckboxWrapper checked={checked}>
+				<StyledCheckbox checked={checked}>
+					<Icon src={tick} />
+				</StyledCheckbox>
+			</StyledCheckboxWrapper>
+		</CheckboxContainer>
+		{children}
+	</Label>
+);
+
+export const SmallCheckbox = ({ children, checked, className, ...props }) => (
+	<Label className={className}>
+		<CheckboxContainer small>
+			<HiddenCheckbox checked={checked} {...props} />
+			<StyledCheckboxWrapper small checked={checked}>
+				<StyledCheckbox small checked={checked}>
+					<Icon small src={tick} />
+				</StyledCheckbox>
+			</StyledCheckboxWrapper>
 		</CheckboxContainer>
 		{children}
 	</Label>

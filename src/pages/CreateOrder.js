@@ -2,195 +2,126 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Buffer } from 'buffer';
 import { web3Context } from '../web3Provider';
 import { create } from 'ipfs-http-client';
-import TextField from '../components/Elements/TextField';
 import styled from 'styled-components';
 import TitleBar from '../components/TitleBar';
-import FileInput from '../components/FileInput';
-import Checkbox from '../components/Elements/Checkbox';
-import { Button } from '../components/Elements/Button';
-
-const SubmitButton = styled.button`
-	${Button};
-	width: 260px;
-	height: 50px;
-	margin-bottom: ${props => props.theme.spacing(4)};
-	font-size: 20px;
-	font-weight: 500;
-	color: #252222;
-`;
+import CreateOrderForm from '../components/CreateOrderForm';
+import maxWidthWrapper from '../components/Elements/MaxWidth';
+import ConnectDialog from '../components/Dialog/ConnectDialog';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
 const Wrapper = styled.div`
-	max-width: ${props => props.theme.maxWidth};
-	margin: 0 auto;
-`;
-
-const Divider = styled.div`
-	width: 100%;
-	background: rgba(144, 144, 144, 0.3);
-	border-radius: 24px;
-	height: 3px;
-	margin: ${props => props.theme.spacing(4)}  0;
+	${maxWidthWrapper}
 `;
 
 // #todo sync form data with localStorage
 const CreateOrder = () => {
 	const fileRef = useRef(null);
 	const { Web3 } = useContext(web3Context);
-	const [formValues, setFormValues] = useState({ agreement: false, whitePaper: null, storageValue: 0, web3: null, accounts: null, whitePaperHash: '', contract: null, title: '', category: '', desc: '', whitePaper: '', tokenPay: '', instanceCount: '' });
+	const [showDialog, setDialog] = useState(false);
 
-	const onSubmit = (e) => {
-		e.preventDefault();
-		const { title, desc, tokenPay, whitePaperHash, instanceCount, category } = formValues;
-		const reader = new FileReader();
-		console.log('state', formValues);
-
-		reader.readAsArrayBuffer(fileRef.current.files[0]); // Read Provided File
-
-		reader.onloadend = async () => {
-			const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
-			const buf = Buffer(reader.result); // Convert data into buffer
-			console.log('state from ipfs', formValues);
-
-			try {
-				const ipfsResponse = await ipfs.add(buf);
-				setFormValues({ whitePaperHash: ipfsResponse.path });
-				let url = `https://ipfs.io/ipfs/${ipfsResponse.path}`;
-				console.log(`Document Of Conditions --> ${url}`);
-
-				// const doc = document.getElementById("_White_Paper");
-				Web3.contract.methods.SetOrderBoard(title, desc, whitePaperHash, tokenPay, instanceCount, category)
-					.send({ from: Web3.accounts[0], to: "0xBf23D9f1e75439657c2Cc5ddd200120e265a2ed4" }, (error, result) => {
-						if (!error) {
-							alert(JSON.stringify('Transaction Hash is :  ' + result));
-						}
-						else {
-							alert(error.message);
-						}
-					});
-				Web3.contract.events.OrderRegistered({}, function (error, result) {
-					if (!error) {
-						let returnValues = result.returnValues;
-						alert(JSON.stringify('Great !! Succes :) ' + '     <<New Order Created ! >>        Owner address is  :  ' + returnValues[0] +
-							'   & Order Number is   :  ' + returnValues[1]));
-					}
-					else {
-						alert(error.message);
-					}
-				});
-			} catch (error) {
-				console.error(error);
-			}
-		};
+	const validationErrors = {
+		required: name => `${name} is required to create your order.`,
+		notEnoughTokens: 'you do not have enough tokens to create this order.',
+		terms: 'you must agree to the term before submitting your order',
+		number: name => `${name} must be a number`,
+		string: name => `${name} must be a string`
 	};
 
-	useEffect(() => {
-		window.ethereum.enable();
-	}, []);
+	const formik = useFormik({
+		initialValues: {
+			title: '',
+			desc: '',
+			tokenPay: '',
+			instanceCount: '',
+			category: '',
+			whitepaper: '',
+			terms: false
+		},
+		validationSchema: yup.object().shape({
+			title: yup.string(validationErrors.string('title')).required(validationErrors.required('title')),
+			desc: yup.string(validationErrors.string('description')).required(validationErrors.required('description')),
+			tokenPay: yup.number().typeError(validationErrors.number('Allocated Biobits')).required(validationErrors.required('Allocated Biobit')),
+			instanceCount: yup.number().typeError(validationErrors.number('Contributors')).required(validationErrors.required('Contributors')),
+			category: yup.string().required(validationErrors.required('category')),
+			whitepaper: yup.mixed(),
+			terms: yup.boolean().required()
+		}),
+		onSubmit: (values => {
+			setDialog(true);
+			if (formik.isValid)
+				if (!values.terms) {
+					formik.setFieldError('terms', validationErrors.terms);
+				} else {
+					if (Web3.accounts.length > 0) {
+						setDialog(false);
+						const { title, desc, tokenPay, instanceCount, category } = values;
+						const reader = new FileReader();
+
+						reader.readAsArrayBuffer(fileRef.current.files[0]); // Read Provided File
+
+						reader.onloadend = async () => {
+							const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
+							const buf = Buffer(reader.result); // Convert data into buffer
+
+							try {
+								const ipfsResponse = await ipfs.add(buf);
+								formik.setFieldValue('whitepaper', ipfsResponse.path);
+								let url = `https://ipfs.io/ipfs/${ipfsResponse.path}`;
+								console.log(`Document Of Conditions --> ${url}`);
+
+								// const doc = document.getElementById("_White_Paper");
+								Web3.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, tokenPay, instanceCount, category)
+									.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZarelaContractAddress }, (error, result) => {
+										if (!error) {
+											alert(JSON.stringify('Transaction Hash is :  ' + result));
+										}
+										else {
+											alert(error.message);
+										}
+									});
+								Web3.contract.events.OrderRegistered({}, function (error, result) {
+									if (!error) {
+										let returnValues = result.returnValues;
+										alert(JSON.stringify('Great !! Succes :) ' + '     <<New Order Created ! >>        Owner address is  :  ' + returnValues[0] +
+											'   & Order Number is   :  ' + returnValues[1]));
+									}
+									else {
+										alert(error.message);
+									}
+								});
+							} catch (error) {
+								console.error(error);
+							}
+						};
+					}
+				}
+		})
+	});
+
 	useEffect(() => {
 		console.log('accounts', Web3.accounts);
 	}, [Web3.accounts]);
 
 	return (
 		<>
-			<TitleBar />
+			<TitleBar>
+				Create Request
+			</TitleBar>
 			<Wrapper>
 				{
-					Web3.accounts.length === 0 ?
-						<div>
-							please connect
-						</div> :
-						<form onSubmit={onSubmit}>
-							<TextField
-								placeholder={'write main topics in your test'}
-								label='Title *'
-								type='text'
-								name={'title'}
-								value={formValues.title}
-								onChange={(e) => {
-									setFormValues(values => ({
-										...values,
-										title: e.target.value
-									}));
-								}}
-							/>
-							<TextField
-								placeholder={'How many people do you need to done the test?'}
-								label='Description *'
-								type='text'
-								name={'desc'}
-								value={formValues.desc}
-								onChange={(e) => {
-									setFormValues(values => ({
-										...values,
-										desc: e.target.value
-									}));
-								}}
-							/>
-							<TextField
-								placeholder={'How many biobits will you pay for each contributor?'}
-								label='Allocated Biobits *'
-								type='text'
-								name={'tokenPay'}
-								value={formValues.tokenPay}
-								onChange={(e) => {
-									setFormValues(values => ({
-										...values,
-										tokenPay: e.target.value
-									}));
-								}}
-							/>
-							<TextField
-								placeholder={'What’s your test about?'}
-								label='Contributors *'
-								type='text'
-								name={'instanceCount'}
-								value={formValues.instanceCount}
-								onChange={(e) => {
-									setFormValues(values => ({
-										...values,
-										instanceCount: e.target.value
-									}));
-								}}
-							/>
-							<TextField
-								placeholder={'Category'}
-								label='Category *'
-								type='text'
-								name={'category'}
-								value={formValues.category}
-								onChange={(e) => {
-									setFormValues(values => ({
-										...values,
-										category: e.target.value
-									}));
-								}}
-							/>
-							<FileInput
-								hasBorder={false}
-								showSelected
-								buttonLabel='Upload'
-								label={'Upload your white paper here'}
-								ref={fileRef}
-								name={'whitepaper'}
-								value={formValues.whitepaper}
-								onChange={(e) => {
-									setFormValues(values => ({
-										...values,
-										whitepaper: e.target.value
-									}));
-								}}
-							/>
-							{/* <button type='submit'>
-								submit
-							</button> */}
-							<Divider />
-							<Checkbox checked={formValues.agreement} onChange={(e) => setFormValues(data => ({ ...data, agreement: e.target.checked }))}>
-								Your request won’t be able to be edited, make sure every data you added is correct and final. By marking this box you claim your agreement towards policies.
-							</Checkbox>
-							<SubmitButton>
-								Submit
-							</SubmitButton>
-						</form>
+
+					<>
+						{
+							Web3.accounts.length < 1 && showDialog ?
+								<ConnectDialog />
+								: null
+						}
+						<CreateOrderForm
+							formik={formik}
+							ref={fileRef}
+						/>
+					</>
 				}
 			</Wrapper>
 		</>

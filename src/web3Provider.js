@@ -5,7 +5,10 @@ const initialState = {
 	web3: null,
 	contract: null,
 	accounts: [],
-	error: null
+	error: null,
+	bank: 0,
+	biobitBalance: 'Connect To See Data',
+	etherBalance: 'Connect To See Data'
 };
 
 const web3Context = React.createContext(initialState);
@@ -20,10 +23,25 @@ const Web3Provider = ({ children }) => {
 					...state,
 					web3: action.payload
 				};
+			case 'SET_BANK':
+				return {
+					...state,
+					bank: action.payload
+				};
 			case 'SET_CONTRACT':
 				return {
 					...state,
 					contract: action.payload
+				};
+			case 'SET_BIOBIT_BALANCE':
+				return {
+					...state,
+					biobitBalance: action.payload
+				};
+			case 'SET_ETHER_BALANCE':
+				return {
+					...state,
+					etherBalance: action.payload
 				};
 			case 'SET_ACCOUNTS':
 				return {
@@ -58,8 +76,9 @@ const Web3Provider = ({ children }) => {
 				);
 				// Set web3, accounts, and contract to the state, and then proceed with an
 				// example of interacting with the contract's methods.
-				
+
 				window.ethereum.on('accountsChanged', (accounts) => {
+
 					// Handle the new accounts, or lack thereof.
 					// "accounts" will always be an array, but it can be empty.
 					console.log('account changed', accounts);
@@ -67,6 +86,14 @@ const Web3Provider = ({ children }) => {
 						type: 'SET_ACCOUNTS',
 						payload: accounts
 					});
+				});
+
+				window.ethereum.on('connect', () => {
+					console.log('connected to metamask');
+				});
+
+				window.ethereum.on('connect', () => {
+					console.log('disconnected from metamask');
 				});
 
 				//   ethereum.on('chainChanged', (chainId) => {
@@ -107,6 +134,43 @@ const Web3Provider = ({ children }) => {
 	useEffect(() => {
 		configureWeb3();
 	}, []);
+
+	useEffect(() => {
+		if (Web3.accounts.length > 0) {
+			Web3.contract.methods.balanceOf(Web3.accounts[0]).call((error, result) => {
+				if (!error) {
+					dispatch({
+						type: 'SET_BIOBIT_BALANCE',
+						payload: result
+					});
+				}
+				else {
+					console.error(error.message);
+				}
+			});
+
+			Web3.contract.methods.bank().call((error, result) => {
+				if (!error) {
+					dispatch({
+						type: 'SET_BANK',
+						payload: +result / Math.pow(10, 9)
+					});
+				}
+				else {
+					console.error(error.message);
+				}
+			});
+
+			Web3.web3.eth.getBalance(Web3.accounts[0]).then(function (result) {
+				dispatch({
+					type: 'SET_ETHER_BALANCE',
+					payload: Web3.web3.utils.fromWei(result, "ether") + " ETH"
+				});
+			}).catch(error => {
+				console.error(error.message);
+			});
+		}
+	}, [Web3.accounts.length]);
 
 	return (
 		<web3Context.Provider

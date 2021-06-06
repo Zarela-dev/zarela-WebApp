@@ -1,5 +1,6 @@
-import React from 'react'
+import React from 'react';
 import styled from 'styled-components';
+import maxWidthWrapper from './Elements/MaxWidth';
 
 const Wrapper = styled.div`
 	background: #F4F8FE;
@@ -8,12 +9,20 @@ const Wrapper = styled.div`
 	margin-bottom: ${props => props.theme.spacing(4)};
 `;
 
-const TitleBar = () => {
+const Inner = styled.div`
+	${maxWidthWrapper};
+	font-weight: normal;
+	font-size: 26px;
+`;
+
+const TitleBar = ({ children }) => {
 	return (
 		<Wrapper>
-			
+			<Inner>
+				{children}
+			</Inner>
 		</Wrapper>
-	)
-}
+	);
+};
 
-export default TitleBar
+export default TitleBar;

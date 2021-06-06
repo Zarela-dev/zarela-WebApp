@@ -1,62 +1,90 @@
 import React from 'react';
 import OrderCardWrapper, {
-	ProgressLayout,
+	Footer,
 	HeaderLayout,
 	AvatarImage,
 	Avatar,
 	Typography,
 	Spacer,
+	Divider,
 	Description,
+	Timestamp,
 	Bookmark,
 	ContributorBadge,
 	ContributorsIcon,
 	TokenBadge,
-	TokenIcon
+	TokenIcon,
+	TokenValue,
+	JoinButton,
+	ProgressTrackerWrapper,
+	ProgressTrackerTrack,
+	ProgressTrackerProcess
 } from './Elements/OrderCard';
 import bookmarkIcon from '../assets/icons/bookmark.svg';
-import biobitIcon from '../assets/icons/biobit.svg';
-import avatarImage from '../assets/icons/avatar.png';
+import biobitIcon from '../assets/icons/biobit-black.svg';
+import avatarImage0 from '../assets/avatar/avatar-0.jpg';
+import avatarImage1 from '../assets/avatar/avatar-1.jpg';
+import avatarImage2 from '../assets/avatar/avatar-2.jpg';
+import avatarImage3 from '../assets/avatar/avatar-3.jpg';
 import contributorIcon from '../assets/icons/contributor.png';
+import confirmIcon from '../assets/icons/confirm.svg';
 
 const OrderCard = (props) => {
+	let avatarImage = [avatarImage0, avatarImage1, avatarImage2, avatarImage3];
 	return (
 		<OrderCardWrapper>
 			<HeaderLayout>
 				<Avatar>
-					<AvatarImage src={avatarImage} />
+					<AvatarImage src={avatarImage[Math.floor(Math.random() * 4)]} />
 				</Avatar>
 				<Typography weight='bold' variant='title'>
-					{props.title}
+					{props.title.length < 130 ? props.title : props.title.substr(0, 130) + '...'}
 				</Typography>
 				<Spacer />
-				<Typography nowrap variant='caption'>
-					6 hours ago
-				</Typography>
 				<Bookmark src={bookmarkIcon} />
 			</HeaderLayout>
 			<Description>
 				<Typography variant='body'>
-					{props.description}
+					{props.description.length < 405 ? props.description : props.description.substr(0, 405) + '...'}
 				</Typography>
+				<Timestamp nowrap variant='caption'>
+					{props.timestamp}
+				</Timestamp>
 			</Description>
-			<ProgressLayout>
+			<ProgressTrackerWrapper>
+				<ProgressTrackerTrack>
+					<ProgressTrackerProcess width={props.progress} />
+				</ProgressTrackerTrack>
+			</ProgressTrackerWrapper>
+			<Footer>
 				<TokenBadge>
 					<TokenIcon src={biobitIcon} />
-					<Typography weight='bold' color='secondary' variant='badge'>
+					<TokenValue>
 						{props.tokenPay}
-					</Typography>
-					<Typography weight='bold' color='secondary' variant='badge'>
+					</TokenValue>
+					<Typography weight='bold' color='primary' variant='badge'>
 						BioBit
 					</Typography>
 				</TokenBadge>
-				<Spacer />
+				<Divider />
 				<ContributorBadge>
 					<ContributorsIcon src={contributorIcon} />
 					<Typography weight='bold' color='secondary' variant='badge'>
 						{props.contributors}
 					</Typography>
 				</ContributorBadge>
-			</ProgressLayout>
+				<Divider />
+				<ContributorBadge>
+					<ContributorsIcon src={confirmIcon} />
+					<Typography weight='bold' color='secondary' variant='badge'>
+						{props.totalContributedCount}
+					</Typography>
+				</ContributorBadge>
+				<Spacer />
+				<JoinButton to={`/order/${props.orderId}`}>
+					Contribute
+				</JoinButton>
+			</Footer>
 		</OrderCardWrapper>
 	);
 };
