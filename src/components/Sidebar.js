@@ -11,7 +11,7 @@ const SidebarCard = styled.div`
 	box-shadow: 0px 10px 18px rgba(81, 197, 234, 0.06);
 	border-radius: 8px;
 	padding: 0 ${props => props.theme.spacing(3)} ${props => props.theme.spacing(3)} ${props => props.theme.spacing(3)};
-	height: 305px;
+	height: 320px;
 `;
 
 
@@ -91,6 +91,14 @@ const Sidebar = () => {
 				</Subtitle>
 				<Value>
 					BBit
+				</Value>
+			</Row>
+			<Row>
+				<Subtitle>
+					Zarela Bank:
+				</Subtitle>
+				<Value>
+					{`${Web3.bank} Biobit`}
 				</Value>
 			</Row>
 			<Header>

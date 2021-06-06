@@ -6,6 +6,7 @@ const initialState = {
 	contract: null,
 	accounts: [],
 	error: null,
+	bank: 0,
 	biobitBalance: 'Connect To See Data',
 	etherBalance: 'Connect To See Data'
 };
@@ -21,6 +22,11 @@ const Web3Provider = ({ children }) => {
 				return {
 					...state,
 					web3: action.payload
+				};
+			case 'SET_BANK':
+				return {
+					...state,
+					bank: action.payload
 				};
 			case 'SET_CONTRACT':
 				return {
@@ -136,6 +142,18 @@ const Web3Provider = ({ children }) => {
 					dispatch({
 						type: 'SET_BIOBIT_BALANCE',
 						payload: result
+					});
+				}
+				else {
+					console.error(error.message);
+				}
+			});
+
+			Web3.contract.methods.bank().call((error, result) => {
+				if (!error) {
+					dispatch({
+						type: 'SET_BANK',
+						payload: +result / Math.pow(10, 9)
 					});
 				}
 				else {
