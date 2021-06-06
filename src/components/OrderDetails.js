@@ -89,6 +89,7 @@ const FileCardSpacer = styled.div`
 
 const OrderDetails = React.forwardRef(({ order, submitSignal }, ref) => {
 	const contributors = `${order.totalContributed}/${order.totalContributors}`;
+	const [signalFile, setSignalFile] = useState(null);
 
 	return (
 		<PageWrapper>
@@ -162,8 +163,10 @@ const OrderDetails = React.forwardRef(({ order, submitSignal }, ref) => {
 					label={'Upload your white paper here'}
 					ref={ref}
 					name={'whitepaper'}
-					value={null}
-					onChange={(e) => { }}
+					value={signalFile}
+					onChange={(e) => { 
+						setSignalFile(e.target.files[0]);
+					}}
 					onClick={submitSignal}
 				/>
 			</FilesWrapper>
