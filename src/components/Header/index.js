@@ -85,7 +85,7 @@ export default function Header() {
 				</NavLink>
 				<NotificationBadge>5</NotificationBadge>
 			</NavItem>
-			<NavItem to='/'>
+			<NavItem to='/account'>
 				<NavIcon src={user} />
 				<NavLink>
 					Account

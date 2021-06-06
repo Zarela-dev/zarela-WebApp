@@ -51,6 +51,7 @@ const OrderDetailsPage = () => {
 									alert(error.message);
 								}
 							});
+							
 						Web3.contract.events.Contributed({}, function (error, result) {
 							if (!error) {
 								let returnValues = result.returnValues;

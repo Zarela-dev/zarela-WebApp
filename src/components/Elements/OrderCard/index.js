@@ -9,9 +9,10 @@ export const OrderCardWrapper = styled.div`
 	border-radius: 8px;
 	padding: ${props => props.theme.spacing(3)};
 
-	&:not(:last-child){
+	margin-bottom: 25px;
+	/* &:not(:last-child){
 		margin-bottom: 25px;
-	}
+	} */
 `;
 
 export const HeaderLayout = styled.div`

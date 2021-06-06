@@ -72,7 +72,7 @@ const SubmitButton = styled.button`
 	line-height: 18px;
 `;
 
-const OrderListItem = ({ total, orderId, title, tokenPay, contributors, handleConfirm }) => {
+const OrderListItem = ({ showContributions, total, orderId, title, tokenPay, contributors, handleConfirm }) => {
 	const [isOpen, setOpen] = useState(false);
 	const { Web3 } = useContext(web3Context);
 	const [formatted, setFormatted] = useState({});
@@ -130,7 +130,7 @@ const OrderListItem = ({ total, orderId, title, tokenPay, contributors, handleCo
 	};
 
 	useEffect(() => {
-		if (Web3.contract !== null) {
+		if (showContributions && Web3.contract !== null) {
 			Web3.contract.methods.GetOrderFiles(orderId).call({ from: Web3.accounts[0] }, (error, result) => {
 				if (!error) {
 					let formatted = {};
@@ -196,7 +196,7 @@ const OrderListItem = ({ total, orderId, title, tokenPay, contributors, handleCo
 				</TotalBadge>
 			</Header>
 			{
-				isOpen ?
+				showContributions && isOpen ?
 					<>
 						<Body>
 							<OrderFilesTable

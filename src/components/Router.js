@@ -5,6 +5,7 @@ import OrderList from '../pages/OrderList';
 import Header from './Header';
 import OrderDetails from '../pages/OrderDetails';
 import MyOrders from '../pages/MyOrders';
+import MyAccount from '../pages/MyAccount';
 
 const AppRouter = () => {
 	return (
@@ -16,6 +17,7 @@ const AppRouter = () => {
 					<Route exact path='/createOrder' component={CreateOrder} />
 					<Route exact path='/order/:id' component={OrderDetails} />
 					<Route exact path='/my-orders' component={MyOrders} />
+					<Route exact path='/account' component={MyAccount} />
 				</Switch>
 			</div>
 		</Router>

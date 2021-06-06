@@ -100,6 +100,7 @@ const MyOrders = () => {
 						<ConnectDialog /> :
 						Object.values(orders).length > 0 ? Object.values(orders).map(item => (
 							<OrderListItem
+								showContributions
 								key={item.orderId}
 								orderId={item.orderId}
 								title={item.title}
