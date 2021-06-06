@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
-import avatarImage from '../assets/icons/avatar.png';
+import avatarImage0 from '../assets/avatar/avatar-0.jpg';
+import avatarImage1 from '../assets/avatar/avatar-1.jpg';
+import avatarImage2 from '../assets/avatar/avatar-2.jpg';
+import avatarImage3 from '../assets/avatar/avatar-3.jpg';
 import biobitIcon from '../assets/icons/biobit.svg';
 import contributorIcon from '../assets/icons/contributor.png';
 import bookmarkIcon from '../assets/icons/bookmark.svg';
@@ -99,6 +102,7 @@ const CustomProgressTrackerWrapper = styled(ProgressTrackerWrapper)`
 `;
 
 const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) => {
+	let avatarImage = [avatarImage0, avatarImage1, avatarImage2, avatarImage3];
 	const contributors = `${order.totalContributed}/${order.totalContributors}`;
 	const totalContributedCount = `${order.totalContributed}/${order.totalContributedCount}`;
 	const [signalFile, setSignalFile] = useState(null);
@@ -109,7 +113,7 @@ const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) 
 				<HeaderInner>
 					<HeaderLayout>
 						<Avatar>
-							<AvatarImage src={avatarImage} />
+							<AvatarImage src={avatarImage[Math.floor(Math.random() * 4)]} />
 						</Avatar>
 						<Typography weight='bold' variant='title'>
 							{order.title}

@@ -38,14 +38,14 @@ const OrderCard = (props) => {
 					<AvatarImage src={avatarImage[Math.floor(Math.random() * 4)]} />
 				</Avatar>
 				<Typography weight='bold' variant='title'>
-					{props.title}
+					{props.title.length < 140 ? props.title : props.title.substr(0, 140) + '...'}
 				</Typography>
 				<Spacer />
 				<Bookmark src={bookmarkIcon} />
 			</HeaderLayout>
 			<Description>
 				<Typography variant='body'>
-					{props.description}
+					{props.description.length < 405 ? props.description : props.description.substr(0, 405) + '...'}
 				</Typography>
 				<Timestamp nowrap variant='caption'>
 					{props.timestamp}

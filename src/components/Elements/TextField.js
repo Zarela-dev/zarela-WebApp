@@ -4,6 +4,7 @@ import { css } from 'styled-components'
 
 
 const InputStyles = css`
+	font-family: Krub;
 	background: #FFFFFF;
 	border: 1px solid rgba(144, 144, 144, 0.3);
 	border-radius: 4px;
@@ -37,7 +38,7 @@ const Label = styled.label`
 	color: #6C6C6C;
 `;
 
-const TextField = forwardRef(({ multiline, label, ...rest }, ref) => {
+const TextField = forwardRef(({ multiline, label, error, ...rest }, ref) => {
 	return (
 		<Wrapper>
 			<Label>

@@ -41,6 +41,7 @@ const CreateOrderForm = React.forwardRef(({onSubmit, formValues, setFormValues},
 			/>
 			<TextField
 				placeholder={'How many people do you need to done the test?'}
+				multiline
 				label='Description *'
 				type='text'
 				name={'desc'}

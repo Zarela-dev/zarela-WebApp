@@ -101,10 +101,10 @@ export default function Header() {
 			<SubmitRequestButton to='/createOrder'>
 				New Request
 			</SubmitRequestButton>
-			<NavItem to='/account'>
+			{/* <NavItem to='/account'>
 				<NavIcon src={bell} />
 				<NotificationBadge>321</NotificationBadge>
-			</NavItem>
+			</NavItem> */}
 		</HeaderWrapper>
 	);
 };
