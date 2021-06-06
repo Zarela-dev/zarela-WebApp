@@ -35,38 +35,36 @@ const MyAccount = () => {
 					}
 				});
 				if (!Object.keys(orders).length) {
-					Web3.contract.methods.Order_Details().call({ from: Web3.accounts[0] }, (error, result) => {
-						if (!error) {
-							const myContributions = result[1];
-							for (let i = myContributions[0]; i < myContributions.length; i++) {
-								Web3.contract.methods.ord_file(i).call((error, result) => {
-									if (!error) {
-										const orderTemplate = {
-											orderId: result[0],
-											title: result[1],
-											description: result[6],
-											requesterAddress: result[2],
-											tokenPay: result[3] / Math.pow(10, 9),
-											totalContributors: result[4], // total contributors required
-											totalContributed: +result[4] - +result[7],
-											categories: result[8], // NOT TO BE USED IN DEMO
-											whitePaper: result[5],
-											status: result[9], // order status inprogress(false)/done(true)
-											timestamp: result[11],
-											totalContributedCount: result[10]
-										};
-										setOrders(orders => ({
-											...orders,
-											[orderTemplate.orderId]: orderTemplate
-										}));
-									} else {
-										console.error(error.message);
-									}
+					Web3.contract.methods.Order_Details().call({ from: Web3.accounts[0] }).then(result => {
+						const myOrders = result[1];
+	
+						myOrders.forEach(currentOrder => {
+							Web3.contract.methods.ord_file(currentOrder).call().then(result => {
+								const orderTemplate = {
+									orderId: result[0],
+									title: result[1],
+									description: result[6],
+									requesterAddress: result[2],
+									tokenPay: result[3] / Math.pow(10, 9),
+									totalContributors: result[4], // total contributors required
+									totalContributed: +result[4] - +result[7],
+									categories: result[8], // NOT TO BE USED IN DEMO
+									whitePaper: result[5],
+									status: result[9], // order status inprogress(false)/done(true)
+									timestamp: result[11],
+									totalContributedCount: result[10]
+								};
+								setOrders(orders => ({
+									...orders,
+									[orderTemplate.orderId]: orderTemplate
+								}));
+							})
+								.catch(error => {
+									console.error(error.message);
 								});
-							}
-						} else {
-							console.error(error.message);
-						}
+						});
+					}).catch(error => {
+						console.error(error.message);
 					});
 				}
 			}

@@ -19,7 +19,6 @@ const MyOrders = () => {
 	const { Web3 } = useContext(web3Context);
 	const PAGE_SIZE = 3;
 	const [orders, setOrders] = useState({});
-	const [ordersCount, setOrdersCount] = useState(0);
 
 	const handleConfirm = (orderId, addresses) => {
 		Web3.contract.methods.ConfirmContributer(orderId, addresses).send({ from: Web3.accounts[0] }, (error, result) => {
@@ -43,51 +42,43 @@ const MyOrders = () => {
 	// pagination hook
 	useEffect(() => {
 		if (Web3.contract !== null) {
-			Web3.contract.methods.OrderSize().call((error, result) => {
-				if (!error) {
-					setOrdersCount(result);
-				} else {
-					console.error(error.message);
-				}
-			});
 			if (Web3.accounts.length !== 0) {
-				Web3.contract.methods.Order_Details().call({ from: Web3.accounts[0] }, (error, result) => {
-					if (!error) {
-						const myOrders = result[0];
-						for (let i = myOrders[0]; i < myOrders.length; i++) {
-							Web3.contract.methods.ord_file(i).call((error, result) => {
-								if (!error) {
-									const orderTemplate = {
-										orderId: result[0],
-										title: result[1],
-										description: result[6],
-										requesterAddress: result[2],
-										tokenPay: result[3] / Math.pow(10, 9),
-										totalContributors: result[4], // total contributors required
-										totalContributed: +result[4] - +result[7],
-										categories: result[8], // NOT TO BE USED IN DEMO
-										whitePaper: result[5],
-										status: result[9], // order status inprogress(false)/done(true)
-										timestamp: result[11],
-										totalContributedCount: result[10] 
-									};
-									setOrders(orders => ({
-										...orders,
-										[orderTemplate.orderId]: orderTemplate
-									}));
-								} else {
-									console.error(error.message);
-								}
+				Web3.contract.methods.Order_Details().call({ from: Web3.accounts[0] }).then(result => {
+					const myOrders = result[0];
+
+					myOrders.forEach(currentOrder => {
+						Web3.contract.methods.ord_file(currentOrder).call().then(result => {
+							const orderTemplate = {
+								orderId: result[0],
+								title: result[1],
+								description: result[6],
+								requesterAddress: result[2],
+								tokenPay: result[3] / Math.pow(10, 9),
+								totalContributors: result[4], // total contributors required
+								totalContributed: +result[4] - +result[7],
+								categories: result[8], // NOT TO BE USED IN DEMO
+								whitePaper: result[5],
+								status: result[9], // order status inprogress(false)/done(true)
+								timestamp: result[11],
+								totalContributedCount: result[10]
+							};
+							setOrders(orders => ({
+								...orders,
+								[orderTemplate.orderId]: orderTemplate
+							}));
+						})
+							.catch(error => {
+								console.error(error.message);
 							});
-						}
-					} else {
-						console.error(error.message);
-					}
+					});
+				}).catch(error => {
+					console.error(error.message);
 				});
 			}
 		}
-	}, [Web3.contract, ordersCount, Web3.accounts]);
+	}, [Web3.contract, Web3.accounts]);
 
+	console.log(orders);
 
 	return (
 		<PageWrapper>
