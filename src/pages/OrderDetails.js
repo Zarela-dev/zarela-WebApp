@@ -17,8 +17,8 @@ const OrderDetailsPage = () => {
 	const getTimestamp = (time) => {
 		if (!time)
 			return 0;
-		let timestamp = new Date((Math.floor(+time / 1000)));
-		let timestampFormatted = switchFormat(new Date(+time)) ? timeSince(new Date(Date.now() - timestamp)) : timestamp;
+		let timestamp = new Date((Math.floor(+time * 1000))).getTime();
+		let timestampFormatted = switchFormat(new Date(+time).getTime()) ? timeSince(timestamp) : timestamp.toString();
 		return timestampFormatted;
 	};
 

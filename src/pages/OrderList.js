@@ -67,7 +67,6 @@ const OrderList = () => {
 							timestamp: result[11],
 							totalContributedCount: result[10]
 						};
-						console.log(orderTemplate);
 						setOrders(orders => ({
 							...orders,
 							[orderTemplate.orderId]: orderTemplate
@@ -88,8 +87,8 @@ const OrderList = () => {
 				<OrderListContentWrapper>
 					{
 						Object.values(orders).map(item => {
-							let timestamp = new Date((Math.floor(+item.timestamp / 1000)));
-							let timestampFormatted = switchFormat(new Date(+item.timestamp)) ? timeSince(new Date(Date.now() - timestamp)) : timestamp;
+							let timestamp = new Date((Math.floor(+item.timestamp * 1000))).getTime();
+							let timestampFormatted = switchFormat(new Date(+item.timestamp).getTime()) ? timeSince(timestamp) : timestamp.toString();
 
 							return (
 								<OrderCard
