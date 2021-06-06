@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 import styled from 'styled-components';
-import { css } from 'styled-components'
+import { css } from 'styled-components';
 
 
 const InputStyles = css`
@@ -18,10 +18,12 @@ const InputStyles = css`
 
 const Input = styled.input`
 	${InputStyles}
+	${props => props.error ? 'border-bottom: 2px solid #F62D76;' : null};
 `;
 
 const TextArea = styled.textarea`
 	${InputStyles}
+	${props => props.error ? 'border-bottom: 2px solid #F62D76;' : null};
 `;
 
 const Wrapper = styled.div`
@@ -38,6 +40,14 @@ const Label = styled.label`
 	color: #6C6C6C;
 `;
 
+export const Error = styled.label`
+	font-weight: 500;
+	font-size: 10px;
+	line-height: 20px;
+	color: #F62D76;
+	/* border-top: 2px solid #F62D76; */
+`;
+
 const TextField = forwardRef(({ multiline, label, error, ...rest }, ref) => {
 	return (
 		<Wrapper>
@@ -46,8 +56,15 @@ const TextField = forwardRef(({ multiline, label, error, ...rest }, ref) => {
 			</Label>
 			{
 				multiline ?
-				<TextArea ref={ref} row={5} {...rest} />:
-				<Input ref={ref} {...rest} />
+					<TextArea error={error} ref={ref} row={5} {...rest} /> :
+					<Input error={error} ref={ref} {...rest} />
+			}
+			{
+				error ?
+					<Error>
+						{error}
+					</Error>
+					: null
 			}
 		</Wrapper>
 	);

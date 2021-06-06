@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "buffer": "^6.0.3",
+    "formik": "^2.2.9",
     "ipfs-http-client": "^50.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -12,7 +13,8 @@
     "react-scripts": "^4.0.3",
     "styled-components": "^5.3.0",
     "web-vitals": "^1.1.2",
-    "web3": "1.2.2"
+    "web3": "1.2.2",
+    "yup": "^0.32.9"
   },
   "scripts": {
     "start": "react-scripts start",

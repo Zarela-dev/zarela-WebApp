@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import FileInput from './FileInput';
 import Checkbox from './Elements/Checkbox';
 import { Button } from './Elements/Button';
-import TextField from './Elements/TextField';
+import TextField, { Error } from './Elements/TextField';
 
 const SubmitButton = styled.button`
 	${Button};
@@ -23,20 +23,18 @@ const Divider = styled.div`
 	margin: ${props => props.theme.spacing(5)} 0 ${props => props.theme.spacing(6)};
 `;
 
-const CreateOrderForm = React.forwardRef(({onSubmit, formValues, setFormValues}, ref) => {
+const CreateOrderForm = React.forwardRef(({ formik }, ref) => {
 	return (
-		<form onSubmit={onSubmit}>
+		<form onSubmit={formik.handleSubmit}>
 			<TextField
 				placeholder={'write main topics in your test'}
 				label='Title *'
 				type='text'
 				name={'title'}
-				value={formValues.title}
+				error={formik.errors?.title}
+				value={formik.values.title}
 				onChange={(e) => {
-					setFormValues(values => ({
-						...values,
-						title: e.target.value
-					}));
+					formik.setFieldValue('title', e.target.value);
 				}}
 			/>
 			<TextField
@@ -45,12 +43,10 @@ const CreateOrderForm = React.forwardRef(({onSubmit, formValues, setFormValues},
 				label='Description *'
 				type='text'
 				name={'desc'}
-				value={formValues.desc}
+				error={formik.errors?.desc}
+				value={formik.values.desc}
 				onChange={(e) => {
-					setFormValues(values => ({
-						...values,
-						desc: e.target.value
-					}));
+					formik.setFieldValue('desc', e.target.value);
 				}}
 			/>
 			<TextField
@@ -58,12 +54,10 @@ const CreateOrderForm = React.forwardRef(({onSubmit, formValues, setFormValues},
 				label='Allocated Biobits *'
 				type='text'
 				name={'tokenPay'}
-				value={formValues.tokenPay}
+				error={formik.errors?.tokenPay}
+				value={formik.values.tokenPay}
 				onChange={(e) => {
-					setFormValues(values => ({
-						...values,
-						tokenPay: e.target.value
-					}));
+					formik.setFieldValue('tokenPay', e.target.value);
 				}}
 			/>
 			<TextField
@@ -71,12 +65,10 @@ const CreateOrderForm = React.forwardRef(({onSubmit, formValues, setFormValues},
 				label='Contributors *'
 				type='text'
 				name={'instanceCount'}
-				value={formValues.instanceCount}
+				error={formik.errors?.instanceCount}
+				value={formik.values.instanceCount}
 				onChange={(e) => {
-					setFormValues(values => ({
-						...values,
-						instanceCount: e.target.value
-					}));
+					formik.setFieldValue('instanceCount', e.target.value);
 				}}
 			/>
 			<TextField
@@ -84,12 +76,10 @@ const CreateOrderForm = React.forwardRef(({onSubmit, formValues, setFormValues},
 				label='Category *'
 				type='text'
 				name={'category'}
-				value={formValues.category}
+				error={formik.errors?.category}
+				value={formik.values.category}
 				onChange={(e) => {
-					setFormValues(values => ({
-						...values,
-						category: e.target.value
-					}));
+					formik.setFieldValue('category', e.target.value);
 				}}
 			/>
 			<FileInput
@@ -99,22 +89,26 @@ const CreateOrderForm = React.forwardRef(({onSubmit, formValues, setFormValues},
 				label={'Upload your white paper here'}
 				ref={ref}
 				name={'whitepaper'}
-				value={formValues.whitepaper}
+				error={formik.errors?.whitepaper}
+				value={formik.values.whitepaper}
 				onChange={(e) => {
-					setFormValues(values => ({
-						...values,
-						whitepaper: e.target.value
-					}));
+					formik.setFieldValue('whitepaper', e.target.value);
 				}}
 			/>
-			{/* <button type='submit'>
-								submit
-							</button> */}
-			<Checkbox checked={formValues.agreement} onChange={(e) => setFormValues(data => ({ ...data, agreement: e.target.checked }))}>
+			<Checkbox checked={formik.values.terms} name='terms' onChange={(e) => formik.setFieldValue('terms', e.target.checked)}>
 				Your request won’t be able to be edited, make sure every data you added is correct and final. By marking this box you claim your agreement towards policies.
 			</Checkbox>
+			{
+				formik.errors?.terms ?
+					<Error>
+						{
+							formik.errors?.terms
+						}
+					</Error>
+					: null
+			}
 			<Divider />
-			<SubmitButton>
+			<SubmitButton type='submit'>
 				Submit
 			</SubmitButton>
 		</form>

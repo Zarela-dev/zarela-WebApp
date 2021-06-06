@@ -38,6 +38,7 @@ const Button = styled.button`
 `;
 
 const Pagination = () => {
+	return null;
 	return (
 		<Wrapper>
 			<ArrowButtonPrev to='/'>
