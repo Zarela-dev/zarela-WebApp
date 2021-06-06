@@ -2,7 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { SmallCheckbox } from './Elements/Checkbox';
 import { AvatarImage, Avatar } from './Elements/OrderCard';
-import avatarIcon from '../assets/icons/avatar.png';
+import avatarImage0 from '../assets/avatar/avatar-0.jpg';
+import avatarImage1 from '../assets/avatar/avatar-1.jpg';
+import avatarImage2 from '../assets/avatar/avatar-2.jpg';
+import avatarImage3 from '../assets/avatar/avatar-3.jpg';
 import downloadIcon from '../assets/icons/download.svg';
 import { Spacer } from './Elements/Spacer';
 import { Scrollbar } from './Elements/Scrollbar';
@@ -117,6 +120,8 @@ const DownloadLink = styled.a`
 `;
 
 const OrderFilesTable = ({ data, selected, onChange, onBulkChange, isAllChecked, changeAll }) => {
+	let avatarImage = [avatarImage0, avatarImage1, avatarImage2, avatarImage3];
+
 	return (
 		<Table>
 			<Row>
@@ -164,7 +169,7 @@ const OrderFilesTable = ({ data, selected, onChange, onBulkChange, isAllChecked,
 						<CellWrapper>
 							<Cell>
 								<SmallAvatar>
-									<AvatarImage src={avatarIcon} />
+									<AvatarImage src={avatarImage[Math.floor(Math.random() * 4)]} />
 								</SmallAvatar>
 								{reqAddress}
 							</Cell>
