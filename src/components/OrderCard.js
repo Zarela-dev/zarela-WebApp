@@ -38,7 +38,7 @@ const OrderCard = (props) => {
 					<AvatarImage src={avatarImage[Math.floor(Math.random() * 4)]} />
 				</Avatar>
 				<Typography weight='bold' variant='title'>
-					{props.title.length < 140 ? props.title : props.title.substr(0, 140) + '...'}
+					{props.title.length < 130 ? props.title : props.title.substr(0, 130) + '...'}
 				</Typography>
 				<Spacer />
 				<Bookmark src={bookmarkIcon} />
