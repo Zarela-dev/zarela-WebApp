@@ -91,12 +91,6 @@ export default function Header() {
 					Account
 				</NavLink>
 			</NavItem>
-			<NavItem to='/'>
-				<NavIcon src={wallet} />
-				<NavLink>
-					Wallet
-				</NavLink>
-			</NavItem>
 			<Spacer />
 			<SubmitRequestButton to='/createOrder'>
 				New Request
