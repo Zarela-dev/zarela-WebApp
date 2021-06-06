@@ -6,8 +6,8 @@ const initialState = {
 	contract: null,
 	accounts: [],
 	error: null,
-	biobitBalance: 0,
-	etherBalance: 0
+	biobitBalance: 'Connect To See Data',
+	etherBalance: 'Connect To See Data'
 };
 
 const web3Context = React.createContext(initialState);
@@ -72,6 +72,7 @@ const Web3Provider = ({ children }) => {
 				// example of interacting with the contract's methods.
 
 				window.ethereum.on('accountsChanged', (accounts) => {
+
 					// Handle the new accounts, or lack thereof.
 					// "accounts" will always be an array, but it can be empty.
 					console.log('account changed', accounts);
@@ -81,25 +82,12 @@ const Web3Provider = ({ children }) => {
 					});
 				});
 
-				ZarelaContract.methods.balanceOf(accounts[0]).call((error, result) => {
-					if (!error) {
-						dispatch({
-							type: 'SET_BIOBIT_BALANCE',
-							payload: result
-						});
-					}
-					else {
-						console.error(error.message);
-					}
+				window.ethereum.on('connect', () => {
+					console.log('connected to metamask');
 				});
 
-				web3.eth.getBalance(accounts[0]).then(function (result) {
-					dispatch({
-						type: 'SET_ETHER_BALANCE',
-						payload: web3.utils.fromWei(result, "ether") + " ETH"
-					});
-				}).catch(error => {
-					console.error(error.message);
+				window.ethereum.on('connect', () => {
+					console.log('disconnected from metamask');
 				});
 
 				//   ethereum.on('chainChanged', (chainId) => {
@@ -140,6 +128,31 @@ const Web3Provider = ({ children }) => {
 	useEffect(() => {
 		configureWeb3();
 	}, []);
+
+	useEffect(() => {
+		if (Web3.accounts.length > 0) {
+			Web3.contract.methods.balanceOf(Web3.accounts[0]).call((error, result) => {
+				if (!error) {
+					dispatch({
+						type: 'SET_BIOBIT_BALANCE',
+						payload: result
+					});
+				}
+				else {
+					console.error(error.message);
+				}
+			});
+
+			Web3.web3.eth.getBalance(Web3.accounts[0]).then(function (result) {
+				dispatch({
+					type: 'SET_ETHER_BALANCE',
+					payload: Web3.web3.utils.fromWei(result, "ether") + " ETH"
+				});
+			}).catch(error => {
+				console.error(error.message);
+			});
+		}
+	}, [Web3.accounts.length]);
 
 	return (
 		<web3Context.Provider

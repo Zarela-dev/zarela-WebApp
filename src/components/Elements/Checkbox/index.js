@@ -9,9 +9,9 @@ const CheckboxContainer = styled.div`
 
 const Icon = styled.img`
 	margin: 0 auto;
-	width: ${props => props.small ? '10px' : '40px'};
-	position: 'relative';
-	top: ${props => props.small ? '2px' : 0};
+	width: ${props => props.small ? '10px' : '18px'};
+	position: relative;
+	top: ${props => props.small ? '0px' : '5px'};
 `;
 // Hide checkbox visually but remain accessible to screen readers.
 // Source: https://polished.js.org/docs/#hidevisually
@@ -29,25 +29,38 @@ const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
 `;
 
 
-const StyledCheckbox = styled.div`
+const StyledCheckboxWrapper = styled.div`
 	display: inline-block;
+	position: relative;
 	width: ${props => props.small ? '20px' : '40px'};
 	height: ${props => props.small ? '20px' : '40px'};
 	background: white;
-	border: 1px solid #A78BE2;
 	box-sizing: border-box;
 	border-radius: 4px;
 	transition: all 150ms;
-	background: ${props => props.checked ? '#2EECA8' : '#fff'};
 	text-align: center;
 
-	${HiddenCheckbox}:focus + & {
-		box-shadow: 0 0 0 3px ${props => props.theme.primaryFaded};
-	}
+	border: 3px solid ${props => props.theme.primaryFaded};
 
 	${Icon} {
 		visibility: ${props => (props.checked ? 'visible' : 'hidden')}
 	}
+`;
+
+const StyledCheckbox = styled.div`
+	display: inline-block;
+	position: absolute;
+	z-index: 1;
+	top: ${props => props.small ? '-3px' : '2px'};
+	left: ${props => props.small ? '-3px' : '2px'};
+	width: ${props => props.small ? '20px' : '30px'};
+	height: ${props => props.small ? '20px' : '30px'};
+	background: white;
+	box-sizing: border-box;
+	border-radius: 4px;
+	transition: all 150ms;
+	background: ${props => props.checked ? '#2EECA8' : 'transparent'};
+	text-align: center;
 `;
 
 const Label = styled.label`
@@ -61,9 +74,11 @@ const Checkbox = ({ children, checked, ...props }) => (
 	<Label>
 		<CheckboxContainer>
 			<HiddenCheckbox checked={checked} {...props} />
-			<StyledCheckbox checked={checked}>
-				<Icon src={tick} />
-			</StyledCheckbox>
+			<StyledCheckboxWrapper checked={checked}>
+				<StyledCheckbox checked={checked}>
+					<Icon src={tick} />
+				</StyledCheckbox>
+			</StyledCheckboxWrapper>
 		</CheckboxContainer>
 		{children}
 	</Label>
@@ -73,9 +88,11 @@ export const SmallCheckbox = ({ children, checked, className, ...props }) => (
 	<Label className={className}>
 		<CheckboxContainer small>
 			<HiddenCheckbox checked={checked} {...props} />
-			<StyledCheckbox small checked={checked}>
-				<Icon small src={tick} />
-			</StyledCheckbox>
+			<StyledCheckboxWrapper small checked={checked}>
+				<StyledCheckbox small checked={checked}>
+					<Icon small src={tick} />
+				</StyledCheckbox>
+			</StyledCheckboxWrapper>
 		</CheckboxContainer>
 		{children}
 	</Label>

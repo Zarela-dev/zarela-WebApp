@@ -11,16 +11,22 @@ import {
 	Avatar,
 	AvatarImage,
 	HeaderLayout,
-	ProgressLayout,
+	Footer,
 	TokenBadge,
 	Spacer,
 	TokenIcon,
 	Bookmark,
 	Typography,
 	ContributorBadge,
-	ContributorsIcon
+	ContributorsIcon,
+	ProgressTrackerTrack,
+	ProgressTrackerWrapper,
+	ProgressTrackerProcess,
+	TokenValue,
+	Divider,
 } from './Elements/OrderCard';
 import maxWidthWrapper from './Elements/MaxWidth';
+import confirmIcon from '../assets/icons/confirm.svg';
 
 const PageWrapper = styled.div`
 	
@@ -87,8 +93,14 @@ const FileCardSpacer = styled.div`
 	flex: 0 1 50px;
 `;
 
-const OrderDetails = React.forwardRef(({ order, submitSignal }, ref) => {
+const CustomProgressTrackerWrapper = styled(ProgressTrackerWrapper)`
+	margin-top: ${props => props.theme.spacing(2)};
+	margin-bottom: ${props => props.theme.spacing(0)};
+`;
+
+const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) => {
 	const contributors = `${order.totalContributed}/${order.totalContributors}`;
+	const totalContributedCount = `${order.totalContributed}/${order.totalContributedCount}`;
 	const [signalFile, setSignalFile] = useState(null);
 
 	return (
@@ -104,28 +116,40 @@ const OrderDetails = React.forwardRef(({ order, submitSignal }, ref) => {
 						</Typography>
 						<Spacer />
 						<Typography nowrap variant='caption'>
-							6 hours ago
+							{timestamp}
 						</Typography>
 						<Bookmark src={bookmarkIcon} />
 					</HeaderLayout>
-					<ProgressLayout>
+					<Footer>
 						<TokenBadge>
 							<TokenIcon src={biobitIcon} />
-							<Typography weight='bold' color='secondary' variant='badge'>
+							<TokenValue>
 								{order.tokenPay}
-							</Typography>
-							<Typography weight='bold' color='secondary' variant='badge'>
+							</TokenValue>
+							<Typography weight='bold' color='primary' variant='badge'>
 								BioBit
 							</Typography>
 						</TokenBadge>
-						<Spacer />
+						<Divider />
 						<ContributorBadge>
 							<ContributorsIcon src={contributorIcon} />
 							<Typography weight='bold' color='secondary' variant='badge'>
 								{contributors}
 							</Typography>
 						</ContributorBadge>
-					</ProgressLayout>
+						<Divider />
+						<ContributorBadge>
+							<ContributorsIcon src={confirmIcon} />
+							<Typography weight='bold' color='secondary' variant='badge'>
+								{totalContributedCount}
+							</Typography>
+						</ContributorBadge>
+					</Footer>
+					<CustomProgressTrackerWrapper>
+						<ProgressTrackerTrack>
+							<ProgressTrackerProcess width={+order.totalContributed / +order.totalContributors * 100} />
+						</ProgressTrackerTrack>
+					</CustomProgressTrackerWrapper>
 				</HeaderInner>
 			</HeaderContainer>
 			<DescriptionContainer>
@@ -164,7 +188,7 @@ const OrderDetails = React.forwardRef(({ order, submitSignal }, ref) => {
 					ref={ref}
 					name={'whitepaper'}
 					value={signalFile}
-					onChange={(e) => { 
+					onChange={(e) => {
 						setSignalFile(e.target.files[0]);
 					}}
 					onClick={submitSignal}

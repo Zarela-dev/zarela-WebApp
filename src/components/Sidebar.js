@@ -104,7 +104,7 @@ const Sidebar = () => {
 					Your Biobit Balance:
 				</Subtitle>
 				<Value>
-					{`${+Web3.biobitBalance / Math.pow(10, 9)}  Biobit`}
+					{`${!Number.isNaN(Web3.biobitBalance) ? +Web3.biobitBalance / Math.pow(10, 9) + '  Biobit' : Web3.biobitBalance}`}
 				</Value>
 			</Row>
 			<Row>

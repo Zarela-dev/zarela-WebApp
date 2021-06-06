@@ -6,6 +6,7 @@ import { SearchBar } from '../components/SearchBar';
 import Sidebar from '../components/Sidebar';
 import Pagination from '../components/Pagination';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
+import { switchFormat, timeSince } from '../utils';
 
 const OrderListWrapper = styled.div`
 	width: 100%;
@@ -62,7 +63,9 @@ const OrderList = () => {
 							totalContributed: +result[4] - +result[7],
 							categories: result[8], // NOT TO BE USED IN DEMO
 							whitePaper: result[5],
-							status: result[9] // order status inprogress(false)/done(true)
+							status: result[9], // order status inprogress(false)/done(true)
+							timestamp: result[11],
+							totalContributedCount: result[10]
 						};
 						console.log(orderTemplate);
 						setOrders(orders => ({
@@ -84,16 +87,24 @@ const OrderList = () => {
 				<Sidebar></Sidebar>
 				<OrderListContentWrapper>
 					{
-						Object.values(orders).map(item => (
-							<OrderCard
-								key={item.orderId}
-								orderId={item.orderId}
-								title={item.title}
-								description={item.description}
-								tokenPay={item.tokenPay}
-								contributors={`${item.totalContributed}/${item.totalContributors}`}
-							/>
-						))
+						Object.values(orders).map(item => {
+							let timestamp = new Date((Math.floor(+item.timestamp / 1000)));
+							let timestampFormatted = switchFormat(new Date(+item.timestamp)) ? timeSince(new Date(Date.now() - timestamp)) : timestamp;
+
+							return (
+								<OrderCard
+									key={item.orderId}
+									orderId={item.orderId}
+									title={item.title}
+									description={item.description}
+									tokenPay={item.tokenPay}
+									timestamp={timestampFormatted}
+									progress={+item.totalContributed / +item.totalContributors * 100}
+									contributors={`${item.totalContributed}/${item.totalContributors}`}
+									totalContributedCount={`${item.totalContributed}/${item.totalContributedCount}`}
+								/>
+							);
+						})
 					}
 				</OrderListContentWrapper>
 			</OrderListLayout>

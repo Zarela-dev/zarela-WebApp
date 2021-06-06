@@ -63,7 +63,6 @@ export const formatLabel = (label) => {
 };
 
 export const getFileName = (inputRef, fallbackLabel) => {
-	debugger;
 	if (inputRef && inputRef.current)
 		if (inputRef.current.files.length)
 			if (inputRef.current.files[0])
