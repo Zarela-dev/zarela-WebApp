@@ -25,7 +25,7 @@ const DownloadFileCard = ({
 	return (
 		<Card>
 			<CustomFileInputWrapper hasBorder>
-				<FileInputLink href={fileLink}>
+				<FileInputLink href={fileLink} target='_blank'>
 					{buttonLabel}
 				</FileInputLink>
 				<FileInputTitle>

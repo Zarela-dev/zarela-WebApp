@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const Typography = styled.div`
+	line-height: 1.3;
 	font-size: ${props => {
 		if (props.variant === 'title')
 			return props.theme.title;

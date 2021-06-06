@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import fileDownloadIcon from '../assets/icons/file-download.svg';
 import fileUploadIcon from '../assets/icons/file-upload.svg';
@@ -21,6 +21,9 @@ export const FileInputWrapper = styled.div`
 `;
 
 export const FileInputTitle = styled.div`
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
 	color:${props => props.theme.textPrimary};
 `;
 
@@ -49,15 +52,35 @@ export const FileInputIcon = styled.img`
 	margin-right: ${props => props.theme.spacing(1)};
 `;
 
-export const getFileName = (inputRef, fallbackLabel) => {
-	if (inputRef && inputRef.current)
-		if (inputRef.current.files)
-			if (inputRef.current.files[0])
-				return inputRef.current.files[0].name;
-	return fallbackLabel;
+export const FileName = styled.div`
+`;
+
+export const formatLabel = (label) => {
+	const length = 28;
+	if (label.length <= length)
+		return label;
+	return label.substr(0, length) + '...';
 };
 
-const FileInput = forwardRef(({ disableUpload,className, hasBorder, showSelected, value, buttonLabel, icon, label, ...rest }, ref) => {
+export const getFileName = (inputRef, fallbackLabel) => {
+	if (inputRef && inputRef.current)
+		if (inputRef.current.files.length)
+			if (inputRef.current.files[0])
+				return formatLabel(inputRef.current.files[0].name);
+	return formatLabel(fallbackLabel);
+};
+
+const FileInput = forwardRef(({
+	disableUpload,
+	className,
+	hasBorder,
+	showSelected,
+	value,
+	buttonLabel,
+	icon,
+	label,
+	...rest
+}, ref) => {
 	return (
 		<FileInputWrapper hasBorder={hasBorder} className={className}>
 			<FileInputLabel>
@@ -77,9 +100,11 @@ const FileInput = forwardRef(({ disableUpload,className, hasBorder, showSelected
 									<FileInputIcon src={fileDownloadIcon} /> :
 									<FileInputIcon src={fileUploadIcon} />
 							}
-							{
-								getFileName(ref, label)
-							}
+							<FileName>
+								{
+									getFileName(ref, formatLabel(label))
+								}
+							</FileName>
 						</FileInputTitle>
 					)
 					: (
@@ -89,7 +114,9 @@ const FileInput = forwardRef(({ disableUpload,className, hasBorder, showSelected
 									<FileInputIcon src={fileDownloadIcon} /> :
 									<FileInputIcon src={fileUploadIcon} />
 							}
-							{label}
+							<FileName>
+								{formatLabel(label)}
+							</FileName>
 						</FileInputTitle>
 					)
 			}

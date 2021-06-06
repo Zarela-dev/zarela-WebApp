@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
-import avatarImage from '../assets/icons/avatar.png';
+import avatarImage0 from '../assets/avatar/avatar-0.jpg';
+import avatarImage1 from '../assets/avatar/avatar-1.jpg';
+import avatarImage2 from '../assets/avatar/avatar-2.jpg';
+import avatarImage3 from '../assets/avatar/avatar-3.jpg';
 import biobitIcon from '../assets/icons/biobit.svg';
 import contributorIcon from '../assets/icons/contributor.png';
 import bookmarkIcon from '../assets/icons/bookmark.svg';
@@ -11,22 +14,25 @@ import {
 	Avatar,
 	AvatarImage,
 	HeaderLayout,
-	ProgressLayout,
+	Footer,
 	TokenBadge,
 	Spacer,
 	TokenIcon,
 	Bookmark,
 	Typography,
 	ContributorBadge,
-	ContributorsIcon
+	ContributorsIcon,
+	ProgressTrackerTrack,
+	ProgressTrackerWrapper,
+	ProgressTrackerProcess,
+	TokenValue,
+	Divider,
 } from './Elements/OrderCard';
+import maxWidthWrapper from './Elements/MaxWidth';
+import confirmIcon from '../assets/icons/confirm.svg';
 
 const PageWrapper = styled.div`
 	
-`;
-const maxWidthWrapper = css`
-	max-width: ${props => props.theme.maxWidth};
-	margin: 0 auto;
 `;
 
 const HeaderContainer = styled.header`
@@ -90,8 +96,16 @@ const FileCardSpacer = styled.div`
 	flex: 0 1 50px;
 `;
 
-const OrderDetails = React.forwardRef(({ order, submitSignal }, ref) => {
+const CustomProgressTrackerWrapper = styled(ProgressTrackerWrapper)`
+	margin-top: ${props => props.theme.spacing(2)};
+	margin-bottom: ${props => props.theme.spacing(0)};
+`;
+
+const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) => {
+	let avatarImage = [avatarImage0, avatarImage1, avatarImage2, avatarImage3];
 	const contributors = `${order.totalContributed}/${order.totalContributors}`;
+	const totalContributedCount = `${order.totalContributed}/${order.totalContributedCount}`;
+	const [signalFile, setSignalFile] = useState(null);
 
 	return (
 		<PageWrapper>
@@ -99,35 +113,47 @@ const OrderDetails = React.forwardRef(({ order, submitSignal }, ref) => {
 				<HeaderInner>
 					<HeaderLayout>
 						<Avatar>
-							<AvatarImage src={avatarImage} />
+							<AvatarImage src={avatarImage[Math.floor(Math.random() * 4)]} />
 						</Avatar>
 						<Typography weight='bold' variant='title'>
 							{order.title}
 						</Typography>
 						<Spacer />
 						<Typography nowrap variant='caption'>
-							6 hours ago
+							{timestamp}
 						</Typography>
 						<Bookmark src={bookmarkIcon} />
 					</HeaderLayout>
-					<ProgressLayout>
+					<Footer>
 						<TokenBadge>
 							<TokenIcon src={biobitIcon} />
-							<Typography weight='bold' color='secondary' variant='badge'>
+							<TokenValue>
 								{order.tokenPay}
-							</Typography>
-							<Typography weight='bold' color='secondary' variant='badge'>
+							</TokenValue>
+							<Typography weight='bold' color='primary' variant='badge'>
 								BioBit
 							</Typography>
 						</TokenBadge>
-						<Spacer />
+						<Divider />
 						<ContributorBadge>
 							<ContributorsIcon src={contributorIcon} />
 							<Typography weight='bold' color='secondary' variant='badge'>
 								{contributors}
 							</Typography>
 						</ContributorBadge>
-					</ProgressLayout>
+						<Divider />
+						<ContributorBadge>
+							<ContributorsIcon src={confirmIcon} />
+							<Typography weight='bold' color='secondary' variant='badge'>
+								{totalContributedCount}
+							</Typography>
+						</ContributorBadge>
+					</Footer>
+					<CustomProgressTrackerWrapper>
+						<ProgressTrackerTrack>
+							<ProgressTrackerProcess width={+order.totalContributed / +order.totalContributors * 100} />
+						</ProgressTrackerTrack>
+					</CustomProgressTrackerWrapper>
 				</HeaderInner>
 			</HeaderContainer>
 			<DescriptionContainer>
@@ -165,8 +191,10 @@ const OrderDetails = React.forwardRef(({ order, submitSignal }, ref) => {
 					label={'Upload your white paper here'}
 					ref={ref}
 					name={'whitepaper'}
-					value={null}
-					onChange={(e) => { }}
+					value={signalFile}
+					onChange={(e) => {
+						setSignalFile(e.target.files[0]);
+					}}
 					onClick={submitSignal}
 				/>
 			</FilesWrapper>
