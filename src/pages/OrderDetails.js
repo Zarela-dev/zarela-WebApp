@@ -6,6 +6,8 @@ import OrderDetails from '../components/OrderDetails';
 import { web3Context } from '../web3Provider';
 import { switchFormat, timeSince } from '../utils';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
+import * as ethUtil from 'ethereumjs-util';
+import { encrypt/* , recoverPersonalSignature, recoverTypedSignatureLegacy, recoverTypedSignature, recoverTypedSignature_v4 */ } from 'eth-sig-util';
 
 const OrderDetailsPage = () => {
 	const { id } = useParams();
@@ -35,8 +37,50 @@ const OrderDetailsPage = () => {
 					const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
 					const buf = Buffer(reader.result); // Convert data into buffer
 
+
+					// // get encryption public key
+					// let encryptionPublicKey;
+					// let encryptedMessage;
+					// window.ethereum
+					// 	.request({
+					// 		method: 'eth_getEncryptionPublicKey',
+					// 		params: [Web3.accounts[0]], // you must have access to the specified account
+					// 	})
+					// 	.then((result) => {
+					// 		encryptionPublicKey = result;
+					// 		console.log(Web3.accounts[0])
+					// 		console.log(encryptionPublicKey)
+					// 	})
+					// 	.catch((error) => {
+					// 		if (error.code === 4001) {
+					// 			// EIP-1193 userRejectedRequest error
+					// 			console.log("We can't encrypt anything without the key.");
+					// 		} else {
+					// 			console.error(error);
+					// 		}
+					// 	});
+
+					// console.log(buf);
+
+					// decrypt
+
+
+					// encrypt
 					try {
-						const ipfsResponse = await ipfs.add(buf);
+						const encryptedMessage = ethUtil.bufferToHex(
+							Buffer.from(
+								JSON.stringify(
+									encrypt(
+										'+GH2N+ryjiwTlwsz+aosxMHo2cfefvuWK/9qbukm0xE=',
+										{ data: buf.toString() },
+										'x25519-xsalsa20-poly1305'
+									)
+								),
+								'utf8'
+							)
+						);
+
+						const ipfsResponse = await ipfs.add(encryptedMessage);
 
 						let url = `https://ipfs.io/ipfs/${ipfsResponse.path}`;
 						console.log(`Document Of Conditions --> ${url}`);
@@ -51,7 +95,7 @@ const OrderDetailsPage = () => {
 									alert(error.message);
 								}
 							});
-							
+
 						Web3.contract.events.Contributed({}, function (error, result) {
 							if (!error) {
 								let returnValues = result.returnValues;

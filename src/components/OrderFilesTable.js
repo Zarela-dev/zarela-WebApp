@@ -111,7 +111,7 @@ const FileCheckbox = styled(SmallCheckbox)`
 const FileName = styled.div`
 `;
 
-const DownloadButton = styled.img`
+const DownloadButtonImage = styled.img`
 	width: 	20px;
 `;
 
@@ -119,7 +119,19 @@ const DownloadLink = styled.a`
 	margin-right: ${props => props.theme.spacing(2)};
 `;
 
-const OrderFilesTable = ({ data, selected, onChange, onBulkChange, isAllChecked, changeAll }) => {
+const DownloadButton = styled.button`
+	margin-right: ${props => props.theme.spacing(2)};
+`;
+
+const OrderFilesTable = ({
+	data,
+	selected,
+	onChange,
+	onBulkChange,
+	isAllChecked,
+	changeAll,
+	signalDownloadHandler
+}) => {
 	let avatarImage = [avatarImage0, avatarImage1, avatarImage2, avatarImage3];
 
 	return (
@@ -198,9 +210,9 @@ const OrderFilesTable = ({ data, selected, onChange, onBulkChange, isAllChecked,
 														}
 													</FileName>
 													<Spacer />
-													<DownloadLink target='_blank' href={`${process.env.REACT_APP_IPFS_LINK + file}`}>
-														<DownloadButton src={downloadIcon} />
-													</DownloadLink>
+													<DownloadButton onClick={() => signalDownloadHandler(file)}>
+														<DownloadButtonImage src={downloadIcon} />
+													</DownloadButton>
 												</FileItem>
 											);
 										})

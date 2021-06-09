@@ -13,7 +13,7 @@ import contributorIcon from '../assets/icons/contributor.png';
 import OrderFilesTable from './OrderFilesTable';
 import { web3Context } from '../web3Provider';
 import { Button } from './Elements/Button';
-
+import axios from 'axios';
 
 const Wrapper = styled.div`
 	background: ${props => props.seen ? '#EDFBF8' : '#F4F8FE'};
@@ -72,21 +72,29 @@ const SubmitButton = styled.button`
 	line-height: 18px;
 `;
 
-const OrderListItem = ({ showContributions, total, orderId, title, tokenPay, contributors, handleConfirm }) => {
+const OrderListItem = ({
+	showContributions,
+	total,
+	orderId,
+	title,
+	tokenPay,
+	contributors,
+	handleConfirm
+}) => {
 	const [isOpen, setOpen] = useState(false);
 	const { Web3 } = useContext(web3Context);
-	const [formatted, setFormatted] = useState({});
+	const [formattedData, setFormattedData] = useState({});
 	const [selected, setSelected] = useState({});
 
 	const isAllChecked = () => {
 		const chosen = Object.values(selected).reduce((acc, curr) => acc.concat(...curr), []);
-		const total = Object.values(formatted).reduce((acc, curr) => acc.concat(...curr), []);
+		const total = Object.values(formattedData).reduce((acc, curr) => acc.concat(...curr), []);
 		return chosen.length === total.length;
 	};
 
 	const changeAll = (type) => {
 		if (type === 'check')
-			setSelected(formatted);
+			setSelected(formattedData);
 		if (type === 'uncheck')
 			setSelected(values => {
 				let result = {};
@@ -103,7 +111,7 @@ const OrderListItem = ({ showContributions, total, orderId, title, tokenPay, con
 		if (type === 'check')
 			setSelected(values => ({
 				...values,
-				[address]: formatted[address]
+				[address]: formattedData[address]
 			}));
 		if (type === 'uncheck')
 			setSelected(values => {
@@ -127,6 +135,72 @@ const OrderListItem = ({ showContributions, total, orderId, title, tokenPay, con
 					[address]: values[address].filter(item => item !== fileHash)
 				};
 			});
+	};
+
+	const signalDownloadHandler = (fileHash) => {
+		// function download(filename, mimeType, text) {
+		// 	var element = document.createElement('a');
+		// 	element.setAttribute('href', `${mimeType},` + encodeURIComponent(text));
+		// 	element.setAttribute('download', filename);
+
+		// 	element.style.display = 'none';
+		// 	document.body.appendChild(element);
+
+		// 	element.click();
+
+		// 	document.body.removeChild(element);
+		// }
+
+		// Start file download.
+		axios.get(`http://127.0.0.1:8080/ipfs/${fileHash}`)
+			.then(fileRes => {
+				console.log(fileRes);
+
+				window.ethereum
+					.request({
+						method: 'eth_decrypt',
+						params: [fileRes.data, Web3.accounts[0]],
+					})
+					.then((decryptedMessage) => {
+						debugger;
+						function binaryToArrayBuffer(binaryString) {
+							// var binaryLen = binaryString.length;
+							// var bytes = new Uint8Array(binaryLen);
+							// for (var i = 0; i < binaryLen; i++) {
+							// 	var ascii = binaryString.charCodeAt(i);
+							// 	bytes[i] = ascii;
+							// }
+							var data = btoa(String(binaryString));
+							console.log('atob:', data);
+							return data;
+						}
+
+						var saveByteArray = (function () {
+							var a = document.createElement("a");
+							document.body.appendChild(a);
+							a.style = "display: none";
+							return function (data, name) {
+								var blob = new Blob(data, { type: "application/pdf" }),
+									url = window.URL.createObjectURL(blob);
+								a.href = url;
+								a.download = name;
+								a.click();
+								window.URL.revokeObjectURL(url);
+							};
+						}());
+
+						console.log('The decrypted message is:', decryptedMessage);
+						saveByteArray([binaryToArrayBuffer(decryptedMessage)], 'example.pdf');
+					})
+					.catch((error) => console.log(error.message));
+			})
+			.catch(error => {
+
+			});
+
+
+
+
 	};
 
 	useEffect(() => {
@@ -158,7 +232,7 @@ const OrderListItem = ({ showContributions, total, orderId, title, tokenPay, con
 						});
 					});
 
-					setFormatted(formatted);
+					setFormattedData(formatted);
 					setSelected(selected);
 				} else {
 					console.error(error.message);
@@ -200,7 +274,8 @@ const OrderListItem = ({ showContributions, total, orderId, title, tokenPay, con
 					<>
 						<Body>
 							<OrderFilesTable
-								data={formatted}
+								signalDownloadHandler={signalDownloadHandler}
+								data={formattedData}
 								selected={selected}
 								onChange={onChange}
 								onBulkChange={onBulkChange}
