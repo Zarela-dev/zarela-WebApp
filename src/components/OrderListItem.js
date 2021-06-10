@@ -172,6 +172,8 @@ const OrderListItem = ({
 							// }
 							var data = btoa(String(binaryString));
 							console.log('atob:', data);
+							debugger;
+
 							return data;
 						}
 

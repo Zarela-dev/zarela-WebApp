@@ -58,17 +58,19 @@ const CreateOrder = () => {
 						const { title, desc, tokenPay, instanceCount, category } = values;
 						const reader = new FileReader();
 
-						reader.readAsArrayBuffer(fileRef.current.files[0]); // Read Provided File
+						window.ethereum
+							.request({
+								method: 'eth_getEncryptionPublicKey',
+								params: [Web3.accounts[0]], // you must have access to the specified account
+							})
+							.then((result) => {
+								const encryptionPublicKey = result;
 
-						reader.onloadend = async () => {
-							const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
-							const buf = Buffer(reader.result); // Convert data into buffer
+								reader.readAsArrayBuffer(fileRef.current.files[0]); // Read Provided File
 
-							try {
-								const ipfsResponse = await ipfs.add(buf);
-								formik.setFieldValue('whitepaper', ipfsResponse.path);
-								let url = `https://ipfs.io/ipfs/${ipfsResponse.path}`;
-								console.log(`Document Of Conditions --> ${url}`);
+								reader.onloadend = async () => {
+									const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
+									const buf = Buffer(reader.result); // Convert data into buffer
 
 								// const doc = document.getElementById("_White_Paper");
 								var allocatedBiobits = tokenPay * Math.pow(10, 9);
@@ -90,11 +92,16 @@ const CreateOrder = () => {
 									else {
 										alert(error.message);
 									}
-								});
-							} catch (error) {
-								console.error(error);
-							}
-						};
+								};
+							})
+							.catch((error) => {
+								if (error.code === 4001) {
+									// EIP-1193 userRejectedRequest error
+									console.log("We can't encrypt anything without the key.");
+								} else {
+									console.error(error);
+								}
+							});
 					}
 				}
 		})

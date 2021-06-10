@@ -25,92 +25,65 @@ const OrderDetailsPage = () => {
 	};
 
 	const submitSignal = (e) => {
-		if (sendSignalRef !== null) {
-			setDialog(true);
-			if (Web3.accounts.length > 0) {
-				setDialog(false);
-				const reader = new FileReader();
+		if (Object.keys(order).length !== 0)
+			if (sendSignalRef !== null) {
+				setDialog(true);
+				if (Web3.accounts.length > 0) {
+					setDialog(false);
+					const reader = new FileReader();
 
-				reader.readAsArrayBuffer(sendSignalRef.current.files[0]); // Read Provided File
+					reader.readAsArrayBuffer(sendSignalRef.current.files[0]); // Read Provided File
 
-				reader.onloadend = async () => {
-					const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
-					const buf = Buffer(reader.result); // Convert data into buffer
+					reader.onloadend = async () => {
+						const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
+						const buf = Buffer(reader.result); // Convert data into buffer
 
+						// encrypt
+						try {
+							const encryptedMessage = ethUtil.bufferToHex(
+								Buffer.from(
+									JSON.stringify(
+										encrypt(
+											order.encryptionPublicKey,
+											{ data: buf.toString() },
+											'x25519-xsalsa20-poly1305'
+										)
+									),
+									'utf8'
+								)
+							);
 
-					// // get encryption public key
-					// let encryptionPublicKey;
-					// let encryptedMessage;
-					// window.ethereum
-					// 	.request({
-					// 		method: 'eth_getEncryptionPublicKey',
-					// 		params: [Web3.accounts[0]], // you must have access to the specified account
-					// 	})
-					// 	.then((result) => {
-					// 		encryptionPublicKey = result;
-					// 		console.log(Web3.accounts[0])
-					// 		console.log(encryptionPublicKey)
-					// 	})
-					// 	.catch((error) => {
-					// 		if (error.code === 4001) {
-					// 			// EIP-1193 userRejectedRequest error
-					// 			console.log("We can't encrypt anything without the key.");
-					// 		} else {
-					// 			console.error(error);
-					// 		}
-					// 	});
+							const ipfsResponse = await ipfs.add(encryptedMessage);
 
-					// console.log(buf);
+							let url = `https://ipfs.io/ipfs/${ipfsResponse.path}`;
+							console.log(`Document Of Conditions --> ${url}`);
 
-					// decrypt
+							// const doc = document.getElementById("_White_Paper");
+							Web3.contract.methods.SendFile(order.orderId, order.requesterAddress, ipfsResponse.path)
+								.send({ from: Web3.accounts[0], gas: 500000, gasPrice: '30000000000' }, (error, result) => {
+									if (!error) {
+										alert(JSON.stringify('Transaction Hash is :  ' + result));
+									}
+									else {
+										alert(error.message);
+									}
+								});
 
-
-					// encrypt
-					try {
-						const encryptedMessage = ethUtil.bufferToHex(
-							Buffer.from(
-								JSON.stringify(
-									encrypt(
-										'+GH2N+ryjiwTlwsz+aosxMHo2cfefvuWK/9qbukm0xE=',
-										{ data: buf.toString() },
-										'x25519-xsalsa20-poly1305'
-									)
-								),
-								'utf8'
-							)
-						);
-
-						const ipfsResponse = await ipfs.add(encryptedMessage);
-
-						let url = `https://ipfs.io/ipfs/${ipfsResponse.path}`;
-						console.log(`Document Of Conditions --> ${url}`);
-
-						// const doc = document.getElementById("_White_Paper");
-						Web3.contract.methods.SendFile(order.orderId, order.requesterAddress, ipfsResponse.path)
-							.send({ from: Web3.accounts[0], gas: 500000, gasPrice: '30000000000' }, (error, result) => {
+							Web3.contract.events.Contributed({}, function (error, result) {
 								if (!error) {
-									alert(JSON.stringify('Transaction Hash is :  ' + result));
+									let returnValues = result.returnValues;
+									alert(JSON.stringify('The signal was sent successfully! ' + ' Signal Sending From  :  << ' + returnValues[0] + ' >>' + '   Account Address To  :  << ' + returnValues[2] + ' >>' + ' To Order Number  :  << ' + returnValues[1] + ' >>'));
 								}
 								else {
 									alert(error.message);
 								}
 							});
-
-						Web3.contract.events.Contributed({}, function (error, result) {
-							if (!error) {
-								let returnValues = result.returnValues;
-								alert(JSON.stringify('The signal was sent successfully! ' + ' Signal Sending From  :  << ' + returnValues[0] + ' >>' + '   Account Address To  :  << ' + returnValues[2] + ' >>' + ' To Order Number  :  << ' + returnValues[1] + ' >>'));
-							}
-							else {
-								alert(error.message);
-							}
-						});
-					} catch (error) {
-						console.error(error);
-					}
-				};
+						} catch (error) {
+							console.error(error);
+						}
+					};
+				}
 			}
-		}
 	};
 
 	useEffect(() => {
@@ -122,14 +95,14 @@ const OrderDetailsPage = () => {
 						title: result[1],
 						description: result[6],
 						requesterAddress: result[2],
-						tokenPay: result[3] / Math.pow(10, 9),
+						tokenPay: result[3],
 						totalContributors: result[4], // total contributors required
 						totalContributed: +result[4] - +result[7],
 						categories: result[8], // NOT TO BE USED IN DEMO
 						whitePaper: result[5],
-						status: result[9],// order status inprogress(false)/done(true)
-						timestamp: result[11],
-						totalContributedCount: result[10]
+						timestamp: result[10],
+						encryptionPublicKey: result[11],
+						totalContributedCount: result[9]
 					};
 					setOrders(orderTemplate);
 				} else {
