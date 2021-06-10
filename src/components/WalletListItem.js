@@ -18,10 +18,11 @@ const Icon = styled.img`
 	margin-right: ${props => props.theme.spacing(2)};
 `;
 
-const Title = styled.div`
+const Title = styled.a`
 	font-weight: 500;
 	font-size: 14px;
 	line-height: 18px;
+	color: ${props => props.theme.textPrimary};
 `;
 
 const TotalBadge = styled.div`
@@ -42,6 +43,7 @@ const Col = styled.div`
 
 `;
 
+
 const Divider = styled.div`
 	width: 1px;
 	background: #3C87AA;
@@ -60,18 +62,26 @@ function WalletListItem({
 	return (
 		<Wrapper>
 			<Icon src={publicKeyIcon} />
-			<Title>
-				{transactionHash}
+			<Title href={process.env.REACT_APP_ETHERSCAN_LINK + transactionHash}>
+				{transactionHash.substr(0, 20) + '...'}
 			</Title>
 			<Spacer />
+			<Divider />
+			<Col>
+				{from}
+			</Col>
+			<Divider />
+			<Col>
+				{incoming ? 'in' : 'out'}
+			</Col>
+			<Divider />
+			<Col>
+				{to}
+			</Col>
+			<Divider />
 			<Col>
 				{BBTValue}
 			</Col>
-			<Divider />
-			<Divider />
-			<TotalBadge>
-				{'total'}
-			</TotalBadge>
 		</Wrapper>
 	);
 }

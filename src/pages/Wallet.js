@@ -28,13 +28,12 @@ const Wallet = () => {
 		}).finally(() => {
 			setLoading(false);
 		});
-	}, []);
+	}, [isLoading]);
 
 	return (
 		<div>
 			{
-				isLoading && Web3.accounts.length > 0 ?
-					<div>is Loading</div> :
+				isLoading === false && Web3.accounts.length > 0 ?
 					logs.map(item => {
 						return (
 							<WalletListItem
@@ -43,10 +42,11 @@ const Wallet = () => {
 								from={item.from}
 								to={item.to}
 								BBTValue={item.value}
-								incoming={Web3.accounts[0] === item.to}
+								incoming={Web3.accounts[0].toLowerCase().trim() === item.to.trim() ? true : false}
 							/>
 						);
-					})
+					}) :
+					<div>is Loading</div>
 			}
 		</div>
 	);

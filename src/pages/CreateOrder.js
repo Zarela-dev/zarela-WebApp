@@ -9,7 +9,7 @@ import maxWidthWrapper from '../components/Elements/MaxWidth';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { Persist } from 'formik-persist'
+import { Persist } from 'formik-persist';
 
 
 const Wrapper = styled.div`
@@ -67,7 +67,6 @@ const CreateOrder = () => {
 							})
 							.then((result) => {
 								const encryptionPublicKey = result;
-
 								reader.readAsArrayBuffer(fileRef.current.files[0]); // Read Provided File
 
 								reader.onloadend = async () => {
@@ -83,7 +82,7 @@ const CreateOrder = () => {
 
 										// const doc = document.getElementById("_White_Paper");
 										Web3.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, +tokenPay * Math.pow(10, 9), instanceCount, category, encryptionPublicKey)
-											.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZarelaContractAddress }, (error, result) => {
+											.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZarelaContractAddress, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
 												if (!error) {
 													alert(JSON.stringify('Transaction Hash is :  ' + result));
 												}
