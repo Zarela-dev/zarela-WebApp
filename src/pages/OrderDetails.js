@@ -51,7 +51,7 @@ const OrderDetailsPage = () => {
 
 							// const doc = document.getElementById("_White_Paper");
 							Web3.contract.methods.SendFile(order.orderId, order.requesterAddress, ipfsResponse.path)
-								.send({ from: Web3.accounts[0], gas: 600000, gasPrice: '30000000000' }, (error, result) => {
+								.send({ from: Web3.accounts[0], gas: 500000, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
 									if (!error) {
 										alert(JSON.stringify('Transaction Hash is :  ' + result));
 									}
@@ -102,6 +102,10 @@ const OrderDetailsPage = () => {
 			});
 		}
 	}, [id, Web3.contract]);
+
+	useEffect(() => {
+		console.log('gas', Web3.gas.average);
+	}, [Object.keys(Web3.gas).length]);
 
 	return (
 		<div>

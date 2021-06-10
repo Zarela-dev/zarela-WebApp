@@ -123,6 +123,10 @@ const CreateOrder = () => {
 		console.log('accounts', Web3.accounts);
 	}, [Web3.accounts]);
 
+	useEffect(() => {
+		console.log('gas', Web3.gas.average);
+	}, [Object.keys(Web3.gas).length]);
+
 	return (
 		<>
 			<TitleBar>

@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import getWeb3 from './getWeb3';
 import { convertToBiobit } from './utils';
+import axios from 'axios';
 
 const initialState = {
 	web3: null,
@@ -9,7 +10,8 @@ const initialState = {
 	error: null,
 	bank: 0,
 	biobitBalance: 'Connect To See Data',
-	etherBalance: 'Connect To See Data'
+	etherBalance: 'Connect To See Data',
+	gas: {}
 };
 
 const web3Context = React.createContext(initialState);
@@ -53,6 +55,11 @@ const Web3Provider = ({ children }) => {
 				return {
 					...state,
 					error: action.payload
+				};
+			case 'SET_GAS':
+				return {
+					...state,
+					gas: action.payload
 				};
 			default:
 				return state;
@@ -132,8 +139,24 @@ const Web3Provider = ({ children }) => {
 		};
 	};
 
+	const getGasPrice = () => {
+		axios.get('https://ethgasstation.info/api/ethgasAPI.json', {
+			params: {
+				'api-key': process.env.REACT_APP_GASSTATION_API_KEY
+			}
+		}).then(res => {
+			dispatch({
+				type: 'SET_GAS',
+				payload: res.data
+			});
+		}).catch(error => {
+			console.log(error);
+		});
+	};
+
 	useEffect(() => {
 		configureWeb3();
+		getGasPrice();
 	}, []);
 
 	useEffect(() => {

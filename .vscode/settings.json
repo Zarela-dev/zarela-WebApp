@@ -3,6 +3,12 @@
 		"allocated",
 		"biobits",
 		"hash",
-		"ipfs"
+		"ipfs",
+		"api",
+		"apikey",
+		"app",
+		"gasstation",
+		"key",
+		"react"
 	]
 }
