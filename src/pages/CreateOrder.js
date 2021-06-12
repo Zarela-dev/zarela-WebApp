@@ -71,7 +71,8 @@ const CreateOrder = () => {
 								console.log(`Document Of Conditions --> ${url}`);
 
 								// const doc = document.getElementById("_White_Paper");
-								Web3.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, tokenPay, instanceCount, category)
+								var allocatedBiobits = tokenPay * Math.pow(10, 9);
+								Web3.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, allocatedBiobits, instanceCount, category)
 									.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZarelaContractAddress }, (error, result) => {
 										if (!error) {
 											alert(JSON.stringify('Transaction Hash is :  ' + result));
