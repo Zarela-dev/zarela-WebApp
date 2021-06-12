@@ -74,7 +74,7 @@ const Sidebar = () => {
 					Total Supply:
 				</Subtitle>
 				<Value>
-					20,000,000,000
+					20,000,000
 				</Value>
 			</Row>
 			<Row>
