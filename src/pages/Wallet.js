@@ -9,26 +9,27 @@ const Wallet = () => {
 	const [isLoading, setLoading] = useState(true);
 
 	useEffect(() => {
-		axios.get('https://api-kovan.etherscan.io/api', {
-			params: {
-				module: 'account',
-				action: 'tokentx',
-				contractaddress: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS,
-				address: '0x24A2E85627bB70C98fAfA2D1cFe85df05f72E160',
-				page: 1,
-				offset: 0,
-				sort: 'async',
-				apikey: process.env.REACT_APP_ETHEREUM_API_KEY,
-			}
-		}).then(res => {
-			if (res.data.message == 'OK')
-				setLogs(res.data.result);
-		}).catch(error => {
-			console.error(error);
-		}).finally(() => {
-			setLoading(false);
-		});
-	}, [isLoading]);
+		if (Web3.accounts.length)
+			axios.get('https://api-kovan.etherscan.io/api', {
+				params: {
+					module: 'account',
+					action: 'tokentx',
+					contractaddress: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS,
+					address: Web3.accounts[0],
+					page: 1,
+					offset: 0,
+					sort: 'async',
+					apikey: process.env.REACT_APP_ETHEREUM_API_KEY,
+				}
+			}).then(res => {
+				if (res.data.message == 'OK')
+					setLogs(res.data.result);
+			}).catch(error => {
+				console.error(error);
+			}).finally(() => {
+				setLoading(false);
+			});
+	}, [isLoading, Web3.accounts.length]);
 
 	return (
 		<div>
