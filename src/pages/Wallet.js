@@ -38,7 +38,7 @@ const Wallet = () => {
 	const [isLoading, setLoading] = useState(true);
 
 	useEffect(() => {
-		if (Web3.accounts.length)
+		if (Web3.accounts.length && isLoading === true)
 			axios.get('https://api-kovan.etherscan.io/api', {
 				params: {
 					module: 'account',
@@ -80,7 +80,7 @@ const Wallet = () => {
 				},
 				{
 					label: 'Transactions',
-					component: <WalletTransactions />
+					component: !isLoading ? <WalletTransactions data={logs} /> : 'loading'
 				},
 			]}>
 			</Tabs>

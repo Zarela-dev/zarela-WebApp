@@ -8,6 +8,7 @@
 		"apikey",
 		"app",
 		"biobits",
+		"blockhash",
 		"contractaddress",
 		"gasstation",
 		"key",
