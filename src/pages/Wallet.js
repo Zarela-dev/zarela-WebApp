@@ -47,7 +47,7 @@ const Wallet = () => {
 					address: Web3.accounts[0],
 					page: 1,
 					offset: 0,
-					sort: 'async',
+					sort: 'desc',
 					apikey: process.env.REACT_APP_ETHEREUM_API_KEY,
 				}
 			}).then(res => {
@@ -80,7 +80,7 @@ const Wallet = () => {
 				},
 				{
 					label: 'Transactions',
-					component: !isLoading ? <WalletTransactions data={logs} /> : 'loading'
+					component: !isLoading ? <WalletTransactions data={logs.reverse()} /> : 'loading'
 				},
 			]}>
 			</Tabs>

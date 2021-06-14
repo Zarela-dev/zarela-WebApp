@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Scrollbar } from './Elements/Scrollbar';
-import { timeSince } from '../utils';
+import { timeSince, convertToBiobit } from '../utils';
 
 const Wrapper = styled.div`
 	padding: ${props => props.theme.spacing(2.5)} ${props => props.theme.spacing(2)};
@@ -34,10 +33,27 @@ const Row = styled.section`
 	margin-bottom: 4px;
 
 	${CellWrapper}:first-of-type {
-		flex: 0 0 62px;
+		flex: 0 0 180px; /* blockHash */
+	}
+	${CellWrapper}:nth-of-type(2) {
+		flex: 0 0 210px; /* timestamp */
+	}
+	${CellWrapper}:nth-of-type(3) {
+		flex: 0 0 180px; /* from  */
+	}
+	${CellWrapper}:nth-of-type(4) {
+		flex: 0 0 180px; /* to */
+	}
+	${CellWrapper}:nth-of-type(5) {
+		flex: 0 0 70px; /* status */
+	}
+	${CellWrapper}:nth-of-type(6) {
+		flex: 1 0 auto; /* value */
+	}
+	${CellWrapper}:nth-of-type(7) {
+		flex: 0 0 170px; /* fee */
 	}
 `;
-
 
 const Cell = styled.div`
 	display: flex;
@@ -53,40 +69,10 @@ const Cell = styled.div`
 	}
 `;
 
-const FilesListWrapper = styled.div`
-	display: flex;
-	flex-direction: column;
-	padding: ${props => props.theme.spacing(1)};
-	margin-bottom: ${props => props.theme.spacing(2)};
-	height: 100%;
-`;
-
-const FilesList = styled.div`
-	flex: 1;
-	border-left: 1px solid #3C87AA;
-    margin-left: -21px;
-    padding-left: 20px;
-	max-height: 238px;
-	min-height: 27px;
-    overflow: auto;
-
-	${Scrollbar};
-`;
-
-const FileItem = styled.div`
-	flex: 1;
-	display: flex;
-	flex-wrap: nowrap;
-	align-items: center;
-	font-size: 12px;
-	line-height: 20px;
-	color: #121213;
-	&:not(:last-child) {
-		margin-bottom: ${props => props.theme.spacing(2)};
-	}
-`;
-
-
+function shortenHash(hash) {
+	if (!hash) return;
+	return hash.substr(0, 20) + '...';
+}
 
 const WalletTransactions = ({ data }) => {
 	console.log(data);
@@ -132,10 +118,10 @@ const WalletTransactions = ({ data }) => {
 				</Row>
 				{
 					data.map((transaction, index) => (
-						<Row key={index}>
+						<Row key={transaction.blockHash}>
 							<CellWrapper>
 								<Cell>
-									{transaction.blockhash}
+									{shortenHash(transaction.blockHash)}
 								</Cell>
 							</CellWrapper>
 							<CellWrapper>
@@ -145,12 +131,12 @@ const WalletTransactions = ({ data }) => {
 							</CellWrapper>
 							<CellWrapper>
 								<Cell>
-									{transaction.from}
+									{shortenHash(transaction.from)}
 								</Cell>
 							</CellWrapper>
 							<CellWrapper>
 								<Cell>
-									{transaction.to}
+									{shortenHash(transaction.to)}
 								</Cell>
 							</CellWrapper>
 							<CellWrapper>
@@ -160,7 +146,7 @@ const WalletTransactions = ({ data }) => {
 							</CellWrapper>
 							<CellWrapper>
 								<Cell>
-									{transaction.value}
+									{convertToBiobit(transaction.value)}
 								</Cell>
 							</CellWrapper>
 							<CellWrapper>
