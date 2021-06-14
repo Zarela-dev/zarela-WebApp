@@ -16,6 +16,7 @@ import { Button } from './Elements/Button';
 import axios from 'axios';
 import { Buffer } from 'buffer';
 import fileType from 'file-type';
+import { convertToBiobit } from '../utils';
 
 const Wrapper = styled.div`
 	background: ${props => props.seen ? '#EDFBF8' : '#F4F8FE'};
@@ -197,7 +198,8 @@ const OrderListItem = ({
 					result[0].forEach((file, fileIndex) => {
 						pairs.push({
 							file,
-							address: result[1][fileIndex]
+							address: result[1][fileIndex],
+							timestamp: result[2][fileIndex]
 						});
 					});
 
@@ -205,9 +207,9 @@ const OrderListItem = ({
 						pairs.forEach((tempItem, tempIndex) => {
 							if (tempItem.address === uAddress) {
 								if (Object(formatted).hasOwnProperty(uAddress)) {
-									formatted[uAddress].push(tempItem.file);
+									formatted[uAddress].push({ ipfsHash: tempItem.file, timestamp: tempItem.timestamp });
 								} else {
-									formatted[uAddress] = [tempItem.file];
+									formatted[uAddress] = [{ ipfsHash: tempItem.file, timestamp: tempItem.timestamp }];
 								}
 								selected[uAddress] = [];
 							}
@@ -223,6 +225,8 @@ const OrderListItem = ({
 		}
 	}, [Web3.contract]);
 
+	// console.log('formatted', formattedData);
+	// console.log('selected', selected);
 	return (
 		<Wrapper>
 			<Header onClick={() => setOpen(!isOpen)}>
@@ -240,7 +244,7 @@ const OrderListItem = ({
 				<TokenBadge>
 					<TokenIcon src={biobitIcon} />
 					<Typography weight='bold' color='secondary' variant='badge'>
-						{tokenPay}
+						{convertToBiobit(tokenPay)}
 					</Typography>
 					<Typography weight='bold' color='secondary' variant='badge'>
 						BioBit

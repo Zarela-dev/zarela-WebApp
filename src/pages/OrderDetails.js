@@ -4,7 +4,7 @@ import { Buffer } from 'buffer';
 import { create } from 'ipfs-http-client';
 import OrderDetails from '../components/OrderDetails';
 import { web3Context } from '../web3Provider';
-import { switchFormat, timeSince } from '../utils';
+import { timeSince } from '../utils';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import * as ethUtil from 'ethereumjs-util';
 import { encrypt } from 'eth-sig-util';
@@ -15,14 +15,6 @@ const OrderDetailsPage = () => {
 	const [order, setOrders] = useState({});
 	const sendSignalRef = useRef(null);
 	const [showDialog, setDialog] = useState(false);
-
-	const getTimestamp = (time) => {
-		if (!time)
-			return 0;
-		let timestamp = new Date((Math.floor(+time * 1000))).getTime();
-		let timestampFormatted = switchFormat(new Date(+time).getTime()) ? timeSince(timestamp) : timestamp.toString();
-		return timestampFormatted;
-	};
 
 	const submitSignal = (e) => {
 		if (Object.keys(order).length !== 0)
@@ -59,7 +51,7 @@ const OrderDetailsPage = () => {
 
 							// const doc = document.getElementById("_White_Paper");
 							Web3.contract.methods.SendFile(order.orderId, order.requesterAddress, ipfsResponse.path)
-								.send({ from: Web3.accounts[0], gas: 500000, gasPrice: '30000000000' }, (error, result) => {
+								.send({ from: Web3.accounts[0], gas: 600000, gasPrice: '30000000000' }, (error, result) => {
 									if (!error) {
 										alert(JSON.stringify('Transaction Hash is :  ' + result));
 									}
@@ -122,7 +114,7 @@ const OrderDetailsPage = () => {
 				order={order}
 				ref={sendSignalRef}
 				submitSignal={submitSignal}
-				timestamp={getTimestamp(order.timestamp)}
+				timestamp={timeSince(order.timestamp)}
 			/>
 		</div>
 	);

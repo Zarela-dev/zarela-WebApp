@@ -53,7 +53,7 @@ const MyOrders = () => {
 								title: result[1],
 								description: result[6],
 								requesterAddress: result[2],
-								tokenPay: result[3] / Math.pow(10, 9),
+								tokenPay: result[3],
 								totalContributors: result[4], // total contributors required
 								totalContributed: +result[4] - +result[7],
 								categories: result[8], // NOT TO BE USED IN DEMO
@@ -88,7 +88,7 @@ const MyOrders = () => {
 				{
 					Web3.accounts.length === 0 ?
 						<ConnectDialog /> :
-						Object.values(orders).length > 0 ? Object.values(orders).map(item => (
+						Object.values(orders).length > 0 ? Object.values(orders).reverse().map(item => (
 							<OrderListItem
 								showContributions
 								key={item.orderId}

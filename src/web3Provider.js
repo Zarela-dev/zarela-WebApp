@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import getWeb3 from './getWeb3';
+import { convertToBiobit } from './utils';
 
 const initialState = {
 	web3: null,
@@ -153,7 +154,7 @@ const Web3Provider = ({ children }) => {
 				if (!error) {
 					dispatch({
 						type: 'SET_BANK',
-						payload: +result / Math.pow(10, 9)
+						payload: convertToBiobit(result)
 					});
 				}
 				else {

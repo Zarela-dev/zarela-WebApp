@@ -73,7 +73,6 @@ const CreateOrder = () => {
 								reader.onloadend = async () => {
 									const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
 									const buf = Buffer(reader.result); // Convert data into buffer
-									debugger;
 
 									try {
 										const ipfsResponse = await ipfs.add(buf);

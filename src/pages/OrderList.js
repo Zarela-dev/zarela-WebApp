@@ -6,7 +6,7 @@ import { SearchBar } from '../components/SearchBar';
 import Sidebar from '../components/Sidebar';
 import Pagination from '../components/Pagination';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
-import { switchFormat, timeSince } from '../utils';
+import { timeSince, convertToBiobit } from '../utils';
 
 const OrderListWrapper = styled.div`
 	width: 100%;
@@ -58,7 +58,7 @@ const OrderList = () => {
 							title: result[1],
 							description: result[6],
 							requesterAddress: result[2],
-							tokenPay: result[3] / Math.pow(10, 9),
+							tokenPay: convertToBiobit(result[3]),
 							totalContributors: result[4], // total contributors required
 							totalContributed: +result[4] - +result[7],
 							categories: result[8], // NOT TO BE USED IN DEMO
@@ -85,10 +85,7 @@ const OrderList = () => {
 				<Sidebar></Sidebar>
 				<OrderListContentWrapper>
 					{
-						Object.values(orders).map(item => {
-							let timestamp = new Date((Math.floor(+item.timestamp * 1000))).getTime();
-							let timestampFormatted = switchFormat(new Date(+item.timestamp).getTime()) ? timeSince(timestamp) : timestamp.toString();
-
+						Object.values(orders).reverse().map(item => {
 							return (
 								<OrderCard
 									key={item.orderId}
@@ -96,7 +93,7 @@ const OrderList = () => {
 									title={item.title}
 									description={item.description}
 									tokenPay={item.tokenPay}
-									timestamp={timestampFormatted}
+									timestamp={timeSince(item.timestamp)}
 									progress={+item.totalContributed / +item.totalContributors * 100}
 									contributors={`${item.totalContributed}/${item.totalContributors}`}
 									totalContributedCount={`${item.totalContributed}/${item.totalContributedCount}`}
