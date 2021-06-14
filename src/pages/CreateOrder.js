@@ -9,6 +9,8 @@ import maxWidthWrapper from '../components/Elements/MaxWidth';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { Persist } from 'formik-persist'
+
 
 const Wrapper = styled.div`
 	${maxWidthWrapper}
@@ -71,26 +73,37 @@ const CreateOrder = () => {
 								reader.onloadend = async () => {
 									const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
 									const buf = Buffer(reader.result); // Convert data into buffer
+									debugger;
 
-								// const doc = document.getElementById("_White_Paper");
-								var allocatedBiobits = tokenPay * Math.pow(10, 9);
-								Web3.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, allocatedBiobits, instanceCount, category)
-									.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZarelaContractAddress }, (error, result) => {
-										if (!error) {
-											alert(JSON.stringify('Transaction Hash is :  ' + result));
-										}
-										else {
-											alert(error.message);
-										}
-									});
-								Web3.contract.events.OrderRegistered({}, function (error, result) {
-									if (!error) {
-										let returnValues = result.returnValues;
-										alert(JSON.stringify('Great !! Succes :) ' + '     <<New Order Created ! >>        Owner address is  :  ' + returnValues[0] +
-											'   & Order Number is   :  ' + returnValues[1]));
-									}
-									else {
-										alert(error.message);
+									try {
+										const ipfsResponse = await ipfs.add(buf);
+										formik.setFieldValue('whitepaper', ipfsResponse.path);
+										let url = `https://ipfs.io/ipfs/${ipfsResponse.path}`;
+										console.log(`Document Of Conditions --> ${url}`);
+
+
+										// const doc = document.getElementById("_White_Paper");
+										Web3.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, +tokenPay * Math.pow(10, 9), instanceCount, category, encryptionPublicKey)
+											.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZarelaContractAddress }, (error, result) => {
+												if (!error) {
+													alert(JSON.stringify('Transaction Hash is :  ' + result));
+												}
+												else {
+													alert(error.message);
+												}
+											});
+										Web3.contract.events.OrderRegistered({}, function (error, result) {
+											if (!error) {
+												let returnValues = result.returnValues;
+												alert(JSON.stringify('Great !! Succes :) ' + '     <<New Order Created ! >>        Owner address is  :  ' + returnValues[0] +
+													'   & Order Number is   :  ' + returnValues[1]));
+											}
+											else {
+												alert(error.message);
+											}
+										});
+									} catch (error) {
+										console.error(error);
 									}
 								};
 							})
@@ -128,7 +141,9 @@ const CreateOrder = () => {
 						<CreateOrderForm
 							formik={formik}
 							ref={fileRef}
-						/>
+						>
+							<Persist />
+						</CreateOrderForm>
 					</>
 				}
 			</Wrapper>

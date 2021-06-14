@@ -7,7 +7,7 @@ import { web3Context } from '../web3Provider';
 import { switchFormat, timeSince } from '../utils';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import * as ethUtil from 'ethereumjs-util';
-import { encrypt/* , recoverPersonalSignature, recoverTypedSignatureLegacy, recoverTypedSignature, recoverTypedSignature_v4 */ } from 'eth-sig-util';
+import { encrypt } from 'eth-sig-util';
 
 const OrderDetailsPage = () => {
 	const { id } = useParams();
@@ -36,8 +36,7 @@ const OrderDetailsPage = () => {
 
 					reader.onloadend = async () => {
 						const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
-						const buf = Buffer(reader.result); // Convert data into buffer
-
+						const buff = Buffer(reader.result); // Convert data into buffer
 						// encrypt
 						try {
 							const encryptedMessage = ethUtil.bufferToHex(
@@ -45,7 +44,7 @@ const OrderDetailsPage = () => {
 									JSON.stringify(
 										encrypt(
 											order.encryptionPublicKey,
-											{ data: buf.toString() },
+											{ data: buff.toString('base64') },
 											'x25519-xsalsa20-poly1305'
 										)
 									),

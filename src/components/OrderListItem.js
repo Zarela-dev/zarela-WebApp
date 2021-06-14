@@ -14,6 +14,8 @@ import OrderFilesTable from './OrderFilesTable';
 import { web3Context } from '../web3Provider';
 import { Button } from './Elements/Button';
 import axios from 'axios';
+import { Buffer } from 'buffer';
+import fileType from 'file-type';
 
 const Wrapper = styled.div`
 	background: ${props => props.seen ? '#EDFBF8' : '#F4F8FE'};
@@ -138,71 +140,49 @@ const OrderListItem = ({
 	};
 
 	const signalDownloadHandler = (fileHash) => {
-		// function download(filename, mimeType, text) {
-		// 	var element = document.createElement('a');
-		// 	element.setAttribute('href', `${mimeType},` + encodeURIComponent(text));
-		// 	element.setAttribute('download', filename);
-
-		// 	element.style.display = 'none';
-		// 	document.body.appendChild(element);
-
-		// 	element.click();
-
-		// 	document.body.removeChild(element);
-		// }
-
 		// Start file download.
 		axios.get(`http://127.0.0.1:8080/ipfs/${fileHash}`)
 			.then(fileRes => {
-				console.log(fileRes);
-
 				window.ethereum
 					.request({
 						method: 'eth_decrypt',
 						params: [fileRes.data, Web3.accounts[0]],
 					})
 					.then((decryptedMessage) => {
-						debugger;
-						function binaryToArrayBuffer(binaryString) {
-							// var binaryLen = binaryString.length;
-							// var bytes = new Uint8Array(binaryLen);
-							// for (var i = 0; i < binaryLen; i++) {
-							// 	var ascii = binaryString.charCodeAt(i);
-							// 	bytes[i] = ascii;
-							// }
-							var data = btoa(String(binaryString));
-							console.log('atob:', data);
-							debugger;
-
-							return data;
+						async function getDownloadUrl(base64) {
+							var byteString = atob(base64);
+							var ab = new ArrayBuffer(byteString.length);
+							var ia = new Uint8Array(ab);
+							var buff = Buffer.from(base64, 'base64');
+							var contributionFileExt = await fileType.fromBuffer(buff);
+							for (var i = 0; i < byteString.length; i++) {
+								ia[i] = byteString.charCodeAt(i);
+							}
+							return `data:${contributionFileExt.mime};base64,${base64}`;
 						}
 
 						var saveByteArray = (function () {
-							var a = document.createElement("a");
-							document.body.appendChild(a);
-							a.style = "display: none";
-							return function (data, name) {
-								var blob = new Blob(data, { type: "application/pdf" }),
-									url = window.URL.createObjectURL(blob);
-								a.href = url;
-								a.download = name;
-								a.click();
-								window.URL.revokeObjectURL(url);
+							var anchorTag = document.createElement("a");
+							document.body.appendChild(anchorTag);
+							anchorTag.style = "display: none";
+
+							return async function (data, name) {
+								try {
+									var url = await getDownloadUrl(data);
+
+									anchorTag.href = url;
+									anchorTag.download = name;
+									anchorTag.click();
+								} catch (error) {
+									console.error(error);
+								}
 							};
 						}());
-
-						console.log('The decrypted message is:', decryptedMessage);
-						saveByteArray([binaryToArrayBuffer(decryptedMessage)], 'example.pdf');
+						saveByteArray(decryptedMessage, fileHash);
 					})
 					.catch((error) => console.log(error.message));
 			})
-			.catch(error => {
-
-			});
-
-
-
-
+			.catch((error) => console.log(error.message));
 	};
 
 	useEffect(() => {
@@ -247,7 +227,7 @@ const OrderListItem = ({
 		<Wrapper>
 			<Header onClick={() => setOpen(!isOpen)}>
 				<Typography variant='title' weight='semiBold'>
-					{title}
+					{title.length < 135 ? title : title.substr(0, 135) + '...'}
 				</Typography>
 				<Spacer />
 				<ContributorBadge>

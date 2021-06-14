@@ -115,11 +115,9 @@ const DownloadButtonImage = styled.img`
 	width: 	20px;
 `;
 
-const DownloadLink = styled.a`
-	margin-right: ${props => props.theme.spacing(2)};
-`;
-
 const DownloadButton = styled.button`
+	border:none;
+	background: white;
 	margin-right: ${props => props.theme.spacing(2)};
 `;
 

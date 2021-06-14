@@ -23,9 +23,10 @@ const Divider = styled.div`
 	margin: ${props => props.theme.spacing(5)} 0 ${props => props.theme.spacing(6)};
 `;
 
-const CreateOrderForm = React.forwardRef(({ formik }, ref) => {
+const CreateOrderForm = React.forwardRef(({ children, formik }, ref) => {
 	return (
 		<form onSubmit={formik.handleSubmit}>
+			{children}
 			<TextField
 				placeholder={'write main topics in your test'}
 				label='Title *'

@@ -58,9 +58,8 @@ const MyOrders = () => {
 								totalContributed: +result[4] - +result[7],
 								categories: result[8], // NOT TO BE USED IN DEMO
 								whitePaper: result[5],
-								status: result[9], // order status inprogress(false)/done(true)
-								timestamp: result[11],
-								totalContributedCount: result[10]
+								timestamp: result[10],
+								totalContributedCount: result[9]
 							};
 							setOrders(orders => ({
 								...orders,
