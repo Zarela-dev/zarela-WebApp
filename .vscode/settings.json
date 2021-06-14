@@ -12,6 +12,8 @@
 		"gasstation",
 		"key",
 		"react",
-		"tokentx"
+		"titlebar",
+		"tokentx",
+		"wallet"
 	]
 }

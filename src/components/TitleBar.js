@@ -15,10 +15,10 @@ const Inner = styled.div`
 	font-size: 26px;
 `;
 
-const TitleBar = ({ children }) => {
+const TitleBar = ({ children, ...rest }) => {
 	return (
 		<Wrapper>
-			<Inner>
+			<Inner {...rest}>
 				{children}
 			</Inner>
 		</Wrapper>

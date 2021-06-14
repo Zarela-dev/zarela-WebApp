@@ -79,7 +79,6 @@ const CreateOrder = () => {
 										let url = `https://ipfs.io/ipfs/${ipfsResponse.path}`;
 										console.log(`Document Of Conditions --> ${url}`);
 
-
 										// const doc = document.getElementById("_White_Paper");
 										Web3.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, +tokenPay * Math.pow(10, 9), instanceCount, category, encryptionPublicKey)
 											.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZarelaContractAddress, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {

@@ -2,6 +2,34 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import WalletListItem from '../components/WalletListItem';
 import { web3Context } from '../web3Provider';
+import styled from 'styled-components';
+import TitleBar from '../components/TitleBar';
+import { Tabs } from '../components/Tabs';
+
+const Wrapper = styled.div`
+
+`;
+
+const WalletTitlebar = styled(TitleBar)`
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+`;
+
+const Title = styled.div`
+	font-weight: 500;
+	font-size: 26px;
+	line-height: 34px;
+	color: ${props => props.theme.textPrimary};
+`;
+
+const Balance = styled.div`
+	font-style: normal;
+	font-weight: 500;
+	font-size: 22px;
+	line-height: 29px;
+	color: ${props => props.theme.textPrimary};
+`;
 
 const Wallet = () => {
 	const { Web3 } = useContext(web3Context);
@@ -29,28 +57,19 @@ const Wallet = () => {
 			}).finally(() => {
 				setLoading(false);
 			});
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isLoading, Web3.accounts.length]);
 
 	return (
-		<div>
-			{
-				isLoading === false && Web3.accounts.length > 0 ?
-					logs.map(item => {
-						return (
-							<WalletListItem
-								transactionHash={item.hash}
-								timeStamp={item.timeStamp}
-								from={item.from}
-								to={item.to}
-								BBTValue={item.value}
-								incoming={Web3.accounts[0].toLowerCase().trim() === item.to.trim() ? true : false}
-							/>
-						);
-					}) :
-					<div>is Loading</div>
-			}
-		</div>
+		<Wrapper>
+			<WalletTitlebar>
+				<Title>Wallet</Title>
+				<Balance>
+					{`Balance: ${+Web3.biobitBalance / Math.pow(10, 9)} Biobit`}
+				</Balance>
+			</WalletTitlebar>
+			<Tabs></Tabs>
+		</Wrapper>
 	);
 };
 
