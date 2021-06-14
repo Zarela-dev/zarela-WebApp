@@ -7,8 +7,11 @@
 		"api",
 		"apikey",
 		"app",
+		"biobits",
+		"contractaddress",
 		"gasstation",
 		"key",
-		"react"
+		"react",
+		"tokentx"
 	]
 }

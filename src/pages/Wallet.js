@@ -22,13 +22,14 @@ const Wallet = () => {
 					apikey: process.env.REACT_APP_ETHEREUM_API_KEY,
 				}
 			}).then(res => {
-				if (res.data.message == 'OK')
+				if (res.data.message === 'OK')
 					setLogs(res.data.result);
 			}).catch(error => {
 				console.error(error);
 			}).finally(() => {
 				setLoading(false);
 			});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isLoading, Web3.accounts.length]);
 
 	return (
