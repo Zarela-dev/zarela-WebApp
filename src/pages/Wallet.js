@@ -5,6 +5,7 @@ import { web3Context } from '../web3Provider';
 import styled from 'styled-components';
 import TitleBar from '../components/TitleBar';
 import { Tabs } from '../components/Tabs';
+import WalletTransactions from '../components/WalletTransactions';
 
 const Wrapper = styled.div`
 
@@ -68,7 +69,21 @@ const Wallet = () => {
 					{`Balance: ${+Web3.biobitBalance / Math.pow(10, 9)} Biobit`}
 				</Balance>
 			</WalletTitlebar>
-			<Tabs></Tabs>
+			<Tabs data={[
+				{
+					label: 'Withdraw',
+					component: null
+				},
+				{
+					label: 'Deposit',
+					component: null
+				},
+				{
+					label: 'Transactions',
+					component: <WalletTransactions />
+				},
+			]}>
+			</Tabs>
 		</Wrapper>
 	);
 };

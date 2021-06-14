@@ -46,32 +46,28 @@ const TabsHeaderItem = styled(Tab)`
 const TabsBody = styled(TabPanel)`
 `;
 
-export const Tabs = () => {
+export const Tabs = ({ data }) => {
 	return (
 		<TabsWrapper
 			selectedTabClassName='is-active'
 			selectedTabPanelClassName='is-active'
 		>
 			<TabsHeader>
-				<TabsHeaderItem>
-					Withdraw
-				</TabsHeaderItem>
-				<TabsHeaderItem>
-					Deposit
-				</TabsHeaderItem>
-				<TabsHeaderItem>
-					Transactions
-				</TabsHeaderItem>
+				{
+					data.map((tab, tabIndex) => (
+						<TabsHeaderItem key={tabIndex}>
+							{tab.label}
+						</TabsHeaderItem>
+					))
+				}
 			</TabsHeader>
-			<TabsBody>
-				foo
-			</TabsBody>
-			<TabsBody>
-				bar
-			</TabsBody>
-			<TabsBody>
-				baz
-			</TabsBody>
+			{
+				data.map(({ component }) => (
+					<TabsBody>
+						{component}
+					</TabsBody>
+				))
+			}
 		</TabsWrapper>
 	);
 };
