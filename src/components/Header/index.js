@@ -83,7 +83,6 @@ export default function Header() {
 				<NavLink>
 					My Orders
 				</NavLink>
-				<NotificationBadge>5</NotificationBadge>
 			</NavItem>
 			<NavItem to='/account'>
 				<NavIcon src={user} />
