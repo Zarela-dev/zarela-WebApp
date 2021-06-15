@@ -142,7 +142,7 @@ const OrderListItem = ({
 
 	const signalDownloadHandler = (fileHash) => {
 		// Start file download.
-		axios.get(`http://127.0.0.1:8080/ipfs/${fileHash}`)
+		axios.get(`${process.env.REACT_APP_IPFS_LINK + fileHash}`)
 			.then(fileRes => {
 				window.ethereum
 					.request({
