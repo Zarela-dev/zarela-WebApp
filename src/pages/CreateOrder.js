@@ -9,6 +9,8 @@ import maxWidthWrapper from '../components/Elements/MaxWidth';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { Persist } from 'formik-persist';
+
 
 const Wrapper = styled.div`
 	${maxWidthWrapper}
@@ -58,42 +60,58 @@ const CreateOrder = () => {
 						const { title, desc, tokenPay, instanceCount, category } = values;
 						const reader = new FileReader();
 
-						reader.readAsArrayBuffer(fileRef.current.files[0]); // Read Provided File
+						window.ethereum
+							.request({
+								method: 'eth_getEncryptionPublicKey',
+								params: [Web3.accounts[0]], // you must have access to the specified account
+							})
+							.then((result) => {
+								const encryptionPublicKey = result;
+								reader.readAsArrayBuffer(fileRef.current.files[0]); // Read Provided File
 
-						reader.onloadend = async () => {
-							const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
-							const buf = Buffer(reader.result); // Convert data into buffer
+								reader.onloadend = async () => {
+									const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
+									const buf = Buffer(reader.result); // Convert data into buffer
 
-							try {
-								const ipfsResponse = await ipfs.add(buf);
-								formik.setFieldValue('whitepaper', ipfsResponse.path);
-								let url = `https://ipfs.io/ipfs/${ipfsResponse.path}`;
-								console.log(`Document Of Conditions --> ${url}`);
+									try {
+										const ipfsResponse = await ipfs.add(buf);
+										formik.setFieldValue('whitepaper', ipfsResponse.path);
+										let url = `https://ipfs.io/ipfs/${ipfsResponse.path}`;
+										console.log(`Document Of Conditions --> ${url}`);
 
-								// const doc = document.getElementById("_White_Paper");
-								Web3.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, tokenPay, instanceCount, category)
-									.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZarelaContractAddress }, (error, result) => {
-										if (!error) {
-											alert(JSON.stringify('Transaction Hash is :  ' + result));
-										}
-										else {
-											alert(error.message);
-										}
-									});
-								Web3.contract.events.OrderRegistered({}, function (error, result) {
-									if (!error) {
-										let returnValues = result.returnValues;
-										alert(JSON.stringify('Great !! Succes :) ' + '     <<New Order Created ! >>        Owner address is  :  ' + returnValues[0] +
-											'   & Order Number is   :  ' + returnValues[1]));
+										// const doc = document.getElementById("_White_Paper");
+										Web3.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, +tokenPay * Math.pow(10, 9), instanceCount, category, encryptionPublicKey)
+											.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZarelaContractAddress, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
+												if (!error) {
+													alert(JSON.stringify('Transaction Hash is :  ' + result));
+												}
+												else {
+													alert(error.message);
+												}
+											});
+										Web3.contract.events.OrderRegistered({}, function (error, result) {
+											if (!error) {
+												let returnValues = result.returnValues;
+												alert(JSON.stringify('Great !! Succes :) ' + '     <<New Order Created ! >>        Owner address is  :  ' + returnValues[0] +
+													'   & Order Number is   :  ' + returnValues[1]));
+											}
+											else {
+												alert(error.message);
+											}
+										});
+									} catch (error) {
+										console.error(error);
 									}
-									else {
-										alert(error.message);
-									}
-								});
-							} catch (error) {
-								console.error(error);
-							}
-						};
+								};
+							})
+							.catch((error) => {
+								if (error.code === 4001) {
+									// EIP-1193 userRejectedRequest error
+									console.log("We can't encrypt anything without the key.");
+								} else {
+									console.error(error);
+								}
+							});
 					}
 				}
 		})
@@ -102,6 +120,10 @@ const CreateOrder = () => {
 	useEffect(() => {
 		console.log('accounts', Web3.accounts);
 	}, [Web3.accounts]);
+
+	useEffect(() => {
+		console.log('gas', Web3.gas.average);
+	}, [Object.keys(Web3.gas).length]);
 
 	return (
 		<>
@@ -120,7 +142,9 @@ const CreateOrder = () => {
 						<CreateOrderForm
 							formik={formik}
 							ref={fileRef}
-						/>
+						>
+							<Persist />
+						</CreateOrderForm>
 					</>
 				}
 			</Wrapper>

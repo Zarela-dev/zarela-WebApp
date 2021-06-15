@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import OrderListItem from '../components/OrderListItem';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
-
+import { convertToBiobit } from '../utils';
 const PageWrapper = styled.div`
 	
 `;
@@ -26,7 +26,7 @@ const MyAccount = () => {
 			if (Web3.accounts.length !== 0) {
 				Web3.contract.methods.User_Map(Web3.accounts[0]).call((error, result) => {
 					if (!error) {
-						const formatter = value => `${+value / Math.pow(10, 9)} Biobit`;
+						const formatter = value => `${convertToBiobit(value)} Biobit`;
 						setTotalRevenueFromRequester(formatter(result[1]));
 						setTotalRevenueFromZarela(formatter(result[0]));
 					}
@@ -45,14 +45,13 @@ const MyAccount = () => {
 									title: result[1],
 									description: result[6],
 									requesterAddress: result[2],
-									tokenPay: result[3] / Math.pow(10, 9),
+									tokenPay: result[3],
 									totalContributors: result[4], // total contributors required
 									totalContributed: +result[4] - +result[7],
 									categories: result[8], // NOT TO BE USED IN DEMO
 									whitePaper: result[5],
-									status: result[9], // order status inprogress(false)/done(true)
-									timestamp: result[11],
-									totalContributedCount: result[10]
+									timestamp: result[10],
+									totalContributedCount: result[9]
 								};
 								setOrders(orders => ({
 									...orders,
@@ -80,7 +79,7 @@ const MyAccount = () => {
 				{
 					Web3.accounts.length === 0 ?
 						<ConnectDialog /> :
-						Object.values(orders).length > 0 ? Object.values(orders).map(item => (
+						Object.values(orders).length > 0 ? Object.values(orders).reverse().map(item => (
 							<OrderListItem
 								key={item.orderId}
 								orderId={item.orderId}

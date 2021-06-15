@@ -9,6 +9,7 @@ import avatarImage3 from '../assets/avatar/avatar-3.jpg';
 import downloadIcon from '../assets/icons/download.svg';
 import { Spacer } from './Elements/Spacer';
 import { Scrollbar } from './Elements/Scrollbar';
+import { timeSince } from './../utils';
 
 const Table = styled.div`
 	display: flex;
@@ -36,6 +37,10 @@ const Row = styled.section`
 
 	${CellWrapper}:first-of-type {
 		flex: 0 0 62px;
+	}
+
+	${CellWrapper}:nth-of-type(2) {
+		flex: 0 0 420px;
 	}
 `;
 
@@ -109,17 +114,32 @@ const FileCheckbox = styled(SmallCheckbox)`
 `;
 
 const FileName = styled.div`
+	margin-right: ${props => props.theme.spacing(2)}
 `;
 
-const DownloadButton = styled.img`
+const DownloadButtonImage = styled.img`
 	width: 	20px;
 `;
 
-const DownloadLink = styled.a`
+const DownloadButton = styled.button`
+	border:none;
+	background: white;
 	margin-right: ${props => props.theme.spacing(2)};
 `;
 
-const OrderFilesTable = ({ data, selected, onChange, onBulkChange, isAllChecked, changeAll }) => {
+const Timestamp = styled.div`
+  
+`;
+
+const OrderFilesTable = ({
+	data,
+	selected,
+	onChange,
+	onBulkChange,
+	isAllChecked,
+	changeAll,
+	signalDownloadHandler
+}) => {
 	let avatarImage = [avatarImage0, avatarImage1, avatarImage2, avatarImage3];
 
 	return (
@@ -181,26 +201,31 @@ const OrderFilesTable = ({ data, selected, onChange, onBulkChange, isAllChecked,
 								</FilesCount>
 								<FilesList>
 									{
-										data[reqAddress].map((file, fileIndex) => {
+										data[reqAddress].map(({ ipfsHash, timestamp }, fileIndex) => {
 											return (
 												<FileItem key={fileIndex}>
-													<FileCheckbox checked={selected[reqAddress].includes(file)} onChange={(e) => {
+													<FileCheckbox checked={selected[reqAddress].includes(ipfsHash)} onChange={(e) => {
 														if (e.target.checked === true) {
-															onChange('check', reqAddress, file);
+															onChange('check', reqAddress, ipfsHash);
 														} else {
-															onChange('uncheck', reqAddress, file);
+															onChange('uncheck', reqAddress, ipfsHash);
 														}
 													}} />
 													<FileName>
 														{
 															// file.substr(0, 4) + '...' + file.substr(file.length - 4) + `  (File #${fileIndex + 1})`
-															file + `  (File #${fileIndex + 1})`
+															ipfsHash + `  (File #${fileIndex + 1})`
 														}
 													</FileName>
+													<Timestamp>
+														{
+															`${timeSince(timestamp)}`
+														}
+													</Timestamp>
 													<Spacer />
-													<DownloadLink target='_blank' href={`${process.env.REACT_APP_IPFS_LINK + file}`}>
-														<DownloadButton src={downloadIcon} />
-													</DownloadLink>
+													<DownloadButton onClick={() => signalDownloadHandler(ipfsHash)}>
+														<DownloadButtonImage src={downloadIcon} />
+													</DownloadButton>
 												</FileItem>
 											);
 										})

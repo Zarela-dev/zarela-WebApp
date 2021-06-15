@@ -23,9 +23,10 @@ const Divider = styled.div`
 	margin: ${props => props.theme.spacing(5)} 0 ${props => props.theme.spacing(6)};
 `;
 
-const CreateOrderForm = React.forwardRef(({ formik }, ref) => {
+const CreateOrderForm = React.forwardRef(({ children, formik }, ref) => {
 	return (
 		<form onSubmit={formik.handleSubmit}>
+			{children}
 			<TextField
 				placeholder={'write main topics in your test'}
 				label='Title *'
@@ -38,7 +39,7 @@ const CreateOrderForm = React.forwardRef(({ formik }, ref) => {
 				}}
 			/>
 			<TextField
-				placeholder={'How many people do you need to done the test?'}
+				placeholder={'What’s your test about?'}
 				multiline
 				label='Description *'
 				type='text'
@@ -61,7 +62,7 @@ const CreateOrderForm = React.forwardRef(({ formik }, ref) => {
 				}}
 			/>
 			<TextField
-				placeholder={'What’s your test about?'}
+				placeholder={'How many people do you need to done the test?'}
 				label='Contributors *'
 				type='text'
 				name={'instanceCount'}
@@ -72,8 +73,8 @@ const CreateOrderForm = React.forwardRef(({ formik }, ref) => {
 				}}
 			/>
 			<TextField
-				placeholder={'Category'}
-				label='Category *'
+				placeholder={'Write your related hashtags here'}
+				label='Hashtags *'
 				type='text'
 				name={'category'}
 				error={formik.errors?.category}

@@ -13,7 +13,10 @@ import contributorIcon from '../assets/icons/contributor.png';
 import OrderFilesTable from './OrderFilesTable';
 import { web3Context } from '../web3Provider';
 import { Button } from './Elements/Button';
-
+import axios from 'axios';
+import { Buffer } from 'buffer';
+import fileType from 'file-type';
+import { convertToBiobit } from '../utils';
 
 const Wrapper = styled.div`
 	background: ${props => props.seen ? '#EDFBF8' : '#F4F8FE'};
@@ -72,21 +75,29 @@ const SubmitButton = styled.button`
 	line-height: 18px;
 `;
 
-const OrderListItem = ({ showContributions, total, orderId, title, tokenPay, contributors, handleConfirm }) => {
+const OrderListItem = ({
+	showContributions,
+	total,
+	orderId,
+	title,
+	tokenPay,
+	contributors,
+	handleConfirm
+}) => {
 	const [isOpen, setOpen] = useState(false);
 	const { Web3 } = useContext(web3Context);
-	const [formatted, setFormatted] = useState({});
+	const [formattedData, setFormattedData] = useState({});
 	const [selected, setSelected] = useState({});
 
 	const isAllChecked = () => {
 		const chosen = Object.values(selected).reduce((acc, curr) => acc.concat(...curr), []);
-		const total = Object.values(formatted).reduce((acc, curr) => acc.concat(...curr), []);
+		const total = Object.values(formattedData).reduce((acc, curr) => acc.concat(...curr), []);
 		return chosen.length === total.length;
 	};
 
 	const changeAll = (type) => {
 		if (type === 'check')
-			setSelected(formatted);
+			setSelected(formattedData);
 		if (type === 'uncheck')
 			setSelected(values => {
 				let result = {};
@@ -103,7 +114,7 @@ const OrderListItem = ({ showContributions, total, orderId, title, tokenPay, con
 		if (type === 'check')
 			setSelected(values => ({
 				...values,
-				[address]: formatted[address]
+				[address]: formattedData[address]
 			}));
 		if (type === 'uncheck')
 			setSelected(values => {
@@ -129,6 +140,52 @@ const OrderListItem = ({ showContributions, total, orderId, title, tokenPay, con
 			});
 	};
 
+	const signalDownloadHandler = (fileHash) => {
+		// Start file download.
+		axios.get(`http://127.0.0.1:8080/ipfs/${fileHash}`)
+			.then(fileRes => {
+				window.ethereum
+					.request({
+						method: 'eth_decrypt',
+						params: [fileRes.data, Web3.accounts[0]],
+					})
+					.then((decryptedMessage) => {
+						async function getDownloadUrl(base64) {
+							var byteString = atob(base64);
+							var ab = new ArrayBuffer(byteString.length);
+							var ia = new Uint8Array(ab);
+							var buff = Buffer.from(base64, 'base64');
+							var contributionFileExt = await fileType.fromBuffer(buff);
+							for (var i = 0; i < byteString.length; i++) {
+								ia[i] = byteString.charCodeAt(i);
+							}
+							return `data:${contributionFileExt.mime};base64,${base64}`;
+						}
+
+						var saveByteArray = (function () {
+							var anchorTag = document.createElement("a");
+							document.body.appendChild(anchorTag);
+							anchorTag.style = "display: none";
+
+							return async function (data, name) {
+								try {
+									var url = await getDownloadUrl(data);
+
+									anchorTag.href = url;
+									anchorTag.download = name;
+									anchorTag.click();
+								} catch (error) {
+									console.error(error);
+								}
+							};
+						}());
+						saveByteArray(decryptedMessage, fileHash);
+					})
+					.catch((error) => console.log(error.message));
+			})
+			.catch((error) => console.log(error.message));
+	};
+
 	useEffect(() => {
 		if (showContributions && Web3.contract !== null) {
 			Web3.contract.methods.GetOrderFiles(orderId).call({ from: Web3.accounts[0] }, (error, result) => {
@@ -141,7 +198,8 @@ const OrderListItem = ({ showContributions, total, orderId, title, tokenPay, con
 					result[0].forEach((file, fileIndex) => {
 						pairs.push({
 							file,
-							address: result[1][fileIndex]
+							address: result[1][fileIndex],
+							timestamp: result[2][fileIndex]
 						});
 					});
 
@@ -149,16 +207,16 @@ const OrderListItem = ({ showContributions, total, orderId, title, tokenPay, con
 						pairs.forEach((tempItem, tempIndex) => {
 							if (tempItem.address === uAddress) {
 								if (Object(formatted).hasOwnProperty(uAddress)) {
-									formatted[uAddress].push(tempItem.file);
+									formatted[uAddress].push({ ipfsHash: tempItem.file, timestamp: tempItem.timestamp });
 								} else {
-									formatted[uAddress] = [tempItem.file];
+									formatted[uAddress] = [{ ipfsHash: tempItem.file, timestamp: tempItem.timestamp }];
 								}
 								selected[uAddress] = [];
 							}
 						});
 					});
 
-					setFormatted(formatted);
+					setFormattedData(formatted);
 					setSelected(selected);
 				} else {
 					console.error(error.message);
@@ -167,11 +225,13 @@ const OrderListItem = ({ showContributions, total, orderId, title, tokenPay, con
 		}
 	}, [Web3.contract]);
 
+	// console.log('formatted', formattedData);
+	// console.log('selected', selected);
 	return (
 		<Wrapper>
 			<Header onClick={() => setOpen(!isOpen)}>
 				<Typography variant='title' weight='semiBold'>
-					{title}
+					{title.length < 135 ? title : title.substr(0, 135) + '...'}
 				</Typography>
 				<Spacer />
 				<ContributorBadge>
@@ -184,7 +244,7 @@ const OrderListItem = ({ showContributions, total, orderId, title, tokenPay, con
 				<TokenBadge>
 					<TokenIcon src={biobitIcon} />
 					<Typography weight='bold' color='secondary' variant='badge'>
-						{tokenPay}
+						{convertToBiobit(tokenPay)}
 					</Typography>
 					<Typography weight='bold' color='secondary' variant='badge'>
 						BioBit
@@ -200,7 +260,8 @@ const OrderListItem = ({ showContributions, total, orderId, title, tokenPay, con
 					<>
 						<Body>
 							<OrderFilesTable
-								data={formatted}
+								signalDownloadHandler={signalDownloadHandler}
+								data={formattedData}
 								selected={selected}
 								onChange={onChange}
 								onBulkChange={onBulkChange}

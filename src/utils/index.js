@@ -1,32 +1,23 @@
 
-export function switchFormat(date) {
-	var seconds = Math.floor((new Date() - date) / 1000);
-
-	var interval = seconds / 31536000;
-
-	interval = seconds / 86400;
-
-	if (interval > 1) {
-		return true
+export function timeSince(rawDate) {
+	if (typeof data === undefined) {
+		return 'loading';
 	}
-	return false;
-}
-
-export function timeSince(date) {
+	var date = new Date((Math.floor(+rawDate * 1000))).getTime();
 	var seconds = Math.floor((new Date() - date) / 1000);
 
 	var interval = seconds / 31536000;
 
 	if (interval > 1) {
-		return Math.floor(interval) + " years ago";
+		return new Date(date).toUTCString();
 	}
 	interval = seconds / 2592000;
 	if (interval > 1) {
-		return Math.floor(interval) + " months ago";
+		return new Date(date).toUTCString();
 	}
 	interval = seconds / 86400;
 	if (interval > 1) {
-		return Math.floor(interval) + " days ago";
+		return new Date(date).toUTCString();
 	}
 	interval = seconds / 3600;
 	if (interval > 1) {
@@ -38,3 +29,9 @@ export function timeSince(date) {
 	}
 	return Math.floor(seconds) + " seconds ago";
 }
+
+export const convertToBiobit = (value) => {
+	if (typeof value === undefined)
+		return 'Invalid value';
+	return +value / Math.pow(10, 9);
+};

@@ -4,6 +4,7 @@ import biobitBlack from '../assets/icons/biobit-black.svg';
 import { web3Context } from '../web3Provider';
 import walletBlack from '../assets/icons/wallet-black.svg';
 import etherBlack from '../assets/icons/ether-black.svg';
+import { convertToBiobit } from '../utils';
 
 const SidebarCard = styled.div`
 	flex: 0 0 390px;
@@ -74,7 +75,7 @@ const Sidebar = () => {
 					Total Supply:
 				</Subtitle>
 				<Value>
-					20,000,000,000
+					20,000,000
 				</Value>
 			</Row>
 			<Row>
@@ -112,7 +113,7 @@ const Sidebar = () => {
 					Your Biobit Balance:
 				</Subtitle>
 				<Value>
-					{`${!Number.isNaN(Web3.biobitBalance) ? +Web3.biobitBalance / Math.pow(10, 9) + '  Biobit' : Web3.biobitBalance}`}
+					{`${!Number.isNaN(Web3.biobitBalance) ?convertToBiobit(Web3.biobitBalance) + '  Biobit' : Web3.biobitBalance}`}
 				</Value>
 			</Row>
 			<Row>

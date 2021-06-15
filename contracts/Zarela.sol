@@ -18,7 +18,7 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
     uint start_date_monthly= block.timestamp; 
     uint start_date_Daily = block.timestamp;
     uint time_in_month = 2 days; // = 18 month
-    uint time_in_day = 30 minutes; // 24 hours
+    uint time_in_day = 90 seconds; // 24 hours
     uint total_daily =  14400000000000;  // 14400 token per day
     uint multi_x = 2;  // 1.9
     uint public bank ;
@@ -38,14 +38,15 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
         string White_Paper; //ipfs
         string Description;
         uint Instance_Remains;
-        string What_Type; //category
-        bool Status;
+        string Category; //category
         uint Order_Contribute_Count;
         uint Registered_Time ;
+        string Ecrypted; 
     }
     
     struct Data{
         uint Order_Number;
+        uint[] Signal_Registered_Time;
         string[] Data;
         address[] Contributer_address;
     }
@@ -57,7 +58,6 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
     }
     
     struct Requester{
-        address Requester_Address;
         uint[] Order_Owned;
     }
     
@@ -94,24 +94,24 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
         return(Requester_Map[msg.sender].Order_Owned,User_Map[msg.sender].orders_contributed);
     }
     
-    function SetOrderBoard(string memory _Title,string memory _Description,string memory _White_Paper,uint _Token_Pay,uint _Instance_Count,string memory _Category)public {
+    function SetOrderBoard(string memory _Title,string memory _Description,string memory _White_Paper,uint _Token_Pay,uint _Instance_Count,string memory _Category,string memory _Encrypted)public {
         require(_balances[msg.sender] >= (_Token_Pay*_Instance_Count) , "Your Token Is Not Enough");
         ERC20.transfer(address(this),(_Token_Pay*_Instance_Count));
         uint order_id = ord_file.length;
-        ord_file.push(OrderFile(order_id,_Title,msg.sender,_Token_Pay,_Instance_Count,_White_Paper,_Description,_Instance_Count,_Category,false,0,block.timestamp));
-        Requester_Map[msg.sender].Requester_Address = msg.sender;
+        ord_file.push(OrderFile(order_id,_Title,msg.sender,_Token_Pay,_Instance_Count,_White_Paper,_Description,_Instance_Count,_Category,0,block.timestamp,_Encrypted));
         Requester_Map[msg.sender].Order_Owned.push(order_id);
         emit OrderRegistered(msg.sender, order_id);
     }
     
     function SendFile(uint _Order_Number,  address _Requester , string memory _Data)public CheckID(_Order_Number) Notnull(_Requester) {
-        require(! ord_file[_Order_Number].Status ,"Order Was Finished");
+        require(ord_file[_Order_Number].Instance_Remains != 0 ,"Order Was Finished");
         require(_Requester ==  ord_file[_Order_Number].Requester_Address_Creator , "Address Requester Is Not True");
         Data_Map[_Order_Number].Order_Number = _Order_Number;
         ord_file[_Order_Number].Order_Contribute_Count ++ ;
         Origin_User_Address.push(msg.sender);
         Data_Map[_Order_Number].Data.push(_Data);
         Data_Map[_Order_Number].Contributer_address.push(msg.sender);
+        Data_Map[_Order_Number].Signal_Registered_Time.push(block.timestamp);
         getLatestPrice();
         contributer_count ++;
         reward.push(multi_x * LastPrice * 1000000000);
@@ -170,7 +170,7 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
     function ConfirmContributer(uint _Order_Number,address[]memory User_Address)public OnlyRequester(_Order_Number) CheckID(_Order_Number) {
         OrderFile storage myorder = ord_file[_Order_Number];
         require(User_Address.length <= myorder.Instance_Remains);
-        require(!myorder.Status,"Your Order Is Done, And You Sent All of Rewards to Users");
+        require(myorder.Instance_Remains != 0,"Your Order Is Done, And You Sent All of Rewards to Users");
         myorder.Instance_Remains = myorder.Instance_Remains.sub(User_Address.length);
         for(uint i;i< User_Address.length ; i++){
             _balances[address(this)] = _balances[address(this)].sub(myorder.Token_Pay);
@@ -179,7 +179,6 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
             emit TokenSent(msg.sender,User_Address[i],myorder.Token_Pay);
         }
         if (myorder.Instance_Remains == 0){
-            myorder.Status = true;
             emit OrderFinish(_Order_Number);
         }
     }
@@ -191,5 +190,5 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
     function OrderSize()public view returns(uint){
         return ord_file.length;
     }
-   
+    
 }
