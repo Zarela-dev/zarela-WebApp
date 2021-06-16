@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import WalletListItem from '../components/WalletListItem';
 import { web3Context } from '../web3Provider';
 import styled from 'styled-components';
 import TitleBar from '../components/TitleBar';
