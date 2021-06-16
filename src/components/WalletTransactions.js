@@ -2,12 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { timeSince, convertToBiobit, CopyableText } from '../utils';
 
-const Wrapper = styled.div`
-	padding: ${props => props.theme.spacing(2.5)} ${props => props.theme.spacing(2)};
-	background: #F4F8FE;
-	border-radius: 8px;
-`;
-
 const Table = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -77,94 +71,92 @@ function shortenHash(hash) {
 const WalletTransactions = ({ data }) => {
 	console.log(data);
 	return (
-		<Wrapper>
-			<Table>
-				<Row>
-					<CellWrapper>
-						<Cell>
-							TXN Hash
-						</Cell>
-					</CellWrapper>
-					<CellWrapper>
-						<Cell>
-							Date
-						</Cell>
-					</CellWrapper>
-					<CellWrapper>
-						<Cell>
-							From
-						</Cell>
-					</CellWrapper>
-					<CellWrapper>
-						<Cell>
-							To
-						</Cell>
-					</CellWrapper>
-					<CellWrapper>
-						<Cell>
-							Status
-						</Cell>
-					</CellWrapper>
-					<CellWrapper>
-						<Cell>
-							Value
-						</Cell>
-					</CellWrapper>
-					<CellWrapper>
-						<Cell>
-							TXN fee
-						</Cell>
-					</CellWrapper>
-				</Row>
-				{
-					data.map((transaction, index) => (
-						<Row key={transaction.blockHash}>
-							<CellWrapper>
-								<CopyableText textToCopy={transaction.blockHash}>
-									<Cell>
-										{shortenHash(transaction.blockHash)}
-									</Cell>
-								</CopyableText>
-							</CellWrapper>
-							<CellWrapper>
+		<Table>
+			<Row>
+				<CellWrapper>
+					<Cell>
+						TXN Hash
+					</Cell>
+				</CellWrapper>
+				<CellWrapper>
+					<Cell>
+						Date
+					</Cell>
+				</CellWrapper>
+				<CellWrapper>
+					<Cell>
+						From
+					</Cell>
+				</CellWrapper>
+				<CellWrapper>
+					<Cell>
+						To
+					</Cell>
+				</CellWrapper>
+				<CellWrapper>
+					<Cell>
+						Status
+					</Cell>
+				</CellWrapper>
+				<CellWrapper>
+					<Cell>
+						Value
+					</Cell>
+				</CellWrapper>
+				<CellWrapper>
+					<Cell>
+						TXN fee
+					</Cell>
+				</CellWrapper>
+			</Row>
+			{
+				data.map((transaction, index) => (
+					<Row key={transaction.blockHash}>
+						<CellWrapper>
+							<CopyableText textToCopy={transaction.blockHash}>
 								<Cell>
-									{timeSince(transaction.timeStamp)}
+									{shortenHash(transaction.blockHash)}
 								</Cell>
-							</CellWrapper>
-							<CellWrapper>
-								<CopyableText textToCopy={transaction.from}>
-									<Cell>
-										{shortenHash(transaction.from)}
-									</Cell>
-								</CopyableText>
-							</CellWrapper>
-							<CellWrapper>
-								<CopyableText textToCopy={transaction.to}>
-									<Cell>
-										{shortenHash(transaction.to)}
-									</Cell>
-								</CopyableText>
-							</CellWrapper>
-							<CellWrapper>
+							</CopyableText>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>
+								{timeSince(transaction.timeStamp)}
+							</Cell>
+						</CellWrapper>
+						<CellWrapper>
+							<CopyableText textToCopy={transaction.from}>
 								<Cell>
-									N/A
+									{shortenHash(transaction.from)}
 								</Cell>
-							</CellWrapper>
-							<CellWrapper>
+							</CopyableText>
+						</CellWrapper>
+						<CellWrapper>
+							<CopyableText textToCopy={transaction.to}>
 								<Cell>
-									{convertToBiobit(transaction.value)}
+									{shortenHash(transaction.to)}
 								</Cell>
-							</CellWrapper>
-							<CellWrapper>
-								<Cell>
-									{+transaction.gasUsed * +transaction.gasPrice}
-								</Cell>
-							</CellWrapper>
-						</Row>
-					))
-				}
-			</Table>
-		</Wrapper>
+							</CopyableText>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>
+								N/A
+							</Cell>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>
+								{convertToBiobit(transaction.value)}
+							</Cell>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>
+								{+transaction.gasUsed * +transaction.gasPrice}
+							</Cell>
+						</CellWrapper>
+					</Row>
+				))
+			}
+		</Table>
 	);
 };
 
