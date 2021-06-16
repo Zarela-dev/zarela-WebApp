@@ -68,8 +68,12 @@ function shortenHash(hash) {
 	return hash.substr(0, 20) + '...';
 }
 
-const WalletTransactions = ({ data }) => {
-	console.log(data);
+const WalletTransactions = ({ isLoading, accounts, data }) => {
+	if (accounts === undefined || isLoading === true)
+		return 'loading';
+	if (accounts.length === 0)
+		return 'no accounts found';
+		
 	return (
 		<Table>
 			<Row>

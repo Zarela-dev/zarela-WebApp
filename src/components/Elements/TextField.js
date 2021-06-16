@@ -2,17 +2,20 @@ import React, { forwardRef } from 'react';
 import styled from 'styled-components';
 import { css } from 'styled-components';
 
-
 const InputStyles = css`
 	font-family: Krub;
 	background: #FFFFFF;
 	border: 1px solid rgba(144, 144, 144, 0.3);
 	border-radius: 4px;
 	padding: ${props => props.theme.spacing(1)};
+	padding-right: 100px;
+	box-sizing: border-box;
 	font-weight: 500;
 	font-size: 12px;
 	color: ${props => props.theme.textPrimary};
-	max-width: 510px;
+	width: 100%;
+`;
+const InputWrapper = styled.div`
 	width: 100%;
 `;
 
@@ -27,6 +30,7 @@ const TextArea = styled.textarea`
 `;
 
 const Wrapper = styled.div`
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
@@ -34,10 +38,23 @@ const Wrapper = styled.div`
 `;
 
 const Label = styled.label`
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	
+`;
+
+const LabelText = styled.div`
 	font-weight: 500;
 	font-size: 14px;
 	line-height: 20px;
 	color: #6C6C6C;
+`;
+
+const Hint = styled.div`
+	font-weight: normal;
+	font-size: 13px;
+	line-height: 16px;
 `;
 
 export const Error = styled.label`
@@ -45,19 +62,87 @@ export const Error = styled.label`
 	font-size: 10px;
 	line-height: 20px;
 	color: #F62D76;
-	/* border-top: 2px solid #F62D76; */
 `;
 
-const TextField = forwardRef(({ multiline, label, error, ...rest }, ref) => {
+const Adornment = styled.div`
+	font-weight: 600;
+	font-size: ${({colored}) => colored ? '12px': '14px'};
+	line-height: 23px;
+	color: ${({colored, theme}) => colored ? '#581D9F': theme.textPrimary};
+`;
+
+const ActionsContainer = styled.div`
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	position: absolute;
+	right: 17px;
+	top: ${props => props.shrink ? '7px' : '26px'};
+	z-index: 3;
+`;
+
+const HelperText = styled.div`
+	font-weight: normal;
+	font-size: 10px;
+	line-height: 13px;
+	color: #212B36;
+	margin-top: ${props => props.theme.spacing(0.7)}
+`;
+
+const InputAction = styled.button`
+	border: none;
+	background: none;
+	background: white;
+	width: 24px;
+	margin-left: ${props => props.theme.spacing(1)}
+`;
+
+const TextField = forwardRef(({coloredAdornment, multiline, className, label, error, helperText, hint, actions, adornment, ...rest }, ref) => {
 	return (
-		<Wrapper>
+		<Wrapper className={className}>
 			<Label>
-				{label}
+				<LabelText>
+					{label}
+				</LabelText>
+				{
+					hint ?
+						<Hint>
+							{hint}
+						</Hint>
+						: null
+				}
 			</Label>
+			<InputWrapper>
+				{
+					multiline ?
+						<TextArea error={error} ref={ref} row={5} {...rest} />
+						: <Input error={error} ref={ref} {...rest} />
+				}
+			</InputWrapper>
+			<ActionsContainer shrink={!label ? true : false}>
+				{
+					adornment ?
+						<Adornment colored={coloredAdornment}>
+							{adornment}
+						</Adornment>
+						: null
+				}
+				{
+					actions ? actions.map(action => {
+						return (
+							<InputAction onClick={action.onClick}>
+								{action.content}
+							</InputAction>
+						);
+					}) : null
+				}
+			</ActionsContainer>
 			{
-				multiline ?
-					<TextArea error={error} ref={ref} row={5} {...rest} /> :
-					<Input error={error} ref={ref} {...rest} />
+				helperText ?
+					<HelperText>
+						{helperText}
+					</HelperText>
+					: null
 			}
 			{
 				error ?

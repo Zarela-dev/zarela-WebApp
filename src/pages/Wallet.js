@@ -6,6 +6,7 @@ import TitleBar from '../components/TitleBar';
 import { Tabs } from '../components/Tabs';
 import WalletTransactions from '../components/WalletTransactions';
 import WalletDeposit from '../components/WalletDeposit';
+import WalletWithdraw from '../components/WalletWithdraw';
 
 const Wrapper = styled.div`
 
@@ -53,10 +54,11 @@ const Balance = styled.div`
 const Wallet = () => {
 	const { Web3 } = useContext(web3Context);
 	const [logs, setLogs] = useState([]);
-	const [isLoading, setLoading] = useState(true);
+	const [isLoading, setLoading] = useState(false);
 
 	useEffect(() => {
-		if (Web3.accounts.length && isLoading === true)
+		if (Web3.accounts.length) {
+			setLoading(true);
 			axios.get('https://api-kovan.etherscan.io/api', {
 				params: {
 					module: 'account',
@@ -76,8 +78,9 @@ const Wallet = () => {
 			}).finally(() => {
 				setLoading(false);
 			});
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isLoading, Web3.accounts.length]);
+	}, [Web3.accounts.length]);
 
 	return (
 		<Wrapper>
@@ -98,16 +101,18 @@ const Wallet = () => {
 				},
 				{
 					label: 'Withdraw',
-					component: null
+					component: (
+						<WalletInnerContainer elevated>
+							<WalletWithdraw />
+						</WalletInnerContainer>
+					)
 				},
 				{
 					label: 'Transactions',
 					component: (
-						!isLoading ?
-							<WalletInnerContainer>
-								<WalletTransactions data={logs.reverse()} />
-							</WalletInnerContainer>
-							: 'loading'
+						<WalletInnerContainer>
+							<WalletTransactions isLoading={isLoading} accounts={Web3.accounts} data={logs.reverse()} />
+						</WalletInnerContainer>
 					)
 				},
 			]}>
