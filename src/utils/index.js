@@ -1,3 +1,4 @@
+import React from 'react';
 
 export function timeSince(rawDate) {
 	if (typeof data === undefined) {
@@ -34,4 +35,15 @@ export const convertToBiobit = (value) => {
 	if (typeof value === undefined)
 		return 'Invalid value';
 	return +value / Math.pow(10, 9);
+};
+
+export const CopyableText = ({ children, textToCopy, ...rest }) => {
+	return React.cloneElement(children, {
+		onClick: () => {
+			navigator.clipboard.writeText(textToCopy);
+			console.log('hash copied', textToCopy);
+			// show notification 
+		},
+		...rest
+	});
 };

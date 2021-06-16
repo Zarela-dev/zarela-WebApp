@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { timeSince, convertToBiobit } from '../utils';
+import { timeSince, convertToBiobit, CopyableText } from '../utils';
 
 const Wrapper = styled.div`
 	padding: ${props => props.theme.spacing(2.5)} ${props => props.theme.spacing(2)};
@@ -120,9 +120,11 @@ const WalletTransactions = ({ data }) => {
 					data.map((transaction, index) => (
 						<Row key={transaction.blockHash}>
 							<CellWrapper>
-								<Cell>
-									{shortenHash(transaction.blockHash)}
-								</Cell>
+								<CopyableText textToCopy={transaction.blockHash}>
+									<Cell>
+										{shortenHash(transaction.blockHash)}
+									</Cell>
+								</CopyableText>
 							</CellWrapper>
 							<CellWrapper>
 								<Cell>
@@ -130,14 +132,18 @@ const WalletTransactions = ({ data }) => {
 								</Cell>
 							</CellWrapper>
 							<CellWrapper>
-								<Cell>
-									{shortenHash(transaction.from)}
-								</Cell>
+								<CopyableText textToCopy={transaction.from}>
+									<Cell>
+										{shortenHash(transaction.from)}
+									</Cell>
+								</CopyableText>
 							</CellWrapper>
 							<CellWrapper>
-								<Cell>
-									{shortenHash(transaction.to)}
-								</Cell>
+								<CopyableText textToCopy={transaction.to}>
+									<Cell>
+										{shortenHash(transaction.to)}
+									</Cell>
+								</CopyableText>
 							</CellWrapper>
 							<CellWrapper>
 								<Cell>
