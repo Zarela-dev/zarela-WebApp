@@ -15,6 +15,7 @@
 		"react",
 		"textfield",
 		"titlebar",
+		"toastify",
 		"tokentx",
 		"wallet"
 	]
