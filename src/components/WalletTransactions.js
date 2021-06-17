@@ -39,7 +39,7 @@ const Row = styled.section`
 		flex: 0 0 180px; /* to */
 	}
 	${CellWrapper}:nth-of-type(5) {
-		flex: 0 0 70px; /* status */
+		flex: 0 0 80px; /* status */
 	}
 	${CellWrapper}:nth-of-type(6) {
 		flex: 1 0 auto; /* value */
