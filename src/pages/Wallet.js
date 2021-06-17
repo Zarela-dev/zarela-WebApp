@@ -7,6 +7,7 @@ import { Tabs } from '../components/Tabs';
 import WalletTransactions from '../components/WalletTransactions';
 import WalletDeposit from '../components/WalletDeposit';
 import WalletWithdraw from '../components/WalletWithdraw';
+import ConnectToMetamask from '../components/ConnectToMetamask';
 
 const Wrapper = styled.div`
 
@@ -83,41 +84,49 @@ const Wallet = () => {
 	}, [Web3.accounts.length]);
 
 	return (
-		<Wrapper>
-			<WalletTitlebar>
-				<Title>Wallet</Title>
-				<Balance>
-					{`Balance: ${+Web3.biobitBalance / Math.pow(10, 9)} Biobit`}
-				</Balance>
-			</WalletTitlebar>
-			<Tabs data={[
-				{
-					label: 'Deposit',
-					component: (
-						<WalletInnerContainer elevated>
-							<WalletDeposit />
-						</WalletInnerContainer>
-					)
-				},
-				{
-					label: 'Withdraw',
-					component: (
-						<WalletInnerContainer elevated>
-							<WalletWithdraw />
-						</WalletInnerContainer>
-					)
-				},
-				{
-					label: 'Transactions',
-					component: (
-						<WalletInnerContainer>
-							<WalletTransactions isLoading={isLoading} accounts={Web3.accounts} data={logs.reverse()} />
-						</WalletInnerContainer>
-					)
-				},
-			]}>
-			</Tabs>
-		</Wrapper>
+		Web3.accounts.length === 0 ?
+			<Wrapper>
+				<WalletTitlebar>
+					<Title>Wallet</Title>
+				</WalletTitlebar>
+				<ConnectToMetamask />
+			</Wrapper>
+			:
+			<Wrapper>
+				<WalletTitlebar>
+					<Title>Wallet</Title>
+					<Balance>
+						{`Balance: ${+Web3.biobitBalance / Math.pow(10, 9)} Biobit`}
+					</Balance>
+				</WalletTitlebar>
+				<Tabs data={[
+					{
+						label: 'Deposit',
+						component: (
+							<WalletInnerContainer elevated>
+								<WalletDeposit address={Web3.accounts.length ? Web3.accounts[0] : 'please connect to Metamask'} />
+							</WalletInnerContainer>
+						)
+					},
+					{
+						label: 'Withdraw',
+						component: (
+							<WalletInnerContainer elevated>
+								<WalletWithdraw />
+							</WalletInnerContainer>
+						)
+					},
+					{
+						label: 'Transactions',
+						component: (
+							<WalletInnerContainer>
+								<WalletTransactions isLoading={isLoading} accounts={Web3.accounts} data={logs.reverse()} />
+							</WalletInnerContainer>
+						)
+					},
+				]}>
+				</Tabs>
+			</Wrapper>
 	);
 };
 

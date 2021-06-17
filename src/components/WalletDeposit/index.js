@@ -40,7 +40,7 @@ const NextStepIcon = styled.img`
 	margin: ${props => props.theme.spacing(0.7)}
 `;
 
-const WalletDeposit = () => {
+const WalletDeposit = ({address}) => {
 	return (
 		<Wrapper>
 			<Content>
@@ -96,9 +96,9 @@ const WalletDeposit = () => {
 								BBit deposit address
 							</AddressTitle>
 							<Address>
-								0XOIIDFSBVFUSDFHUIHUISJFBSBFIJOS
+								{address}
 							</Address>
-							<CopyableText textToCopy={'0XOIIDFSBVFUSDFHUIHUISJFBSBFIJOS'}>
+							<CopyableText textToCopy={address}>
 								<CopyAddressButton variant='secondary'>
 									Copy address
 								</CopyAddressButton>
