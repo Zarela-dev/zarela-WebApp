@@ -64,19 +64,14 @@ const TotalContributors = styled.div`
 	font-size: 24px;
 `;
 
-const Sidebar = () => {
-	// const { Web3 } = useContext(web3Context);
+const ZarelaReward = styled(Value)`
+	color: #FDF534;
+	font-weight: 600;
+    font-size: 18px;
+    margin-top: 15px;
+`;
 
-	// useEffect(() => {
-	// 	if (Web3.web3){
-	// 		Web3.web3.contributer_count()
-	// 			.then(result =>
-	// 				console.log('contributors count', result))
-	// 			.catch(err => console.log(err));
-	// 	}
-	// 	Web3.web3.sum_of_reward_per_contributer()
-	// }, [Web3.web3]);
-
+const Sidebar = ({ dailyContributors, BiobitBasedOnEth, ZarelaRewardPool }) => {
 	return (
 		<ColoredSidebarCard>
 			<Header>
@@ -94,15 +89,15 @@ const Sidebar = () => {
 			</Row>
 			<Row>
 				<Title >
-					Eth. 0.0000015
+					Eth. {BiobitBasedOnEth}
 				</Title>
 				<ValueColumn>
 					<Value>
-						TXN
+						Zarela Max reward
 					</Value>
-					<Value>
-						0.05689
-					</Value>
+					<ZarelaReward>
+						{'$ ' + ZarelaRewardPool}
+					</ZarelaReward>
 				</ValueColumn>
 			</Row>
 			<Divider light />
@@ -113,7 +108,7 @@ const Sidebar = () => {
 				</TotalContributorsLabel>
 				<Spacer />
 				<TotalContributors>
-					263
+					{dailyContributors}
 				</TotalContributors>
 			</Header>
 		</ColoredSidebarCard>

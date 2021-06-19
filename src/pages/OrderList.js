@@ -8,9 +8,12 @@ import TokenStatsSidebar from '../components/Sidebar/TokenStats';
 import Pagination from '../components/Pagination';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import { timeSince, convertToBiobit } from '../utils';
+import homepageBg from '../assets/home-bg.jpg';
 
 const OrderListWrapper = styled.div`
 	width: 100%;
+	background-image: url(${homepageBg});
+	background-size: 100%, 400px;
 `;
 
 const OrderListLayout = styled.section`
@@ -40,6 +43,9 @@ const OrderList = () => {
 	const PAGE_SIZE = 3;
 	const [orders, setOrders] = useState({});
 	const [ordersCount, setOrdersCount] = useState(0);
+	const [dailyContributors, setDailyContributors] = useState(0);
+	const [BiobitBasedOnEth, setBiobitBasedOnEth] = useState(0);
+	const [ZarelaReward, setZarelaReward] = useState(0);
 
 	// pagination hook
 	useEffect(() => {
@@ -80,12 +86,47 @@ const OrderList = () => {
 		}
 	}, [Web3.contract, ordersCount]);
 
+	useEffect(() => {
+		if (Web3.contract) {
+			Web3.contract.methods.LastPrice().call((error, result) => {
+				if (!error)
+					setZarelaReward(+result * 2);
+				else
+					console.error(error.message);
+			});
+			Web3.contract.methods.contributer_count().call((error, result) => {
+				if (!error)
+					setDailyContributors(result);
+				else
+					console.error(error.message);
+			});
+			Web3.contract.methods.GetETHPrice().call((error, result) => {
+				if (!error)
+					setBiobitBasedOnEth((1 / (+result / Math.pow(10, 8))).toFixed(6));
+				else
+					console.error(error.message);
+			});
+		};
+		// move to wallet #todo
+		// Web3.contract.methods.sum_of_reward_per_contributer((error, result) => {
+		// 	if (!error)
+		// 		console.log(result);
+		// 	else
+		// 		console.error(error.message);
+		// })
+
+	}, [Web3.contract]);
+
 	return (
 		<OrderListWrapper>
 			<SearchBar></SearchBar>
 			<OrderListLayout>
 				<OrderListSidebarWrapper>
-					<TokenStatsSidebar />
+					<TokenStatsSidebar
+						ZarelaRewardPool={ZarelaReward}
+						dailyContributors={dailyContributors}
+						BiobitBasedOnEth={BiobitBasedOnEth}
+					/>
 					<TokenInfoSidebar />
 				</OrderListSidebarWrapper>
 				<OrderListContentWrapper>
