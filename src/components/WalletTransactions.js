@@ -163,7 +163,7 @@ const WalletTransactions = ({ isLoading, accounts, data }) => {
 						</CellWrapper>
 						<CellWrapper>
 							<Cell>
-								{+transaction.gasUsed * +transaction.gasPrice}
+								{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}
 							</Cell>
 						</CellWrapper>
 					</Row>

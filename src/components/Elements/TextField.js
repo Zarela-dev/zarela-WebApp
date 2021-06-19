@@ -89,7 +89,7 @@ const HelperText = styled.div`
 	margin-top: ${props => props.theme.spacing(0.7)}
 `;
 
-const InputAction = styled.button`
+const InputAction = styled.button.attrs({ type: 'button'})`
 	border: none;
 	background: none;
 	background: white;

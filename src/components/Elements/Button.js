@@ -55,9 +55,9 @@ const TheButton = styled.button`
 	line-height: 1;
 `;
 
-const GenericButton = ({ children, variant, ...rest }) => (
+const GenericButton = ({ children, variant, type, ...rest }) => (
 	<Container variant={variant} {...rest}>
-		<TheButton variant={variant}>
+		<TheButton variant={variant} type={type}>
 			{children}
 		</TheButton>
 	</Container>

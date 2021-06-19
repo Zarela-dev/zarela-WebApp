@@ -188,7 +188,7 @@ const Web3Provider = ({ children }) => {
 			Web3.web3.eth.getBalance(Web3.accounts[0]).then(function (result) {
 				dispatch({
 					type: 'SET_ETHER_BALANCE',
-					payload: Web3.web3.utils.fromWei(result, "ether") + " ETH"
+					payload: Web3.web3.utils.fromWei(result, "ether")
 				});
 			}).catch(error => {
 				console.error(error.message);

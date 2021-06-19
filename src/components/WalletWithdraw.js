@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { web3Context } from '../web3Provider';
 import {
 	Title, TokenList, TokenButton, TokenIcon, TokenName, Token
 } from './WalletDeposit/DepositChoices';
@@ -9,7 +10,11 @@ import etherIcon from '../assets/icons/ether-black.png';
 import Textfield from './Elements/TextField';
 import Button from './Elements/Button';
 import copyImage from '../assets/icons/copy.svg';
-import { CopyableText } from '../utils';
+import { CopyableText, scientificToDecimal, convertToBiobit } from '../utils';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { useHistory } from 'react-router';
+
 
 const WalletInput = styled(Textfield)`
 	min-width: 510px;
@@ -25,51 +30,75 @@ const WithdrawButton = styled(Button)`
     margin: 0;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.form`
 	width: 510px;
 `;
 
+/* #todo #fancy if the requested amount is more than user balance, give error */
 const WalletWithdraw = () => {
+	const { Web3 } = useContext(web3Context);
+	const history = useHistory();
+	const formik = useFormik({
+		initialValues: {
+			token: 'Biobit',
+			address: '',
+			amount: ''
+		},
+		onSubmit: (values) => {
+			if (values.token === 'Biobit') {
+				Web3.contract.methods.transfer(values.address, +values.amount * Math.pow(10, 9))
+					.send({ from: Web3.accounts[0] }, (error, result) => {
+						if (!error) {
+							alert(JSON.stringify('Transaction Hash is :  ' + result));
+							history.push('/wallet/transactions');
+							//#todo create the tab based routes
+						}
+						else {
+							alert(error.message);
+						}
+					});
+				Web3.contract.events.Transfer({}, function (error, result) {
+					// [0] from 
+					// [1] to 
+					// [2] amount (without fee) 
+					if (!error) {
+						let returnValues = result.returnValues;
+						alert(JSON.stringify('Great !! Success :) ' + 'from :' + returnValues[0] + 'to:' + returnValues[1] + ' amount: ' + returnValues[2]));
+					}
+					else {
+						alert(error.message);
+					}
+				});
+			} else {
+				Web3.web3.eth.sendTransaction({ to: values.address, from: Web3.accounts[0], value: Web3.web3.utils.toWei(values.amount, "ether") })
+					.then(({ transactionHash }) => {
+						console.log(transactionHash);
+					}).catch(error => {
+						console.error(error.message);
+					});
+			}
+		}
+	});
+
+	const getBalanceHint = () => {
+		console.log(Web3.etherBalance);
+		return `Available: ${formik.values.token === 'Biobit' ? convertToBiobit(+Web3.biobitBalance) : +Web3.etherBalance} ${formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'}`;
+	};
 	return (
-		<Wrapper>
+		<Wrapper onSubmit={formik.handleSubmit}>
 			<Content>
 				<Column>
-					<Title>
-						Current cryptocurrency
-					</Title>
-					<TokenList>
-						<Token>
-							<TokenIcon src={biobitIcon} />
-							<TokenName>
-								Biobit
-							</TokenName>
-						</Token>
-					</TokenList>
-					<WalletInput
-						label={'Address'}
-						placeholder={'Please enter the wallet address'}
-						actions={[
-							{
-								content: (
-									<CopyableText>
-										<CopyIcon src={copyImage} />
-									</CopyableText>
-								),
-								onClick: () => { console.log('bar'); }
-							}
-						]}
-					/>
 					<Title>
 						Choose Token
 					</Title>
 					<TokenList>
-						<Token>
+						<Token active={formik.values.token === 'Biobit'} onClick={() => formik.setFieldValue('token', 'Biobit')}>
 							<TokenIcon src={biobitIcon} />
 							<TokenName>
 								Biobit
 							</TokenName>
 						</Token>
-						<Token>
+						<Token active={formik.values.token === 'Ethereum'} onClick={() => formik.setFieldValue('token', 'Ethereum')}>
 							<TokenIcon src={etherIcon} />
 							<TokenName>
 								Ethereum
@@ -77,15 +106,32 @@ const WalletWithdraw = () => {
 						</Token>
 					</TokenList>
 					<WalletInput
-						label={'Amount'}
-						helperText={'Transaction fee: 0 USTD'}
-						placeholder={'Minimum 0 USTD'}
-						hint={'Available: 256000 BBIT'}
-						adornment={'Max'}
-						coloredAdornment
+						label={'Recipient\'s Address'}
+						placeholder={'Please enter the Recipient\'s address'}
+						adornment={'Paste'} // #todo
+						onChange={(e) => formik.setFieldValue('address', e.target.value)}
+						name='address'
+						value={formik.values.address}
 					/>
-					<WalletInput helperText="= $ 0.0000056" placeholder={'You will get'} adornment={'0 ETH.'}/>
-					<WithdrawButton variant='primary'>
+					<WalletInput
+						label={'Amount'}
+						placeholder={'Enter amount'}
+						hint={getBalanceHint()} // will change based on token chosen
+						actions={[
+							{
+								content: 'Max',
+								onClick: async() => {
+									const value = formik.values.token === 'Biobit' ? convertToBiobit(+Web3.biobitBalance) : +Web3.etherBalance;
+									await formik.setFieldValue('amount', value);
+								}
+							}
+						]}
+						coloredAdornment
+						onChange={(e) => formik.setFieldValue('amount', e.target.value)}
+						name='amount'
+						value={formik.values.amount}
+					/>
+					<WithdrawButton variant='primary' type='submit'>
 						Withdraw
 					</WithdrawButton>
 				</Column>
