@@ -3,7 +3,8 @@ import { web3Context } from '../web3Provider';
 import OrderCard from '../components/OrderCard';
 import styled from 'styled-components';
 import { SearchBar } from '../components/SearchBar';
-import Sidebar from '../components/Sidebar';
+import TokenInfoSidebar from '../components/Sidebar/TokenInfo';
+import TokenStatsSidebar from '../components/Sidebar/TokenStats';
 import Pagination from '../components/Pagination';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import { timeSince, convertToBiobit } from '../utils';
@@ -12,7 +13,7 @@ const OrderListWrapper = styled.div`
 	width: 100%;
 `;
 
-const OrderListLayout = styled.aside`
+const OrderListLayout = styled.section`
 	display: flex;
 	flex-direction: row-reverse;
 	flex-wrap: nowrap;
@@ -22,9 +23,10 @@ const OrderListLayout = styled.aside`
 `;
 
 const OrderListSidebarWrapper = styled.aside`
-	width: 309px;
-	flex: 0;
-	
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	flex: 0 0 390px;
 `;
 
 const OrderListContentWrapper = styled.section`
@@ -82,7 +84,10 @@ const OrderList = () => {
 		<OrderListWrapper>
 			<SearchBar></SearchBar>
 			<OrderListLayout>
-				<Sidebar></Sidebar>
+				<OrderListSidebarWrapper>
+					<TokenStatsSidebar />
+					<TokenInfoSidebar />
+				</OrderListSidebarWrapper>
 				<OrderListContentWrapper>
 					{
 						Object.values(orders).reverse().map(item => {
