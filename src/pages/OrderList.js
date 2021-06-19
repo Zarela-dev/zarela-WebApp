@@ -11,9 +11,43 @@ import { timeSince, convertToBiobit } from '../utils';
 import homepageBg from '../assets/home-bg.jpg';
 
 const OrderListWrapper = styled.div`
+	position: relative;
 	width: 100%;
-	background-image: url(${homepageBg});
-	background-size: 100%, 400px;
+`;
+
+const Background = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	z-index: -1;
+
+	&::before {
+		content: '';
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 80vh;
+
+		background-image: url(${homepageBg}), linear-gradient(0deg,rgb(255 255 255),rgb(255 255 255 / 0%));
+		background-size: 100%, 400px;
+		z-index: -3;
+	}
+	
+	&::after {
+		content: '';
+		display: block;
+		position: absolute;
+		bottom: 0;
+		height: 80vh;
+		left: 0;
+		width: 100%;
+		z-index: -2;
+		background: linear-gradient(0deg,rgb(255 255 255) 50%,rgb(255 255 255 / 0%));
+	}
 `;
 
 const OrderListLayout = styled.section`
@@ -119,6 +153,7 @@ const OrderList = () => {
 
 	return (
 		<OrderListWrapper>
+			<Background />
 			<SearchBar></SearchBar>
 			<OrderListLayout>
 				<OrderListSidebarWrapper>
