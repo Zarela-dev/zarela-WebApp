@@ -9,6 +9,7 @@ import Pagination from '../components/Pagination';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import { timeSince, convertToBiobit } from '../utils';
 import homepageBg from '../assets/home-bg.jpg';
+import HomepageCounters from '../components/HomepageCounters';
 
 const OrderListWrapper = styled.div`
 	position: relative;
@@ -34,6 +35,7 @@ const Background = styled.div`
 
 		background-image: url(${homepageBg}), linear-gradient(0deg,rgb(255 255 255),rgb(255 255 255 / 0%));
 		background-size: 100%, 400px;
+		background-position: 0 -30px;
 		z-index: -3;
 	}
 	
@@ -153,8 +155,9 @@ const OrderList = () => {
 
 	return (
 		<OrderListWrapper>
-			<Background />
 			<SearchBar></SearchBar>
+			<Background />
+			<HomepageCounters />
 			<OrderListLayout>
 				<OrderListSidebarWrapper>
 					<TokenStatsSidebar
