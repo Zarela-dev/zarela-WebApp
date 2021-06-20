@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Tab, Tabs as RaTabs, TabList, TabPanel } from 'react-tabs';
 import maxWidthWRapper from '../Elements/MaxWidth';
+import { Route, useHistory } from 'react-router-dom';
 
 const TabsWrapper = styled(RaTabs)`
 	${maxWidthWRapper};
@@ -47,24 +48,34 @@ const TabsBody = styled(TabPanel)`
 `;
 
 export const Tabs = ({ data }) => {
+	const history = useHistory();
+	const activeTab = history.location.pathname.split('/').reverse()[0];
+	console.log(data)
+
 	return (
 		<TabsWrapper
 			selectedTabClassName='is-active'
 			selectedTabPanelClassName='is-active'
+			selectedIndex={data.findIndex(item => item.label.toLowerCase() === activeTab)}
+			onSelect={(index, lastIndex) => {
+				console.log(index);
+				history.push(`/wallet/${data[index].label?.toLowerCase()}`);
+				return false;
+			}}
 		>
 			<TabsHeader>
 				{
 					data.map((tab, tabIndex) => (
-						<TabsHeaderItem key={tabIndex}>
+						<TabsHeaderItem tabIndex={tab.label} key={tabIndex}>
 							{tab.label}
 						</TabsHeaderItem>
 					))
 				}
 			</TabsHeader>
 			{
-				data.map(({ component }) => (
-					<TabsBody>
-						{component}
+				data.map(({ component, label }, index) => (
+					<TabsBody tabIndex={label} key={index}>
+						<Route path={`/wallet/${label.toLowerCase()}`} exact render={() => component} />
 					</TabsBody>
 				))
 			}
