@@ -65,7 +65,7 @@ const OrderListSidebarWrapper = styled.aside`
 	display: flex;
 	flex-wrap: wrap;
 	flex-direction: column;
-	flex: 0 0 390px;
+	flex: 0 0 310px;
 `;
 
 const OrderListContentWrapper = styled.section`
@@ -155,7 +155,7 @@ const OrderList = () => {
 
 	return (
 		<OrderListWrapper>
-			<SearchBar></SearchBar>
+			{/* <SearchBar></SearchBar> */}
 			<Background />
 			<HomepageCounters />
 			<OrderListLayout>

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Countdown from "react-countdown";
 
 const Wrapper = styled.div`
+	flex: 3 0 auto;
 	height: 250px;
 	display: flex;
 	flex-direction: column;
@@ -78,39 +79,23 @@ const Renderer = ({ days, hours, minutes, seconds, completed }) => {
 			</Title>
 			<Row>
 				<Segment>
-					<Digit>
-						{days}
-					</Digit>
-					<Label>
-						Days
-					</Label>
+					<Digit>{days}</Digit>
+					<Label>Days</Label>
 				</Segment>
 				<Colon />
 				<Segment>
-					<Digit>
-						{hours}
-					</Digit>
-					<Label>
-						Hours
-					</Label>
+					<Digit>{hours}</Digit>
+					<Label>Hours</Label>
 				</Segment>
 				<Colon />
 				<Segment>
-					<Digit>
-						{minutes}
-					</Digit>
-					<Label>
-						Minutes
-					</Label>
+					<Digit>{minutes}</Digit>
+					<Label>Minutes</Label>
 				</Segment>
 				<Colon />
 				<Segment>
-					<Digit>
-						{seconds}
-					</Digit>
-					<Label>
-						Seconds
-					</Label>
+					<Digit>{seconds}</Digit>
+					<Label>Seconds</Label>
 				</Segment>
 			</Row>
 		</>
