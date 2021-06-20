@@ -1,6 +1,20 @@
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 
+function getBackground(props) {
+	if (props.disabled)
+		return css`
+			background: transparent;
+		`;
+	if (props.variant === 'primary')
+		return css`
+			background: linear-gradient(256.48deg, #A2F0EA -37.74%, #75F0E7 -37.73%, #A981FE 103.72%);
+		`;
+	if (props.variant === 'secondary')
+		return css`
+			background: linear-gradient(256.48deg ,rgb(72 194 185 / 50%),rgb(138 100 212 / 50%));
+		`;
+}
 function getColor(props) {
 	if (props.variant === 'primary') {
 		return css`
@@ -16,7 +30,7 @@ function getColor(props) {
 	}
 }
 
-function getDisabledStyles () {
+function getDisabledStyles() {
 	return css`
 		background: #D4D4D4;
 		cursor: not-allowed !important;
@@ -24,7 +38,7 @@ function getDisabledStyles () {
 }
 
 const Container = styled.div`
-	background: ${props => props.disabled === true ? 'transparent' : 'linear-gradient(256.48deg ,rgb(72 194 185 / 50%),rgb(138 100 212 / 50%))'};
+	${props => getBackground(props)};
 	box-shadow: 0px 5.46667px 18px rgba(223, 236, 255, 0.5);
 	border-radius: 5.5px;
 	text-align: center;

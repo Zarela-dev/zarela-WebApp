@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Button from '../Elements/Button';
 
 // #todo this file should be divided info separate files - by component)
 export const SidebarCard = styled.div`
@@ -34,6 +35,10 @@ export const Row = styled.div`
 	display: flex;
 	align-items: center;
 	margin-bottom: ${props => props.theme.spacing(1)};
+
+	& > * {
+		color: ${props => props.hiddenInfo ? '#858585' : props.theme.textPrimary};
+	}
 `;
 
 export const Value = styled.span`
@@ -61,6 +66,19 @@ export const Divider = styled.div`
 	width: 100%;
 	margin: ${props => props.theme.spacing(2)} auto;
 `;
+
+export const NoConnectionMessage = styled.div`
+	font-weight: 600;
+	font-size: 12px;
+	line-height: 22px;
+	text-align: center;
+	margin-bottom: ${props => props.theme.spacing(1)};
+`;
+
+export const ConnectButton = styled(Button)`
+	margin: 0 auto;
+`;
+
 export const Adornment = styled.img`
   
 `;

@@ -81,7 +81,7 @@ const CreateOrder = () => {
 
 										// const doc = document.getElementById("_White_Paper");
 										Web3.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, +tokenPay * Math.pow(10, 9), instanceCount, category, encryptionPublicKey)
-											.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZarelaContractAddress, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
+											.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
 												if (!error) {
 													alert(JSON.stringify('Transaction Hash is :  ' + result));
 												}

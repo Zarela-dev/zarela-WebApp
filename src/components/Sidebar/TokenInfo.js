@@ -14,7 +14,9 @@ import {
 	Subtitle,
 	Title,
 	Value,
-	Divider
+	Divider,
+	NoConnectionMessage,
+	ConnectButton
 } from './Elements';
 import { Spacer } from '../Elements/Spacer';
 
@@ -71,7 +73,7 @@ const Sidebar = () => {
 				<Spacer />
 				<Icon src={infoIcon} />
 			</Header>
-			<Row>
+			<Row hiddenInfo={Web3.accounts.length === 0}>
 				<Subtitle>
 					Biobit Balance
 				</Subtitle>
@@ -79,7 +81,7 @@ const Sidebar = () => {
 					{`${!Number.isNaN(Web3.biobitBalance) ? convertToBiobit(Web3.biobitBalance) + '  Biobit' : Web3.biobitBalance}`}
 				</Value>
 			</Row>
-			<Row>
+			<Row hiddenInfo={Web3.accounts.length === 0}>
 				<Subtitle>
 					Ether Balance
 				</Subtitle>
@@ -87,6 +89,18 @@ const Sidebar = () => {
 					{Web3.etherBalance}
 				</Value>
 			</Row>
+			{
+				Web3.accounts.length === 0 ?
+					<>
+						<NoConnectionMessage>
+							connect your wallet to see more data 
+						</NoConnectionMessage>
+						<ConnectButton variant='primary' onClick={() => window.ethereum.enable()}>
+							connect
+						</ConnectButton>
+					</>
+					: null
+			}
 		</SidebarCard>
 	);
 };
