@@ -76,7 +76,7 @@ const CreateOrder = () => {
 									try {
 										const ipfsResponse = await ipfs.add(buf);
 										formik.setFieldValue('whitepaper', ipfsResponse.path);
-										let url = `https://ipfs.io/ipfs/${ipfsResponse.path}`;
+										let url = `${process.env.REACT_APP_IPFS_LINK + ipfsResponse.path}`;
 										console.log(`Document Of Conditions --> ${url}`);
 
 										// const doc = document.getElementById("_White_Paper");

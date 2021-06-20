@@ -235,7 +235,7 @@ const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) 
 					buttonLabel={'Download'}
 					label={'just label'}
 					helperText={'This .Zip file contains Whitepaper file and survey test files.'}
-					fileLink={'http://94.237.41.18:8080/ipfs/' + order.whitePaper}
+					fileLink={process.env.REACT_APP_IPFS_LINK + order.whitePaper}
 				/>
 				<FileCardSpacer />
 				<UploadFileCard
