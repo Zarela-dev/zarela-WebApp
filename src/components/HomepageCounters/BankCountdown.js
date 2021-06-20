@@ -35,6 +35,7 @@ const Segment = styled.div`
 `;
 
 const Digit = styled.div`
+	font-family: LeagueGothic;
 	font-weight: normal;
 	font-size: 88.889px;
 	line-height: 82px;
@@ -49,19 +50,20 @@ const Label = styled.div`
 	text-align: justify;
 	margin-top: ${props => props.theme.spacing(1)};
 	color: #081985;
+	
 `;
 
 const Colon = styled.div`
 	height: 100%;
 
 	&::after {
-		display: inline-block;
+		display: block;
 		content: ':';
-		margin: 0 ${props => props.theme.spacing(2)};
 		color: white;
 		opacity: 0.5;
 		font-size: 58.3334px;
 		line-height: 1;
+		filter: drop-shadow(0px 5.55556px 5.55556px rgba(0, 0, 0, 0.25));
 	}
 `;
 

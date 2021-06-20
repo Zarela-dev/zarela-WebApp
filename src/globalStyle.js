@@ -1,6 +1,15 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, css } from "styled-components";
+import leagueFont from './assets/fonts/LeagueGothic-Regular.otf';
+
+const fonts = css`
+	@font-face {
+		font-family: "LeagueGothic";
+		src: url(${leagueFont});
+	}
+`;
 
 export const GlobalStyle = createGlobalStyle`
+	${fonts};
 	/* http://meyerweb.com/eric/tools/css/reset/
 	v2.0-modified | 20110126
 	License: none (public domain)
