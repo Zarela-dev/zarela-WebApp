@@ -5,7 +5,7 @@ import maxWidthWrapper from '../components/Elements/MaxWidth';
 import { web3Context } from '../web3Provider';
 import OrderListItem from '../components/OrderListItem';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
-
+import { convertToBiobit} from '../utils'
 const PageWrapper = styled.div`
 	
 `;
@@ -94,7 +94,7 @@ const MyOrders = () => {
 								key={item.orderId}
 								orderId={item.orderId}
 								title={item.title}
-								tokenPay={item.tokenPay}
+								tokenPay={convertToBiobit(item.tokenPay)}
 								total={item.totalContributedCount}
 								contributors={`${item.totalContributed}/${item.totalContributors}`}
 								handleConfirm={handleConfirm}

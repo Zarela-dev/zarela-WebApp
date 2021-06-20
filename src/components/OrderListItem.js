@@ -5,21 +5,26 @@ import {
 	ContributorsIcon,
 	ContributorBadge,
 	TokenIcon,
-	TokenBadge,
+	OrderNumber,
+	BiobitToDollarPair,
+	BadgeRow,
+	BadgeLabel,
+	TokenValue,
+	ValueLabel,
+	BiobitToDollarValue
 } from './Elements/OrderCard';
 import { Typography } from './Elements/Typography';
-import biobitIcon from '../assets/icons/biobit.svg';
-import contributorIcon from '../assets/icons/contributor.png';
+import biobitIcon from '../assets/icons/biobit-black.svg';
+import contributorIcon from '../assets/icons/user-blue.svg';
 import OrderFilesTable from './OrderFilesTable';
 import { web3Context } from '../web3Provider';
 import { Button } from './Elements/Button';
 import axios from 'axios';
 import { Buffer } from 'buffer';
 import fileType from 'file-type';
-import { convertToBiobit } from '../utils';
 
 const Wrapper = styled.div`
-	background: ${props => props.seen ? '#EDFBF8' : '#F4F8FE'};
+	background: ${props => props.seen ? '#EDFBF8' : '#EAF2FF'};
 	opacity: 0.8;
 	border-radius: 8px;
 	padding: ${props => props.theme.spacing(3)} ${props => props.theme.spacing(3.5)};
@@ -73,6 +78,13 @@ const SubmitButton = styled.button`
 	font-weight: 500;
 	font-size: 16px;
 	line-height: 18px;
+`;
+const CustomContributeBadge = styled(ContributorBadge)`
+	flex: 0 0 auto;
+`;
+
+const EqualSign = styled(BiobitToDollarValue)`
+	margin: 0 5px;
 `;
 
 const OrderListItem = ({
@@ -225,31 +237,45 @@ const OrderListItem = ({
 		}
 	}, [Web3.contract]);
 
-	// console.log('formatted', formattedData);
-	// console.log('selected', selected);
 	return (
 		<Wrapper>
 			<Header onClick={() => setOpen(!isOpen)}>
+				<OrderNumber>
+					{orderId}
+				</OrderNumber>
 				<Typography variant='title' weight='semiBold'>
 					{title.length < 135 ? title : title.substr(0, 135) + '...'}
 				</Typography>
 				<Spacer />
-				<ContributorBadge>
-					<ContributorsIcon src={contributorIcon} />
-					<Typography weight='bold' color='secondary' variant='badge'>
-						{contributors}
-					</Typography>
-				</ContributorBadge>
+				<BiobitToDollarPair>
+					<BadgeRow>
+						<TokenIcon src={biobitIcon} />
+						<TokenValue>
+							{tokenPay}
+						</TokenValue>
+						<ValueLabel>
+							BioBit
+						</ValueLabel>
+						<EqualSign>
+							=
+						</EqualSign>
+						<BiobitToDollarValue>
+							$25
+						</BiobitToDollarValue>
+						<ValueLabel colored>
+							Dollar
+						</ValueLabel>
+					</BadgeRow>
+				</BiobitToDollarPair>
 				<Divider />
-				<TokenBadge>
-					<TokenIcon src={biobitIcon} />
-					<Typography weight='bold' color='secondary' variant='badge'>
-						{convertToBiobit(tokenPay)}
-					</Typography>
-					<Typography weight='bold' color='secondary' variant='badge'>
-						BioBit
-					</Typography>
-				</TokenBadge>
+				<CustomContributeBadge>
+					<BadgeRow>
+						<ContributorsIcon src={contributorIcon} />
+						<BadgeLabel>
+							{contributors}
+						</BadgeLabel>
+					</BadgeRow>
+				</CustomContributeBadge>
 				<Divider />
 				<TotalBadge>
 					{total}

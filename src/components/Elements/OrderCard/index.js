@@ -1,13 +1,15 @@
 import styled from 'styled-components';
 import { Typography } from '../Typography';
-import { Link } from 'react-router-dom';
+import { GenericLinkButton } from '../Button';
 
 export const OrderCardWrapper = styled.div`
 	display: flex;
 	flex-wrap: wrap;
-	background: linear-gradient(220.57deg, rgba(107, 230, 238, 0.15) -15.95%, rgba(64, 76, 189, 0.15) 107.46%);
+	/* background: linear-gradient(220.57deg, rgba(107, 230, 238, 0.15) -15.95%, rgba(64, 76, 189, 0.15) 107.46%); */
+	background: white;
+	border: 1px solid #C4C4C4;
 	border-radius: 8px;
-	padding: ${props => props.theme.spacing(3)};
+	padding: ${props => props.theme.spacing(4)} ${props => props.theme.spacing(2.7)} ${props => props.theme.spacing(1.8)};
 
 	margin-bottom: 25px;
 	/* &:not(:last-child){
@@ -19,67 +21,76 @@ export const HeaderLayout = styled.div`
 	display: flex;
 	flex-wrap: nowrap;
 	width: 100%;
-	margin-bottom: ${props => props.theme.spacing(1.5)};
 `;
 
-export const Avatar = styled.div`
+export const OrderNumber = styled.div`
 	flex: 0 0 100px;
-	width: 100px;
-	height: 100px;
-	border: 2px solid #79AFC3;
-	border-radius: 6px;
-	/* padding: ${props => props.theme.spacing(0.5)}; */
+	height: 50px;
+	border-radius: 10px 10px 0px 10px;
+	padding: ${props => props.theme.spacing(1)} ${props => props.theme.spacing(2)};
 	margin-right: ${props => props.theme.spacing(2)};
+	font-weight: bold;
+	background: linear-gradient(246.29deg, #3A68DE 12.69%, #3A68DE 100%);
+	font-size: 32px;
+	line-height: 30px;
+	color: #FFFFFF;
+	text-align: center;
 `;
-
-export const AvatarImage = styled.img`
-	width: 100%;
-	border-radius: 4px;
+export const Title = styled.div`
+	font-weight: 500;
+	font-size: 24px;
+	line-height: 30px; 
+	color: ${props => props.theme.textPrimary};
 `;
 
 export const Bookmark = styled.img`
-	width: 16px;
-	height: 20px;
+	width: 20px;
+	align-self: flex-start;
 	margin-left: ${props => props.theme.spacing(0.5)};
 `;
 
 export const Description = styled.div`
 	flex: 1 0 100%;
-	background: rgba(255, 255, 255, 0.7);
-	border-radius: 5px;
-	padding: ${props => props.theme.spacing(1)} ${props => props.theme.spacing(1.5)};
-	/* margin-bottom: ${props => props.theme.spacing(2.5)}; */
+	background: #EAF1FA;
+	border-radius: 5px 5px 0 0;
+	padding: ${props => props.theme.spacing(2)};
+	font-weight: 300;
+	font-size: 14px;
 	line-height: 20px;
+	text-align: justify;
+	color: #121213;
 `;
 
 export const Timestamp = styled(Typography)`
-	text-align: right;
-	font-size: 12px;
+	text-align: left;
+	font-size: 10px;
 	line-height: 20px;
-	color: ${props => props.theme.textPrimary};
+	color: #858585;
+	margin-left: ${props => props.theme.spacing(12)};
+	margin-bottom: ${props => props.theme.spacing(1.5)};
 `;
 
 export const ProgressTrackerWrapper = styled.div`
 	position: relative;
-	top: -5px;
+	top: -3px;
 	width: 100%;
-	height: 5px;
-	overflow: hidden;
+	height: 3px;
+	overflow: visible;
 `;
 export const ProgressTrackerTrack = styled.div`
-	height: 100%;
+	height: 3px;
 	background: rgba(123, 139, 178, 0.26);
-	border-radius: 24px;
+	border-radius: 0;
 `;
 
 export const ProgressTrackerProcess = styled.div`
 	position: absolute;
 	left: 0;
-	top: 0;
-	height: 100%;
+	top: -1px;
+	height: 5px;
 	width: ${props => props.width + '%' || '0%'};
-	background: #3C87AA;
-	border-radius: 24px;
+	background: #3A68DE;
+	border-radius: 0;
 `;
 
 export const Footer = styled.div`
@@ -90,26 +101,65 @@ export const Footer = styled.div`
 	margin-top: ${props => props.theme.spacing(2)};
 `;
 
-export const TokenBadge = styled.div`
+export const BiobitToDollarPair = styled.div`
 	display: flex;
+	flex-direction: column;
 	align-items: center;
+	flex: 0 0 120px;
+`;
+
+export const BadgeRow = styled.div`
+	display: flex;
+	align-items: flex-end;
+	width: 100%;
+	margin-bottom: ${props => props.theme.spacing(0.5)};
+`;
+export const BadgeLabel = styled.div`
+	line-height: 1;
+	font-size: 14px;
+	font-weight: 700;
+	white-space: normal;
+	color: #3A68DE;
+`;
+
+export const BiobitToDollarValue = styled.div`
+	font-weight: 600;
+	font-size: 18px;
+	line-height: 20px;
+	color: #3A68DE;
+	margin-right: 3px;
+`;
+
+export const Hint = styled.div`
+	font-weight: 300;
+	font-size: 12px;
+	line-height: 20px;
+	color: #3A68DE;
+	white-space: nowrap;
+`;
+
+export const ValueLabel = styled.div`
+	line-height: 1;
+	font-size: 12px;
+	font-weight: 700;
+	white-space: normal;
+	padding-bottom: 2px;
+	color: ${props => props.colored ? '#3A68DE' : props.theme.textPrimary};
 `;
 
 export const TokenValue = styled.div`
 	font-weight: 600;
-	font-size: 20px;
+	font-size: 18px;
 	line-height: 20px;
-	color: #121213;
+	color: ${props => props.theme.textPrimary};
 	margin-right: 3px;
 `;
 
-export const ContributorBadge = styled.div`
-	display: flex;
-	align-items: flex-end;
+export const ContributorBadge = styled(BiobitToDollarPair)`
 `;
 
 export const TokenIcon = styled.img`
-	width: 18px;
+	flex:0 0 18px;
 	height: 18px;
 	margin-right: ${props => props.theme.spacing(0.5)};
 `;
@@ -125,23 +175,19 @@ export const Spacer = styled.div`
 `;
 
 export const Divider = styled.div`
-	height: 26px;
+	height: 46px;
 	background: #3C87AA;
 	width: 1px;
 	margin: 0 ${props => props.theme.spacing(2)};
 `;
 
-export const JoinButton = styled(Link)`
-	text-decoration: none;
-	background: #FFFFFF;
-	box-shadow: 0px 5.46667px 18px rgba(223, 236, 255, 0.5);
-	border-radius: 5.46667px;
-	border: 1px solid #BBBEE6;
-	padding: ${props => props.theme.spacing(1)} ${props => props.theme.spacing(4)};
-	color: #7246D0;
-	line-height: 33px;
-	font-weight: 500;
-	font-size: 20px;
+export const JoinButton = styled(GenericLinkButton)`
+	width: 100%;
+	margin: 0;
+
+	& > * {
+		color: #7246D0;
+	}
 `;
 
 export default OrderCardWrapper;

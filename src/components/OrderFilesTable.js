@@ -1,15 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { SmallCheckbox } from './Elements/Checkbox';
-import { AvatarImage, Avatar } from './Elements/OrderCard';
-import avatarImage0 from '../assets/avatar/avatar-0.jpg';
-import avatarImage1 from '../assets/avatar/avatar-1.jpg';
-import avatarImage2 from '../assets/avatar/avatar-2.jpg';
-import avatarImage3 from '../assets/avatar/avatar-3.jpg';
 import downloadIcon from '../assets/icons/download.svg';
 import { Spacer } from './Elements/Spacer';
 import { Scrollbar } from './Elements/Scrollbar';
-import { timeSince } from './../utils';
+import { timeSince, CopyableText } from './../utils';
+import publicKeyIcon from '../assets/icons/public-key.svg';
 
 const Table = styled.div`
 	display: flex;
@@ -53,13 +49,15 @@ const Cell = styled.div`
 	font-size: 12px;
 	height: 40px;
 	width: 100%;
+	font-weight: normal;
+	cursor: ${props => props.pointer ? 'pointer' : 'normal'};
 
 	${CellWrapper}:not(:last-child) & {
 		border-right: 1px solid #3C87AA;
 	}
 `;
 
-const SmallAvatar = styled(Avatar)`
+const PublicKeyIcon = styled.img`
 	flex: 0 0 40px;
 	height: 40px;
 	margin-right: ${props => props.theme.spacing(1)};
@@ -104,6 +102,7 @@ const FileItem = styled.div`
 	font-size: 12px;
 	line-height: 20px;
 	color: #121213;
+
 	&:not(:last-child) {
 		margin-bottom: ${props => props.theme.spacing(2)};
 	}
@@ -140,8 +139,6 @@ const OrderFilesTable = ({
 	changeAll,
 	signalDownloadHandler
 }) => {
-	let avatarImage = [avatarImage0, avatarImage1, avatarImage2, avatarImage3];
-
 	return (
 		<Table>
 			<Row>
@@ -187,12 +184,12 @@ const OrderFilesTable = ({
 							</Cell>
 						</CellWrapper>
 						<CellWrapper>
-							<Cell>
-								<SmallAvatar>
-									<AvatarImage src={avatarImage[Math.floor(Math.random() * 4)]} />
-								</SmallAvatar>
-								{reqAddress}
-							</Cell>
+							<CopyableText textToCopy={reqAddress}>
+								<Cell pointer>
+									<PublicKeyIcon src={publicKeyIcon} />
+									{reqAddress}
+								</Cell>
+							</CopyableText>
 						</CellWrapper>
 						<CellWrapper>
 							<FilesListWrapper>

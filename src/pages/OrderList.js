@@ -180,7 +180,7 @@ const OrderList = () => {
 									timestamp={timeSince(item.timestamp)}
 									progress={+item.totalContributed / +item.totalContributors * 100}
 									contributors={`${item.totalContributed}/${item.totalContributors}`}
-									totalContributedCount={`${item.totalContributed}/${item.totalContributedCount}`}
+									totalContributedCount={item.totalContributedCount}
 								/>
 							);
 						})

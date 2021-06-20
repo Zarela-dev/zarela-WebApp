@@ -4,7 +4,7 @@ import { Buffer } from 'buffer';
 import { create } from 'ipfs-http-client';
 import OrderDetails from '../components/OrderDetails';
 import { web3Context } from '../web3Provider';
-import { timeSince } from '../utils';
+import { timeSince, convertToBiobit } from '../utils';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import * as ethUtil from 'ethereumjs-util';
 import { encrypt } from 'eth-sig-util';
@@ -86,7 +86,7 @@ const OrderDetailsPage = () => {
 						title: result[1],
 						description: result[6],
 						requesterAddress: result[2],
-						tokenPay: result[3],
+						tokenPay: convertToBiobit(result[3]),
 						totalContributors: result[4], // total contributors required
 						totalContributed: +result[4] - +result[7],
 						categories: result[8], // NOT TO BE USED IN DEMO

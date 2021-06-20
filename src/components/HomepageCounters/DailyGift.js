@@ -24,6 +24,7 @@ const TimerContainer = styled.div`
   	height: 120px;
 	width: 100%;
 	/* background: linear-gradient(256.48deg, #A2F0EA -37.74%, #75F0E7 -37.73%, #A981FE 103.72%); */
+	border: 3px solid #41C4BB;
 	box-shadow: 0px 10px 18px rgba(81, 197, 234, 0.06);
 	border-radius: 25px;
 `;
