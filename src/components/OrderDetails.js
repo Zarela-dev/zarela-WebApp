@@ -139,7 +139,7 @@ const CustomProgressTrackerWrapper = styled(ProgressTrackerWrapper)`
 const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) => {
 	const contributors = `${order.totalContributed}/${order.totalContributors}`;
 	const [signalFile, setSignalFile] = useState(null);
-	console.log(order);
+	
 	return (
 		<PageWrapper>
 			<HeaderContainer>

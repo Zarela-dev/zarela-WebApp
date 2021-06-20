@@ -77,8 +77,6 @@ const MyOrders = () => {
 		}
 	}, [Web3.contract, Web3.accounts]);
 
-	console.log(orders);
-
 	return (
 		<PageWrapper>
 			<TitleBar>

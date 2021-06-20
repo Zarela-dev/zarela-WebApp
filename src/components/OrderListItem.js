@@ -108,8 +108,13 @@ const OrderListItem = ({
 	};
 
 	const changeAll = (type) => {
+		const allSelected = {};
+		Object.keys(formattedData).forEach(address => {
+			allSelected[address] = formattedData[address].map(item => item.ipfsHash)
+		});
+
 		if (type === 'check')
-			setSelected(formattedData);
+			setSelected(allSelected);
 		if (type === 'uncheck')
 			setSelected(values => {
 				let result = {};
@@ -122,11 +127,11 @@ const OrderListItem = ({
 			});
 	};
 
-	const onBulkChange = (type, address, allOrders) => {
+	const onBulkChange = (type, address) => {
 		if (type === 'check')
 			setSelected(values => ({
 				...values,
-				[address]: formattedData[address]
+				[address]: formattedData[address].map(item => item.ipfsHash)
 			}));
 		if (type === 'uncheck')
 			setSelected(values => {
