@@ -1,5 +1,6 @@
 import { createGlobalStyle, css } from "styled-components";
 import leagueFont from './assets/fonts/LeagueGothic-Regular.otf';
+import overrides from './overrides';
 
 const fonts = css`
 	@font-face {
@@ -10,6 +11,7 @@ const fonts = css`
 
 export const GlobalStyle = createGlobalStyle`
 	${fonts};
+	${overrides};
 	/* http://meyerweb.com/eric/tools/css/reset/
 	v2.0-modified | 20110126
 	License: none (public domain)

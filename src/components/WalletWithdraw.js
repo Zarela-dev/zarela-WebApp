@@ -10,7 +10,7 @@ import etherIcon from '../assets/icons/ether-black.png';
 import Textfield from './Elements/TextField';
 import Button from './Elements/Button';
 import copyImage from '../assets/icons/copy.svg';
-import { CopyableText, scientificToDecimal, convertToBiobit } from '../utils';
+import { CopyableText, scientificToDecimal, toast, convertToBiobit } from '../utils';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useHistory } from 'react-router';
@@ -54,12 +54,12 @@ const WalletWithdraw = () => {
 				Web3.contract.methods.transfer(values.address, +values.amount * Math.pow(10, 9))
 					.send({ from: Web3.accounts[0] }, (error, result) => {
 						if (!error) {
-							alert(JSON.stringify('Transaction Hash is :  ' + result));
+							toast(result, 'success', true, result);
 							history.push('/wallet/transactions');
 							//#todo create the tab based routes
 						}
 						else {
-							alert(error.message);
+							toast(error.message, 'error');
 						}
 					});
 				Web3.contract.events.Transfer({}, function (error, result) {
@@ -68,10 +68,10 @@ const WalletWithdraw = () => {
 					// [2] amount (without fee) 
 					if (!error) {
 						let returnValues = result.returnValues;
-						alert(JSON.stringify('Great !! Success :) ' + 'from :' + returnValues[0] + 'to:' + returnValues[1] + ' amount: ' + returnValues[2]));
+						toast(`${returnValues[2]} tokens were successfully sent to ${returnValues[1]}`, 'success');
 					}
 					else {
-						alert(error.message);
+						toast(error.message, 'error');
 					}
 				});
 			} else {

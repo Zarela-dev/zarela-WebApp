@@ -8,13 +8,8 @@ import { timeSince, convertToBiobit } from '../utils';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import * as ethUtil from 'ethereumjs-util';
 import { encrypt } from 'eth-sig-util';
-// import { toast } from '../utils';
-import { toast } from 'react-toastify';
-import styled from 'styled-components';
+import { toast } from '../utils';
 
-const ToastInner = styled.div`
-	background: red;
-`;
 const OrderDetailsPage = () => {
 	const { id } = useParams();
 	const { Web3 } = useContext(web3Context);
@@ -59,20 +54,20 @@ const OrderDetailsPage = () => {
 							Web3.contract.methods.SendFile(order.orderId, order.requesterAddress, ipfsResponse.path)
 								.send({ from: Web3.accounts[0], gas: 600000, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
 									if (!error) {
-										toast(JSON.stringify('Transaction Hash is :  ' + result));
+										toast(result, 'success', true, result);
 									}
 									else {
-										toast(error.message);
+										toast(error.message, 'error');
 									}
 								});
 
 							Web3.contract.events.Contributed({}, function (error, result) {
 								if (!error) {
 									let returnValues = result.returnValues;
-									toast(JSON.stringify('The signal was sent successfully! ' + ' Signal Sending From  :  << ' + returnValues[0] + ' >>' + '   Account Address To  :  << ' + returnValues[2] + ' >>' + ' To Order Number  :  << ' + returnValues[1] + ' >>'));
+									toast(`signal submitted on order #${returnValues[1]} for address: ${returnValues[2]}`);
 								}
 								else {
-									toast(error.message);
+									toast(error.message, 'error');
 								}
 							});
 						} catch (error) {

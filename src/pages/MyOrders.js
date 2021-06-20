@@ -5,7 +5,7 @@ import maxWidthWrapper from '../components/Elements/MaxWidth';
 import { web3Context } from '../web3Provider';
 import OrderListItem from '../components/OrderListItem';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
-import { convertToBiobit} from '../utils'
+import { convertToBiobit, toast } from '../utils';
 const PageWrapper = styled.div`
 	
 `;
@@ -23,19 +23,19 @@ const MyOrders = () => {
 	const handleConfirm = (orderId, addresses) => {
 		Web3.contract.methods.ConfirmContributer(orderId, addresses).send({ from: Web3.accounts[0] }, (error, result) => {
 			if (!error) {
-				alert(JSON.stringify('Transaction Hash is :  ' + result));
+				toast(result, 'success', true, result);
 			}
 			else {
-				alert(error.message);
+				toast(error.message, 'error');
 			}
 		});
 		Web3.contract.events.TokenSent({}, function (error, result) {
 			if (!error) {
 				let returnValues = result.returnValues;
-				alert(JSON.stringify('Your Mission Is Complete! ' + returnValues[0] + '  Address Sending  ' + returnValues[2] + '    Token To Account  :  << ' + returnValues[1] + ' >>'));
+				toast(`Your mission is complete, tokens were successfully sent to ${returnValues[1]}`, 'success');
 			}
 			else {
-				alert(error.message);
+				toast(error.message, 'error');
 			}
 		});
 	};

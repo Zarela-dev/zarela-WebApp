@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import OrderListItem from '../components/OrderListItem';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
-import { convertToBiobit } from '../utils';
+import { convertToBiobit, toast } from '../utils';
 const PageWrapper = styled.div`
 	
 `;
@@ -31,13 +31,13 @@ const MyAccount = () => {
 						setTotalRevenueFromZarela(formatter(result[0]));
 					}
 					else {
-						alert(error.message);
+						toast(error.message, 'error');
 					}
 				});
 				if (!Object.keys(orders).length) {
 					Web3.contract.methods.Order_Details().call({ from: Web3.accounts[0] }).then(result => {
 						const myOrders = result[1];
-	
+
 						myOrders.forEach(currentOrder => {
 							Web3.contract.methods.ord_file(currentOrder).call().then(result => {
 								const orderTemplate = {
@@ -73,7 +73,7 @@ const MyAccount = () => {
 	return (
 		<PageWrapper>
 			<TitleBar>
-				My Account {totalRevenueFromZarela} / {totalRevenueFromRequester} 
+				My Account {totalRevenueFromZarela} / {totalRevenueFromRequester}
 			</TitleBar>
 			<ContentWrapper>
 				{
