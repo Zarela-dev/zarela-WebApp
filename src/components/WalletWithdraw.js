@@ -44,6 +44,11 @@ const WalletWithdraw = () => {
 			address: '',
 			amount: ''
 		},
+		validationSchema: yup.object().shape({
+			token: yup.string().required('token type can not be blank'),
+			address: yup.string().required('recipient address can not be empty'),
+			amount: yup.string().required('token amount can not be empty')
+		}),
 		onSubmit: (values) => {
 			if (values.token === 'Biobit') {
 				Web3.contract.methods.transfer(values.address, +values.amount * Math.pow(10, 9))
@@ -84,6 +89,7 @@ const WalletWithdraw = () => {
 		console.log(Web3.etherBalance);
 		return `Available: ${formik.values.token === 'Biobit' ? convertToBiobit(+Web3.biobitBalance) : +Web3.etherBalance} ${formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'}`;
 	};
+	console.log(formik);
 	return (
 		<Wrapper onSubmit={formik.handleSubmit}>
 			<Content>
@@ -112,6 +118,7 @@ const WalletWithdraw = () => {
 						onChange={(e) => formik.setFieldValue('address', e.target.value)}
 						name='address'
 						value={formik.values.address}
+						error={formik.errors?.address}
 					/>
 					<WalletInput
 						label={'Amount'}
@@ -120,7 +127,7 @@ const WalletWithdraw = () => {
 						actions={[
 							{
 								content: 'Max',
-								onClick: async() => {
+								onClick: async () => {
 									const value = formik.values.token === 'Biobit' ? convertToBiobit(+Web3.biobitBalance) : +Web3.etherBalance;
 									await formik.setFieldValue('amount', value);
 								}
@@ -130,8 +137,9 @@ const WalletWithdraw = () => {
 						onChange={(e) => formik.setFieldValue('amount', e.target.value)}
 						name='amount'
 						value={formik.values.amount}
+						error={formik.errors?.amount}
 					/>
-					<WithdrawButton variant='primary' type='submit'>
+					<WithdrawButton variant='primary' type='submit' disabled={!formik.isValid && !formik.isSubmitting && !formik.pristine}>
 						Withdraw
 					</WithdrawButton>
 				</Column>

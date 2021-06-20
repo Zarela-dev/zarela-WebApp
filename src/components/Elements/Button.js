@@ -16,8 +16,15 @@ function getColor(props) {
 	}
 }
 
+function getDisabledStyles () {
+	return css`
+		background: #D4D4D4;
+		cursor: not-allowed !important;
+	`;
+}
+
 const Container = styled.div`
-	background: linear-gradient(256.48deg ,rgb(72 194 185 / 50%),rgb(138 100 212 / 50%));
+	background: ${props => props.disabled === true ? 'transparent' : 'linear-gradient(256.48deg ,rgb(72 194 185 / 50%),rgb(138 100 212 / 50%))'};
 	box-shadow: 0px 5.46667px 18px rgba(223, 236, 255, 0.5);
 	border-radius: 5.5px;
 	text-align: center;
@@ -29,7 +36,7 @@ const Container = styled.div`
 
 const TheButton = styled.button`
 	${(props) => getColor(props)};
-
+	${(props) => props.disabled && getDisabledStyles()};
 	padding: ${props => props.theme.spacing(1.5)} ${props => props.theme.spacing(3)};
     text-decoration: none;
 	font-weight: 500;
@@ -44,9 +51,8 @@ const TheButton = styled.button`
 `;
 
 const TheLinkButton = styled(Link)`
-	display: block;
 	${(props) => getColor(props)};
-
+	display: block;
 	padding: ${props => props.theme.spacing(1.5)} ${props => props.theme.spacing(3)};
     text-decoration: none;
 	font-weight: 500;
@@ -62,9 +68,9 @@ const TheLinkButton = styled(Link)`
 `;
 
 
-const GenericButton = ({ children, variant, type, ...rest }) => (
-	<Container variant={variant} {...rest}>
-		<TheButton variant={variant} type={type}>
+const GenericButton = ({ children, variant, type, disabled, ...rest }) => (
+	<Container disabled={disabled} variant={variant} {...rest}>
+		<TheButton variant={variant} type={type} disabled={disabled}>
 			{children}
 		</TheButton>
 	</Container>
