@@ -29,10 +29,10 @@ const MyOrders = () => {
 				toast(error.message, 'error');
 			}
 		});
-		Web3.contract.events.TokenSent({}, function (error, result) {
+		Web3.contract.events.Transfer({}, function (error, result) {
 			if (!error) {
 				let returnValues = result.returnValues;
-				toast(`Your mission is complete, tokens were successfully sent to ${returnValues[1]}`, 'success');
+				toast(`Your mission is complete, ${returnValues[2]} tokens were successfully sent to ${returnValues[1]}`, 'success');
 			}
 			else {
 				toast(error.message, 'error');

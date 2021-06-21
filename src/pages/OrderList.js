@@ -124,7 +124,7 @@ const OrderList = () => {
 
 	useEffect(() => {
 		if (Web3.contract) {
-			Web3.contract.methods.LastPrice().call((error, result) => {
+			Web3.contract.methods.Prize().call((error, result) => {
 				if (!error)
 					setZarelaReward(+result * 2);
 				else
