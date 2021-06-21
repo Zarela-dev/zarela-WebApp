@@ -240,9 +240,8 @@ const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) 
 				<FileCardSpacer />
 				<UploadFileCard
 					showSelected
-					buttonLabel='Upload'
-					helperText={'This .Zip file contains Whitepaper file and survey test files.'}
-					label={'Upload your white paper here'}
+					buttonLabel='Select Files'
+					label={'upload your files here'}
 					ref={ref}
 					name={'whitepaper'}
 					value={signalFile}
