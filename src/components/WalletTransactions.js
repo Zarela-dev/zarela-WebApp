@@ -87,7 +87,7 @@ const WalletTransactions = ({ isLoading, accounts, data }) => {
 
 					<CellWrapper>
 						<Cell>
-							TXN Hash
+							TX Hash
 						</Cell>
 					</CellWrapper>
 					<CellWrapper>
@@ -117,7 +117,7 @@ const WalletTransactions = ({ isLoading, accounts, data }) => {
 					</CellWrapper>
 					<CellWrapper>
 						<Cell>
-							TXN fee
+							TX fee
 						</Cell>
 					</CellWrapper>
 				</Row>
