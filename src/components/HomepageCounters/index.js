@@ -12,11 +12,11 @@ const Wrapper = styled.div`
 	align-items: center;
 `;
 
-const HomepageCounters = () => {
+const HomepageCounters = ({todayGift}) => {
 	return (
 		<Wrapper>
 			<BankCountdown />
-			<DailyGift />
+			<DailyGift giftValue={todayGift}/>
 		</Wrapper>
 	)
 }

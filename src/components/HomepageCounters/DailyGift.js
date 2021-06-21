@@ -120,7 +120,7 @@ const Renderer = ({ days, hours, minutes, seconds, completed }) => {
 
 };
 
-const DailyGift = () => {
+const DailyGift = ({giftValue}) => {
 	return (
 		<Wrapper>
 			<Header>
@@ -128,7 +128,7 @@ const DailyGift = () => {
 					Today Gift
 				</Title>
 				<Subtitle>
-					BBit 58
+					{giftValue + ' BBit'}
 				</Subtitle>
 			</Header>
 			<TimerContainer>

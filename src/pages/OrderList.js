@@ -157,7 +157,7 @@ const OrderList = () => {
 		<OrderListWrapper>
 			{/* <SearchBar></SearchBar> */}
 			<Background />
-			<HomepageCounters />
+			<HomepageCounters todayGift={Web3.bank} />
 			<OrderListLayout>
 				<OrderListSidebarWrapper>
 					<TokenStatsSidebar
