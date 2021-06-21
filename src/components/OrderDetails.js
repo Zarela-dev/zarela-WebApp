@@ -231,10 +231,10 @@ const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) 
 			</DescriptionContainer>
 			<FilesWrapper>
 				<DownloadFileCard
-					fileName={'Download Whitepaper'}
+					fileName={'Download Zpaper'}
 					buttonLabel={'Download'}
 					label={'just label'}
-					helperText={'This .Zip file contains Whitepaper file and survey test files.'}
+					helperText={'This file contains Zpaper file and survey test files.'}
 					fileLink={process.env.REACT_APP_IPFS_LINK + order.whitePaper}
 				/>
 				<FileCardSpacer />
