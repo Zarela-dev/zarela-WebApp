@@ -81,7 +81,7 @@ const Wallet = () => {
 			});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [Web3.accounts.length]);
+	}, [Web3.accounts]);
 
 	return (
 		Web3.accounts.length === 0 ?
