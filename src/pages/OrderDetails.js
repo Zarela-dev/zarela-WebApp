@@ -64,7 +64,7 @@ const OrderDetailsPage = () => {
 							Web3.contract.events.Contributed({}, function (error, result) {
 								if (!error) {
 									let returnValues = result.returnValues;
-									toast(`signal submitted on order #${returnValues[1]} for address: ${returnValues[2]}`);
+									toast(`signal submitted on order #${returnValues[1]} for address: ${returnValues[2]}`, 'success');
 								}
 								else {
 									toast(error.message, 'error');
