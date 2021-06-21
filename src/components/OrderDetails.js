@@ -194,7 +194,7 @@ const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) 
 								=
 							</EqualSign>
 							<BiobitToDollarValue>
-								$25
+								{'$' + order.tokenPay}
 							</BiobitToDollarValue>
 							<ValueLabel colored>
 								Dollar
