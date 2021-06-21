@@ -19,7 +19,7 @@ const AppRouter = () => {
 					<Route exact path='/order/:id' component={OrderDetails} />
 					<Route exact path='/my-orders' component={MyOrders} />
 					<Route exact path='/account' component={MyAccount} />
-					<Route exact path='/wallet' component={Wallet} />
+					<Route path='/wallet' component={Wallet} />
 				</Switch>
 			</div>
 		</Router>

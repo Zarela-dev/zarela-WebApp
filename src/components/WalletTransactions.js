@@ -1,12 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { timeSince, convertToBiobit } from '../utils';
-
-const Wrapper = styled.div`
-	padding: ${props => props.theme.spacing(2.5)} ${props => props.theme.spacing(2)};
-	background: #F4F8FE;
-	border-radius: 8px;
-`;
+import { timeSince, convertToBiobit, CopyableText } from '../utils';
 
 const Table = styled.div`
 	display: flex;
@@ -33,7 +27,7 @@ const Row = styled.section`
 	margin-bottom: 4px;
 
 	${CellWrapper}:first-of-type {
-		flex: 0 0 180px; /* blockHash */
+		flex: 0 0 240px; /* blockHash */
 	}
 	${CellWrapper}:nth-of-type(2) {
 		flex: 0 0 210px; /* timestamp */
@@ -45,7 +39,7 @@ const Row = styled.section`
 		flex: 0 0 180px; /* to */
 	}
 	${CellWrapper}:nth-of-type(5) {
-		flex: 0 0 70px; /* status */
+		flex: 0 0 80px; /* status */
 	}
 	${CellWrapper}:nth-of-type(6) {
 		flex: 1 0 auto; /* value */
@@ -63,23 +57,34 @@ const Cell = styled.div`
 	font-size: 12px;
 	height: 40px;
 	width: 100%;
+	word-break: break-word;
+	font-weight: ${props => props.bold ? 'bold' : 'normal'};
+
+	cursor: ${props => props.copyable ? 'pointer' : 'normal'};
+	color: ${props => props.copyable ? '#3A68DE' : props.theme.textPrimary};
 
 	${CellWrapper}:not(:last-child) & {
 		border-right: 1px solid #3C87AA;
 	}
 `;
 
-function shortenHash(hash) {
-	if (!hash) return;
-	return hash.substr(0, 20) + '...';
-}
+const Header = styled.div`
+	${Cell} {
+		font-size: 14px;	
+	}
+`;
 
-const WalletTransactions = ({ data }) => {
-	console.log(data);
+const WalletTransactions = ({ isLoading, accounts, data }) => {
+	if (accounts === undefined || isLoading === true)
+		return 'loading';
+	if (accounts.length === 0)
+		return 'no accounts found';
+
 	return (
-		<Wrapper>
-			<Table>
+		<Table>
+			<Header>
 				<Row>
+
 					<CellWrapper>
 						<Cell>
 							TXN Hash
@@ -116,49 +121,55 @@ const WalletTransactions = ({ data }) => {
 						</Cell>
 					</CellWrapper>
 				</Row>
-				{
-					data.map((transaction, index) => (
-						<Row key={transaction.blockHash}>
-							<CellWrapper>
-								<Cell>
-									{shortenHash(transaction.blockHash)}
+			</Header>
+			{
+				data.map((transaction, index) => (
+					<Row key={transaction.blockHash}>
+						<CellWrapper>
+							<CopyableText textToCopy={transaction.blockHash}>
+								<Cell copyable>
+									{transaction.blockHash}
 								</Cell>
-							</CellWrapper>
-							<CellWrapper>
-								<Cell>
-									{timeSince(transaction.timeStamp)}
+							</CopyableText>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>
+								{timeSince(transaction.timeStamp)}
+							</Cell>
+						</CellWrapper>
+						<CellWrapper>
+							<CopyableText textToCopy={transaction.from}>
+								<Cell copyable>
+									{transaction.from}
 								</Cell>
-							</CellWrapper>
-							<CellWrapper>
-								<Cell>
-									{shortenHash(transaction.from)}
+							</CopyableText>
+						</CellWrapper>
+						<CellWrapper>
+							<CopyableText textToCopy={transaction.to}>
+								<Cell copyable>
+									{transaction.to}
 								</Cell>
-							</CellWrapper>
-							<CellWrapper>
-								<Cell>
-									{shortenHash(transaction.to)}
-								</Cell>
-							</CellWrapper>
-							<CellWrapper>
-								<Cell>
-									N/A
-								</Cell>
-							</CellWrapper>
-							<CellWrapper>
-								<Cell>
-									{convertToBiobit(transaction.value)}
-								</Cell>
-							</CellWrapper>
-							<CellWrapper>
-								<Cell>
-									{+transaction.gasUsed * +transaction.gasPrice}
-								</Cell>
-							</CellWrapper>
-						</Row>
-					))
-				}
-			</Table>
-		</Wrapper>
+							</CopyableText>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>
+								N/A
+							</Cell>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell bold>
+								{convertToBiobit(transaction.value)}
+							</Cell>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>
+								{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}
+							</Cell>
+						</CellWrapper>
+					</Row>
+				))
+			}
+		</Table>
 	);
 };
 

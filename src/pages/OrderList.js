@@ -3,16 +3,56 @@ import { web3Context } from '../web3Provider';
 import OrderCard from '../components/OrderCard';
 import styled from 'styled-components';
 import { SearchBar } from '../components/SearchBar';
-import Sidebar from '../components/Sidebar';
+import TokenInfoSidebar from '../components/Sidebar/TokenInfo';
+import TokenStatsSidebar from '../components/Sidebar/TokenStats';
 import Pagination from '../components/Pagination';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import { timeSince, convertToBiobit } from '../utils';
+import homepageBg from '../assets/home-bg.jpg';
+import HomepageCounters from '../components/HomepageCounters';
 
 const OrderListWrapper = styled.div`
+	position: relative;
 	width: 100%;
 `;
 
-const OrderListLayout = styled.aside`
+const Background = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	z-index: -1;
+
+	&::before {
+		content: '';
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 80vh;
+
+		background-image: url(${homepageBg}), linear-gradient(0deg,rgb(255 255 255),rgb(255 255 255 / 0%));
+		background-size: 100%, 400px;
+		background-position: 0 -30px;
+		z-index: -3;
+	}
+	
+	&::after {
+		content: '';
+		display: block;
+		position: absolute;
+		bottom: 0;
+		height: 80vh;
+		left: 0;
+		width: 100%;
+		z-index: -2;
+		background: linear-gradient(0deg,rgb(255 255 255) 50%,rgb(255 255 255 / 0%));
+	}
+`;
+
+const OrderListLayout = styled.section`
 	display: flex;
 	flex-direction: row-reverse;
 	flex-wrap: nowrap;
@@ -22,9 +62,10 @@ const OrderListLayout = styled.aside`
 `;
 
 const OrderListSidebarWrapper = styled.aside`
-	width: 309px;
-	flex: 0;
-	
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	flex: 0 0 310px;
 `;
 
 const OrderListContentWrapper = styled.section`
@@ -38,6 +79,9 @@ const OrderList = () => {
 	const PAGE_SIZE = 3;
 	const [orders, setOrders] = useState({});
 	const [ordersCount, setOrdersCount] = useState(0);
+	const [dailyContributors, setDailyContributors] = useState(0);
+	const [BiobitBasedOnEth, setBiobitBasedOnEth] = useState(0);
+	const [ZarelaReward, setZarelaReward] = useState(0);
 
 	// pagination hook
 	useEffect(() => {
@@ -78,11 +122,51 @@ const OrderList = () => {
 		}
 	}, [Web3.contract, ordersCount]);
 
+	useEffect(() => {
+		if (Web3.contract) {
+			Web3.contract.methods.LastPrice().call((error, result) => {
+				if (!error)
+					setZarelaReward(+result * 2);
+				else
+					console.error(error.message);
+			});
+			Web3.contract.methods.contributer_count().call((error, result) => {
+				if (!error)
+					setDailyContributors(result);
+				else
+					console.error(error.message);
+			});
+			Web3.contract.methods.GetETHPrice().call((error, result) => {
+				if (!error)
+					setBiobitBasedOnEth((1 / (+result / Math.pow(10, 8))).toFixed(6));
+				else
+					console.error(error.message);
+			});
+		};
+		// move to wallet #todo
+		// Web3.contract.methods.sum_of_reward_per_contributer((error, result) => {
+		// 	if (!error)
+		// 		console.log(result);
+		// 	else
+		// 		console.error(error.message);
+		// })
+
+	}, [Web3.contract]);
+
 	return (
 		<OrderListWrapper>
-			<SearchBar></SearchBar>
+			{/* <SearchBar></SearchBar> */}
+			<Background />
+			<HomepageCounters />
 			<OrderListLayout>
-				<Sidebar></Sidebar>
+				<OrderListSidebarWrapper>
+					<TokenStatsSidebar
+						ZarelaRewardPool={ZarelaReward}
+						dailyContributors={dailyContributors}
+						BiobitBasedOnEth={BiobitBasedOnEth}
+					/>
+					<TokenInfoSidebar />
+				</OrderListSidebarWrapper>
 				<OrderListContentWrapper>
 					{
 						Object.values(orders).reverse().map(item => {
@@ -96,7 +180,7 @@ const OrderList = () => {
 									timestamp={timeSince(item.timestamp)}
 									progress={+item.totalContributed / +item.totalContributors * 100}
 									contributors={`${item.totalContributed}/${item.totalContributors}`}
-									totalContributedCount={`${item.totalContributed}/${item.totalContributedCount}`}
+									totalContributedCount={item.totalContributedCount}
 								/>
 							);
 						})

@@ -4,10 +4,11 @@ import { Buffer } from 'buffer';
 import { create } from 'ipfs-http-client';
 import OrderDetails from '../components/OrderDetails';
 import { web3Context } from '../web3Provider';
-import { timeSince } from '../utils';
+import { timeSince, convertToBiobit } from '../utils';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import * as ethUtil from 'ethereumjs-util';
 import { encrypt } from 'eth-sig-util';
+import { toast } from '../utils';
 
 const OrderDetailsPage = () => {
 	const { id } = useParams();
@@ -46,27 +47,27 @@ const OrderDetailsPage = () => {
 
 							const ipfsResponse = await ipfs.add(encryptedMessage);
 
-							let url = `https://ipfs.io/ipfs/${ipfsResponse.path}`;
+							let url = `${process.env.REACT_APP_IPFS_LINK + ipfsResponse.path}`;
 							console.log(`Document Of Conditions --> ${url}`);
 
 							// const doc = document.getElementById("_White_Paper");
 							Web3.contract.methods.SendFile(order.orderId, order.requesterAddress, ipfsResponse.path)
-								.send({ from: Web3.accounts[0], gas: 500000, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
+								.send({ from: Web3.accounts[0], gas: 600000, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
 									if (!error) {
-										alert(JSON.stringify('Transaction Hash is :  ' + result));
+										toast(result, 'success', true, result);
 									}
 									else {
-										alert(error.message);
+										toast(error.message, 'error');
 									}
 								});
 
 							Web3.contract.events.Contributed({}, function (error, result) {
 								if (!error) {
 									let returnValues = result.returnValues;
-									alert(JSON.stringify('The signal was sent successfully! ' + ' Signal Sending From  :  << ' + returnValues[0] + ' >>' + '   Account Address To  :  << ' + returnValues[2] + ' >>' + ' To Order Number  :  << ' + returnValues[1] + ' >>'));
+									toast(`signal submitted on order #${returnValues[1]} for address: ${returnValues[2]}`);
 								}
 								else {
-									alert(error.message);
+									toast(error.message, 'error');
 								}
 							});
 						} catch (error) {
@@ -86,7 +87,7 @@ const OrderDetailsPage = () => {
 						title: result[1],
 						description: result[6],
 						requesterAddress: result[2],
-						tokenPay: result[3],
+						tokenPay: convertToBiobit(result[3]),
 						totalContributors: result[4], // total contributors required
 						totalContributed: +result[4] - +result[7],
 						categories: result[8], // NOT TO BE USED IN DEMO

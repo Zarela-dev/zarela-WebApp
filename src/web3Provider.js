@@ -9,8 +9,8 @@ const initialState = {
 	accounts: [],
 	error: null,
 	bank: 0,
-	biobitBalance: 'Connect To See Data',
-	etherBalance: 'Connect To See Data',
+	biobitBalance: 'Hidden Info',
+	etherBalance: 'Hidden Info',
 	gas: {}
 };
 
@@ -74,13 +74,12 @@ const Web3Provider = ({ children }) => {
 				const web3 = await getWeb3();
 				// Use web3 to get the user's accounts.
 				const accounts = await web3.eth.getAccounts();
-
 				// Get the contract instance.
 				// const networkId = await web3.eth.net.getId();
 				// const deployedNetwork = SimpleStorageContract.networks[networkId];
 				const ZarelaContract = new web3.eth.Contract(
-					JSON.parse(process.env.REACT_APP_ZarelaContractABI),
-					process.env.REACT_APP_ZarelaContractAddress
+					JSON.parse(process.env.REACT_APP_ZARELA_CONTRACT_ABI),
+					process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS
 				);
 				// Set web3, accounts, and contract to the state, and then proceed with an
 				// example of interacting with the contract's methods.
@@ -188,7 +187,7 @@ const Web3Provider = ({ children }) => {
 			Web3.web3.eth.getBalance(Web3.accounts[0]).then(function (result) {
 				dispatch({
 					type: 'SET_ETHER_BALANCE',
-					payload: Web3.web3.utils.fromWei(result, "ether") + " ETH"
+					payload: Web3.web3.utils.fromWei(result, "ether")
 				});
 			}).catch(error => {
 				console.error(error.message);

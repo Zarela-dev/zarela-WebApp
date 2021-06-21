@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Buffer } from 'buffer';
 import { web3Context } from '../web3Provider';
+import { useHistory } from 'react-router-dom';
 import { create } from 'ipfs-http-client';
 import styled from 'styled-components';
 import TitleBar from '../components/TitleBar';
@@ -10,7 +11,7 @@ import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Persist } from 'formik-persist';
-
+import { toast } from '../utils';
 
 const Wrapper = styled.div`
 	${maxWidthWrapper}
@@ -21,6 +22,7 @@ const CreateOrder = () => {
 	const fileRef = useRef(null);
 	const { Web3 } = useContext(web3Context);
 	const [showDialog, setDialog] = useState(false);
+	const history = useHistory();
 
 	const validationErrors = {
 		required: name => `${name} is required to create your order.`,
@@ -76,27 +78,29 @@ const CreateOrder = () => {
 									try {
 										const ipfsResponse = await ipfs.add(buf);
 										formik.setFieldValue('whitepaper', ipfsResponse.path);
-										let url = `https://ipfs.io/ipfs/${ipfsResponse.path}`;
+										let url = `${process.env.REACT_APP_IPFS_LINK + ipfsResponse.path}`;
 										console.log(`Document Of Conditions --> ${url}`);
 
 										// const doc = document.getElementById("_White_Paper");
 										Web3.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, +tokenPay * Math.pow(10, 9), instanceCount, category, encryptionPublicKey)
-											.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZarelaContractAddress, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
+											.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
 												if (!error) {
-													alert(JSON.stringify('Transaction Hash is :  ' + result));
+													toast(result, 'success', true, result);
 												}
 												else {
-													alert(error.message);
+													toast(error.message, 'error');
 												}
 											});
 										Web3.contract.events.OrderRegistered({}, function (error, result) {
 											if (!error) {
 												let returnValues = result.returnValues;
-												alert(JSON.stringify('Great !! Succes :) ' + '     <<New Order Created ! >>        Owner address is  :  ' + returnValues[0] +
-													'   & Order Number is   :  ' + returnValues[1]));
+												toast(`Transaction #${returnValues[1]} has been created successfully.`, 'success');
+												history.push(`/order/${returnValues[1]}`);
+												// alert(JSON.stringify('Great !! Succes :) ' + '     <<New Order Created ! >>        Owner address is  :  ' + returnValues[0] +
+												// '   & Order Number is   :  ' + returnValues[1]));
 											}
 											else {
-												alert(error.message);
+												toast(error.message, 'error');
 											}
 										});
 									} catch (error) {

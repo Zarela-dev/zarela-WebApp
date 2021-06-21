@@ -1,19 +1,21 @@
 {
 	"cSpell.words": [
 		"allocated",
-		"biobits",
-		"hash",
-		"ipfs",
 		"api",
 		"apikey",
 		"app",
 		"biobits",
 		"blockhash",
 		"contractaddress",
+		"cryptocurrency",
 		"gasstation",
+		"hash",
+		"ipfs",
 		"key",
 		"react",
+		"textfield",
 		"titlebar",
+		"toastify",
 		"tokentx",
 		"wallet"
 	]

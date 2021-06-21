@@ -2,9 +2,9 @@ import React from 'react';
 import OrderCardWrapper, {
 	Footer,
 	HeaderLayout,
-	AvatarImage,
-	Avatar,
+	OrderNumber,
 	Typography,
+	Title,
 	Spacer,
 	Divider,
 	Description,
@@ -12,44 +12,45 @@ import OrderCardWrapper, {
 	Bookmark,
 	ContributorBadge,
 	ContributorsIcon,
-	TokenBadge,
+	BiobitToDollarPair,
+	BadgeRow,
 	TokenIcon,
 	TokenValue,
 	JoinButton,
+	BiobitToDollarValue,
 	ProgressTrackerWrapper,
 	ProgressTrackerTrack,
-	ProgressTrackerProcess
+	ProgressTrackerProcess,
+	ValueLabel,
+	BadgeLabel,
+	Hint
 } from './Elements/OrderCard';
-import bookmarkIcon from '../assets/icons/bookmark.svg';
+import bookmarkIcon from '../assets/icons/bookmark-purple.svg';
 import biobitIcon from '../assets/icons/biobit-black.svg';
-import avatarImage0 from '../assets/avatar/avatar-0.jpg';
-import avatarImage1 from '../assets/avatar/avatar-1.jpg';
-import avatarImage2 from '../assets/avatar/avatar-2.jpg';
-import avatarImage3 from '../assets/avatar/avatar-3.jpg';
-import contributorIcon from '../assets/icons/contributor.png';
-import confirmIcon from '../assets/icons/confirm.svg';
+import contributorIcon from '../assets/icons/user-blue.svg';
+import documentsIcon from '../assets/icons/document-blue.svg';
+import dollarIcon from '../assets/icons/dollar-blue.svg';
 
 const OrderCard = (props) => {
-	let avatarImage = [avatarImage0, avatarImage1, avatarImage2, avatarImage3];
 	return (
 		<OrderCardWrapper>
 			<HeaderLayout>
-				<Avatar>
-					<AvatarImage src={avatarImage[Math.floor(Math.random() * 4)]} />
-				</Avatar>
-				<Typography weight='bold' variant='title'>
-					{props.title.length < 130 ? props.title : props.title.substr(0, 130) + '...'}
-				</Typography>
+				<OrderNumber>
+					{props.orderId}
+				</OrderNumber>
+				<Title>
+					{props.title.length < 115 ? props.title : props.title.substr(0, 115) + '...'}
+				</Title>
 				<Spacer />
 				<Bookmark src={bookmarkIcon} />
 			</HeaderLayout>
+			<Timestamp nowrap variant='caption'>
+				{props.timestamp}
+			</Timestamp>
 			<Description>
 				<Typography variant='body'>
 					{props.description.length < 405 ? props.description : props.description.substr(0, 405) + '...'}
 				</Typography>
-				<Timestamp nowrap variant='caption'>
-					{props.timestamp}
-				</Timestamp>
 			</Description>
 			<ProgressTrackerWrapper>
 				<ProgressTrackerTrack>
@@ -57,32 +58,57 @@ const OrderCard = (props) => {
 				</ProgressTrackerTrack>
 			</ProgressTrackerWrapper>
 			<Footer>
-				<TokenBadge>
-					<TokenIcon src={biobitIcon} />
-					<TokenValue>
-						{props.tokenPay}
-					</TokenValue>
-					<Typography weight='bold' color='primary' variant='badge'>
-						BioBit
-					</Typography>
-				</TokenBadge>
+				<BiobitToDollarPair>
+					<BadgeRow>
+						<TokenIcon src={biobitIcon} />
+						<TokenValue>
+							{props.tokenPay}
+						</TokenValue>
+						<ValueLabel>
+							BioBit
+						</ValueLabel>
+					</BadgeRow>
+					<BadgeRow>
+						<TokenIcon src={dollarIcon} />
+						<BiobitToDollarValue>
+							25
+						</BiobitToDollarValue>
+						<ValueLabel colored>
+							Dollar
+						</ValueLabel>
+					</BadgeRow>
+				</BiobitToDollarPair>
 				<Divider />
 				<ContributorBadge>
-					<ContributorsIcon src={contributorIcon} />
-					<Typography weight='bold' color='secondary' variant='badge'>
-						{props.contributors}
-					</Typography>
+					<BadgeRow>
+						<ContributorsIcon src={documentsIcon} />
+						<BadgeLabel>
+							{props.contributors}
+						</BadgeLabel>
+					</BadgeRow>
+					<BadgeRow>
+						<Hint>
+							No. of accepted docs
+						</Hint>
+					</BadgeRow>
 				</ContributorBadge>
 				<Divider />
 				<ContributorBadge>
-					<ContributorsIcon src={confirmIcon} />
-					<Typography weight='bold' color='secondary' variant='badge'>
-						{props.totalContributedCount}
-					</Typography>
+					<BadgeRow>
+						<ContributorsIcon src={contributorIcon} />
+						<BadgeLabel>
+							{props.totalContributedCount}
+						</BadgeLabel>
+					</BadgeRow>
+					<BadgeRow>
+						<Hint>
+							No. of people who contribute
+						</Hint>
+					</BadgeRow>
 				</ContributorBadge>
 				<Spacer />
-				<JoinButton to={`/order/${props.orderId}`}>
-					Contribute
+				<JoinButton variant='secondary' to={`/order/${props.orderId}`}>
+					Join the test
 				</JoinButton>
 			</Footer>
 		</OrderCardWrapper>

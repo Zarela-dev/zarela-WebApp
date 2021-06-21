@@ -14,6 +14,9 @@ const SubmitButton = styled.button`
 	font-weight: 500;
 	color: #252222;
 `;
+const Form = styled.form`
+	max-width: 510px;
+`;
 
 const Divider = styled.div`
 	width: 100%;
@@ -25,7 +28,7 @@ const Divider = styled.div`
 
 const CreateOrderForm = React.forwardRef(({ children, formik }, ref) => {
 	return (
-		<form onSubmit={formik.handleSubmit}>
+		<Form onSubmit={formik.handleSubmit}>
 			{children}
 			<TextField
 				placeholder={'write main topics in your test'}
@@ -112,7 +115,7 @@ const CreateOrderForm = React.forwardRef(({ children, formik }, ref) => {
 			<SubmitButton type='submit'>
 				Submit
 			</SubmitButton>
-		</form>
+		</Form>
 	);
 });
 

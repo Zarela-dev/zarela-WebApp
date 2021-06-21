@@ -1,21 +1,11 @@
 import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
-import avatarImage0 from '../assets/avatar/avatar-0.jpg';
-import avatarImage1 from '../assets/avatar/avatar-1.jpg';
-import avatarImage2 from '../assets/avatar/avatar-2.jpg';
-import avatarImage3 from '../assets/avatar/avatar-3.jpg';
-import biobitIcon from '../assets/icons/biobit.svg';
-import contributorIcon from '../assets/icons/contributor.png';
-import bookmarkIcon from '../assets/icons/bookmark.svg';
-import publicKeyIcon from '../assets/icons/public-key.svg';
+import styled from 'styled-components';
 import DownloadFileCard from './DownloadFileCard';
 import UploadFileCard from './uploadFileCard';
 import {
-	Avatar,
-	AvatarImage,
+	OrderNumber,
 	HeaderLayout,
 	Footer,
-	TokenBadge,
 	Spacer,
 	TokenIcon,
 	Bookmark,
@@ -27,9 +17,19 @@ import {
 	ProgressTrackerProcess,
 	TokenValue,
 	Divider,
+	BadgeRow,
+	Title,
+	ValueLabel,
+	BiobitToDollarValue,
+	BadgeLabel,
 } from './Elements/OrderCard';
 import maxWidthWrapper from './Elements/MaxWidth';
-import confirmIcon from '../assets/icons/confirm.svg';
+import biobitIcon from '../assets/icons/biobit-black.svg';
+import contributorIcon from '../assets/icons/user-blue.svg';
+import documentsIcon from '../assets/icons/document-blue.svg';
+import bookmarkIcon from '../assets/icons/bookmark-purple.svg';
+import publicKeyIcon from '../assets/icons/public-key.svg';
+import { CopyableText } from '../utils';
 
 const PageWrapper = styled.div`
 	
@@ -37,7 +37,7 @@ const PageWrapper = styled.div`
 
 const HeaderContainer = styled.header`
 	background: #F4F8FE;
-	padding: ${props => props.theme.spacing(5)} 0;
+	padding: ${props => props.theme.spacing(5)} 0 0;
 	width: 100%;
 `;
 
@@ -47,7 +47,19 @@ const HeaderInner = styled(HeaderLayout)`
 	${maxWidthWrapper};
 `;
 
+const CustomFooter = styled(Footer)`
+	margin-top: ${props => props.theme.spacing(3)};
+	padding-left: ${props => props.theme.spacing(12)};
+	flex-wrap: nowrap;
+`;
+
+const CustomBadgeRow = styled(BadgeRow)`
+	flex: 0;
+	align-items: center;
+`;
+
 const DescriptionContainer = styled.div`
+	position: relative;
 	padding-top: ${props => props.theme.spacing(6)};
 	${maxWidthWrapper};
 `;
@@ -62,13 +74,15 @@ const Description = styled.p`
 	font-size: 14px;
 	line-height: 25px;
 	text-align: justify;
+	margin-bottom: ${props => props.theme.spacing(5)};
 `;
 
 const PublicKeyBadge = styled.div`
 	display: flex;
+	position: absolute;
+	right: 0;
+	top: 40px;
 	max-width: 400px;
-	margin-bottom: ${props => props.theme.spacing(10)};
-	margin-top: ${props => props.theme.spacing(5)};
 `;
 
 const PublicKeyTextContainer = styled.div`
@@ -78,12 +92,27 @@ const PublicKeyTextContainer = styled.div`
 `;
 
 const PublicKey = styled(Typography)`
-	margin-top: ${props => props.theme.spacing(1)};
+	font-weight: 500;
+	font-size: 12px;
+	line-height: 20px;
+	
+	&:not(:last-child) {
+		margin-bottom: ${props => props.theme.spacing(0)};
+	}
 `;
 
 const PublicKeyIcon = styled.img`
-	flex: 0 0 63px;
+	flex: 0 0 36px;
+	width: 36px;
 	margin-right: ${props => props.theme.spacing(1)};
+`;
+
+const CustomContributeBadge = styled(ContributorBadge)`
+	flex: 0 0 auto;
+`;
+
+const EqualSign = styled(BiobitToDollarValue)`
+	margin: 0 5px;
 `;
 
 const FilesWrapper = styled.div`
@@ -96,59 +125,82 @@ const FileCardSpacer = styled.div`
 	flex: 0 1 50px;
 `;
 
+const CustomDivider = styled(Divider)`
+	height: 26px;
+`;
+
 const CustomProgressTrackerWrapper = styled(ProgressTrackerWrapper)`
-	margin-top: ${props => props.theme.spacing(2)};
+	position: relative;
+	top: 2px;
+	margin-top: ${props => props.theme.spacing(1)};
 	margin-bottom: ${props => props.theme.spacing(0)};
 `;
 
 const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) => {
-	let avatarImage = [avatarImage0, avatarImage1, avatarImage2, avatarImage3];
 	const contributors = `${order.totalContributed}/${order.totalContributors}`;
-	const totalContributedCount = `${order.totalContributed}/${order.totalContributedCount}`;
 	const [signalFile, setSignalFile] = useState(null);
-
+	
 	return (
 		<PageWrapper>
 			<HeaderContainer>
 				<HeaderInner>
 					<HeaderLayout>
-						<Avatar>
-							<AvatarImage src={avatarImage[Math.floor(Math.random() * 4)]} />
-						</Avatar>
-						<Typography weight='bold' variant='title'>
+						<OrderNumber>
+							{order.orderId}
+						</OrderNumber>
+						<Title>
 							{order.title}
-						</Typography>
+						</Title>
 						<Spacer />
-						<Typography nowrap variant='caption'>
-							{timestamp}
-						</Typography>
 						<Bookmark src={bookmarkIcon} />
 					</HeaderLayout>
-					<Footer>
-						<TokenBadge>
+					<CustomFooter>
+						<CustomContributeBadge>
+							<BadgeRow>
+								<ContributorsIcon src={documentsIcon} />
+								<BadgeLabel>
+									{contributors}
+								</BadgeLabel>
+							</BadgeRow>
+						</CustomContributeBadge>
+						<CustomDivider />
+						<CustomContributeBadge>
+							<BadgeRow>
+								<ContributorsIcon src={contributorIcon} />
+								<BadgeLabel>
+									{order.totalContributedCount}
+								</BadgeLabel>
+							</BadgeRow>
+						</CustomContributeBadge>
+						<CustomDivider />
+						<CustomContributeBadge>
+							<BadgeRow>
+								<BadgeLabel>
+									{timestamp}
+								</BadgeLabel>
+							</BadgeRow>
+						</CustomContributeBadge>
+						<Spacer />
+						<CustomBadgeRow>
 							<TokenIcon src={biobitIcon} />
 							<TokenValue>
 								{order.tokenPay}
 							</TokenValue>
-							<Typography weight='bold' color='primary' variant='badge'>
+							<ValueLabel>
 								BioBit
-							</Typography>
-						</TokenBadge>
-						<Divider />
-						<ContributorBadge>
-							<ContributorsIcon src={contributorIcon} />
-							<Typography weight='bold' color='secondary' variant='badge'>
-								{contributors}
-							</Typography>
-						</ContributorBadge>
-						<Divider />
-						<ContributorBadge>
-							<ContributorsIcon src={confirmIcon} />
-							<Typography weight='bold' color='secondary' variant='badge'>
-								{totalContributedCount}
-							</Typography>
-						</ContributorBadge>
-					</Footer>
+							</ValueLabel>
+
+							<EqualSign>
+								=
+							</EqualSign>
+							<BiobitToDollarValue>
+								$25
+							</BiobitToDollarValue>
+							<ValueLabel colored>
+								Dollar
+							</ValueLabel>
+						</CustomBadgeRow>
+					</CustomFooter>
 					<CustomProgressTrackerWrapper>
 						<ProgressTrackerTrack>
 							<ProgressTrackerProcess width={+order.totalContributed / +order.totalContributors * 100} />
@@ -157,23 +209,25 @@ const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) 
 				</HeaderInner>
 			</HeaderContainer>
 			<DescriptionContainer>
+				<PublicKeyBadge>
+					<PublicKeyIcon src={publicKeyIcon} />
+					<CopyableText textToCopy={order.requesterAddress}>
+						<PublicKeyTextContainer>
+							<PublicKey variant='body'>
+								Requester public key
+							</PublicKey>
+							<PublicKey variant='body2' weight='semiBold'>
+								{order.requesterAddress}
+							</PublicKey>
+						</PublicKeyTextContainer>
+					</CopyableText>
+				</PublicKeyBadge>
 				<DescriptionTitle>
 					Description:
 				</DescriptionTitle>
 				<Description>
 					{order.description}
 				</Description>
-				<PublicKeyBadge>
-					<PublicKeyIcon src={publicKeyIcon} />
-					<PublicKeyTextContainer>
-						<Typography variant='body'>
-							Requester public key
-						</Typography>
-						<PublicKey variant='body2' weight='semiBold'>
-							{order.requesterAddress}
-						</PublicKey>
-					</PublicKeyTextContainer>
-				</PublicKeyBadge>
 			</DescriptionContainer>
 			<FilesWrapper>
 				<DownloadFileCard
@@ -181,7 +235,7 @@ const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) 
 					buttonLabel={'Download'}
 					label={'just label'}
 					helperText={'This .Zip file contains Whitepaper file and survey test files.'}
-					fileLink={'http://94.237.41.18:8080/ipfs/' + order.whitePaper}
+					fileLink={process.env.REACT_APP_IPFS_LINK + order.whitePaper}
 				/>
 				<FileCardSpacer />
 				<UploadFileCard

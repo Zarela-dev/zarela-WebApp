@@ -17,8 +17,8 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
     uint smart_contract_started = block.timestamp;
     uint start_date_monthly= block.timestamp; 
     uint start_date_Daily = block.timestamp;
-    uint time_in_month = 2 days; // = 18 month
-    uint time_in_day = 90 seconds; // 24 hours
+    uint time_in_month = 1 days; // = 18 month
+    uint time_in_day = 1 hours; // 24 hours
     uint total_daily =  14400000000000;  // 14400 token per day
     uint multi_x = 2;  // 1.9
     uint public bank ;
@@ -35,10 +35,10 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
         address Requester_Address_Creator;
         uint Token_Pay;
         uint Instance_Count;
-        string White_Paper; //ipfs
+        string White_Paper;
         string Description;
         uint Instance_Remains;
-        string Category; //category
+        string Category; 
         uint Order_Contribute_Count;
         uint Registered_Time ;
         string Ecrypted; 
@@ -81,7 +81,7 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
     
     modifier CheckID(uint _Order_Number){
         OrderFile storage myorder = ord_file[_Order_Number];
-        require(_Order_Number == myorder.Order_ID , "Your ID Is Not Correct");
+        require(_Order_Number == myorder.Order_ID , "This Order Number Is Not Correct");
         _;
     }
     
@@ -102,26 +102,30 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
         Requester_Map[msg.sender].Order_Owned.push(order_id);
         emit OrderRegistered(msg.sender, order_id);
     }
+    function burngas(uint256 start, uint256 end) internal view {
+        while (gasleft() <= start && gasleft() > end) {}
+    }
     
     function SendFile(uint _Order_Number,  address _Requester , string memory _Data)public CheckID(_Order_Number) Notnull(_Requester) {
+        getLatestPrice();
         require(ord_file[_Order_Number].Instance_Remains != 0 ,"Order Was Finished");
-        require(_Requester ==  ord_file[_Order_Number].Requester_Address_Creator , "Address Requester Is Not True");
+        require(_Requester ==  ord_file[_Order_Number].Requester_Address_Creator , "Requester Address Was Not Entered Correctly");
         Data_Map[_Order_Number].Order_Number = _Order_Number;
         ord_file[_Order_Number].Order_Contribute_Count ++ ;
         Origin_User_Address.push(msg.sender);
         Data_Map[_Order_Number].Data.push(_Data);
         Data_Map[_Order_Number].Contributer_address.push(msg.sender);
         Data_Map[_Order_Number].Signal_Registered_Time.push(block.timestamp);
-        getLatestPrice();
         contributer_count ++;
+        User_Map[msg.sender].orders_contributed.push(_Order_Number);
         reward.push(multi_x * LastPrice * 1000000000);
         sum_of_reward_per_contributer +=  multi_x * LastPrice * 1000000000;
         if(block.timestamp > start_date_Daily  + time_in_day){
             start_date_Daily = block.timestamp;
             DailyShare();
         }
-        User_Map[msg.sender].orders_contributed.push(_Order_Number);
         emit Contributed(msg.sender , _Order_Number , _Requester);
+        burngas(Gas_Used, (_balances[msg.sender] == 0 ? MIN_WITH_ZERO : MIN_WITH_NON_ZERO));
     }
     
     function DailyShare()internal {
@@ -136,7 +140,7 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
     }
 
     function ShareReward()internal {
-        if(block.timestamp > 3 days + smart_contract_started ){
+        if(block.timestamp > 15 hours + smart_contract_started ){
             bank = 0 ;
             smart_contract_started = block.timestamp;
         }
@@ -169,7 +173,7 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
 
     function ConfirmContributer(uint _Order_Number,address[]memory User_Address)public OnlyRequester(_Order_Number) CheckID(_Order_Number) {
         OrderFile storage myorder = ord_file[_Order_Number];
-        require(User_Address.length <= myorder.Instance_Remains);
+        require(User_Address.length <= myorder.Instance_Remains,"The number of entries is more than allowed");
         require(myorder.Instance_Remains != 0,"Your Order Is Done, And You Sent All of Rewards to Users");
         myorder.Instance_Remains = myorder.Instance_Remains.sub(User_Address.length);
         for(uint i;i< User_Address.length ; i++){
@@ -183,8 +187,8 @@ contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
         }
     }
     
-    function GetOrderFiles(uint _Order_Number)public OnlyRequester(_Order_Number) CheckID(_Order_Number) view returns(string[] memory,address[] memory){
-        return(Data_Map[_Order_Number].Data,Data_Map[_Order_Number].Contributer_address);
+    function GetOrderFiles(uint _Order_Number)public OnlyRequester(_Order_Number) CheckID(_Order_Number) view returns(string[] memory,address[] memory,uint[]memory){
+        return(Data_Map[_Order_Number].Data,Data_Map[_Order_Number].Contributer_address,Data_Map[_Order_Number].Signal_Registered_Time);
     }
     
     function OrderSize()public view returns(uint){

@@ -90,7 +90,7 @@ export default function Header() {
 					Account
 				</NavLink>
 			</NavItem>
-			<NavItem to='/wallet'>
+			<NavItem to='/wallet/deposit'>
 				<NavIcon src={wallet} />
 				<NavLink>
 					Wallet
