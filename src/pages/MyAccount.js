@@ -45,7 +45,7 @@ const MyAccount = () => {
 									title: result[1],
 									description: result[6],
 									requesterAddress: result[2],
-									tokenPay: result[3],
+									tokenPay: convertToBiobit(result[3]),
 									totalContributors: result[4], // total contributors required
 									totalContributed: +result[4] - +result[7],
 									categories: result[8], // NOT TO BE USED IN DEMO
