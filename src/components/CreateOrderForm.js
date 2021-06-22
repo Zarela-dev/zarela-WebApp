@@ -31,7 +31,7 @@ const CreateOrderForm = React.forwardRef(({ children, formik }, ref) => {
 		<Form onSubmit={formik.handleSubmit}>
 			{children}
 			<TextField
-				placeholder={'write main topics in your test'}
+				placeholder={'write main topics in your study'}
 				label='Title *'
 				type='text'
 				name={'title'}
@@ -42,7 +42,7 @@ const CreateOrderForm = React.forwardRef(({ children, formik }, ref) => {
 				}}
 			/>
 			<TextField
-				placeholder={'What’s your test about?'}
+				placeholder={'What’s your study about?'}
 				multiline
 				label='Description *'
 				type='text'
@@ -65,7 +65,7 @@ const CreateOrderForm = React.forwardRef(({ children, formik }, ref) => {
 				}}
 			/>
 			<TextField
-				placeholder={'How many people do you need to done the test?'}
+				placeholder={'How many people do you need to done the study?'}
 				label='Contributors *'
 				type='text'
 				name={'instanceCount'}
