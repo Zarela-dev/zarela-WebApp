@@ -108,7 +108,7 @@ const OrderCard = (props) => {
 				</ContributorBadge>
 				<Spacer />
 				<JoinButton variant='secondary' to={`/order/${props.orderId}`}>
-					Join the test
+					Join
 				</JoinButton>
 			</Footer>
 		</OrderCardWrapper>
