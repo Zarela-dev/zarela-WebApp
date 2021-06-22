@@ -90,7 +90,7 @@ const CreateOrderForm = React.forwardRef(({ children, formik }, ref) => {
 				hasBorder={false}
 				showSelected
 				buttonLabel='Upload'
-				label={'Upload your white paper here'}
+				label={'Upload your Zpaper here'}
 				ref={ref}
 				name={'whitepaper'}
 				error={formik.errors?.whitepaper}

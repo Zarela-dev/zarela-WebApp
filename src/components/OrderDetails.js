@@ -194,7 +194,7 @@ const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) 
 								=
 							</EqualSign>
 							<BiobitToDollarValue>
-								$25
+								{'$' + order.tokenPay}
 							</BiobitToDollarValue>
 							<ValueLabel colored>
 								Dollar
@@ -231,18 +231,17 @@ const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) 
 			</DescriptionContainer>
 			<FilesWrapper>
 				<DownloadFileCard
-					fileName={'Download Whitepaper'}
+					fileName={'Download Zpaper'}
 					buttonLabel={'Download'}
 					label={'just label'}
-					helperText={'This .Zip file contains Whitepaper file and survey test files.'}
+					helperText={'This file contains Zpaper file and survey test files.'}
 					fileLink={process.env.REACT_APP_IPFS_LINK + order.whitePaper}
 				/>
 				<FileCardSpacer />
 				<UploadFileCard
 					showSelected
-					buttonLabel='Upload'
-					helperText={'This .Zip file contains Whitepaper file and survey test files.'}
-					label={'Upload your white paper here'}
+					buttonLabel='Select Files'
+					label={'upload your files here'}
 					ref={ref}
 					name={'whitepaper'}
 					value={signalFile}

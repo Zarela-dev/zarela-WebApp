@@ -11,7 +11,9 @@ const initialState = {
 	bank: 0,
 	biobitBalance: 'Hidden Info',
 	etherBalance: 'Hidden Info',
-	gas: {}
+	gas: {},
+	zarelaInitDate: null,
+	zarelaDailyGift: null,
 };
 
 const web3Context = React.createContext(initialState);
@@ -60,6 +62,16 @@ const Web3Provider = ({ children }) => {
 				return {
 					...state,
 					gas: action.payload
+				};
+			case 'SET_ZARELA_INIT_DATE':
+				return {
+					...state,
+					zarelaInitDate: action.payload
+				};
+			case 'SET_ZARELA_DAILY_GIFT':
+				return {
+					...state,
+					zarelaDailyGift: action.payload
 				};
 			default:
 				return state;
@@ -138,6 +150,48 @@ const Web3Provider = ({ children }) => {
 		};
 	};
 
+	const setTimers = () => {
+		if (Web3.contract) {
+			setInterval(() => {
+				Web3.contract.methods.smart_contract_started().call((error, result) => {
+					if (!error) {
+						dispatch({
+							type: 'SET_ZARELA_INIT_DATE',
+							payload: result * 1000
+						});
+					}
+					else {
+						console.error(error.message);
+					}
+				});
+			}, 10 * 1000);
+
+			Web3.contract.methods.smart_contract_started().call((error, result) => {
+				if (!error) {
+					dispatch({
+						type: 'SET_ZARELA_INIT_DATE',
+						payload: result * 1000
+					});
+				}
+				else {
+					console.error(error.message);
+				}
+			});
+
+			Web3.contract.methods.start_date_Daily().call((error, result) => {
+				if (!error) {
+					dispatch({
+						type: 'SET_ZARELA_DAILY_GIFT',
+						payload: result * 1000
+					});
+				}
+				else {
+					console.error(error.message);
+				}
+			});
+		}
+	};
+
 	const getGasPrice = () => {
 		axios.get('https://ethgasstation.info/api/ethgasAPI.json', {
 			params: {
@@ -152,6 +206,10 @@ const Web3Provider = ({ children }) => {
 			console.log(error);
 		});
 	};
+
+	useEffect(() => {
+		setTimers();
+	}, [Web3.contract]);
 
 	useEffect(() => {
 		configureWeb3();

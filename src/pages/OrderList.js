@@ -124,7 +124,7 @@ const OrderList = () => {
 
 	useEffect(() => {
 		if (Web3.contract) {
-			Web3.contract.methods.LastPrice().call((error, result) => {
+			Web3.contract.methods.Prize().call((error, result) => {
 				if (!error)
 					setZarelaReward(+result * 2);
 				else
@@ -157,7 +157,7 @@ const OrderList = () => {
 		<OrderListWrapper>
 			{/* <SearchBar></SearchBar> */}
 			<Background />
-			<HomepageCounters />
+			<HomepageCounters zarelaDailyGift={Web3.zarelaDailyGift} zarelaInitDate={Web3.zarelaInitDate} todayGift={Web3.bank} />
 			<OrderListLayout>
 				<OrderListSidebarWrapper>
 					<TokenStatsSidebar

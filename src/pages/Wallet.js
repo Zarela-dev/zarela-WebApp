@@ -63,17 +63,49 @@ const Wallet = () => {
 			axios.get('https://api-kovan.etherscan.io/api', {
 				params: {
 					module: 'account',
-					action: 'tokentx',
-					contractaddress: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS,
+					action: 'txlist',
 					address: Web3.accounts[0],
-					page: 1,
-					offset: 0,
 					sort: 'desc',
 					apikey: process.env.REACT_APP_ETHEREUM_API_KEY,
 				}
-			}).then(res => {
-				if (res.data.message === 'OK')
-					setLogs(res.data.result);
+			}).then(txListRes => {
+				if (txListRes.data.message === 'OK') {
+					axios.get('https://api-kovan.etherscan.io/api', {
+						params: {
+							module: 'account',
+							action: 'tokentx',
+							address: Web3.accounts[0],
+							sort: 'desc',
+							apikey: process.env.REACT_APP_ETHEREUM_API_KEY,
+						}
+					}).then(tokentxRes => {
+						if (tokentxRes.data.message === 'OK') {
+							const smartContactAddress = process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS.toLowerCase();
+							const txlist = txListRes.data.result;
+							const tokentx = tokentxRes.data.result;
+							const tokenTxFormatted = {};
+
+							tokentx.forEach(item => {
+								tokenTxFormatted[item.hash] = item;
+							});
+
+							let result = [];
+
+							txlist.filter(tx => tx.from == smartContactAddress || tx.to == smartContactAddress).forEach(item => {
+								if (tokenTxFormatted[item.hash] === undefined) {
+									result.push(item);
+								} else {
+									result.push({ ...item, value: tokenTxFormatted[item.hash].value });
+								}
+							});
+							setLogs(result);
+						}
+					}).catch(error => {
+						console.error(error);
+					}).finally(() => {
+						setLoading(false);
+					});
+				}
 			}).catch(error => {
 				console.error(error);
 			}).finally(() => {

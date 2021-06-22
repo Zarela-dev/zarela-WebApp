@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import BankCountdown from './BankCountdown';
 import maxWidthWrapper from '../Elements/MaxWidth';
 import DailyGift from './DailyGift';
+import { Spacer } from '../Elements/Spacer';
 
 const Wrapper = styled.div`
 	${maxWidthWrapper};
@@ -12,13 +13,44 @@ const Wrapper = styled.div`
 	align-items: center;
 `;
 
-const HomepageCounters = () => {
-	return (
-		<Wrapper>
-			<BankCountdown />
-			<DailyGift />
-		</Wrapper>
-	)
+function getDifferenceInHours(date1, date2) {
+	const diffInMs = Math.abs(date2 - date1);
+	return diffInMs / (1000 * 60 * 60);
 }
 
-export default HomepageCounters
+function getDifferenceInMSeconds(date1, date2) {
+	const diffInMs = Math.abs(date2 - date1);
+	return diffInMs;
+}
+
+const HomepageCounters = ({ zarelaInitDate, zarelaDailyGift, todayGift }) => {
+	const [bankCountdown, setBankCountdown] = useState(0);
+	const [giftCountdown, setGiftCountdown] = useState(0);
+	const bankInterval = 7776000000; // 90 days
+	const giftInterval = 86400000; // 24 hours
+
+	useEffect(() => {
+		console.log(zarelaInitDate, zarelaDailyGift);
+		if (zarelaInitDate !== null && zarelaDailyGift !== null) {
+			setBankCountdown(new Date().getTime() + (bankInterval - getDifferenceInMSeconds(zarelaInitDate, new Date().getTime())));
+			setGiftCountdown(new Date().getTime() + (giftInterval - getDifferenceInMSeconds(zarelaDailyGift, new Date().getTime())));
+		}
+	}, [zarelaInitDate, zarelaDailyGift]);
+
+	return (
+		<Wrapper>
+			{
+				bankCountdown !== 0 ?
+					<BankCountdown countdown={bankCountdown} />
+					: <Spacer />
+			}
+			{
+				bankCountdown !== 0 ?
+					<DailyGift countdown={giftCountdown} giftValue={todayGift} />
+					: <Spacer />
+			}
+		</Wrapper>
+	);
+};
+
+export default HomepageCounters;

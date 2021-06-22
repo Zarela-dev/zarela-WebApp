@@ -39,7 +39,7 @@ const Row = styled.section`
 		flex: 0 0 180px; /* to */
 	}
 	${CellWrapper}:nth-of-type(5) {
-		flex: 0 0 80px; /* status */
+		flex: 0 0 105px; /* status */
 	}
 	${CellWrapper}:nth-of-type(6) {
 		flex: 1 0 auto; /* value */
@@ -80,6 +80,21 @@ const WalletTransactions = ({ isLoading, accounts, data }) => {
 	if (accounts.length === 0)
 		return 'no accounts found';
 
+	function getInput(input) {
+		switch (input) {
+			case '0xd9f64981':
+				return 'contribute';
+			case '0x827e6fd9':
+				return 'create order';
+			case '0xa9059cbb':
+				return 'transfer';
+			case '0xae615e8f':
+				return 'confirmation';
+			default:
+				return input;
+		}
+	}
+
 	return (
 		<Table>
 			<Header>
@@ -87,7 +102,7 @@ const WalletTransactions = ({ isLoading, accounts, data }) => {
 
 					<CellWrapper>
 						<Cell>
-							TXN Hash
+							TX Hash
 						</Cell>
 					</CellWrapper>
 					<CellWrapper>
@@ -107,7 +122,7 @@ const WalletTransactions = ({ isLoading, accounts, data }) => {
 					</CellWrapper>
 					<CellWrapper>
 						<Cell>
-							Status
+							Input
 						</Cell>
 					</CellWrapper>
 					<CellWrapper>
@@ -117,7 +132,7 @@ const WalletTransactions = ({ isLoading, accounts, data }) => {
 					</CellWrapper>
 					<CellWrapper>
 						<Cell>
-							TXN fee
+							TX fee
 						</Cell>
 					</CellWrapper>
 				</Row>
@@ -128,7 +143,7 @@ const WalletTransactions = ({ isLoading, accounts, data }) => {
 						<CellWrapper>
 							<CopyableText textToCopy={transaction.blockHash}>
 								<Cell copyable>
-									{transaction.blockHash}
+									{transaction.hash}
 								</Cell>
 							</CopyableText>
 						</CellWrapper>
@@ -153,7 +168,7 @@ const WalletTransactions = ({ isLoading, accounts, data }) => {
 						</CellWrapper>
 						<CellWrapper>
 							<Cell>
-								N/A
+								{getInput(transaction.input.substr(0, 10))}
 							</Cell>
 						</CellWrapper>
 						<CellWrapper>

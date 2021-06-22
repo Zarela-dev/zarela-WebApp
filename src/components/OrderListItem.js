@@ -110,7 +110,7 @@ const OrderListItem = ({
 	const changeAll = (type) => {
 		const allSelected = {};
 		Object.keys(formattedData).forEach(address => {
-			allSelected[address] = formattedData[address].map(item => item.ipfsHash)
+			allSelected[address] = formattedData[address].map(item => item.ipfsHash);
 		});
 
 		if (type === 'check')
@@ -265,7 +265,7 @@ const OrderListItem = ({
 							=
 						</EqualSign>
 						<BiobitToDollarValue>
-							$25
+							{'$' + tokenPay}
 						</BiobitToDollarValue>
 						<ValueLabel colored>
 							Dollar
