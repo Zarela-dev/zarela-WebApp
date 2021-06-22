@@ -103,11 +103,12 @@ const Renderer = ({ days, hours, minutes, seconds, completed }) => {
 
 };
 
-const BankCountdown = () => {
+
+const BankCountdown = ({ countdown }) => {
 	return (
 		<Wrapper>
 			<Countdown
-				date={Date.now() + 5000000}
+				date={countdown}
 				renderer={Renderer}
 			/>
 		</Wrapper>
