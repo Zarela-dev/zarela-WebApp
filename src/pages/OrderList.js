@@ -157,7 +157,7 @@ const OrderList = () => {
 		<OrderListWrapper>
 			{/* <SearchBar></SearchBar> */}
 			<Background />
-			<HomepageCounters zarelaInitDate={Web3.zarelaInitDate} todayGift={Web3.bank} />
+			<HomepageCounters zarelaDailyGift={Web3.zarelaDailyGift} zarelaInitDate={Web3.zarelaInitDate} todayGift={Web3.bank} />
 			<OrderListLayout>
 				<OrderListSidebarWrapper>
 					<TokenStatsSidebar

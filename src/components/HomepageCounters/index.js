@@ -23,25 +23,32 @@ function getDifferenceInMSeconds(date1, date2) {
 	return diffInMs;
 }
 
-const HomepageCounters = ({ zarelaInitDate, todayGift }) => {
-	const [timer, setTimer] = useState(0);
-	const timerValue = 54000000; // 15 hours
+const HomepageCounters = ({ zarelaInitDate, zarelaDailyGift, todayGift }) => {
+	const [bankCountdown, setBankCountdown] = useState(0);
+	const [giftCountdown, setGiftCountdown] = useState(0);
+	const bankInterval = 7776000000; // 90 days
+	const giftInterval = 86400000; // 24 hours
 
 	useEffect(() => {
-		if (zarelaInitDate !== null) {
-			setTimer(new Date().getTime() + (timerValue - getDifferenceInMSeconds(zarelaInitDate, new Date().getTime())));
+		console.log(zarelaInitDate, zarelaDailyGift);
+		if (zarelaInitDate !== null && zarelaDailyGift !== null) {
+			setBankCountdown(new Date().getTime() + (bankInterval - getDifferenceInMSeconds(zarelaInitDate, new Date().getTime())));
+			setGiftCountdown(new Date().getTime() + (giftInterval - getDifferenceInMSeconds(zarelaDailyGift, new Date().getTime())));
 		}
-	}, [zarelaInitDate]);
+	}, [zarelaInitDate, zarelaDailyGift]);
 
-	console.log('timer', timer);
 	return (
 		<Wrapper>
 			{
-				timer !== 0 ?
-					<BankCountdown countdown={timer} />
+				bankCountdown !== 0 ?
+					<BankCountdown countdown={bankCountdown} />
 					: <Spacer />
 			}
-			<DailyGift giftValue={todayGift} />
+			{
+				bankCountdown !== 0 ?
+					<DailyGift countdown={giftCountdown} giftValue={todayGift} />
+					: <Spacer />
+			}
 		</Wrapper>
 	);
 };

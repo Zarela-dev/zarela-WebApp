@@ -120,7 +120,7 @@ const Renderer = ({ days, hours, minutes, seconds, completed }) => {
 
 };
 
-const DailyGift = ({giftValue}) => {
+const DailyGift = ({giftValue, countdown}) => {
 	return (
 		<Wrapper>
 			<Header>
@@ -134,7 +134,7 @@ const DailyGift = ({giftValue}) => {
 			<TimerContainer>
 				<Inner>
 					<Countdown
-						date={Date.now() + 5000000}
+						date={countdown}
 						renderer={Renderer}
 					/>
 				</Inner>
