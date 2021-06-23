@@ -62,18 +62,22 @@ const WalletWithdraw = () => {
 							toast(error.message, 'error');
 						}
 					});
-				Web3.contract.events.Transfer({}, function (error, result) {
-					// [0] from 
-					// [1] to 
-					// [2] amount (without fee) 
-					if (!error) {
-						let returnValues = result.returnValues;
-						toast(`${returnValues[2]} tokens were successfully sent to ${returnValues[1]}`, 'success');
-					}
-					else {
+				Web3.contract.events.Transfer({})
+					.on('data', (event) => {
+						toast(
+							`${event.returnValues[2]} tokens were successfully sent to ${event.returnValues[1]}.`,
+							'success',
+							false,
+							null,
+							{
+								toastId: event.id
+							}
+						);
+					})
+					.on('error', (error, receipt) => {
 						toast(error.message, 'error');
-					}
-				});
+						console.error(error, receipt);
+					});
 			} else {
 				Web3.web3.eth.sendTransaction({ to: values.address, from: Web3.accounts[0], value: Web3.web3.utils.toWei(values.amount, "ether") })
 					.then(({ transactionHash }) => {

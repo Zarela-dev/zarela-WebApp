@@ -30,7 +30,6 @@ const HomepageCounters = ({ zarelaInitDate, zarelaDailyGift, todayGift }) => {
 	const giftInterval = 86400000; // 24 hours
 
 	useEffect(() => {
-		console.log(zarelaInitDate, zarelaDailyGift);
 		if (zarelaInitDate !== null && zarelaDailyGift !== null) {
 			setBankCountdown(new Date().getTime() + (bankInterval - getDifferenceInMSeconds(zarelaInitDate, new Date().getTime())));
 			setGiftCountdown(new Date().getTime() + (giftInterval - getDifferenceInMSeconds(zarelaDailyGift, new Date().getTime())));

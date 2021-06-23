@@ -29,15 +29,22 @@ const MyOrders = () => {
 				toast(error.message, 'error');
 			}
 		});
-		Web3.contract.events.Transfer({}, function (error, result) {
-			if (!error) {
-				let returnValues = result.returnValues;
-				toast(`Your mission is complete, ${returnValues[2]} tokens were successfully sent to ${returnValues[1]}`, 'success');
-			}
-			else {
+		Web3.contract.events.Transfer({})
+			.on('data', (event) => {
+				toast(
+					`tokens were successfully sent to ${event.returnValues[1]}`,
+					'success',
+					false,
+					null,
+					{
+						toastId: event.id
+					}
+				);
+			})
+			.on('error', (error, receipt) => {
 				toast(error.message, 'error');
-			}
-		});
+				console.error(error, receipt);
+			});
 	};
 	// pagination hook
 	useEffect(() => {

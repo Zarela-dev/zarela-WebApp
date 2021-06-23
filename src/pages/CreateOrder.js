@@ -91,27 +91,26 @@ const CreateOrder = () => {
 													toast(error.message, 'error');
 												}
 											});
-										Web3.contract.events.OrderRegistered({}, function (error, result) {
-											if (!error) {
-												let returnValues = result.returnValues;
-												toast(`Transaction #${returnValues[1]} has been created successfully.`, 'success');
-												history.push(`/order/${returnValues[1]}`);
-												// alert(JSON.stringify('Great !! Succes :) ' + '     <<New Order Created ! >>        Owner address is  :  ' + returnValues[0] +
-												// '   & Order Number is   :  ' + returnValues[1]));
-											}
-											else {
+
+
+										Web3.contract.events.OrderRegistered({})
+											.on('data', (event) => {
+												toast(
+													`Transaction #${event.returnValues[1]} has been created successfully.`,
+													'success',
+													false,
+													null,
+													{
+														toastId: event.id
+													}
+												);
+												history.push(`/order/${event.returnValues[1]}`);
+
+											})
+											.on('error', (error, receipt) => {
 												toast(error.message, 'error');
-											}
-										});
-										Web3.contract.events.Transfer({}, function (error, result) {
-											if (!error) {
-												let returnValues = result.returnValues;
-												toast(`Your mission is complete, ${returnValues[2]} tokens were successfully sent to ${returnValues[1]}`, 'success');
-											}
-											else {
-												toast(error.message, 'error');
-											}
-										});
+												console.error(error, receipt);
+											});
 									} catch (error) {
 										console.error(error);
 									}

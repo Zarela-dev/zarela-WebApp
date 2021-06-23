@@ -50,7 +50,6 @@ const TabsBody = styled(TabPanel)`
 export const Tabs = ({ data }) => {
 	const history = useHistory();
 	const activeTab = history.location.pathname.split('/').reverse()[0];
-	console.log(data)
 
 	return (
 		<TabsWrapper
@@ -58,7 +57,6 @@ export const Tabs = ({ data }) => {
 			selectedTabPanelClassName='is-active'
 			selectedIndex={data.findIndex(item => item.label.toLowerCase() === activeTab)}
 			onSelect={(index, lastIndex) => {
-				console.log(index);
 				history.push(`/wallet/${data[index].label?.toLowerCase()}`);
 				return false;
 			}}
