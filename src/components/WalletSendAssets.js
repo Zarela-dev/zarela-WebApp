@@ -25,7 +25,7 @@ const CopyIcon = styled.img`
 
 `;
 
-const WithdrawButton = styled(Button)`
+const SendButton = styled(Button)`
 	align-self: flex-end;
     margin: 0;
 `;
@@ -35,7 +35,7 @@ const Wrapper = styled.form`
 `;
 
 /* #todo #fancy if the requested amount is more than user balance, give error */
-const WalletWithdraw = () => {
+const WalletSendAssets = () => {
 	const { Web3 } = useContext(web3Context);
 	const history = useHistory();
 	const formik = useFormik({
@@ -143,13 +143,13 @@ const WalletWithdraw = () => {
 						value={formik.values.amount}
 						error={formik.errors?.amount}
 					/>
-					<WithdrawButton variant='primary' type='submit' disabled={!formik.isValid && !formik.isSubmitting && !formik.pristine}>
-						Withdraw
-					</WithdrawButton>
+					<SendButton variant='primary' type='submit' disabled={!formik.isValid && !formik.isSubmitting && !formik.pristine}>
+						Send
+					</SendButton>
 				</Column>
 			</Content>
 		</Wrapper>
 	);
 };
 
-export default WalletWithdraw;
+export default WalletSendAssets;
