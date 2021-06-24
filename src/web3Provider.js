@@ -84,6 +84,7 @@ const Web3Provider = ({ children }) => {
 			try {
 				// Get network provider and web3 instance.
 				const web3 = await getWeb3();
+				console.log('web3 in config', web3)
 				// Use web3 to get the user's accounts.
 				const accounts = await web3.eth.getAccounts();
 				// Get the contract instance.

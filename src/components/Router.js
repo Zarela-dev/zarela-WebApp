@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import CreateOrder from '../pages/CreateOrder';
 import OrderList from '../pages/OrderList';
@@ -7,8 +7,15 @@ import OrderDetails from '../pages/OrderDetails';
 import MyOrders from '../pages/MyOrders';
 import MyAccount from '../pages/MyAccount';
 import Wallet from '../pages/Wallet';
+import NoMetamaskMessage from './NoMetamaskMessage';
 
 const AppRouter = () => {
+
+	if (!window.web3)
+		return <>
+			<NoMetamaskMessage />
+			<OrderList />
+		</>;
 	return (
 		<Router>
 			<div>
