@@ -6,6 +6,7 @@ import { web3Context } from '../web3Provider';
 import OrderListItem from '../components/OrderListItem';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { convertToBiobit, toast } from '../utils';
+import NoOrders from '../components/NoOrders';
 const PageWrapper = styled.div`
 	
 `;
@@ -104,7 +105,7 @@ const MyOrders = () => {
 								contributors={`${item.totalContributed}/${item.totalContributors}`}
 								handleConfirm={handleConfirm}
 							/>
-						)) : 'You don\'t have any orders on this account'
+						)) : <NoOrders />
 				}
 			</ContentWrapper>
 		</PageWrapper>
