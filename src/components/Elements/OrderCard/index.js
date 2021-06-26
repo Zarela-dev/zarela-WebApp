@@ -88,7 +88,7 @@ export const ProgressTrackerProcess = styled.div`
 	left: 0;
 	top: -1px;
 	height: 5px;
-	width: ${props => props.width + '%' || '0%'};
+	width: ${props => props.progress + '%' || '0%'};
 	background: #3A68DE;
 	border-radius: 0;
 `;

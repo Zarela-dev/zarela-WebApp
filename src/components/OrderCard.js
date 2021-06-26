@@ -54,7 +54,7 @@ const OrderCard = (props) => {
 			</Description>
 			<ProgressTrackerWrapper>
 				<ProgressTrackerTrack>
-					<ProgressTrackerProcess width={props.progress} />
+					<ProgressTrackerProcess progress={props.progress} />
 				</ProgressTrackerTrack>
 			</ProgressTrackerWrapper>
 			<Footer>
