@@ -22,6 +22,7 @@ const TabsHeaderItem = styled(Tab)`
 	line-height: 26px;
 	padding: ${props => props.theme.spacing(1)} ${props => props.theme.spacing(0.5)};
 	margin-right: ${props => props.theme.spacing(2)};
+	cursor: pointer;
 	
 	&.is-active {
 		opacity: 1;
