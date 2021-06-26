@@ -8,14 +8,18 @@ import MyOrders from '../pages/MyOrders';
 import MyAccount from '../pages/MyAccount';
 import Wallet from '../pages/Wallet';
 import NoMetamaskMessage from './NoMetamaskMessage';
+import NoMobileSupportMessage from './NoMobileSupportMessage';
 
 const AppRouter = () => {
+	if (window.innerWidth < 1280)
+		return <NoMobileSupportMessage />;
 
 	if (!window.web3)
 		return <>
 			<NoMetamaskMessage />
 			<OrderList />
 		</>;
+
 	return (
 		<Router>
 			<div>
