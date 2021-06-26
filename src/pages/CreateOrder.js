@@ -23,6 +23,7 @@ const CreateOrder = () => {
 	const { Web3 } = useContext(web3Context);
 	const [showDialog, setDialog] = useState(false);
 	const history = useHistory();
+	const [timer, setTimer] = useState(0);
 
 	const validationErrors = {
 		required: name => `${name} is required to create your order.`,
@@ -62,12 +63,15 @@ const CreateOrder = () => {
 						const { title, desc, tokenPay, instanceCount, category } = values;
 						const reader = new FileReader();
 
+						console.log('requesting public key');
 						window.ethereum
 							.request({
 								method: 'eth_getEncryptionPublicKey',
 								params: [Web3.accounts[0]], // you must have access to the specified account
 							})
 							.then((result) => {
+								console.log('requesting public key cb');
+
 								const encryptionPublicKey = result;
 								reader.readAsArrayBuffer(fileRef.current.files[0]); // Read Provided File
 
@@ -130,12 +134,15 @@ const CreateOrder = () => {
 	});
 
 	useEffect(() => {
-		console.log('accounts', Web3.accounts);
+		if (Web3.accounts < 1) {
+			const timerId = setTimeout(() => {
+				setDialog(true);
+			}, 500);
+			setTimer(timerId);
+		} else {
+			clearTimeout(timer);
+		}
 	}, [Web3.accounts]);
-
-	useEffect(() => {
-		console.log('gas', Web3.gas.average);
-	}, [Object.keys(Web3.gas).length]);
 
 	return (
 		<>

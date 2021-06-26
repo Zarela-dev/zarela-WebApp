@@ -2,18 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import FileInput from './FileInput';
 import Checkbox from './Elements/Checkbox';
-import { Button } from './Elements/Button';
+import Button from './Elements/Button';
 import TextField, { Error } from './Elements/TextField';
 
-const SubmitButton = styled.button`
-	${Button};
+const SubmitButton = styled(Button)`
 	width: 190px;
-	height: 50px;
 	margin-bottom: ${props => props.theme.spacing(4)};
-	font-size: 20px;
-	font-weight: 500;
-	color: #252222;
 `;
+
 const Form = styled.form`
 	max-width: 510px;
 `;
@@ -112,7 +108,7 @@ const CreateOrderForm = React.forwardRef(({ children, formik }, ref) => {
 					: null
 			}
 			<Divider />
-			<SubmitButton type='submit'>
+			<SubmitButton variant='primary' disabled={!formik.dirty || formik.isSubmitting} type='submit'>
 				Submit
 			</SubmitButton>
 		</Form>
