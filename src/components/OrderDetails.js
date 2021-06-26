@@ -203,7 +203,7 @@ const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) 
 					</CustomFooter>
 					<CustomProgressTrackerWrapper>
 						<ProgressTrackerTrack>
-							<ProgressTrackerProcess width={+order.totalContributed / +order.totalContributors * 100} />
+							<ProgressTrackerProcess progress={+order.totalContributed / +order.totalContributors * 100} />
 						</ProgressTrackerTrack>
 					</CustomProgressTrackerWrapper>
 				</HeaderInner>

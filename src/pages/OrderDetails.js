@@ -52,7 +52,7 @@ const OrderDetailsPage = () => {
 
 							// const doc = document.getElementById("_White_Paper");
 							Web3.contract.methods.SendFile(order.orderId, order.requesterAddress, ipfsResponse.path)
-								.send({ from: Web3.accounts[0], gas: 600000, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
+								.send({ from: Web3.accounts[0], gas: 700000, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
 									if (!error) {
 										toast(result, 'success', true, result);
 									}
@@ -61,24 +61,22 @@ const OrderDetailsPage = () => {
 									}
 								});
 
-							Web3.contract.events.Contributed({}, function (error, result) {
-								if (!error) {
-									let returnValues = result.returnValues;
-									toast(`signal submitted on order #${returnValues[1]} for address: ${returnValues[2]}`, 'success');
-								}
-								else {
+							Web3.contract.events.Contributed({})
+								.on('data', (event) => {
+									toast(
+										`signal submitted on order #${event.returnValues[1]} for address: ${event.returnValues[2]}`,
+										'success',
+										false,
+										null,
+										{
+											toastId: event.id
+										}
+									);
+								})
+								.on('error', (error, receipt) => {
 									toast(error.message, 'error');
-								}
-							});
-							Web3.contract.events.Transfer({}, function (error, result) {
-								if (!error) {
-									let returnValues = result.returnValues;
-									toast(`Your mission is complete, ${returnValues[2]} tokens were successfully sent to ${returnValues[1]}`, 'success');
-								}
-								else {
-									toast(error.message, 'error');
-								}
-							});
+									console.error(error, receipt);
+								});
 						} catch (error) {
 							console.error(error);
 						}

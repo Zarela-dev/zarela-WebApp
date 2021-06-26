@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import getWeb3 from './getWeb3';
-import { convertToBiobit } from './utils';
+import { convertToBiobit, toast } from './utils';
 import axios from 'axios';
 
 const initialState = {
@@ -84,6 +84,7 @@ const Web3Provider = ({ children }) => {
 			try {
 				// Get network provider and web3 instance.
 				const web3 = await getWeb3();
+				console.log('web3 in config', web3)
 				// Use web3 to get the user's accounts.
 				const accounts = await web3.eth.getAccounts();
 				// Get the contract instance.
@@ -209,6 +210,23 @@ const Web3Provider = ({ children }) => {
 
 	useEffect(() => {
 		setTimers();
+		if (Web3.contract)
+			Web3.contract.events.Transfer({})
+				.on('data', (event) => {
+					toast(
+						`${convertToBiobit(event.returnValues[2])} tokens were successfully sent to ${event.returnValues[1]}.`,
+						'success',
+						false,
+						null,
+						{
+							toastId: event.id
+						}
+					);
+				})
+				.on('error', (error, receipt) => {
+					toast(error.message, 'error');
+					console.error(error, receipt);
+				});
 	}, [Web3.contract]);
 
 	useEffect(() => {

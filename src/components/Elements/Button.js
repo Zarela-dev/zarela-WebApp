@@ -64,6 +64,23 @@ const TheButton = styled.button`
 	line-height: 1;
 `;
 
+const LinkButtonAnchor = styled.a`
+	${(props) => getColor(props)};
+	display: block;
+	padding: ${props => props.theme.spacing(1.5)} ${props => props.theme.spacing(3)};
+    text-decoration: none;
+	font-weight: 500;
+	font-size: 20px;
+	border: none;
+	width: calc(100% - 2px);
+    height: calc(100% - 2px);
+    position: relative;
+    top: 1px;
+	left: 1px;
+    border-radius: 5.5px;
+	line-height: 1;
+`;
+
 const TheLinkButton = styled(Link)`
 	${(props) => getColor(props)};
 	display: block;
@@ -87,6 +104,14 @@ const GenericButton = ({ children, variant, type, disabled, ...rest }) => (
 		<TheButton variant={variant} type={type} disabled={disabled}>
 			{children}
 		</TheButton>
+	</Container>
+);
+
+export const LinkButton = ({ children, variant, href, target, ...rest }) => (
+	<Container variant={variant} {...rest}>
+		<LinkButtonAnchor variant={variant} target={target} href={href}>
+			{children}
+		</LinkButtonAnchor>
 	</Container>
 );
 

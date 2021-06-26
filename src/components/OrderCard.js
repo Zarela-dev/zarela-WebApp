@@ -54,7 +54,7 @@ const OrderCard = (props) => {
 			</Description>
 			<ProgressTrackerWrapper>
 				<ProgressTrackerTrack>
-					<ProgressTrackerProcess width={props.progress} />
+					<ProgressTrackerProcess progress={props.progress} />
 				</ProgressTrackerTrack>
 			</ProgressTrackerWrapper>
 			<Footer>
@@ -108,7 +108,7 @@ const OrderCard = (props) => {
 				</ContributorBadge>
 				<Spacer />
 				<JoinButton variant='secondary' to={`/order/${props.orderId}`}>
-					Join the test
+					Join
 				</JoinButton>
 			</Footer>
 		</OrderCardWrapper>

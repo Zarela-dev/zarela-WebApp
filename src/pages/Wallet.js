@@ -6,7 +6,7 @@ import TitleBar from '../components/TitleBar';
 import { Tabs } from '../components/Tabs';
 import WalletTransactions from '../components/WalletTransactions';
 import WalletDeposit from '../components/WalletDeposit';
-import WalletWithdraw from '../components/WalletWithdraw';
+import WalletSendAssets from '../components/WalletSendAssets';
 import ConnectToMetamask from '../components/ConnectToMetamask';
 
 const Wrapper = styled.div`
@@ -141,10 +141,10 @@ const Wallet = () => {
 						)
 					},
 					{
-						label: 'Withdraw',
+						label: 'Send',
 						component: (
 							<WalletInnerContainer elevated>
-								<WalletWithdraw />
+								<WalletSendAssets />
 							</WalletInnerContainer>
 						)
 					},

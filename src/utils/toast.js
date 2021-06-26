@@ -30,7 +30,6 @@ const Icon = styled.img`
 
 
 const Message = ({ text, copyable, textToCopy, closeToast, toastProps }) => {
-	console.log(toastProps);
 	return (
 		<Container>
 			<Icon src={toastProps.type === 'success' ? checkedBoxImage : alertImage} />
@@ -49,15 +48,17 @@ const Message = ({ text, copyable, textToCopy, closeToast, toastProps }) => {
 		</Container>
 	);
 };
-
-export const toast = (message, variant = 'info', copyable, textToCopy/*  = message */) => {
-	return originalToast[variant](<Message text={message} copyable={copyable} textToCopy={textToCopy} />, {
+export const toast = (message, variant = 'info', copyable, textToCopy/*  = message */, toastOptions = {}) => {
+	console.log(toastOptions);
+	return originalToast(<Message text={message} copyable={copyable} textToCopy={textToCopy} />, {
 		position: originalToast.POSITION.BOTTOM_CENTER,
 		pauseOnHover: true,
 		pauseOnFocusLoss: true,
 		closeOnClick: false,
 		draggable: true,
 		closeButton: false,
-		autoClose: 7 * 1000
+		autoClose: 7 * 1000,
+		type: variant,
+		...toastOptions
 	});
 };
