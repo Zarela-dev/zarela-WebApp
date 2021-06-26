@@ -39,6 +39,7 @@ const Modal = styled.div`
 	border-radius: 60px 60px 10px 60px;
 	padding: ${props => props.theme.spacing(8)} ${props => props.theme.spacing(10)};
 	overflow: hidden;
+	
 `;
 
 const Header = styled.div`
@@ -162,7 +163,7 @@ const NoMetamaskMessage = () => {
 					<Message>
 						Just looking around? Contuniue to <Link inline href="https://zarela.io" target="_blank"> Zarela.io</Link> to get more familiar with us :)
 					</Message>
-					<LetsGoButton variant={'secondary'}  href="https://zarela.io" target="_blank">
+					<LetsGoButton variant={'secondary'} href="https://zarela.io" target="_blank">
 						Let's Go
 					</LetsGoButton>
 				</Footer>
