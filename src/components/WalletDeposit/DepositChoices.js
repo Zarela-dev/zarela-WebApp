@@ -39,6 +39,7 @@ export const TokenName = styled.span`
 export const Token = styled.div`
 	display: flex;
 	margin-right: ${props => props.theme.spacing(1)};
+	cursor: pointer;
 	${props => props.active};
 
 	& ${TokenName} {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
 import { Spacer } from './Elements/Spacer';
+import { WithPointerCursor } from './Elements/WithPointerCursor';
 import {
 	ContributorsIcon,
 	ContributorBadge,
@@ -37,6 +38,14 @@ const Header = styled.header`
 	align-items: center;
 `;
 
+const OrderNumberWithPointer = styled(OrderNumber)`
+	${WithPointerCursor};
+`;
+
+const Title = styled(Typography)`
+	${WithPointerCursor};
+`;
+
 const TotalBadge = styled.div`
 	background: #2EECA8;
 	min-width: 32px;
@@ -60,6 +69,11 @@ const Divider = styled.div`
 
 const Body = styled.section`
 
+`;
+
+const NoContributionMessage = styled.div`
+	margin-top: ${props => props.theme.spacing(2)};
+	margin-left: ${props => props.theme.spacing(12)};
 `;
 
 const Footer = styled.footer`
@@ -245,12 +259,12 @@ const OrderListItem = ({
 	return (
 		<Wrapper>
 			<Header onClick={() => setOpen(!isOpen)}>
-				<OrderNumber>
+				<OrderNumberWithPointer>
 					{orderId}
-				</OrderNumber>
-				<Typography variant='title' weight='semiBold'>
+				</OrderNumberWithPointer>
+				<Title variant='title' weight='semiBold'>
 					{title.length < 135 ? title : title.substr(0, 135) + '...'}
-				</Typography>
+				</Title>
 				<Spacer />
 				<BiobitToDollarPair>
 					<BadgeRow>
@@ -288,35 +302,41 @@ const OrderListItem = ({
 			</Header>
 			{
 				showContributions && isOpen ?
-					<>
-						<Body>
-							<OrderFilesTable
-								signalDownloadHandler={signalDownloadHandler}
-								data={formattedData}
-								selected={selected}
-								onChange={onChange}
-								onBulkChange={onBulkChange}
-								isAllChecked={isAllChecked}
-								changeAll={changeAll}
-							/>
-						</Body>
-						<Footer>
-							<SubmitButton onClick={() => {
-								let payload = [];
+					Object.keys(formattedData).length > 0 ?
+						<>
+							<Body>
+								<OrderFilesTable
+									signalDownloadHandler={signalDownloadHandler}
+									data={formattedData}
+									selected={selected}
+									onChange={onChange}
+									onBulkChange={onBulkChange}
+									isAllChecked={isAllChecked}
+									changeAll={changeAll}
+								/>
+							</Body>
+							<Footer>
+								<SubmitButton onClick={() => {
+									let payload = [];
 
-								Object.keys(selected).forEach(item => {
-									payload.push(...selected[item].map(fileHash => {
-										// we need the duplicated addresses here
-										return item;
-									}));
-								});
-								if (payload.length > 0)
-									handleConfirm(orderId, payload);
-							}}>
-								Send Tokens
-							</SubmitButton>
-						</Footer>
-					</>
+									Object.keys(selected).forEach(item => {
+										payload.push(...selected[item].map(fileHash => {
+											// we need the duplicated addresses here
+											return item;
+										}));
+									});
+									if (payload.length > 0)
+										handleConfirm(orderId, payload);
+								}}>
+									Send Tokens
+								</SubmitButton>
+							</Footer>
+						</>
+						: <Body>
+							<NoContributionMessage>
+								There are no contributions for now
+							</NoContributionMessage>
+						</Body>
 					: null
 			}
 		</Wrapper>
