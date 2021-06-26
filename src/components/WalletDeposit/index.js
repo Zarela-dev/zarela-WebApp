@@ -71,11 +71,6 @@ const WalletDeposit = ({address}) => {
 								ERC20
 							</TokenButton>
 						</Token>
-						<Token>
-							<TokenButton>
-								TRC20
-							</TokenButton>
-						</Token>
 					</TokenList>
 				</Column>
 				<NextStepArrow>
