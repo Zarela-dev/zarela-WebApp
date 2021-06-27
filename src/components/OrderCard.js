@@ -65,7 +65,7 @@ const OrderCard = (props) => {
 							{props.tokenPay}
 						</TokenValue>
 						<ValueLabel>
-							BioBit
+							BBit
 						</ValueLabel>
 					</BadgeRow>
 					<BadgeRow>

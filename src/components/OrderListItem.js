@@ -273,7 +273,7 @@ const OrderListItem = ({
 							{tokenPay}
 						</TokenValue>
 						<ValueLabel>
-							BioBit
+							BBit
 						</ValueLabel>
 						<BiobitToDollarValue noMargin>
 							{'~ $' + tokenPay}

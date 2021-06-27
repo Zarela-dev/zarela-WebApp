@@ -40,7 +40,7 @@ const NextStepIcon = styled.img`
 	margin: ${props => props.theme.spacing(0.7)}
 `;
 
-const WalletDeposit = ({address}) => {
+const WalletDeposit = ({ address }) => {
 	return (
 		<Wrapper>
 			<Content>
@@ -52,7 +52,7 @@ const WalletDeposit = ({address}) => {
 						<Token active>
 							<TokenIcon src={biobitIcon} />
 							<TokenName>
-								Biobit
+								BBit
 							</TokenName>
 						</Token>
 						<Token>
