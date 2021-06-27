@@ -69,13 +69,9 @@ const OrderCard = (props) => {
 						</ValueLabel>
 					</BadgeRow>
 					<BadgeRow>
-						<TokenIcon src={dollarIcon} />
 						<BiobitToDollarValue>
-							{props.tokenPay}
+							{`~ $ ${props.tokenPay}`}
 						</BiobitToDollarValue>
-						<ValueLabel colored>
-							Dollar
-						</ValueLabel>
 					</BadgeRow>
 				</BiobitToDollarPair>
 				<Divider />

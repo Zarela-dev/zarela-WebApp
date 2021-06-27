@@ -139,7 +139,7 @@ const CustomProgressTrackerWrapper = styled(ProgressTrackerWrapper)`
 const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) => {
 	const contributors = `${order.totalContributed}/${order.totalContributors}`;
 	const [signalFile, setSignalFile] = useState(null);
-	
+
 	return (
 		<PageWrapper>
 			<HeaderContainer>
@@ -189,16 +189,9 @@ const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) 
 							<ValueLabel>
 								BioBit
 							</ValueLabel>
-
-							<EqualSign>
-								=
-							</EqualSign>
-							<BiobitToDollarValue>
-								{'$' + order.tokenPay}
+							<BiobitToDollarValue noMargin>
+								{`~ $ ${order.tokenPay}`}
 							</BiobitToDollarValue>
-							<ValueLabel colored>
-								Dollar
-							</ValueLabel>
 						</CustomBadgeRow>
 					</CustomFooter>
 					<CustomProgressTrackerWrapper>

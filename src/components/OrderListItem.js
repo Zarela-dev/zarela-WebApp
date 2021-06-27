@@ -275,15 +275,9 @@ const OrderListItem = ({
 						<ValueLabel>
 							BioBit
 						</ValueLabel>
-						<EqualSign>
-							=
-						</EqualSign>
-						<BiobitToDollarValue>
-							{'$' + tokenPay}
+						<BiobitToDollarValue noMargin>
+							{'~ $' + tokenPay}
 						</BiobitToDollarValue>
-						<ValueLabel colored>
-							Dollar
-						</ValueLabel>
 					</BadgeRow>
 				</BiobitToDollarPair>
 				<Divider />
