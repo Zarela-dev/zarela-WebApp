@@ -73,7 +73,7 @@ const MyAccount = () => {
 	return (
 		<PageWrapper>
 			<TitleBar>
-				My Account {totalRevenueFromZarela} / {totalRevenueFromRequester}
+				My Contributions {totalRevenueFromZarela} / {totalRevenueFromRequester}
 			</TitleBar>
 			<ContentWrapper>
 				{

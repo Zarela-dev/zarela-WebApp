@@ -1,4 +1,4 @@
-import styled ,{ css } from 'styled-components';
+import styled, { css } from 'styled-components';
 import logo from '../../assets/icons/logo.png';
 import home from '../../assets/icons/home.svg';
 import inbox from '../../assets/icons/inbox.svg';
@@ -87,7 +87,7 @@ export default function Header() {
 			<NavItem to='/account'>
 				<NavIcon src={user} />
 				<NavLink>
-					Account
+					My Contributions
 				</NavLink>
 			</NavItem>
 			<NavItem to='/wallet/deposit'>
