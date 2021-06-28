@@ -9,6 +9,7 @@ import ConnectDialog from '../components/Dialog/ConnectDialog';
 import * as ethUtil from 'ethereumjs-util';
 import { encrypt } from 'eth-sig-util';
 import { toast } from '../utils';
+import Dialog from '../components/Dialog';
 
 const OrderDetailsPage = () => {
 	const { id } = useParams();
@@ -16,71 +17,98 @@ const OrderDetailsPage = () => {
 	const [order, setOrders] = useState({});
 	const sendSignalRef = useRef(null);
 	const [showDialog, setDialog] = useState(false);
+	const [isSubmitting, setSubmitting] = useState(false);
+	const [dialogMessage, setDialogMessage] = useState('');
+	const [error, setError] = useState(false);
+
+	const clearSubmitDialog = () => {
+		setSubmitting(false);
+		setDialogMessage('');
+		if (sendSignalRef.current !== null)
+			sendSignalRef.current.value = null;
+	};
 
 	const submitSignal = (e) => {
 		if (Object.keys(order).length !== 0)
 			if (sendSignalRef !== null) {
 				setDialog(true);
 				if (Web3.accounts.length > 0) {
-					setDialog(false);
-					const reader = new FileReader();
+					if (sendSignalRef.current.value !== null && sendSignalRef.current.value !== '') {
+						setDialog(false);
+						setSubmitting(true);
+						setDialogMessage('encrypting file');
 
-					reader.readAsArrayBuffer(sendSignalRef.current.files[0]); // Read Provided File
+						const reader = new FileReader();
 
-					reader.onloadend = async () => {
-						const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
-						const buff = Buffer(reader.result); // Convert data into buffer
-						// encrypt
-						try {
-							const encryptedMessage = ethUtil.bufferToHex(
-								Buffer.from(
-									JSON.stringify(
-										encrypt(
-											order.encryptionPublicKey,
-											{ data: buff.toString('base64') },
-											'x25519-xsalsa20-poly1305'
-										)
-									),
-									'utf8'
-								)
-							);
+						reader.readAsArrayBuffer(sendSignalRef.current.files[0]); // Read Provided File
 
-							const ipfsResponse = await ipfs.add(encryptedMessage);
+						reader.onloadend = async () => {
+							const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
+							const buff = Buffer(reader.result); // Convert data into buffer
+							// encrypt
+							try {
+								const encryptedMessage = ethUtil.bufferToHex(
+									Buffer.from(
+										JSON.stringify(
+											encrypt(
+												order.encryptionPublicKey,
+												{ data: buff.toString('base64') },
+												'x25519-xsalsa20-poly1305'
+											)
+										),
+										'utf8'
+									)
+								);
+								setDialogMessage('uploading to ipfs');
+								const ipfsResponse = await ipfs.add(encryptedMessage);
 
-							let url = `${process.env.REACT_APP_IPFS_LINK + ipfsResponse.path}`;
-							console.log(`Document Of Conditions --> ${url}`);
+								let url = `${process.env.REACT_APP_IPFS_LINK + ipfsResponse.path}`;
+								console.log(`Document Of Conditions --> ${url}`);
 
-							// const doc = document.getElementById("_White_Paper");
-							Web3.contract.methods.SendFile(order.orderId, order.requesterAddress, ipfsResponse.path)
-								.send({ from: Web3.accounts[0], gas: 700000, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
-									if (!error) {
-										toast(result, 'success', true, result);
-									}
-									else {
-										toast(error.message, 'error');
-									}
-								});
+								// const doc = document.getElementById("_White_Paper");
+								setDialogMessage('awaiting confirmation');
+								Web3.contract.methods.SendFile(order.orderId, order.requesterAddress, ipfsResponse.path)
+									.send({ from: Web3.accounts[0], gas: 700000, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
+										if (!error) {
+											clearSubmitDialog();
+											toast(result, 'success', true, result);
 
-							Web3.contract.events.Contributed({})
-								.on('data', (event) => {
-									toast(
-										`signal submitted on order #${event.returnValues[1]} for address: ${event.returnValues[2]}`,
-										'success',
-										false,
-										null,
-										{
-											toastId: event.id
+											if (sendSignalRef.current !== null)
+												sendSignalRef.current.value = null;
 										}
-									);
-								})
-								.on('error', (error, receipt) => {
-									toast(error.message, 'error');
-									console.error(error, receipt);
-								});
-						} catch (error) {
-							console.error(error);
-						}
-					};
+										else {
+											clearSubmitDialog();
+
+											toast(error.message, 'error');
+										}
+									});
+
+								Web3.contract.events.Contributed({})
+									.on('data', (event) => {
+										toast(
+											`signal submitted on order #${event.returnValues[1]} for address: ${event.returnValues[2]}`,
+											'success',
+											false,
+											null,
+											{
+												toastId: event.id
+											}
+										);
+									})
+									.on('error', (error, receipt) => {
+										clearSubmitDialog();
+										toast(error.message, 'error');
+										console.error(error, receipt);
+									});
+							} catch (error) {
+								clearSubmitDialog();
+								console.error(error);
+							}
+						};
+
+					} else {
+						setError('please select files to upload');
+					}
 				}
 			}
 	};
@@ -117,16 +145,22 @@ const OrderDetailsPage = () => {
 
 	return (
 		<div>
-			{
-				Web3.accounts.length < 1 && showDialog ?
-					<ConnectDialog />
-					: null
-			}
+			<ConnectDialog isOpen={Web3.accounts.length < 1 && showDialog} />
+			<Dialog
+				isOpen={isSubmitting}
+				content={(
+					dialogMessage
+				)}
+				hasSpinner
+				type='success'
+			/>
 			<OrderDetails
 				order={order}
 				ref={sendSignalRef}
 				submitSignal={submitSignal}
 				timestamp={timeSince(order.timestamp)}
+				error={error}
+				setError={setError}
 			/>
 		</div>
 	);

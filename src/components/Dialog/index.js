@@ -1,5 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import closeIcon from '../../assets/icons/close-black.svg';
+import Spinner from '../Spinner';
 
 const getBorder = (type) => {
 	if (type === 'success')
@@ -21,25 +23,21 @@ const getBorder = (type) => {
 };
 
 const Header = styled.header`
-	font-weight: bold;
-	font-size: 18px;
-	line-height: 20px;
-	text-align: center;
-	color: #4FCFA1;
+	display: flex;
+	justify-content: space-between;
+
 	max-width: 215px;
 
 	margin: 0 auto ${props => props.theme.spacing(3)};
 `;
 
-const Body = styled.header`
-	font-weight: bold;
-	font-size: 18px;
-	line-height: 20px;
-	text-align: center;
-	color: #4FCFA1;
+const Body = styled.section`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 `;
 
-const Footer = styled.header`
+const Footer = styled.footer`
 	font-weight: bold;
 	font-size: 18px;
 	line-height: 20px;
@@ -69,15 +67,57 @@ const Card = styled.div`
 	padding: ${props => props.theme.spacing(3)};
 `;
 
-const Dialog = ({ title, content, actions, type }) => {
+const TitleWrapper = styled.div`
+	font-weight: bold;
+	font-size: 18px;
+	line-height: 20px;
+	text-align: center;
+	color: #4FCFA1;
+`;
+
+const CloseIconWrapper = styled.div`
+
+`;
+const CloseIcon = styled.img`
+  
+`;
+
+const SpinnerContainer = styled.div`
+  
+`;
+
+const Content = styled.div`
+	font-weight: bold;
+	font-size: 18px;
+	line-height: 20px;
+	text-align: center;
+	color: #4FCFA1;
+`;
+
+const Dialog = ({ isOpen, hasSpinner, title, content, actions, type = 'error', onClose }) => {
+	if (!isOpen)
+		return null;
 	return (
 		<Backdrop>
-			<Card type='error'>
+			<Card type={type}>
 				<Header>
-					{title}
+					<TitleWrapper>
+						{title}
+					</TitleWrapper>
+					{
+						typeof onClose === 'function' ?
+							<CloseIconWrapper>
+								<CloseIcon src={closeIcon} onClick={onClose} />
+							</CloseIconWrapper> : null
+					}
 				</Header>
 				<Body>
-					{content}
+					<SpinnerContainer>
+						{hasSpinner ? <Spinner /> : null}
+					</SpinnerContainer>
+					<Content>
+						{content}
+					</Content>
 				</Body>
 				<Footer>
 					{actions}

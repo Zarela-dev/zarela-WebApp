@@ -160,11 +160,7 @@ const CreateOrder = () => {
 				{
 
 					<>
-						{
-							Web3.accounts.length < 1 && showDialog ?
-								<ConnectDialog />
-								: null
-						}
+						<ConnectDialog isOpen={Web3.accounts.length < 1 && showDialog} />
 						<CreateOrderForm
 							formik={formik}
 							ref={fileRef}

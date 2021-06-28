@@ -1,10 +1,9 @@
 import React from 'react';
-import { Card, CustomFileInput, HelperText } from './FileCard';
+import { Card, CustomFileInput, HelperText, ErrorText } from './FileCard';
 import styled from 'styled-components';
-import { Button } from './Elements/Button';
+import Button from './Elements/Button';
 
-const SubmitButton = styled.button`
-	${Button}
+const SubmitButton = styled(Button)`
 	margin-top: ${props => props.theme.spacing(4)};
 `;
 
@@ -20,6 +19,8 @@ const UploadFileCard = React.forwardRef(({
 	helperText,
 	name,
 	value,
+	error,
+	setError,
 	disableUpload,
 	onChange,
 	onClick = () => { }
@@ -35,13 +36,21 @@ const UploadFileCard = React.forwardRef(({
 				ref={ref}
 				name={name}
 				value={value}
-				onChange={onChange}
+				onChange={(e) => {
+					if (e.target.value !== '' && e.target.value !== null) {
+						setError(null);
+						onChange(e);
+					}
+				}}
 			/>
 			<HelperText>
 				{helperText}
 			</HelperText>
+			<ErrorText>
+				{error}
+			</ErrorText>
 			<ActionFooter>
-				<SubmitButton onClick={onClick}>
+				<SubmitButton disabled={error !== null} variant='primary' onClick={onClick}>
 					Submit
 				</SubmitButton>
 			</ActionFooter>

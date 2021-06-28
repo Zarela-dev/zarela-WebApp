@@ -136,7 +136,7 @@ const CustomProgressTrackerWrapper = styled(ProgressTrackerWrapper)`
 	margin-bottom: ${props => props.theme.spacing(0)};
 `;
 
-const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) => {
+const OrderDetails = React.forwardRef(({ setError, error, timestamp, order, submitSignal }, ref) => {
 	const contributors = `${order.totalContributed}/${order.totalContributors}`;
 	const [signalFile, setSignalFile] = useState(null);
 
@@ -241,6 +241,8 @@ const OrderDetails = React.forwardRef(({ timestamp, order, submitSignal }, ref) 
 					onChange={(e) => {
 						setSignalFile(e.target.files[0]);
 					}}
+					error={error}
+					setError={setError}
 					onClick={submitSignal}
 				/>
 			</FilesWrapper>
