@@ -2,6 +2,7 @@ import React, { forwardRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import fileDownloadIcon from '../assets/icons/file-download.svg';
 import fileUploadIcon from '../assets/icons/file-upload.svg';
+import { Error } from './Elements/TextField';
 
 export const FileInputWithBorder = css`
 	background: #FFFFFF;
@@ -16,6 +17,7 @@ export const FileInputWrapper = styled.div`
 	display: flex;
 	flex-direction: row-reverse;
 	justify-content: space-between;
+	flex-wrap: wrap;
 	max-width: 530px;
 	margin: ${props => props.theme.spacing(2)} 0 ${props => props.theme.spacing(4)};
 `;
@@ -45,6 +47,17 @@ export const FileInputLink = styled.a`
 	text-decoration: none;
 	padding: ${props => props.theme.spacing(1)} ${props => props.theme.spacing(4)};
 	color: #7246D0;
+`;
+
+const FileContainer = styled.div`
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: space-between;
+	width: 100%;
+`;
+
+const ErrorContainer = styled.div`
+	margin-top: ${props => props.theme.spacing(1)};
 `;
 
 export const FileInputIcon = styled.img`
@@ -78,48 +91,60 @@ const FileInput = forwardRef(({
 	value,
 	buttonLabel,
 	icon,
+	error,
 	label,
 	...rest
 }, ref) => {
 	return (
 		<FileInputWrapper hasBorder={hasBorder} className={className}>
-			<FileInputLabel>
-				{buttonLabel}
+			<FileContainer>
+				<FileInputLabel>
+					{buttonLabel}
+					{
+						!disableUpload ?
+							<input ref={ref} type='file' style={{ display: 'none' }} {...rest} />
+							: null
+					}
+				</FileInputLabel>
 				{
-					!disableUpload ?
-						<input ref={ref} type='file' style={{ display: 'none' }} {...rest} />
+					showSelected ?
+						(
+							<FileInputTitle>
+								{
+									icon === 'download' ?
+										<FileInputIcon src={fileDownloadIcon} /> :
+										<FileInputIcon src={fileUploadIcon} />
+								}
+								<FileName>
+									{
+										getFileName(ref, formatLabel(label))
+									}
+								</FileName>
+							</FileInputTitle>
+						)
+						: (
+							<FileInputTitle>
+								{
+									icon === 'download' ?
+										<FileInputIcon src={fileDownloadIcon} /> :
+										<FileInputIcon src={fileUploadIcon} />
+								}
+								<FileName>
+									{formatLabel(label)}
+								</FileName>
+							</FileInputTitle>
+						)
+				}
+			</FileContainer>
+			<ErrorContainer>
+				{
+					error ?
+						<Error>
+							{error}
+						</Error>
 						: null
 				}
-			</FileInputLabel>
-			{
-				showSelected ?
-					(
-						<FileInputTitle>
-							{
-								icon === 'download' ?
-									<FileInputIcon src={fileDownloadIcon} /> :
-									<FileInputIcon src={fileUploadIcon} />
-							}
-							<FileName>
-								{
-									getFileName(ref, formatLabel(label))
-								}
-							</FileName>
-						</FileInputTitle>
-					)
-					: (
-						<FileInputTitle>
-							{
-								icon === 'download' ?
-									<FileInputIcon src={fileDownloadIcon} /> :
-									<FileInputIcon src={fileUploadIcon} />
-							}
-							<FileName>
-								{formatLabel(label)}
-							</FileName>
-						</FileInputTitle>
-					)
-			}
+			</ErrorContainer>
 		</FileInputWrapper>
 	);
 });

@@ -78,13 +78,13 @@ const OrderDetailsPage = () => {
 										}
 										else {
 											clearSubmitDialog();
-
 											toast(error.message, 'error');
 										}
 									});
 
 								Web3.contract.events.Contributed({})
 									.on('data', (event) => {
+										clearSubmitDialog();
 										toast(
 											`signal submitted on order #${event.returnValues[1]} for address: ${event.returnValues[2]}`,
 											'success',

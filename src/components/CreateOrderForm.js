@@ -23,6 +23,7 @@ const Divider = styled.div`
 `;
 
 const CreateOrderForm = React.forwardRef(({ children, formik }, ref) => {
+	console.log('submit button', formik.dirty, formik.isSubmitting);
 	return (
 		<Form onSubmit={formik.handleSubmit}>
 			{children}
@@ -85,14 +86,18 @@ const CreateOrderForm = React.forwardRef(({ children, formik }, ref) => {
 			<FileInput
 				hasBorder={false}
 				showSelected
-				buttonLabel='Upload'
+				buttonLabel='Select Files'
 				label={'Upload your Zpaper here'}
 				ref={ref}
-				name={'whitepaper'}
-				error={formik.errors?.whitepaper}
-				value={formik.values.whitepaper}
+				name={'zpaper'}
+				error={formik.errors?.zpaper}
+				value={formik.values.zpaper}
 				onChange={(e) => {
-					formik.setFieldValue('whitepaper', e.target.value);
+					formik.setFieldValue('zpaper', e.target.value);
+					if (e.target.value !== '' && e.target.value !== null) {
+						formik.setFieldError('zpaper', null);
+						formik.setSubmitting(false);
+					}
 				}}
 			/>
 			<Checkbox checked={formik.values.terms} name='terms' onChange={(e) => formik.setFieldValue('terms', e.target.checked)}>
