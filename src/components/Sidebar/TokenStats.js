@@ -84,7 +84,7 @@ const Sidebar = ({ dailyContributors, BiobitBasedOnEth, ZarelaRewardPool }) => {
 			</Header>
 			<Row>
 				<Title colored>
-					$ 1.00
+					~ $ 1.00
 				</Title>
 			</Row>
 			<Row>
@@ -96,7 +96,7 @@ const Sidebar = ({ dailyContributors, BiobitBasedOnEth, ZarelaRewardPool }) => {
 						Zarela Max reward
 					</Value>
 					<ZarelaReward>
-						{'$ ' + ZarelaRewardPool}
+						{'~ $ ' + ZarelaRewardPool}
 					</ZarelaReward>
 				</ValueColumn>
 			</Row>

@@ -89,7 +89,7 @@ const WalletSendAssets = () => {
 						<Token active={formik.values.token === 'Biobit'} onClick={() => formik.setFieldValue('token', 'Biobit')}>
 							<TokenIcon src={biobitIcon} />
 							<TokenName>
-								Biobit
+								BBit
 							</TokenName>
 						</Token>
 						<Token active={formik.values.token === 'Ethereum'} onClick={() => formik.setFieldValue('token', 'Ethereum')}>

@@ -84,7 +84,7 @@ const Web3Provider = ({ children }) => {
 			try {
 				// Get network provider and web3 instance.
 				const web3 = await getWeb3();
-				console.log('web3 in config', web3)
+				console.log('web3 in config', web3);
 				// Use web3 to get the user's accounts.
 				const accounts = await web3.eth.getAccounts();
 				// Get the contract instance.
@@ -248,6 +248,17 @@ const Web3Provider = ({ children }) => {
 				}
 			});
 
+			Web3.web3.eth.getBalance(Web3.accounts[0]).then(function (result) {
+				dispatch({
+					type: 'SET_ETHER_BALANCE',
+					payload: Web3.web3.utils.fromWei(result, "ether")
+				});
+			}).catch(error => {
+				console.error(error.message);
+			});
+		}
+
+		if (Web3.contract !== null) {
 			Web3.contract.methods.bank().call((error, result) => {
 				if (!error) {
 					dispatch({
@@ -259,17 +270,8 @@ const Web3Provider = ({ children }) => {
 					console.error(error.message);
 				}
 			});
-
-			Web3.web3.eth.getBalance(Web3.accounts[0]).then(function (result) {
-				dispatch({
-					type: 'SET_ETHER_BALANCE',
-					payload: Web3.web3.utils.fromWei(result, "ether")
-				});
-			}).catch(error => {
-				console.error(error.message);
-			});
 		}
-	}, [Web3.accounts.length]);
+	}, [Web3.accounts, Web3.contract]);
 
 	return (
 		<web3Context.Provider

@@ -30,7 +30,7 @@ const CreateOrder = () => {
 		notEnoughTokens: 'you do not have enough tokens to create this order.',
 		terms: 'you must agree to the term before submitting your order',
 		number: name => `${name} must be a number`,
-		string: name => `${name} must be a string`
+		string: name => `${name} must be a string`,
 	};
 
 	const formik = useFormik({
@@ -54,82 +54,89 @@ const CreateOrder = () => {
 		}),
 		onSubmit: (values => {
 			setDialog(true);
-			if (formik.isValid)
-				if (!values.terms) {
-					formik.setFieldError('terms', validationErrors.terms);
+			if (formik.isValid) {
+				if (+values.tokenPay * +values.instanceCount >= +Web3.biobitBalance / Math.pow(10, 9)) {
+					formik.setFieldError('tokenPay', validationErrors.notEnoughTokens);
+					formik.setSubmitting(false);
 				} else {
-					if (Web3.accounts.length > 0) {
-						setDialog(false);
-						const { title, desc, tokenPay, instanceCount, category } = values;
-						const reader = new FileReader();
+					if (!values.terms) {
+						formik.setFieldError('terms', validationErrors.terms);
+						formik.setSubmitting(false);
+					} else {
+						if (Web3.accounts.length > 0) {
+							setDialog(false);
+							const { title, desc, tokenPay, instanceCount, category } = values;
+							const reader = new FileReader();
 
-						console.log('requesting public key');
-						window.ethereum
-							.request({
-								method: 'eth_getEncryptionPublicKey',
-								params: [Web3.accounts[0]], // you must have access to the specified account
-							})
-							.then((result) => {
-								console.log('requesting public key cb');
+							console.log('requesting public key');
+							window.ethereum
+								.request({
+									method: 'eth_getEncryptionPublicKey',
+									params: [Web3.accounts[0]], // you must have access to the specified account
+								})
+								.then((result) => {
+									console.log('requesting public key cb');
 
-								const encryptionPublicKey = result;
-								reader.readAsArrayBuffer(fileRef.current.files[0]); // Read Provided File
+									const encryptionPublicKey = result;
+									reader.readAsArrayBuffer(fileRef.current.files[0]); // Read Provided File
 
-								reader.onloadend = async () => {
-									const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
-									const buf = Buffer(reader.result); // Convert data into buffer
+									reader.onloadend = async () => {
+										const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
+										const buf = Buffer(reader.result); // Convert data into buffer
 
-									try {
-										const ipfsResponse = await ipfs.add(buf);
-										formik.setFieldValue('whitepaper', ipfsResponse.path);
-										let url = `${process.env.REACT_APP_IPFS_LINK + ipfsResponse.path}`;
-										console.log(`Document Of Conditions --> ${url}`);
+										try {
+											const ipfsResponse = await ipfs.add(buf);
+											formik.setFieldValue('whitepaper', ipfsResponse.path);
+											let url = `${process.env.REACT_APP_IPFS_LINK + ipfsResponse.path}`;
+											console.log(`Document Of Conditions --> ${url}`);
 
-										// const doc = document.getElementById("_White_Paper");
-										Web3.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, +tokenPay * Math.pow(10, 9), instanceCount, category, encryptionPublicKey)
-											.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
-												if (!error) {
-													toast(result, 'success', true, result);
-												}
-												else {
-													toast(error.message, 'error');
-												}
-											});
-
-
-										Web3.contract.events.OrderRegistered({})
-											.on('data', (event) => {
-												toast(
-													`Transaction #${event.returnValues[1]} has been created successfully.`,
-													'success',
-													false,
-													null,
-													{
-														toastId: event.id
+											// const doc = document.getElementById("_White_Paper");
+											Web3.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, +tokenPay * Math.pow(10, 9), instanceCount, category, encryptionPublicKey)
+												.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
+													if (!error) {
+														toast(result, 'success', true, result);
 													}
-												);
-												history.push(`/order/${event.returnValues[1]}`);
+													else {
+														toast(error.message, 'error');
+													}
+												});
 
-											})
-											.on('error', (error, receipt) => {
-												toast(error.message, 'error');
-												console.error(error, receipt);
-											});
-									} catch (error) {
+
+											Web3.contract.events.OrderRegistered({})
+												.on('data', (event) => {
+													toast(
+														`Transaction #${event.returnValues[1]} has been created successfully.`,
+														'success',
+														false,
+														null,
+														{
+															toastId: event.id
+														}
+													);
+													history.push(`/order/${event.returnValues[1]}`);
+
+												})
+												.on('error', (error, receipt) => {
+													toast(error.message, 'error');
+													console.error(error, receipt);
+												});
+										} catch (error) {
+											console.error(error);
+										}
+									};
+								})
+								.catch((error) => {
+									if (error.code === 4001) {
+										// EIP-1193 userRejectedRequest error
+										console.log("We can't encrypt anything without the key.");
+									} else {
 										console.error(error);
 									}
-								};
-							})
-							.catch((error) => {
-								if (error.code === 4001) {
-									// EIP-1193 userRejectedRequest error
-									console.log("We can't encrypt anything without the key.");
-								} else {
-									console.error(error);
-								}
-							});
+								});
+						}
 					}
 				}
+			}
 		})
 	});
 

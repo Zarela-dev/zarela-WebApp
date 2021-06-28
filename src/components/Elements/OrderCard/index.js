@@ -124,10 +124,12 @@ export const BadgeLabel = styled.div`
 
 export const BiobitToDollarValue = styled.div`
 	font-weight: 600;
-	font-size: 18px;
+	font-size: 15px;
 	line-height: 20px;
 	color: #3A68DE;
 	margin-right: 3px;
+	margin-left: ${props => props.noMargin ? props.theme.spacing(1) : props.theme.spacing(2.3)};
+	white-space: nowrap;
 `;
 
 export const Hint = styled.div`

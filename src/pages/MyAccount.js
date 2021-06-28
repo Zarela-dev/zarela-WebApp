@@ -6,6 +6,7 @@ import maxWidthWrapper from '../components/Elements/MaxWidth';
 import OrderListItem from '../components/OrderListItem';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { convertToBiobit, toast } from '../utils';
+
 const PageWrapper = styled.div`
 	
 `;
@@ -13,6 +14,44 @@ const PageWrapper = styled.div`
 const ContentWrapper = styled.div`
 	margin-top: ${props => props.theme.spacing(6)};
 	${maxWidthWrapper};
+`;
+
+const WalletTitlebar = styled(TitleBar)`
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	align-items: center;
+    margin-top: -12px;
+`;
+
+const Title = styled.div`
+	font-weight: 500;
+	font-size: 26px;
+	line-height: 34px;
+	color: ${props => props.theme.textPrimary};
+`;
+
+const RewardWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	`;
+
+const RewardItem = styled.div`
+	display: flex;
+	justify-content: flex-end;
+`;
+
+const RewardLabel = styled.div`
+	font-weight: 300;
+	font-size: 16px;
+	line-height: 21px;
+`;
+
+const RewardValue = styled.div`
+	font-size: 16px;
+	font-weight: 700;
+	margin-left: ${props => props.theme.spacing(1)};
+  
 `;
 
 const MyAccount = () => {
@@ -72,9 +111,21 @@ const MyAccount = () => {
 
 	return (
 		<PageWrapper>
-			<TitleBar>
-				My Account {totalRevenueFromZarela} / {totalRevenueFromRequester}
-			</TitleBar>
+			<WalletTitlebar>
+				<Title>
+					My Contributions
+				</Title>
+				<RewardWrapper>
+					<RewardItem>
+						<RewardLabel>Reward Pool</RewardLabel>
+						<RewardValue>{`${totalRevenueFromZarela} BBit`}</RewardValue>
+					</RewardItem>
+					<RewardItem>
+						<RewardLabel>Requesters Reward</RewardLabel>
+						<RewardValue>{`${totalRevenueFromRequester} BBit`}</RewardValue>
+					</RewardItem>
+				</RewardWrapper>
+			</WalletTitlebar>
 			<ContentWrapper>
 				{
 					Web3.accounts.length === 0 ?
