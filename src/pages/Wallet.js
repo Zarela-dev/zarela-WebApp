@@ -128,7 +128,7 @@ const Wallet = () => {
 				<WalletTitlebar>
 					<Title>Wallet</Title>
 					<Balance>
-						{`Balance: ${+Web3.biobitBalance / Math.pow(10, 9)} Biobit`}
+						{`Balance: ${+Web3.biobitBalance / Math.pow(10, 9)} BBit`}
 					</Balance>
 				</WalletTitlebar>
 				<Tabs data={[

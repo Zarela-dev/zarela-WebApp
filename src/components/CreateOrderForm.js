@@ -50,7 +50,7 @@ const CreateOrderForm = React.forwardRef(({ children, formik }, ref) => {
 				}}
 			/>
 			<TextField
-				placeholder={'How many biobits will you pay for each contributor?'}
+				placeholder={'How many BBits will you pay for each contributor?'}
 				label='Allocated BBits *'
 				type='text'
 				name={'tokenPay'}

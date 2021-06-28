@@ -45,7 +45,7 @@ const Sidebar = () => {
 					Token Name
 				</Subtitle>
 				<Value>
-					Biobit
+					BBit
 				</Value>
 			</Row>
 			<Row>
@@ -61,7 +61,7 @@ const Sidebar = () => {
 					Zarela Bank
 				</Subtitle>
 				<Value>
-					{`${Web3.bank} Biobit`}
+					{`${Web3.bank} BBit`}
 				</Value>
 			</Row>
 			<Divider />
@@ -75,10 +75,10 @@ const Sidebar = () => {
 			</Header>
 			<Row hiddenInfo={Web3.accounts.length === 0}>
 				<Subtitle>
-					Biobit Balance
+					BBit Balance
 				</Subtitle>
 				<Value>
-					{`${!Number.isNaN(Web3.biobitBalance) ? convertToBiobit(Web3.biobitBalance) + '  Biobit' : Web3.biobitBalance}`}
+					{`${!Number.isNaN(Web3.biobitBalance) ? convertToBiobit(Web3.biobitBalance) + '  BBit' : Web3.biobitBalance}`}
 				</Value>
 			</Row>
 			<Row hiddenInfo={Web3.accounts.length === 0}>
@@ -93,7 +93,7 @@ const Sidebar = () => {
 				Web3.accounts.length === 0 ?
 					<>
 						<NoConnectionMessage>
-							connect your wallet to see more data 
+							connect your wallet to see more data
 						</NoConnectionMessage>
 						<ConnectButton variant='primary' onClick={() => window.ethereum.enable()}>
 							connect

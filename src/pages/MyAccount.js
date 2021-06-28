@@ -65,7 +65,7 @@ const MyAccount = () => {
 			if (Web3.accounts.length !== 0) {
 				Web3.contract.methods.User_Map(Web3.accounts[0]).call((error, result) => {
 					if (!error) {
-						const formatter = value => `${convertToBiobit(value)} Biobit`;
+						const formatter = value => convertToBiobit(value);
 						setTotalRevenueFromRequester(formatter(result[1]));
 						setTotalRevenueFromZarela(formatter(result[0]));
 					}
