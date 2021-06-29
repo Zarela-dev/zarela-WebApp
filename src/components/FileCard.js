@@ -21,5 +21,12 @@ export const CustomFileInput = styled(FileInput)`
 export const HelperText = styled.div`
 	font-size: 12px;
 	line-height: 20px;
-	margin-top: ${props => props.theme.spacing(6)};
+	margin-top: ${props => props.theme.spacing(3)};
+`;
+
+export const ErrorText = styled.div`
+	font-size: 12px;
+	line-height: 20px;
+	color: #F62D76;
+	margin-top: ${props => props.theme.spacing(3)};
 `;

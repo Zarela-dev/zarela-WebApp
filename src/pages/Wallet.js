@@ -75,29 +75,106 @@ const Wallet = () => {
 							module: 'account',
 							action: 'tokentx',
 							address: Web3.accounts[0],
+							contractaddress: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS,
 							sort: 'desc',
 							apikey: process.env.REACT_APP_ETHEREUM_API_KEY,
 						}
-					}).then(tokentxRes => {
+					}).then(async tokentxRes => {
+						/* 
+							here we have a two APIs from etherscan that each of them give parts of the list we want,
+							here we take the parts that we want from each list them merge and sort them.
+
+							here is a list of what we want and where they are located on the APIs.
+
+								tokentx																txlist		
+							-----------------------------------------------------------------------------------
+								reward (from both pool and request owners)							tx inputs
+								proper values														contribution
+								BBit transfers														ETH transfer
+																									confirmation
+																									create order
+
+							results will include all transactions from above lists. but the values are overridden by tokentx.
+							also the inputs are overridden by txlist.
+						*/
 						if (tokentxRes.data.message === 'OK') {
 							const smartContactAddress = process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS.toLowerCase();
+
 							const txlist = txListRes.data.result;
 							const tokentx = tokentxRes.data.result;
-							const tokenTxFormatted = {};
+
+							const tokentxFormatted = {};
+							const txlistFormatted = {};
 
 							tokentx.forEach(item => {
-								tokenTxFormatted[item.hash] = item;
+								tokentxFormatted[item.hash] = item;
+							});
+
+							txlist.forEach(item => {
+								txlistFormatted[item.hash] = item;
 							});
 
 							let result = [];
 
-							txlist.filter(tx => tx.from == smartContactAddress || tx.to == smartContactAddress).forEach(item => {
-								if (tokenTxFormatted[item.hash] === undefined) {
-									result.push(item);
-								} else {
-									result.push({ ...item, value: tokenTxFormatted[item.hash].value });
-								}
+							txlist.forEach(item => {
+								result.push({
+									...item,
+									value: tokentxFormatted[item.hash]?.value || txlistFormatted[item.hash]?.value || 0
+								});
+								/* 
+									we exclude the data that is already present on txlist to prevent duplication
+									on final results
+								*/
+								delete tokentxFormatted[item.hash];
 							});
+
+							async function hasZarelaContract(txObject) {
+								/* 
+									to detect if the address is a contract so we can filter it
+									(we don't want to show txs from other dApps or our previous smart contracts)
+								*/
+								let from = await Web3.web3.eth.getCode(txObject.from);
+								let to = await Web3.web3.eth.getCode(txObject.to);
+
+								console.log('from ', from !== '0x', txObject.from === smartContactAddress);
+								console.log('to ', to !== '0x', txObject.to === smartContactAddress);
+
+								if (
+									(from !== '0x' && txObject.from === smartContactAddress) ||
+									(to !== '0x' && txObject.to === smartContactAddress)
+								) {
+									console.log('zarela transaction');
+									return true;
+								} else {
+									console.log('non zarelean transaction');
+									return false;
+								}
+							}
+
+							const mergeResults = async () => {
+								for (const txItem of Object.values(tokentxFormatted)) {
+									console.log('checking recepient');
+									const hasZarela = await hasZarelaContract(txItem);
+
+									if (hasZarela) {
+										console.log('checking recepient');
+										result.push({
+											...txItem,
+											input: 'Reward'
+										});
+									} else {
+										console.log('checking recepient');
+										result.push({
+											...txItem,
+											input: 'BBit transfer'
+										});
+									}
+								}
+							};
+
+							await mergeResults();
+							result.sort((a, b) => +b.timeStamp - +a.timeStamp);
+
 							setLogs(result);
 						}
 					}).catch(error => {
@@ -111,7 +188,7 @@ const Wallet = () => {
 			}).finally(() => {
 				setLoading(false);
 			});
-		}
+		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [Web3.accounts]);
 
@@ -152,7 +229,7 @@ const Wallet = () => {
 						label: 'Transactions',
 						component: (
 							<WalletInnerContainer>
-								<WalletTransactions isLoading={isLoading} accounts={Web3.accounts} data={logs.reverse()} />
+								<WalletTransactions isLoading={isLoading} accounts={Web3.accounts} data={logs} />
 							</WalletInnerContainer>
 						)
 					},

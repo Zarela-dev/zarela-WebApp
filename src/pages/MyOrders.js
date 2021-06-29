@@ -93,7 +93,7 @@ const MyOrders = () => {
 			<ContentWrapper>
 				{
 					Web3.accounts.length === 0 ?
-						<ConnectDialog /> :
+						<ConnectDialog isOpen={true} /> :
 						Object.values(orders).length > 0 ? Object.values(orders).reverse().map(item => (
 							<OrderListItem
 								showContributions

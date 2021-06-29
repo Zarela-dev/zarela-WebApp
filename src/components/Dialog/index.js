@@ -1,5 +1,8 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import closeIcon from '../../assets/icons/close-black.svg';
+import Spinner from '../Spinner';
+import { Spacer } from '../Elements/Spacer';
 
 const getBorder = (type) => {
 	if (type === 'success')
@@ -21,25 +24,31 @@ const getBorder = (type) => {
 };
 
 const Header = styled.header`
-	font-weight: bold;
-	font-size: 18px;
-	line-height: 20px;
-	text-align: center;
-	color: #4FCFA1;
-	max-width: 215px;
+	display: flex;
+	position: relative;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
 
 	margin: 0 auto ${props => props.theme.spacing(3)};
 `;
 
-const Body = styled.header`
+const Body = styled.section`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`;
+
+const Content = styled.div`
 	font-weight: bold;
 	font-size: 18px;
 	line-height: 20px;
 	text-align: center;
 	color: #4FCFA1;
+	width: 70%;
 `;
 
-const Footer = styled.header`
+const Footer = styled.footer`
 	font-weight: bold;
 	font-size: 18px;
 	line-height: 20px;
@@ -67,17 +76,58 @@ const Card = styled.div`
 	box-shadow: 0px 10px 18px rgba(81, 197, 234, 0.06);
 	border-radius: 8px;
 	padding: ${props => props.theme.spacing(3)};
+	width: 680px;
 `;
 
-const Dialog = ({ title, content, actions, type }) => {
+const TitleWrapper = styled.div`
+	font-weight: bold;
+	font-size: 18px;
+	line-height: 20px;
+	text-align: center;
+	color: #4FCFA1;
+`;
+
+const CloseIconWrapper = styled.div`
+	position: absolute;
+	right: 0;
+	top: -7px;
+	cursor: pointer;
+`;
+
+const CloseIcon = styled.img`
+  
+`;
+
+const SpinnerContainer = styled.div`
+  
+`;
+
+const Dialog = ({ isOpen, hasSpinner, title, content, actions, type = 'error', onClose }) => {
+	if (!isOpen)
+		return null;
 	return (
 		<Backdrop>
-			<Card type='error'>
+			<Card type={type}>
 				<Header>
-					{title}
+					<Spacer />
+					<TitleWrapper>
+						{title}
+					</TitleWrapper>
+					<Spacer />
+					{
+						typeof onClose === 'function' ?
+							<CloseIconWrapper>
+								<CloseIcon src={closeIcon} onClick={onClose} />
+							</CloseIconWrapper> : null
+					}
 				</Header>
 				<Body>
-					{content}
+					<SpinnerContainer>
+						{hasSpinner ? <Spinner /> : null}
+					</SpinnerContainer>
+					<Content>
+						{content}
+					</Content>
 				</Body>
 				<Footer>
 					{actions}

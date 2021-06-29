@@ -12,6 +12,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Persist } from 'formik-persist';
 import { toast } from '../utils';
+import Dialog from '../components/Dialog';
 
 const Wrapper = styled.div`
 	${maxWidthWrapper}
@@ -23,8 +24,17 @@ const CreateOrder = () => {
 	const { Web3 } = useContext(web3Context);
 	const [showDialog, setDialog] = useState(false);
 	const history = useHistory();
-	const [timer, setTimer] = useState(0);
+	const [isUploading, setUploading] = useState(false);
+	const [dialogMessage, setDialogMessage] = useState('');
 
+	const clearSubmitDialog = () => {
+		setUploading(false);
+		setDialogMessage('');
+		formik.setSubmitting(false);
+
+		if (fileRef.current !== null)
+			fileRef.current.value = null;
+	};
 	const validationErrors = {
 		required: name => `${name} is required to create your order.`,
 		notEnoughTokens: 'you do not have enough tokens to create this order.',
@@ -40,7 +50,7 @@ const CreateOrder = () => {
 			tokenPay: '',
 			instanceCount: '',
 			category: '',
-			whitepaper: '',
+			zpaper: '',
 			terms: false
 		},
 		validationSchema: yup.object().shape({
@@ -49,13 +59,12 @@ const CreateOrder = () => {
 			tokenPay: yup.number().typeError(validationErrors.number('Allocated Biobits')).required(validationErrors.required('Allocated Biobit')),
 			instanceCount: yup.number().typeError(validationErrors.number('Contributors')).required(validationErrors.required('Contributors')),
 			category: yup.string().required(validationErrors.required('category')),
-			whitepaper: yup.mixed(),
+			zpaper: yup.mixed(),
 			terms: yup.boolean().required()
 		}),
 		onSubmit: (values => {
-			setDialog(true);
 			if (formik.isValid) {
-				if (+values.tokenPay * +values.instanceCount >= +Web3.biobitBalance / Math.pow(10, 9)) {
+				if (+values.tokenPay * +values.instanceCount > +Web3.biobitBalance / Math.pow(10, 9)) {
 					formik.setFieldError('tokenPay', validationErrors.notEnoughTokens);
 					formik.setSubmitting(false);
 				} else {
@@ -65,74 +74,90 @@ const CreateOrder = () => {
 					} else {
 						if (Web3.accounts.length > 0) {
 							setDialog(false);
-							const { title, desc, tokenPay, instanceCount, category } = values;
-							const reader = new FileReader();
+							if (fileRef.current.value !== null && fileRef.current.value !== '') {
+								setUploading(true);
+								setDialogMessage('in order to secure the file, so only you can access it we require your public key to encrypt the file');
 
-							console.log('requesting public key');
-							window.ethereum
-								.request({
-									method: 'eth_getEncryptionPublicKey',
-									params: [Web3.accounts[0]], // you must have access to the specified account
-								})
-								.then((result) => {
-									console.log('requesting public key cb');
+								const { title, desc, tokenPay, instanceCount, category } = values;
+								const reader = new FileReader();
 
-									const encryptionPublicKey = result;
-									reader.readAsArrayBuffer(fileRef.current.files[0]); // Read Provided File
+								window.ethereum
+									.request({
+										method: 'eth_getEncryptionPublicKey',
+										params: [Web3.accounts[0]], // you must have access to the specified account
+									})
+									.then((result) => {
+										setDialogMessage('uploading to ipfs');
 
-									reader.onloadend = async () => {
-										const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
-										const buf = Buffer(reader.result); // Convert data into buffer
+										const encryptionPublicKey = result;
+										reader.readAsArrayBuffer(fileRef.current.files[0]); // Read Provided File
 
-										try {
-											const ipfsResponse = await ipfs.add(buf);
-											formik.setFieldValue('whitepaper', ipfsResponse.path);
-											let url = `${process.env.REACT_APP_IPFS_LINK + ipfsResponse.path}`;
-											console.log(`Document Of Conditions --> ${url}`);
+										reader.onloadend = async () => {
+											const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
+											const buf = Buffer(reader.result); // Convert data into buffer
 
-											// const doc = document.getElementById("_White_Paper");
-											Web3.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, +tokenPay * Math.pow(10, 9), instanceCount, category, encryptionPublicKey)
-												.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
-													if (!error) {
-														toast(result, 'success', true, result);
-													}
-													else {
-														toast(error.message, 'error');
-													}
-												});
+											try {
+												const ipfsResponse = await ipfs.add(buf);
+												formik.setFieldValue('zpaper', ipfsResponse.path);
+												let url = `${process.env.REACT_APP_IPFS_LINK + ipfsResponse.path}`;
+												console.log(`Document Of Conditions --> ${url}`);
 
+												setDialogMessage('awaiting confirmation');
 
-											Web3.contract.events.OrderRegistered({})
-												.on('data', (event) => {
-													toast(
-														`Transaction #${event.returnValues[1]} has been created successfully.`,
-														'success',
-														false,
-														null,
-														{
-															toastId: event.id
+												Web3.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, +tokenPay * Math.pow(10, 9), instanceCount, category, encryptionPublicKey)
+													.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
+														if (!error) {
+															clearSubmitDialog();
+															toast(result, 'success', true, result);
 														}
-													);
-													history.push(`/order/${event.returnValues[1]}`);
+														else {
+															clearSubmitDialog();
+															toast(error.message, 'error');
+														}
+													});
 
-												})
-												.on('error', (error, receipt) => {
-													toast(error.message, 'error');
-													console.error(error, receipt);
-												});
-										} catch (error) {
+
+												Web3.contract.events.OrderRegistered({})
+													.on('data', (event) => {
+														clearSubmitDialog();
+
+														toast(
+															`Transaction #${event.returnValues[1]} has been created successfully.`,
+															'success',
+															false,
+															null,
+															{
+																toastId: event.id
+															}
+														);
+														history.push(`/order/${event.returnValues[1]}`);
+
+													})
+													.on('error', (error, receipt) => {
+														clearSubmitDialog();
+
+														toast(error.message, 'error');
+														console.error(error, receipt);
+													});
+											} catch (error) {
+												console.error(error);
+											}
+										};
+									})
+									.catch((error) => {
+										if (error.code === 4001) {
+											// EIP-1193 userRejectedRequest error
+											clearSubmitDialog();
+											console.log("We can't encrypt anything without the key.");
+										} else {
 											console.error(error);
 										}
-									};
-								})
-								.catch((error) => {
-									if (error.code === 4001) {
-										// EIP-1193 userRejectedRequest error
-										console.log("We can't encrypt anything without the key.");
-									} else {
-										console.error(error);
-									}
-								});
+									});
+							} else {
+								formik.setFieldError('zpaper', 'please select files to upload');
+							}
+						} else {
+							setDialog(true);
 						}
 					}
 				}
@@ -141,15 +166,11 @@ const CreateOrder = () => {
 	});
 
 	useEffect(() => {
-		if (Web3.accounts < 1) {
-			const timerId = setTimeout(() => {
-				setDialog(true);
-			}, 500);
-			setTimer(timerId);
-		} else {
-			clearTimeout(timer);
+		if (Web3.accounts.length > 0) {
+			setDialog(false);
+			formik.setSubmitting(false);
 		}
-	}, [Web3.accounts]);
+	}, [Web3.accounts.length]);
 
 	return (
 		<>
@@ -158,13 +179,22 @@ const CreateOrder = () => {
 			</TitleBar>
 			<Wrapper>
 				{
-
 					<>
-						{
-							Web3.accounts.length < 1 && showDialog ?
-								<ConnectDialog />
-								: null
-						}
+						<Dialog
+							isOpen={isUploading}
+							content={(
+								dialogMessage
+							)}
+							onClose={() => {
+								clearSubmitDialog();
+							}}
+							hasSpinner
+							type='success'
+						/>
+						<ConnectDialog isOpen={showDialog} onClose={() => {
+							formik.setSubmitting(false);
+							setDialog(false);
+						}} />
 						<CreateOrderForm
 							formik={formik}
 							ref={fileRef}
