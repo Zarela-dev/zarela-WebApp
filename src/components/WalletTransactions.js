@@ -11,7 +11,7 @@ const Table = styled.div`
 
 const CellWrapper = styled.div`
 	flex: 1;
-	padding: 5px;
+	padding: 5px 0;
 	background: white;
 
 	&:first-child {
@@ -81,15 +81,21 @@ const WalletTransactions = ({ isLoading, accounts, data }) => {
 		return 'no accounts found';
 
 	function getInput(input) {
-		switch (input) {
+		const inputInitials = input.substr(0, 10);
+
+		switch (inputInitials) {
 			case '0xd9f64981':
-				return 'contribute';
+				return 'Contribute';
 			case '0x827e6fd9':
-				return 'create order';
+				return 'Create order';
 			case '0xa9059cbb':
-				return 'transfer';
+				return 'BBit transfer';
+			case '0x5743b65d':
+				return 'Transaction Failed';
 			case '0xae615e8f':
-				return 'confirmation';
+				return 'Confirmation';
+			case '0x':
+				return 'ETH transfer';
 			default:
 				return input;
 		}
@@ -139,7 +145,7 @@ const WalletTransactions = ({ isLoading, accounts, data }) => {
 			</Header>
 			{
 				data.map((transaction, index) => (
-					<Row key={transaction.blockHash}>
+					<Row key={index}>
 						<CellWrapper>
 							<CopyableText textToCopy={transaction.blockHash}>
 								<Cell copyable>
@@ -168,12 +174,12 @@ const WalletTransactions = ({ isLoading, accounts, data }) => {
 						</CellWrapper>
 						<CellWrapper>
 							<Cell>
-								{getInput(transaction.input.substr(0, 10))}
+								{getInput(transaction.input)}
 							</Cell>
 						</CellWrapper>
 						<CellWrapper>
 							<Cell bold>
-								{convertToBiobit(transaction.value)}
+								{transaction.input !== '0x' ? convertToBiobit(transaction.value) : +transaction.value / Math.pow(10, 18)}
 							</Cell>
 						</CellWrapper>
 						<CellWrapper>
