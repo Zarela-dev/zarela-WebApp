@@ -11,30 +11,36 @@ import NoMetamaskMessage from './NoMetamaskMessage';
 import NoMobileSupportMessage from './NoMobileSupportMessage';
 
 const AppRouter = () => {
-	if (window.innerWidth < 1280)
+	/*  reference: https://stackoverflow.com/a/3540295 */
+	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		// true for mobile device
 		return <NoMobileSupportMessage />;
+	} else {
+		// false for not mobile device
 
-	if (!window.web3)
-		return <>
-			<NoMetamaskMessage />
-			<OrderList />
-		</>;
+		if (!window.web3)
+			return <>
+				<NoMetamaskMessage />
+				<OrderList />
+			</>;
 
-	return (
-		<Router>
-			<div>
-				<Header />
-				<Switch>
-					<Route exact path='/' component={OrderList} />
-					<Route exact path='/createOrder' component={CreateOrder} />
-					<Route exact path='/order/:id' component={OrderDetails} />
-					<Route exact path='/my-orders' component={MyOrders} />
-					<Route exact path='/account' component={MyAccount} />
-					<Route path='/wallet' component={Wallet} />
-				</Switch>
-			</div>
-		</Router>
-	);
+		return (
+			<Router>
+				<div>
+					<Header />
+					<Switch>
+						<Route exact path='/' component={OrderList} />
+						<Route exact path='/createOrder' component={CreateOrder} />
+						<Route exact path='/order/:id' component={OrderDetails} />
+						<Route exact path='/my-orders' component={MyOrders} />
+						<Route exact path='/account' component={MyAccount} />
+						<Route path='/wallet' component={Wallet} />
+					</Switch>
+				</div>
+			</Router>
+		);
+	}
+
 };
 
 export default AppRouter;
