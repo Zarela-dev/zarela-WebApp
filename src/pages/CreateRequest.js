@@ -13,6 +13,7 @@ import * as yup from 'yup';
 import { Persist } from 'formik-persist';
 import { toast } from '../utils';
 import Dialog from '../components/Dialog';
+import { useWeb3React } from '@web3-react/core';
 
 const Wrapper = styled.div`
 	${maxWidthWrapper}
@@ -26,6 +27,7 @@ const CreateRequest = () => {
 	const history = useHistory();
 	const [isUploading, setUploading] = useState(false);
 	const [dialogMessage, setDialogMessage] = useState('');
+	const { account } = useWeb3React();
 
 	const clearSubmitDialog = () => {
 		setUploading(false);
@@ -72,7 +74,7 @@ const CreateRequest = () => {
 						formik.setFieldError('terms', validationErrors.terms);
 						formik.setSubmitting(false);
 					} else {
-						if (appState.accounts.length > 0) {
+						if (account) {
 							setDialog(false);
 							if (fileRef.current.value !== null && fileRef.current.value !== '') {
 								setUploading(true);
@@ -84,7 +86,7 @@ const CreateRequest = () => {
 								window.ethereum
 									.request({
 										method: 'eth_getEncryptionPublicKey',
-										params: [appState.accounts[0]], // you must have access to the specified account
+										params: [account], // you must have access to the specified account
 									})
 									.then((result) => {
 										setDialogMessage('uploading to ipfs');
@@ -105,7 +107,7 @@ const CreateRequest = () => {
 												setDialogMessage('awaiting confirmation');
 
 												appState.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, +tokenPay * Math.pow(10, 9), instanceCount, category, encryptionPublicKey)
-													.send({ from: appState.accounts[0], to: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS, gasPrice: +appState.gas.average * Math.pow(10, 8) }, (error, result) => {
+													.send({ from: account, to: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS, gasPrice: +appState.gas.average * Math.pow(10, 8) }, (error, result) => {
 														if (!error) {
 															clearSubmitDialog();
 															toast(result, 'success', true, result);
@@ -166,11 +168,11 @@ const CreateRequest = () => {
 	});
 
 	useEffect(() => {
-		if (appState.accounts.length > 0) {
+		if (account > 0) {
 			setDialog(false);
 			formik.setSubmitting(false);
 		}
-	}, [appState.accounts.length]);
+	}, [account]);
 
 	return (
 		<>
