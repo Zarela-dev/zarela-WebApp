@@ -6,6 +6,7 @@ import maxWidthWrapper from '../components/Elements/MaxWidth';
 import RequestListItem from '../components/RequestListItem';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { convertToBiobit, toast } from '../utils';
+import { useWeb3React } from '@web3-react/core';
 
 const PageWrapper = styled.div`
 	
@@ -59,11 +60,12 @@ const MyAccount = () => {
 	const { appState } = useContext(mainContext);
 	const [totalRevenueFromZarela, setTotalRevenueFromZarela] = useState(0);
 	const [totalRevenueFromRequester, setTotalRevenueFromRequester] = useState(0);
+	const { account } = useWeb3React();
 
 	useEffect(() => {
 		if (appState.contract !== null) {
-			if (appState.accounts.length !== 0) {
-				appState.contract.methods.User_Map(appState.accounts[0]).call((error, result) => {
+			if (account) {
+				appState.contract.methods.User_Map(account).call((error, result) => {
 					if (!error) {
 						const formatter = value => convertToBiobit(value);
 						setTotalRevenueFromRequester(formatter(result[1]));
@@ -75,7 +77,7 @@ const MyAccount = () => {
 				});
 
 				if (!Object.keys(requests).length) {
-					appState.contract.methods.Order_Details().call({ from: appState.accounts[0] }).then(result => {
+					appState.contract.methods.Order_Details().call({ from: account }).then(result => {
 						const myRequests = result[1];
 						myRequests.forEach(currentRequest => {
 							appState.contract.methods.ord_file(currentRequest).call().then(result => {
@@ -107,7 +109,7 @@ const MyAccount = () => {
 				}
 			}
 		}
-	}, [appState.contract, appState.accounts]);
+	}, [appState.contract, account]);
 
 	return (
 		<PageWrapper>
@@ -128,7 +130,7 @@ const MyAccount = () => {
 			</WalletTitlebar>
 			<ContentWrapper>
 				{
-					appState.accounts.length === 0 ?
+					!account ?
 						<ConnectDialog isOpen={true} /> :
 						Object.values(requests).length > 0 ? Object.values(requests).reverse().map(item => (
 							<RequestListItem
