@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import RequestCard from '../components/RequestCard';
-import { mainContext } from '../../state';
+import { mainContext } from '../state';
 import styled from 'styled-components';
-import { SearchBar } from '../../components/SearchBar';
-import TokenInfoSidebar from '../../components/Sidebar/TokenInfo';
-import TokenStatsSidebar from '../../components/Sidebar/TokenStats';
-import Pagination from '../../components/Pagination';
-import maxWidthWrapper from '../../components/Elements/MaxWidth';
-import { timeSince, convertToBiobit } from '../../utils';
-import homepageBg from '../../assets/home-bg.jpg';
-import HomepageCounters from '../../components/HomepageCounters';
+import { SearchBar } from '../components/SearchBar';
+import TokenInfoSidebar from '../components/Sidebar/TokenInfo';
+import TokenStatsSidebar from '../components/Sidebar/TokenStats';
+import Pagination from '../components/Pagination';
+import maxWidthWrapper from '../components/Elements/MaxWidth';
+import { timeSince, convertToBiobit } from '../utils';
+import homepageBg from '../assets/home-bg.jpg';
+import HomepageCounters from '../components/HomepageCounters';
 import { useWeb3React } from '@web3-react/core';
 
 const RequestsListWrapper = styled.div`
