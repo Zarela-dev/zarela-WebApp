@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import biobitBlack from '../../assets/icons/biobit-black.svg';
-import { web3Context } from '../../web3Provider';
+import { mainContext } from '../../state';
 import walletBlack from '../../assets/icons/wallet-black.svg';
 import etherBlack from '../../assets/icons/ether-black.svg';
 import infoIcon from '../../assets/icons/info-purple.svg';
@@ -19,9 +19,11 @@ import {
 	ConnectButton
 } from './Elements';
 import { Spacer } from '../Elements/Spacer';
+import { injectedConnector } from '../../connectors';
+import { useWeb3React } from '@web3-react/core'
 
-const Sidebar = () => {
-	const { Web3 } = useContext(web3Context);
+const Sidebar = ({ data, account }) => {
+	const {activate} = useWeb3React();
 
 	return (
 		<SidebarCard>
@@ -61,7 +63,7 @@ const Sidebar = () => {
 					Zarela Bank
 				</Subtitle>
 				<Value>
-					{`${Web3.bank} BBit`}
+					{`${data.bank} BBit`}
 				</Value>
 			</Row>
 			<Divider />
@@ -73,29 +75,29 @@ const Sidebar = () => {
 				<Spacer />
 				<Icon src={infoIcon} />
 			</Header>
-			<Row hiddenInfo={Web3.accounts.length === 0}>
+			<Row hiddenInfo={account === undefined}>
 				<Subtitle>
 					BBit Balance
 				</Subtitle>
 				<Value>
-					{`${!Number.isNaN(Web3.biobitBalance) ? convertToBiobit(Web3.biobitBalance) + '  BBit' : Web3.biobitBalance}`}
+					{`${!Number.isNaN(data.biobitBalance) ? convertToBiobit(data.biobitBalance) + '  BBit' : data.biobitBalance}`}
 				</Value>
 			</Row>
-			<Row hiddenInfo={Web3.accounts.length === 0}>
+			<Row hiddenInfo={account === undefined}>
 				<Subtitle>
 					Ether Balance
 				</Subtitle>
 				<Value>
-					{Web3.etherBalance}
+					{data.etherBalance}
 				</Value>
 			</Row>
 			{
-				Web3.accounts.length === 0 ?
+				account === undefined ?
 					<>
 						<NoConnectionMessage>
 							connect your wallet to see more data
 						</NoConnectionMessage>
-						<ConnectButton variant='primary' onClick={() => window.ethereum.enable()}>
+						<ConnectButton variant='primary' onClick={() => activate(injectedConnector)}>
 							connect
 						</ConnectButton>
 					</>

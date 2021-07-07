@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import RequestCard from '../components/RequestCard';
-import { mainContext } from '../state';
+import { mainContext } from '../../state';
 import styled from 'styled-components';
-import { SearchBar } from '../components/SearchBar';
-import TokenInfoSidebar from '../components/Sidebar/TokenInfo';
-import TokenStatsSidebar from '../components/Sidebar/TokenStats';
-import Pagination from '../components/Pagination';
-import maxWidthWrapper from '../components/Elements/MaxWidth';
-import { timeSince, convertToBiobit } from '../utils';
-import homepageBg from '../assets/home-bg.jpg';
-import HomepageCounters from '../components/HomepageCounters';
+import { SearchBar } from '../../components/SearchBar';
+import TokenInfoSidebar from '../../components/Sidebar/TokenInfo';
+import TokenStatsSidebar from '../../components/Sidebar/TokenStats';
+import Pagination from '../../components/Pagination';
+import maxWidthWrapper from '../../components/Elements/MaxWidth';
+import { timeSince, convertToBiobit } from '../../utils';
+import homepageBg from '../../assets/home-bg.jpg';
+import HomepageCounters from '../../components/HomepageCounters';
 import { useWeb3React } from '@web3-react/core';
 
 const RequestsListWrapper = styled.div`
@@ -74,6 +74,7 @@ const RequestsListContentWrapper = styled.section`
 	padding-right: ${props => props.theme.spacing(4)};
 `;
 
+
 const RequestsList = () => {
 	const { appState } = useContext(mainContext);
 	const web3React = useWeb3React();
@@ -96,9 +97,9 @@ const RequestsList = () => {
 				}
 			});
 
-
 			for (let i = 0; i < requestsCount; i++) {
 				appState.contract.methods.ord_file(i).call((error, result) => {
+
 					if (!error) {
 						const requestTemplate = {
 							requestID: result[0],
@@ -161,6 +162,10 @@ const RequestsList = () => {
 		<RequestsListWrapper>
 			{/* <SearchBar></SearchBar> */}
 			<Background />
+
+
+
+
 
 			<HomepageCounters
 				zarelaDailyGift={appState.zarelaDailyGift}

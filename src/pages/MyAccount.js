@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { web3Context } from '../web3Provider';
+import { mainContext } from '../state';
 import TitleBar from '../components/TitleBar';
 import styled from 'styled-components';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
@@ -55,15 +55,15 @@ const RewardValue = styled.div`
 `;
 
 const MyAccount = () => {
-	const { Web3 } = useContext(web3Context);
 	const [requests, setRequests] = useState({});
+	const { appState } = useContext(mainContext);
 	const [totalRevenueFromZarela, setTotalRevenueFromZarela] = useState(0);
 	const [totalRevenueFromRequester, setTotalRevenueFromRequester] = useState(0);
 
 	useEffect(() => {
-		if (Web3.contract !== null) {
-			if (Web3.accounts.length !== 0) {
-				Web3.contract.methods.User_Map(Web3.accounts[0]).call((error, result) => {
+		if (appState.contract !== null) {
+			if (appState.accounts.length !== 0) {
+				appState.contract.methods.User_Map(appState.accounts[0]).call((error, result) => {
 					if (!error) {
 						const formatter = value => convertToBiobit(value);
 						setTotalRevenueFromRequester(formatter(result[1]));
@@ -73,12 +73,12 @@ const MyAccount = () => {
 						toast(error.message, 'error');
 					}
 				});
-				if (!Object.keys(requests).length) {
-					Web3.contract.methods.Order_Details().call({ from: Web3.accounts[0] }).then(result => {
-						const myRequests = result[1];
 
+				if (!Object.keys(requests).length) {
+					appState.contract.methods.Order_Details().call({ from: appState.accounts[0] }).then(result => {
+						const myRequests = result[1];
 						myRequests.forEach(currentRequest => {
-							Web3.contract.methods.ord_file(currentRequest).call().then(result => {
+							appState.contract.methods.ord_file(currentRequest).call().then(result => {
 								const requestTemplate = {
 									requestID: result[0],
 									title: result[1],
@@ -107,7 +107,7 @@ const MyAccount = () => {
 				}
 			}
 		}
-	}, [Web3.contract, Web3.accounts]);
+	}, [appState.contract, appState.accounts]);
 
 	return (
 		<PageWrapper>
@@ -128,7 +128,7 @@ const MyAccount = () => {
 			</WalletTitlebar>
 			<ContentWrapper>
 				{
-					Web3.accounts.length === 0 ?
+					appState.accounts.length === 0 ?
 						<ConnectDialog isOpen={true} /> :
 						Object.values(requests).length > 0 ? Object.values(requests).reverse().map(item => (
 							<RequestListItem

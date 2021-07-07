@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Buffer } from 'buffer';
-import { web3Context } from '../web3Provider';
+import { mainContext } from '../state';
 import { useHistory } from 'react-router-dom';
 import { create } from 'ipfs-http-client';
 import styled from 'styled-components';
@@ -21,7 +21,7 @@ const Wrapper = styled.div`
 // #todo sync form data with localStorage
 const CreateRequest = () => {
 	const fileRef = useRef(null);
-	const { Web3 } = useContext(web3Context);
+	const { appState } = useContext(mainContext);
 	const [showDialog, setDialog] = useState(false);
 	const history = useHistory();
 	const [isUploading, setUploading] = useState(false);
@@ -64,7 +64,7 @@ const CreateRequest = () => {
 		}),
 		onSubmit: (values => {
 			if (formik.isValid) {
-				if (+values.tokenPay * +values.instanceCount > +Web3.biobitBalance / Math.pow(10, 9)) {
+				if (+values.tokenPay * +values.instanceCount > +appState.biobitBalance / Math.pow(10, 9)) {
 					formik.setFieldError('tokenPay', validationErrors.notEnoughTokens);
 					formik.setSubmitting(false);
 				} else {
@@ -72,7 +72,7 @@ const CreateRequest = () => {
 						formik.setFieldError('terms', validationErrors.terms);
 						formik.setSubmitting(false);
 					} else {
-						if (Web3.accounts.length > 0) {
+						if (appState.accounts.length > 0) {
 							setDialog(false);
 							if (fileRef.current.value !== null && fileRef.current.value !== '') {
 								setUploading(true);
@@ -84,7 +84,7 @@ const CreateRequest = () => {
 								window.ethereum
 									.request({
 										method: 'eth_getEncryptionPublicKey',
-										params: [Web3.accounts[0]], // you must have access to the specified account
+										params: [appState.accounts[0]], // you must have access to the specified account
 									})
 									.then((result) => {
 										setDialogMessage('uploading to ipfs');
@@ -104,8 +104,8 @@ const CreateRequest = () => {
 
 												setDialogMessage('awaiting confirmation');
 
-												Web3.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, +tokenPay * Math.pow(10, 9), instanceCount, category, encryptionPublicKey)
-													.send({ from: Web3.accounts[0], to: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
+												appState.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, +tokenPay * Math.pow(10, 9), instanceCount, category, encryptionPublicKey)
+													.send({ from: appState.accounts[0], to: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS, gasPrice: +appState.gas.average * Math.pow(10, 8) }, (error, result) => {
 														if (!error) {
 															clearSubmitDialog();
 															toast(result, 'success', true, result);
@@ -117,7 +117,7 @@ const CreateRequest = () => {
 													});
 
 
-												Web3.contract.events.OrderRegistered({})
+												appState.contract.events.OrderRegistered({})
 													.on('data', (event) => {
 														clearSubmitDialog();
 
@@ -166,11 +166,11 @@ const CreateRequest = () => {
 	});
 
 	useEffect(() => {
-		if (Web3.accounts.length > 0) {
+		if (appState.accounts.length > 0) {
 			setDialog(false);
 			formik.setSubmitting(false);
 		}
-	}, [Web3.accounts.length]);
+	}, [appState.accounts.length]);
 
 	return (
 		<>

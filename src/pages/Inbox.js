@@ -2,8 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import TitleBar from '../components/TitleBar';
 import styled from 'styled-components';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
-import { web3Context } from '../web3Provider';
 import RequestListItem from '../components/RequestListItem';
+import { mainContext } from '../state';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { convertToBiobit, toast } from '../utils';
 import NoRequestsFound from '../components/NoRequestsFound';
@@ -17,12 +17,12 @@ const ContentWrapper = styled.div`
 `;
 
 const Inbox = () => {
-	const { Web3 } = useContext(web3Context);
+	const { appState } = useContext(mainContext);
 	const PAGE_SIZE = 3;
 	const [requests, setRequests] = useState({});
 
 	const handleConfirm = (requestID, addresses) => {
-		Web3.contract.methods.ConfirmContributer(requestID, addresses).send({ from: Web3.accounts[0] }, (error, result) => {
+		appState.contract.methods.ConfirmContributer(requestID, addresses).send({ from: appState.accounts[0] }, (error, result) => {
 			if (!error) {
 				toast(result, 'success', true, result);
 			}
@@ -30,7 +30,7 @@ const Inbox = () => {
 				toast(error.message, 'error');
 			}
 		});
-		Web3.contract.events.Transfer({})
+		appState.contract.events.Transfer({})
 			.on('data', (event) => {
 				toast(
 					`tokens were successfully sent to ${event.returnValues[1]}`,
@@ -49,13 +49,13 @@ const Inbox = () => {
 	};
 	// pagination hook
 	useEffect(() => {
-		if (Web3.contract !== null) {
-			if (Web3.accounts.length !== 0) {
-				Web3.contract.methods.Order_Details().call({ from: Web3.accounts[0] }).then(result => {
+		if (appState.contract !== null) {
+			if (appState.accounts.length !== 0) {
+				appState.contract.methods.Order_Details().call({ from: appState.accounts[0] }).then(result => {
 					const myRequests = result[0];
 
 					myRequests.forEach(currentRequest => {
-						Web3.contract.methods.ord_file(currentRequest).call().then(result => {
+						appState.contract.methods.ord_file(currentRequest).call().then(result => {
 							const requestTemplate = {
 								requestID: result[0],
 								title: result[1],
@@ -83,7 +83,7 @@ const Inbox = () => {
 				});
 			}
 		}
-	}, [Web3.contract, Web3.accounts]);
+	}, [appState.contract, appState.accounts]);
 
 	return (
 		<PageWrapper>
@@ -92,7 +92,7 @@ const Inbox = () => {
 			</TitleBar>
 			<ContentWrapper>
 				{
-					Web3.accounts.length === 0 ?
+					appState.accounts.length === 0 ?
 						<ConnectDialog isOpen={true} /> :
 						Object.values(requests).length > 0 ? Object.values(requests).reverse().map(item => (
 							<RequestListItem

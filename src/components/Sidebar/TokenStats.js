@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-// import { web3Context } from '../../web3Provider';
+// import { mainContext } from '../../web3Provider';
 import contributorIcon from '../../assets/icons/contributor.svg';
 // import { convertToBiobit } from '../../utils';
 import {
