@@ -150,7 +150,7 @@ const AppProvider = ({ children }) => {
 			appState.contract.methods.bank().call((error, result) => {
 				if (!error) {
 					dispatch({
-						type: 'SET_BANK',
+						type: actionTypes.SET_ZARELA_BANK,
 						payload: convertToBiobit(result)
 					});
 				}
@@ -163,12 +163,13 @@ const AppProvider = ({ children }) => {
 
 	// manually activate metamask in case it's connected
 	useEffect(() => {
-		// it's connected
 		if (window.ethereum.selectedAddress !== null && active === false) {
 			activate(injectedConnector);
 		}
-	}, [window.ethereum.selectedAddress]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [active]);
 
+	console.log(account);
 	return (
 		<mainContext.Provider
 			value={{

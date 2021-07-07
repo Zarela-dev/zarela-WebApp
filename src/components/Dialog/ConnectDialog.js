@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import Dialog from './index';
 import Button, { LinkButton } from '../Elements/Button';
 import metamaskIcon from '../../assets/icons/metamask.png';
+import { injectedConnector} from '../../connectors';
+import { useWeb3React } from '@web3-react/core';
 
 const Text = styled.p`
 	font-weight: normal;
@@ -48,6 +50,8 @@ const ConnectButton = styled(Button)`
 
 
 const ConnectDialog = (props) => {
+	const { activate } = useWeb3React();
+
 	return (
 		<Dialog
 			{...props}
@@ -65,7 +69,7 @@ const ConnectDialog = (props) => {
 						</DownloadButton>
 					</DownloadBox>
 					<Divider />
-					<ConnectButton variant='primary' onClick={() => window.ethereum && window.ethereum.enable()}>
+					<ConnectButton variant='primary' onClick={() => activate(injectedConnector)}>
 						Connect
 					</ConnectButton>
 				</>

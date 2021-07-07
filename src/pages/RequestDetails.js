@@ -141,10 +141,6 @@ const RequestDetailsPage = () => {
 		}
 	}, [id, appState.contract]);
 
-	useEffect(() => {
-		console.log('gas', appState.gas.average);
-	}, [Object.keys(appState.gas).length]);
-
 	return (
 		<div>
 			<ConnectDialog isOpen={!account && showDialog} />
