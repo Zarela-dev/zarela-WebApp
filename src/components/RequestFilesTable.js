@@ -4,7 +4,7 @@ import { SmallCheckbox } from './Elements/Checkbox';
 import downloadIcon from '../assets/icons/download.svg';
 import { Spacer } from './Elements/Spacer';
 import { Scrollbar } from './Elements/Scrollbar';
-import { timeSince, CopyableText } from './../utils';
+import { timeSince, CopyableText } from '../utils';
 import publicKeyIcon from '../assets/icons/public-key.svg';
 
 const Table = styled.div`
@@ -130,7 +130,7 @@ const Timestamp = styled.div`
   
 `;
 
-const OrderFilesTable = ({
+const RequestFilesTable = ({
 	data,
 	selected,
 	onChange,
@@ -160,7 +160,7 @@ const OrderFilesTable = ({
 				</CellWrapper>
 				<CellWrapper>
 					<Cell>
-						Contributor public key
+						Contributor's public key
 					</Cell>
 				</CellWrapper>
 				<CellWrapper>
@@ -239,4 +239,4 @@ const OrderFilesTable = ({
 	);
 };
 
-export default OrderFilesTable;
+export default RequestFilesTable;

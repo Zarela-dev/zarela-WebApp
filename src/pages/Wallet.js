@@ -92,7 +92,7 @@ const Wallet = () => {
 								proper values														contribution
 								BBit transfers														ETH transfer
 																									confirmation
-																									create order
+																									create request
 
 							results will include all transactions from above lists. but the values are overridden by tokentx.
 							also the inputs are overridden by txlist.

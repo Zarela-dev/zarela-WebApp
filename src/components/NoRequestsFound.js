@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components';
-import noOrdersImage from '../assets/no-orders.png';
+import noRequestsFoundImage from '../assets/no-requests-found.png';
 
 const Container = styled.div`
 	display: flex;
@@ -24,15 +24,15 @@ const Message = styled.div`
 	word-break: break-word;
 `;
 
-const NoOrders = () => {
+const NoRequestsFound = () => {
 	return (
 		<Container>
-			<Image src={noOrdersImage} />
+			<Image src={noRequestsFoundImage} />
 			<Message>
-				You have not submited any new requests!
+				You have not submitted any new requests!
 			</Message>
 		</Container>
 	)
 }
 
-export default NoOrders
+export default NoRequestsFound

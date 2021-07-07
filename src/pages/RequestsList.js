@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { web3Context } from '../web3Provider';
-import OrderCard from '../components/OrderCard';
+import RequestCard from '../components/RequestCard';
 import styled from 'styled-components';
 import { SearchBar } from '../components/SearchBar';
 import TokenInfoSidebar from '../components/Sidebar/TokenInfo';
@@ -11,7 +11,7 @@ import { timeSince, convertToBiobit } from '../utils';
 import homepageBg from '../assets/home-bg.jpg';
 import HomepageCounters from '../components/HomepageCounters';
 
-const OrderListWrapper = styled.div`
+const RequestsListWrapper = styled.div`
 	position: relative;
 	width: 100%;
 `;
@@ -52,7 +52,7 @@ const Background = styled.div`
 	}
 `;
 
-const OrderListLayout = styled.section`
+const RequestsListLayout = styled.section`
 	display: flex;
 	flex-direction: row-reverse;
 	flex-wrap: nowrap;
@@ -61,24 +61,24 @@ const OrderListLayout = styled.section`
 	${maxWidthWrapper};
 `;
 
-const OrderListSidebarWrapper = styled.aside`
+const RequestListSidebarWrapper = styled.aside`
 	display: flex;
 	flex-wrap: wrap;
 	flex-direction: column;
 	flex: 0 0 310px;
 `;
 
-const OrderListContentWrapper = styled.section`
+const RequestsListContentWrapper = styled.section`
 	flex: 1 0;
 	padding-right: ${props => props.theme.spacing(4)};
 `;
 
 
-const OrderList = () => {
+const RequestsList = () => {
 	const { Web3 } = useContext(web3Context);
 	const PAGE_SIZE = 3;
-	const [orders, setOrders] = useState({});
-	const [ordersCount, setOrdersCount] = useState(0);
+	const [requests, setRequests] = useState({});
+	const [requestsCount, setRequestsCount] = useState(0);
 	const [dailyContributors, setDailyContributors] = useState(0);
 	const [BiobitBasedOnEth, setBiobitBasedOnEth] = useState(0);
 	const [ZarelaReward, setZarelaReward] = useState(0);
@@ -88,17 +88,17 @@ const OrderList = () => {
 		if (Web3.contract !== null) {
 			Web3.contract.methods.OrderSize().call((error, result) => {
 				if (!error) {
-					setOrdersCount(result);
+					setRequestsCount(result);
 				} else {
 					console.error(error.message);
 				}
 			});
 
-			for (let i = 0; i < ordersCount; i++) {
+			for (let i = 0; i < requestsCount; i++) {
 				Web3.contract.methods.ord_file(i).call((error, result) => {
 					if (!error) {
-						const orderTemplate = {
-							orderId: result[0],
+						const requestTemplate = {
+							requestID: result[0],
 							title: result[1],
 							description: result[6],
 							requesterAddress: result[2],
@@ -110,9 +110,9 @@ const OrderList = () => {
 							timestamp: result[10],
 							totalContributedCount: result[9]
 						};
-						setOrders(orders => ({
-							...orders,
-							[orderTemplate.orderId]: orderTemplate
+						setRequests(requests => ({
+							...requests,
+							[requestTemplate.requestID]: requestTemplate
 						}));
 					} else {
 						console.error(error.message);
@@ -120,7 +120,7 @@ const OrderList = () => {
 				});
 			}
 		}
-	}, [Web3.contract, ordersCount]);
+	}, [Web3.contract, requestsCount]);
 
 	useEffect(() => {
 		if (Web3.contract) {
@@ -154,26 +154,26 @@ const OrderList = () => {
 	}, [Web3.contract]);
 
 	return (
-		<OrderListWrapper>
+		<RequestsListWrapper>
 			{/* <SearchBar></SearchBar> */}
 			<Background />
 			<HomepageCounters zarelaDailyGift={Web3.zarelaDailyGift} zarelaInitDate={Web3.zarelaInitDate} todayGift={Web3.bank} />
-			<OrderListLayout>
-				<OrderListSidebarWrapper>
+			<RequestsListLayout>
+				<RequestListSidebarWrapper>
 					<TokenStatsSidebar
 						ZarelaRewardPool={ZarelaReward}
 						dailyContributors={dailyContributors}
 						BiobitBasedOnEth={BiobitBasedOnEth}
 					/>
 					<TokenInfoSidebar />
-				</OrderListSidebarWrapper>
-				<OrderListContentWrapper>
+				</RequestListSidebarWrapper>
+				<RequestsListContentWrapper>
 					{
-						Object.values(orders).reverse().map(item => {
+						Object.values(requests).reverse().map(item => {
 							return (
-								<OrderCard
-									key={item.orderId}
-									orderId={item.orderId}
+								<RequestCard
+									key={item.requestID}
+									requestID={item.requestID}
 									title={item.title}
 									description={item.description}
 									tokenPay={item.tokenPay}
@@ -185,11 +185,11 @@ const OrderList = () => {
 							);
 						})
 					}
-				</OrderListContentWrapper>
-			</OrderListLayout>
+				</RequestsListContentWrapper>
+			</RequestsListLayout>
 			<Pagination />
-		</OrderListWrapper>
+		</RequestsListWrapper>
 	);
 };
 
-export default OrderList;
+export default RequestsList;

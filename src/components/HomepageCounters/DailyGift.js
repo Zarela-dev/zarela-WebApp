@@ -125,7 +125,7 @@ const DailyGift = ({giftValue, countdown}) => {
 		<Wrapper>
 			<Header>
 				<Title>
-					Today Gift
+					Today's Gift
 				</Title>
 				<Subtitle>
 					{giftValue + ' BBit'}

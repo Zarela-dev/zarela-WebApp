@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { create } from 'ipfs-http-client';
 import styled from 'styled-components';
 import TitleBar from '../components/TitleBar';
-import CreateOrderForm from '../components/CreateOrderForm';
+import CreateRequestForm from '../components/CreateRequestForm';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { useFormik } from 'formik';
@@ -19,7 +19,7 @@ const Wrapper = styled.div`
 `;
 
 // #todo sync form data with localStorage
-const CreateOrder = () => {
+const CreateRequest = () => {
 	const fileRef = useRef(null);
 	const { Web3 } = useContext(web3Context);
 	const [showDialog, setDialog] = useState(false);
@@ -36,9 +36,9 @@ const CreateOrder = () => {
 			fileRef.current.value = null;
 	};
 	const validationErrors = {
-		required: name => `${name} is required to create your order.`,
-		notEnoughTokens: 'you do not have enough tokens to create this order.',
-		terms: 'you must agree to the term before submitting your order',
+		required: name => `${name} is required to create your request.`,
+		notEnoughTokens: 'you do not have enough tokens to create this request.',
+		terms: 'you must agree to the term before submitting your request',
 		number: name => `${name} must be a number`,
 		string: name => `${name} must be a string`,
 	};
@@ -76,7 +76,7 @@ const CreateOrder = () => {
 							setDialog(false);
 							if (fileRef.current.value !== null && fileRef.current.value !== '') {
 								setUploading(true);
-								setDialogMessage('in order to secure the file, so only you can access it we require your public key to encrypt the file');
+								setDialogMessage('in request to secure the file, so only you can access it we require your public key to encrypt the file');
 
 								const { title, desc, tokenPay, instanceCount, category } = values;
 								const reader = new FileReader();
@@ -130,7 +130,7 @@ const CreateOrder = () => {
 																toastId: event.id
 															}
 														);
-														history.push(`/order/${event.returnValues[1]}`);
+														history.push(`/request/${event.returnValues[1]}`);
 
 													})
 													.on('error', (error, receipt) => {
@@ -195,12 +195,12 @@ const CreateOrder = () => {
 							formik.setSubmitting(false);
 							setDialog(false);
 						}} />
-						<CreateOrderForm
+						<CreateRequestForm
 							formik={formik}
 							ref={fileRef}
 						>
 							<Persist />
-						</CreateOrderForm>
+						</CreateRequestForm>
 					</>
 				}
 			</Wrapper>
@@ -208,4 +208,4 @@ const CreateOrder = () => {
 	);
 };
 
-export default CreateOrder;
+export default CreateRequest;
