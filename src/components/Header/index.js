@@ -78,10 +78,10 @@ export default function Header() {
 					Home
 				</NavLink>
 			</NavItem>
-			<NavItem to='/my-orders'>
+			<NavItem to='/inbox'>
 				<NavIcon src={inbox} />
 				<NavLink>
-					My Orders
+					Inbox
 				</NavLink>
 			</NavItem>
 			<NavItem to='/account'>
@@ -97,7 +97,7 @@ export default function Header() {
 				</NavLink>
 			</NavItem>
 			<Spacer />
-			<SubmitRequestButton to='/createOrder'>
+			<SubmitRequestButton to='/request/create'>
 				New Request
 			</SubmitRequestButton>
 			{/* <NavItem to='/account'>

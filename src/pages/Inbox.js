@@ -3,10 +3,10 @@ import TitleBar from '../components/TitleBar';
 import styled from 'styled-components';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import { web3Context } from '../web3Provider';
-import OrderListItem from '../components/OrderListItem';
+import RequestListItem from '../components/RequestListItem';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { convertToBiobit, toast } from '../utils';
-import NoOrders from '../components/NoOrders';
+import NoRequestsFound from '../components/NoRequestsFound';
 const PageWrapper = styled.div`
 	
 `;
@@ -16,13 +16,13 @@ const ContentWrapper = styled.div`
 	${maxWidthWrapper};
 `;
 
-const MyOrders = () => {
+const Inbox = () => {
 	const { Web3 } = useContext(web3Context);
 	const PAGE_SIZE = 3;
-	const [orders, setOrders] = useState({});
+	const [requests, setRequests] = useState({});
 
-	const handleConfirm = (orderId, addresses) => {
-		Web3.contract.methods.ConfirmContributer(orderId, addresses).send({ from: Web3.accounts[0] }, (error, result) => {
+	const handleConfirm = (requestID, addresses) => {
+		Web3.contract.methods.ConfirmContributer(requestID, addresses).send({ from: Web3.accounts[0] }, (error, result) => {
 			if (!error) {
 				toast(result, 'success', true, result);
 			}
@@ -52,12 +52,12 @@ const MyOrders = () => {
 		if (Web3.contract !== null) {
 			if (Web3.accounts.length !== 0) {
 				Web3.contract.methods.Order_Details().call({ from: Web3.accounts[0] }).then(result => {
-					const myOrders = result[0];
+					const myRequests = result[0];
 
-					myOrders.forEach(currentOrder => {
-						Web3.contract.methods.ord_file(currentOrder).call().then(result => {
-							const orderTemplate = {
-								orderId: result[0],
+					myRequests.forEach(currentRequest => {
+						Web3.contract.methods.ord_file(currentRequest).call().then(result => {
+							const requestTemplate = {
+								requestID: result[0],
 								title: result[1],
 								description: result[6],
 								requesterAddress: result[2],
@@ -69,9 +69,9 @@ const MyOrders = () => {
 								timestamp: result[10],
 								totalContributedCount: result[9]
 							};
-							setOrders(orders => ({
-								...orders,
-								[orderTemplate.orderId]: orderTemplate
+							setRequests(requests => ({
+								...requests,
+								[requestTemplate.requestID]: requestTemplate
 							}));
 						})
 							.catch(error => {
@@ -88,28 +88,28 @@ const MyOrders = () => {
 	return (
 		<PageWrapper>
 			<TitleBar>
-				My Orders
+				My Requests
 			</TitleBar>
 			<ContentWrapper>
 				{
 					Web3.accounts.length === 0 ?
 						<ConnectDialog isOpen={true} /> :
-						Object.values(orders).length > 0 ? Object.values(orders).reverse().map(item => (
-							<OrderListItem
+						Object.values(requests).length > 0 ? Object.values(requests).reverse().map(item => (
+							<RequestListItem
 								showContributions
-								key={item.orderId}
-								orderId={item.orderId}
+								key={item.requestID}
+								requestID={item.requestID}
 								title={item.title}
 								tokenPay={convertToBiobit(item.tokenPay)}
 								total={item.totalContributedCount}
 								contributors={`${item.totalContributed}/${item.totalContributors}`}
 								handleConfirm={handleConfirm}
 							/>
-						)) : <NoOrders />
+						)) : <NoRequestsFound />
 				}
 			</ContentWrapper>
 		</PageWrapper>
 	);
 };
 
-export default MyOrders;
+export default Inbox;

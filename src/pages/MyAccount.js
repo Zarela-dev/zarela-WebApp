@@ -3,7 +3,7 @@ import { web3Context } from '../web3Provider';
 import TitleBar from '../components/TitleBar';
 import styled from 'styled-components';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
-import OrderListItem from '../components/OrderListItem';
+import RequestListItem from '../components/RequestListItem';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { convertToBiobit, toast } from '../utils';
 
@@ -56,7 +56,7 @@ const RewardValue = styled.div`
 
 const MyAccount = () => {
 	const { Web3 } = useContext(web3Context);
-	const [orders, setOrders] = useState({});
+	const [requests, setRequests] = useState({});
 	const [totalRevenueFromZarela, setTotalRevenueFromZarela] = useState(0);
 	const [totalRevenueFromRequester, setTotalRevenueFromRequester] = useState(0);
 
@@ -73,14 +73,14 @@ const MyAccount = () => {
 						toast(error.message, 'error');
 					}
 				});
-				if (!Object.keys(orders).length) {
+				if (!Object.keys(requests).length) {
 					Web3.contract.methods.Order_Details().call({ from: Web3.accounts[0] }).then(result => {
-						const myOrders = result[1];
+						const myRequests = result[1];
 
-						myOrders.forEach(currentOrder => {
-							Web3.contract.methods.ord_file(currentOrder).call().then(result => {
-								const orderTemplate = {
-									orderId: result[0],
+						myRequests.forEach(currentRequest => {
+							Web3.contract.methods.ord_file(currentRequest).call().then(result => {
+								const requestTemplate = {
+									requestID: result[0],
 									title: result[1],
 									description: result[6],
 									requesterAddress: result[2],
@@ -92,9 +92,9 @@ const MyAccount = () => {
 									timestamp: result[10],
 									totalContributedCount: result[9]
 								};
-								setOrders(orders => ({
-									...orders,
-									[orderTemplate.orderId]: orderTemplate
+								setRequests(requests => ({
+									...requests,
+									[requestTemplate.requestID]: requestTemplate
 								}));
 							})
 								.catch(error => {
@@ -130,16 +130,16 @@ const MyAccount = () => {
 				{
 					Web3.accounts.length === 0 ?
 						<ConnectDialog isOpen={true} /> :
-						Object.values(orders).length > 0 ? Object.values(orders).reverse().map(item => (
-							<OrderListItem
-								key={item.orderId}
-								orderId={item.orderId}
+						Object.values(requests).length > 0 ? Object.values(requests).reverse().map(item => (
+							<RequestListItem
+								key={item.requestID}
+								requestID={item.requestID}
 								title={item.title}
 								tokenPay={item.tokenPay}
 								total={item.totalContributedCount}
 								contributors={`${item.totalContributed}/${item.totalContributors}`}
 							/>
-						)) : 'You haven\'t contributed to any orders yet.'
+						)) : 'You haven\'t contributed to any requests yet.'
 				}
 			</ContentWrapper>
 		</PageWrapper>

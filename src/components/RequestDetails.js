@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import DownloadFileCard from './DownloadFileCard';
 import UploadFileCard from './uploadFileCard';
 import {
-	OrderNumber,
+	RequestNumber,
 	HeaderLayout,
 	Footer,
 	Spacer,
@@ -22,7 +22,7 @@ import {
 	ValueLabel,
 	BiobitToDollarValue,
 	BadgeLabel,
-} from './Elements/OrderCard';
+} from './Elements/RequestCard';
 import maxWidthWrapper from './Elements/MaxWidth';
 import biobitIcon from '../assets/icons/biobit-black.svg';
 import contributorIcon from '../assets/icons/user-blue.svg';
@@ -136,8 +136,8 @@ const CustomProgressTrackerWrapper = styled(ProgressTrackerWrapper)`
 	margin-bottom: ${props => props.theme.spacing(0)};
 `;
 
-const OrderDetails = React.forwardRef(({ setError, error, timestamp, order, submitSignal }, ref) => {
-	const contributors = `${order.totalContributed}/${order.totalContributors}`;
+const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, submitSignal }, ref) => {
+	const contributors = `${request.totalContributed}/${request.totalContributors}`;
 	const [signalFile, setSignalFile] = useState(null);
 
 	return (
@@ -145,11 +145,11 @@ const OrderDetails = React.forwardRef(({ setError, error, timestamp, order, subm
 			<HeaderContainer>
 				<HeaderInner>
 					<HeaderLayout>
-						<OrderNumber>
-							{order.orderId}
-						</OrderNumber>
+						<RequestNumber>
+							{request.requestID}
+						</RequestNumber>
 						<Title>
-							{order.title}
+							{request.title}
 						</Title>
 						<Spacer />
 						<Bookmark src={bookmarkIcon} />
@@ -168,7 +168,7 @@ const OrderDetails = React.forwardRef(({ setError, error, timestamp, order, subm
 							<BadgeRow>
 								<ContributorsIcon src={contributorIcon} />
 								<BadgeLabel>
-									{order.totalContributedCount}
+									{request.totalContributedCount}
 								</BadgeLabel>
 							</BadgeRow>
 						</CustomContributeBadge>
@@ -184,19 +184,19 @@ const OrderDetails = React.forwardRef(({ setError, error, timestamp, order, subm
 						<CustomBadgeRow>
 							<TokenIcon src={biobitIcon} />
 							<TokenValue>
-								{order.tokenPay}
+								{request.tokenPay}
 							</TokenValue>
 							<ValueLabel>
 								BBit
 							</ValueLabel>
 							<BiobitToDollarValue noMargin>
-								{`~ $ ${order.tokenPay}`}
+								{`~ $ ${request.tokenPay}`}
 							</BiobitToDollarValue>
 						</CustomBadgeRow>
 					</CustomFooter>
 					<CustomProgressTrackerWrapper>
 						<ProgressTrackerTrack>
-							<ProgressTrackerProcess progress={+order.totalContributed / +order.totalContributors * 100} />
+							<ProgressTrackerProcess progress={+request.totalContributed / +request.totalContributors * 100} />
 						</ProgressTrackerTrack>
 					</CustomProgressTrackerWrapper>
 				</HeaderInner>
@@ -204,13 +204,13 @@ const OrderDetails = React.forwardRef(({ setError, error, timestamp, order, subm
 			<DescriptionContainer>
 				<PublicKeyBadge>
 					<PublicKeyIcon src={publicKeyIcon} />
-					<CopyableText textToCopy={order.requesterAddress}>
+					<CopyableText textToCopy={request.requesterAddress}>
 						<PublicKeyTextContainer>
 							<PublicKey variant='body'>
 								Requester public key
 							</PublicKey>
 							<PublicKey variant='body2' weight='semiBold'>
-								{order.requesterAddress}
+								{request.requesterAddress}
 							</PublicKey>
 						</PublicKeyTextContainer>
 					</CopyableText>
@@ -219,7 +219,7 @@ const OrderDetails = React.forwardRef(({ setError, error, timestamp, order, subm
 					Description:
 				</DescriptionTitle>
 				<Description>
-					{order.description}
+					{request.description}
 				</Description>
 			</DescriptionContainer>
 			<FilesWrapper>
@@ -228,13 +228,13 @@ const OrderDetails = React.forwardRef(({ setError, error, timestamp, order, subm
 					buttonLabel={'Download'}
 					label={'just label'}
 					helperText={'This file contains Zpaper file and survey test files.'}
-					fileLink={process.env.REACT_APP_IPFS_LINK + order.whitePaper}
+					fileLink={process.env.REACT_APP_IPFS_LINK + request.whitePaper}
 				/>
 				<FileCardSpacer />
 				<UploadFileCard
 					showSelected
 					buttonLabel='Select Files'
-					label={'upload your files here'}
+					label={'select your files here'}
 					ref={ref}
 					name={'whitepaper'}
 					value={signalFile}
@@ -250,4 +250,4 @@ const OrderDetails = React.forwardRef(({ setError, error, timestamp, order, subm
 	);
 });
 
-export default OrderDetails;
+export default RequestDetails;

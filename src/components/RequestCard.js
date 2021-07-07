@@ -1,8 +1,8 @@
 import React from 'react';
-import OrderCardWrapper, {
+import RequestCardWrapper, {
 	Footer,
 	HeaderLayout,
-	OrderNumber,
+	RequestNumber,
 	Typography,
 	Title,
 	Spacer,
@@ -24,20 +24,20 @@ import OrderCardWrapper, {
 	ValueLabel,
 	BadgeLabel,
 	Hint
-} from './Elements/OrderCard';
+} from './Elements/RequestCard';
 import bookmarkIcon from '../assets/icons/bookmark-purple.svg';
 import biobitIcon from '../assets/icons/biobit-black.svg';
 import contributorIcon from '../assets/icons/user-blue.svg';
 import documentsIcon from '../assets/icons/document-blue.svg';
 import dollarIcon from '../assets/icons/dollar-blue.svg';
 
-const OrderCard = (props) => {
+const RequestCard = (props) => {
 	return (
-		<OrderCardWrapper>
+		<RequestCardWrapper>
 			<HeaderLayout>
-				<OrderNumber>
-					{props.orderId}
-				</OrderNumber>
+				<RequestNumber>
+					{props.requestID}
+				</RequestNumber>
 				<Title>
 					{props.title.length < 115 ? props.title : props.title.substr(0, 115) + '...'}
 				</Title>
@@ -103,12 +103,12 @@ const OrderCard = (props) => {
 					</BadgeRow>
 				</ContributorBadge>
 				<Spacer />
-				<JoinButton variant='secondary' to={`/order/${props.orderId}`}>
+				<JoinButton variant='secondary' to={`/request/${props.requestID}`}>
 					Join
 				</JoinButton>
 			</Footer>
-		</OrderCardWrapper>
+		</RequestCardWrapper>
 	);
 };
 
-export default OrderCard;
+export default RequestCard;

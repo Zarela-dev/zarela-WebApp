@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Typography } from '../Typography';
 import { GenericLinkButton } from '../Button';
 
-export const OrderCardWrapper = styled.div`
+export const RequestCardWrapper = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	/* background: linear-gradient(220.57deg, rgba(107, 230, 238, 0.15) -15.95%, rgba(64, 76, 189, 0.15) 107.46%); */
@@ -23,7 +23,7 @@ export const HeaderLayout = styled.div`
 	width: 100%;
 `;
 
-export const OrderNumber = styled.div`
+export const RequestNumber = styled.div`
 	flex: 0 0 100px;
 	height: 50px;
 	border-radius: 10px 10px 0px 10px;
@@ -192,7 +192,7 @@ export const JoinButton = styled(GenericLinkButton)`
 	}
 `;
 
-export default OrderCardWrapper;
+export default RequestCardWrapper;
 export {
 	// Avatar,
 	// Bookmark,

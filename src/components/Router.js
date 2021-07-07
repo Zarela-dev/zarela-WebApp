@@ -1,10 +1,10 @@
 import React, { useContext, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import CreateOrder from '../pages/CreateOrder';
-import OrderList from '../pages/OrderList';
+import CreateRequest from '../pages/CreateRequest';
+import RequestsList from '../pages/RequestsList';
 import Header from './Header';
-import OrderDetails from '../pages/OrderDetails';
-import MyOrders from '../pages/MyOrders';
+import RequestDetails from '../pages/RequestDetails';
+import Inbox from '../pages/Inbox';
 import MyAccount from '../pages/MyAccount';
 import Wallet from '../pages/Wallet';
 import NoMetamaskMessage from './NoMetamaskMessage';
@@ -21,7 +21,7 @@ const AppRouter = () => {
 		if (!window.web3)
 			return <>
 				<NoMetamaskMessage />
-				<OrderList />
+				<RequestsList />
 			</>;
 
 		return (
@@ -29,10 +29,10 @@ const AppRouter = () => {
 				<div>
 					<Header />
 					<Switch>
-						<Route exact path='/' component={OrderList} />
-						<Route exact path='/createOrder' component={CreateOrder} />
-						<Route exact path='/order/:id' component={OrderDetails} />
-						<Route exact path='/my-orders' component={MyOrders} />
+						<Route exact path='/' component={RequestsList} />
+						<Route exact path='/request/create' component={CreateRequest} />
+						<Route exact path='/request/:id' component={RequestDetails} />
+						<Route exact path='/inbox' component={Inbox} />
 						<Route exact path='/account' component={MyAccount} />
 						<Route path='/wallet' component={Wallet} />
 					</Switch>

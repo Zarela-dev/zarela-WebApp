@@ -87,7 +87,7 @@ const WalletTransactions = ({ isLoading, accounts, data }) => {
 			case '0xd9f64981':
 				return 'Contribute';
 			case '0x827e6fd9':
-				return 'Create order';
+				return 'Create Request';
 			case '0xa9059cbb':
 				return 'BBit transfer';
 			case '0x5743b65d':

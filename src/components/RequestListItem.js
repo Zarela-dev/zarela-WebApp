@@ -6,18 +6,18 @@ import {
 	ContributorsIcon,
 	ContributorBadge,
 	TokenIcon,
-	OrderNumber,
+	RequestNumber,
 	BiobitToDollarPair,
 	BadgeRow,
 	BadgeLabel,
 	TokenValue,
 	ValueLabel,
 	BiobitToDollarValue
-} from './Elements/OrderCard';
+} from './Elements/RequestCard';
 import { Typography } from './Elements/Typography';
 import biobitIcon from '../assets/icons/biobit-black.svg';
 import contributorIcon from '../assets/icons/user-blue.svg';
-import OrderFilesTable from './OrderFilesTable';
+import RequestFilesTable from './RequestFilesTable';
 import { web3Context } from '../web3Provider';
 import { Button } from './Elements/Button';
 import axios from 'axios';
@@ -38,7 +38,7 @@ const Header = styled.header`
 	align-items: center;
 `;
 
-const OrderNumberWithPointer = styled(OrderNumber)`
+const RequestNumberWithPointer = styled(RequestNumber)`
 	${WithPointerCursor};
 `;
 
@@ -101,10 +101,10 @@ const EqualSign = styled(BiobitToDollarValue)`
 	margin: 0 5px;
 `;
 
-const OrderListItem = ({
+const RequestListItem = ({
 	showContributions,
 	total,
-	orderId,
+	requestID,
 	title,
 	tokenPay,
 	contributors,
@@ -219,7 +219,7 @@ const OrderListItem = ({
 
 	useEffect(() => {
 		if (showContributions && Web3.contract !== null) {
-			Web3.contract.methods.GetOrderFiles(orderId).call({ from: Web3.accounts[0] }, (error, result) => {
+			Web3.contract.methods.GetOrderFiles(requestID).call({ from: Web3.accounts[0] }, (error, result) => {
 				if (!error) {
 					let formatted = {};
 					let selected = {};
@@ -259,9 +259,9 @@ const OrderListItem = ({
 	return (
 		<Wrapper>
 			<Header onClick={() => setOpen(!isOpen)}>
-				<OrderNumberWithPointer>
-					{orderId}
-				</OrderNumberWithPointer>
+				<RequestNumberWithPointer>
+					{requestID}
+				</RequestNumberWithPointer>
 				<Title variant='title' weight='semiBold'>
 					{title.length < 135 ? title : title.substr(0, 135) + '...'}
 				</Title>
@@ -299,7 +299,7 @@ const OrderListItem = ({
 					Object.keys(formattedData).length > 0 ?
 						<>
 							<Body>
-								<OrderFilesTable
+								<RequestFilesTable
 									signalDownloadHandler={signalDownloadHandler}
 									data={formattedData}
 									selected={selected}
@@ -320,7 +320,7 @@ const OrderListItem = ({
 										}));
 									});
 									if (payload.length > 0)
-										handleConfirm(orderId, payload);
+										handleConfirm(requestID, payload);
 								}}>
 									Send Tokens
 								</SubmitButton>
@@ -337,4 +337,4 @@ const OrderListItem = ({
 	);
 };
 
-export default OrderListItem;
+export default RequestListItem;

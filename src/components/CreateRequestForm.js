@@ -22,7 +22,7 @@ const Divider = styled.div`
 	margin: ${props => props.theme.spacing(5)} 0 ${props => props.theme.spacing(6)};
 `;
 
-const CreateOrderForm = React.forwardRef(({ children, formik }, ref) => {
+const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 	console.log('submit button', formik.dirty, formik.isSubmitting);
 	return (
 		<Form onSubmit={formik.handleSubmit}>
@@ -120,4 +120,4 @@ const CreateOrderForm = React.forwardRef(({ children, formik }, ref) => {
 	);
 });
 
-export default CreateOrderForm;
+export default CreateRequestForm;
