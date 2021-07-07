@@ -7,6 +7,8 @@ import { mainContext } from '../state';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { convertToBiobit, toast } from '../utils';
 import NoRequestsFound from '../components/NoRequestsFound';
+import { useWeb3React } from '@web3-react/core';
+
 const PageWrapper = styled.div`
 	
 `;
@@ -20,9 +22,10 @@ const Inbox = () => {
 	const { appState } = useContext(mainContext);
 	const PAGE_SIZE = 3;
 	const [requests, setRequests] = useState({});
+	const { account } = useWeb3React();
 
 	const handleConfirm = (requestID, addresses) => {
-		appState.contract.methods.ConfirmContributer(requestID, addresses).send({ from: appState.accounts[0] }, (error, result) => {
+		appState.contract.methods.ConfirmContributer(requestID, addresses).send({ from: account }, (error, result) => {
 			if (!error) {
 				toast(result, 'success', true, result);
 			}
@@ -50,8 +53,8 @@ const Inbox = () => {
 	// pagination hook
 	useEffect(() => {
 		if (appState.contract !== null) {
-			if (appState.accounts.length !== 0) {
-				appState.contract.methods.Order_Details().call({ from: appState.accounts[0] }).then(result => {
+			if (account) {
+				appState.contract.methods.Order_Details().call({ from: account }).then(result => {
 					const myRequests = result[0];
 
 					myRequests.forEach(currentRequest => {
@@ -83,7 +86,7 @@ const Inbox = () => {
 				});
 			}
 		}
-	}, [appState.contract, appState.accounts]);
+	}, [appState.contract, account]);
 
 	return (
 		<PageWrapper>
@@ -92,7 +95,7 @@ const Inbox = () => {
 			</TitleBar>
 			<ContentWrapper>
 				{
-					appState.accounts.length === 0 ?
+					!account ?
 						<ConnectDialog isOpen={true} /> :
 						Object.values(requests).length > 0 ? Object.values(requests).reverse().map(item => (
 							<RequestListItem
