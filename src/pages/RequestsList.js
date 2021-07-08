@@ -178,7 +178,7 @@ const RequestsList = () => {
 				</RequestListSidebarWrapper>
 				<RequestsListContentWrapper>
 					{
-						Object.values(requests).sort((a, b) => +b.orderId - +a.orderId).map(item => {
+						Object.values(requests).sort((a, b) => +b.requestID - +a.requestID).map(item => {
 							return (
 								<RequestCard
 									key={item.requestID}
