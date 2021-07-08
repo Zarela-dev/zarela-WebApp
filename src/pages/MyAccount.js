@@ -153,16 +153,17 @@ const MyAccount = () => {
 							<SpinnerWrapper>
 								<Spinner />
 							</SpinnerWrapper> :
-							Object.values(requests).length > 0 ? Object.values(requests).reverse().map(item => (
-								<RequestListItem
-									key={item.requestID}
-									requestID={item.requestID}
-									title={item.title}
-									tokenPay={item.tokenPay}
-									total={item.totalContributedCount}
-									contributors={`${item.totalContributed}/${item.totalContributors}`}
-								/>
-							)) : 'You haven\'t contributed to any requests yet.'
+							Object.values(requests).length > 0 ?
+								Object.values(requests).sort((a, b) => +b.requestID - +a.requestID).map(item => (
+									<RequestListItem
+										key={item.requestID}
+										requestID={item.requestID}
+										title={item.title}
+										tokenPay={item.tokenPay}
+										total={item.totalContributedCount}
+										contributors={`${item.totalContributed}/${item.totalContributors}`}
+									/>
+								)) : 'You haven\'t contributed to any requests yet.'
 				}
 			</ContentWrapper>
 		</PageWrapper>

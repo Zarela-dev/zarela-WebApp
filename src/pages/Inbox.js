@@ -8,6 +8,7 @@ import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { convertToBiobit, toast } from '../utils';
 import NoRequestsFound from '../components/NoRequestsFound';
 import { useWeb3React } from '@web3-react/core';
+import Spinner from '../components/Spinner';
 
 const PageWrapper = styled.div`
 	
@@ -18,10 +19,18 @@ const ContentWrapper = styled.div`
 	${maxWidthWrapper};
 `;
 
+const SpinnerWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;
+
 const Inbox = () => {
 	const { appState } = useContext(mainContext);
 	const PAGE_SIZE = 3;
 	const [requests, setRequests] = useState({});
+	const [isLoading, setLoading] = useState(false);
 	const { account } = useWeb3React();
 
 	const handleConfirm = (requestID, addresses) => {
@@ -54,32 +63,42 @@ const Inbox = () => {
 	useEffect(() => {
 		if (appState.contract !== null) {
 			if (account) {
+				setLoading(true);
+
 				appState.contract.methods.Order_Details().call({ from: account }).then(result => {
 					const myRequests = result[0];
 
-					myRequests.forEach(currentRequest => {
-						appState.contract.methods.ord_file(currentRequest).call().then(result => {
-							const requestTemplate = {
-								requestID: result[0],
-								title: result[1],
-								description: result[6],
-								requesterAddress: result[2],
-								tokenPay: result[3],
-								totalContributors: result[4], // total contributors required
-								totalContributed: +result[4] - +result[7],
-								categories: result[8], // NOT TO BE USED IN DEMO
-								whitePaper: result[5],
-								timestamp: result[10],
-								totalContributedCount: result[9]
-							};
-							setRequests(requests => ({
-								...requests,
-								[requestTemplate.requestID]: requestTemplate
-							}));
-						})
-							.catch(error => {
-								console.error(error.message);
-							});
+					const getAllRequests = new Promise(async (resolve, reject) => {
+						const requestsListObject = {};
+
+						for (const currentRequest of myRequests) {
+							await appState.contract.methods.ord_file(currentRequest).call()
+								.then(result => {
+									const requestTemplate = {
+										requestID: result[0],
+										title: result[1],
+										description: result[6],
+										requesterAddress: result[2],
+										tokenPay: result[3],
+										totalContributors: result[4], // total contributors required
+										totalContributed: +result[4] - +result[7],
+										categories: result[8], // NOT TO BE USED IN DEMO
+										whitePaper: result[5],
+										timestamp: result[10],
+										totalContributedCount: result[9]
+									};
+									requestsListObject[requestTemplate.requestID] = requestTemplate;
+								})
+								.catch(error => {
+									console.error(error.message);
+								});
+						}
+						resolve(requestsListObject);
+					});
+
+					getAllRequests.then(result => {
+						setRequests(result);
+						setLoading(false);
 					});
 				}).catch(error => {
 					console.error(error.message);
@@ -97,18 +116,23 @@ const Inbox = () => {
 				{
 					!account ?
 						<ConnectDialog isOpen={true} /> :
-						Object.values(requests).length > 0 ? Object.values(requests).reverse().map(item => (
-							<RequestListItem
-								showContributions
-								key={item.requestID}
-								requestID={item.requestID}
-								title={item.title}
-								tokenPay={convertToBiobit(item.tokenPay)}
-								total={item.totalContributedCount}
-								contributors={`${item.totalContributed}/${item.totalContributors}`}
-								handleConfirm={handleConfirm}
-							/>
-						)) : <NoRequestsFound />
+						isLoading ?
+							<SpinnerWrapper>
+								<Spinner />
+							</SpinnerWrapper> :
+							Object.values(requests).length > 0 ?
+								Object.values(requests).sort((a, b) => +b.requestID - +a.requestID).map(item => (
+									<RequestListItem
+										showContributions
+										key={item.requestID}
+										requestID={item.requestID}
+										title={item.title}
+										tokenPay={convertToBiobit(item.tokenPay)}
+										total={item.totalContributedCount}
+										contributors={`${item.totalContributed}/${item.totalContributors}`}
+										handleConfirm={handleConfirm}
+									/>
+								)) : <NoRequestsFound />
 				}
 			</ContentWrapper>
 		</PageWrapper>
