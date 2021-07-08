@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { web3Context } from '../web3Provider';
+import { mainContext } from '../state';
 import {
 	Title, TokenList, TokenButton, TokenIcon, TokenName, Token
 } from './WalletDeposit/DepositChoices';
@@ -14,6 +14,7 @@ import { CopyableText, scientificToDecimal, toast, convertToBiobit } from '../ut
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useHistory } from 'react-router';
+import { useWeb3React } from '@web3-react/core'
 
 
 const WalletInput = styled(Textfield)`
@@ -36,8 +37,9 @@ const Wrapper = styled.form`
 
 /* #todo #fancy if the requested amount is more than user balance, give error */
 const WalletSendAssets = () => {
-	const { Web3 } = useContext(web3Context);
+	const { appState } = useContext(mainContext);
 	const history = useHistory();
+	const { account } = useWeb3React();
 	const formik = useFormik({
 		initialValues: {
 			token: 'Biobit',
@@ -51,8 +53,8 @@ const WalletSendAssets = () => {
 		}),
 		onSubmit: (values) => {
 			if (values.token === 'Biobit') {
-				Web3.contract.methods.transfer(values.address, +values.amount * Math.pow(10, 9))
-					.send({ from: Web3.accounts[0] }, (error, result) => {
+				appState.contract.methods.transfer(values.address, +values.amount * Math.pow(10, 9))
+					.send({ from: account }, (error, result) => {
 						if (!error) {
 							toast(result, 'success', true, result);
 							history.push('/wallet/transactions');
@@ -63,7 +65,7 @@ const WalletSendAssets = () => {
 						}
 					});
 			} else {
-				Web3.web3.eth.sendTransaction({ to: values.address, from: Web3.accounts[0], value: Web3.web3.utils.toWei(values.amount, "ether") })
+				appState.fallbackWeb3Instance.eth.sendTransaction({ to: values.address, from: account, value: appState.fallbackWeb3Instance.utils.toWei(values.amount, "ether") })
 					.then(({ transactionHash }) => {
 						console.log(transactionHash);
 					}).catch(error => {
@@ -74,10 +76,9 @@ const WalletSendAssets = () => {
 	});
 
 	const getBalanceHint = () => {
-		console.log(Web3.etherBalance);
-		return `Available: ${formik.values.token === 'Biobit' ? convertToBiobit(+Web3.biobitBalance) : +Web3.etherBalance} ${formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'}`;
+		return `Available: ${formik.values.token === 'Biobit' ? convertToBiobit(+appState.biobitBalance) : +appState.etherBalance} ${formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'}`;
 	};
-	console.log(formik);
+	
 	return (
 		<Wrapper onSubmit={formik.handleSubmit}>
 			<Content>
@@ -116,7 +117,7 @@ const WalletSendAssets = () => {
 							{
 								content: 'Max',
 								onClick: async () => {
-									const value = formik.values.token === 'Biobit' ? convertToBiobit(+Web3.biobitBalance) : +Web3.etherBalance;
+									const value = formik.values.token === 'Biobit' ? convertToBiobit(+appState.biobitBalance) : +appState.etherBalance;
 									await formik.setFieldValue('amount', value);
 								}
 							}

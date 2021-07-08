@@ -139,8 +139,6 @@ const RequestFilesTable = ({
 	changeAll,
 	signalDownloadHandler
 }) => {
-	console.log('selected',selected);
-	console.log('data',data);
 	return (
 		<Table>
 			<Row>

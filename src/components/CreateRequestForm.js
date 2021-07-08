@@ -23,7 +23,6 @@ const Divider = styled.div`
 `;
 
 const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
-	console.log('submit button', formik.dirty, formik.isSubmitting);
 	return (
 		<Form onSubmit={formik.handleSubmit}>
 			{children}

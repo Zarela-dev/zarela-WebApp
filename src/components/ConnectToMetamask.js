@@ -1,6 +1,8 @@
 import React from 'react';
 import Button from './Elements/Button';
 import styled from 'styled-components';
+import { useWeb3React } from '@web3-react/core';
+import { injectedConnector } from '../connectors';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -14,12 +16,14 @@ const Message = styled.div`
 `;
 
 const ConnectToMetamask = () => {
+	const { activate } = useWeb3React();
+
 	return (
 		<Wrapper>
 			<Message>
 				Please connect to Metamask to continue
 			</Message>
-			<Button variant='primary' onClick={() => window.ethereum.enable()}>
+			<Button variant='primary' onClick={() => activate(injectedConnector)}>
 				Connect
 			</Button>
 		</Wrapper>

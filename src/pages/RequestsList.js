@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { web3Context } from '../web3Provider';
 import RequestCard from '../components/RequestCard';
+import { mainContext } from '../state';
 import styled from 'styled-components';
 import { SearchBar } from '../components/SearchBar';
 import TokenInfoSidebar from '../components/Sidebar/TokenInfo';
@@ -10,6 +10,7 @@ import maxWidthWrapper from '../components/Elements/MaxWidth';
 import { timeSince, convertToBiobit } from '../utils';
 import homepageBg from '../assets/home-bg.jpg';
 import HomepageCounters from '../components/HomepageCounters';
+import { useWeb3React } from '@web3-react/core';
 
 const RequestsListWrapper = styled.div`
 	position: relative;
@@ -73,9 +74,10 @@ const RequestsListContentWrapper = styled.section`
 	padding-right: ${props => props.theme.spacing(4)};
 `;
 
-
 const RequestsList = () => {
-	const { Web3 } = useContext(web3Context);
+	const { appState } = useContext(mainContext);
+	const web3React = useWeb3React();
+
 	const PAGE_SIZE = 3;
 	const [requests, setRequests] = useState({});
 	const [requestsCount, setRequestsCount] = useState(0);
@@ -85,8 +87,8 @@ const RequestsList = () => {
 
 	// pagination hook
 	useEffect(() => {
-		if (Web3.contract !== null) {
-			Web3.contract.methods.OrderSize().call((error, result) => {
+		if (appState.contract !== null) {
+			appState.contract.methods.OrderSize().call((error, result) => {
 				if (!error) {
 					setRequestsCount(result);
 				} else {
@@ -94,8 +96,9 @@ const RequestsList = () => {
 				}
 			});
 
+
 			for (let i = 0; i < requestsCount; i++) {
-				Web3.contract.methods.ord_file(i).call((error, result) => {
+				appState.contract.methods.ord_file(i).call((error, result) => {
 					if (!error) {
 						const requestTemplate = {
 							requestID: result[0],
@@ -120,44 +123,50 @@ const RequestsList = () => {
 				});
 			}
 		}
-	}, [Web3.contract, requestsCount]);
+	}, [appState.contract, requestsCount]);
 
 	useEffect(() => {
-		if (Web3.contract) {
-			Web3.contract.methods.Prize().call((error, result) => {
+		if (appState.contract) {
+			appState.contract.methods.Prize().call((error, result) => {
 				if (!error)
 					setZarelaReward(+result * 2);
 				else
 					console.error(error.message);
 			});
-			Web3.contract.methods.contributer_count().call((error, result) => {
+			appState.contract.methods.contributer_count().call((error, result) => {
 				if (!error)
 					setDailyContributors(result);
 				else
 					console.error(error.message);
 			});
-			Web3.contract.methods.GetETHPrice().call((error, result) => {
+			appState.contract.methods.GetETHPrice().call((error, result) => {
 				if (!error)
 					setBiobitBasedOnEth((1 / (+result / Math.pow(10, 8))).toFixed(6));
 				else
 					console.error(error.message);
 			});
 		};
+
 		// move to wallet #todo
-		// Web3.contract.methods.sum_of_reward_per_contributer((error, result) => {
+		// appState.contract.methods.sum_of_reward_per_contributer((error, result) => {
 		// 	if (!error)
 		// 		console.log(result);
 		// 	else
 		// 		console.error(error.message);
 		// })
 
-	}, [Web3.contract]);
+	}, [appState.contract]);
 
 	return (
 		<RequestsListWrapper>
 			{/* <SearchBar></SearchBar> */}
 			<Background />
-			<HomepageCounters zarelaDailyGift={Web3.zarelaDailyGift} zarelaInitDate={Web3.zarelaInitDate} todayGift={Web3.bank} />
+
+			<HomepageCounters
+				zarelaDailyGift={appState.zarelaDailyGift}
+				zarelaInitDate={appState.zarelaInitDate}
+				todayGift={appState.bank}
+			/>
 			<RequestsListLayout>
 				<RequestListSidebarWrapper>
 					<TokenStatsSidebar
@@ -165,11 +174,11 @@ const RequestsList = () => {
 						dailyContributors={dailyContributors}
 						BiobitBasedOnEth={BiobitBasedOnEth}
 					/>
-					<TokenInfoSidebar />
+					<TokenInfoSidebar data={appState} account={web3React.account} />
 				</RequestListSidebarWrapper>
 				<RequestsListContentWrapper>
 					{
-						Object.values(requests).reverse().map(item => {
+						Object.values(requests).sort((a, b) => +b.requestID - +a.requestID).map(item => {
 							return (
 								<RequestCard
 									key={item.requestID}

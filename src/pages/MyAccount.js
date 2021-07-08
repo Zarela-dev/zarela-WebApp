@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { web3Context } from '../web3Provider';
+import { mainContext } from '../state';
 import TitleBar from '../components/TitleBar';
 import styled from 'styled-components';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import RequestListItem from '../components/RequestListItem';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { convertToBiobit, toast } from '../utils';
+import { useWeb3React } from '@web3-react/core';
+import Spinner from '../components/Spinner';
 
 const PageWrapper = styled.div`
 	
@@ -51,19 +53,28 @@ const RewardValue = styled.div`
 	font-size: 16px;
 	font-weight: 700;
 	margin-left: ${props => props.theme.spacing(1)};
-  
+`;
+
+const SpinnerWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 `;
 
 const MyAccount = () => {
-	const { Web3 } = useContext(web3Context);
 	const [requests, setRequests] = useState({});
+	const { appState } = useContext(mainContext);
 	const [totalRevenueFromZarela, setTotalRevenueFromZarela] = useState(0);
 	const [totalRevenueFromRequester, setTotalRevenueFromRequester] = useState(0);
+	const { account } = useWeb3React();
+	const [isLoading, setLoading] = useState(false);
 
 	useEffect(() => {
-		if (Web3.contract !== null) {
-			if (Web3.accounts.length !== 0) {
-				Web3.contract.methods.User_Map(Web3.accounts[0]).call((error, result) => {
+		if (appState.contract !== null) {
+			if (account) {
+				setLoading(true);
+				appState.contract.methods.User_Map(account).call((error, result) => {
 					if (!error) {
 						const formatter = value => convertToBiobit(value);
 						setTotalRevenueFromRequester(formatter(result[1]));
@@ -73,41 +84,49 @@ const MyAccount = () => {
 						toast(error.message, 'error');
 					}
 				});
-				if (!Object.keys(requests).length) {
-					Web3.contract.methods.Order_Details().call({ from: Web3.accounts[0] }).then(result => {
+
+				appState.contract.methods.Order_Details().call({ from: account })
+					.then(result => {
 						const myRequests = result[1];
 
-						myRequests.forEach(currentRequest => {
-							Web3.contract.methods.ord_file(currentRequest).call().then(result => {
-								const requestTemplate = {
-									requestID: result[0],
-									title: result[1],
-									description: result[6],
-									requesterAddress: result[2],
-									tokenPay: convertToBiobit(result[3]),
-									totalContributors: result[4], // total contributors required
-									totalContributed: +result[4] - +result[7],
-									categories: result[8], // NOT TO BE USED IN DEMO
-									whitePaper: result[5],
-									timestamp: result[10],
-									totalContributedCount: result[9]
-								};
-								setRequests(requests => ({
-									...requests,
-									[requestTemplate.requestID]: requestTemplate
-								}));
-							})
-								.catch(error => {
-									console.error(error.message);
-								});
+						const getAllRequests = new Promise(async (resolve, reject) => {
+							const requestsListObject = {};
+
+							for (const currentRequest of myRequests) {
+								await appState.contract.methods.ord_file(currentRequest).call()
+									.then(result => {
+										const requestTemplate = {
+											requestID: result[0],
+											title: result[1],
+											description: result[6],
+											requesterAddress: result[2],
+											tokenPay: convertToBiobit(result[3]),
+											totalContributors: result[4], // total contributors required
+											totalContributed: +result[4] - +result[7],
+											categories: result[8], // NOT TO BE USED IN DEMO
+											whitePaper: result[5],
+											timestamp: result[10],
+											totalContributedCount: result[9]
+										};
+										requestsListObject[requestTemplate.requestID] = requestTemplate;
+									})
+									.catch(error => {
+										console.error(error.message);
+									});
+							}
+							resolve(requestsListObject);
+						});
+
+						getAllRequests.then(result => {
+							setRequests(result);
+							setLoading(false);
 						});
 					}).catch(error => {
 						console.error(error.message);
 					});
-				}
 			}
 		}
-	}, [Web3.contract, Web3.accounts]);
+	}, [appState.contract, account]);
 
 	return (
 		<PageWrapper>
@@ -128,18 +147,23 @@ const MyAccount = () => {
 			</WalletTitlebar>
 			<ContentWrapper>
 				{
-					Web3.accounts.length === 0 ?
+					!account ?
 						<ConnectDialog isOpen={true} /> :
-						Object.values(requests).length > 0 ? Object.values(requests).reverse().map(item => (
-							<RequestListItem
-								key={item.requestID}
-								requestID={item.requestID}
-								title={item.title}
-								tokenPay={item.tokenPay}
-								total={item.totalContributedCount}
-								contributors={`${item.totalContributed}/${item.totalContributors}`}
-							/>
-						)) : 'You haven\'t contributed to any requests yet.'
+						isLoading ?
+							<SpinnerWrapper>
+								<Spinner />
+							</SpinnerWrapper> :
+							Object.values(requests).length > 0 ?
+								Object.values(requests).sort((a, b) => +b.requestID - +a.requestID).map(item => (
+									<RequestListItem
+										key={item.requestID}
+										requestID={item.requestID}
+										title={item.title}
+										tokenPay={item.tokenPay}
+										total={item.totalContributedCount}
+										contributors={`${item.totalContributed}/${item.totalContributors}`}
+									/>
+								)) : 'You haven\'t contributed to any requests yet.'
 				}
 			</ContentWrapper>
 		</PageWrapper>

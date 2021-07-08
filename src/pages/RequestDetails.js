@@ -3,23 +3,25 @@ import { useParams } from 'react-router';
 import { Buffer } from 'buffer';
 import { create } from 'ipfs-http-client';
 import RequestDetails from '../components/RequestDetails';
-import { web3Context } from '../web3Provider';
+import { mainContext } from '../state';
 import { timeSince, convertToBiobit } from '../utils';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import * as ethUtil from 'ethereumjs-util';
 import { encrypt } from 'eth-sig-util';
 import { toast } from '../utils';
 import Dialog from '../components/Dialog';
+import { useWeb3React } from '@web3-react/core';
 
 const RequestDetailsPage = () => {
 	const { id } = useParams();
-	const { Web3 } = useContext(web3Context);
 	const [request, setRequest] = useState({});
+	const { appState } = useContext(mainContext);
 	const sendSignalRef = useRef(null);
 	const [showDialog, setDialog] = useState(false);
 	const [isSubmitting, setSubmitting] = useState(false);
 	const [dialogMessage, setDialogMessage] = useState('');
 	const [error, setError] = useState(false);
+	const { account } = useWeb3React();
 
 	const clearSubmitDialog = () => {
 		setSubmitting(false);
@@ -32,7 +34,7 @@ const RequestDetailsPage = () => {
 		if (Object.keys(request).length !== 0)
 			if (sendSignalRef !== null) {
 				setDialog(true);
-				if (Web3.accounts.length > 0) {
+				if (account) {
 					if (sendSignalRef.current.value !== null && sendSignalRef.current.value !== '') {
 						setDialog(false);
 						setSubmitting(true);
@@ -67,8 +69,8 @@ const RequestDetailsPage = () => {
 
 								// const doc = document.getElementById("_White_Paper");
 								setDialogMessage('awaiting confirmation');
-								Web3.contract.methods.SendFile(request.requestID, request.requesterAddress, ipfsResponse.path)
-									.send({ from: Web3.accounts[0], gas: 700000, gasPrice: +Web3.gas.average * Math.pow(10, 8) }, (error, result) => {
+								appState.contract.methods.SendFile(request.requestID, request.requesterAddress, ipfsResponse.path)
+									.send({ from: account, gas: 700000, gasPrice: +appState.gas.average * Math.pow(10, 8) }, (error, result) => {
 										if (!error) {
 											clearSubmitDialog();
 											toast(result, 'success', true, result);
@@ -82,7 +84,7 @@ const RequestDetailsPage = () => {
 										}
 									});
 
-								Web3.contract.events.Contributed({})
+								appState.contract.events.Contributed({})
 									.on('data', (event) => {
 										clearSubmitDialog();
 										toast(
@@ -114,8 +116,8 @@ const RequestDetailsPage = () => {
 	};
 
 	useEffect(() => {
-		if (Web3.contract !== null) {
-			Web3.contract.methods.ord_file(id).call((error, result) => {
+		if (appState.contract !== null) {
+			appState.contract.methods.ord_file(id).call((error, result) => {
 				if (!error) {
 					const requestTemplate = {
 						requestID: result[0],
@@ -137,15 +139,11 @@ const RequestDetailsPage = () => {
 				}
 			});
 		}
-	}, [id, Web3.contract]);
-
-	useEffect(() => {
-		console.log('gas', Web3.gas.average);
-	}, [Object.keys(Web3.gas).length]);
+	}, [id, appState.contract]);
 
 	return (
 		<div>
-			<ConnectDialog isOpen={Web3.accounts.length < 1 && showDialog} />
+			<ConnectDialog isOpen={!account && showDialog} />
 			<Dialog
 				isOpen={isSubmitting}
 				content={(

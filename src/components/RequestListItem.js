@@ -18,11 +18,12 @@ import { Typography } from './Elements/Typography';
 import biobitIcon from '../assets/icons/biobit-black.svg';
 import contributorIcon from '../assets/icons/user-blue.svg';
 import RequestFilesTable from './RequestFilesTable';
-import { web3Context } from '../web3Provider';
+import { mainContext } from '../state';
 import { Button } from './Elements/Button';
 import axios from 'axios';
 import { Buffer } from 'buffer';
 import fileType from 'file-type';
+import { useWeb3React } from '@web3-react/core';
 
 const Wrapper = styled.div`
 	background: ${props => props.seen ? '#EDFBF8' : '#EAF2FF'};
@@ -111,9 +112,10 @@ const RequestListItem = ({
 	handleConfirm
 }) => {
 	const [isOpen, setOpen] = useState(false);
-	const { Web3 } = useContext(web3Context);
+	const { appState } = useContext(mainContext);
 	const [formattedData, setFormattedData] = useState({});
 	const [selected, setSelected] = useState({});
+	const { account } = useWeb3React();
 
 	const isAllChecked = () => {
 		const chosen = Object.values(selected).reduce((acc, curr) => acc.concat(...curr), []);
@@ -178,7 +180,7 @@ const RequestListItem = ({
 				window.ethereum
 					.request({
 						method: 'eth_decrypt',
-						params: [fileRes.data, Web3.accounts[0]],
+						params: [fileRes.data, account],
 					})
 					.then((decryptedMessage) => {
 						async function getDownloadUrl(base64) {
@@ -218,8 +220,8 @@ const RequestListItem = ({
 	};
 
 	useEffect(() => {
-		if (showContributions && Web3.contract !== null) {
-			Web3.contract.methods.GetOrderFiles(requestID).call({ from: Web3.accounts[0] }, (error, result) => {
+		if (showContributions && appState.contract !== null) {
+			appState.contract.methods.GetOrderFiles(requestID).call({ from: account }, (error, result) => {
 				if (!error) {
 					let formatted = {};
 					let selected = {};
@@ -254,7 +256,7 @@ const RequestListItem = ({
 				}
 			});
 		}
-	}, [Web3.contract]);
+	}, [appState.contract]);
 
 	return (
 		<Wrapper>

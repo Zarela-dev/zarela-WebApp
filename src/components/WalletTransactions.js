@@ -74,10 +74,10 @@ const Header = styled.div`
 	}
 `;
 
-const WalletTransactions = ({ isLoading, accounts, data }) => {
-	if (accounts === undefined || isLoading === true)
+const WalletTransactions = ({ isLoading, account, data }) => {
+	if (!account || isLoading === true)
 		return 'loading';
-	if (accounts.length === 0)
+	if (!account)
 		return 'no accounts found';
 
 	function getInput(input) {

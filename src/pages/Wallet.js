@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { web3Context } from '../web3Provider';
+import { mainContext } from '../state';
 import styled, { css } from 'styled-components';
 import TitleBar from '../components/TitleBar';
 import { Tabs } from '../components/Tabs';
@@ -8,6 +8,7 @@ import WalletTransactions from '../components/WalletTransactions';
 import WalletDeposit from '../components/WalletDeposit';
 import WalletSendAssets from '../components/WalletSendAssets';
 import ConnectToMetamask from '../components/ConnectToMetamask';
+import { useWeb3React } from '@web3-react/core';
 
 const Wrapper = styled.div`
 
@@ -53,18 +54,19 @@ const Balance = styled.div`
 `;
 
 const Wallet = () => {
-	const { Web3 } = useContext(web3Context);
+	const { appState } = useContext(mainContext);
 	const [logs, setLogs] = useState([]);
 	const [isLoading, setLoading] = useState(false);
+	const { account } = useWeb3React();
 
 	useEffect(() => {
-		if (Web3.accounts.length) {
+		if (account) {
 			setLoading(true);
 			axios.get('https://api-kovan.etherscan.io/api', {
 				params: {
 					module: 'account',
 					action: 'txlist',
-					address: Web3.accounts[0],
+					address: account,
 					sort: 'desc',
 					apikey: process.env.REACT_APP_ETHEREUM_API_KEY,
 				}
@@ -74,7 +76,7 @@ const Wallet = () => {
 						params: {
 							module: 'account',
 							action: 'tokentx',
-							address: Web3.accounts[0],
+							address: account,
 							contractaddress: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS,
 							sort: 'desc',
 							apikey: process.env.REACT_APP_ETHEREUM_API_KEY,
@@ -133,37 +135,29 @@ const Wallet = () => {
 									to detect if the address is a contract so we can filter it
 									(we don't want to show txs from other dApps or our previous smart contracts)
 								*/
-								let from = await Web3.web3.eth.getCode(txObject.from);
-								let to = await Web3.web3.eth.getCode(txObject.to);
-
-								console.log('from ', from !== '0x', txObject.from === smartContactAddress);
-								console.log('to ', to !== '0x', txObject.to === smartContactAddress);
+								let from = await appState.fallbackWeb3Instance.eth.getCode(txObject.from);
+								let to = await appState.fallbackWeb3Instance.eth.getCode(txObject.to);
 
 								if (
 									(from !== '0x' && txObject.from === smartContactAddress) ||
 									(to !== '0x' && txObject.to === smartContactAddress)
 								) {
-									console.log('zarela transaction');
 									return true;
 								} else {
-									console.log('non zarelean transaction');
 									return false;
 								}
 							}
 
 							const mergeResults = async () => {
 								for (const txItem of Object.values(tokentxFormatted)) {
-									console.log('checking recepient');
 									const hasZarela = await hasZarelaContract(txItem);
 
 									if (hasZarela) {
-										console.log('checking recepient');
 										result.push({
 											...txItem,
 											input: 'Reward'
 										});
 									} else {
-										console.log('checking recepient');
 										result.push({
 											...txItem,
 											input: 'BBit transfer'
@@ -190,10 +184,10 @@ const Wallet = () => {
 			});
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [Web3.accounts]);
+	}, [account]);
 
 	return (
-		Web3.accounts.length === 0 ?
+		!account ?
 			<Wrapper>
 				<WalletTitlebar>
 					<Title>Wallet</Title>
@@ -205,7 +199,7 @@ const Wallet = () => {
 				<WalletTitlebar>
 					<Title>Wallet</Title>
 					<Balance>
-						{`Balance: ${+Web3.biobitBalance / Math.pow(10, 9)} BBit`}
+						{`Balance: ${+appState.biobitBalance / Math.pow(10, 9)} BBit`}
 					</Balance>
 				</WalletTitlebar>
 				<Tabs data={[
@@ -213,7 +207,7 @@ const Wallet = () => {
 						label: 'Deposit',
 						component: (
 							<WalletInnerContainer elevated>
-								<WalletDeposit address={Web3.accounts.length ? Web3.accounts[0] : 'please connect to Metamask'} />
+								<WalletDeposit address={account ? account : 'please connect to Metamask'} />
 							</WalletInnerContainer>
 						)
 					},
@@ -229,7 +223,7 @@ const Wallet = () => {
 						label: 'Transactions',
 						component: (
 							<WalletInnerContainer>
-								<WalletTransactions isLoading={isLoading} accounts={Web3.accounts} data={logs} />
+								<WalletTransactions isLoading={isLoading} account={account} data={logs} />
 							</WalletInnerContainer>
 						)
 					},
