@@ -49,7 +49,6 @@ const Message = ({ text, copyable, textToCopy, closeToast, toastProps }) => {
 	);
 };
 export const toast = (message, variant = 'info', copyable, textToCopy/*  = message */, toastOptions = {}) => {
-	console.log(toastOptions);
 	return originalToast(<Message text={message} copyable={copyable} textToCopy={textToCopy} />, {
 		position: originalToast.POSITION.BOTTOM_CENTER,
 		pauseOnHover: true,
