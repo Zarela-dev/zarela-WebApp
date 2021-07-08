@@ -138,34 +138,26 @@ const Wallet = () => {
 								let from = await appState.fallbackWeb3Instance.eth.getCode(txObject.from);
 								let to = await appState.fallbackWeb3Instance.eth.getCode(txObject.to);
 
-								console.log('from ', from !== '0x', txObject.from === smartContactAddress);
-								console.log('to ', to !== '0x', txObject.to === smartContactAddress);
-
 								if (
 									(from !== '0x' && txObject.from === smartContactAddress) ||
 									(to !== '0x' && txObject.to === smartContactAddress)
 								) {
-									console.log('zarela transaction');
 									return true;
 								} else {
-									console.log('non zarelean transaction');
 									return false;
 								}
 							}
 
 							const mergeResults = async () => {
 								for (const txItem of Object.values(tokentxFormatted)) {
-									console.log('checking recepient');
 									const hasZarela = await hasZarelaContract(txItem);
 
 									if (hasZarela) {
-										console.log('checking recepient');
 										result.push({
 											...txItem,
 											input: 'Reward'
 										});
 									} else {
-										console.log('checking recepient');
 										result.push({
 											...txItem,
 											input: 'BBit transfer'
