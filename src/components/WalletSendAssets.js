@@ -14,6 +14,7 @@ import { CopyableText, scientificToDecimal, toast, convertToBiobit } from '../ut
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useHistory } from 'react-router';
+import { useWeb3React } from '@web3-react/core'
 
 
 const WalletInput = styled(Textfield)`
@@ -38,6 +39,7 @@ const Wrapper = styled.form`
 const WalletSendAssets = () => {
 	const { appState } = useContext(mainContext);
 	const history = useHistory();
+	const { account } = useWeb3React();
 	const formik = useFormik({
 		initialValues: {
 			token: 'Biobit',
@@ -52,7 +54,7 @@ const WalletSendAssets = () => {
 		onSubmit: (values) => {
 			if (values.token === 'Biobit') {
 				appState.contract.methods.transfer(values.address, +values.amount * Math.pow(10, 9))
-					.send({ from: appState.accounts[0] }, (error, result) => {
+					.send({ from: account }, (error, result) => {
 						if (!error) {
 							toast(result, 'success', true, result);
 							history.push('/wallet/transactions');
@@ -63,7 +65,7 @@ const WalletSendAssets = () => {
 						}
 					});
 			} else {
-				appState.fallbackWeb3Instance.eth.sendTransaction({ to: values.address, from: appState.accounts[0], value: appState.fallbackWeb3Instance.utils.toWei(values.amount, "ether") })
+				appState.fallbackWeb3Instance.eth.sendTransaction({ to: values.address, from: account, value: appState.fallbackWeb3Instance.utils.toWei(values.amount, "ether") })
 					.then(({ transactionHash }) => {
 						console.log(transactionHash);
 					}).catch(error => {
@@ -74,10 +76,9 @@ const WalletSendAssets = () => {
 	});
 
 	const getBalanceHint = () => {
-		console.log(appState.etherBalance);
 		return `Available: ${formik.values.token === 'Biobit' ? convertToBiobit(+appState.biobitBalance) : +appState.etherBalance} ${formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'}`;
 	};
-	console.log(formik);
+	
 	return (
 		<Wrapper onSubmit={formik.handleSubmit}>
 			<Content>

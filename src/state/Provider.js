@@ -167,9 +167,8 @@ const AppProvider = ({ children }) => {
 			activate(injectedConnector);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [active]);
+	}, [active, window.ethereum.selectedAddress]);
 
-	console.log(account);
 	return (
 		<mainContext.Provider
 			value={{

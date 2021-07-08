@@ -8,6 +8,7 @@ import WalletTransactions from '../components/WalletTransactions';
 import WalletDeposit from '../components/WalletDeposit';
 import WalletSendAssets from '../components/WalletSendAssets';
 import ConnectToMetamask from '../components/ConnectToMetamask';
+import { useWeb3React } from '@web3-react/core';
 
 const Wrapper = styled.div`
 
@@ -56,15 +57,16 @@ const Wallet = () => {
 	const { appState } = useContext(mainContext);
 	const [logs, setLogs] = useState([]);
 	const [isLoading, setLoading] = useState(false);
+	const { account } = useWeb3React();
 
 	useEffect(() => {
-		if (appState.accounts.length) {
+		if (account) {
 			setLoading(true);
 			axios.get('https://api-kovan.etherscan.io/api', {
 				params: {
 					module: 'account',
 					action: 'txlist',
-					address: appState.accounts[0],
+					address: account,
 					sort: 'desc',
 					apikey: process.env.REACT_APP_ETHEREUM_API_KEY,
 				}
@@ -74,7 +76,7 @@ const Wallet = () => {
 						params: {
 							module: 'account',
 							action: 'tokentx',
-							address: appState.accounts[0],
+							address: account,
 							contractaddress: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS,
 							sort: 'desc',
 							apikey: process.env.REACT_APP_ETHEREUM_API_KEY,
@@ -190,10 +192,10 @@ const Wallet = () => {
 			});
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [appState.accounts]);
+	}, [account]);
 
 	return (
-		appState.accounts.length === 0 ?
+		!account ?
 			<Wrapper>
 				<WalletTitlebar>
 					<Title>Wallet</Title>
@@ -213,7 +215,7 @@ const Wallet = () => {
 						label: 'Deposit',
 						component: (
 							<WalletInnerContainer elevated>
-								<WalletDeposit address={appState.accounts.length ? appState.accounts[0] : 'please connect to Metamask'} />
+								<WalletDeposit address={account ? account : 'please connect to Metamask'} />
 							</WalletInnerContainer>
 						)
 					},
@@ -229,7 +231,7 @@ const Wallet = () => {
 						label: 'Transactions',
 						component: (
 							<WalletInnerContainer>
-								<WalletTransactions isLoading={isLoading} accounts={appState.accounts} data={logs} />
+								<WalletTransactions isLoading={isLoading} account={account} data={logs} />
 							</WalletInnerContainer>
 						)
 					},
