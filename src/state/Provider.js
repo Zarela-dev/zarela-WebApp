@@ -137,15 +137,16 @@ const AppProvider = ({ children }) => {
 
 	useEffect(() => {
 		const activeWeb3 = library || appState.fallbackWeb3Instance;
-		if (activeWeb3 && appState.contract && account) {
-			activeWeb3.eth.getBalance(account).then(function (result) {
-				dispatch({
-					type: actionTypes.SET_ETHER_BALANCE,
-					payload: activeWeb3.utils.fromWei(result, "ether")
+		if (activeWeb3 && appState.contract) {
+			if (account)
+				activeWeb3.eth.getBalance(account).then(function (result) {
+					dispatch({
+						type: actionTypes.SET_ETHER_BALANCE,
+						payload: activeWeb3.utils.fromWei(result, "ether")
+					});
+				}).catch(error => {
+					console.error(error.message);
 				});
-			}).catch(error => {
-				console.error(error.message);
-			});
 
 			appState.contract.methods.bank().call((error, result) => {
 				if (!error) {
