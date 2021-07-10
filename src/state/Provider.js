@@ -164,11 +164,11 @@ const AppProvider = ({ children }) => {
 
 	// manually activate metamask in case it's connected
 	useEffect(() => {
-		if (window.ethereum.selectedAddress !== null && active === false) {
+		if (window.ethereum?.selectedAddress && active === false) {
 			activate(injectedConnector);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [active, window.ethereum.selectedAddress]);
+	}, [active, window.ethereum?.selectedAddress]);
 
 	return (
 		<mainContext.Provider
