@@ -3,7 +3,7 @@ import { Web3ReactProvider } from '@web3-react/core';
 import AppRouter from './components/Router';
 import { theme } from './theme';
 import { ThemeProvider } from 'styled-components';
-import { AppProvider } from './state';
+import { AppProvider, ConfirmationProvider } from './state';
 import { GlobalStyle } from './globalStyle';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
@@ -14,11 +14,13 @@ function App() {
 		<div className="App">
 			<Web3ReactProvider getLibrary={getLibrary}>
 				<AppProvider>
-					<ThemeProvider theme={theme}>
-						<AppRouter />
-						<ToastContainer />
-						<GlobalStyle />
-					</ThemeProvider>
+					<ConfirmationProvider>
+						<ThemeProvider theme={theme}>
+							<AppRouter />
+							<ToastContainer />
+							<GlobalStyle />
+						</ThemeProvider>
+					</ConfirmationProvider>
 				</AppProvider>
 			</Web3ReactProvider>
 		</div>

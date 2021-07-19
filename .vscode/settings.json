@@ -15,12 +15,14 @@
 		"hash",
 		"ipfs",
 		"key",
+		"lockr",
 		"react",
 		"set",
 		"textfield",
 		"titlebar",
 		"toastify",
 		"tokentx",
+		"unstaged",
 		"wallet",
 		"zpaper"
 	]
