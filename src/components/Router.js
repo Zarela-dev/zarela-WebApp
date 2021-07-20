@@ -14,7 +14,23 @@ const AppRouter = () => {
 	/*  reference: https://stackoverflow.com/a/3540295 */
 	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 		// true for mobile device
-		return <NoMobileSupportMessage />;
+		// return <NoMobileSupportMessage />;
+
+		return(
+			<Router>
+				<div>
+					<Header device="mobile" />
+					<Switch>
+						<Route exact path='/' component={RequestsList} />
+						<Route exact path='/request/create' component={CreateRequest} />
+						<Route exact path='/request/:id' component={RequestDetails} />
+						<Route exact path='/inbox' component={Inbox} />
+						<Route exact path='/account' component={MyAccount} />
+						<Route path='/wallet' component={Wallet} />
+					</Switch>
+				</div>
+			</Router>
+		)
 	} else {
 		// false for not mobile device
 
@@ -27,7 +43,7 @@ const AppRouter = () => {
 		return (
 			<Router>
 				<div>
-					<Header />
+					<Header device="desktop" />
 					<Switch>
 						<Route exact path='/' component={RequestsList} />
 						<Route exact path='/request/create' component={CreateRequest} />
