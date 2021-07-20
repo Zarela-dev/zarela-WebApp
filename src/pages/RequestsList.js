@@ -71,7 +71,7 @@ const RequestListSidebarWrapper = styled.aside`
 
 const RequestsListContentWrapper = styled.section`
 	flex: 1 0;
-	padding-right: ${props => props.theme.spacing(4)};
+	padding: 0 ${props => props.theme.spacing(2)};
 `;
 
 const RequestsList = () => {
@@ -162,20 +162,20 @@ const RequestsList = () => {
 			{/* <SearchBar></SearchBar> */}
 			<Background />
 
-			<HomepageCounters
+			{/* <HomepageCounters
 				zarelaDailyGift={appState.zarelaDailyGift}
 				zarelaInitDate={appState.zarelaInitDate}
 				todayGift={appState.bank}
-			/>
+			/> */}
 			<RequestsListLayout>
-				<RequestListSidebarWrapper>
+				{/* <RequestListSidebarWrapper>
 					<TokenStatsSidebar
 						ZarelaRewardPool={ZarelaReward}
 						dailyContributors={dailyContributors}
 						BiobitBasedOnEth={BiobitBasedOnEth}
 					/>
 					<TokenInfoSidebar data={appState} account={web3React.account} />
-				</RequestListSidebarWrapper>
+				</RequestListSidebarWrapper> */}
 				<RequestsListContentWrapper>
 					{
 						Object.values(requests).sort((a, b) => +b.requestID - +a.requestID).map(item => {
