@@ -24,38 +24,31 @@ export const HeaderLayout = styled.div`
 `;
 
 export const RequestNumber = styled.div`
-	flex: 0 0 100px;
-	height: 50px;
-	border-radius: 10px 10px 0px 10px;
-	padding: ${props => props.theme.spacing(1)} ${props => props.theme.spacing(2)};
-	margin-right: ${props => props.theme.spacing(2)};
+	height: 26px;
+  width:38px;
+	margin-right: ${props => props.theme.spacing(1.5)};
+  padding: 5px 10px;
+  border-radius: 5px;
 	font-weight: bold;
 	background: linear-gradient(246.29deg, #3A68DE 12.69%, #3A68DE 100%);
-	font-size: 32px;
-	line-height: 30px;
+	font-size: 15px;
 	color: #FFFFFF;
 	text-align: center;
 `;
 export const Title = styled.div`
-	font-weight: 500;
-	font-size: 24px;
-	line-height: 30px; 
+	font-weight: 600;
+	font-size: 14px; 
 	color: ${props => props.theme.textPrimary};
 `;
 
-export const Bookmark = styled.img`
-	width: 20px;
-	align-self: flex-start;
-	margin-left: ${props => props.theme.spacing(0.5)};
-`;
-
 export const Description = styled.div`
+  margin-top: ${props => props.theme.spacing(2)};
 	flex: 1 0 100%;
 	background: #EAF1FA;
 	border-radius: 5px 5px 0 0;
 	padding: ${props => props.theme.spacing(2)};
-	font-weight: 300;
-	font-size: 14px;
+	font-weight: 400;
+	font-size: 12px;
 	line-height: 20px;
 	text-align: justify;
 	color: #121213;
@@ -63,11 +56,10 @@ export const Description = styled.div`
 
 export const Timestamp = styled(Typography)`
 	text-align: left;
-	font-size: 10px;
-	line-height: 20px;
+	font-size: 9px;
 	color: #858585;
-	margin-left: ${props => props.theme.spacing(12)};
-	margin-bottom: ${props => props.theme.spacing(1.5)};
+	margin-left: ${props => props.theme.spacing(5)};
+	margin-top: ${props => props.theme.spacing(0.5)};
 `;
 
 export const ProgressTrackerWrapper = styled.div`
@@ -105,30 +97,35 @@ export const BiobitToDollarPair = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	flex: 0 0 80px;
+  align-self: self-start;
+  width: fit-content;
 `;
 
 export const BadgeRow = styled.div`
-	display: flex;
-	align-items: flex-end;
-	width: 100%;
+	width: fit-content;
 	margin-bottom: ${props => props.theme.spacing(0.5)};
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
 `;
 export const BadgeLabel = styled.div`
 	line-height: 1;
-	font-size: 14px;
+	font-size: 10px;
 	font-weight: 700;
 	white-space: normal;
-	color: #3A68DE;
+	color: #121213;
 `;
 
 export const BiobitToDollarValue = styled.div`
-	font-weight: 600;
-	font-size: 15px;
-	line-height: 20px;
-	color: #3A68DE;
-	margin-right: 3px;
-	margin-left: ${props => props.noMargin ? props.theme.spacing(1) : props.theme.spacing(2.3)};
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 0px;
+  color: #3A68DE;
+  margin-right: 2px;
+  margin-left: 8px;
+  white-space: nowrap;
+	margin-left: ${props => props.noMargin ? props.theme.spacing(1) : props.theme.spacing(0.8)};
 	white-space: nowrap;
 `;
 
@@ -151,7 +148,7 @@ export const ValueLabel = styled.div`
 
 export const TokenValue = styled.div`
 	font-weight: 600;
-	font-size: 18px;
+	font-size: 10px;
 	line-height: 20px;
 	color: ${props => props.theme.textPrimary};
 	margin-right: 3px;
@@ -160,9 +157,15 @@ export const TokenValue = styled.div`
 export const ContributorBadge = styled(BiobitToDollarPair)`
 `;
 
+export const Bookmark = styled.img`
+	width: 20px;
+	align-self: flex-start;
+	margin-left: ${props => props.theme.spacing(0.5)};
+`;
+
 export const TokenIcon = styled.img`
-	flex:0 0 18px;
-	height: 18px;
+	flex:0 0 14px;
+	height: 14px;
 	margin-right: ${props => props.theme.spacing(0.5)};
 `;
 
@@ -177,30 +180,40 @@ export const Spacer = styled.div`
 `;
 
 export const Divider = styled.div`
-	height: 46px;
-	background: #3C87AA;
+	height: 18px;
+	background: #121213;
 	width: 1px;
 	margin: 0 ${props => props.theme.spacing(1)};
+  align-self: self-start;
 `;
 
 export const JoinButton = styled(GenericLinkButton)`
-	width: 100%;
 	margin: 0;
+  height: fit-content;
+  align-self: self-start;
+  content-self: self-end;
+  
+  position: absolute;
+  right: 50px;
 
+  
 	& > * {
 		color: #7246D0;
+    font-size: 10px;
+    padding: 7px 17px;
+    margin-bottom: 2px;
 	}
 `;
 
 export default RequestCardWrapper;
 export {
-	// Avatar,
-	// Bookmark,
-	// Description,
-	Typography,
-	// ProgressLayout,
-	// TokenIcon,
-	// Spacer,
-	// AvatarImage,
-	// HeaderLayout
+  // Avatar,
+  // Bookmark,
+  // Description,
+  Typography,
+  // ProgressLayout,
+  // TokenIcon,
+  // Spacer,
+  // AvatarImage,
+  // HeaderLayout
 };

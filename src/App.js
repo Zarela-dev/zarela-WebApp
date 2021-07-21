@@ -11,7 +11,7 @@ import getLibrary from './utils/getLibrary';
 
 function App() {
 	return (
-		<div className="App">
+		<div className="App" style={{overflowX: 'hidden'}}>
 			<Web3ReactProvider getLibrary={getLibrary}>
 				<AppProvider>
 					<ThemeProvider theme={theme}>

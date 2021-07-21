@@ -2,15 +2,14 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useParams } from 'react-router';
 import { Buffer } from 'buffer';
 import { create } from 'ipfs-http-client';
-import RequestDetails from '../components/RequestDetails';
-import { mainContext } from '../state';
-import { timeSince, convertToBiobit } from '../utils';
-import ConnectDialog from '../components/Dialog/ConnectDialog';
+import { mainContext } from '../../state';
+import { convertToBiobit } from '../../utils';
 import * as ethUtil from 'ethereumjs-util';
 import { encrypt } from 'eth-sig-util';
-import { toast } from '../utils';
-import Dialog from '../components/Dialog';
+import { toast } from '../../utils';
 import { useWeb3React } from '@web3-react/core';
+import App from './App';
+import Desktop from './Desktop';
 
 const RequestDetailsPage = () => {
 	const { id } = useParams();
@@ -141,27 +140,15 @@ const RequestDetailsPage = () => {
 		}
 	}, [id, appState.contract]);
 
-	return (
-		<div>
-			<ConnectDialog isOpen={!account && showDialog} />
-			<Dialog
-				isOpen={isSubmitting}
-				content={(
-					dialogMessage
-				)}
-				hasSpinner
-				type='success'
-			/>
-			<RequestDetails
-				request={request}
-				ref={sendSignalRef}
-				submitSignal={submitSignal}
-				timestamp={timeSince(request.timestamp)}
-				error={error}
-				setError={setError}
-			/>
-		</div>
-	);
+	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		return (
+			<App {...{account, showDialog, isSubmitting, dialogMessage, request , sendSignalRef , submitSignal ,error , setError}} />
+		);
+	} else {
+		return (
+			<Desktop {...{account, showDialog, isSubmitting, dialogMessage, request , sendSignalRef , submitSignal ,error , setError}}  />
+		)
+	}
 };
 
 export default RequestDetailsPage;

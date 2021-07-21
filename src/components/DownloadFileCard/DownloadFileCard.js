@@ -4,10 +4,10 @@ import {
 	FileInputWrapper,
 	FileInputTitle,
 	FileInputIcon
-} from './FileInput';
-import { Card, HelperText } from './FileCard';
+} from '../UploadFileCard/FileInput';
+import { Card, HelperText } from '../UploadFileCard/FileCard';
 import styled from 'styled-components';
-import fileDownloadIcon from '../assets/icons/file-download.svg';
+import fileDownloadIcon from '../../assets/icons/file-download.svg';
 
 const CustomFileInputWrapper = styled(FileInputWrapper)`
 	margin: 0;

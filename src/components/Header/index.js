@@ -3,24 +3,32 @@ import logo from '../../assets/icons/logo.png';
 import home from '../../assets/icons/home.svg';
 import inbox from '../../assets/icons/inbox.svg';
 import live from '../../assets/icons/live.svg';
+import help from '../../assets/icons/help.svg';
 import user from '../../assets/icons/user.svg';
 import bell from '../../assets/icons/bell.svg';
 import wallet from '../../assets/icons/wallet.svg';
 import { Link } from 'react-router-dom';
 import { Typography } from '../Elements/Typography';
 import { Button } from '../Elements/Button';
-import maxWidthWrapper from '../Elements/MaxWidth';
+import menu from '../../assets/icons/menu.svg';
 
 const NavItem = styled(Link)`
 	position: relative;
 	height: 50px;
 	display: flex;
 	flex-direction: column;
-	align-items: space-between;
+	align-items: center;
 	align-content: center;
-	justify-content: flex-end;
+	justify-content: center;
 	text-decoration: none;
-	margin: 0 ${props => props.theme.spacing(4)}
+	margin: 0 ${props => props.device === "desktop" ? props.theme.spacing(4) : props.theme.spacing(2)}
+`;
+
+const NavLink = styled(Typography)`
+	color: ${props => props.theme.navLinkColor};
+	font-weight: 500;
+	font-size: ${props => props.theme.body};
+	white-space: nowrap;
 `;
 
 const VerticalNavItem = styled(Link)`
@@ -34,8 +42,10 @@ const VerticalNavItem = styled(Link)`
 	text-decoration: none;
 `;
 
+
 const RightMenu = styled.div`
 	display: flex;
+	align-items: center;
 	flex: 7;
 `;
 
@@ -45,16 +55,8 @@ const LeftMenu = styled.div`
 	flex: 5;
 `;
 
-const NavLink = styled(Typography)`
-	color: ${props => props.theme.navLinkColor};
-	font-weight: 500;
-	font-size: ${props => props.theme.body};
-	white-space: nowrap;
-`;
-
 const NavIcon = styled.img`
 	height: 30px;
-	margin-bottom: ${props => props.theme.spacing(1)};
 `;
 
 const VerticalNavIcon = styled.img`
@@ -64,8 +66,10 @@ const VerticalNavIcon = styled.img`
 
 const Logo = styled.img`
 	height: 40px;
-	margin-right: ${props => props.theme.spacing(8)};
+	margin-left: 20px;
+	margin-right: ${props => props.device === "desktop" ? props.theme.spacing(4) : props.theme.spacing(1)}
 `;
+
 const NotificationBadge = styled.div`
 	position: absolute;
 	top: -12px;
@@ -79,75 +83,114 @@ const NotificationBadge = styled.div`
 	color: white;
 `;
 
-const Spacer = styled.div`
-	flex: 1;
-`;
-
 const SubmitRequestButton = styled(Link)`
 	${Button};
 `;
 
 const HeaderWrapper = styled.header`
-	${maxWidthWrapper};
 	display: flex;
 	flex-direction: row;
-	justify-content: flex-start;
+	justify-content: space-between;
 	width: 100%;
-	height: 94px;
 	padding: ${props => props.theme.spacing(3)} 0;
 `;
 
+
+const HeaderWrapperApp = styled(HeaderWrapper)`
+	padding: 15px; 
+`;
+
+
+const LogoApp = styled(Logo)`
+	width: 78px;
+	height: 27px;
+	margin-left: 6px;
+`;
+const NavLinkApp = styled(NavLink)`
+	font-size: 13.5px;
+	font-weight: 700px;
+`;
+const NavIconApp = styled(NavIcon)`
+	height: 19.5px;
+`;
+
+const VerticalNavIconApp = styled(VerticalNavIcon)`
+	height: 19.5px;
+`;
+const NotificationBadgeApp = styled(NotificationBadge)`
+	font-size: 10.5px;
+	top: 4px;
+	height: 16px;
+`;
+
 export default function Header({ device }) {
-	return (
-		<HeaderWrapper>
-			<RightMenu>
-				<Logo src={logo} />
-				{device === "desktop" ?
-					<>
-						<NavItem to='/'>
-							<NavIcon src={home} />
-							<NavLink>
-								Home
-							</NavLink>
-						</NavItem>
-						<NavItem to='/inbox'>
-							<NavIcon src={inbox} />
-							<NavLink>
-								Inbox
-							</NavLink>
-						</NavItem>
-						<NavItem to='/account'>
-							<NavIcon src={user} />
-							<NavLink>
-								My Contributions
-							</NavLink>
-						</NavItem>
-						<NavItem to='/wallet/deposit'>
-							<NavIcon src={wallet} />
-							<NavLink>
-								Wallet
-							</NavLink>
-						</NavItem>
-					</> : null}
-			</RightMenu>
-			{device === "mobile" ?
+	if (device === "mobile") {
+		return (
+			<HeaderWrapperApp>
+				<RightMenu>
+					<LogoApp src={logo} />
+				</RightMenu>
 				<LeftMenu>
 					<VerticalNavItem>
-						<VerticalNavIcon src={live} />
-						<NavLink>
+						<VerticalNavIconApp src={live} />
+						<NavLinkApp>
 							Live
-						</NavLink>
+						</NavLinkApp>
 					</VerticalNavItem>
-					{/* <SubmitRequestButton to='/request/create'>
-								New Request
-							</SubmitRequestButton> */}
-					{/* <NavItem to='/account'>
-								<NavIcon src={bell} />
-								<NotificationBadge>321</NotificationBadge>
-							</NavItem> */}
+					<NavItem to='/account'>
+						<NavIconApp src={bell} />
+						<NotificationBadgeApp>321</NotificationBadgeApp>
+					</NavItem>
+					<NavItem>
+						<NavIconApp src={menu} />
+					</NavItem>
 				</LeftMenu>
-				: null}
-			<Spacer />
-		</HeaderWrapper>
-	);
+			</HeaderWrapperApp>
+		);
+
+	} else if (device === "desktop") {
+		return (
+			<HeaderWrapper>
+				<RightMenu>
+					<Logo device="desktop" src={logo} />
+					<NavItem device="desktop" to='/'>
+						<NavIcon src={home} />
+						<NavLink>
+							Home
+						</NavLink>
+					</NavItem>
+					<NavItem device="desktop" to='/inbox'>
+						<NavIcon src={inbox} />
+						<NavLink>
+							Inbox
+						</NavLink>
+					</NavItem>
+					<NavItem device="desktop" to='/account'>
+						<NavIcon src={user} />
+						<NavLink>
+							My Contributions
+						</NavLink>
+					</NavItem>
+					<NavItem device="desktop" to='/wallet/deposit'>
+						<NavIcon src={wallet} />
+						<NavLink>
+							Wallet
+						</NavLink>
+					</NavItem>
+				</RightMenu>
+				<LeftMenu>
+					<SubmitRequestButton to='/request/create'>
+						Connect
+					</SubmitRequestButton>
+					<NavItem to='/account'>
+						<NavIcon src={bell} />
+						<NotificationBadge>321</NotificationBadge>
+					</NavItem>
+					<NavItem>
+						<NavIcon src={help} />
+					</NavItem>
+				</LeftMenu>
+			</HeaderWrapper>
+		);
+	}
 };
