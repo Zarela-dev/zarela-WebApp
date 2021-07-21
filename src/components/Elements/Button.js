@@ -8,11 +8,16 @@ function getBackground(props) {
 		`;
 	if (props.variant === 'primary')
 		return css`
-			background: linear-gradient(256.48deg, #A2F0EA -37.74%, #75F0E7 -37.73%, #A981FE 103.72%);
+			background: linear-gradient(
+				256.48deg,
+				#a2f0ea -37.74%,
+				#75f0e7 -37.73%,
+				#a981fe 103.72%
+			);
 		`;
 	if (props.variant === 'secondary')
 		return css`
-			background: linear-gradient(256.48deg ,rgb(72 194 185 / 50%),rgb(138 100 212 / 50%));
+			background: linear-gradient(256.48deg, rgb(72 194 185 / 50%), rgb(138 100 212 / 50%));
 		`;
 }
 function getColor(props) {
@@ -25,25 +30,25 @@ function getColor(props) {
 	if (props.variant === 'secondary') {
 		return css`
 			background: white;
-			color: #7246D0;
+			color: #7246d0;
 		`;
 	}
 }
 
 function getDisabledStyles() {
 	return css`
-		background: #D4D4D4;
+		background: #d4d4d4;
 		cursor: not-allowed !important;
 	`;
 }
 
 const Container = styled.div`
-	${props => getBackground(props)};
+	${(props) => getBackground(props)};
 	box-shadow: 0px 5.46667px 18px rgba(223, 236, 255, 0.5);
 	border-radius: 5.5px;
 	text-align: center;
 	height: 50px;
-	margin-right: ${props => props.theme.spacing(3)};
+	margin-right: ${(props) => props.theme.spacing(3)};
 	max-width: 190px;
 	cursor: pointer;
 `;
@@ -51,53 +56,53 @@ const Container = styled.div`
 const TheButton = styled.button`
 	${(props) => getColor(props)};
 	${(props) => props.disabled && getDisabledStyles()};
-	padding: ${props => props.theme.spacing(1.5)} ${props => props.theme.spacing(3)};
-    text-decoration: none;
+	padding: ${(props) => props.theme.spacing(1.5)} ${(props) => props.theme.spacing(3)};
+	text-decoration: none;
 	font-weight: 500;
 	font-size: 20px;
 	border: none;
 	width: calc(100% - 2px);
-    height: calc(100% - 2px);
-    position: relative;
-    top: 1px;
-    border-radius: 5.5px;
+	height: calc(100% - 2px);
+	position: relative;
+	top: 1px;
+	border-radius: 5.5px;
 	line-height: 1;
 `;
 
 const LinkButtonAnchor = styled.a`
 	${(props) => getColor(props)};
 	display: block;
-	padding: ${props => props.theme.spacing(1.5)} ${props => props.theme.spacing(3)};
-    text-decoration: none;
+	padding: ${(props) => props.theme.spacing(1.5)} ${(props) => props.theme.spacing(3)};
+	text-decoration: none;
 	font-weight: 500;
 	font-size: 20px;
+	white-space: nowrap;
 	border: none;
 	width: calc(100% - 2px);
-    height: calc(100% - 2px);
-    position: relative;
-    top: 1px;
+	height: calc(100% - 2px);
+	position: relative;
+	top: 1px;
 	left: 1px;
-    border-radius: 5.5px;
+	border-radius: 5.5px;
 	line-height: 1;
 `;
 
 const TheLinkButton = styled(Link)`
 	${(props) => getColor(props)};
 	display: block;
-	padding: ${props => props.theme.spacing(1.5)} ${props => props.theme.spacing(3)};
-    text-decoration: none;
+	padding: ${(props) => props.theme.spacing(1.5)} ${(props) => props.theme.spacing(3)};
+	text-decoration: none;
 	font-weight: 500;
 	font-size: 20px;
 	border: none;
 	width: calc(100% - 2px);
-    height: calc(100% - 2px);
-    position: relative;
-    top: 1px;
+	height: calc(100% - 2px);
+	position: relative;
+	top: 1px;
 	left: 1px;
-    border-radius: 5.5px;
+	border-radius: 5.5px;
 	line-height: 1;
 `;
-
 
 const GenericButton = ({ children, variant, type, disabled, ...rest }) => (
 	<Container disabled={disabled} variant={variant} {...rest}>
@@ -126,16 +131,16 @@ export const GenericLinkButton = ({ children, variant, to, type, ...rest }) => (
 export default GenericButton;
 
 export const Button = css`
-	background: linear-gradient(256.48deg, #A2F0EA -37.74%, #75F0E7 -37.73%, #A981FE 103.72%);
-	box-shadow: 0px 4px 18px #DFECFF;
+	background: linear-gradient(256.48deg, #a2f0ea -37.74%, #75f0e7 -37.73%, #a981fe 103.72%);
+	box-shadow: 0px 4px 18px #dfecff;
 	border-radius: 4px;
 	text-align: center;
 	font-weight: 500;
 	font-size: 20px;
 	border: none;
 	height: 50px;
-	padding: ${props => props.theme.spacing(1.5)} ${props => props.theme.spacing(3)};
-    text-decoration: none;
-	color: ${props => props.theme.textPrimary};
-	margin-right: ${props => props.theme.spacing(3)};
+	padding: ${(props) => props.theme.spacing(1.5)} ${(props) => props.theme.spacing(3)};
+	text-decoration: none;
+	color: ${(props) => props.theme.textPrimary};
+	margin-right: ${(props) => props.theme.spacing(3)};
 `;
