@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import FileInput from './FileInput';
+import FileInput from './UploadFileCard/FileInput';
 import Checkbox from './Elements/Checkbox';
 import Button from './Elements/Button';
 import TextField, { Error } from './Elements/TextField';

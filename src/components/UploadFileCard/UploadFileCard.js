@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CustomFileInput, HelperText, ErrorText } from './FileCard';
 import styled from 'styled-components';
-import Button from './Elements/Button';
+import Button from '../Elements/Button';
 
 const SubmitButton = styled(Button)`
 	margin-top: ${props => props.theme.spacing(4)};

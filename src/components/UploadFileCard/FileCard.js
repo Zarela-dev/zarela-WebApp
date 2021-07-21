@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import FileInput from './FileInput';
+import FileInputApp from './FileInputApp';
 
 export const Card = styled.div`
 	flex: 1;
@@ -17,6 +18,15 @@ export const CustomFileInput = styled(FileInput)`
 	max-width: unset;
 	width: 100%;
 `;
+
+export const CustomFileInputApp = styled(FileInputApp)`
+	margin: 0;
+	max-width: unset;
+	width: 100%;
+	padding: 0;
+	border: 1px dashed #3ADEA3;
+`;
+
 
 export const HelperText = styled.div`
 	font-size: 12px;

@@ -1,8 +1,8 @@
 import React, { forwardRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import fileDownloadIcon from '../assets/icons/file-download.svg';
-import fileUploadIcon from '../assets/icons/file-upload.svg';
-import { Error } from './Elements/TextField';
+import fileDownloadIcon from '../../assets/icons/file-download.svg';
+import fileUploadIcon from '../../assets/icons/file-upload.svg';
+import { Error } from '../Elements/TextField';
 
 export const FileInputWithBorder = css`
 	background: #FFFFFF;
@@ -33,8 +33,6 @@ export const FileInputLabel = styled.label`
 	background: #FFFFFF;
 	box-shadow: 0px 5.46667px 18px rgba(223, 236, 255, 0.5);
 	border-radius: 5.46667px;
-	border: 1px solid #BBBEE6;
-	padding: ${props => props.theme.spacing(1)} ${props => props.theme.spacing(4)};
 	color: #7246D0;
 	cursor: pointer;
 `;
@@ -83,7 +81,7 @@ export const getFileName = (inputRef, fallbackLabel) => {
 	return formatLabel(fallbackLabel);
 };
 
-const FileInput = forwardRef(({
+const FileInputApp = forwardRef(({
 	disableUpload,
 	className,
 	hasBorder,
@@ -149,4 +147,4 @@ const FileInput = forwardRef(({
 	);
 });
 
-export default FileInput;
+export default FileInputApp;

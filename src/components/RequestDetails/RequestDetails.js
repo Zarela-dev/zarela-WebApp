@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import DownloadFileCard from './DownloadFileCard';
-import UploadFileCard from './uploadFileCard';
+import DownloadFileCard from '../DownloadFileCard/DownloadFileCard';
+import UploadFileCard from '../UploadFileCard/UploadFileCard';
 import {
 	RequestNumber,
 	HeaderLayout,
@@ -22,14 +22,14 @@ import {
 	ValueLabel,
 	BiobitToDollarValue,
 	BadgeLabel,
-} from './Elements/RequestCard';
-import maxWidthWrapper from './Elements/MaxWidth';
-import biobitIcon from '../assets/icons/biobit-black.svg';
-import contributorIcon from '../assets/icons/user-blue.svg';
-import documentsIcon from '../assets/icons/document-blue.svg';
-import bookmarkIcon from '../assets/icons/bookmark-purple.svg';
-import publicKeyIcon from '../assets/icons/public-key.svg';
-import { CopyableText } from '../utils';
+} from './../Elements/RequestCard';
+import maxWidthWrapper from './../Elements/MaxWidth';
+import biobitIcon from '../../assets/icons/biobit-black.svg';
+import contributorIcon from '../../assets/icons/user-blue.svg';
+import documentsIcon from '../../assets/icons/document-blue.svg';
+import bookmarkIcon from '../../assets/icons/bookmark-purple.svg';
+import publicKeyIcon from '../../assets/icons/public-key.svg';
+import { CopyableText } from '../../utils';
 
 const PageWrapper = styled.div`
 	
