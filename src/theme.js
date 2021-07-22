@@ -22,5 +22,11 @@ export const theme = {
 	textToken: '#3C87AA',
 	navLinkColor: '#8B72DE',
 	navLinkDisabled: '#E3DDFA',
-	notificationColor: '#2EECA8'
+	notificationColor: '#2EECA8',
+	// breakpoints
+	desktop_md_breakpoint: '1440px',
+  desktop_sm_breakpoint: '1170px',
+  tablet_sm_breakpoint: '768px',
+  mobile_sm_breakpoint: '450px',
+  mobile_xs_breakpoint: '320px',
 }

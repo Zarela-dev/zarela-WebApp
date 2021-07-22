@@ -3,23 +3,31 @@ import styled from 'styled-components';
 import noMetamaskBackdrop from '../../assets/no-meta-backdrop.png';
 import LogoImage from '../../assets/icons/logo.png';
 import { LinkButton } from '../Elements/Button';
-import metamaskIcon from '../../assets/icons/wallets/metamask.svg';
 import twitterIcon from '../../assets/icons/social/twitter.svg';
 import instagramIcon from '../../assets/icons/social/instagram.svg';
 import linkedinIcon from '../../assets/icons/social/linkedin.svg';
 import { Spacer } from '../Elements/Spacer';
+import metamaskIcon from '../../assets/icons/wallets/metamask.svg';
+import walletConnectIcon from '../../assets/icons/wallets/walletConnect.svg';
+import coinbaseIcon from '../../assets/icons/wallets/coinbase.svg';
+import portisIcon from '../../assets/icons/wallets/portis.svg';
+import fortmaticIcon from '../../assets/icons/wallets/fortmatic.svg';
 
 const Container = styled.div`
-	position: fixed;
-	width: 100vw;
+	width: 100%;
 	height: 100vh;
 	display: flex;
 	justify-content: center;
-	align-items: center;
+	align-items: flex-start;
 	padding: ${(props) => props.theme.spacing(1.5)};
 	z-index: 9999;
-
+	
+	@media only screen and (min-width: ${({ theme }) => theme.tablet_sm_breakpoint}) {
+		padding: ${(props) => props.theme.spacing(6)};
+	}
+	
 	&::before {
+		position: fixed;
 		content: '';
 		background-image: url(${noMetamaskBackdrop});
 		background-repeat: no-repeat;
@@ -28,21 +36,28 @@ const Container = styled.div`
 		left: 0;
 		bottom: 0;
 		right: 0;
-		position: absolute;
 		z-index: -1;
 	}
 `;
 
 const Modal = styled.div`
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	height: 100%;
+	min-height: 100%;
 	background: rgba(255, 255, 255, 0.9);
 	box-shadow: 0px 14.6965px 26.4537px rgba(81, 197, 234, 0.06);
 	border-radius: 30px 30px 10px 30px;
 	padding: ${(props) => props.theme.spacing(1.5)};
-	overflow: hidden;
+	overflow: auto;
+
+	margin-bottom: ${(props) => props.theme.spacing(1.5)};
+	
+	@media only screen and (min-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
+		margin-bottom: ${(props) => props.theme.spacing(6)};
+		padding: ${(props) => props.theme.spacing(4)} 10%;
+	}
 `;
 
 const Header = styled.div`
@@ -50,11 +65,21 @@ const Header = styled.div`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+
+	@media only screen and (min-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
+		padding-top: 70px;
+	}
 `;
 
 const Logo = styled.img`
 	width: 120px;
 	margin-bottom: ${(props) => props.theme.spacing(2)};
+
+	@media only screen and (min-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
+		position: absolute;
+		left: 40px;
+		top: 30px;
+	}
 `;
 
 const Title = styled.h1`
@@ -62,6 +87,12 @@ const Title = styled.h1`
 	font-size: 20px;
 	text-align: center;
 	color: ${(props) => props.theme.textPrimary};
+
+	@media only screen and (min-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
+		font-weight: bold;
+		font-size: 64px;
+		line-height: 20px;
+	}
 `;
 
 const Content = styled.div`
@@ -83,6 +114,13 @@ const WalletsList = styled.div`
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
+	width: 100%;
+	margin-top: ${(props) => props.theme.spacing(1)};
+
+	@media only screen and (min-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
+		margin-top: ${(props) => props.theme.spacing(4)};
+		justify-content: space-around;
+	}
 `;
 
 const WalletItem = styled.div`
@@ -91,20 +129,28 @@ const WalletItem = styled.div`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	padding: ${(props) => props.theme.spacing(2)};
+	padding: ${(props) => props.theme.spacing(2)} ${(props) => props.theme.spacing(2)};
+	opacity: ${(props) => (props.active ? 1 : 0.5)};
+	cursor: ${(props) => (props.active ? 'pointer' : 'not-allowed')};
 `;
 
 const WalletIcon = styled.img`
 	width: 45px;
 	margin-bottom: ${(props) => props.theme.spacing(1)};
+
+	@media only screen and (min-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
+		width: 75px;
+	}
 `;
 
 const WalletTitle = styled.p`
 	font-style: normal;
 	font-weight: 600;
-	font-size: 8.56056px;
-	line-height: 10px;
+	font-size: 18px;
+	line-height: 20px;
 	color: ${(props) => props.theme.textPrimary};
+	white-space: nowrap;
+	margin-top: ${(props) => props.theme.spacing(2)};
 `;
 
 const Divider = styled.div`
@@ -140,6 +186,7 @@ const LearnMoreButton = styled(LinkButton).attrs((props) => {
 const Footer = styled.footer`
 	display: flex;
 	justify-content: center;
+	margin-top: ${(props) => props.theme.spacing(4)};
 `;
 
 const SocialList = styled.div`
@@ -160,6 +207,34 @@ const SocialIcon = styled.img`
 	width: 18px;
 `;
 
+const wallets = [
+	{
+		name: 'Metamask',
+		icon: metamaskIcon,
+		active: true
+	},
+	{
+		name: 'Fortmatic',
+		icon: fortmaticIcon,
+		active: false
+	},
+	{
+		name: 'Portis',
+		icon: portisIcon,
+		active: false
+	},
+	{
+		name: 'Coinbase',
+		icon: coinbaseIcon,
+		active: false
+	},
+	{
+		name: 'WalletConnect',
+		icon: walletConnectIcon,
+		active: false
+	},
+];
+
 const IntroModal = () => {
 	return (
 		<Container>
@@ -174,14 +249,12 @@ const IntroModal = () => {
 						wallets.
 					</Message>
 					<WalletsList>
-						{Array(5)
-							.fill(null)
-							.map(() => (
-								<WalletItem>
-									<WalletIcon src={metamaskIcon} />
-									<WalletTitle>wallet name</WalletTitle>
-								</WalletItem>
-							))}
+						{wallets.map(({ name, icon, active }) => (
+							<WalletItem active={active}>
+								<WalletIcon src={icon} />
+								<WalletTitle>{name}</WalletTitle>
+							</WalletItem>
+						))}
 					</WalletsList>
 					<Divider />
 					<MessageContainer>
