@@ -4,6 +4,10 @@ import noMetamaskBackdrop from '../../assets/no-meta-backdrop.png';
 import LogoImage from '../../assets/icons/logo.png';
 import { LinkButton } from '../Elements/Button';
 import metamaskIcon from '../../assets/icons/wallets/metamask.svg';
+import twitterIcon from '../../assets/icons/social/twitter.svg';
+import instagramIcon from '../../assets/icons/social/instagram.svg';
+import linkedinIcon from '../../assets/icons/social/linkedin.svg';
+import { Spacer } from '../Elements/Spacer';
 
 const Container = styled.div`
 	position: fixed;
@@ -30,6 +34,8 @@ const Container = styled.div`
 `;
 
 const Modal = styled.div`
+	display: flex;
+	flex-direction: column;
 	width: 100%;
 	height: 100%;
 	background: rgba(255, 255, 255, 0.9);
@@ -126,7 +132,7 @@ const LearnMoreButton = styled(LinkButton).attrs((props) => {
 		variant: 'secondary',
 	};
 })`
-	margin-top: ${props => props.theme.spacing(2)};
+	margin-top: ${(props) => props.theme.spacing(2)};
 	margin-right: 0;
 	min-width: 127px;
 `;
@@ -143,10 +149,15 @@ const SocialList = styled.div`
 
 const SocialLink = styled.a`
 	flex: 1;
+	padding: 0 ${(props) => props.theme.spacing(2)};
+
+	&:focus {
+		outline: none;
+	}
 `;
 
 const SocialIcon = styled.img`
-	width: 35px;
+	width: 18px;
 `;
 
 const IntroModal = () => {
@@ -178,10 +189,20 @@ const IntroModal = () => {
 						<LearnMoreButton>learn more</LearnMoreButton>
 					</MessageContainer>
 				</Content>
+				<Spacer />
 				<Footer>
 					<SocialList>
-						<SocialLink>
-							<SocialIcon />
+						<SocialLink
+							href="https://www.instagram.com/zarela.io/?hl=en"
+							target="_blank"
+						>
+							<SocialIcon src={instagramIcon} />
+						</SocialLink>
+						<SocialLink href="https://twitter.com/zarela_io" target="_blank">
+							<SocialIcon src={twitterIcon} />
+						</SocialLink>
+						<SocialLink href="https://twitter.com/zarela_io" target="_blank">
+							<SocialIcon src={linkedinIcon} />
 						</SocialLink>
 					</SocialList>
 				</Footer>

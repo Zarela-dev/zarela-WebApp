@@ -13,14 +13,18 @@
 		"ethersproject",
 		"gasstation",
 		"hash",
+		"icon",
 		"ipfs",
 		"key",
+		"linkedin",
+		"lockr",
 		"react",
 		"set",
 		"textfield",
 		"titlebar",
 		"toastify",
 		"tokentx",
+		"unstaged",
 		"wallet",
 		"zpaper"
 	]
