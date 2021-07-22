@@ -45,7 +45,7 @@ function getDisabledStyles() {
 const Container = styled.div`
 	${(props) => getBackground(props)};
 	box-shadow: 0px 5.46667px 18px rgba(223, 236, 255, 0.5);
-	border-radius: 5.5px;
+	border-radius: 5px;
 	text-align: center;
 	height: 50px;
 	margin-right: ${(props) => props.theme.spacing(3)};
@@ -65,7 +65,7 @@ const TheButton = styled.button`
 	height: calc(100% - 2px);
 	position: relative;
 	top: 1px;
-	border-radius: 5.5px;
+	border-radius: 5px;
 	line-height: 1;
 `;
 
@@ -83,7 +83,7 @@ const LinkButtonAnchor = styled.a`
 	position: relative;
 	top: 1px;
 	left: 1px;
-	border-radius: 5.5px;
+	border-radius: 5px;
 	line-height: 1;
 `;
 
@@ -100,7 +100,7 @@ const TheLinkButton = styled(Link)`
 	position: relative;
 	top: 1px;
 	left: 1px;
-	border-radius: 5.5px;
+	border-radius: 5px;
 	line-height: 1;
 `;
 

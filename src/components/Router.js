@@ -8,11 +8,17 @@ import Inbox from '../pages/Inbox';
 import MyAccount from '../pages/MyAccount';
 import Wallet from '../pages/Wallet';
 import IntroModal from './IntroModal';
+import BottomNavigation from './BottomNavigation';
 
 const AppRouter = () => {
 	const provider = window.ethereum;
 
-	if (!provider) return <IntroModal />;
+	if (!provider)
+		return (
+			<>
+				<IntroModal />
+			</>
+		);
 
 	return (
 		<Router>

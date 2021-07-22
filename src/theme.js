@@ -3,7 +3,7 @@ export const theme = {
 	primary: '#7246D0',
 	primaryFaded: '#7246d029',
 	secondary: 'rgba(126, 162, 253, 0.4)',
-
+	success: '#3ADEA3',
 	spacing: (val) => {
 		const BASE = 10;
 		return BASE * val + 'px';
