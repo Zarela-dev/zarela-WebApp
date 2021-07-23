@@ -59,7 +59,7 @@ const CustomBadgeRow = styled(BadgeRow)`
 
 const DescriptionContainer = styled.div`
 	position: relative;
-	padding-top: ${props => props.theme.spacing(6)};
+	padding-top: ${props => props.theme.spacing(1)};
 	${maxWidthWrapper};
 `;
 
@@ -70,7 +70,7 @@ const DescriptionTitle = styled.h4`
 `;
 
 const TitleContent = styled(Title)`
-  padding: 20px;
+  padding: 0 18px;
   font-size: 14px;
   font-weight: 600;
 `;
@@ -80,7 +80,7 @@ const Description = styled.p`
 	line-height: 25px;
 	text-align: justify;
 	margin-bottom: ${props => props.theme.spacing(5)};
-  padding: 20px;
+  padding: 0 18px;
 `;
 
 const PublicKeyBadge = styled.div`
@@ -117,18 +117,10 @@ const CustomContributeBadge = styled(ContributorBadge)`
 	flex: 0 0 auto;
 `;
 
-const EqualSign = styled(BiobitToDollarValue)`
-	margin: 0 5px;
-`;
-
 const FilesWrapper = styled.div`
 	${maxWidthWrapper};
 	display: flex; 
 	justify-content: space-between;
-`;
-
-const FileCardSpacer = styled.div`
-	flex: 0 1 50px;
 `;
 
 const CustomDivider = styled(Divider)`
@@ -207,6 +199,10 @@ const RequestDetailsApp = React.forwardRef(({ setError, error, timestamp, reques
           </CustomProgressTrackerWrapper>
         </HeaderInner>
       </HeaderContainer>
+
+
+
+
       <DescriptionContainer>
         <UploadFileCardApp
           showSelected

@@ -9,7 +9,7 @@ export const RequestCardWrapper = styled.div`
 	background: white;
 	border: 1px solid #C4C4C4;
 	border-radius: 8px;
-	padding: ${props => props.theme.spacing(4)} ${props => props.theme.spacing(2.7)} ${props => props.theme.spacing(1.8)};
+	padding: ${props => props.theme.spacing(1.7)} ${props => props.theme.spacing(1.4)} ${props => props.theme.spacing(1.4)};
 
 	margin-bottom: 25px;
 	/* &:not(:last-child){
@@ -28,7 +28,7 @@ export const RequestNumber = styled.div`
   width:38px;
 	margin-right: ${props => props.theme.spacing(1.5)};
   padding: 5px 10px;
-  border-radius: 5px;
+  border-radius: 5px 5px 0 5px;
 	font-weight: bold;
 	background: linear-gradient(246.29deg, #3A68DE 12.69%, #3A68DE 100%);
 	font-size: 15px;
@@ -38,6 +38,7 @@ export const RequestNumber = styled.div`
 export const Title = styled.div`
 	font-weight: 600;
 	font-size: 14px; 
+	line-height: 20px;
 	color: ${props => props.theme.textPrimary};
 `;
 

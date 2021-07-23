@@ -21,7 +21,8 @@ const NavItem = styled(Link)`
 	align-content: center;
 	justify-content: center;
 	text-decoration: none;
-	margin: 0 ${props => props.device === "desktop" ? props.theme.spacing(4) : props.theme.spacing(2)}
+	margin-right: ${props => props.device === "desktop" ? props.theme.spacing(4) : props.theme.spacing(0)};
+	margin-left: ${props => props.device === "desktop" ? props.theme.spacing(4) : props.theme.spacing(2)};
 `;
 
 const NavLink = styled(Typography)`
@@ -97,14 +98,14 @@ const HeaderWrapper = styled.header`
 
 
 const HeaderWrapperApp = styled(HeaderWrapper)`
-	padding: 15px; 
+	padding: 10px 18px; 
 `;
 
 
 const LogoApp = styled(Logo)`
 	width: 78px;
 	height: 27px;
-	margin-left: 6px;
+	margin-left: 0;
 `;
 const NavLinkApp = styled(NavLink)`
 	font-size: 13.5px;
@@ -182,11 +183,11 @@ export default function Header({ device }) {
 					<SubmitRequestButton to='/request/create'>
 						Connect
 					</SubmitRequestButton>
-					<NavItem to='/account'>
+					<NavItem device="desktop" to='/account'>
 						<NavIcon src={bell} />
 						<NotificationBadge>321</NotificationBadge>
 					</NavItem>
-					<NavItem>
+					<NavItem device="desktop">
 						<NavIcon src={help} />
 					</NavItem>
 				</LeftMenu>

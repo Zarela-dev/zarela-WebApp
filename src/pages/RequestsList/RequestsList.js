@@ -3,7 +3,7 @@ import { mainContext } from '../../state';
 import { timeSince, convertToBiobit } from '../../utils';
 import { useWeb3React } from '@web3-react/core';
 import Desktop from './Desktop';
-import App from './App';
+import Mobile from './Mobile';
 
 const RequestsList = () => {
 	const { appState } = useContext(mainContext);
@@ -89,7 +89,7 @@ const RequestsList = () => {
 
 	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 		return (
-			<App {...{ requests }} />
+			<Mobile {...{ requests }} />
 		);
 	} else {
 		return (
