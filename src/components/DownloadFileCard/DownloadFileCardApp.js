@@ -13,7 +13,22 @@ const CustomFileInputWrapper = styled(FileInputWrapper)`
 	margin: 0;
 	max-width: unset;
 	width: 100%;
+  flex-wrap: nowrap;
+  padding: 10px 18px;
+  margin-bottom: ${props => props.theme.spacing(5)};
 `;
+
+const MobileCard = styled(Card)`
+  margin-bottom: 0;
+  padding: 0 18px;
+  border: none;
+  margin-top: 25px;
+`;
+const FileInputLinkMobile = styled(FileInputLink)`
+  padding: 12px 14px;
+  font-size: 13px;
+`;
+
 
 const DownloadFileCardApp = ({
   fileName,
@@ -23,11 +38,11 @@ const DownloadFileCardApp = ({
   fileLink
 }) => {
   return (
-    <Card>
+    <MobileCard>
       <CustomFileInputWrapper hasBorder>
-        <FileInputLink href={fileLink} target='_blank'>
+        <FileInputLinkMobile href={fileLink} target='_blank'>
           {buttonLabel}
-        </FileInputLink>
+        </FileInputLinkMobile>
         <FileInputTitle>
           <FileInputIcon src={fileDownloadIcon} />
           {
@@ -35,10 +50,7 @@ const DownloadFileCardApp = ({
           }
         </FileInputTitle>
       </CustomFileInputWrapper>
-      <HelperText>
-        {helperText}
-      </HelperText>
-    </Card>
+    </MobileCard>
   );
 };
 

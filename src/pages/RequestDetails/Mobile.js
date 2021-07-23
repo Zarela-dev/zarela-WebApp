@@ -4,7 +4,6 @@ import { timeSince, convertToBiobit } from '../../utils';
 import ConnectDialog from '../../components/Dialog/ConnectDialog';
 import Dialog from '../../components/Dialog';
 
-
 const App = ({ account, showDialog, isSubmitting, dialogMessage, request, sendSignalRef, submitSignal, error, setError }) => {
   
 	return (

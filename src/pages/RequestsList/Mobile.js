@@ -60,14 +60,14 @@ const RequestsListLayout = styled.section`
 
 const RequestsListContentWrapper = styled.section`
 	flex: 1 0;
-	padding: 0 ${props => props.theme.spacing(2)};
+	padding: 0 ${props => props.theme.spacing(1.8)};
 `;
 
 const TitleSection = styled.div`
   display:flex;
   height: 83px;
   width: 100%;
-  padding: 5px 10px;
+  padding: 0 18px;
   justify-content: space-between;
   align-items: center;
   background-color: #F4F8FE;
@@ -78,7 +78,7 @@ const Title = styled.h1`
   font-size: 18px;
   font-weight: 700;
   white-space: nowrap;
-  margin-left: 10px;
+  margin-left: 0px;
 `;
 
 const SubmitRequestButton = styled(Link)`
@@ -87,7 +87,7 @@ const SubmitRequestButton = styled(Link)`
   margin-right: 0;
   height: 35px;
   font-size: 14px;
-  padding: 10px 30px; 
+  padding: 10px 24px; 
 `;
 
 

@@ -30,7 +30,7 @@ import documentsIcon from '../../assets/icons/document-blue.svg';
 
 const RequestCardApp = (props) => {
   return (
-    <RequestCardWrapper>
+    <RequestCardWrapper >
       <HeaderLayout>
         <RequestNumber>
           {props.requestID}

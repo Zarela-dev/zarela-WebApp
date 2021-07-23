@@ -8,7 +8,7 @@ import * as ethUtil from 'ethereumjs-util';
 import { encrypt } from 'eth-sig-util';
 import { toast } from '../../utils';
 import { useWeb3React } from '@web3-react/core';
-import App from './App';
+import Mobile from './Mobile';
 import Desktop from './Desktop';
 
 const RequestDetailsPage = () => {
@@ -142,7 +142,7 @@ const RequestDetailsPage = () => {
 
 	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 		return (
-			<App {...{account, showDialog, isSubmitting, dialogMessage, request , sendSignalRef , submitSignal ,error , setError}} />
+			<Mobile {...{account, showDialog, isSubmitting, dialogMessage, request , sendSignalRef , submitSignal ,error , setError}} />
 		);
 	} else {
 		return (
