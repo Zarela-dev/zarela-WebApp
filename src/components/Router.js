@@ -9,6 +9,7 @@ import MyAccount from '../pages/MyAccount';
 import Wallet from '../pages/Wallet';
 import IntroModal from './IntroModal';
 import BottomNavigation from './BottomNavigation';
+import MobileMenu from './MobileMenu';
 
 const AppRouter = () => {
 	const provider = window.ethereum;
@@ -38,6 +39,7 @@ const AppRouter = () => {
 					<Route exact path="/account" component={MyAccount} />
 					<Route path="/wallet" component={Wallet} />
 				</Switch>
+				{/* <MobileMenu /> */}
 			</div>
 		</Router>
 	);
