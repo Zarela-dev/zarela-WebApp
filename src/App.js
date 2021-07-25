@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Web3ReactProvider } from '@web3-react/core';
 import AppRouter from './components/Router';
 import { theme } from './theme';
@@ -8,19 +8,31 @@ import { GlobalStyle } from './globalStyle';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import getLibrary from './utils/getLibrary';
+import Context from "./utils/context";
 
 function App() {
+
+	const [device, setDevice] = useState('');
+
+	const contextStore = {
+		device,
+		setDevice,
+	};
+
+
 	return (
-		<div className="App" style={{overflowX: 'hidden'}}>
+		<div className="App" style={{ overflowX: 'hidden' }}>
 			<Web3ReactProvider getLibrary={getLibrary}>
 				<AppProvider>
-					<ConfirmationProvider>
-						<ThemeProvider theme={theme}>
-							<AppRouter />
-							<ToastContainer />
-							<GlobalStyle />
-						</ThemeProvider>
-					</ConfirmationProvider>
+					<Context.Provider value={contextStore}>
+						<ConfirmationProvider>
+							<ThemeProvider theme={theme}>
+								<AppRouter />
+								<ToastContainer />
+								<GlobalStyle />
+							</ThemeProvider>
+						</ConfirmationProvider>
+					</Context.Provider>
 				</AppProvider>
 			</Web3ReactProvider>
 		</div>

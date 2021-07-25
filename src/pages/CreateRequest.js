@@ -4,7 +4,7 @@ import { mainContext } from '../state';
 import { useHistory } from 'react-router-dom';
 import { create } from 'ipfs-http-client';
 import styled from 'styled-components';
-import TitleBar from '../components/TitleBar';
+import TitleBar from '../components/TitleBar/TitleBar';
 import CreateRequestForm from '../components/CreateRequestForm';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import ConnectDialog from '../components/Dialog/ConnectDialog';

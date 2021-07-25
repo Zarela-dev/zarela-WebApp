@@ -4,8 +4,10 @@ import { timeSince, convertToBiobit } from '../../utils';
 import { useWeb3React } from '@web3-react/core';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
+import Context from './../../utils/context';
 
 const RequestsList = () => {
+	const context = useContext(Context);
 	const { appState } = useContext(mainContext);
 	const web3React = useWeb3React();
 	const PAGE_SIZE = 3;
@@ -86,14 +88,13 @@ const RequestsList = () => {
 
 	}, [appState.contract]);
 
-
-	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+	if (context.device === "Mobile") {
 		return (
 			<Mobile {...{ requests }} />
 		);
 	} else {
 		return (
-			<Desktop {...{ requests , appState , web3React, ZarelaReward , BiobitBasedOnEth , dailyContributors }} />
+			<Desktop {...{ requests, appState, web3React, ZarelaReward, BiobitBasedOnEth, dailyContributors }} />
 		)
 	}
 };

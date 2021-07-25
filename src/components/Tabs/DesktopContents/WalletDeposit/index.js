@@ -1,11 +1,11 @@
 import React from 'react';
-import Note from '../Note';
+import Note from '../../../Note';
 import styled, { css } from 'styled-components';
-import biobitIcon from '../../assets/icons/biobit-black.svg';
-import etherIcon from '../../assets/icons/ether-black.png';
-import nextStepIcon from '../../assets/icons/next-step-arrow.svg';
-import qrCodeImage from '../../assets/icons/qr-code.png';
-import { CopyableText } from '../../utils';
+import biobitIcon from '../../../../assets/icons/biobit-black.svg';
+import etherIcon from '../../../../assets/icons/ether-black.png';
+import nextStepIcon from '../../../../assets/icons/next-step-arrow.svg';
+import qrCodeImage from '../../../../assets/icons/qr-code.png';
+import { CopyableText } from '../../../../utils';
 import { Wrapper, Content, Row, Column } from './Layout';
 import {
 	Title, TokenList, TokenButton, TokenIcon, TokenName, Token

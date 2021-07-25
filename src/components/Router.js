@@ -6,12 +6,22 @@ import Header from './Header';
 import RequestDetails from '../pages/RequestDetails/RequestDetails';
 import Inbox from '../pages/Inbox';
 import MyAccount from '../pages/MyAccount';
-import Wallet from '../pages/Wallet';
+import Wallet from '../pages/Wallet/Wallet';
 import NoMetamaskMessage from './NoMetamaskMessage';
 import NoMobileSupportMessage from './NoMobileSupportMessage';
 import RequestsList from '../pages/RequestsList/RequestsList';
+import Context from './../utils/context';
 
 const AppRouter = () => {
+	const context = useContext(Context);
+
+	useEffect(() => {
+		if ((/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+			context.setDevice("Mobile");
+		} else {
+			context.setDevice("Desktop");
+		};
+	}, [context]);
 
 	if (!window.web3)
 		return <>
@@ -22,7 +32,7 @@ const AppRouter = () => {
 	return (
 		<Router>
 			<>
-				{(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) ?
+				{context.device === "Mobile" ?
 					<Header device="mobile" />
 					:
 					<Header device="desktop" />

@@ -10,8 +10,10 @@ import { toast } from '../../utils';
 import { useWeb3React } from '@web3-react/core';
 import Mobile from './Mobile';
 import Desktop from './Desktop';
+import Context from './../../utils/context';
 
 const RequestDetailsPage = () => {
+	const context = useContext(Context);
 	const { id } = useParams();
 	const [request, setRequest] = useState({});
 	const { appState } = useContext(mainContext);
@@ -140,13 +142,13 @@ const RequestDetailsPage = () => {
 		}
 	}, [id, appState.contract]);
 
-	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+	if (context.device === "Mobile") {
 		return (
-			<Mobile {...{account, showDialog, isSubmitting, dialogMessage, request , sendSignalRef , submitSignal ,error , setError}} />
+			<Mobile {...{ account, showDialog, isSubmitting, dialogMessage, request, sendSignalRef, submitSignal, error, setError }} />
 		);
 	} else {
 		return (
-			<Desktop {...{account, showDialog, isSubmitting, dialogMessage, request , sendSignalRef , submitSignal ,error , setError}}  />
+			<Desktop {...{ account, showDialog, isSubmitting, dialogMessage, request, sendSignalRef, submitSignal, error, setError }} />
 		)
 	}
 };

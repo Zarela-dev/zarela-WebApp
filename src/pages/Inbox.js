@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import TitleBar from '../components/TitleBar';
+import TitleBar from '../components/TitleBar/TitleBar';
 import styled from 'styled-components';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import RequestListItem from '../components/RequestListItem';

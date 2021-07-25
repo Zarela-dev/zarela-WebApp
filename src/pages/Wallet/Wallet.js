@@ -1,59 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { mainContext } from '../state';
-import styled, { css } from 'styled-components';
-import TitleBar from '../components/TitleBar';
-import { Tabs } from '../components/Tabs';
-import WalletTransactions from '../components/WalletTransactions';
-import WalletDeposit from '../components/WalletDeposit';
-import WalletSendAssets from '../components/WalletSendAssets';
-import ConnectToMetamask from '../components/ConnectToMetamask';
+import { mainContext } from '../../state';
 import { useWeb3React } from '@web3-react/core';
-
-const Wrapper = styled.div`
-
-`;
-
-function getInnerPadding(props) {
-	if (props.elevated)
-		return css`
-			padding: ${props => props.theme.spacing(3.6)} ${props => props.theme.spacing(5.7)};
-		`;
-	return css`
-		padding: ${props => props.theme.spacing(2.5)} ${props => props.theme.spacing(2)};
-	`;
-}
-
-const WalletInnerContainer = styled.div`
-	${props => getInnerPadding(props)};
-	background: ${props => props.elevated ? '#FFFFFF' : '#F4F8FE'};
-	border: ${props => props.elevated ? '0.5px solid rgba(133, 206, 238, 0.5)' : 'none'};
-	box-shadow: ${props => props.elevated ? '0px 4px 18px rgba(223, 236, 255, 0.3)' : 'none'};
-	border-radius: 8px;
-`;
-
-const WalletTitlebar = styled(TitleBar)`
-	display: flex;
-	flex-wrap: nowrap;
-	justify-content: space-between;
-`;
-
-const Title = styled.div`
-	font-weight: 500;
-	font-size: 26px;
-	line-height: 34px;
-	color: ${props => props.theme.textPrimary};
-`;
-
-const Balance = styled.div`
-	font-style: normal;
-	font-weight: 500;
-	font-size: 22px;
-	line-height: 29px;
-	color: ${props => props.theme.textPrimary};
-`;
+import Desktop from './Desktop';
+import Mobile from './Mobile';
+import Context from './../../utils/context';
 
 const Wallet = () => {
+	const context = useContext(Context);
 	const { appState } = useContext(mainContext);
 	const [logs, setLogs] = useState([]);
 	const [isLoading, setLoading] = useState(false);
@@ -186,51 +140,15 @@ const Wallet = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [account]);
 
-	return (
-		!account ?
-			<Wrapper>
-				<WalletTitlebar>
-					<Title>Wallet</Title>
-				</WalletTitlebar>
-				<ConnectToMetamask />
-			</Wrapper>
-			:
-			<Wrapper>
-				<WalletTitlebar>
-					<Title>Wallet</Title>
-					<Balance>
-						{`Balance: ${+appState.biobitBalance / Math.pow(10, 9)} BBit`}
-					</Balance>
-				</WalletTitlebar>
-				<Tabs data={[
-					{
-						label: 'Deposit',
-						component: (
-							<WalletInnerContainer elevated>
-								<WalletDeposit address={account ? account : 'please connect to Metamask'} />
-							</WalletInnerContainer>
-						)
-					},
-					{
-						label: 'Send',
-						component: (
-							<WalletInnerContainer elevated>
-								<WalletSendAssets />
-							</WalletInnerContainer>
-						)
-					},
-					{
-						label: 'Transactions',
-						component: (
-							<WalletInnerContainer>
-								<WalletTransactions isLoading={isLoading} account={account} data={logs} />
-							</WalletInnerContainer>
-						)
-					},
-				]}>
-				</Tabs>
-			</Wrapper>
-	);
+	if (context.device === "Mobile") {
+		return (
+			<Mobile {...{account, logs, isLoading}} />
+		);
+	} else {
+		return (
+			<Desktop {...{account, logs, isLoading}} />
+		)
+	}
 };
 
 export default Wallet;
