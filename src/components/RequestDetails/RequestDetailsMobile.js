@@ -30,6 +30,7 @@ import bookmarkIcon from '../../assets/icons/bookmark-purple.svg';
 import publicKeyIcon from '../../assets/icons/public-key.svg';
 import { CopyableText } from '../../utils';
 import DownloadFileCardMobile from '../DownloadFileCard/DownloadFileCardMobile';
+import MobileLayout from '../MobileLayout';
 
 const PageWrapper = styled.div`
 `;
@@ -141,108 +142,110 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
   const [signalFile, setSignalFile] = useState(null);
 
   return (
-    <PageWrapper>
-      <HeaderContainer>
-        <HeaderInner>
-          <HeaderLayout>
-            <RequestNumber>
-              {request.requestID}
-            </RequestNumber>
-            <Title>
-              {request.title}
-            </Title>
-            <Spacer />
-            <Bookmark src={bookmarkIcon} />
-          </HeaderLayout>
-          <CustomFooter>
-            <CustomContributeBadge>
-              <BadgeRow>
-                <ContributorsIcon src={documentsIcon} />
-                <BadgeLabel>
-                  {contributors}
-                </BadgeLabel>
-              </BadgeRow>
-            </CustomContributeBadge>
-            <CustomDivider />
-            <CustomContributeBadge>
-              <BadgeRow>
-                <ContributorsIcon src={contributorIcon} />
-                <BadgeLabel>
-                  {request.totalContributedCount}
-                </BadgeLabel>
-              </BadgeRow>
-            </CustomContributeBadge>
-            <CustomDivider />
-            <CustomContributeBadge>
-              <BadgeRow>
-                <BadgeLabel>
-                  {timestamp}
-                </BadgeLabel>
-              </BadgeRow>
-            </CustomContributeBadge>
-            <Spacer />
-            <CustomBadgeRow>
-              <TokenIcon src={biobitIcon} />
-              <TokenValue>
-                {request.tokenPay}
-              </TokenValue>
-              <BiobitToDollarValue noMargin>
-                {`~ $ ${request.tokenPay}`}
-              </BiobitToDollarValue>
-            </CustomBadgeRow>
-          </CustomFooter>
-          <CustomProgressTrackerWrapper>
-            <ProgressTrackerTrack>
-              <ProgressTrackerProcess progress={+request.totalContributed / +request.totalContributors * 100} />
-            </ProgressTrackerTrack>
-          </CustomProgressTrackerWrapper>
-        </HeaderInner>
-      </HeaderContainer>
-      <DescriptionContainer>
-        <UploadFileCardMobile
-          showSelected
-          buttonLabel='Select Files'
-          label={'Already have the file?'}
-          ref={ref}
-          name={'whitepaper'}
-          value={signalFile}
-          onChange={(e) => {
-            setSignalFile(e.target.files[0]);
-          }}
-          error={error}
-          setError={setError}
-          onClick={submitSignal}
-        />
-        <TitleContent>
-          Description
-        </TitleContent>
-        <Description>
-          {request.description}
-        </Description>
-      </DescriptionContainer>
-      <PublicKeyBadge>
-        <PublicKeyIcon src={publicKeyIcon} />
-        <CopyableText textToCopy={request.requesterAddress}>
-          <PublicKeyTextContainer>
-            <PublicKey variant='body'>
-              Requester public key
-            </PublicKey>
-            <PublicKey variant='body2' weight='semiBold'>
-              {request.requesterAddress}
-            </PublicKey>
-          </PublicKeyTextContainer>
-        </CopyableText>
-      </PublicKeyBadge>
-      <FilesWrapper>
-        <DownloadFileCardMobile
-          fileName={'Download Zpaper'}
-          buttonLabel={'Download'}
-          label={'just label'}
-          helperText={'This file contains Zpaper file and survey test files.'}
-          fileLink={process.env.REACT_APP_IPFS_LINK + request.whitePaper}
-        />
-      </FilesWrapper>
-    </PageWrapper>
+    <MobileLayout>
+      <PageWrapper>
+        <HeaderContainer>
+          <HeaderInner>
+            <HeaderLayout>
+              <RequestNumber>
+                {request.requestID}
+              </RequestNumber>
+              <Title>
+                {request.title}
+              </Title>
+              <Spacer />
+              <Bookmark src={bookmarkIcon} />
+            </HeaderLayout>
+            <CustomFooter>
+              <CustomContributeBadge>
+                <BadgeRow>
+                  <ContributorsIcon src={documentsIcon} />
+                  <BadgeLabel>
+                    {contributors}
+                  </BadgeLabel>
+                </BadgeRow>
+              </CustomContributeBadge>
+              <CustomDivider />
+              <CustomContributeBadge>
+                <BadgeRow>
+                  <ContributorsIcon src={contributorIcon} />
+                  <BadgeLabel>
+                    {request.totalContributedCount}
+                  </BadgeLabel>
+                </BadgeRow>
+              </CustomContributeBadge>
+              <CustomDivider />
+              <CustomContributeBadge>
+                <BadgeRow>
+                  <BadgeLabel>
+                    {timestamp}
+                  </BadgeLabel>
+                </BadgeRow>
+              </CustomContributeBadge>
+              <Spacer />
+              <CustomBadgeRow>
+                <TokenIcon src={biobitIcon} />
+                <TokenValue>
+                  {request.tokenPay}
+                </TokenValue>
+                <BiobitToDollarValue noMargin>
+                  {`~ $ ${request.tokenPay}`}
+                </BiobitToDollarValue>
+              </CustomBadgeRow>
+            </CustomFooter>
+            <CustomProgressTrackerWrapper>
+              <ProgressTrackerTrack>
+                <ProgressTrackerProcess progress={+request.totalContributed / +request.totalContributors * 100} />
+              </ProgressTrackerTrack>
+            </CustomProgressTrackerWrapper>
+          </HeaderInner>
+        </HeaderContainer>
+        <DescriptionContainer>
+          <UploadFileCardMobile
+            showSelected
+            buttonLabel='Select Files'
+            label={'Already have the file?'}
+            ref={ref}
+            name={'whitepaper'}
+            value={signalFile}
+            onChange={(e) => {
+              setSignalFile(e.target.files[0]);
+            }}
+            error={error}
+            setError={setError}
+            onClick={submitSignal}
+          />
+          <TitleContent>
+            Description
+          </TitleContent>
+          <Description>
+            {request.description}
+          </Description>
+        </DescriptionContainer>
+        <PublicKeyBadge>
+          <PublicKeyIcon src={publicKeyIcon} />
+          <CopyableText textToCopy={request.requesterAddress}>
+            <PublicKeyTextContainer>
+              <PublicKey variant='body'>
+                Requester public key
+              </PublicKey>
+              <PublicKey variant='body2' weight='semiBold'>
+                {request.requesterAddress}
+              </PublicKey>
+            </PublicKeyTextContainer>
+          </CopyableText>
+        </PublicKeyBadge>
+        <FilesWrapper>
+          <DownloadFileCardMobile
+            fileName={'Download Zpaper'}
+            buttonLabel={'Download'}
+            label={'just label'}
+            helperText={'This file contains Zpaper file and survey test files.'}
+            fileLink={process.env.REACT_APP_IPFS_LINK + request.whitePaper}
+          />
+        </FilesWrapper>
+      </PageWrapper>
+    </MobileLayout>
   );
 });
 

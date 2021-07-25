@@ -7,6 +7,7 @@ import WalletTransactions from '../../components/Tabs/MobileContents/WalletTrans
 import WalletDeposit from '../../components/Tabs/MobileContents/WalletDeposit';
 import WalletSendAssets from '../../components/Tabs/MobileContents/WalletSendAssets';
 import ConnectToMetamask from '../../components/ConnectToMetamask';
+import MobileLayout from '../../components/MobileLayout';
 
 const Wrapper = styled.div`
 `;
@@ -71,33 +72,35 @@ const Mobile = ({ account, logs, isLoading }) => {
             {`Balance: ${+appState.biobitBalance / Math.pow(10, 9)} BBit`}
           </Balance>
         </WalletTitlebar>
-        <MobileTabs data={[
-          {
-            label: 'Deposit',
-            component: (
-              <WalletInnerContainer elevated>
-                <WalletDeposit address={account ? account : 'please connect to Metamask'} />
-              </WalletInnerContainer>
-            )
-          },
-          {
-            label: 'Send',
-            component: (
-              <WalletInnerContainer elevated>
-                <WalletSendAssets />
-              </WalletInnerContainer>
-            )
-          },
-          {
-            label: 'Transactions',
-            component: (
-              <WalletInnerContainer>
-                <WalletTransactions isLoading={isLoading} account={account} data={logs} />
-              </WalletInnerContainer>
-            )
-          },
-        ]}>
-        </MobileTabs>
+        <MobileLayout>
+          <MobileTabs data={[
+            {
+              label: 'Deposit',
+              component: (
+                <WalletInnerContainer elevated>
+                  <WalletDeposit address={account ? account : 'please connect to Metamask'} />
+                </WalletInnerContainer>
+              )
+            },
+            {
+              label: 'Send',
+              component: (
+                <WalletInnerContainer elevated>
+                  <WalletSendAssets />
+                </WalletInnerContainer>
+              )
+            },
+            {
+              label: 'Transactions',
+              component: (
+                <WalletInnerContainer>
+                  <WalletTransactions isLoading={isLoading} account={account} data={logs} />
+                </WalletInnerContainer>
+              )
+            },
+          ]}>
+          </MobileTabs>
+        </MobileLayout>
       </Wrapper>
   );
 }
