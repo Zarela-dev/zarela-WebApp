@@ -5,7 +5,7 @@ import "./ERC20.sol";
 import "./SafeMath.sol";
 import "./CheckPrice.sol";
 import "./ERC20Burnable.sol";
-// Initiate Biobit Token With 20M Total Supply And Set Name, Symbol
+// Initiate Biobit Token With 20M Total Supply And Set Name, Symbol,Zarela Contract
 
 contract ZarelaSmartContract is ERC20 , PriceConsumer , ERC20Burnable{
     constructor() {
