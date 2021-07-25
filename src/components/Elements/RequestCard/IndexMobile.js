@@ -107,7 +107,6 @@ export const BadgeRow = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-
 `;
 export const BadgeLabel = styled.div`
 	line-height: 1;
@@ -155,6 +154,7 @@ export const TokenValue = styled.div`
 `;
 
 export const ContributorBadge = styled(BiobitToDollarPair)`
+	align-self: center;
 `;
 
 export const Bookmark = styled.img`
@@ -192,9 +192,8 @@ export const JoinButton = styled(GenericLinkButton)`
   height: fit-content;
   align-self: self-start;
   content-self: self-end;
-  
   position: absolute;
-  right: 50px;
+  right: 33px;
 
   
 	& > * {
@@ -207,13 +206,13 @@ export const JoinButton = styled(GenericLinkButton)`
 
 export default RequestCardWrapper;
 export {
-  // Avatar,
-  // Bookmark,
-  // Description,
-  Typography,
-  // ProgressLayout,
-  // TokenIcon,
-  // Spacer,
-  // AvatarImage,
-  // HeaderLayout
+	// Avatar,
+	// Bookmark,
+	// Description,
+	Typography,
+	// ProgressLayout,
+	// TokenIcon,
+	// Spacer,
+	// AvatarImage,
+	// HeaderLayout
 };

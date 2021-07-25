@@ -25,8 +25,8 @@ import RequestCardWrapper, {
   Hint
 } from '../Elements/RequestCard/IndexMobile';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
-import contributorIcon from '../../assets/icons/user-blue.svg';
-import documentsIcon from '../../assets/icons/document-blue.svg';
+import contributorIcon from '../../assets/icons/user-black.svg';
+import documentsIcon from '../../assets/icons/document-black.svg';
 
 const RequestCardMobile = (props) => {
   return (
