@@ -19,7 +19,7 @@ function App() {
 	};
 
 	return (
-		<div className="App" style={{ overflowX: 'hidden' }}>
+		<div className="App">
 			<Web3ReactProvider getLibrary={getLibrary}>
 				<AppProvider>
 					<Context.Provider value={contextStore}>
