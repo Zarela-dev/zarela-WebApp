@@ -27,6 +27,9 @@ export const FileInputTitle = styled.div`
 	flex-wrap: nowrap;
 	align-items: center;
 	color:${props => props.theme.textPrimary};
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 11.27px;
 `;
 
 export const FileInputLabel = styled.label`
@@ -64,6 +67,9 @@ export const FileInputIcon = styled.img`
 `;
 
 export const FileName = styled.div`
+font-size: 10.5px;
+font-weight: 500;
+line-height: 11.5px;
 `;
 
 export const formatLabel = (label) => {
