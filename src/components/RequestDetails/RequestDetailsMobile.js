@@ -59,7 +59,6 @@ const CustomBadgeRow = styled(BadgeRow)`
 
 const DescriptionContainer = styled.div`
 	position: relative;
-	padding-top: ${props => props.theme.spacing(1)};
 	${maxWidthWrapper};
 `;
 

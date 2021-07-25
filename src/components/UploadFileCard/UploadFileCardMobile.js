@@ -15,7 +15,7 @@ const SubmitButton = styled.button`
 
 const MobileCard = styled(Card)`
 	border: none;
-	padding: 18px;
+	padding: 0 18px;
 	margin: 0;
 `;
 

@@ -23,7 +23,7 @@ export const CustomFileInputMobile = styled(FileInputMobile)`
 	width: 100%;
 	padding: 0;
 	border: 1px dashed #3ADEA3;
-	padding: 10px 20px;
+	padding: 9px;
 `;
 
 

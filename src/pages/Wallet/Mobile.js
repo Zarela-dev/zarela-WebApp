@@ -14,7 +14,7 @@ const Wrapper = styled.div`
 
 const WalletInnerContainer = styled.div`
 padding: 0;
-margin: 40px 0;
+margin: 0;
 background: ${props => props.elevated ? '#FFFFFF' : '#F4F8FE'};
 border: ${props => props.elevated ? '0.5px solid rgba(133, 206, 238, 0.5)' : 'none'};
 box-shadow: ${props => props.elevated ? '0px 4px 18px rgba(223, 236, 255, 0.3)' : 'none'};

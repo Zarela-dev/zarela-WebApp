@@ -5,7 +5,7 @@ import { timeSince, convertToBiobit, CopyableText } from '../../../utils';
 
 const Wrapper = styled.div`
 	width: 100%;
-	padding: 18px;
+	padding: 0;
 	background: #fff;
 `;
 
