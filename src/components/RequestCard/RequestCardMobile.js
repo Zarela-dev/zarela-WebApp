@@ -23,7 +23,7 @@ import RequestCardWrapper, {
   ValueLabel,
   BadgeLabel,
   Hint
-} from '../Elements/RequestCard/IndexApp';
+} from '../Elements/RequestCard/IndexMobile';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/user-blue.svg';
 import documentsIcon from '../../assets/icons/document-blue.svg';

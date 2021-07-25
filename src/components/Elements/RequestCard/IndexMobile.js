@@ -104,7 +104,6 @@ export const BiobitToDollarPair = styled.div`
 
 export const BadgeRow = styled.div`
 	width: fit-content;
-	margin-bottom: ${props => props.theme.spacing(0.5)};
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -171,8 +170,8 @@ export const TokenIcon = styled.img`
 `;
 
 export const ContributorsIcon = styled.img`
-	width: 18px;
-	height: 18px;
+	width: 13px;
+	height: 12px;
 	margin-right: ${props => props.theme.spacing(0.5)};
 `;
 

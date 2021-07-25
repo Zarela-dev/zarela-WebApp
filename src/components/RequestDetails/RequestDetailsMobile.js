@@ -21,11 +21,11 @@ import {
   ValueLabel,
   BiobitToDollarValue,
   BadgeLabel,
-} from '../Elements/RequestCard/IndexApp';
+} from '../Elements/RequestCard/IndexMobile';
 import maxWidthWrapper from '../Elements/MaxWidth';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
-import contributorIcon from '../../assets/icons/user-blue.svg';
-import documentsIcon from '../../assets/icons/document-blue.svg';
+import contributorIcon from '../../assets/icons/user-black.svg';
+import documentsIcon from '../../assets/icons/document-black.svg';
 import bookmarkIcon from '../../assets/icons/bookmark-purple.svg';
 import publicKeyIcon from '../../assets/icons/public-key.svg';
 import { CopyableText } from '../../utils';
@@ -116,6 +116,7 @@ const PublicKeyIcon = styled.img`
 
 const CustomContributeBadge = styled(ContributorBadge)`
 	flex: 0 0 auto;
+  align-self: center;
 `;
 
 const FilesWrapper = styled.div`
@@ -185,9 +186,6 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
               <TokenValue>
                 {request.tokenPay}
               </TokenValue>
-              <ValueLabel>
-                BBit
-              </ValueLabel>
               <BiobitToDollarValue noMargin>
                 {`~ $ ${request.tokenPay}`}
               </BiobitToDollarValue>
