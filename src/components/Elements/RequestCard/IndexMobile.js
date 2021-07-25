@@ -39,6 +39,7 @@ export const Title = styled.div`
 	font-weight: 600;
 	font-size: 14px; 
 	line-height: 20px;
+	padding-left: 20px;
 	color: ${props => props.theme.textPrimary};
 `;
 
@@ -158,7 +159,8 @@ export const ContributorBadge = styled(BiobitToDollarPair)`
 `;
 
 export const Bookmark = styled.img`
-	width: 20px;
+	width: 14.5px;
+	height: 17.5px;
 	align-self: flex-start;
 	margin-left: ${props => props.theme.spacing(0.5)};
 `;
