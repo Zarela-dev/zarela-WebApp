@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import CreateRequest from '../pages/CreateRequest';
-// import RequestsList from '../pages/RequestsList';
 import Header from './Header';
 import RequestDetails from '../pages/RequestDetails/RequestDetails';
 import Inbox from '../pages/Inbox';
@@ -10,6 +9,7 @@ import Wallet from '../pages/Wallet/Wallet';
 import NoMetamaskMessage from './NoMetamaskMessage';
 import NoMobileSupportMessage from './NoMobileSupportMessage';
 import RequestsList from '../pages/RequestsList/RequestsList';
+import Log from './../pages/Log/Log';
 import Context from './../utils/context';
 
 const AppRouter = () => {
@@ -21,7 +21,7 @@ const AppRouter = () => {
 		} else {
 			context.setDevice("Desktop");
 		};
-	}, [context]);
+	}, [context.device]);
 
 	if (!window.web3)
 		return <>
@@ -44,6 +44,7 @@ const AppRouter = () => {
 					<Route exact path='/inbox' component={Inbox} />
 					<Route exact path='/account' component={MyAccount} />
 					<Route path='/wallet' component={Wallet} />
+					<Route exact path='/log' component={Log} />
 				</Switch>
 			</>
 		</Router>
