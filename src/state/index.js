@@ -1,10 +1,6 @@
 import { AppProvider, mainContext } from './Provider';
-import { ConfirmationProvider, confirmationContext } from './confirmationProvider'
+import { actionTypes } from './actionTypes';
 
 export {
-	AppProvider,
-	mainContext,
-
-	ConfirmationProvider,
-	confirmationContext
+	AppProvider, mainContext, actionTypes
 };

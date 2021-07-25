@@ -12,25 +12,25 @@ import {
 	BadgeLabel,
 	TokenValue,
 	ValueLabel,
-	BiobitToDollarValue,
+	BiobitToDollarValue
 } from './Elements/RequestCard';
 import { Typography } from './Elements/Typography';
 import biobitIcon from '../assets/icons/biobit-black.svg';
 import contributorIcon from '../assets/icons/user-blue.svg';
 import RequestFilesTable from './RequestFilesTable';
-import { mainContext, confirmationContext } from '../state';
+import { mainContext } from '../state';
 import { Button } from './Elements/Button';
 import axios from 'axios';
 import { Buffer } from 'buffer';
 import fileType from 'file-type';
 import { useWeb3React } from '@web3-react/core';
-import { arraySymmetricDiff } from '../utils';
 
 const Wrapper = styled.div`
-	background: #eef5ff;
+	background: ${props => props.seen ? '#EDFBF8' : '#EAF2FF'};
+	opacity: 0.8;
 	border-radius: 8px;
-	padding: ${(props) => props.theme.spacing(3)} ${(props) => props.theme.spacing(3.5)};
-	margin-bottom: ${(props) => props.theme.spacing(2)};
+	padding: ${props => props.theme.spacing(3)} ${props => props.theme.spacing(3.5)};
+	margin-bottom: ${props => props.theme.spacing(2)};
 `;
 
 const Header = styled.header`
@@ -48,10 +48,10 @@ const Title = styled(Typography)`
 `;
 
 const TotalBadge = styled.div`
-	background: #2eeca8;
+	background: #2EECA8;
 	min-width: 32px;
 	height: 32px;
-	padding: ${(props) => props.theme.spacing(0.8)} ${(props) => props.theme.spacing(0.6)};
+	padding: ${props => props.theme.spacing(0.8)} ${props => props.theme.spacing(0.6)};
 	border-radius: 32px;
 
 	text-align: center;
@@ -63,16 +63,18 @@ const TotalBadge = styled.div`
 
 const Divider = styled.div`
 	width: 1px;
-	background: #3c87aa;
+	background: #3C87AA;
 	min-height: 37px;
-	margin: 0 ${(props) => props.theme.spacing(1)};
+	margin: 0 ${props => props.theme.spacing(1)};
 `;
 
-const Body = styled.section``;
+const Body = styled.section`
+
+`;
 
 const NoContributionMessage = styled.div`
-	margin-top: ${(props) => props.theme.spacing(2)};
-	margin-left: ${(props) => props.theme.spacing(12)};
+	margin-top: ${props => props.theme.spacing(2)};
+	margin-left: ${props => props.theme.spacing(12)};
 `;
 
 const Footer = styled.footer`
@@ -86,8 +88,8 @@ const SubmitButton = styled.button`
 	width: 133px;
 	height: 35px;
 	margin-right: 0;
-	margin-top: ${(props) => props.theme.spacing(3)};
-	padding: ${(props) => props.theme.spacing(0.5)} ${(props) => props.theme.spacing(1.5)};
+	margin-top: ${props => props.theme.spacing(3)};
+	padding: ${props => props.theme.spacing(0.5)} ${props => props.theme.spacing(1.5)};
 	font-weight: 500;
 	font-size: 16px;
 	line-height: 18px;
@@ -107,96 +109,33 @@ const RequestListItem = ({
 	title,
 	tokenPay,
 	contributors,
-	handleConfirm,
+	handleConfirm
 }) => {
 	const [isOpen, setOpen] = useState(false);
 	const { appState } = useContext(mainContext);
-	const { confirmations } = useContext(confirmationContext);
 	const [formattedData, setFormattedData] = useState({});
-	const [unstaged, setUnstaged] = useState({});
+	const [selected, setSelected] = useState({});
 	const { account } = useWeb3React();
 
-	/* 
-		here we need to extract the contributors object from local storage and give it to 
-		selected data type (the state that captures the user file selection)
-
-		now due to the nature of the ethereum network for a transaction to be confirmed
-		it might take up to hours in some cases, but normally it happens way faster.
-
-		we have 2 events, one that gets triggered when the transaction hash is ready, and 
-		one that triggers when the transaction is mined and it's considered "confirmed".
-
-		when the user changes the value of a checkbox, we store that in "selected" state 
-		locally to this component. after the user has made his/her/it's selection, they try
-		submitting, after the transaction hash is generated and returned to us, we take that
-		selection along with other required data and store it as stagedFiles (sf) in localstorage.
-
-		now we empty the "selected" state, and will show the checkboxes as checked and readonly
-		but with a different color so the user knows these files are not yet fully approved on the blockchain.
-
-		and after the completion event is triggered, we move the stagedFiles into confirmedFiles 
-		and will remove those form stagedFiles on localstorage.
-
-	*/
-	const getLocalConfirmations = (confirmations, requestID, state = 'confirmed') => {
-		let localStorageData = confirmations[state];
-
-		let formattedConfirmedFiles = {};
-
-		Object.values(localStorageData).forEach((item) => {
-			if (item?.requestID === requestID) {
-				if (formattedConfirmedFiles[requestID] !== undefined) {
-					let union = {};
-
-					Object.keys(formattedConfirmedFiles[requestID]).forEach(
-						(contributorAddress) => {
-							let theFiles = formattedConfirmedFiles[requestID][contributorAddress];
-
-							if (theFiles.length > 0) {
-								union[contributorAddress] = [
-									...theFiles,
-									...item.contributions[contributorAddress],
-								];
-							} else {
-								union[contributorAddress] = item.contributions[contributorAddress];
-							}
-						}
-					);
-
-					formattedConfirmedFiles[requestID] = union;
-				} else {
-					formattedConfirmedFiles[requestID] = item.contributions;
-				}
-			}
-		});
-
-		return formattedConfirmedFiles[requestID] || {};
-	};
-
 	const isAllChecked = () => {
-		const chosen = Object.values(unstaged).reduce((acc, curr) => acc.concat(...curr), []);
+		const chosen = Object.values(selected).reduce((acc, curr) => acc.concat(...curr), []);
 		const total = Object.values(formattedData).reduce((acc, curr) => acc.concat(...curr), []);
 		return chosen.length === total.length;
 	};
 
 	const changeAll = (type) => {
-		let locallyConfirmed = getLocalConfirmations(confirmations, requestID);
-		let locallyStaged = getLocalConfirmations(confirmations, requestID, 'staged');
-		let totalUnstagedFiles = {};
-
-		Object.keys(formattedData).forEach((address) => {
-			let filesFromBoth = locallyConfirmed[address]?.concat(locallyStaged[address] || []);
-			let allFiles = formattedData[address].map((item) => item.ipfsHash);
-			let remainingUnstagedFiles = arraySymmetricDiff(allFiles || [], filesFromBoth || []);
-			totalUnstagedFiles[address] = remainingUnstagedFiles;
+		const allSelected = {};
+		Object.keys(formattedData).forEach(address => {
+			allSelected[address] = formattedData[address].map(item => item.ipfsHash);
 		});
 
-		if (type === 'check') setUnstaged(totalUnstagedFiles);
+		if (type === 'check')
+			setSelected(allSelected);
 		if (type === 'uncheck')
-			setUnstaged((values) => {
+			setSelected(values => {
 				let result = {};
 
-				Object.keys(values).forEach((address) => {
+				Object.keys(values).forEach(address => {
 					result[address] = [];
 				});
 
@@ -205,52 +144,39 @@ const RequestListItem = ({
 	};
 
 	const onBulkChange = (type, address) => {
-		if (type === 'check') {
-			let locallyConfirmed = getLocalConfirmations(confirmations, requestID);
-			let locallyStaged = getLocalConfirmations(confirmations, requestID, 'staged');
-			let filesFromBoth = locallyConfirmed[address]?.concat(locallyStaged[address] || []);
-			let allFiles = formattedData[address].map((item) => item.ipfsHash);
-			let remainingUnstagedFiles = arraySymmetricDiff(allFiles || [], filesFromBoth || []);
-
-			setUnstaged((values) => {
-				return {
-					...values,
-					[address]: remainingUnstagedFiles,
-				};
-			});
-		}
-
+		if (type === 'check')
+			setSelected(values => ({
+				...values,
+				[address]: formattedData[address].map(item => item.ipfsHash)
+			}));
 		if (type === 'uncheck')
-			setUnstaged((values) => {
+			setSelected(values => {
 				return {
 					...values,
-					[address]: [],
+					[address]: []
 				};
 			});
 	};
 
 	const onChange = (type, address, fileHash) => {
 		if (type === 'check')
-			setUnstaged((values) => {
-				return {
-					...values,
-					[address]: [...values[address], fileHash],
-				};
-			});
+			setSelected(values => ({
+				...values,
+				[address]: [...values[address], fileHash]
+			}));
 		if (type === 'uncheck')
-			setUnstaged((values) => {
+			setSelected(values => {
 				return {
 					...values,
-					[address]: values[address].filter((item) => item !== fileHash),
+					[address]: values[address].filter(item => item !== fileHash)
 				};
 			});
 	};
 
 	const signalDownloadHandler = (fileHash) => {
 		// Start file download.
-		axios
-			.get(`${process.env.REACT_APP_IPFS_LINK + fileHash}`)
-			.then((fileRes) => {
+		axios.get(`${process.env.REACT_APP_IPFS_LINK + fileHash}`)
+			.then(fileRes => {
 				window.ethereum
 					.request({
 						method: 'eth_decrypt',
@@ -270,9 +196,9 @@ const RequestListItem = ({
 						}
 
 						var saveByteArray = (function () {
-							var anchorTag = document.createElement('a');
+							var anchorTag = document.createElement("a");
 							document.body.appendChild(anchorTag);
-							anchorTag.style = 'display: none';
+							anchorTag.style = "display: none";
 
 							return async function (data, name) {
 								try {
@@ -285,7 +211,7 @@ const RequestListItem = ({
 									console.error(error);
 								}
 							};
-						})();
+						}());
 						saveByteArray(decryptedMessage, fileHash);
 					})
 					.catch((error) => console.log(error.message));
@@ -295,135 +221,120 @@ const RequestListItem = ({
 
 	useEffect(() => {
 		if (showContributions && appState.contract !== null) {
-			appState.contract.methods
-				.GetOrderFiles(requestID)
-				.call({ from: account }, (error, result) => {
-					const files = result[0],
-						addresses = result[1],
-						timestamps = result[2];
+			appState.contract.methods.GetOrderFiles(requestID).call({ from: account }, (error, result) => {
+				if (!error) {
+					let formatted = {};
+					let selected = {};
+					let uniqueAddresses = [...new Set(result[1])];
+					let pairs = [];
 
-					if (!error) {
-						let formatted = {};
-						let selected = {};
-						let uniqueAddresses = [...new Set(addresses)];
-						let contributions = [];
-
-						files.forEach((file, fileIndex) => {
-							contributions.push({
-								file,
-								// indexes on both arrays are synced
-								address: addresses[fileIndex],
-								timestamp: timestamps[fileIndex],
-							});
+					result[0].forEach((file, fileIndex) => {
+						pairs.push({
+							file,
+							address: result[1][fileIndex],
+							timestamp: result[2][fileIndex]
 						});
+					});
 
-						uniqueAddresses.forEach((uAddress /* unique address */, uIndex) => {
-							contributions.forEach((contribution, tempIndex) => {
-								if (contribution.address === uAddress) {
-									if (Object(formatted).hasOwnProperty(uAddress)) {
-										formatted[uAddress].push({
-											ipfsHash: contribution.file,
-											timestamp: contribution.timestamp,
-										});
-									} else {
-										formatted[uAddress] = [
-											{
-												ipfsHash: contribution.file,
-												timestamp: contribution.timestamp,
-											},
-										];
-									}
-									selected[uAddress] = [];
+					uniqueAddresses.forEach((uAddress, uIndex) => {
+						pairs.forEach((tempItem, tempIndex) => {
+							if (tempItem.address === uAddress) {
+								if (Object(formatted).hasOwnProperty(uAddress)) {
+									formatted[uAddress].push({ ipfsHash: tempItem.file, timestamp: tempItem.timestamp });
+								} else {
+									formatted[uAddress] = [{ ipfsHash: tempItem.file, timestamp: tempItem.timestamp }];
 								}
-							});
+								selected[uAddress] = [];
+							}
 						});
+					});
 
-						setFormattedData(formatted);
-						setUnstaged(selected);
-					} else {
-						console.error(error.message);
-					}
-				});
+					setFormattedData(formatted);
+					setSelected(selected);
+				} else {
+					console.error(error.message);
+				}
+			});
 		}
 	}, [appState.contract]);
 
 	return (
 		<Wrapper>
 			<Header onClick={() => setOpen(!isOpen)}>
-				<RequestNumberWithPointer>{requestID}</RequestNumberWithPointer>
-				<Title variant="title" weight="semiBold">
+				<RequestNumberWithPointer>
+					{requestID}
+				</RequestNumberWithPointer>
+				<Title variant='title' weight='semiBold'>
 					{title.length < 135 ? title : title.substr(0, 135) + '...'}
 				</Title>
 				<Spacer />
 				<BiobitToDollarPair>
 					<BadgeRow>
 						<TokenIcon src={biobitIcon} />
-						<TokenValue>{tokenPay}</TokenValue>
-						<ValueLabel>BBit</ValueLabel>
-						<BiobitToDollarValue noMargin>{'~ $' + tokenPay}</BiobitToDollarValue>
+						<TokenValue>
+							{tokenPay}
+						</TokenValue>
+						<ValueLabel>
+							BBit
+						</ValueLabel>
+						<BiobitToDollarValue noMargin>
+							{'~ $' + tokenPay}
+						</BiobitToDollarValue>
 					</BadgeRow>
 				</BiobitToDollarPair>
 				<Divider />
 				<CustomContributeBadge>
 					<BadgeRow>
 						<ContributorsIcon src={contributorIcon} />
-						<BadgeLabel>{contributors}</BadgeLabel>
+						<BadgeLabel>
+							{contributors}
+						</BadgeLabel>
 					</BadgeRow>
 				</CustomContributeBadge>
 				<Divider />
-				<TotalBadge>{total}</TotalBadge>
+				<TotalBadge>
+					{total}
+				</TotalBadge>
 			</Header>
-			{showContributions && isOpen ? (
-				Object.keys(formattedData).length > 0 ? (
-					<>
-						<Body>
-							<RequestFilesTable
-								signalDownloadHandler={signalDownloadHandler}
-								data={formattedData}
-								unstaged={unstaged}
-								confirmed={getLocalConfirmations(confirmations, requestID)}
-								staged={getLocalConfirmations(confirmations, requestID, 'staged')}
-								onChange={onChange}
-								onBulkChange={onBulkChange}
-								isAllChecked={isAllChecked}
-								changeAll={changeAll}
-							/>
-						</Body>
-						<Footer>
-							<SubmitButton
-								onClick={() => {
+			{
+				showContributions && isOpen ?
+					Object.keys(formattedData).length > 0 ?
+						<>
+							<Body>
+								<RequestFilesTable
+									signalDownloadHandler={signalDownloadHandler}
+									data={formattedData}
+									selected={selected}
+									onChange={onChange}
+									onBulkChange={onBulkChange}
+									isAllChecked={isAllChecked}
+									changeAll={changeAll}
+								/>
+							</Body>
+							<Footer>
+								<SubmitButton onClick={() => {
 									let payload = [];
 
-									Object.keys(unstaged).forEach((item) => {
-										payload.push(
-											...unstaged[item].map((fileHash) => {
-												// we need the duplicated addresses here
-												return item;
-											})
-										);
+									Object.keys(selected).forEach(item => {
+										payload.push(...selected[item].map(fileHash => {
+											// we need the duplicated addresses here
+											return item;
+										}));
 									});
-
 									if (payload.length > 0)
-										handleConfirm(
-											requestID,
-											payload,
-											unstaged,
-											setUnstaged
-										);
-								}}
-							>
-								Send Tokens
-							</SubmitButton>
-						</Footer>
-					</>
-				) : (
-					<Body>
-						<NoContributionMessage>
-							There are no contributions for now
-						</NoContributionMessage>
-					</Body>
-				)
-			) : null}
+										handleConfirm(requestID, payload);
+								}}>
+									Send Tokens
+								</SubmitButton>
+							</Footer>
+						</>
+						: <Body>
+							<NoContributionMessage>
+								There are no contributions for now
+							</NoContributionMessage>
+						</Body>
+					: null
+			}
 		</Wrapper>
 	);
 };
