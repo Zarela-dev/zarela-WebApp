@@ -144,108 +144,13 @@ const WalletTransactions = ({ isLoading, account, data }) => {
 							Value
 						</TitleCol>
 						<ValueCol>
-							115
+							{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}
 						</ValueCol>
 					</TransactionRow>
 				</TransactionCard>
 			))}
 		</Wrapper>
 	);
-
-
-
-
-	// return (
-	// 	<Table>
-	// 		<Header>
-	// 			<Row>
-
-	// 				<CellWrapper>
-	// 					<Cell>
-	// 						TX Hash
-	// 					</Cell>
-	// 				</CellWrapper>
-	// 				<CellWrapper>
-	// 					<Cell>
-	// 						Date
-	// 					</Cell>
-	// 				</CellWrapper>
-	// 				<CellWrapper>
-	// 					<Cell>
-	// 						From
-	// 					</Cell>
-	// 				</CellWrapper>
-	// 				<CellWrapper>
-	// 					<Cell>
-	// 						To
-	// 					</Cell>
-	// 				</CellWrapper>
-	// 				<CellWrapper>
-	// 					<Cell>
-	// 						Input
-	// 					</Cell>
-	// 				</CellWrapper>
-	// 				<CellWrapper>
-	// 					<Cell>
-	// 						Value
-	// 					</Cell>
-	// 				</CellWrapper>
-	// 				<CellWrapper>
-	// 					<Cell>
-	// 						TX fee
-	// 					</Cell>
-	// 				</CellWrapper>
-	// 			</Row>
-	// 		</Header>
-	// 		{
-	// 			data.map((transaction, index) => (
-	// 				<Row key={index}>
-	// 					<CellWrapper>
-	// 						<CopyableText textToCopy={transaction.blockHash}>
-	// 							<Cell copyable>
-	// 								{transaction.hash}
-	// 							</Cell>
-	// 						</CopyableText>
-	// 					</CellWrapper>
-	// 					<CellWrapper>
-	// 						<Cell>
-	// 							{timeSince(transaction.timeStamp)}
-	// 						</Cell>
-	// 					</CellWrapper>
-	// 					<CellWrapper>
-	// 						<CopyableText textToCopy={transaction.from}>
-	// 							<Cell copyable>
-	// 								{transaction.from}
-	// 							</Cell>
-	// 						</CopyableText>
-	// 					</CellWrapper>
-	// 					<CellWrapper>
-	// 						<CopyableText textToCopy={transaction.to}>
-	// 							<Cell copyable>
-	// 								{transaction.to}
-	// 							</Cell>
-	// 						</CopyableText>
-	// 					</CellWrapper>
-	// 					<CellWrapper>
-	// 						<Cell>
-	// 							{getInput(transaction.input)}
-	// 						</Cell>
-	// 					</CellWrapper>
-	// 					<CellWrapper>
-	// 						<Cell bold>
-	// 							{transaction.input !== '0x' ? convertToBiobit(transaction.value) : +transaction.value / Math.pow(10, 18)}
-	// 						</Cell>
-	// 					</CellWrapper>
-	// 					<CellWrapper>
-	// 						<Cell>
-	// 							{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}
-	// 						</Cell>
-	// 					</CellWrapper>
-	// 				</Row>
-	// 			))
-	// 		}
-	// 	</Table>
-	// );
 };
 
 export default WalletTransactions;
