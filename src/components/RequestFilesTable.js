@@ -11,7 +11,7 @@ const Table = styled.div`
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	margin-top: ${(props) => props.theme.spacing(3)};
+	margin-top: ${props => props.theme.spacing(3)};
 `;
 
 const CellWrapper = styled.div`
@@ -40,27 +40,27 @@ const Row = styled.section`
 	}
 `;
 
+
 const Cell = styled.div`
 	display: flex;
 	align-items: center;
-	justify-content: ${(props) => (props.justifyCenter ? 'center' : 'flex-start')};
 	min-height: 48px;
-	padding: ${(props) => props.theme.spacing(0.6)} ${(props) => props.theme.spacing(1)};
+	padding: ${props => props.theme.spacing(0.6)} ${props => props.theme.spacing(1)};
 	font-size: 12px;
 	height: 40px;
 	width: 100%;
 	font-weight: normal;
-	cursor: ${(props) => (props.pointer ? 'pointer' : 'normal')};
+	cursor: ${props => props.pointer ? 'pointer' : 'normal'};
 
 	${CellWrapper}:not(:last-child) & {
-		border-right: 1px solid #3c87aa;
+		border-right: 1px solid #3C87AA;
 	}
 `;
 
 const PublicKeyIcon = styled.img`
 	flex: 0 0 40px;
 	height: 40px;
-	margin-right: ${(props) => props.theme.spacing(1)};
+	margin-right: ${props => props.theme.spacing(1)};
 `;
 
 const CustomCheckbox = styled(SmallCheckbox)`
@@ -71,25 +71,25 @@ const FilesCount = styled.div`
 	font-size: 12px;
 	line-height: 20px;
 	color: #858585;
-	margin-bottom: ${(props) => props.theme.spacing(2)};
+	margin-bottom: ${props => props.theme.spacing(2)};
 `;
 
 const FilesListWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
-	padding: ${(props) => props.theme.spacing(1)};
-	margin-bottom: ${(props) => props.theme.spacing(2)};
+	padding: ${props => props.theme.spacing(1)};
+	margin-bottom: ${props => props.theme.spacing(2)};
 	height: 100%;
 `;
 
 const FilesList = styled.div`
 	flex: 1;
-	border-left: 1px solid #3c87aa;
-	margin-left: -21px;
-	padding-left: 20px;
+	border-left: 1px solid #3C87AA;
+    margin-left: -21px;
+    padding-left: 20px;
 	max-height: 238px;
 	min-height: 27px;
-	overflow: auto;
+    overflow: auto;
 
 	${Scrollbar};
 `;
@@ -104,162 +104,48 @@ const FileItem = styled.div`
 	color: #121213;
 
 	&:not(:last-child) {
-		margin-bottom: ${(props) => props.theme.spacing(2)};
+		margin-bottom: ${props => props.theme.spacing(2)};
 	}
 `;
 
 const FileCheckbox = styled(SmallCheckbox)`
-	margin-right: ${(props) => props.theme.spacing(1)};
+	margin-right: ${props => props.theme.spacing(1)};
 `;
 
 const FileName = styled.div`
-	margin-right: ${(props) => props.theme.spacing(2)};
+	margin-right: ${props => props.theme.spacing(2)}
 `;
 
 const DownloadButtonImage = styled.img`
-	width: 20px;
+	width: 	20px;
 `;
 
 const DownloadButton = styled.button`
-	border: none;
+	border:none;
 	background: white;
-	margin-right: ${(props) => props.theme.spacing(2)};
+	margin-right: ${props => props.theme.spacing(2)};
 `;
 
-const Timestamp = styled.div``;
+const Timestamp = styled.div`
+  
+`;
 
 const RequestFilesTable = ({
 	data,
-	unstaged,
-	confirmed,
-	staged,
+	selected,
 	onChange,
 	onBulkChange,
 	isAllChecked,
 	changeAll,
-	signalDownloadHandler,
+	signalDownloadHandler
 }) => {
-	const isConfirmed = (address, fileHash, type = 'file') => {
-		if (type === 'file') return confirmed[address]?.includes(fileHash);
-		else if (type === 'contributor') return confirmed[address]?.length === data[address].length;
-		return false;
-	};
-
-	const isStaged = (address, fileHash, type = 'file') => {
-		if (type === 'file') return staged[address]?.includes(fileHash);
-		else if (type === 'contributor') return staged[address]?.length === data[address].length;
-		return false;
-	};
-
-	const isChecked = (address, fileHash, type = 'file') => {
-		let props = {
-			checked: false,
-		};
-
-		if (type === 'file') {
-			let _confirmed = isConfirmed(address, fileHash),
-				_staged = isStaged(address, fileHash),
-				_unstaged = unstaged[address]?.includes(fileHash);
-
-			if (_confirmed) {
-				props = {
-					checked: true,
-					readonly: true,
-					variant: 'confirmed',
-				};
-			} else if (_staged) {
-				props = {
-					checked: true,
-					readonly: true,
-					variant: 'staged',
-				};
-			} else if (_unstaged) {
-				props = {
-					checked: true,
-					readonly: false,
-					variant: '',
-				};
-			}
-		} else if (type === 'contributor') {
-			let _confirmed = confirmed[address]?.length === data[address].length,
-				_staged =
-					staged[address]?.length === data[address].length ||
-					(confirmed[address]?.length || 0) + (staged[address]?.length || 0) ===
-						data[address].length,
-				_unstaged =
-					unstaged[address]?.length === data[address].length ||
-					(confirmed[address]?.length || 0) +
-						(staged[address]?.length || 0) +
-						unstaged[address]?.length ===
-						data[address].length;
-
-			if (_confirmed) {
-				props = {
-					checked: true,
-					readonly: true,
-					variant: 'confirmed',
-				};
-			} else if (_staged) {
-				props = {
-					checked: true,
-					readonly: true,
-					variant: 'staged',
-				};
-			} else if (_unstaged) {
-				props = {
-					checked: true,
-					readonly: false,
-					variant: '',
-				};
-			}
-		} else if (type === 'all') {
-			function getFiles(obj) {
-				return Object.values(obj).reduce((acc, curr) => acc.concat(...curr), []);
-			}
-
-			let _confirmed = getFiles(confirmed).length === getFiles(data).length,
-				_staged =
-					getFiles(staged).length === getFiles(data).length ||
-					((getFiles(confirmed).length || 0) + (getFiles(staged).length || 0) ===
-						getFiles(data).length &&
-						getFiles(staged).length !== 0),
-				_unstaged =
-					getFiles(unstaged).length === getFiles(data).length ||
-					(getFiles(confirmed).length || 0) +
-						(getFiles(staged).length || 0) +
-						getFiles(unstaged).length ===
-						getFiles(data).length;
-			if (_confirmed) {
-				props = {
-					checked: true,
-					readonly: true,
-					variant: 'confirmed',
-				};
-			} else if (_staged) {
-				props = {
-					checked: true,
-					readonly: true,
-					variant: 'staged',
-				};
-			} else if (_unstaged) {
-				props = {
-					checked: true,
-					readonly: false,
-					variant: '',
-				};
-			}
-		}
-		return props;
-	};
-
 	return (
 		<Table>
 			<Row>
 				<CellWrapper>
-					<Cell justifyCenter>
-						{/* all checkbox */}
+					<Cell>
 						<CustomCheckbox
-							{...isChecked(null, null, 'all')}
+							checked={isAllChecked()}
 							onChange={(e) => {
 								if (e.target.checked === true) {
 									changeAll('check');
@@ -271,76 +157,82 @@ const RequestFilesTable = ({
 					</Cell>
 				</CellWrapper>
 				<CellWrapper>
-					<Cell>Contributor's public key</Cell>
+					<Cell>
+						Contributor's public key
+					</Cell>
 				</CellWrapper>
 				<CellWrapper>
-					<Cell>Uploaded files</Cell>
+					<Cell>
+						Uploaded files
+					</Cell>
 				</CellWrapper>
 			</Row>
-			{Object.keys(data).map((reqAddress, index) => (
-				<Row key={reqAddress}>
-					<CellWrapper>
-						<Cell justifyCenter>
-							{/* contributor checkbox */}
-							<CustomCheckbox
-								{...isChecked(reqAddress, null, 'contributor')}
-								onChange={(e) => {
-									if (e.target.checked === true) {
-										onBulkChange('check', reqAddress);
-									} else {
-										onBulkChange('uncheck', reqAddress);
-									}
-								}}
-							/>
-						</Cell>
-					</CellWrapper>
-					<CellWrapper>
-						<CopyableText textToCopy={reqAddress}>
-							<Cell pointer>
-								<PublicKeyIcon src={publicKeyIcon} />
-								{reqAddress}
+			{
+				Object.keys(data).map((reqAddress, index) => (
+					<Row key={reqAddress}>
+						<CellWrapper>
+							<Cell>
+								<CustomCheckbox
+									checked={selected[reqAddress].length === data[reqAddress].length}
+									onChange={(e) => {
+										if (e.target.checked === true) {
+											onBulkChange('check', reqAddress);
+										} else {
+											onBulkChange('uncheck', reqAddress);
+										}
+									}} />
 							</Cell>
-						</CopyableText>
-					</CellWrapper>
-					<CellWrapper>
-						<FilesListWrapper>
-							<FilesCount>{`${data[reqAddress].length} files`}</FilesCount>
-							<FilesList>
-								{data[reqAddress].map(({ ipfsHash, timestamp }, fileIndex) => {
-									return (
-										<FileItem key={fileIndex}>
-											{/* file checkbox */}
-											<FileCheckbox
-												{...isChecked(reqAddress, ipfsHash)}
-												onChange={(e) => {
-													if (e.target.checked === true) {
-														onChange('check', reqAddress, ipfsHash);
-													} else {
-														onChange('uncheck', reqAddress, ipfsHash);
-													}
-												}}
-											/>
-											<FileName>
-												{
-													// file.substr(0, 4) + '...' + file.substr(file.length - 4) + `  (File #${fileIndex + 1})`
-													ipfsHash + `  (File #${fileIndex + 1})`
-												}
-											</FileName>
-											<Timestamp>{`${timeSince(timestamp)}`}</Timestamp>
-											<Spacer />
-											<DownloadButton
-												onClick={() => signalDownloadHandler(ipfsHash)}
-											>
-												<DownloadButtonImage src={downloadIcon} />
-											</DownloadButton>
-										</FileItem>
-									);
-								})}
-							</FilesList>
-						</FilesListWrapper>
-					</CellWrapper>
-				</Row>
-			))}
+						</CellWrapper>
+						<CellWrapper>
+							<CopyableText textToCopy={reqAddress}>
+								<Cell pointer>
+									<PublicKeyIcon src={publicKeyIcon} />
+									{reqAddress}
+								</Cell>
+							</CopyableText>
+						</CellWrapper>
+						<CellWrapper>
+							<FilesListWrapper>
+								<FilesCount>
+									{`${data[reqAddress].length} files`}
+								</FilesCount>
+								<FilesList>
+									{
+										data[reqAddress].map(({ ipfsHash, timestamp }, fileIndex) => {
+											return (
+												<FileItem key={fileIndex}>
+													<FileCheckbox checked={selected[reqAddress].includes(ipfsHash)} onChange={(e) => {
+														if (e.target.checked === true) {
+															onChange('check', reqAddress, ipfsHash);
+														} else {
+															onChange('uncheck', reqAddress, ipfsHash);
+														}
+													}} />
+													<FileName>
+														{
+															// file.substr(0, 4) + '...' + file.substr(file.length - 4) + `  (File #${fileIndex + 1})`
+															ipfsHash + `  (File #${fileIndex + 1})`
+														}
+													</FileName>
+													<Timestamp>
+														{
+															`${timeSince(timestamp)}`
+														}
+													</Timestamp>
+													<Spacer />
+													<DownloadButton onClick={() => signalDownloadHandler(ipfsHash)}>
+														<DownloadButtonImage src={downloadIcon} />
+													</DownloadButton>
+												</FileItem>
+											);
+										})
+									}
+								</FilesList>
+							</FilesListWrapper>
+						</CellWrapper>
+					</Row>
+				))
+			}
 		</Table>
 	);
 };
