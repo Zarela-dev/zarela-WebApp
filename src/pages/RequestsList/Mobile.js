@@ -1,5 +1,5 @@
 import React from 'react';
-import RequestCardApp from '../../components/RequestCard/RequestCardApp';
+import RequestCardMobile from '../../components/RequestCard/RequestCardMobile';
 import styled from 'styled-components';
 import Pagination from '../../components/Pagination';
 import maxWidthWrapper from '../../components/Elements/MaxWidth';
@@ -109,7 +109,7 @@ const App = ({ requests }) => {
             {
               Object.values(requests).sort((a, b) => +b.requestID - +a.requestID).map(item => {
                 return (
-                  <RequestCardApp
+                  <RequestCardMobile
                     key={item.requestID}
                     requestID={item.requestID}
                     title={item.title}

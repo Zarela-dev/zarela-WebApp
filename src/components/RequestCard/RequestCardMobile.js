@@ -28,7 +28,7 @@ import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/user-blue.svg';
 import documentsIcon from '../../assets/icons/document-blue.svg';
 
-const RequestCardApp = (props) => {
+const RequestCardMobile = (props) => {
   return (
     <RequestCardWrapper >
       <HeaderLayout>
@@ -93,4 +93,4 @@ const RequestCardApp = (props) => {
   );
 };
 
-export default RequestCardApp;
+export default RequestCardMobile;

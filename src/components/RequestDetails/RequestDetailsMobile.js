@@ -21,8 +21,8 @@ import {
   ValueLabel,
   BiobitToDollarValue,
   BadgeLabel,
-} from './../Elements/RequestCard/IndexApp';
-import maxWidthWrapper from './../Elements/MaxWidth';
+} from '../Elements/RequestCard/IndexApp';
+import maxWidthWrapper from '../Elements/MaxWidth';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/user-blue.svg';
 import documentsIcon from '../../assets/icons/document-blue.svg';
@@ -135,7 +135,7 @@ const CustomProgressTrackerWrapper = styled(ProgressTrackerWrapper)`
 	margin-bottom: ${props => props.theme.spacing(0)};
 `;
 
-const RequestDetailsApp = React.forwardRef(({ setError, error, timestamp, request, submitSignal }, ref) => {
+const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, request, submitSignal }, ref) => {
   const contributors = `${request.totalContributed}/${request.totalContributors}`;
   const [signalFile, setSignalFile] = useState(null);
 
@@ -227,18 +227,18 @@ const RequestDetailsApp = React.forwardRef(({ setError, error, timestamp, reques
         </Description>
       </DescriptionContainer>
       <PublicKeyBadge>
-					<PublicKeyIcon src={publicKeyIcon} />
-					<CopyableText textToCopy={request.requesterAddress}>
-						<PublicKeyTextContainer>
-							<PublicKey variant='body'>
-								Requester public key
-							</PublicKey>
-							<PublicKey variant='body2' weight='semiBold'>
-								{request.requesterAddress}
-							</PublicKey>
-						</PublicKeyTextContainer>
-					</CopyableText>
-				</PublicKeyBadge>
+        <PublicKeyIcon src={publicKeyIcon} />
+        <CopyableText textToCopy={request.requesterAddress}>
+          <PublicKeyTextContainer>
+            <PublicKey variant='body'>
+              Requester public key
+            </PublicKey>
+            <PublicKey variant='body2' weight='semiBold'>
+              {request.requesterAddress}
+            </PublicKey>
+          </PublicKeyTextContainer>
+        </CopyableText>
+      </PublicKeyBadge>
       <FilesWrapper>
         <DownloadFileCardApp
           fileName={'Download Zpaper'}
@@ -252,4 +252,4 @@ const RequestDetailsApp = React.forwardRef(({ setError, error, timestamp, reques
   );
 });
 
-export default RequestDetailsApp;
+export default RequestDetailsMobile;
