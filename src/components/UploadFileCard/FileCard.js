@@ -14,17 +14,16 @@ export const Card = styled.div`
 `;
 
 export const CustomFileInput = styled(FileInput)`
-	margin: 0;
 	max-width: unset;
 	width: 100%;
 `;
 
 export const CustomFileInputApp = styled(FileInputApp)`
-	margin: 0;
 	max-width: unset;
 	width: 100%;
 	padding: 0;
 	border: 1px dashed #3ADEA3;
+	padding: 0 20px;
 `;
 
 

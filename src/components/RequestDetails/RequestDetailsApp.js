@@ -89,6 +89,7 @@ const PublicKeyBadge = styled.div`
 	right: 0;
 	top: 40px;
 	max-width: 400px;
+  padding: 0 20px;
 `;
 
 const PublicKeyTextContainer = styled.div`
