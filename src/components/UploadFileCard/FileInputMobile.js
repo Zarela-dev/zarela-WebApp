@@ -81,7 +81,7 @@ export const getFileName = (inputRef, fallbackLabel) => {
 	return formatLabel(fallbackLabel);
 };
 
-const FileInputApp = forwardRef(({
+const FileInputMobile = forwardRef(({
 	disableUpload,
 	className,
 	hasBorder,
@@ -147,4 +147,4 @@ const FileInputApp = forwardRef(({
 	);
 });
 
-export default FileInputApp;
+export default FileInputMobile;

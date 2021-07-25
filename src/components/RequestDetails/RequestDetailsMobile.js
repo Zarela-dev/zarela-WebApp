@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import UploadFileCardApp from '../UploadFileCard/UploadFileCardApp';
+import UploadFileCardMobile from '../UploadFileCard/UploadFileCardMobile';
 import {
   RequestNumber,
   HeaderLayout,
@@ -29,7 +29,7 @@ import documentsIcon from '../../assets/icons/document-blue.svg';
 import bookmarkIcon from '../../assets/icons/bookmark-purple.svg';
 import publicKeyIcon from '../../assets/icons/public-key.svg';
 import { CopyableText } from '../../utils';
-import DownloadFileCardApp from '../DownloadFileCard/DownloadFileCardApp';
+import DownloadFileCardMobile from '../DownloadFileCard/DownloadFileCardMobile';
 
 const PageWrapper = styled.div`
 `;
@@ -200,12 +200,8 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
           </CustomProgressTrackerWrapper>
         </HeaderInner>
       </HeaderContainer>
-
-
-
-
       <DescriptionContainer>
-        <UploadFileCardApp
+        <UploadFileCardMobile
           showSelected
           buttonLabel='Select Files'
           label={'Already have the file?'}
@@ -240,7 +236,7 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
         </CopyableText>
       </PublicKeyBadge>
       <FilesWrapper>
-        <DownloadFileCardApp
+        <DownloadFileCardMobile
           fileName={'Download Zpaper'}
           buttonLabel={'Download'}
           label={'just label'}

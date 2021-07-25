@@ -1,10 +1,16 @@
 import React from 'react';
-import { Card, CustomFileInputApp, HelperText, ErrorText } from './FileCard';
+import { Card, CustomFileInputMobile, HelperText, ErrorText } from './FileCard';
 import styled from 'styled-components';
 import uploadPlusBtn from './../../assets/icons/uploadPlusBtn.svg';
 
-const SubmitButton = styled.img`
-	
+const SubmitButton = styled.button`
+	background-image: url(${uploadPlusBtn});
+	width: 38px;
+  height: 38px;
+  background-position: center;
+	outline: none;
+	border: none;
+	border-radius: 3px;
 `;
 
 const MobileCard = styled(Card)`
@@ -14,7 +20,7 @@ const MobileCard = styled(Card)`
 `;
 
 
-const UploadFileCardApp = React.forwardRef(({
+const UploadFileCardMobile = React.forwardRef(({
 	showSelected,
 	label,
 	helperText,
@@ -28,11 +34,11 @@ const UploadFileCardApp = React.forwardRef(({
 }, ref) => {
 	return (
 		<MobileCard>
-			<CustomFileInputApp
+			<CustomFileInputMobile
 				hasBorder
 				disableUpload={disableUpload}
 				showSelected={showSelected}
-				buttonLabel={<SubmitButton src={uploadPlusBtn} disabled={error !== null} variant='primary' onClick={onClick} />}
+				buttonLabel={<SubmitButton disabled={error !== null} variant='primary' onClick={onClick} />}
 				label={label}
 				ref={ref}
 				name={name}
@@ -54,4 +60,4 @@ const UploadFileCardApp = React.forwardRef(({
 	);
 });
 
-export default UploadFileCardApp;
+export default UploadFileCardMobile;

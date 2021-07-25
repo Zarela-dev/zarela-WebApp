@@ -4,7 +4,7 @@ import {
   FileInputWrapper,
   FileInputTitle,
   FileInputIcon
-} from '../UploadFileCard/FileInputApp';
+} from '../UploadFileCard/FileInputMobile';
 import { Card, HelperText } from '../UploadFileCard/FileCard';
 import styled from 'styled-components';
 import fileDownloadIcon from '../../assets/icons/file-download.svg';
@@ -30,7 +30,7 @@ const FileInputLinkMobile = styled(FileInputLink)`
 `;
 
 
-const DownloadFileCardApp = ({
+const DownloadFileCardMobile = ({
   fileName,
   buttonLabel,
   label,
@@ -54,4 +54,4 @@ const DownloadFileCardApp = ({
   );
 };
 
-export default DownloadFileCardApp;
+export default DownloadFileCardMobile;
