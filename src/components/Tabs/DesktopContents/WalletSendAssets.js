@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { mainContext } from '../state';
+import { mainContext } from '../../../state';
 import {
 	Title, TokenList, TokenButton, TokenIcon, TokenName, Token
 } from './WalletDeposit/DepositChoices';
 import { Content, Row, Column } from './WalletDeposit/Layout';
-import biobitIcon from '../assets/icons/biobit-black.svg';
-import etherIcon from '../assets/icons/ether-black.png';
-import Textfield from './Elements/TextField';
-import Button from './Elements/Button';
-import copyImage from '../assets/icons/copy.svg';
-import { CopyableText, scientificToDecimal, toast, convertToBiobit } from '../utils';
+import biobitIcon from '../../../assets/icons/biobit-black.svg';
+import etherIcon from '../../../assets/icons/ether-black.png';
+import Textfield from './../../Elements/TextField';
+import Button from './../../Elements/Button';
+import copyImage from '../../../assets/icons/copy.svg';
+import { CopyableText, scientificToDecimal, toast, convertToBiobit } from '../../../utils';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useHistory } from 'react-router';

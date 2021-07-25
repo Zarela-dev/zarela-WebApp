@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { mainContext } from '../state';
-import TitleBar from '../components/TitleBar';
+import TitleBar from '../components/TitleBar/TitleBar';
 import styled from 'styled-components';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import RequestListItem from '../components/RequestListItem';

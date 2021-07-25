@@ -23,6 +23,7 @@ const appInitialState = {
 
 	zarelaInitDate: null,
 	zarelaDailyGift: null,
+	device: null
 };
 
 const mainContext = React.createContext(appInitialState);

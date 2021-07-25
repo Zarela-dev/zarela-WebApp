@@ -41,6 +41,7 @@ const Label = styled.label`
 	display: flex;
 	width: 100%;
 	justify-content: space-between;
+	margin-bottom: ${props => props.theme.spacing(0.5)}
 	
 `;
 
@@ -77,7 +78,7 @@ const ActionsContainer = styled.div`
 	align-items: center;
 	position: absolute;
 	right: 17px;
-	top: ${props => props.shrink ? '7px' : '26px'};
+	top: ${props => props.shrink ? '7px' : '31px'};
 	z-index: 3;
 `;
 

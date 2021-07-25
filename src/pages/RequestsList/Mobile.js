@@ -1,5 +1,5 @@
 import React from 'react';
-import RequestCardApp from '../../components/RequestCard/RequestCardApp';
+import RequestCardMobile from '../../components/RequestCard/RequestCardMobile';
 import styled from 'styled-components';
 import Pagination from '../../components/Pagination';
 import maxWidthWrapper from '../../components/Elements/MaxWidth';
@@ -7,6 +7,7 @@ import { timeSince, convertToBiobit } from '../../utils';
 import homepageBg from '../../assets/home-bg.jpg';
 import { Button } from '../../components/Elements/Button';
 import { Link } from 'react-router-dom';
+import MobileLayout from '../../components/MobileLayout';
 
 const RequestsListWrapper = styled.div`
 	position: relative;
@@ -102,31 +103,33 @@ const App = ({ requests }) => {
           New Request
         </SubmitRequestButton>
       </TitleSection>
-      <RequestsListWrapper>
-        <Background />
-        <RequestsListLayout>
-          <RequestsListContentWrapper>
-            {
-              Object.values(requests).sort((a, b) => +b.requestID - +a.requestID).map(item => {
-                return (
-                  <RequestCardApp
-                    key={item.requestID}
-                    requestID={item.requestID}
-                    title={item.title}
-                    description={item.description}
-                    tokenPay={item.tokenPay}
-                    timestamp={timeSince(item.timestamp)}
-                    progress={+item.totalContributed / +item.totalContributors * 100}
-                    contributors={`${item.totalContributed}/${item.totalContributors}`}
-                    totalContributedCount={item.totalContributedCount}
-                  />
-                );
-              })
-            }
-          </RequestsListContentWrapper>
-        </RequestsListLayout>
-        <Pagination />
-      </RequestsListWrapper>
+      <MobileLayout>
+        <RequestsListWrapper>
+          <Background />
+          <RequestsListLayout>
+            <RequestsListContentWrapper>
+              {
+                Object.values(requests).sort((a, b) => +b.requestID - +a.requestID).map(item => {
+                  return (
+                    <RequestCardMobile
+                      key={item.requestID}
+                      requestID={item.requestID}
+                      title={item.title}
+                      description={item.description}
+                      tokenPay={item.tokenPay}
+                      timestamp={timeSince(item.timestamp)}
+                      progress={+item.totalContributed / +item.totalContributors * 100}
+                      contributors={`${item.totalContributed}/${item.totalContributors}`}
+                      totalContributedCount={item.totalContributedCount}
+                    />
+                  );
+                })
+              }
+            </RequestsListContentWrapper>
+          </RequestsListLayout>
+          <Pagination />
+        </RequestsListWrapper>
+      </MobileLayout>
     </>
   )
 }

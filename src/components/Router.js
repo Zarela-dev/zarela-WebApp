@@ -1,15 +1,16 @@
 import React, { useContext, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import CreateRequest from '../pages/CreateRequest';
-import RequestsList from '../pages/RequestsList';
 import Header from './Header';
 import RequestDetails from '../pages/RequestDetails/RequestDetails';
 import Inbox from '../pages/Inbox';
-import MyAccount from '../pages/MyAccount';
-import Wallet from '../pages/Wallet';
 import IntroModal from './IntroModal';
 import BottomNavigation from './BottomNavigation';
 import styled from 'styled-components';
+import Wallet from '../pages/Wallet/Wallet';
+import RequestsList from '../pages/RequestsList/RequestsList';
+import Context from './../utils/context';
+import MyAccount from '../pages/MyAccount';
 
 const AppWrapper = styled.div`
 	padding-bottom: ${(props) => props.theme.spacing(5)};
@@ -17,6 +18,19 @@ const AppWrapper = styled.div`
 
 const AppRouter = () => {
 	const provider = window.ethereum;
+	const context = useContext(Context);
+
+	useEffect(() => {
+		if (
+			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+				navigator.userAgent
+			)
+		) {
+			context.setDevice('Mobile');
+		} else {
+			context.setDevice('Desktop');
+		}
+	}, [context.device]);
 
 	if (!provider)
 		return (
@@ -24,13 +38,10 @@ const AppRouter = () => {
 				<IntroModal />
 			</>
 		);
-
 	return (
 		<Router>
 			<AppWrapper>
-				{/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-					navigator.userAgent
-				) ? (
+				{context.device === 'Mobile' ? (
 					<>
 						<Header device="mobile" />
 						<BottomNavigation />
@@ -46,7 +57,6 @@ const AppRouter = () => {
 					<Route exact path="/account" component={MyAccount} />
 					<Route path="/wallet" component={Wallet} />
 				</Switch>
-				{/* <MobileMenu /> */}
 			</AppWrapper>
 		</Router>
 	);

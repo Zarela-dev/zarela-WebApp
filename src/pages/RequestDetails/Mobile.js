@@ -1,5 +1,5 @@
 import React from 'react';
-import RequestDetailsApp from '../../components/RequestDetails/RequestDetailsApp';
+import RequestDetailsMobile from '../../components/RequestDetails/RequestDetailsMobile';
 import { timeSince, convertToBiobit } from '../../utils';
 import ConnectDialog from '../../components/Dialog/ConnectDialog';
 import Dialog from '../../components/Dialog';
@@ -17,7 +17,7 @@ const App = ({ account, showDialog, isSubmitting, dialogMessage, request, sendSi
 				hasSpinner
 				type='success'
 			/>
-			<RequestDetailsApp
+			<RequestDetailsMobile
 				request={request}
 				ref={sendSignalRef}
 				submitSignal={submitSignal}

@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import Button from '../Elements/Button';
+import Button from '../../../Elements/Button';
 
 export const QRCode = styled.div`
 	width: 136px;
