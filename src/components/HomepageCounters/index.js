@@ -31,23 +31,22 @@ const HomepageCounters = ({ zarelaInitDate, zarelaDailyGift, todayGift }) => {
 
 	useEffect(() => {
 		if (zarelaInitDate !== null && zarelaDailyGift !== null) {
-			setBankCountdown(new Date().getTime() + (bankInterval - getDifferenceInMSeconds(zarelaInitDate, new Date().getTime())));
-			setGiftCountdown(new Date().getTime() + (giftInterval - getDifferenceInMSeconds(zarelaDailyGift, new Date().getTime())));
+			setBankCountdown(1627141373705 /* 2021-07-24 */ + 45 * 24 * 60 * 60 * 1000);
+			setGiftCountdown(
+				new Date().getTime() +
+					(giftInterval - getDifferenceInMSeconds(zarelaDailyGift, new Date().getTime()))
+			);
 		}
 	}, [zarelaInitDate, zarelaDailyGift]);
 
 	return (
 		<Wrapper>
-			{
-				bankCountdown !== 0 ?
-					<BankCountdown countdown={bankCountdown} />
-					: <Spacer />
-			}
-			{
-				bankCountdown !== 0 ?
-					<DailyGift countdown={giftCountdown} giftValue={todayGift} />
-					: <Spacer />
-			}
+			{bankCountdown !== 0 ? <BankCountdown countdown={bankCountdown} /> : <Spacer />}
+			{bankCountdown !== 0 ? (
+				<DailyGift countdown={giftCountdown} giftValue={todayGift} />
+			) : (
+				<Spacer />
+			)}
 		</Wrapper>
 	);
 };
