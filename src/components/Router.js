@@ -9,7 +9,11 @@ import MyAccount from '../pages/MyAccount';
 import Wallet from '../pages/Wallet';
 import IntroModal from './IntroModal';
 import BottomNavigation from './BottomNavigation';
-import MobileMenu from './MobileMenu';
+import styled from 'styled-components';
+
+const AppWrapper = styled.div`
+	padding-bottom: ${(props) => props.theme.spacing(5)};
+`;
 
 const AppRouter = () => {
 	const provider = window.ethereum;
@@ -23,11 +27,14 @@ const AppRouter = () => {
 
 	return (
 		<Router>
-			<div>
+			<AppWrapper>
 				{/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
 					navigator.userAgent
 				) ? (
-					<Header device="mobile" />
+					<>
+						<Header device="mobile" />
+						<BottomNavigation />
+					</>
 				) : (
 					<Header device="desktop" />
 				)}
@@ -40,7 +47,7 @@ const AppRouter = () => {
 					<Route path="/wallet" component={Wallet} />
 				</Switch>
 				{/* <MobileMenu /> */}
-			</div>
+			</AppWrapper>
 		</Router>
 	);
 };

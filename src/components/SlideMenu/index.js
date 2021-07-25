@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import backIcon from '../../assets/icons/left-arrow.svg';
 import { matchPath, useLocation, Link } from 'react-router-dom';
@@ -9,12 +9,14 @@ const Nav = styled.nav`
 	top: 0;
 	height: 100vh;
 	background: white;
-	transform: translateX(0%);
+	transform: ${({isOpen}) => isOpen ? 'translateX(0%)': 'translateX(100%)'};
 	min-width: 276px;
 	border: 1.5px solid ${(props) => props.theme.success};
 	border-radius: 8px 0px 0px 0px;
 	padding: ${(props) => props.theme.spacing(2)} ${(props) => props.theme.spacing(3)};
 	overflow: auto;
+	z-index: 1000;
+	transition: transform 0.4s ease-in-out;
 `;
 
 const Header = styled.header`
@@ -82,14 +84,14 @@ const Badge = styled.div`
 	border-radius: 24px;
 `;
 
-const SlideMenu = ({ title, listItems, cta }) => {
+const SlideMenu = ({ isOpen, onClose, title, listItems, cta }) => {
 	const { pathname } = useLocation();
 
 	return (
-		<Nav>
+		<Nav isOpen={isOpen}>
 			<Header>
 				<HeaderRow>
-					<BackIcon src={backIcon} />
+					<BackIcon src={backIcon} onClick={onClose} />
 				</HeaderRow>
 				<HeaderRow>
 					<Title>{title}</Title>
@@ -103,6 +105,7 @@ const SlideMenu = ({ title, listItems, cta }) => {
 						return (
 							<>
 								<MenuItem
+									onClick={onClose}
 									active={matchPath(pathname, {
 										path: item.path,
 										exact: true,
@@ -131,6 +134,7 @@ const SlideMenu = ({ title, listItems, cta }) => {
 					}
 					return (
 						<MenuItem
+							onClick={onClose}
 							active={matchPath(pathname, { path: item.path, exact: true })}
 							to={item.path}
 							notification={item.notification}

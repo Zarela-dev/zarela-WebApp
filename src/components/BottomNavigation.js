@@ -1,12 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import { LinkButton } from './Elements/Button';
-import { Link } from 'react-router-dom';
-import homeIcon_active from '../assets/icons/nav/home-active.svg';
+import { GenericLinkButton } from './Elements/Button';
+import { Link, matchPath, useLocation } from 'react-router-dom';
+import plusIcon from '../assets/icons/nav/plus.svg';
 import inboxIcon from '../assets/icons/nav/inbox.svg';
 import profileIcon from '../assets/icons/nav/profile.svg';
 import walletIcon from '../assets/icons/nav/wallet.svg';
-import plusIcon from '../assets/icons/nav/plus.svg';
+import homeIcon from '../assets/icons/nav/home.svg';
+import inboxIcon_active from '../assets/icons/nav/inbox-active.svg';
+import profileIcon_active from '../assets/icons/nav/profile-active.svg';
+import walletIcon_active from '../assets/icons/nav/wallet-active.svg';
+import homeIcon_active from '../assets/icons/nav/home-active.svg';
 
 const Nav = styled.nav`
 	position: fixed;
@@ -26,7 +30,7 @@ const Nav = styled.nav`
 	}
 `;
 
-const NavItem = styled.a`
+const NavItem = styled(Link)`
 	position: relative;
 	padding: ${(props) => props.theme.spacing(1.3)};
 	background: white;
@@ -69,8 +73,8 @@ const CreateRequestNavItem = styled.div`
 	flex: 1;
 	height: 50px;
 	min-width: 70px;
-	
-	@media only screen and (min-width: ${({theme}) => theme.mobile_xs_breakpoint}) {
+
+	@media only screen and (min-width: ${({ theme }) => theme.mobile_xs_breakpoint}) {
 		/* flex: 1 0 23px; */
 	}
 
@@ -107,7 +111,7 @@ const CreateRequestNavItem = styled.div`
 	}
 `;
 
-const CreateRequestButton = styled(LinkButton).attrs((props) => {
+const CreateRequestButton = styled(GenericLinkButton).attrs((props) => {
 	return {
 		variant: 'secondary',
 	};
@@ -130,27 +134,67 @@ const CreateRequestIcon = styled.img`
 	width: 20px;
 `;
 
+const bottomNavItems = [
+	{
+		icon: profileIcon,
+		activeIcon: profileIcon_active,
+		path: '/account',
+		notifications: 0,
+	},
+	{
+		icon: inboxIcon,
+		activeIcon: inboxIcon_active,
+		path: '/inbox',
+		notifications: 2,
+	},
+	{
+		center: true,
+		icon: plusIcon,
+		path: '/request/create',
+		notifications: 0,
+	},
+	{
+		icon: homeIcon,
+		activeIcon: homeIcon_active,
+		path: '/',
+		notifications: 0,
+	},
+	{
+		icon: walletIcon,
+		activeIcon: walletIcon_active,
+		path: '/wallet/deposit',
+		notifications: 0,
+	},
+];
+
 const BottomNavigation = () => {
+	const { pathname } = useLocation();
+
 	return (
 		<Nav>
-			<NavItem active>
-				<NavIcon src={profileIcon} />
-			</NavItem>
-			<NavItem>
-				<NavBadge>5</NavBadge>
-				<NavIcon src={inboxIcon} />
-			</NavItem>
-			<CreateRequestNavItem>
-				<CreateRequestButton>
-					<CreateRequestIcon src={plusIcon} />
-				</CreateRequestButton>
-			</CreateRequestNavItem>
-			<NavItem>
-				<NavIcon src={homeIcon_active} />
-			</NavItem>
-			<NavItem>
-				<NavIcon src={walletIcon} />
-			</NavItem>
+			{bottomNavItems.map(({ center, path, icon, activeIcon, notifications }) => {
+				const isActive = matchPath(pathname, {
+					path: path,
+					exact: true,
+				});
+
+				if (!center)
+					return (
+						<NavItem to={path} active>
+							{+notifications > 0 ? <NavBadge>{notifications}</NavBadge> : null}
+							{isActive ? <NavIcon src={activeIcon} /> : <NavIcon src={icon} />}
+						</NavItem>
+					);
+				else if (center)
+					return (
+						<CreateRequestNavItem>
+							<CreateRequestButton to={path}>
+								<CreateRequestIcon src={icon} />
+							</CreateRequestButton>
+						</CreateRequestNavItem>
+					);
+				return null;
+			})}
 		</Nav>
 	);
 };

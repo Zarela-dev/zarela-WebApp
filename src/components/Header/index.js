@@ -1,4 +1,5 @@
-import styled, { css } from 'styled-components';
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import logo from '../../assets/icons/logo.png';
 import home from '../../assets/icons/home.svg';
 import inbox from '../../assets/icons/inbox.svg';
@@ -11,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { Typography } from '../Elements/Typography';
 import { Button } from '../Elements/Button';
 import menu from '../../assets/icons/menu.svg';
+import MobileMenu from '../MobileMenu';
 
 const NavItem = styled(Link)`
 	position: relative;
@@ -21,14 +23,16 @@ const NavItem = styled(Link)`
 	align-content: center;
 	justify-content: center;
 	text-decoration: none;
-	margin-right: ${props => props.device === "desktop" ? props.theme.spacing(4) : props.theme.spacing(0)};
-	margin-left: ${props => props.device === "desktop" ? props.theme.spacing(4) : props.theme.spacing(2)};
+	margin-right: ${(props) =>
+		props.device === 'desktop' ? props.theme.spacing(4) : props.theme.spacing(0)};
+	margin-left: ${(props) =>
+		props.device === 'desktop' ? props.theme.spacing(4) : props.theme.spacing(2)};
 `;
 
 const NavLink = styled(Typography)`
-	color: ${props => props.theme.navLinkColor};
+	color: ${(props) => props.theme.navLinkColor};
 	font-weight: 500;
-	font-size: ${props => props.theme.body};
+	font-size: ${(props) => props.theme.body};
 	white-space: nowrap;
 `;
 
@@ -42,7 +46,6 @@ const VerticalNavItem = styled(Link)`
 	justify-content: center;
 	text-decoration: none;
 `;
-
 
 const RightMenu = styled.div`
 	display: flex;
@@ -62,25 +65,26 @@ const NavIcon = styled.img`
 
 const VerticalNavIcon = styled.img`
 	height: 30px;
-	margin-right: ${props => props.theme.spacing(1)};
+	margin-right: ${(props) => props.theme.spacing(1)};
 `;
 
 const Logo = styled.img`
 	height: 40px;
 	margin-left: 20px;
-	margin-right: ${props => props.device === "desktop" ? props.theme.spacing(4) : props.theme.spacing(1)}
+	margin-right: ${(props) =>
+		props.device === 'desktop' ? props.theme.spacing(4) : props.theme.spacing(1)};
 `;
 
 const NotificationBadge = styled.div`
 	position: absolute;
 	top: -12px;
-    left: 8px;
+	left: 8px;
 	min-width: 24px;
 	height: 24px;
 	border-radius: 24px;
 	padding: 3px 6px;
 	text-align: center;
-	background: ${props => props.theme.notificationColor};
+	background: ${(props) => props.theme.notificationColor};
 	color: white;
 `;
 
@@ -92,15 +96,23 @@ const HeaderWrapper = styled.header`
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	background: white;
 	width: 100%;
-	padding: ${props => props.theme.spacing(3)} 0;
+	padding: ${(props) => props.theme.spacing(3)} 0;
 `;
 
+const MobileHeaderSpaceFixer = styled.div`
+	height: 70px;
+	width: 100%;
+`;
 
 const HeaderWrapperApp = styled(HeaderWrapper)`
-	padding: 10px 18px; 
+	padding: 10px 18px;
+	height: 70px;
+	position: sticky;
+	top: 0;
+	z-index: 999;
 `;
-
 
 const LogoApp = styled(Logo)`
 	width: 78px;
@@ -120,70 +132,70 @@ const VerticalNavIconApp = styled(VerticalNavIcon)`
 `;
 const NotificationBadgeApp = styled(NotificationBadge)`
 	font-size: 10.5px;
+	font-weight: 700;
 	top: 4px;
 	height: 16px;
 `;
 
 export default function Header({ device }) {
-	if (device === "mobile") {
+	const [isMenuOpen, setMenuOpen] = useState(false);
+
+	if (device === 'mobile') {
 		return (
 			<HeaderWrapperApp>
 				<RightMenu>
-					<LogoApp src={logo} />
+					<Link to="/">
+						<LogoApp src={logo} />
+					</Link>
 				</RightMenu>
 				<LeftMenu>
 					<VerticalNavItem>
 						<VerticalNavIconApp src={live} />
-						<NavLinkApp>
-							Live
-						</NavLinkApp>
+						<NavLinkApp>Live</NavLinkApp>
 					</VerticalNavItem>
-					<NavItem to='/account'>
+					<NavItem>
 						<NavIconApp src={bell} />
 						<NotificationBadgeApp>321</NotificationBadgeApp>
 					</NavItem>
 					<NavItem>
-						<NavIconApp src={menu} />
+						<NavIconApp src={menu} onClick={() => setMenuOpen(true)} />
 					</NavItem>
 				</LeftMenu>
+				<MobileMenu
+					isOpen={isMenuOpen}
+					onClose={() => {
+						setMenuOpen(false);
+					}}
+				/>
 			</HeaderWrapperApp>
 		);
-
-	} else if (device === "desktop") {
+	} else if (device === 'desktop') {
 		return (
 			<HeaderWrapper>
 				<RightMenu>
-					<Logo device="desktop" src={logo} />
-					<NavItem device="desktop" to='/'>
+					<Link to="/">
+						<Logo device="desktop" src={logo} />
+					</Link>
+					<NavItem device="desktop" to="/">
 						<NavIcon src={home} />
-						<NavLink>
-							Home
-						</NavLink>
+						<NavLink>Home</NavLink>
 					</NavItem>
-					<NavItem device="desktop" to='/inbox'>
+					<NavItem device="desktop" to="/inbox">
 						<NavIcon src={inbox} />
-						<NavLink>
-							Inbox
-						</NavLink>
+						<NavLink>Inbox</NavLink>
 					</NavItem>
-					<NavItem device="desktop" to='/account'>
+					<NavItem device="desktop" to="/account">
 						<NavIcon src={user} />
-						<NavLink>
-							My Contributions
-						</NavLink>
+						<NavLink>My Contributions</NavLink>
 					</NavItem>
-					<NavItem device="desktop" to='/wallet/deposit'>
+					<NavItem device="desktop" to="/wallet/deposit">
 						<NavIcon src={wallet} />
-						<NavLink>
-							Wallet
-						</NavLink>
+						<NavLink>Wallet</NavLink>
 					</NavItem>
 				</RightMenu>
 				<LeftMenu>
-					<SubmitRequestButton to='/request/create'>
-						Connect
-					</SubmitRequestButton>
-					<NavItem device="desktop" to='/account'>
+					<SubmitRequestButton to="/request/create">Connect</SubmitRequestButton>
+					<NavItem device="desktop" to="/account">
 						<NavIcon src={bell} />
 						<NotificationBadge>321</NotificationBadge>
 					</NavItem>
@@ -194,4 +206,4 @@ export default function Header({ device }) {
 			</HeaderWrapper>
 		);
 	}
-};
+}

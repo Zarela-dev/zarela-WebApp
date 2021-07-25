@@ -101,6 +101,7 @@ const PublicKey = styled(Typography)`
 	font-weight: 500;
 	font-size: 12px;
 	line-height: 20px;
+	word-break: break-word;
 	
 	&:not(:last-child) {
 		margin-bottom: ${props => props.theme.spacing(0)};

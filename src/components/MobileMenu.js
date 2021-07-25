@@ -47,9 +47,11 @@ const menuItems = [
 	},
 ];
 
-const MobileMenu = () => {
+const MobileMenu = ({ isOpen, onClose }) => {
 	return (
 		<SlideMenu
+			isOpen={isOpen}
+			onClose={onClose}
 			title={'Menu'}
 			cta={() => <Button variant="primary">New Request</Button>}
 			listItems={menuItems}
