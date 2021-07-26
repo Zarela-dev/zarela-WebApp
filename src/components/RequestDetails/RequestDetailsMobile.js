@@ -77,7 +77,7 @@ const TitleContent = styled(Title)`
 
 const Description = styled.p`
 	font-size: 14px;
-	line-height: 25px;
+	line-height: 17px;
 	text-align: justify;
 	margin-bottom: ${props => props.theme.spacing(5)};
   padding: 0 18px;
