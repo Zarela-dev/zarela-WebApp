@@ -149,14 +149,14 @@ export default function Header({ device }) {
 					</Link>
 				</RightMenu>
 				<LeftMenu>
-					<VerticalNavItem>
+					{/* <VerticalNavItem>
 						<VerticalNavIconApp src={live} />
 						<NavLinkApp>Live</NavLinkApp>
-					</VerticalNavItem>
-					<NavItem>
+					</VerticalNavItem> */}
+					{/* <NavItem>
 						<NavIconApp src={bell} />
 						<NotificationBadgeApp>321</NotificationBadgeApp>
-					</NavItem>
+					</NavItem> */}
 					<NavItem>
 						<NavIconApp src={menu} onClick={() => setMenuOpen(true)} />
 					</NavItem>
@@ -195,13 +195,13 @@ export default function Header({ device }) {
 				</RightMenu>
 				<LeftMenu>
 					<SubmitRequestButton to="/request/create">Create</SubmitRequestButton>
-					<NavItem device="desktop" to="/account">
+					{/* <NavItem device="desktop" to="/account">
 						<NavIcon src={bell} />
 						<NotificationBadge>321</NotificationBadge>
-					</NavItem>
-					<NavItem device="desktop">
+					</NavItem> */}
+					{/* <NavItem device="desktop">
 						<NavIcon src={help} />
-					</NavItem>
+					</NavItem> */}
 				</LeftMenu>
 			</HeaderWrapper>
 		);

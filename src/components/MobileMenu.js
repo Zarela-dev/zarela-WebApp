@@ -23,28 +23,28 @@ const menuItems = [
 		path: '/wallet/deposit',
 		notifications: 0,
 	},
-	{
-		title: 'Settings',
-		path: '/settings',
-		notifications: 0,
-		children: [
-			{
-				title: 'Blacklist',
-				path: '/settings/blacklist',
-				notifications: 0,
-			},
-			{
-				title: 'Sync devices',
-				path: '/settings/sync',
-				notifications: 0,
-			},
-			{
-				title: 'Contacts',
-				path: '/settings/contacts',
-				notifications: 0,
-			},
-		],
-	},
+	// {
+	// 	title: 'Settings',
+	// 	path: '/settings',
+	// 	notifications: 0,
+	// 	children: [
+	// 		{
+	// 			title: 'Blacklist',
+	// 			path: '/settings/blacklist',
+	// 			notifications: 0,
+	// 		},
+	// 		{
+	// 			title: 'Sync devices',
+	// 			path: '/settings/sync',
+	// 			notifications: 0,
+	// 		},
+	// 		{
+	// 			title: 'Contacts',
+	// 			path: '/settings/contacts',
+	// 			notifications: 0,
+	// 		},
+	// 	],
+	// },
 ];
 
 const MobileMenu = ({ isOpen, onClose }) => {
