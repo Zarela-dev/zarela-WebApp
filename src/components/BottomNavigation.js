@@ -11,19 +11,23 @@ import inboxIcon_active from '../assets/icons/nav/inbox-active.svg';
 import profileIcon_active from '../assets/icons/nav/profile-active.svg';
 import walletIcon_active from '../assets/icons/nav/wallet-active.svg';
 import homeIcon_active from '../assets/icons/nav/home-active.svg';
+import navBackground from '../assets/images/navbar.svg';
 
 const Nav = styled.nav`
 	position: fixed;
 	bottom: 0;
 	left: 0;
 	width: 100vw;
-	height: 50px;
+	height: 65px;
 
 	display: flex;
 	flex-wrap: nowrap;
 	justify-content: center;
-	align-items: center;
+	align-items: flex-end;
 	z-index: 100;
+	background: url(${navBackground});
+	background-repeat: no-repeat;
+	background-position: -369px -1px;
 
 	@media only screen and (min-width: ${(props) => props.theme.mobile_sm_breakpoint}) {
 		display: none;
@@ -32,10 +36,11 @@ const Nav = styled.nav`
 
 const NavItem = styled(Link)`
 	position: relative;
-	padding: ${(props) => props.theme.spacing(1.3)};
-	background: white;
+	padding: ${(props) => props.theme.spacing(1.1)};
+	background: transparent;
 	flex: 1;
 	display: flex;
+	align-items: flex-end;
 	justify-content: center;
 	height: 50px;
 `;
@@ -58,7 +63,7 @@ const NavBadge = styled.div`
 	padding: 0 7px;
 
 	position: absolute;
-	top: 2px;
+	top: 4px;
 	left: 50%;
 	transform: translateX(-50%);
 	z-index: 1;
@@ -67,7 +72,7 @@ const NavBadge = styled.div`
 const CreateRequestNavItem = styled.div`
 	position: relative;
 	background: transparent;
-	border: 6px solid white;
+	/* border: 6px solid white; */
 	border-top: none;
 	border-radius: 0 0 11px 11px;
 	flex: 1;
@@ -78,7 +83,7 @@ const CreateRequestNavItem = styled.div`
 		/* flex: 1 0 23px; */
 	}
 
-	&::after {
+	/* &::after {
 		content: '';
 		display: block;
 		position: absolute;
@@ -108,7 +113,7 @@ const CreateRequestNavItem = styled.div`
 		border-top: 11px solid transparent;
 		z-index: 2;
 		border-radius: 0;
-	}
+	} */
 `;
 
 const CreateRequestButton = styled(GenericLinkButton).attrs((props) => {
