@@ -4,9 +4,12 @@ import { timeSince, convertToBiobit } from '../../utils';
 import { useWeb3React } from '@web3-react/core';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
+import deviceContext from '../../utils/context';
+import Splash from '../../components/Splash';
 
 const RequestsList = () => {
 	const { appState } = useContext(mainContext);
+	const { device } = useContext(deviceContext);
 	const web3React = useWeb3React();
 	const PAGE_SIZE = 3;
 	const [requests, setRequests] = useState({});
@@ -14,6 +17,7 @@ const RequestsList = () => {
 	const [dailyContributors, setDailyContributors] = useState(0);
 	const [BiobitBasedOnEth, setBiobitBasedOnEth] = useState(0);
 	const [ZarelaReward, setZarelaReward] = useState(0);
+	const [isLoading, setLoading] = useState(true);
 
 	// pagination hook
 	useEffect(() => {
@@ -40,12 +44,13 @@ const RequestsList = () => {
 							categories: result[8], // NOT TO BE USED IN DEMO
 							whitePaper: result[5],
 							timestamp: result[10],
-							totalContributedCount: result[9]
+							totalContributedCount: result[9],
 						};
-						setRequests(requests => ({
+						setRequests((requests) => ({
 							...requests,
-							[requestTemplate.requestID]: requestTemplate
+							[requestTemplate.requestID]: requestTemplate,
 						}));
+						if (i === +requestsCount - 1) setLoading(false);
 					} else {
 						console.error(error.message);
 					}
@@ -54,27 +59,27 @@ const RequestsList = () => {
 		}
 	}, [appState.contract, requestsCount]);
 
+	// useEffect(() => {
+	// 	setTimeout(() => {
+	// 		setLoading(false);
+	// 	}, 2000);
+	// }, []);
+
 	useEffect(() => {
 		if (appState.contract) {
 			appState.contract.methods.Prize().call((error, result) => {
-				if (!error)
-					setZarelaReward(+result * 2);
-				else
-					console.error(error.message);
+				if (!error) setZarelaReward(+result * 2);
+				else console.error(error.message);
 			});
 			appState.contract.methods.contributer_count().call((error, result) => {
-				if (!error)
-					setDailyContributors(result);
-				else
-					console.error(error.message);
+				if (!error) setDailyContributors(result);
+				else console.error(error.message);
 			});
 			appState.contract.methods.GetETHPrice().call((error, result) => {
-				if (!error)
-					setBiobitBasedOnEth((1 / (+result / Math.pow(10, 8))).toFixed(6));
-				else
-					console.error(error.message);
+				if (!error) setBiobitBasedOnEth((1 / (+result / Math.pow(10, 8))).toFixed(6));
+				else console.error(error.message);
 			});
-		};
+		}
 
 		// move to wallet #todo
 		// appState.contract.methods.sum_of_reward_per_contributer((error, result) => {
@@ -83,18 +88,28 @@ const RequestsList = () => {
 		// 	else
 		// 		console.error(error.message);
 		// })
-
 	}, [appState.contract]);
 
-
-	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+	if (device === 'Mobile') {
 		return (
-			<Mobile {...{ requests }} />
+			<>
+				<Splash isVisible={isLoading} />
+				<Mobile {...{ requests }} />
+			</>
 		);
 	} else {
 		return (
-			<Desktop {...{ requests , appState , web3React, ZarelaReward , BiobitBasedOnEth , dailyContributors }} />
-		)
+			<Desktop
+				{...{
+					requests,
+					appState,
+					web3React,
+					ZarelaReward,
+					BiobitBasedOnEth,
+					dailyContributors,
+				}}
+			/>
+		);
 	}
 };
 

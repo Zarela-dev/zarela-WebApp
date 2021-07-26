@@ -8,7 +8,7 @@ import IntroModal from './IntroModal';
 import BottomNavigation from './BottomNavigation';
 import styled from 'styled-components';
 import Wallet from '../pages/Wallet/Wallet';
-import RequestsList from '../pages/RequestsList/RequestsList';
+import RequestsList from '../pages/RequestsList';
 import Context from './../utils/context';
 import MyAccount from '../pages/MyAccount';
 
