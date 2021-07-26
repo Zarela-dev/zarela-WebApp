@@ -1,22 +1,41 @@
 import React from 'react';
 import { Card, CustomFileInputMobile, HelperText, ErrorText } from './FileCard';
 import styled from 'styled-components';
-import uploadPlusBtn from './../../assets/icons/uploadPlusBtn.svg';
-
-const SubmitButton = styled.button`
-	background-image: url(${uploadPlusBtn});
-	width: 38px;
-  height: 38px;
-  background-position: center;
-	outline: none;
-	border: none;
-	border-radius: 3px;
-`;
+import { GenericLinkButton } from './../Elements/Button';
+import plusIcon from '../../assets/icons/requests/uploadPlus.svg';
 
 const MobileCard = styled(Card)`
 	border: none;
 	padding: 0 18px;
 	margin: 0;
+`;
+
+const UploadFileButtonWrapper = styled.div`
+	position: relative;
+	background: transparent;
+	flex: 1;
+	height: 37px;
+	min-width: 37px;
+`;
+
+
+const UploadFileButton = styled(GenericLinkButton)`
+	width: 37px;
+	height: 37px;
+	position: absolute;
+	margin: 0;
+	background: linear-gradient(228.09deg, #8CC0F1 -3.49%, #A291FB 96.8%);
+
+	& > a {
+		padding: ${(props) => props.theme.spacing(1)};
+	}
+`;
+
+
+const UploadFileIcon = styled.img`
+	width: 100%;
+	display:flex;
+	align-self: center;
 `;
 
 
@@ -38,7 +57,13 @@ const UploadFileCardMobile = React.forwardRef(({
 				hasBorder
 				disableUpload={disableUpload}
 				showSelected={showSelected}
-				buttonLabel={<SubmitButton disabled={error !== null} variant='primary' onClick={onClick} />}
+				buttonLabel={
+					<UploadFileButtonWrapper>
+						<UploadFileButton >
+							<UploadFileIcon src={plusIcon} />
+						</UploadFileButton>
+					</UploadFileButtonWrapper>
+				}
 				label={label}
 				ref={ref}
 				name={name}

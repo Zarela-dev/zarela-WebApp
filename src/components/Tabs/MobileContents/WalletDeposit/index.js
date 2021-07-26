@@ -59,7 +59,6 @@ const WalletDeposit = ({ address }) => {
 				<NextStepArrow>
 					<NextStepIcon src={nextStepIcon} />
 				</NextStepArrow>
-
 					<Column>
 						<Column center>
 							<QRCode>
