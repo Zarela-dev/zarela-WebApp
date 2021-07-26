@@ -12,7 +12,6 @@ import MobileLayout from '../../components/MobileLayout';
 const Wrapper = styled.div`
 `;
 
-
 const WalletInnerContainer = styled.div`
 padding: 0;
 margin: 0;
@@ -26,15 +25,12 @@ const WalletTitlebar = styled(TitleBarMobile)`
 display: flex;
 flex-wrap: nowrap;
 justify-content: space-between;
-
 height: 85px;
 padding: 0 18px;
 flex-direction: row;
 display: flex;
 width: 100%;
 align-items: center;
-
-
 `;
 
 const Title = styled.div`

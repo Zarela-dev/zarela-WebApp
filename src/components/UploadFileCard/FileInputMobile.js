@@ -62,7 +62,7 @@ const ErrorContainer = styled.div`
 `;
 
 export const FileInputIcon = styled.img`
-	width: 42px;
+	width: 33px;
 	margin-right: ${props => props.theme.spacing(1)};
 `;
 

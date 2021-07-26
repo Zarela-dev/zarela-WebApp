@@ -1,18 +1,18 @@
-import React, { forwardRef } from 'react';
-import styled from 'styled-components';
-import { css } from 'styled-components';
+import React, { forwardRef } from "react";
+import styled from "styled-components";
+import { css } from "styled-components";
 
 const InputStyles = css`
 	font-family: Krub;
-	background: #FFFFFF;
+	background: #ffffff;
 	border: 1px solid rgba(144, 144, 144, 0.3);
 	border-radius: 4px;
-	padding: ${props => props.theme.spacing(1)};
+	padding: ${(props) => props.theme.spacing(1)};
 	padding-right: 100px;
 	box-sizing: border-box;
 	font-weight: 500;
 	font-size: 12px;
-	color: ${props => props.theme.textPrimary};
+	color: ${(props) => props.theme.textPrimary};
 	width: 100%;
 `;
 const InputWrapper = styled.div`
@@ -21,12 +21,12 @@ const InputWrapper = styled.div`
 
 const Input = styled.input`
 	${InputStyles}
-	${props => props.error ? 'border-bottom: 2px solid #F62D76;' : null};
+	${(props) => (props.error ? "border-bottom: 2px solid #F62D76;" : null)};
 `;
 
 const TextArea = styled.textarea`
 	${InputStyles}
-	${props => props.error ? 'border-bottom: 2px solid #F62D76;' : null};
+	${(props) => (props.error ? "border-bottom: 2px solid #F62D76;" : null)};
 `;
 
 const Wrapper = styled.div`
@@ -34,22 +34,21 @@ const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	margin-bottom: ${props => props.theme.spacing(2)};
+	margin-bottom: ${(props) => props.theme.spacing(2)};
 `;
 
 const Label = styled.label`
 	display: flex;
 	width: 100%;
 	justify-content: space-between;
-	margin-bottom: ${props => props.theme.spacing(0.5)}
-	
+	margin-bottom: ${(props) => props.theme.spacing(0.5)};
 `;
 
 const LabelText = styled.div`
 	font-weight: 500;
 	font-size: 14px;
 	line-height: 20px;
-	color: #6C6C6C;
+	color: #6c6c6c;
 `;
 
 const Hint = styled.div`
@@ -62,14 +61,14 @@ export const Error = styled.label`
 	font-weight: 500;
 	font-size: 10px;
 	line-height: 20px;
-	color: #F62D76;
+	color: #f62d76;
 `;
 
 const Adornment = styled.div`
 	font-weight: 600;
-	font-size: ${({colored}) => colored ? '12px': '14px'};
+	font-size: ${({ colored }) => (colored ? "12px" : "14px")};
 	line-height: 23px;
-	color: ${({colored, theme}) => colored ? '#581D9F': theme.textPrimary};
+	color: ${({ colored, theme }) => (colored ? "#581D9F" : theme.textPrimary)};
 `;
 
 const ActionsContainer = styled.div`
@@ -77,8 +76,8 @@ const ActionsContainer = styled.div`
 	flex-wrap: nowrap;
 	align-items: center;
 	position: absolute;
-	right: 17px;
-	top: ${props => props.shrink ? '7px' : '31px'};
+	right: ${(props) => (props.isActionTypeIcon ? "7px" : "19px")};
+	top: ${(props) => (props.shrink ? "7px" : "31px")};
 	z-index: 3;
 `;
 
@@ -86,74 +85,70 @@ const HelperText = styled.div`
 	font-weight: normal;
 	font-size: 10px;
 	line-height: 13px;
-	color: #212B36;
-	margin-top: ${props => props.theme.spacing(0.7)}
+	color: #212b36;
+	margin-top: ${(props) => props.theme.spacing(0.7)};
 `;
 
-const InputAction = styled.button.attrs({ type: 'button'})`
+const InputAction = styled.button.attrs({ type: "button" })`
 	border: none;
 	background: none;
 	background: white;
 	width: 24px;
-	margin-left: ${props => props.theme.spacing(1)}
+	margin-left: ${(props) => props.theme.spacing(1)};
 `;
 
-const TextField = forwardRef(({coloredAdornment, multiline, className, label, error, helperText, hint, actions, adornment, ...rest }, ref) => {
-	return (
-		<Wrapper className={className}>
-			<Label>
-				<LabelText>
-					{label}
-				</LabelText>
-				{
-					hint ?
-						<Hint>
-							{hint}
-						</Hint>
-						: null
-				}
-			</Label>
-			<InputWrapper>
-				{
-					multiline ?
+const TextField = forwardRef(
+	(
+		{
+			coloredAdornment,
+			multiline,
+			className,
+			label,
+			error,
+			helperText,
+			hint,
+			actions,
+			isActionTypeIcon,
+			adornment,
+			...rest
+		},
+		ref
+	) => {
+		return (
+			<Wrapper className={className}>
+				<Label>
+					<LabelText>{label}</LabelText>
+					{hint ? <Hint>{hint}</Hint> : null}
+				</Label>
+				<InputWrapper>
+					{multiline ? (
 						<TextArea error={error} ref={ref} row={5} {...rest} />
-						: <Input error={error} ref={ref} {...rest} />
-				}
-			</InputWrapper>
-			<ActionsContainer shrink={!label ? true : false}>
-				{
-					adornment ?
-						<Adornment colored={coloredAdornment}>
-							{adornment}
-						</Adornment>
-						: null
-				}
-				{
-					actions ? actions.map(action => {
-						return (
-							<InputAction onClick={action.onClick}>
-								{action.content}
-							</InputAction>
-						);
-					}) : null
-				}
-			</ActionsContainer>
-			{
-				helperText ?
-					<HelperText>
-						{helperText}
-					</HelperText>
-					: null
-			}
-			{
-				error ?
-					<Error>
-						{error}
-					</Error>
-					: null
-			}
-		</Wrapper>
-	);
-});
+					) : (
+						<Input error={error} ref={ref} {...rest} />
+					)}
+				</InputWrapper>
+				<ActionsContainer
+					shrink={!label ? true : false}
+					isActionTypeIcon={isActionTypeIcon}
+				>
+					{adornment ? (
+						<Adornment colored={coloredAdornment}>{adornment}</Adornment>
+					) : null}
+					{actions
+						? actions.map((action) => {
+								return (
+									<InputAction onClick={action.onClick}>
+										{action.content}
+									</InputAction>
+								);
+						  })
+						: null}
+				</ActionsContainer>
+				{helperText ? <HelperText>{helperText}</HelperText> : null}
+				{error ? <Error>{error}</Error> : null}
+			</Wrapper>
+		);
+	}
+);
 
 export default TextField;
