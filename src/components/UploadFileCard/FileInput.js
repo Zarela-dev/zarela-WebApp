@@ -6,7 +6,7 @@ import { Error } from '../Elements/TextField';
 
 export const FileInputWithBorder = css`
 	background: #FFFFFF;
-	border: 0.5px dashed rgba(133, 206, 238, 0.5);
+	border: 1px dashed #3ADEA3;
 	box-shadow: 0px 4px 18px rgba(223, 236, 255, 0.3);
 	border-radius: 5px;
 	padding: ${props => props.theme.spacing(2)}  ${props => props.theme.spacing(3)};
