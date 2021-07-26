@@ -11,7 +11,7 @@ import inboxIcon_active from '../assets/icons/nav/inbox-active.svg';
 import profileIcon_active from '../assets/icons/nav/profile-active.svg';
 import walletIcon_active from '../assets/icons/nav/wallet-active.svg';
 import homeIcon_active from '../assets/icons/nav/home-active.svg';
-import navBackground from '../assets/images/navbar.svg';
+import navBackground from '../assets/images/navbar.png';
 
 const Nav = styled.nav`
 	position: fixed;
@@ -26,10 +26,11 @@ const Nav = styled.nav`
 	align-items: flex-end;
 	z-index: 100;
 	background: url(${navBackground});
-	background-repeat: no-repeat;
-	background-position: -369px -1px;
+	background-position: center bottom;
+	background-clip: revert;
+	background-size: auto;
 
-	@media only screen and (min-width: ${(props) => props.theme.mobile_sm_breakpoint}) {
+	@media only screen and (min-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
 		display: none;
 	}
 `;
@@ -82,38 +83,6 @@ const CreateRequestNavItem = styled.div`
 	@media only screen and (min-width: ${({ theme }) => theme.mobile_xs_breakpoint}) {
 		/* flex: 1 0 23px; */
 	}
-
-	/* &::after {
-		content: '';
-		display: block;
-		position: absolute;
-		width: 0;
-		right: -6px;
-		height: 0;
-		background: transparent;
-		bottom: -6px;
-		border-right: 15px solid white;
-		border-bottom: 0px solid transparent;
-		border-top: 11px solid transparent;
-		z-index: 2;
-		border-radius: 0;
-	}
-
-	&::before {
-		content: '';
-		display: block;
-		position: absolute;
-		width: 0;
-		left: -6px;
-		height: 0;
-		background: transparent;
-		bottom: -6px;
-		border-left: 15px solid white;
-		border-bottom: 0px solid transparent;
-		border-top: 11px solid transparent;
-		z-index: 2;
-		border-radius: 0;
-	} */
 `;
 
 const CreateRequestButton = styled(GenericLinkButton).attrs((props) => {
@@ -128,8 +97,9 @@ const CreateRequestButton = styled(GenericLinkButton).attrs((props) => {
 	box-shadow: 0px -3px 22px rgba(81, 197, 234, 0.25);
 	position: absolute;
 	top: -7px;
-	left: 7px;
-
+	left: 50%;
+	transform: translateX(-50%);
+	
 	& > a {
 		padding: ${(props) => props.theme.spacing(1)};
 	}
