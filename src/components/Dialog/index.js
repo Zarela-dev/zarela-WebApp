@@ -11,11 +11,11 @@ const getBorder = (type) => {
 		`;
 	if (type === 'warning')
 		return css`
-			border: 1.5px solid #FEC600;
+			border: 1.5px solid #fec600;
 		`;
 	if (type === 'error')
 		return css`
-			border: 1.5px solid #F72D76;
+			border: 1.5px solid #f72d76;
 		`;
 	if (type === 'info')
 		return css`
@@ -30,7 +30,7 @@ const Header = styled.header`
 	align-items: center;
 	width: 100%;
 
-	margin: 0 auto ${props => props.theme.spacing(3)};
+	margin: 0 auto ${(props) => props.theme.spacing(3)};
 `;
 
 const Body = styled.section`
@@ -44,8 +44,12 @@ const Content = styled.div`
 	font-size: 18px;
 	line-height: 20px;
 	text-align: center;
-	color: #4FCFA1;
-	width: 70%;
+	color: #4fcfa1;
+	width: 100%;
+
+	@media only screen and (min-width: ${({ theme }) => theme.desktop_sm_breakpoint}) {
+		width: 70%;
+	}
 `;
 
 const Footer = styled.footer`
@@ -53,7 +57,7 @@ const Footer = styled.footer`
 	font-size: 18px;
 	line-height: 20px;
 	text-align: center;
-	color: #4FCFA1;
+	color: #4fcfa1;
 `;
 
 const Backdrop = styled.div`
@@ -62,21 +66,30 @@ const Backdrop = styled.div`
 	align-items: center;
 	position: fixed;
 	left: 0;
-	top: 0;
 	width: 100vw;
-	height: 100vh;
+	top: 70px;
+	height: calc(100vh - 70px);
 	background: rgba(255, 255, 255, 0.6);
 	z-index: 999;
+
+	@media only screen and (min-width: ${({ theme }) => theme.desktop_sm_breakpoint}) {
+		top: 110px;
+		height: calc(100vh - 110px);
+	}
 `;
 
 const Card = styled.div`
 	background: #fff;
-	${props => getBorder(props.type)};
+	${(props) => getBorder(props.type)};
 	box-sizing: border-box;
 	box-shadow: 0px 10px 18px rgba(81, 197, 234, 0.06);
 	border-radius: 8px;
-	padding: ${props => props.theme.spacing(3)};
-	width: 680px;
+	padding: ${(props) => props.theme.spacing(2.1)};
+	width: calc(100% - 36px);
+
+	@media only screen and (min-width: ${({ theme }) => theme.desktop_sm_breakpoint}) {
+		width: 680px;
+	}
 `;
 
 const TitleWrapper = styled.div`
@@ -84,7 +97,7 @@ const TitleWrapper = styled.div`
 	font-size: 18px;
 	line-height: 20px;
 	text-align: center;
-	color: #4FCFA1;
+	color: #4fcfa1;
 `;
 
 const CloseIconWrapper = styled.div`
@@ -94,44 +107,30 @@ const CloseIconWrapper = styled.div`
 	cursor: pointer;
 `;
 
-const CloseIcon = styled.img`
-  
-`;
+const CloseIcon = styled.img``;
 
-const SpinnerContainer = styled.div`
-  
-`;
+const SpinnerContainer = styled.div``;
 
 const Dialog = ({ isOpen, hasSpinner, title, content, actions, type = 'error', onClose }) => {
-	if (!isOpen)
-		return null;
+	if (!isOpen) return null;
 	return (
 		<Backdrop>
 			<Card type={type}>
 				<Header>
 					<Spacer />
-					<TitleWrapper>
-						{title}
-					</TitleWrapper>
+					<TitleWrapper>{title}</TitleWrapper>
 					<Spacer />
-					{
-						typeof onClose === 'function' ?
-							<CloseIconWrapper>
-								<CloseIcon src={closeIcon} onClick={onClose} />
-							</CloseIconWrapper> : null
-					}
+					{typeof onClose === 'function' ? (
+						<CloseIconWrapper>
+							<CloseIcon src={closeIcon} onClick={onClose} />
+						</CloseIconWrapper>
+					) : null}
 				</Header>
 				<Body>
-					<SpinnerContainer>
-						{hasSpinner ? <Spinner /> : null}
-					</SpinnerContainer>
-					<Content>
-						{content}
-					</Content>
+					<SpinnerContainer>{hasSpinner ? <Spinner /> : null}</SpinnerContainer>
+					<Content>{content}</Content>
 				</Body>
-				<Footer>
-					{actions}
-				</Footer>
+				<Footer>{actions}</Footer>
 			</Card>
 		</Backdrop>
 	);

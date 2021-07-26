@@ -121,9 +121,9 @@ const Inbox = () => {
 		<PageWrapper>
 			<TitleBar>My Requests</TitleBar>
 			<ContentWrapper>
-				{device === 'Mobile' ? (
+				{false ? (
 					<NoMobileSupportMessage />
-				) : !account ? (
+				) : account ? (
 					<ConnectDialog isOpen={true} />
 				) : isLoading ? (
 					<SpinnerWrapper>
