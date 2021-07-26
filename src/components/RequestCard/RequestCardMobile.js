@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import RequestCardWrapper, {
   Footer,
   HeaderLayout,
@@ -11,12 +12,10 @@ import RequestCardWrapper, {
   Timestamp,
   ContributorBadge,
   ContributorsIcon,
-  BiobitToDollarPair,
   BadgeRow,
   TokenIcon,
   TokenValue,
   JoinButton,
-  BiobitToDollarValue,
   ProgressTrackerWrapper,
   ProgressTrackerTrack,
   ProgressTrackerProcess,
@@ -27,6 +26,32 @@ import RequestCardWrapper, {
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/user-black.svg';
 import documentsIcon from '../../assets/icons/document-black.svg';
+
+const BiobitToDollarValue = styled.div`
+  position: absolute;
+  bottom: -6px;
+  left: 3px;
+  font-weight: 600;
+  font-size: 9.5px;
+  line-height: 0px;
+  color: #3A68DE;
+  margin-right: 2px;
+  margin-left: 8px;
+  white-space: nowrap;
+	margin-left: ${props => props.noMargin ? props.theme.spacing(1) : props.theme.spacing(0.8)};
+	white-space: nowrap;
+`;
+
+const BiobitToDollarPair = styled.div`
+  position: relative;
+  bottom: 5px;
+  padding-right: 9px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+  align-self: self-start;
+  width: fit-content;
+`;
 
 const RequestCardMobile = (props) => {
   return (
