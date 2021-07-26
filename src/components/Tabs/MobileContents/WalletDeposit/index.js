@@ -11,6 +11,7 @@ import {
 	Title, TokenList, TokenButton, TokenIcon, TokenName, Token
 } from './DepositChoices';
 import { QRCode, QRCodeImage, SaveQRCodeButton, AddressTitle, Address, CopyAddressButton } from './WalletInfo';
+import WalletsList from '../../../IntroModal/WalletsList';
 
 const NextStepArrow = styled.div`
 	height: 100%;
@@ -53,13 +54,11 @@ const WalletDeposit = ({ address }) => {
 					<Title>
 						Choose the wallet you want to connect with
 					</Title>
-					<MetaMaskContainer>
-					</MetaMaskContainer>
+					<WalletsList />
 				</Column>
 				<NextStepArrow>
 					<NextStepIcon src={nextStepIcon} />
 				</NextStepArrow>
-
 					<Column>
 						<Column center>
 							<QRCode>
