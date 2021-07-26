@@ -111,7 +111,7 @@ const HeaderWrapperApp = styled(HeaderWrapper)`
 	height: 70px;
 	position: sticky;
 	top: 0;
-	z-index: 999;
+	z-index: ${props => props.theme.z_header};
 	box-shadow: 0px 4px 18px rgba(81, 197, 234, 0.15);
 `;
 

@@ -4,7 +4,7 @@ import logo from '../assets/icons/logo-white.svg';
 
 const Wrapper = styled.div`
 	position: fixed;
-	z-index: 1000;
+	z-index: ${props => props.theme.z_modal};
 	top: 0;
 	left: 0;
 	width: 100vw;

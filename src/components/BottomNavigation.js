@@ -24,7 +24,7 @@ const Nav = styled.nav`
 	flex-wrap: nowrap;
 	justify-content: center;
 	align-items: flex-end;
-	z-index: 100;
+	z-index: ${props => props.theme.z_bottomNav};
 	background: url(${navBackground});
 	background-position: center bottom;
 	background-clip: revert;

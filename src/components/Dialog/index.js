@@ -70,7 +70,7 @@ const Backdrop = styled.div`
 	top: 70px;
 	height: calc(100vh - 70px);
 	background: rgba(255, 255, 255, 0.6);
-	z-index: 999;
+	z-index: ${props => props.theme.z_modal};
 
 	@media only screen and (min-width: ${({ theme }) => theme.desktop_sm_breakpoint}) {
 		top: 110px;

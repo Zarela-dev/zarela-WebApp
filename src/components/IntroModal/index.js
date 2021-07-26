@@ -16,7 +16,7 @@ const Container = styled.div`
 	justify-content: center;
 	align-items: flex-start;
 	padding: ${(props) => props.theme.spacing(1.5)};
-	z-index: 9999;
+	z-index: ${(props) => props.theme.z_modal};
 
 	@media only screen and (min-width: ${({ theme }) => theme.tablet_sm_breakpoint}) {
 		padding: ${(props) => props.theme.spacing(6)};
