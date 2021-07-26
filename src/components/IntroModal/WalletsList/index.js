@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import metamaskIcon from '../../../assets/icons/wallets/metamask.svg';
 import walletConnectIcon from '../../../assets/icons/wallets/walletConnect.svg';
 import coinbaseIcon from '../../../assets/icons/wallets/coinbase.svg';
@@ -11,6 +11,7 @@ const wallets = [
 		name: 'Metamask',
 		icon: metamaskIcon,
 		active: true,
+		link: 'https://metamask.app.link/dapp/app.zarela.io',
 	},
 	{
 		name: 'Fortmatic',
@@ -47,7 +48,7 @@ const Wrapper = styled.div`
 	}
 `;
 
-const WalletItem = styled.div`
+const GridItem = css`
 	flex: 1;
 	display: flex;
 	flex-direction: column;
@@ -56,6 +57,17 @@ const WalletItem = styled.div`
 	padding: ${(props) => props.theme.spacing(2)} ${(props) => props.theme.spacing(2)};
 	opacity: ${(props) => (props.active ? 1 : 0.5)};
 	cursor: ${(props) => (props.active ? 'pointer' : 'not-allowed')};
+`;
+
+const GridItemLink = styled.a`
+	${GridItem};
+	text-decoration: none;
+`;
+
+const GridItemButton = styled.button`
+	${GridItem};
+	border: none;
+	background: none;
 `;
 
 const WalletIcon = styled.img`
@@ -86,7 +98,7 @@ const ListWrapper = styled.div`
 	width: 100%;
 `;
 
-const ListItem = styled.div`
+const ListItem = css`
 	width: 100%;
 	padding: ${(props) => props.theme.spacing(2.7)};
 	display: flex;
@@ -100,6 +112,17 @@ const ListItem = styled.div`
 	&:not(:last-child) {
 		border-bottom: 1px solid rgba(114, 70, 208, 0.3);
 	}
+`;
+
+const ListItemLink = styled.a`
+	${ListItem};
+	text-decoration: none;
+`;
+
+const ListItemButton = styled.button`
+	${ListItem};
+	border: none;
+	background: none;
 `;
 
 const ListItemIcon = styled.img`
@@ -116,23 +139,45 @@ function WalletsList({ view = 'grid' }) {
 	if (view === 'grid')
 		return (
 			<Wrapper>
-				{wallets.map(({ name, icon, active }) => (
-					<WalletItem active={active}>
-						<WalletIcon src={icon} />
-						<WalletTitle>{name}</WalletTitle>
-					</WalletItem>
-				))}
+				{wallets.map(({ name, icon, active, link, onClick }) =>
+					!window.ethereum?.isMetaMask && link !== undefined && active ? (
+						<GridItemLink href={link} target="_blank" active={active}>
+							<WalletIcon src={icon} />
+							<WalletTitle>{name}</WalletTitle>
+						</GridItemLink>
+					) : (
+						<GridItemButton
+							onClick={onClick}
+							disabled={window.ethereum?.isMetaMask && !active}
+							active={active}
+						>
+							<WalletIcon src={icon} />
+							<WalletTitle>{name}</WalletTitle>
+						</GridItemButton>
+					)
+				)}
 			</Wrapper>
 		);
 	if (view === 'list')
 		return (
 			<ListWrapper>
-				{wallets.map(({ name, icon, active }) => (
-					<ListItem active={active}>
-						<ListItemTitle>{name}</ListItemTitle>
-						<ListItemIcon src={icon} />
-					</ListItem>
-				))}
+				{wallets.map(({ name, icon, active, link, onClick }) =>
+					!window.ethereum?.isMetaMask && link !== undefined && active ? (
+						<ListItemLink href={link} target="_blank" active={active}>
+							<ListItemTitle>{name}</ListItemTitle>
+							<ListItemIcon src={icon} />
+						</ListItemLink>
+					) : (
+						<ListItemButton
+							disabled={window.ethereum?.isMetaMask && !active}
+							onClick={onClick}
+							active
+						>
+							<ListItemTitle>{name}</ListItemTitle>
+							<ListItemIcon src={icon} />
+						</ListItemButton>
+					)
+				)}
 			</ListWrapper>
 		);
 }
