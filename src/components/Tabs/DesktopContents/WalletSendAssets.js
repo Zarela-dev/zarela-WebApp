@@ -2,7 +2,12 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { mainContext } from '../../../state';
 import {
-	Title, TokenList, TokenButton, TokenIcon, TokenName, Token
+	Title,
+	TokenList,
+	TokenButton,
+	TokenIcon,
+	TokenName,
+	Token,
 } from './WalletDeposit/DepositChoices';
 import { Content, Row, Column } from './WalletDeposit/Layout';
 import biobitIcon from '../../../assets/icons/biobit-black.svg';
@@ -14,21 +19,18 @@ import { CopyableText, scientificToDecimal, toast, convertToBiobit } from '../..
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useHistory } from 'react-router';
-import { useWeb3React } from '@web3-react/core'
-
+import { useWeb3React } from '@web3-react/core';
 
 const WalletInput = styled(Textfield)`
 	min-width: 510px;
-	margin-bottom: ${props => props.theme.spacing(4)}
+	margin-bottom: ${(props) => props.theme.spacing(4)};
 `;
 
-const CopyIcon = styled.img`
-
-`;
+const CopyIcon = styled.img``;
 
 const SendButton = styled(Button)`
 	align-self: flex-end;
-    margin: 0;
+	margin: 0;
 `;
 
 const Wrapper = styled.form`
@@ -44,68 +46,78 @@ const WalletSendAssets = () => {
 		initialValues: {
 			token: 'Biobit',
 			address: '',
-			amount: ''
+			amount: '',
 		},
 		validationSchema: yup.object().shape({
 			token: yup.string().required('token type can not be blank'),
 			address: yup.string().required('recipient address can not be empty'),
-			amount: yup.string().required('token amount can not be empty')
+			amount: yup.string().required('token amount can not be empty'),
 		}),
 		onSubmit: (values) => {
 			if (values.token === 'Biobit') {
-				appState.contract.methods.transfer(values.address, +values.amount * Math.pow(10, 9))
+				appState.contract.methods
+					.transfer(values.address, +values.amount * Math.pow(10, 9))
 					.send({ from: account }, (error, result) => {
 						if (!error) {
 							toast(result, 'success', true, result);
 							history.push('/wallet/transactions');
 							//#todo create the tab based routes
-						}
-						else {
+						} else {
 							toast(error.message, 'error');
 						}
 					});
 			} else {
-				appState.fallbackWeb3Instance.eth.sendTransaction({ to: values.address, from: account, value: appState.fallbackWeb3Instance.utils.toWei(values.amount, "ether") })
+				appState.fallbackWeb3Instance.eth
+					.sendTransaction({
+						to: values.address,
+						from: account,
+						value: appState.fallbackWeb3Instance.utils.toWei(values.amount, 'ether'),
+					})
 					.then(({ transactionHash }) => {
 						console.log(transactionHash);
-					}).catch(error => {
+					})
+					.catch((error) => {
 						console.error(error.message);
 					});
 			}
-		}
+		},
 	});
 
 	const getBalanceHint = () => {
-		return `Available: ${formik.values.token === 'Biobit' ? convertToBiobit(+appState.biobitBalance) : +appState.etherBalance} ${formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'}`;
+		return `Available: ${
+			formik.values.token === 'Biobit'
+				? convertToBiobit(+appState.biobitBalance)
+				: +appState.etherBalance
+		} ${formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'}`;
 	};
-	
+
 	return (
 		<Wrapper onSubmit={formik.handleSubmit}>
 			<Content>
 				<Column>
-					<Title>
-						Choose Token
-					</Title>
+					<Title>Choose Token</Title>
 					<TokenList>
-						<Token active={formik.values.token === 'Biobit'} onClick={() => formik.setFieldValue('token', 'Biobit')}>
+						<Token
+							active={formik.values.token === 'Biobit'}
+							onClick={() => formik.setFieldValue('token', 'Biobit')}
+						>
 							<TokenIcon src={biobitIcon} />
-							<TokenName>
-								BBit
-							</TokenName>
+							<TokenName>BBit</TokenName>
 						</Token>
-						<Token active={formik.values.token === 'Ethereum'} onClick={() => formik.setFieldValue('token', 'Ethereum')}>
+						<Token
+							active={formik.values.token === 'Ethereum'}
+							onClick={() => formik.setFieldValue('token', 'Ethereum')}
+						>
 							<TokenIcon src={etherIcon} />
-							<TokenName>
-								Ethereum
-							</TokenName>
+							<TokenName>Ethereum</TokenName>
 						</Token>
 					</TokenList>
 					<WalletInput
-						label={'Recipient\'s Address'}
-						placeholder={'Please enter the Recipient\'s address'}
+						label={"Recipient's Address"}
+						placeholder={"Please enter the Recipient's address"}
 						adornment={'Paste'} // #todo
 						onChange={(e) => formik.setFieldValue('address', e.target.value)}
-						name='address'
+						name="address"
 						value={formik.values.address}
 						error={formik.errors?.address}
 					/>
@@ -117,18 +129,25 @@ const WalletSendAssets = () => {
 							{
 								content: 'Max',
 								onClick: async () => {
-									const value = formik.values.token === 'Biobit' ? convertToBiobit(+appState.biobitBalance) : +appState.etherBalance;
+									const value =
+										formik.values.token === 'Biobit'
+											? convertToBiobit(+appState.biobitBalance)
+											: +appState.etherBalance;
 									await formik.setFieldValue('amount', value);
-								}
-							}
+								},
+							},
 						]}
 						coloredAdornment
 						onChange={(e) => formik.setFieldValue('amount', e.target.value)}
-						name='amount'
+						name="amount"
 						value={formik.values.amount}
 						error={formik.errors?.amount}
 					/>
-					<SendButton variant='primary' type='submit' disabled={!formik.isValid && !formik.isSubmitting && !formik.pristine}>
+					<SendButton
+						variant="primary"
+						type="submit"
+						disabled={!formik.isValid && !formik.isSubmitting && !formik.pristine}
+					>
 						Send
 					</SendButton>
 				</Column>

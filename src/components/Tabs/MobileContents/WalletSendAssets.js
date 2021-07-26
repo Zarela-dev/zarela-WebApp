@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
-import styled from "styled-components";
-import { mainContext } from "../../../state";
+import React, { useContext } from 'react';
+import styled from 'styled-components';
+import { mainContext } from '../../../state';
 import {
 	Title,
 	TokenList,
@@ -8,23 +8,18 @@ import {
 	TokenIcon,
 	TokenName,
 	Token,
-} from "./WalletDeposit/DepositChoices";
-import { Content, Row, Column } from "./WalletDeposit/Layout";
-import biobitIcon from "../../../assets/icons/biobit-black.svg";
-import etherIcon from "../../../assets/icons/ether-black.png";
-import Textfield from "./../../Elements/TextField";
-import Button from "./../../Elements/Button";
-import copyImage from "../../../assets/icons/copy.svg";
-import {
-	CopyableText,
-	scientificToDecimal,
-	toast,
-	convertToBiobit,
-} from "../../../utils";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import { useHistory } from "react-router";
-import { useWeb3React } from "@web3-react/core";
+} from './WalletDeposit/DepositChoices';
+import { Content, Row, Column } from './WalletDeposit/Layout';
+import biobitIcon from '../../../assets/icons/biobit-black.svg';
+import etherIcon from '../../../assets/icons/ether-black.png';
+import Textfield from './../../Elements/TextField';
+import Button from './../../Elements/Button';
+import copyImage from '../../../assets/icons/copy.svg';
+import { CopyableText, scientificToDecimal, toast, convertToBiobit } from '../../../utils';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { useHistory } from 'react-router';
+import { useWeb3React } from '@web3-react/core';
 
 const WalletInput = styled(Textfield)`
 	margin-bottom: ${(props) => props.theme.spacing(4)};
@@ -54,26 +49,26 @@ const WalletSendAssets = () => {
 	const { account } = useWeb3React();
 	const formik = useFormik({
 		initialValues: {
-			token: "Biobit",
-			address: "",
-			amount: "",
+			token: 'Biobit',
+			address: '',
+			amount: '',
 		},
 		validationSchema: yup.object().shape({
-			token: yup.string().required("token type can not be blank"),
-			address: yup.string().required("recipient address can not be empty"),
-			amount: yup.string().required("token amount can not be empty"),
+			token: yup.string().required('token type can not be blank'),
+			address: yup.string().required('recipient address can not be empty'),
+			amount: yup.string().required('token amount can not be empty'),
 		}),
 		onSubmit: (values) => {
-			if (values.token === "Biobit") {
+			if (values.token === 'Biobit') {
 				appState.contract.methods
 					.transfer(values.address, +values.amount * Math.pow(10, 9))
 					.send({ from: account }, (error, result) => {
 						if (!error) {
-							toast(result, "success", true, result);
-							history.push("/wallet/transactions");
+							toast(result, 'success', true, result);
+							history.push('/wallet/transactions');
 							//#todo create the tab based routes
 						} else {
-							toast(error.message, "error");
+							toast(error.message, 'error');
 						}
 					});
 			} else {
@@ -81,10 +76,7 @@ const WalletSendAssets = () => {
 					.sendTransaction({
 						to: values.address,
 						from: account,
-						value: appState.fallbackWeb3Instance.utils.toWei(
-							values.amount,
-							"ether"
-						),
+						value: appState.fallbackWeb3Instance.utils.toWei(values.amount, 'ether'),
 					})
 					.then(({ transactionHash }) => {
 						console.log(transactionHash);
@@ -98,10 +90,10 @@ const WalletSendAssets = () => {
 
 	const getBalanceHint = () => {
 		return `Available: ${
-			formik.values.token === "Biobit"
+			formik.values.token === 'Biobit'
 				? convertToBiobit(+appState.biobitBalance)
 				: +appState.etherBalance
-		} ${formik.values.token === "Biobit" ? "BBIT" : "ETH"}`;
+		} ${formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'}`;
 	};
 
 	return (
@@ -111,61 +103,57 @@ const WalletSendAssets = () => {
 					<TitleLeft>Choose Token</TitleLeft>
 					<TokenList>
 						<Token
-							active={formik.values.token === "Biobit"}
-							onClick={() => formik.setFieldValue("token", "Biobit")}
+							active={formik.values.token === 'Biobit'}
+							onClick={() => formik.setFieldValue('token', 'Biobit')}
 						>
 							<TokenIcon src={biobitIcon} />
 							<TokenName>BBit</TokenName>
 						</Token>
 						<Token
-							active={formik.values.token === "Ethereum"}
-							onClick={() => formik.setFieldValue("token", "Ethereum")}
+							active={formik.values.token === 'Ethereum'}
+							onClick={() => formik.setFieldValue('token', 'Ethereum')}
 						>
 							<TokenIcon src={etherIcon} />
 							<TokenName>Ethereum</TokenName>
 						</Token>
 					</TokenList>
 					<WalletInput
-						label={"Address"}
-						placeholder={"Please enter the wallet address"}
-						isActionTypeIcon={true}
-						adornment={<img src={copyImage} />} // #todo
-						onChange={(e) => formik.setFieldValue("address", e.target.value)}
+						label={"Recipient's Address"}
+						placeholder={"Please enter the Recipient's address"}
+						adornment={'Paste'} // #todo
+						onChange={(e) => formik.setFieldValue('address', e.target.value)}
 						name="address"
 						value={formik.values.address}
 						error={formik.errors?.address}
 					/>
 					<WalletInput
-						label={"Amount"}
-						placeholder={"Enter amount"}
+						label={'Amount'}
+						placeholder={'Enter amount'}
 						hint={getBalanceHint()} // will change based on token chosen
 						actions={[
 							{
-								content: "Max",
+								content: 'Max',
 								onClick: async () => {
 									const value =
-										formik.values.token === "Biobit"
+										formik.values.token === 'Biobit'
 											? convertToBiobit(+appState.biobitBalance)
 											: +appState.etherBalance;
-									await formik.setFieldValue("amount", value);
+									await formik.setFieldValue('amount', value);
 								},
 							},
 						]}
 						coloredAdornment
-						onChange={(e) => formik.setFieldValue("amount", e.target.value)}
+						onChange={(e) => formik.setFieldValue('amount', e.target.value)}
 						name="amount"
 						value={formik.values.amount}
 						error={formik.errors?.amount}
-						helperText="Transaction fee: 0 USTD"
 					/>
 					<SendButton
 						variant="primary"
 						type="submit"
-						disabled={
-							!formik.isValid && !formik.isSubmitting && !formik.pristine
-						}
+						disabled={!formik.isValid && !formik.isSubmitting && !formik.pristine}
 					>
-						Widthraw
+						Send
 					</SendButton>
 				</Column>
 			</Content>
