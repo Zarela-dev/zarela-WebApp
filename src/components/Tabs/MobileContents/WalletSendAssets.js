@@ -31,11 +31,19 @@ const WalletInput = styled(Textfield)`
 	width: 100%;
 `;
 
-const CopyIcon = styled.img``;
-
 const SendButton = styled(Button)`
 	align-self: flex-end;
 	margin: auto;
+	height: 35px;
+	width: 135px;
+	border-radius: 3px;
+	font-size: 14px;
+	padding: 0;
+
+	buttun {
+		font-size: 5px;
+		color: red;
+	}
 `;
 
 const Wrapper = styled.form`
@@ -161,6 +169,7 @@ const WalletSendAssets = () => {
 					<SendButton
 						variant="primary"
 						type="submit"
+						fontSize="15px"
 						disabled={
 							!formik.isValid && !formik.isSubmitting && !formik.pristine
 						}
