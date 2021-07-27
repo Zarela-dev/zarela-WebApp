@@ -15,7 +15,7 @@ const Nav = styled.nav`
 	border-radius: 8px 0px 0px 0px;
 	padding: ${(props) => props.theme.spacing(2)} ${(props) => props.theme.spacing(3)};
 	overflow: auto;
-	z-index: 1000;
+	z-index: ${(props) => props.theme.z_mobileSlideMenu};
 	transition: transform 0.4s ease-in-out;
 `;
 

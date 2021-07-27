@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div`
-  
-`;
+export const Wrapper = styled.div``;
 
 export const Content = styled.div`
 	display: flex;
@@ -15,14 +13,18 @@ export const Row = styled.div`
 	justify-content: space-evenly;
 	flex: 1;
 	width: 100%;
-	padding: 0 18%;
+	/* padding: 0 18%; */
 	align-items: flex-end;
-    padding-bottom: 50px;
+	
+	&:not(:last-child) {
+		padding-bottom: 60px;
+	}
 `;
 
 export const Column = styled.div`
 	display: flex;
 	flex-direction: column;
-	flex: ${props => props.fixed ? '0 0 320px' : '1 0 auto'};
-	align-items: ${props => props.center ? 'center' : 'flex-start'};
+	width: 100%;
+	flex: ${(props) => (props.fixed ? '0 0 370px' : '1 0')};
+	align-items: ${(props) => (props.center ? 'center' : 'flex-start')};
 `;

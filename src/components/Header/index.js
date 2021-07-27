@@ -111,7 +111,8 @@ const HeaderWrapperApp = styled(HeaderWrapper)`
 	height: 70px;
 	position: sticky;
 	top: 0;
-	z-index: 999;
+	z-index: ${props => props.theme.z_header};
+	box-shadow: 0px 4px 18px rgba(81, 197, 234, 0.15);
 `;
 
 const LogoApp = styled(Logo)`
@@ -149,14 +150,14 @@ export default function Header({ device }) {
 					</Link>
 				</RightMenu>
 				<LeftMenu>
-					<VerticalNavItem>
+					{/* <VerticalNavItem>
 						<VerticalNavIconApp src={live} />
 						<NavLinkApp>Live</NavLinkApp>
-					</VerticalNavItem>
-					<NavItem>
+					</VerticalNavItem> */}
+					{/* <NavItem>
 						<NavIconApp src={bell} />
 						<NotificationBadgeApp>321</NotificationBadgeApp>
-					</NavItem>
+					</NavItem> */}
 					<NavItem>
 						<NavIconApp src={menu} onClick={() => setMenuOpen(true)} />
 					</NavItem>
@@ -194,14 +195,14 @@ export default function Header({ device }) {
 					</NavItem>
 				</RightMenu>
 				<LeftMenu>
-					<SubmitRequestButton to="/request/create">Connect</SubmitRequestButton>
-					<NavItem device="desktop" to="/account">
+					<SubmitRequestButton to="/request/create">Create</SubmitRequestButton>
+					{/* <NavItem device="desktop" to="/account">
 						<NavIcon src={bell} />
 						<NotificationBadge>321</NotificationBadge>
-					</NavItem>
-					<NavItem device="desktop">
+					</NavItem> */}
+					{/* <NavItem device="desktop">
 						<NavIcon src={help} />
-					</NavItem>
+					</NavItem> */}
 				</LeftMenu>
 			</HeaderWrapper>
 		);

@@ -134,10 +134,9 @@ const WalletSendAssets = () => {
 						</Token>
 					</TokenList>
 					<WalletInput
-						label={"Address"}
-						placeholder={"Please enter the wallet address"}
-						isActionTypeIcon={true}
-						adornment={<img src={copyImage} />} // #todo
+						label={"Recipient's Address"}
+						placeholder={"Please enter the Recipient's address"}
+						adornment={"Paste"} // #todo
 						onChange={(e) => formik.setFieldValue("address", e.target.value)}
 						name="address"
 						value={formik.values.address}
@@ -164,7 +163,6 @@ const WalletSendAssets = () => {
 						name="amount"
 						value={formik.values.amount}
 						error={formik.errors?.amount}
-						helperText="Transaction fee: 0 USTD"
 					/>
 					<SendButton
 						variant="primary"
@@ -174,7 +172,7 @@ const WalletSendAssets = () => {
 							!formik.isValid && !formik.isSubmitting && !formik.pristine
 						}
 					>
-						Widthraw
+						Send
 					</SendButton>
 				</Column>
 			</Content>

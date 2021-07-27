@@ -27,11 +27,12 @@ const NoteContent = styled.div`
 	line-height: 1.4;
 	font-size: 12px;
 	text-align: justify;
+	word-break: break-word;
 `;
 
-const Note = ({ icon, children, title }) => {
+const Note = ({ icon, children, title , ...rest}) => {
 	return (
-		<NoteWrapper>
+		<NoteWrapper {...rest}>
 			<NoteHeader>
 				<NoteIcon src={icon || infoIcon} />
 				<NoteTitle>

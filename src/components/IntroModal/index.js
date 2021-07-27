@@ -7,11 +7,7 @@ import twitterIcon from '../../assets/icons/social/twitter.svg';
 import instagramIcon from '../../assets/icons/social/instagram.svg';
 import linkedinIcon from '../../assets/icons/social/linkedin.svg';
 import { Spacer } from '../Elements/Spacer';
-import metamaskIcon from '../../assets/icons/wallets/metamask.svg';
-import walletConnectIcon from '../../assets/icons/wallets/walletConnect.svg';
-import coinbaseIcon from '../../assets/icons/wallets/coinbase.svg';
-import portisIcon from '../../assets/icons/wallets/portis.svg';
-import fortmaticIcon from '../../assets/icons/wallets/fortmatic.svg';
+import WalletsList from './WalletsList';
 
 const Container = styled.div`
 	width: 100%;
@@ -20,12 +16,12 @@ const Container = styled.div`
 	justify-content: center;
 	align-items: flex-start;
 	padding: ${(props) => props.theme.spacing(1.5)};
-	z-index: 9999;
-	
+	z-index: ${(props) => props.theme.z_modal};
+
 	@media only screen and (min-width: ${({ theme }) => theme.tablet_sm_breakpoint}) {
 		padding: ${(props) => props.theme.spacing(6)};
 	}
-	
+
 	&::before {
 		position: fixed;
 		content: '';
@@ -53,7 +49,7 @@ const Modal = styled.div`
 	overflow: auto;
 
 	margin-bottom: ${(props) => props.theme.spacing(1.5)};
-	
+
 	@media only screen and (min-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
 		margin-bottom: ${(props) => props.theme.spacing(6)};
 		padding: ${(props) => props.theme.spacing(4)} 10%;
@@ -110,49 +106,6 @@ const Message = styled.p`
 	text-align: center;
 `;
 
-const WalletsList = styled.div`
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	width: 100%;
-	margin-top: ${(props) => props.theme.spacing(1)};
-
-	@media only screen and (min-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
-		margin-top: ${(props) => props.theme.spacing(4)};
-		justify-content: space-around;
-	}
-`;
-
-const WalletItem = styled.div`
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	padding: ${(props) => props.theme.spacing(2)} ${(props) => props.theme.spacing(2)};
-	opacity: ${(props) => (props.active ? 1 : 0.5)};
-	cursor: ${(props) => (props.active ? 'pointer' : 'not-allowed')};
-`;
-
-const WalletIcon = styled.img`
-	width: 45px;
-	margin-bottom: ${(props) => props.theme.spacing(1)};
-
-	@media only screen and (min-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
-		width: 75px;
-	}
-`;
-
-const WalletTitle = styled.p`
-	font-style: normal;
-	font-weight: 600;
-	font-size: 18px;
-	line-height: 20px;
-	color: ${(props) => props.theme.textPrimary};
-	white-space: nowrap;
-	margin-top: ${(props) => props.theme.spacing(2)};
-`;
-
 const Divider = styled.div`
 	width: 100%;
 	height: 1px;
@@ -207,34 +160,6 @@ const SocialIcon = styled.img`
 	width: 18px;
 `;
 
-const wallets = [
-	{
-		name: 'Metamask',
-		icon: metamaskIcon,
-		active: true
-	},
-	{
-		name: 'Fortmatic',
-		icon: fortmaticIcon,
-		active: false
-	},
-	{
-		name: 'Portis',
-		icon: portisIcon,
-		active: false
-	},
-	{
-		name: 'Coinbase',
-		icon: coinbaseIcon,
-		active: false
-	},
-	{
-		name: 'WalletConnect',
-		icon: walletConnectIcon,
-		active: false
-	},
-];
-
 const IntroModal = () => {
 	return (
 		<Container>
@@ -248,14 +173,7 @@ const IntroModal = () => {
 						To continue please sync your digital wallet or download one of these trusted
 						wallets.
 					</Message>
-					<WalletsList>
-						{wallets.map(({ name, icon, active }) => (
-							<WalletItem active={active}>
-								<WalletIcon src={icon} />
-								<WalletTitle>{name}</WalletTitle>
-							</WalletItem>
-						))}
-					</WalletsList>
+					<WalletsList />
 					<Divider />
 					<MessageContainer>
 						<Message>you don't know ...</Message>

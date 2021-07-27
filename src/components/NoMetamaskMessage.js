@@ -14,7 +14,7 @@ const Container = styled.div`
 	justify-content: center;
 	align-items: center;
 	padding: ${props => props.theme.spacing(7)} ${props => props.theme.spacing(10)};
-	z-index: 9999;
+	z-index: ${props => props.theme.z_modal};
 	
 	&::before {
 		content: "";
