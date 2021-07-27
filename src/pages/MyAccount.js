@@ -20,10 +20,11 @@ const ContentWrapper = styled.div`
 
 const WalletTitlebar = styled(TitleBar)`
 	display: flex;
-	flex-wrap: nowrap;
+	flex-wrap: wrap;
 	justify-content: space-between;
 	align-items: center;
-    margin-top: -12px;
+  margin-top: -12px;
+	padding: 0 18px;
 `;
 
 const Title = styled.div`
@@ -31,11 +32,17 @@ const Title = styled.div`
 	font-size: 26px;
 	line-height: 34px;
 	color: ${props => props.theme.textPrimary};
+
+	@media(max-width: 768px) {
+		font-size: 14px;
+	}
 `;
 
 const RewardWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
+
+
 	`;
 
 const RewardItem = styled.div`
@@ -47,12 +54,21 @@ const RewardLabel = styled.div`
 	font-weight: 300;
 	font-size: 16px;
 	line-height: 21px;
+
+	@media(max-width: 768px) {
+		font-size: 12.5px;
+	}
 `;
 
 const RewardValue = styled.div`
 	font-size: 16px;
 	font-weight: 700;
 	margin-left: ${props => props.theme.spacing(1)};
+
+	@media(max-width: 768px) {
+		font-size: 13px;
+		font-weidth: 600;
+	}
 `;
 
 const SpinnerWrapper = styled.div`
