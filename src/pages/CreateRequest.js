@@ -14,7 +14,6 @@ import { Persist } from 'formik-persist';
 import { toast } from '../utils';
 import Dialog from '../components/Dialog';
 import { useWeb3React } from '@web3-react/core';
-import deviceContext from '../utils/context';
 import NoMobileSupportMessage from '../components/NoMobileSupportMessage';
 
 const Wrapper = styled.div`
@@ -30,7 +29,6 @@ const CreateRequest = () => {
 	const [isUploading, setUploading] = useState(false);
 	const [dialogMessage, setDialogMessage] = useState('');
 	const { account } = useWeb3React();
-	const { device } = useContext(deviceContext);
 
 	const clearSubmitDialog = () => {
 		setUploading(false);
@@ -224,7 +222,7 @@ const CreateRequest = () => {
 		<>
 			<TitleBar>Create Request</TitleBar>
 			<Wrapper>
-				{device === 'Mobile' ? (
+				{appState.device === 'Mobile' ? (
 					<NoMobileSupportMessage />
 				) : (
 					<>

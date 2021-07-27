@@ -1,20 +1,20 @@
-import React, { useEffect, useReducer } from 'react';
-import { convertToBiobit, toast } from '../utils';
-import { actionTypes } from './actionTypes';
+import React, { useEffect, useReducer } from "react";
+import { convertToBiobit, toast } from "../utils";
+import { actionTypes } from "./actionTypes";
 import {
 	configureFallbackWeb3,
 	setTimers,
 	getGasPrice,
-	configureWeb3
-} from './actions';
-import { useWeb3React } from '@web3-react/core';
-import { injectedConnector } from '../connectors';
+	configureWeb3,
+} from "./actions";
+import { useWeb3React } from "@web3-react/core";
+import { injectedConnector } from "../connectors";
 const appInitialState = {
 	error: null,
 
 	bank: 0,
-	biobitBalance: 'Hidden Info',
-	etherBalance: 'Hidden Info',
+	biobitBalance: "Hidden Info",
+	etherBalance: "Hidden Info",
 
 	gas: {},
 
@@ -23,7 +23,7 @@ const appInitialState = {
 
 	zarelaInitDate: null,
 	zarelaDailyGift: null,
-	device: null
+	device: null,
 };
 
 const mainContext = React.createContext(appInitialState);
@@ -38,47 +38,52 @@ const AppProvider = ({ children }) => {
 			case actionTypes.SET_FALLBACK_WEB3:
 				return {
 					...state,
-					fallbackWeb3Instance: action.payload
+					fallbackWeb3Instance: action.payload,
 				};
 			case actionTypes.SET_ZARELA_BANK:
 				return {
 					...state,
-					bank: action.payload
+					bank: action.payload,
 				};
 			case actionTypes.SET_CONTRACT:
 				return {
 					...state,
-					contract: action.payload
+					contract: action.payload,
 				};
 			case actionTypes.SET_BBIT_BALANCE:
 				return {
 					...state,
-					biobitBalance: action.payload
+					biobitBalance: action.payload,
 				};
 			case actionTypes.SET_ETHER_BALANCE:
 				return {
 					...state,
-					etherBalance: action.payload
+					etherBalance: action.payload,
 				};
 			case actionTypes.SET_ERROR:
 				return {
 					...state,
-					error: action.payload
+					error: action.payload,
 				};
 			case actionTypes.SET_GAS:
 				return {
 					...state,
-					gas: action.payload
+					gas: action.payload,
 				};
 			case actionTypes.SET_ZARELA_INIT_DATE:
 				return {
 					...state,
-					zarelaInitDate: action.payload
+					zarelaInitDate: action.payload,
 				};
 			case actionTypes.SET_ZARELA_DAILY_GIFT:
 				return {
 					...state,
-					zarelaDailyGift: action.payload
+					zarelaDailyGift: action.payload,
+				};
+			case actionTypes.SET_CLIENT_DEVICE:
+				return {
+					...state,
+					device: action.payload,
 				};
 			default:
 				return state;
@@ -87,6 +92,14 @@ const AppProvider = ({ children }) => {
 
 	useEffect(() => {
 		getGasPrice(dispatch);
+		dispatch({
+			type: actionTypes.SET_CLIENT_DEVICE,
+			payload: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+				navigator.userAgent
+			)
+				? "Mobile"
+				: "Desktop",
+		});
 	}, []);
 
 	useEffect(() => {
@@ -101,20 +114,23 @@ const AppProvider = ({ children }) => {
 		if (appState.contract) {
 			setTimers(dispatch, appState.contract);
 			if (appState.contract)
-				appState.contract.events.Transfer({})
-					.on('data', (event) => {
+				appState.contract.events
+					.Transfer({})
+					.on("data", (event) => {
 						toast(
-							`${convertToBiobit(event.returnValues[2])} tokens were successfully sent to ${event.returnValues[1]}.`,
-							'success',
+							`${convertToBiobit(
+								event.returnValues[2]
+							)} tokens were successfully sent to ${event.returnValues[1]}.`,
+							"success",
 							false,
 							null,
 							{
-								toastId: event.id
+								toastId: event.id,
 							}
 						);
 					})
-					.on('error', (error, receipt) => {
-						toast(error.message, 'error');
+					.on("error", (error, receipt) => {
+						toast(error.message, "error");
 						console.error(error, receipt);
 					});
 		}
@@ -126,10 +142,9 @@ const AppProvider = ({ children }) => {
 				if (!error) {
 					dispatch({
 						type: actionTypes.SET_BBIT_BALANCE,
-						payload: result
+						payload: result,
 					});
-				}
-				else {
+				} else {
 					console.error(error.message);
 				}
 			});
@@ -140,23 +155,25 @@ const AppProvider = ({ children }) => {
 		const activeWeb3 = library || appState.fallbackWeb3Instance;
 		if (activeWeb3 && appState.contract) {
 			if (account)
-				activeWeb3.eth.getBalance(account).then(function (result) {
-					dispatch({
-						type: actionTypes.SET_ETHER_BALANCE,
-						payload: activeWeb3.utils.fromWei(result, "ether")
+				activeWeb3.eth
+					.getBalance(account)
+					.then(function (result) {
+						dispatch({
+							type: actionTypes.SET_ETHER_BALANCE,
+							payload: activeWeb3.utils.fromWei(result, "ether"),
+						});
+					})
+					.catch((error) => {
+						console.error(error.message);
 					});
-				}).catch(error => {
-					console.error(error.message);
-				});
 
 			appState.contract.methods.bank().call((error, result) => {
 				if (!error) {
 					dispatch({
 						type: actionTypes.SET_ZARELA_BANK,
-						payload: convertToBiobit(result)
+						payload: convertToBiobit(result),
 					});
-				}
-				else {
+				} else {
 					console.error(error.message);
 				}
 			});
@@ -174,7 +191,7 @@ const AppProvider = ({ children }) => {
 	return (
 		<mainContext.Provider
 			value={{
-				appState
+				appState,
 			}}
 		>
 			{children}

@@ -9,7 +9,6 @@ import { convertToBiobit, toast } from '../utils';
 import NoRequestsFound from '../components/NoRequestsFound';
 import { useWeb3React } from '@web3-react/core';
 import Spinner from '../components/Spinner';
-import deviceContext from '../utils/context';
 import NoMobileSupportMessage from '../components/NoMobileSupportMessage';
 
 const PageWrapper = styled.div``;
@@ -28,7 +27,6 @@ const SpinnerWrapper = styled.div`
 
 const Inbox = () => {
 	const { appState } = useContext(mainContext);
-	const { device } = useContext(deviceContext);
 	const PAGE_SIZE = 3;
 	const [requests, setRequests] = useState({});
 	const [isLoading, setLoading] = useState(false);
@@ -121,7 +119,7 @@ const Inbox = () => {
 		<PageWrapper>
 			<TitleBar>My Requests</TitleBar>
 			<ContentWrapper>
-				{device === 'Mobile' ? (
+				{appState.device === 'Mobile' ? (
 					<NoMobileSupportMessage />
 				) : !account ? (
 					<ConnectDialog isOpen={true} />

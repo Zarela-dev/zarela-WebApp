@@ -1,34 +1,31 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
-import { useParams } from 'react-router';
-import { Buffer } from 'buffer';
-import { create } from 'ipfs-http-client';
-import { mainContext } from '../../state';
-import { convertToBiobit } from '../../utils';
-import * as ethUtil from 'ethereumjs-util';
-import { encrypt } from 'eth-sig-util';
-import { toast } from '../../utils';
-import { useWeb3React } from '@web3-react/core';
-import Mobile from './Mobile';
-import Desktop from './Desktop';
-import Context from './../../utils/context';
+import React, { useEffect, useState, useContext, useRef } from "react";
+import { useParams } from "react-router";
+import { Buffer } from "buffer";
+import { create } from "ipfs-http-client";
+import { mainContext } from "../../state";
+import { convertToBiobit } from "../../utils";
+import * as ethUtil from "ethereumjs-util";
+import { encrypt } from "eth-sig-util";
+import { toast } from "../../utils";
+import { useWeb3React } from "@web3-react/core";
+import Mobile from "./Mobile";
+import Desktop from "./Desktop";
 
 const RequestDetailsPage = () => {
-	const context = useContext(Context);
 	const { id } = useParams();
 	const [request, setRequest] = useState({});
 	const { appState } = useContext(mainContext);
 	const sendSignalRef = useRef(null);
 	const [showDialog, setDialog] = useState(false);
 	const [isSubmitting, setSubmitting] = useState(false);
-	const [dialogMessage, setDialogMessage] = useState('');
+	const [dialogMessage, setDialogMessage] = useState("");
 	const [error, setError] = useState(false);
 	const { account } = useWeb3React();
 
 	const clearSubmitDialog = () => {
 		setSubmitting(false);
-		setDialogMessage('');
-		if (sendSignalRef.current !== null)
-			sendSignalRef.current.value = null;
+		setDialogMessage("");
+		if (sendSignalRef.current !== null) sendSignalRef.current.value = null;
 	};
 
 	const submitSignal = (e) => {
@@ -36,10 +33,13 @@ const RequestDetailsPage = () => {
 			if (sendSignalRef !== null) {
 				setDialog(true);
 				if (account) {
-					if (sendSignalRef.current.value !== null && sendSignalRef.current.value !== '') {
+					if (
+						sendSignalRef.current.value !== null &&
+						sendSignalRef.current.value !== ""
+					) {
 						setDialog(false);
 						setSubmitting(true);
-						setDialogMessage('encrypting file');
+						setDialogMessage("encrypting file");
 
 						const reader = new FileReader();
 
@@ -55,52 +55,66 @@ const RequestDetailsPage = () => {
 										JSON.stringify(
 											encrypt(
 												request.encryptionPublicKey,
-												{ data: buff.toString('base64') },
-												'x25519-xsalsa20-poly1305'
+												{ data: buff.toString("base64") },
+												"x25519-xsalsa20-poly1305"
 											)
 										),
-										'utf8'
+										"utf8"
 									)
 								);
-								setDialogMessage('uploading to ipfs');
+								setDialogMessage("uploading to ipfs");
 								const ipfsResponse = await ipfs.add(encryptedMessage);
 
-								let url = `${process.env.REACT_APP_IPFS_LINK + ipfsResponse.path}`;
+								let url = `${
+									process.env.REACT_APP_IPFS_LINK + ipfsResponse.path
+								}`;
 								console.log(`Document Of Conditions --> ${url}`);
 
 								// const doc = document.getElementById("_White_Paper");
-								setDialogMessage('awaiting confirmation');
-								appState.contract.methods.SendFile(request.requestID, request.requesterAddress, ipfsResponse.path)
-									.send({ from: account, gas: 700000, gasPrice: +appState.gas.average * Math.pow(10, 8) }, (error, result) => {
-										if (!error) {
-											clearSubmitDialog();
-											toast(result, 'success', true, result);
+								setDialogMessage("awaiting confirmation");
+								appState.contract.methods
+									.SendFile(
+										request.requestID,
+										request.requesterAddress,
+										ipfsResponse.path
+									)
+									.send(
+										{
+											from: account,
+											gas: 700000,
+											gasPrice: +appState.gas.average * Math.pow(10, 8),
+										},
+										(error, result) => {
+											if (!error) {
+												clearSubmitDialog();
+												toast(result, "success", true, result);
 
-											if (sendSignalRef.current !== null)
-												sendSignalRef.current.value = null;
+												if (sendSignalRef.current !== null)
+													sendSignalRef.current.value = null;
+											} else {
+												clearSubmitDialog();
+												toast(error.message, "error");
+											}
 										}
-										else {
-											clearSubmitDialog();
-											toast(error.message, 'error');
-										}
-									});
+									);
 
-								appState.contract.events.Contributed({})
-									.on('data', (event) => {
+								appState.contract.events
+									.Contributed({})
+									.on("data", (event) => {
 										clearSubmitDialog();
 										toast(
 											`signal submitted on request #${event.returnValues[1]} for address: ${event.returnValues[2]}`,
-											'success',
+											"success",
 											false,
 											null,
 											{
-												toastId: event.id
+												toastId: event.id,
 											}
 										);
 									})
-									.on('error', (error, receipt) => {
+									.on("error", (error, receipt) => {
 										clearSubmitDialog();
-										toast(error.message, 'error');
+										toast(error.message, "error");
 										console.error(error, receipt);
 									});
 							} catch (error) {
@@ -108,9 +122,8 @@ const RequestDetailsPage = () => {
 								console.error(error);
 							}
 						};
-
 					} else {
-						setError('please select files to upload');
+						setError("please select files to upload");
 					}
 				}
 			}
@@ -132,7 +145,7 @@ const RequestDetailsPage = () => {
 						whitePaper: result[5],
 						timestamp: result[10],
 						encryptionPublicKey: result[11],
-						totalContributedCount: result[9]
+						totalContributedCount: result[9],
 					};
 					setRequest(requestTemplate);
 				} else {
@@ -142,14 +155,38 @@ const RequestDetailsPage = () => {
 		}
 	}, [id, appState.contract]);
 
-	if (context.device === "Mobile") {
+	if (appState.device === "Mobile") {
 		return (
-			<Mobile {...{ account, showDialog, isSubmitting, dialogMessage, request, sendSignalRef, submitSignal, error, setError }} />
+			<Mobile
+				{...{
+					account,
+					showDialog,
+					isSubmitting,
+					dialogMessage,
+					request,
+					sendSignalRef,
+					submitSignal,
+					error,
+					setError,
+				}}
+			/>
 		);
 	} else {
 		return (
-			<Desktop {...{ account, showDialog, isSubmitting, dialogMessage, request, sendSignalRef, submitSignal, error, setError }} />
-		)
+			<Desktop
+				{...{
+					account,
+					showDialog,
+					isSubmitting,
+					dialogMessage,
+					request,
+					sendSignalRef,
+					submitSignal,
+					error,
+					setError,
+				}}
+			/>
+		);
 	}
 };
 

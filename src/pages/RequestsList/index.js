@@ -1,15 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { mainContext } from '../../state';
-import { timeSince, convertToBiobit } from '../../utils';
-import { useWeb3React } from '@web3-react/core';
-import Desktop from './Desktop';
-import Mobile from './Mobile';
-import deviceContext from '../../utils/context';
-import Splash from '../../components/Splash';
+import React, { useContext, useEffect, useState } from "react";
+import { mainContext } from "../../state";
+import { timeSince, convertToBiobit } from "../../utils";
+import { useWeb3React } from "@web3-react/core";
+import Desktop from "./Desktop";
+import Mobile from "./Mobile";
+import Splash from "../../components/Splash";
 
 const RequestsList = () => {
 	const { appState } = useContext(mainContext);
-	const { device } = useContext(deviceContext);
 	const web3React = useWeb3React();
 	const PAGE_SIZE = 3;
 	const [requests, setRequests] = useState({});
@@ -70,7 +68,8 @@ const RequestsList = () => {
 				else console.error(error.message);
 			});
 			appState.contract.methods.GetETHPrice().call((error, result) => {
-				if (!error) setBiobitBasedOnEth((1 / (+result / Math.pow(10, 8))).toFixed(6));
+				if (!error)
+					setBiobitBasedOnEth((1 / (+result / Math.pow(10, 8))).toFixed(6));
 				else console.error(error.message);
 			});
 		}
@@ -84,7 +83,7 @@ const RequestsList = () => {
 		// })
 	}, [appState.contract]);
 
-	if (device === 'Mobile') {
+	if (appState.device === "Mobile") {
 		return (
 			<>
 				<Splash isVisible={isLoading} />
