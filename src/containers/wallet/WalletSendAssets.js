@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { mainContext } from "../../../state";
+import { mainContext } from "../../state";
 import {
 	Title,
 	TokenList,
@@ -10,29 +10,35 @@ import {
 	Token,
 } from "./WalletDeposit/DepositChoices";
 import { Content, Row, Column } from "./WalletDeposit/Layout";
-import biobitIcon from "../../../assets/icons/biobit-black.svg";
-import etherIcon from "../../../assets/icons/ether-black.png";
-import Textfield from "./../../Elements/TextField";
-import Button from "./../../Elements/Button";
-import copyImage from "../../../assets/icons/copy.svg";
+import biobitIcon from "../../assets/icons/biobit-black.svg";
+import etherIcon from "../../assets/icons/ether-black.png";
+import Textfield from "./../../components/Elements/TextField";
+import Button from "./../../components/Elements/Button";
+import copyImage from "../../assets/icons/copy.svg";
 import {
 	CopyableText,
 	scientificToDecimal,
 	toast,
 	convertToBiobit,
-} from "../../../utils";
+} from "../../utils";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useHistory } from "react-router";
 import { useWeb3React } from "@web3-react/core";
 
 const WalletInput = styled(Textfield)`
+	min-width: ${(props) => (props.mobile ? "100%" : "510px")};
 	margin-bottom: ${(props) => props.theme.spacing(4)};
-	width: 100%;
 `;
+
+const CopyIcon = styled.img``;
 
 const SendButton = styled(Button)`
 	align-self: flex-end;
+	margin: 0;
+`;
+
+const SendButtonMobile = styled(SendButton)`
 	margin: auto;
 	height: 35px;
 	width: 135px;
@@ -47,16 +53,13 @@ const SendButton = styled(Button)`
 `;
 
 const Wrapper = styled.form`
-	padding: 18px;
-`;
-const TitleLeft = styled(Title)`
-	text-align: left;
-	margin: unset;
-	margin-bottom: ${(props) => props.theme.spacing(2)};
+	width: ${props => props.mobile ? 'unset' : '510px'};
+	padding: ${props => props.mobile ? '18px' : ''};
 `;
 
 /* #todo #fancy if the requested amount is more than user balance, give error */
-const WalletSendAssets = () => {
+const WalletSendAssets = (mobile) => {
+	console.log('mobile', mobile);
 	const { appState } = useContext(mainContext);
 	const history = useHistory();
 	const { account } = useWeb3React();
@@ -113,10 +116,10 @@ const WalletSendAssets = () => {
 	};
 
 	return (
-		<Wrapper onSubmit={formik.handleSubmit}>
+		<Wrapper mobile={mobile} onSubmit={formik.handleSubmit}>
 			<Content>
 				<Column>
-					<TitleLeft>Choose Token</TitleLeft>
+					<Title>Choose Token</Title>
 					<TokenList>
 						<Token
 							active={formik.values.token === "Biobit"}
@@ -134,6 +137,7 @@ const WalletSendAssets = () => {
 						</Token>
 					</TokenList>
 					<WalletInput
+						mobile
 						label={"Recipient's Address"}
 						placeholder={"Please enter the Recipient's address"}
 						adornment={"Paste"} // #todo
@@ -164,16 +168,27 @@ const WalletSendAssets = () => {
 						value={formik.values.amount}
 						error={formik.errors?.amount}
 					/>
-					<SendButton
-						variant="primary"
-						type="submit"
-						fontSize="15px"
-						disabled={
-							!formik.isValid && !formik.isSubmitting && !formik.pristine
-						}
-					>
-						Send
-					</SendButton>
+					{mobile ? (
+						<SendButtonMobile
+							variant="primary"
+							type="submit"
+							disabled={
+								!formik.isValid && !formik.isSubmitting && !formik.pristine
+							}
+						>
+							Send
+						</SendButtonMobile>
+					) : (
+						<SendButton
+							variant="primary"
+							type="submit"
+							disabled={
+								!formik.isValid && !formik.isSubmitting && !formik.pristine
+							}
+						>
+							Send
+						</SendButton>
+					)}
 				</Column>
 			</Content>
 		</Wrapper>

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import copyImage from '../../../assets/icons/copy.svg';
-import { timeSince, convertToBiobit, CopyableText } from '../../../utils';
+import copyImage from '../../assets/icons/copy.svg';
+import { timeSince, convertToBiobit, CopyableText } from '../../utils';
 
 const Wrapper = styled.div`
 	width: 100%;
@@ -59,7 +59,7 @@ const IconCol = styled.img`
 	height: 25px;
 `;
 
-const WalletTransactions = ({ isLoading, account, data }) => {
+const WalletTransactionsMobile = ({ isLoading, account, data }) => {
 	if (!account || isLoading === true)
 		return 'loading';
 	if (!account)
@@ -153,4 +153,4 @@ const WalletTransactions = ({ isLoading, account, data }) => {
 	);
 };
 
-export default WalletTransactions;
+export default WalletTransactionsMobile;

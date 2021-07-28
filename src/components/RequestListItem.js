@@ -48,6 +48,7 @@ const TitleColumn = styled.div`
 const DetailsColumn = styled.div`
 	display: flex;
 	flex: 4;
+	justify-content: flex-end;
 
 	@media (max-width: 768px) {
 		align-items: center;

@@ -28,3 +28,7 @@ export const Column = styled.div`
 	flex: ${(props) => (props.fixed ? '0 0 370px' : '1 0')};
 	align-items: ${(props) => (props.center ? 'center' : 'flex-start')};
 `;
+
+export const MobileColumn = styled(Column)`
+	margin-bottom: 40px;
+`;

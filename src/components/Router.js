@@ -10,6 +10,7 @@ import styled from "styled-components";
 import Wallet from "../pages/Wallet/Wallet";
 import RequestsList from "../pages/RequestsList";
 import MyAccount from "../pages/MyAccount";
+import Log from "../pages/Log/Log";
 import { mainContext } from "./../state";
 
 const AppWrapper = styled.div`
@@ -44,6 +45,7 @@ const AppRouter = () => {
 					<Route exact path="/inbox" component={Inbox} />
 					<Route exact path="/account" component={MyAccount} />
 					<Route path="/wallet" component={Wallet} />
+					<Route path="/log" component={Log} />
 				</Switch>
 			</AppWrapper>
 		</Router>

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { timeSince, convertToBiobit, CopyableText } from '../../../utils';
+import { timeSince, convertToBiobit, CopyableText } from '../../utils';
 
 const Table = styled.div`
 	display: flex;
@@ -105,7 +105,6 @@ const WalletTransactions = ({ isLoading, account, data }) => {
 		<Table>
 			<Header>
 				<Row>
-
 					<CellWrapper>
 						<Cell>
 							TX Hash

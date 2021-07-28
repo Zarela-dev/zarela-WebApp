@@ -2,8 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { mainContext } from "../../state";
 import { useWeb3React } from "@web3-react/core";
-import Desktop from "./Desktop";
-import Mobile from "./Mobile";
+import { WalletDesktop } from "./WalletDesktop";
+import { WalletMobile } from "./WalletMobile";
 
 const Wallet = () => {
 	const { appState } = useContext(mainContext);
@@ -156,9 +156,9 @@ const Wallet = () => {
 	}, [account]);
 
 	if (appState.device === "Mobile") {
-		return <Mobile {...{ account, logs, isLoading }} />;
+		return <WalletMobile {...{ account, logs, isLoading }} />;
 	} else {
-		return <Desktop {...{ account, logs, isLoading }} />;
+		return <WalletDesktop {...{ account, logs, isLoading }} />;
 	}
 };
 

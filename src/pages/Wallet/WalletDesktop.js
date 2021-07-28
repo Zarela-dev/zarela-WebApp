@@ -3,10 +3,11 @@ import styled, { css } from 'styled-components';
 import TitleBar from '../../components/TitleBar/TitleBar';
 import { Tabs } from '../../components/Tabs';
 import { mainContext } from '../../state';
-import WalletTransactions from '../../components/Tabs/DesktopContents/WalletTransactions';
-import WalletDeposit from '../../components/Tabs/DesktopContents/WalletDeposit';
-import WalletSendAssets from '../../components/Tabs/DesktopContents/WalletSendAssets';
+import WalletTransactions from './../../containers/wallet/WalletTransactions';
+import WalletDeposit from './../../containers/wallet/WalletDeposit';
+import WalletSendAssets from './../../containers/wallet/WalletSendAssets';
 import ConnectToMetamask from '../../components/ConnectToMetamask';
+
 const Wrapper = styled.div`
 
 `;
@@ -50,10 +51,7 @@ line-height: 29px;
 color: ${props => props.theme.textPrimary};
 `;
 
-
-
-
-const Desktop = ({ account, logs, isLoading }) => {
+export const WalletDesktop = ({ account, logs, isLoading }) => {
   const { appState } = useContext(mainContext);
 
   return (
@@ -72,7 +70,7 @@ const Desktop = ({ account, logs, isLoading }) => {
             {`Balance: ${+appState.biobitBalance / Math.pow(10, 9)} BBit`}
           </Balance>
         </WalletTitlebar>
-        <Tabs data={[
+        <Tabs route="wallet" data={[
           {
             label: 'Deposit',
             component: (
@@ -102,5 +100,3 @@ const Desktop = ({ account, logs, isLoading }) => {
       </Wrapper>
   );
 }
-
-export default Desktop;

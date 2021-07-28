@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import Button from '../../../Elements/Button';
+import Button from '../../../components/Elements/Button';
 
 export const QRCode = styled.div`
 	width: 136px;
@@ -10,6 +10,13 @@ export const QRCode = styled.div`
 	box-shadow: 0px 4px 18px rgb(17 94 89 / 12%);
     border-radius: 4px;
 	margin-bottom: ${props => props.theme.spacing(2)};
+`;
+
+export const QRCodeMobile = styled(QRCode)`
+	width: 161px;
+	height: 153px;
+	display: flex;
+	margin: 25px 0;
 `;
 
 export const QRCodeImage = styled.img`
@@ -38,6 +45,11 @@ export const AddressTitle = styled.div`
 	line-height: 26px;
 	margin-bottom: ${props => props.theme.spacing(1)};
 	`;
+
+export const AddressTitleMobile = styled(AddressTitle)`
+	font-size: 18px;
+	line-height: 23px;
+`;
 export const Address = styled.div`
 	font-size: 20px;
 	line-height: 28px;
@@ -45,6 +57,11 @@ export const Address = styled.div`
 	margin-bottom: ${props => props.theme.spacing(3.5)};
 	width: 240px;
     word-break: break-word;
+`;
+
+export const AddressMobile = styled(Address)`
+	font-size: 16px;
+	font-weight: 400;
 `;
 
 export const CopyAddressButton = styled(Button)`
