@@ -195,7 +195,7 @@ export default function Header({ device }) {
 					</NavItem>
 				</RightMenu>
 				<LeftMenu>
-					<SubmitRequestButton to="/request/create">Create</SubmitRequestButton>
+					<SubmitRequestButton to="/request/create">New Request</SubmitRequestButton>
 					{/* <NavItem device="desktop" to="/account">
 						<NavIcon src={bell} />
 						<NotificationBadge>321</NotificationBadge>
