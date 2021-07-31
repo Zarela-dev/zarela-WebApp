@@ -6,12 +6,13 @@ import coinbaseIcon from '../../../assets/icons/wallets/coinbase.svg';
 import portisIcon from '../../../assets/icons/wallets/portis.svg';
 import fortmaticIcon from '../../../assets/icons/wallets/fortmatic.svg';
 
+
 const wallets = [
 	{
 		name: 'Metamask',
 		icon: metamaskIcon,
 		active: true,
-		link: 'https://metamask.app.link/dapp/app.zarela.io',
+		link: `https://metamask.app.link/dapp/${window.location.host}`,
 	},
 	{
 		name: 'Fortmatic',

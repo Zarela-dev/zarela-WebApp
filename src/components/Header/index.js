@@ -197,7 +197,14 @@ export default function Header({ isMobile }) {
 					</NavItem>
 				</RightMenu>
 				<LeftMenu>
-					<SubmitRequestButton to="/request/create">Create</SubmitRequestButton>
+					<SubmitRequestButton to="/request/create">New Request</SubmitRequestButton>
+					{/* <NavItem device="desktop" to="/account">
+						<NavIcon src={bell} />
+						<NotificationBadge>321</NotificationBadge>
+					</NavItem> */}
+					{/* <NavItem device="desktop">
+						<NavIcon src={help} />
+					</NavItem> */}
 				</LeftMenu>
 			</HeaderWrapper>
 		);
