@@ -8,8 +8,7 @@ import MarketRequests from '../../containers/Log/MarketRequests';
 import { convertToBiobit, toast } from '../../utils';
 import Contributes from '../../containers/Log/Contributes';
 import { useWeb3React } from '@web3-react/core';
-
-import ConnectToMetamask from '../../components/ConnectToMetamask';
+import ConnectDialog from '../../components/Dialog/ConnectDialog';
 import MobileLayout from '../../components/MobileLayout';
 
 const Wrapper = styled.div``;
@@ -111,36 +110,40 @@ const Log = () => {
 				</RewardWrapper>
 			</WalletTitlebar>
 			<MobileLayout>
-				<Tabs
-					route="log"
-					isMobile={appState.isMobile}
-					data={[
-						{
-							label: 'My Requests',
-							component: (
-								<LogInnerContainer elevated>
-									<MyRequests />
-								</LogInnerContainer>
-							),
-						},
-						{
-							label: 'Marked Requests',
-							component: (
-								<LogInnerContainer elevated>
-									<MarketRequests />
-								</LogInnerContainer>
-							),
-						},
-						{
-							label: 'Contributed',
-							component: (
-								<LogInnerContainer elevated>
-									<Contributes />
-								</LogInnerContainer>
-							),
-						},
-					]}
-				></Tabs>
+				{!account ? (
+					<ConnectDialog isOpen={true} />
+				) : (
+					<Tabs
+						route="log"
+						isMobile={appState.isMobile}
+						data={[
+							{
+								label: 'My Requests',
+								component: (
+									<LogInnerContainer elevated>
+										<MyRequests />
+									</LogInnerContainer>
+								),
+							},
+							{
+								label: 'Marked Requests',
+								component: (
+									<LogInnerContainer elevated>
+										<MarketRequests />
+									</LogInnerContainer>
+								),
+							},
+							{
+								label: 'Contributed',
+								component: (
+									<LogInnerContainer elevated>
+										<Contributes />
+									</LogInnerContainer>
+								),
+							},
+						]}
+					/>
+				)}
 			</MobileLayout>
 		</Wrapper>
 	);
