@@ -6,25 +6,23 @@ import { Route, useHistory } from "react-router-dom";
 
 const TabsWrapper = styled(RaTabs)`
 	${maxWidthWRapper};
-	padding: ${(props) => props.device === "Mobile" && "0 18px"};
+	padding: ${(props) => props.isMobile && "0 18px"};
 `;
 
 const TabsHeader = styled(TabList)`
 	display: flex;
 	margin-bottom: ${(props) =>
-		props.device === "Mobile"
-			? props.theme.spacing(2)
-			: props.theme.spacing(3)};
+		props.isMobile ? props.theme.spacing(2) : props.theme.spacing(3)};
 `;
 
 const TabsHeaderItem = styled(Tab)`
 	white-space: nowrap;
 	position: relative;
-	min-width: ${(props) => (props.device === "Mobile" ? "100px" : "180px")};
-	height: ${(props) => (props.device === "Mobile" ? "35px" : "50px")};
-	font-size: ${(props) => (props.device === "Mobile" ? "12.5px" : "20px")};
+	min-width: ${(props) => (props.isMobile ? "100px" : "180px")};
+	height: ${(props) => (props.isMobile ? "35px" : "50px")};
+	font-size: ${(props) => (props.isMobile ? "12.5px" : "20px")};
 	opacity: 0.5;
-	line-height: ${(props) => (props.device === "Mobile" ? "17px" : "26px")};
+	line-height: ${(props) => (props.isMobile ? "17px" : "26px")};
 	padding: ${(props) => props.theme.spacing(0.9)} 0;
 	margin-right: ${(props) => props.theme.spacing(2)};
 	cursor: pointer;
@@ -56,13 +54,13 @@ const TabsHeaderItem = styled(Tab)`
 
 const TabsBody = styled(TabPanel)``;
 
-export const Tabs = ({ data, device, route }) => {
+export const Tabs = ({ data, isMobile, route }) => {
 	const history = useHistory();
 	const activeTab = history.location.pathname.split("/").reverse()[0];
 
 	return (
 		<TabsWrapper
-			device={device}
+			isMobile={isMobile}
 			selectedTabClassName="is-active"
 			selectedTabPanelClassName="is-active"
 			selectedIndex={data.findIndex(
@@ -73,9 +71,13 @@ export const Tabs = ({ data, device, route }) => {
 				return false;
 			}}
 		>
-			<TabsHeader device={device}>
+			<TabsHeader isMobile={isMobile}>
 				{data.map((tab, tabIndex) => (
-					<TabsHeaderItem device={device} tabIndex={tab.label} key={tabIndex}>
+					<TabsHeaderItem
+						isMobile={isMobile}
+						tabIndex={tab.label}
+						key={tabIndex}
+					>
 						{tab.label}
 					</TabsHeaderItem>
 				))}

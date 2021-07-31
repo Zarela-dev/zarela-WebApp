@@ -119,7 +119,7 @@ const Inbox = () => {
 		<PageWrapper>
 			<TitleBar>My Requests</TitleBar>
 			<ContentWrapper>
-				{appState.device === 'Mobile' ? (
+				{appState.isMobile ? (
 					<NoMobileSupportMessage />
 				) : !account ? (
 					<ConnectDialog isOpen={true} />

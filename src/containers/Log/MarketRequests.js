@@ -1,13 +1,12 @@
-import React from 'react';
-import LogCard from '../../components/LogCard/Index';
-import styled from 'styled-components';
+import React from "react";
+import LogCard from "../../components/LogCard/Index";
 
 const MarketRequests = () => {
-  return(
-    <div>
-      <LogCard bookmark contributes />
-    </div>
-  )
-}
+	return (
+		<>
+			<LogCard bookmark contributes />
+		</>
+	);
+};
 
 export default MarketRequests;

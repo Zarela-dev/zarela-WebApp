@@ -23,7 +23,7 @@ const appInitialState = {
 
 	zarelaInitDate: null,
 	zarelaDailyGift: null,
-	device: null,
+	isMobile: null,
 };
 
 const mainContext = React.createContext(appInitialState);
@@ -83,7 +83,7 @@ const AppProvider = ({ children }) => {
 			case actionTypes.SET_CLIENT_DEVICE:
 				return {
 					...state,
-					device: action.payload,
+					isMobile: action.payload,
 				};
 			default:
 				return state;
@@ -97,8 +97,8 @@ const AppProvider = ({ children }) => {
 			payload: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
 				navigator.userAgent
 			)
-				? "Mobile"
-				: "Desktop",
+				? true
+				: false,
 		});
 	}, []);
 

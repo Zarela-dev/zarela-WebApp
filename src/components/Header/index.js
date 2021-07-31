@@ -1,18 +1,19 @@
-import { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import logo from '../../assets/icons/logo.png';
-import home from '../../assets/icons/home.svg';
-import inbox from '../../assets/icons/inbox.svg';
-import live from '../../assets/icons/live.svg';
-import help from '../../assets/icons/help.svg';
-import user from '../../assets/icons/user.svg';
-import bell from '../../assets/icons/bell.svg';
-import wallet from '../../assets/icons/wallet.svg';
-import { Link } from 'react-router-dom';
-import { Typography } from '../Elements/Typography';
-import { Button } from '../Elements/Button';
-import menu from '../../assets/icons/menu.svg';
-import MobileMenu from '../MobileMenu';
+import { useState, useEffect, useContext } from "react";
+import styled from "styled-components";
+import logo from "../../assets/icons/logo.png";
+import home from "../../assets/icons/home.svg";
+import inbox from "../../assets/icons/inbox.svg";
+import live from "../../assets/icons/live.svg";
+import help from "../../assets/icons/help.svg";
+import user from "../../assets/icons/user.svg";
+import bell from "../../assets/icons/bell.svg";
+import wallet from "../../assets/icons/wallet.svg";
+import { Link } from "react-router-dom";
+import { Typography } from "../Elements/Typography";
+import { Button } from "../Elements/Button";
+import menu from "../../assets/icons/menu.svg";
+import MobileMenu from "../MobileMenu";
+import { mainContext } from "./../../state";
 
 const NavItem = styled(Link)`
 	position: relative;
@@ -24,9 +25,9 @@ const NavItem = styled(Link)`
 	justify-content: center;
 	text-decoration: none;
 	margin-right: ${(props) =>
-		props.device === 'desktop' ? props.theme.spacing(4) : props.theme.spacing(0)};
+		props.isMobile ? props.theme.spacing(0) : props.theme.spacing(4)};
 	margin-left: ${(props) =>
-		props.device === 'desktop' ? props.theme.spacing(4) : props.theme.spacing(2)};
+		props.isMobile ? props.theme.spacing(2) : props.theme.spacing(4)};
 `;
 
 const NavLink = styled(Typography)`
@@ -72,7 +73,7 @@ const Logo = styled.img`
 	height: 40px;
 	margin-left: 20px;
 	margin-right: ${(props) =>
-		props.device === 'desktop' ? props.theme.spacing(4) : props.theme.spacing(1)};
+		props.isMobile ? props.theme.spacing(1) : props.theme.spacing(4)};
 `;
 
 const NotificationBadge = styled.div`
@@ -111,7 +112,7 @@ const HeaderWrapperApp = styled(HeaderWrapper)`
 	height: 70px;
 	position: sticky;
 	top: 0;
-	z-index: ${props => props.theme.z_header};
+	z-index: ${(props) => props.theme.z_header};
 	box-shadow: 0px 4px 18px rgba(81, 197, 234, 0.15);
 `;
 
@@ -138,10 +139,11 @@ const NotificationBadgeApp = styled(NotificationBadge)`
 	height: 16px;
 `;
 
-export default function Header({ device }) {
+export default function Header({ isMobile }) {
 	const [isMenuOpen, setMenuOpen] = useState(false);
+	const { appState } = useContext(mainContext);
 
-	if (device === 'mobile') {
+	if (isMobile) {
 		return (
 			<HeaderWrapperApp>
 				<RightMenu>
@@ -158,7 +160,7 @@ export default function Header({ device }) {
 						<NavIconApp src={bell} />
 						<NotificationBadgeApp>321</NotificationBadgeApp>
 					</NavItem> */}
-					<NavItem>
+					<NavItem isMobile={appState.isMobile}>
 						<NavIconApp src={menu} onClick={() => setMenuOpen(true)} />
 					</NavItem>
 				</LeftMenu>
@@ -170,39 +172,32 @@ export default function Header({ device }) {
 				/>
 			</HeaderWrapperApp>
 		);
-	} else if (device === 'desktop') {
+	} else {
 		return (
 			<HeaderWrapper>
 				<RightMenu>
 					<Link to="/">
-						<Logo device="desktop" src={logo} />
+						<Logo isMobile={appState.isMobile} src={logo} />
 					</Link>
-					<NavItem device="desktop" to="/">
+					<NavItem isMobile={appState.isMobile} to="/">
 						<NavIcon src={home} />
 						<NavLink>Home</NavLink>
 					</NavItem>
-					<NavItem device="desktop" to="/inbox">
+					<NavItem isMobile={appState.isMobile} to="/inbox">
 						<NavIcon src={inbox} />
 						<NavLink>Inbox</NavLink>
 					</NavItem>
-					<NavItem device="desktop" to="/account">
+					<NavItem isMobile={appState.isMobile} to="/account">
 						<NavIcon src={user} />
 						<NavLink>My Contributions</NavLink>
 					</NavItem>
-					<NavItem device="desktop" to="/wallet/deposit">
+					<NavItem isMobile={appState.isMobile} to="/wallet/deposit">
 						<NavIcon src={wallet} />
 						<NavLink>Wallet</NavLink>
 					</NavItem>
 				</RightMenu>
 				<LeftMenu>
 					<SubmitRequestButton to="/request/create">Create</SubmitRequestButton>
-					{/* <NavItem device="desktop" to="/account">
-						<NavIcon src={bell} />
-						<NotificationBadge>321</NotificationBadge>
-					</NavItem> */}
-					{/* <NavItem device="desktop">
-						<NavIcon src={help} />
-					</NavItem> */}
 				</LeftMenu>
 			</HeaderWrapper>
 		);

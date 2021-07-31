@@ -1,14 +1,13 @@
-import React from 'react';
-import LogCard from '../../components/LogCard/Index';
-import styled from 'styled-components';
+import React from "react";
+import LogCard from "../../components/LogCard/Index";
 
 const Contributes = () => {
-  return(
-    <div>
-      <LogCard success  />
-      <LogCard pending  />
-    </div>
-  )
-}
+	return (
+		<>
+			<LogCard success contributed />
+			<LogCard pending contributed />
+		</>
+	);
+};
 
 export default Contributes;

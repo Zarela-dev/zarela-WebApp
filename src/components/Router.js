@@ -30,13 +30,13 @@ const AppRouter = () => {
 	return (
 		<Router>
 			<AppWrapper>
-				{appState.device === "Mobile" ? (
+				{appState.isMobile ? (
 					<>
-						<Header device="mobile" />
+						<Header isMobile={appState.isMobile} />
 						<BottomNavigation />
 					</>
 				) : (
-					<Header device="desktop" />
+					<Header isMobile={appState.isMobile ?? false} />
 				)}
 				<Switch>
 					<Route exact path="/" component={RequestsList} />
