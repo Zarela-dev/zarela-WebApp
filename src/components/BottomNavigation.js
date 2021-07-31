@@ -113,7 +113,7 @@ const bottomNavItems = [
 	{
 		icon: profileIcon,
 		activeIcon: profileIcon_active,
-		path: '/account',
+		path: '/log/my_requests',
 		notifications: 0,
 	},
 	{
