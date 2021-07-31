@@ -144,7 +144,7 @@ const WalletTransactionsMobile = ({ isLoading, account, data }) => {
 							Value
 						</TitleCol>
 						<ValueCol>
-							{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}
+						{transaction.input !== '0x' ? convertToBiobit(transaction.value) : +transaction.value / Math.pow(10, 18)}
 						</ValueCol>
 					</TransactionRow>
 				</TransactionCard>

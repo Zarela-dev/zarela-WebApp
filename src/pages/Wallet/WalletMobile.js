@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 import styled, { css } from "styled-components";
-import TitleBarMobile from "../../components/TitleBar/TitleBarMobile";
+import TitleBar from "../../components/TitleBar/TitleBar";
 import { Tabs } from "../../components/Tabs";
 import { mainContext } from "../../state";
 import ConnectToMetamask from "../../components/ConnectToMetamask";
 import MobileLayout from "../../components/MobileLayout";
-import WalletTransactionsMobile from './../../containers/wallet/WalletTransactionsMobile';
-import WalletDepositMobile from './../../containers/wallet/WalletDeposit/Mobile';
-import WalletSendAssets from './../../containers/wallet/WalletSendAssets';
+import WalletTransactionsMobile from "./../../containers/wallet/WalletTransactionsMobile";
+import WalletDepositMobile from "./../../containers/wallet/WalletDeposit/Mobile";
+import WalletSendAssets from "./../../containers/wallet/WalletSendAssets";
 
 const Wrapper = styled.div``;
 
@@ -22,14 +22,13 @@ const WalletInnerContainer = styled.div`
 	border-radius: 8px;
 `;
 
-const WalletTitlebar = styled(TitleBarMobile)`
+const WalletTitlebar = styled(TitleBar)`
 	display: flex;
 	flex-wrap: nowrap;
 	justify-content: space-between;
-	height: 85px;
-	padding: 0 18px;
+	height: ${(props) => (props.isMobile ? "85px" : "unset")};
+	padding: ${(props) => props.isMobile && "0 18px"};
 	flex-direction: row;
-	display: flex;
 	width: 100%;
 	align-items: center;
 `;
@@ -55,14 +54,14 @@ export const WalletMobile = ({ data, account, logs, isLoading }) => {
 
 	return !account ? (
 		<Wrapper>
-			<WalletTitlebar>
+			<WalletTitlebar isMobile={appState.isMobile}>
 				<Title>Wallet</Title>
 			</WalletTitlebar>
 			<ConnectToMetamask />
 		</Wrapper>
 	) : (
 		<Wrapper>
-			<WalletTitlebar>
+			<WalletTitlebar isMobile={appState.isMobile}>
 				<Title>Wallet</Title>
 				<Balance>
 					{`Balance: ${+appState.biobitBalance / Math.pow(10, 9)} BBit`}
@@ -70,8 +69,8 @@ export const WalletMobile = ({ data, account, logs, isLoading }) => {
 			</WalletTitlebar>
 			<MobileLayout>
 				<Tabs
-          route="wallet"
-					device={appState.device}
+					route="wallet"
+					isMobile={appState.isMobile}
 					data={[
 						{
 							label: "Deposit",

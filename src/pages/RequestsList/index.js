@@ -83,7 +83,7 @@ const RequestsList = () => {
 		// })
 	}, [appState.contract]);
 
-	if (appState.device === "Mobile") {
+	if (appState.isMobile) {
 		return (
 			<>
 				<Splash isVisible={isLoading} />

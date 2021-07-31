@@ -155,7 +155,7 @@ const RequestDetailsPage = () => {
 		}
 	}, [id, appState.contract]);
 
-	if (appState.device === "Mobile") {
+	if (appState.isMobile) {
 		return (
 			<Mobile
 				{...{

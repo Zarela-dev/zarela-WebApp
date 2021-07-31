@@ -155,7 +155,7 @@ const Wallet = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [account]);
 
-	if (appState.device === "Mobile") {
+	if (appState.isMobile) {
 		return <WalletMobile {...{ account, logs, isLoading }} />;
 	} else {
 		return <WalletDesktop {...{ account, logs, isLoading }} />;

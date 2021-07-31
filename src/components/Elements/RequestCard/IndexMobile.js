@@ -88,7 +88,6 @@ export const ProgressTrackerProcess = styled.div`
 `;
 
 export const Footer = styled.div`
-	flex: 1 0 100%;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;

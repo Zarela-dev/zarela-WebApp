@@ -24,15 +24,15 @@ export const HeaderLayout = styled.div`
 `;
 
 export const RequestNumber = styled.div`
-	flex: 0 0 100px;
-	height: 50px;
-	border-radius: 10px 10px 0px 10px;
+	flex: ${props => props.isMobile ? '' : '0 0 100px'};
+	height: ${props => props.isMobile ? '38px;' : '50px'};
+	border-radius: ${props => props.isMobile ? '5px 5px 0px 5px' : '10px 10px 0px 10px'};
 	padding: ${props => props.theme.spacing(1)} ${props => props.theme.spacing(2)};
 	margin-right: ${props => props.theme.spacing(2)};
 	font-weight: bold;
 	background: linear-gradient(246.29deg, #3A68DE 12.69%, #3A68DE 100%);
-	font-size: 32px;
-	line-height: 30px;
+	font-size: ${props => props.isMobile ? '15px' : '32px'};
+	line-height: ${props => props.isMobile ? '11.4px' : '30px'};
 	color: #FFFFFF;
 	text-align: center;
 `;
