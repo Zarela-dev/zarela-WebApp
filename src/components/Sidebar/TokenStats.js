@@ -1,14 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-// import { mainContext } from '../../web3Provider';
 import contributorIcon from '../../assets/icons/contributor.svg';
-// import { convertToBiobit } from '../../utils';
-import {
-	SidebarCard,
-	Header,
-	Row,
-	Divider
-} from './Elements';
+import { SidebarCard, Header, Row, Divider } from './Elements';
 import { Spacer } from '../Elements/Spacer';
 
 const TextShadow = css`
@@ -16,7 +9,7 @@ const TextShadow = css`
 `;
 
 const ColoredSidebarCard = styled(SidebarCard)`
-	background: linear-gradient(223.08deg, #0F0F43 -21.82%, #3439A1 51.14%, #C3B8F6 125.64%);
+	background: linear-gradient(223.08deg, #0f0f43 -21.82%, #3439a1 51.14%, #c3b8f6 125.64%);
 	box-shadow: 0px 10px 18px rgba(81, 197, 234, 0.06);
 	padding-bottom: 0;
 `;
@@ -24,7 +17,7 @@ const ColoredSidebarCard = styled(SidebarCard)`
 const Title = styled.div`
 	font-weight: 700;
 	font-size: 18px;
-	color: ${props => props.colored ? '#FDF534' : 'white'};
+	color: ${(props) => (props.colored ? '#FDF534' : 'white')};
 	${TextShadow};
 	flex: 0 0 190px;
 `;
@@ -53,7 +46,7 @@ const TotalContributorsLabel = styled.div`
 
 const TotalContributorsIcon = styled.img`
 	width: 26px;
-	margin-right: ${props => props.theme.spacing(1)};
+	margin-right: ${(props) => props.theme.spacing(1)};
 	${TextShadow};
 `;
 
@@ -64,52 +57,22 @@ const TotalContributors = styled.div`
 	font-size: 24px;
 `;
 
-const ZarelaReward = styled(Value)`
-	color: #FDF534;
-	font-weight: 600;
-    font-size: 18px;
-    margin-top: 15px;
-`;
-
-const Sidebar = ({ dailyContributors, BiobitBasedOnEth, ZarelaRewardPool }) => {
+const Sidebar = ({ dailyContributors }) => {
 	return (
 		<ColoredSidebarCard>
 			<Header>
-				<Title>
-					BBit Value
-				</Title>
-				<LastUpdate>
-					2020.05.06
-				</LastUpdate>
+				<Title>BBit Value</Title>
+				<LastUpdate>2020.05.06</LastUpdate>
 			</Header>
 			<Row>
-				<Title colored>
-					~ $ 1.00
-				</Title>
-			</Row>
-			<Row>
-				<Title >
-					Eth. {BiobitBasedOnEth}
-				</Title>
-				<ValueColumn>
-					<Value>
-						Zarela Max reward
-					</Value>
-					<ZarelaReward>
-						{'~ $ ' + ZarelaRewardPool}
-					</ZarelaReward>
-				</ValueColumn>
+				<Title colored>~ $ 1.00</Title>
 			</Row>
 			<Divider light />
 			<Header>
 				<TotalContributorsIcon src={contributorIcon} />
-				<TotalContributorsLabel>
-					Today contributes
-				</TotalContributorsLabel>
+				<TotalContributorsLabel>Today contributes</TotalContributorsLabel>
 				<Spacer />
-				<TotalContributors>
-					{dailyContributors}
-				</TotalContributors>
+				<TotalContributors>{dailyContributors}</TotalContributors>
 			</Header>
 		</ColoredSidebarCard>
 	);

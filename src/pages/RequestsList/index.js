@@ -13,8 +13,8 @@ const RequestsList = () => {
 	const [requests, setRequests] = useState({});
 	const [requestsCount, setRequestsCount] = useState(0);
 	const [dailyContributors, setDailyContributors] = useState(0);
-	const [BiobitBasedOnEth, setBiobitBasedOnEth] = useState(0);
-	const [ZarelaReward, setZarelaReward] = useState(0);
+	// const [BiobitBasedOnEth, setBiobitBasedOnEth] = useState(0);
+	// const [ZarelaReward, setZarelaReward] = useState(0);
 	const [isLoading, setLoading] = useState(false);
 
 	// pagination hook
@@ -59,28 +59,11 @@ const RequestsList = () => {
 
 	useEffect(() => {
 		if (appState.contract) {
-			appState.contract.methods.Prize().call((error, result) => {
-				if (!error) setZarelaReward(+result * 2);
-				else console.error(error.message);
-			});
-			appState.contract.methods.contributer_count().call((error, result) => {
+			appState.contract.methods.today_contribute().call((error, result) => {
 				if (!error) setDailyContributors(result);
 				else console.error(error.message);
 			});
-			appState.contract.methods.GetETHPrice().call((error, result) => {
-				if (!error)
-					setBiobitBasedOnEth((1 / (+result / Math.pow(10, 8))).toFixed(6));
-				else console.error(error.message);
-			});
 		}
-
-		// move to wallet #todo
-		// appState.contract.methods.sum_of_reward_per_contributer((error, result) => {
-		// 	if (!error)
-		// 		console.log(result);
-		// 	else
-		// 		console.error(error.message);
-		// })
 	}, [appState.contract]);
 
 	if (appState.isMobile) {
@@ -97,8 +80,6 @@ const RequestsList = () => {
 					requests,
 					appState,
 					web3React,
-					ZarelaReward,
-					BiobitBasedOnEth,
 					dailyContributors,
 				}}
 			/>
