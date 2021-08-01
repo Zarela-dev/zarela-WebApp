@@ -9,7 +9,6 @@ import {
 } from "./actions";
 import { useWeb3React } from "@web3-react/core";
 import { injectedConnector } from "../connectors";
-import ErrorBoundary from "../hooks/ErrorBoundary";
 
 const appInitialState = {
 	error: null,
@@ -196,7 +195,7 @@ const AppProvider = ({ children }) => {
 				appState,
 			}}
 		>
-			<ErrorBoundary>{children}</ErrorBoundary>
+			{children}
 		</mainContext.Provider>
 	);
 };
