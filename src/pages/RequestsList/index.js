@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import { mainContext } from "../../state";
-import { timeSince, convertToBiobit } from "../../utils";
-import { useWeb3React } from "@web3-react/core";
-import Desktop from "./Desktop";
-import Mobile from "./Mobile";
-import Splash from "../../components/Splash";
+import React, { useContext, useEffect, useState } from 'react';
+import { mainContext } from '../../state';
+import { timeSince, convertToBiobit } from '../../utils';
+import { useWeb3React } from '@web3-react/core';
+import Desktop from './Desktop';
+import Mobile from './Mobile';
+import Splash from '../../components/Splash';
 
 const RequestsList = () => {
 	const { appState } = useContext(mainContext);
@@ -29,25 +29,34 @@ const RequestsList = () => {
 			});
 
 			for (let i = 0; i < requestsCount; i++) {
-				appState.contract.methods.ord_file(i).call((error, result) => {
+				appState.contract.methods.Cat(i).call((error, result) => {
 					if (!error) {
-						const requestTemplate = {
-							requestID: result[0],
-							title: result[1],
-							description: result[6],
-							requesterAddress: result[2],
-							tokenPay: convertToBiobit(result[3]),
-							totalContributors: result[4], // total contributors required
-							totalContributed: +result[4] - +result[7],
-							whitePaper: result[5],
-							timestamp: result[9],
-							totalContributedCount: result[8],
-						};
-						setRequests((requests) => ({
-							...requests,
-							[requestTemplate.requestID]: requestTemplate,
-						}));
-						// if (i === +requestsCount - 1) setLoading(false);
+						let businessCategory = result[2];
+						
+						if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY) // only show zarela requests
+							appState.contract.methods.ord_file(i).call((error, result) => {
+								if (!error) {
+									const requestTemplate = {
+										requestID: result[0],
+										title: result[1],
+										description: result[6],
+										requesterAddress: result[2],
+										tokenPay: convertToBiobit(result[3]),
+										totalContributors: result[4], // total contributors required
+										totalContributed: +result[4] - +result[7],
+										whitePaper: result[5],
+										timestamp: result[9],
+										totalContributedCount: result[8],
+									};
+									setRequests((requests) => ({
+										...requests,
+										[requestTemplate.requestID]: requestTemplate,
+									}));
+									// if (i === +requestsCount - 1) setLoading(false);
+								} else {
+									console.error(error.message);
+								}
+							});
 					} else {
 						console.error(error.message);
 					}
