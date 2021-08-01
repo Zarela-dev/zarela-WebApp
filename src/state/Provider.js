@@ -70,11 +70,6 @@ const AppProvider = ({ children }) => {
 					...state,
 					gas: action.payload,
 				};
-			case actionTypes.SET_ZARELA_INIT_DATE:
-				return {
-					...state,
-					zarelaInitDate: action.payload,
-				};
 			case actionTypes.SET_ZARELA_DAILY_GIFT:
 				return {
 					...state,

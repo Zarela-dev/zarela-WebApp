@@ -59,33 +59,7 @@ export const configureFallbackWeb3 = async (dispatch) => {
 
 export const setTimers = (dispatch, contract) => {
 	if (contract) {
-		setInterval(() => {
-			contract.methods.smart_contract_started().call((error, result) => {
-				if (!error) {
-					dispatch({
-						type: actionTypes.SET_ZARELA_INIT_DATE,
-						payload: result * 1000
-					});
-				}
-				else {
-					console.error(error.message);
-				}
-			});
-		}, 10 * 1000);
-
-		contract.methods.smart_contract_started().call((error, result) => {
-			if (!error) {
-				dispatch({
-					type: actionTypes.SET_ZARELA_INIT_DATE,
-					payload: result * 1000
-				});
-			}
-			else {
-				console.error(error.message);
-			}
-		});
-
-		contract.methods.start_date_Daily().call((error, result) => {
+		contract.methods.timer_24Hour().call((error, result) => {
 			if (!error) {
 				dispatch({
 					type: actionTypes.SET_ZARELA_DAILY_GIFT,
