@@ -99,7 +99,7 @@ const App = ({ requests }) => {
         <Title>
           Recent requests
         </Title>
-        <SubmitRequestButton>
+        <SubmitRequestButton to='/request/create'>
           New Request
         </SubmitRequestButton>
       </TitleSection>

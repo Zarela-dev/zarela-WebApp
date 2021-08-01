@@ -43,7 +43,6 @@ const AppRouter = () => {
 					<Route exact path="/request/create" component={CreateRequest} />
 					<Route exact path="/request/:id" component={RequestDetails} />
 					<Route exact path="/inbox" component={Inbox} />
-					<Route exact path="/account" component={MyAccount} />
 					<Route path="/wallet" component={Wallet} />
 					<Route path="/log" component={Log} />
 				</Switch>
