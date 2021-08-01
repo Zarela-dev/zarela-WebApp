@@ -25,28 +25,4 @@ class ErrorBoundary extends Component {
 	}
 }
 
-class ErrorBoundaryWeb3 extends Component {
-	constructor(props) {
-		super(props);
-		this.state = { hasError: false };
-	}
-
-	static getDerivedStateFromError(error) {
-		return { hasError: true };
-	}
-
-	componentDidCatch(error, errorInfo) {}
-
-	render() {
-		if (this.state.hasError) {
-			return console.log("error on web 3 layer");
-		}
-
-		return this.props.children;
-	}
-}
-
-export {
-  ErrorBoundary,
-  ErrorBoundaryWeb3,
-}
+export default ErrorBoundary;

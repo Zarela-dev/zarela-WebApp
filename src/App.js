@@ -8,26 +8,23 @@ import { GlobalStyle } from "./globalStyle";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import getLibrary from "./utils/getLibrary";
-import { ErrorBoundary, ErrorBoundaryWeb3 } from "./hooks/ErrorBoundary";
+import ErrorBoundary from "./hooks/ErrorBoundary";
 
 function App() {
 	return (
 		<div className="App">
 			{/* Error Boundary for web 3 logic layer errors */}
-			<ErrorBoundaryWeb3>
+			<ErrorBoundary>
 				<Web3ReactProvider getLibrary={getLibrary}>
 					<AppProvider>
 						<ThemeProvider theme={theme}>
-							{/* Error Boundary for router and UI rendering run time errors */}
-							<ErrorBoundary>
-								<AppRouter />
-							</ErrorBoundary>
+							<AppRouter />
 							<ToastContainer />
 							<GlobalStyle />
 						</ThemeProvider>
 					</AppProvider>
 				</Web3ReactProvider>
-			</ErrorBoundaryWeb3>
+			</ErrorBoundary>
 		</div>
 	);
 }
