@@ -47,7 +47,7 @@ const Sidebar = ({ data, account }) => {
 					Token Name
 				</Subtitle>
 				<Value>
-					BBit
+					Biobit
 				</Value>
 			</Row>
 			<Row>
