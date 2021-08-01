@@ -79,7 +79,6 @@ const Desktop = ({ requests, appState, web3React, dailyContributors }) => {
 			<HomepageCounters
 				zarelaDailyGift={appState.zarelaDailyGift}
 				zarelaInitDate={appState.zarelaInitDate}
-				todayGift={appState.bank}
 			/>
 			<RequestsListLayout>
 				<RequestListSidebarWrapper>

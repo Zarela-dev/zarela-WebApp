@@ -12,7 +12,6 @@ import { injectedConnector } from "../connectors";
 const appInitialState = {
 	error: null,
 
-	bank: 0,
 	biobitBalance: "Hidden Info",
 	etherBalance: "Hidden Info",
 
@@ -39,11 +38,6 @@ const AppProvider = ({ children }) => {
 				return {
 					...state,
 					fallbackWeb3Instance: action.payload,
-				};
-			case actionTypes.SET_ZARELA_BANK:
-				return {
-					...state,
-					bank: action.payload,
 				};
 			case actionTypes.SET_CONTRACT:
 				return {
@@ -161,17 +155,6 @@ const AppProvider = ({ children }) => {
 					.catch((error) => {
 						console.error(error.message);
 					});
-
-			appState.contract.methods.bank().call((error, result) => {
-				if (!error) {
-					dispatch({
-						type: actionTypes.SET_ZARELA_BANK,
-						payload: convertToBiobit(result),
-					});
-				} else {
-					console.error(error.message);
-				}
-			});
 		}
 	}, [account, library, appState.contract, appState.fallbackWeb3Instance]);
 

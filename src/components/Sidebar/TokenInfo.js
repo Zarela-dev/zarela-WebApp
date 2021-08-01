@@ -58,14 +58,6 @@ const Sidebar = ({ data, account }) => {
 					BBit
 				</Value>
 			</Row>
-			<Row>
-				<Subtitle>
-					Zarela Bank
-				</Subtitle>
-				<Value>
-					{`${data.bank} BBit`}
-				</Value>
-			</Row>
 			<Divider />
 			<Header>
 				<Icon src={walletBlack} />
