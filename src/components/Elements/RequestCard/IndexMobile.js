@@ -123,9 +123,8 @@ export const BiobitToDollarValue = styled.div`
   line-height: 0px;
   color: #3A68DE;
   margin-right: 2px;
-  margin-left: 8px;
   white-space: nowrap;
-	margin-left: ${props => props.noMargin ? props.theme.spacing(1) : props.theme.spacing(0.8)};
+	margin-left: ${props => props.noMargin ? 0 : props.theme.spacing(0.8)};
 	white-space: nowrap;
 `;
 
