@@ -30,8 +30,8 @@ import { mainContext } from "../../state";
 
 const BiobitToDollarValue = styled.div`
 	position: absolute;
-	bottom: -6px;
-	left: 3px;
+	bottom: -5px;
+	left: 1px;
 	font-weight: 600;
 	font-size: 9.5px;
 	line-height: 0px;
@@ -46,7 +46,7 @@ const BiobitToDollarValue = styled.div`
 
 const BiobitToDollarPair = styled.div`
 	position: relative;
-	bottom: 5px;
+	bottom: 0;
 	padding-right: 9px;
 	display: flex;
 	flex-direction: column;

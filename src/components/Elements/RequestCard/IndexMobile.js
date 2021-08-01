@@ -92,6 +92,7 @@ export const Footer = styled.div`
 	flex-wrap: wrap;
 	align-items: center;
 	margin-top: ${props => props.theme.spacing(2)};
+	margin-bottom: ${props => props.theme.spacing(0.6)};
 `;
 
 export const BiobitToDollarPair = styled.div`
