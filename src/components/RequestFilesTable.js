@@ -189,25 +189,23 @@ const RequestFilesTable = ({
 							<FilesCount>{`${data[reqAddress].length} files`}</FilesCount>
 							<FilesList>
 								{data[reqAddress].map(
-									({ ipfsHash, originalIndex, timestamp }, fileIndex) => {
+									({ ipfsHash, status, originalIndex, timestamp }, fileIndex) => {
 										return (
 											<FileItem key={fileIndex}>
-												<FileCheckbox
-													checked={selected.includes(originalIndex)}
-													onChange={(e) => {
-														if (e.target.checked === true) {
-															onChange(
-																'check',
-																originalIndex
-															);
-														} else {
-															onChange(
-																'uncheck',
-																originalIndex
-															);
-														}
-													}}
-												/>
+												{status === true ? (
+													'confirmed '
+												) : (
+													<FileCheckbox
+														checked={selected.includes(originalIndex)}
+														onChange={(e) => {
+															if (e.target.checked === true) {
+																onChange('check', originalIndex);
+															} else {
+																onChange('uncheck', originalIndex);
+															}
+														}}
+													/>
+												)}
 												<FileName>
 													{
 														// file.substr(0, 4) + '...' + file.substr(file.length - 4) + `  (File #${fileIndex + 1})`

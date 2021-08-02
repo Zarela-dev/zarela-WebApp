@@ -244,56 +244,66 @@ const RequestListItem = ({
 
 	useEffect(() => {
 		if (showContributions && appState.contract !== null) {
-			appState.contract.methods
-				.GetOrderFiles(requestID)
-				.call({ from: account }, (error, result) => {
-					if (!error) {
-						let formatted = {};
-						let selected = [];
-						let uniqueAddresses = [...new Set(result[1])];
-						let pairs = [];
+			appState.contract.methods.GetOrderFiles(requestID).call((orderInfoError, orderInfo) => {
+				if (!orderInfoError) {
+					appState.contract.methods
+						.ShowFile(requestID)
+						.call({ from: account }, (fileError, files) => {
+							if (!fileError) {
+								let addresses = orderInfo[0];
+								let timestamp = orderInfo[1];
+								let status = orderInfo[2];
 
-						result[0].forEach((file, fileIndex) => {
-							pairs.push({
-								file,
-								address: result[1][fileIndex],
-								timestamp: result[2][fileIndex],
-								originalIndex: fileIndex,
-								status: result[3][fileIndex],
-							});
+								let formatted = {};
+								let selected = [];
+								let uniqueAddresses = [...new Set(addresses)];
+								let pairs = [];
+
+								addresses.forEach((address, fileIndex) => {
+									pairs.push({
+										file: files[fileIndex],
+										address: address,
+										timestamp: timestamp[fileIndex],
+										originalIndex: fileIndex,
+										status: status[fileIndex],
+									});
+								});
+
+								uniqueAddresses.forEach((uAddress, uIndex) => {
+									pairs.forEach((tempItem, tempIndex) => {
+										if (tempItem.address === uAddress) {
+											if (Object(formatted).hasOwnProperty(uAddress)) {
+												formatted[uAddress].push({
+													ipfsHash: tempItem.file,
+													timestamp: tempItem.timestamp,
+													originalIndex: tempItem.originalIndex,
+													status: tempItem.status,
+												});
+											} else {
+												formatted[uAddress] = [
+													{
+														ipfsHash: tempItem.file,
+														timestamp: tempItem.timestamp,
+														originalIndex: tempItem.originalIndex,
+														status: tempItem.status,
+													},
+												];
+											}
+											selected[uAddress] = [];
+										}
+									});
+								});
+
+								setFormattedData(formatted);
+								setSelected(selected);
+							} else {
+								console.error(fileError);
+							}
 						});
-
-						uniqueAddresses.forEach((uAddress, uIndex) => {
-							pairs.forEach((tempItem, tempIndex) => {
-								if (tempItem.address === uAddress) {
-									if (Object(formatted).hasOwnProperty(uAddress)) {
-										formatted[uAddress].push({
-											ipfsHash: tempItem.file,
-											timestamp: tempItem.timestamp,
-											originalIndex: tempItem.originalIndex,
-											status: tempItem.status,
-										});
-									} else {
-										formatted[uAddress] = [
-											{
-												ipfsHash: tempItem.file,
-												timestamp: tempItem.timestamp,
-												originalIndex: tempItem.originalIndex,
-												status: tempItem.status,
-											},
-										];
-									}
-									selected[uAddress] = [];
-								}
-							});
-						});
-
-						setFormattedData(formatted);
-						setSelected(selected);
-					} else {
-						console.error(error.message);
-					}
-				});
+				} else {
+					console.error(orderInfoError.message);
+				}
+			});
 		}
 	}, [appState.contract]);
 
