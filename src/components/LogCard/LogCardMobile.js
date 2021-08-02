@@ -17,6 +17,7 @@ import {
 	Title,
 	BiobitToDollarValue,
 	BadgeLabel,
+	Timestamp,
 } from "../Elements/RequestCard/IndexMobile";
 import maxWidthWrapper from "../Elements/MaxWidth";
 import biobitIcon from "../../assets/icons/biobit-black.svg";
@@ -43,7 +44,7 @@ const CustomRequestNumber = styled(RequestNumber)`
 const HeaderContainer = styled.header`
 	background: #f4f8fe;
 	border-radius: 8px;
-	padding: 13px 21px;
+	padding: 19px 13px;
 	width: 100%;
 	margin-bottom: 10px;
 `;
@@ -94,7 +95,7 @@ const BodyContainer = styled.div`
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
-	margin-top: 10px;
+	margin-top: 5px;
 `;
 
 const HashContent = styled.div`
@@ -158,6 +159,10 @@ const ContentWrapper = styled.div`
 	justify-content: center;
 `;
 
+const CustomTimeStamp = styled(Timestamp)`
+		margin: 1px 0 0 0;
+`;
+
 const LogCardMobile = ({
 	bookmark,
 	MyRequests,
@@ -178,6 +183,9 @@ const LogCardMobile = ({
 						<TitleContent>
 							Reactions while playing brutal games among 13 - 19 years teanagers
 						</TitleContent>
+						<CustomTimeStamp>
+							time stamp
+						</CustomTimeStamp>
 						{MyRequests && (
 							<BodyContainer>
 								<HashContent>

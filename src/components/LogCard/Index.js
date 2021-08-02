@@ -77,9 +77,9 @@ const CustomBadgeRowGrow = styled(CustomBadgeRow)`
 `;
 
 const TitleContent = styled(Title)`
-	font-size: "14px";
-	font-weight: "600";
-	line-height: "20px";
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 20px;
 	font-weight: 600;
 	line-heigh: 16px;
 `;
@@ -94,12 +94,12 @@ const BodyContainer = styled.div`
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
-	margin-top: "8px";
+	margin-top: 8px;
 `;
 
 const HashContent = styled.div`
 	display: flex;
-	flex-direction: "row";
+	flex-direction: row;
 `;
 
 const HashBody = styled.div`
@@ -111,21 +111,21 @@ const HashBody = styled.div`
 `;
 
 const HashTitle = styled(HashBody)`
-	font-size: "14px;
+	font-size: 14px;
 	font-weight: 400;
-	line-height: " 20px;
-	color: "#000";
-	margin-right: "6px";
+	line-height: 20px;
+	color: #000;
+	margin-right: 6px;
 	align-items: center;
 `;
 
 const CustomContributorBadge = styled(ContributorBadge)`
-	margin-right: "25px";
+	margin-right: 25px;
 `;
 
 const ContributorsIconMobile = styled(ContributorsIcon)`
-	width: "18px";
-	height: "18px";
+	width: 18px;
+	height: 18px;
 `;
 const ToeknIconMobile = styled(TokenIcon)`
 	width: 20px;
@@ -133,9 +133,9 @@ const ToeknIconMobile = styled(TokenIcon)`
 `;
 
 const BadgeLabelTimeMobile = styled(BadgeLabel)`
-	font-size: "14px";
+	font-size: 14px;
 	line-height: 20px;
-	font-weight: "700";
+	font-weight: 700;
 	color: ${(props) =>
 		props.success
 			? "rgba(27, 204, 141, 1)"
@@ -143,8 +143,8 @@ const BadgeLabelTimeMobile = styled(BadgeLabel)`
 `;
 
 const BadgeLabelContributors = styled(BadgeLabel)`
-	font-size: "16px";
-	line-height: "18px";
+	font-size: 16px;
+	line-height: 18px;
 	font-weight: 400;
 	min-width: ${(props) => props.minWidth && "60px"};
 	white-space: nowrap;
@@ -167,7 +167,6 @@ const LogCard = ({
 	success,
 	pending,
 }) => {
-
 	return (
 		<HeaderContainer>
 			<HeaderInner>
@@ -225,31 +224,30 @@ const LogCard = ({
 							>{`= $ 21`}</BadgeLabelContributors>
 						</CustomBadgeRowGrow>
 					)} */}
-					{contributes &&
-
-							<>
-								<CustomContributorBadge>
-									<BadgeRow>
-										<ContributorsIconMobile src={contributorIcon} />
-										<BadgeLabelContributors>32</BadgeLabelContributors>
-									</BadgeRow>
-								</CustomContributorBadge>
-								<CustomDivider />
-								<CustomBadgeRow>
-									<ToeknIconMobile src={biobitIcon} />
-									<BadgeLabelContributors>20</BadgeLabelContributors>
-									<BadgeLabelContributors
-										minWidth
-									>{`= $ 21`}</BadgeLabelContributors>
-								</CustomBadgeRow>
-								{bookmark && (
-									<>
-										<CustomDivider />
-										<CopyIconWrapper src={bookmarkIcon} />
-									</>
-								)}
-							</>
-						}
+					{contributes && (
+						<>
+							<CustomContributorBadge>
+								<BadgeRow>
+									<ContributorsIconMobile src={contributorIcon} />
+									<BadgeLabelContributors>32</BadgeLabelContributors>
+								</BadgeRow>
+							</CustomContributorBadge>
+							<CustomDivider />
+							<CustomBadgeRow>
+								<ToeknIconMobile src={biobitIcon} />
+								<BadgeLabelContributors>20</BadgeLabelContributors>
+								<BadgeLabelContributors
+									minWidth
+								>{`= $ 21`}</BadgeLabelContributors>
+							</CustomBadgeRow>
+							{bookmark && (
+								<>
+									<CustomDivider />
+									<CopyIconWrapper src={bookmarkIcon} />
+								</>
+							)}
+						</>
+					)}
 					{success && (
 						<>
 							<CustomDivider />
