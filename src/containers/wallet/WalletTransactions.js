@@ -59,7 +59,7 @@ const Cell = styled.div`
 	width: 100%;
 	word-break: break-word;
 	font-weight: ${props => props.bold ? 'bold' : 'normal'};
-
+	overflow: hidden;
 	cursor: ${props => props.copyable ? 'pointer' : 'normal'};
 	color: ${props => props.copyable ? '#3A68DE' : props.theme.textPrimary};
 

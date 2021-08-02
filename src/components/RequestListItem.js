@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useContext } from "react";
-import styled from "styled-components";
-import { Spacer } from "./Elements/Spacer";
-import { WithPointerCursor } from "./Elements/WithPointerCursor";
+import React, { useEffect, useState, useContext } from 'react';
+import styled from 'styled-components';
+import { Spacer } from './Elements/Spacer';
+import { WithPointerCursor } from './Elements/WithPointerCursor';
 import {
 	ContributorsIcon,
 	ContributorBadge,
@@ -13,24 +13,23 @@ import {
 	TokenValue,
 	ValueLabel,
 	BiobitToDollarValue,
-} from "./Elements/RequestCard";
-import { Typography } from "./Elements/Typography";
-import biobitIcon from "../assets/icons/biobit-black.svg";
-import contributorIcon from "../assets/icons/user-blue.svg";
-import RequestFilesTable from "./RequestFilesTable";
-import { mainContext } from "../state";
-import { Button } from "./Elements/Button";
-import axios from "axios";
-import { Buffer } from "buffer";
-import fileType from "file-type";
-import { useWeb3React } from "@web3-react/core";
+} from './Elements/RequestCard';
+import { Typography } from './Elements/Typography';
+import biobitIcon from '../assets/icons/biobit-black.svg';
+import contributorIcon from '../assets/icons/user-blue.svg';
+import RequestFilesTable from './RequestFilesTable';
+import { mainContext } from '../state';
+import { Button } from './Elements/Button';
+import axios from 'axios';
+import { Buffer } from 'buffer';
+import fileType from 'file-type';
+import { useWeb3React } from '@web3-react/core';
 
 const Wrapper = styled.div`
-	background: ${(props) => (props.seen ? "#EDFBF8" : "#EAF2FF")};
+	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
 	opacity: 0.8;
 	border-radius: 8px;
-	padding: ${(props) => props.theme.spacing(3)}
-		${(props) => props.theme.spacing(3.5)};
+	padding: ${(props) => props.theme.spacing(3)} ${(props) => props.theme.spacing(3.5)};
 	margin-bottom: ${(props) => props.theme.spacing(2)};
 `;
 
@@ -86,8 +85,7 @@ const TotalBadge = styled.div`
 	background: #2eeca8;
 	min-width: 32px;
 	height: 32px;
-	padding: ${(props) => props.theme.spacing(0.8)}
-		${(props) => props.theme.spacing(0.6)};
+	padding: ${(props) => props.theme.spacing(0.8)} ${(props) => props.theme.spacing(0.6)};
 	border-radius: 32px;
 
 	text-align: center;
@@ -123,8 +121,7 @@ const SubmitButton = styled.button`
 	height: 35px;
 	margin-right: 0;
 	margin-top: ${(props) => props.theme.spacing(3)};
-	padding: ${(props) => props.theme.spacing(0.5)}
-		${(props) => props.theme.spacing(1.5)};
+	padding: ${(props) => props.theme.spacing(0.5)} ${(props) => props.theme.spacing(1.5)};
 	font-weight: 500;
 	font-size: 16px;
 	line-height: 18px;
@@ -149,31 +146,23 @@ const RequestListItem = ({
 	const [isOpen, setOpen] = useState(false);
 	const { appState } = useContext(mainContext);
 	const [formattedData, setFormattedData] = useState({});
-	const [selected, setSelected] = useState({});
+	const [selected, setSelected] = useState([]);
 	const { account } = useWeb3React();
 
 	const isAllChecked = () => {
-		const chosen = Object.values(selected).reduce(
-			(acc, curr) => acc.concat(...curr),
-			[]
-		);
-		const total = Object.values(formattedData).reduce(
-			(acc, curr) => acc.concat(...curr),
-			[]
-		);
+		const chosen = Object.values(selected).reduce((acc, curr) => acc.concat(...curr), []);
+		const total = Object.values(formattedData).reduce((acc, curr) => acc.concat(...curr), []);
 		return chosen.length === total.length;
 	};
 
 	const changeAll = (type) => {
 		const allSelected = {};
 		Object.keys(formattedData).forEach((address) => {
-			allSelected[address] = formattedData[address].map(
-				(item) => item.ipfsHash
-			);
+			allSelected[address] = formattedData[address].map((item) => item.ipfsHash);
 		});
 
-		if (type === "check") setSelected(allSelected);
-		if (type === "uncheck")
+		if (type === 'check') setSelected(allSelected);
+		if (type === 'uncheck')
 			setSelected((values) => {
 				let result = {};
 
@@ -186,12 +175,12 @@ const RequestListItem = ({
 	};
 
 	const onBulkChange = (type, address) => {
-		if (type === "check")
+		if (type === 'check')
 			setSelected((values) => ({
 				...values,
 				[address]: formattedData[address].map((item) => item.ipfsHash),
 			}));
-		if (type === "uncheck")
+		if (type === 'uncheck')
 			setSelected((values) => {
 				return {
 					...values,
@@ -200,19 +189,10 @@ const RequestListItem = ({
 			});
 	};
 
-	const onChange = (type, address, fileHash) => {
-		if (type === "check")
-			setSelected((values) => ({
-				...values,
-				[address]: [...values[address], fileHash],
-			}));
-		if (type === "uncheck")
-			setSelected((values) => {
-				return {
-					...values,
-					[address]: values[address].filter((item) => item !== fileHash),
-				};
-			});
+	const onChange = (type, originalIndex) => {
+		if (type === 'check') setSelected((values) => [...values, originalIndex]);
+		if (type === 'uncheck')
+			setSelected((values) => values.filter((item) => +item !== +originalIndex));
 	};
 
 	const signalDownloadHandler = (fileHash) => {
@@ -222,7 +202,7 @@ const RequestListItem = ({
 			.then((fileRes) => {
 				window.ethereum
 					.request({
-						method: "eth_decrypt",
+						method: 'eth_decrypt',
 						params: [fileRes.data, account],
 					})
 					.then((decryptedMessage) => {
@@ -230,7 +210,7 @@ const RequestListItem = ({
 							var byteString = atob(base64);
 							var ab = new ArrayBuffer(byteString.length);
 							var ia = new Uint8Array(ab);
-							var buff = Buffer.from(base64, "base64");
+							var buff = Buffer.from(base64, 'base64');
 							var contributionFileExt = await fileType.fromBuffer(buff);
 							for (var i = 0; i < byteString.length; i++) {
 								ia[i] = byteString.charCodeAt(i);
@@ -239,9 +219,9 @@ const RequestListItem = ({
 						}
 
 						var saveByteArray = (function () {
-							var anchorTag = document.createElement("a");
+							var anchorTag = document.createElement('a');
 							document.body.appendChild(anchorTag);
-							anchorTag.style = "display: none";
+							anchorTag.style = 'display: none';
 
 							return async function (data, name) {
 								try {
@@ -269,7 +249,7 @@ const RequestListItem = ({
 				.call({ from: account }, (error, result) => {
 					if (!error) {
 						let formatted = {};
-						let selected = {};
+						let selected = [];
 						let uniqueAddresses = [...new Set(result[1])];
 						let pairs = [];
 
@@ -278,6 +258,8 @@ const RequestListItem = ({
 								file,
 								address: result[1][fileIndex],
 								timestamp: result[2][fileIndex],
+								originalIndex: fileIndex,
+								status: result[3][fileIndex],
 							});
 						});
 
@@ -288,12 +270,16 @@ const RequestListItem = ({
 										formatted[uAddress].push({
 											ipfsHash: tempItem.file,
 											timestamp: tempItem.timestamp,
+											originalIndex: tempItem.originalIndex,
+											status: tempItem.status,
 										});
 									} else {
 										formatted[uAddress] = [
 											{
 												ipfsHash: tempItem.file,
 												timestamp: tempItem.timestamp,
+												originalIndex: tempItem.originalIndex,
+												status: tempItem.status,
 											},
 										];
 									}
@@ -317,7 +303,7 @@ const RequestListItem = ({
 				<TitleColumn>
 					<RequestNumberWithPointer>{requestID}</RequestNumberWithPointer>
 					<Title variant="title" weight="semiBold">
-						{title.length < 135 ? title : title.substr(0, 135) + "..."}
+						{title.length < 135 ? title : title.substr(0, 135) + '...'}
 					</Title>
 					<Spacer />
 				</TitleColumn>
@@ -328,9 +314,7 @@ const RequestListItem = ({
 							<TokenIcon src={biobitIcon} />
 							<TokenValue>{tokenPay}</TokenValue>
 							<ValueLabel>BBit</ValueLabel>
-							<BiobitToDollarValue noMargin>
-								{"~ $" + tokenPay}
-							</BiobitToDollarValue>
+							<BiobitToDollarValue noMargin>{'~ $' + tokenPay}</BiobitToDollarValue>
 						</BadgeRow>
 					</BiobitToDollarPair>
 
@@ -364,17 +348,17 @@ const RequestListItem = ({
 						<Footer>
 							<SubmitButton
 								onClick={() => {
-									let payload = [];
+									// let payload = [];
 
-									Object.keys(selected).forEach((item) => {
-										payload.push(
-											...selected[item].map((fileHash) => {
-												// we need the duplicated addresses here
-												return item;
-											})
-										);
-									});
-									if (payload.length > 0) handleConfirm(requestID, payload);
+									// Object.keys(selected).forEach((item) => {
+									// 	payload.push(
+									// 		...selected[item].map((fileHash) => {
+									// 			// we need the duplicated addresses here
+									// 			return item;
+									// 		})
+									// 	);
+									// });
+									handleConfirm(requestID, selected);
 								}}
 							>
 								Send Tokens

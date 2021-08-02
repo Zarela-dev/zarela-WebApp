@@ -32,9 +32,11 @@ const Inbox = () => {
 	const [isLoading, setLoading] = useState(false);
 	const { account } = useWeb3React();
 
-	const handleConfirm = (requestID, addresses) => {
+	const handleConfirm = (requestID, originalIndexes) => {
+		console.log(originalIndexes)
+		debugger
 		appState.contract.methods
-			.ConfirmContributer(requestID, addresses)
+			.ConfirmContributer(requestID, originalIndexes)
 			.send({ from: account }, (error, result) => {
 				if (!error) {
 					toast(result, 'success', true, result);
