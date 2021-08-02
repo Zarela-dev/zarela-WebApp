@@ -79,8 +79,6 @@ const RequestDetailsPage = () => {
 									.send(
 										{
 											from: account,
-											gas: 700000,
-											gasPrice: +appState.gas.average * Math.pow(10, 8),
 										},
 										(error, result) => {
 											if (!error) {
