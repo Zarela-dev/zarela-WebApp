@@ -7,7 +7,11 @@ const MarketRequests = () => {
 	const { appState } = useContext(mainContext);
 	return (
 		<>
-			{appState.isMobile ? <LogCardMobile bookmark contributes /> : <LogCard />}
+		{appState.isMobile ? 
+			<LogCardMobile marketRequest />
+			:
+			<LogCard />
+		}
 		</>
 	);
 };
