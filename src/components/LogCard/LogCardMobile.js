@@ -4,18 +4,12 @@ import {
 	RequestNumber,
 	HeaderLayout,
 	Footer,
-	Spacer,
 	TokenIcon,
 	Bookmark,
-	Typography,
 	ContributorBadge,
 	ContributorsIcon,
-	ProgressTrackerWrapper,
-	TokenValue,
-	Divider,
 	BadgeRow,
 	Title,
-	BiobitToDollarValue,
 	BadgeLabel,
 	Timestamp,
 } from "../Elements/RequestCard/IndexMobile";
@@ -86,12 +80,6 @@ const TitleContent = styled(Title)`
 	line-heigh: 16px;
 `;
 
-const CustomDivider = styled(Divider)`
-	height: 48px;
-	background-color: rgba(60, 135, 170, 0.6);
-	margin: 0 20px;
-`;
-
 const BodyContainer = styled.div`
 	display: flex;
 	justify-content: flex-start;
@@ -121,11 +109,13 @@ const HashTitle = styled(HashBody)`
 
 const CustomContributorBadge = styled(ContributorBadge)`
 	margin-right: ${(props) => (props.noMarginRight ? 0 : "8px")};
+	align-self: self-start;
 `;
 
 const ContributorsIconMobile = styled(ContributorsIcon)`
-	width: 16px;
-	height: 16px;
+	width: 18.3px;
+	height: 18.3px;
+	margin-right: 0;
 `;
 const ToeknIconMobile = styled(TokenIcon)`
 	width: 16px;
@@ -206,40 +196,24 @@ const LogCardMobile = ({
 						)}
 					</ContentWrapper>
 					{marketRequest && <BookmarkIconWrapper src={bookmarkIcon} />}
-
 					{success && (
-						<CustomContributorBadge>
+						<CustomContributorBadge noMarginRight>
 							<BadgeRow>
 								<ContributorsIconMobile src={checkedGreen} />
 							</BadgeRow>
 						</CustomContributorBadge>
 					)}
-
 					{pending && (
-						<CustomContributorBadge>
+						<CustomContributorBadge noMarginRight>
 							<BadgeRow>
 								<ContributorsIconMobile src={pendingIcon} />
 							</BadgeRow>
 						</CustomContributorBadge>
 					)}
 				</HeaderLayoutCustom>
-
 				<FooterWrapper>
 					<FooterSpacer />
 					<CustomFooter>
-						{/* {false && (
-								<>
-									<CustomContributorBadge>
-										<BadgeRow>
-											<BadgeLabelTimeMobile>2020.08.02</BadgeLabelTimeMobile>
-										</BadgeRow>
-									</CustomContributorBadge>
-									<CustomContributorBadge>
-										<BadgeLabelTimeMobile>13:57</BadgeLabelTimeMobile>
-									</CustomContributorBadge>
-								</>
-							)} */}
-
 						<CustomBadgeRowGrow>
 							<ToeknIconMobile src={biobitIcon} />
 							<BadgeLabelContributors bold>20</BadgeLabelContributors>
@@ -247,7 +221,6 @@ const LogCardMobile = ({
 								minWidth
 							>{`~ $ 21`}</BadgeLabelContributors>
 						</CustomBadgeRowGrow>
-
 						{MyRequests || marketRequest ? (
 							<CustomContributorBadge noMarginRight>
 								<BadgeRow>
@@ -256,30 +229,6 @@ const LogCardMobile = ({
 								</BadgeRow>
 							</CustomContributorBadge>
 						) : null}
-						{success && !appState.isMobile && (
-							<>
-								<CustomDivider />
-								<CustomContributorBadge>
-									<BadgeRow>
-										<ContributorsIconMobile src={checkedGreen} />
-										<BadgeLabelTimeMobile success>
-											Recieved
-										</BadgeLabelTimeMobile>
-									</BadgeRow>
-								</CustomContributorBadge>
-							</>
-						)}
-						{pending && !appState.isMobile && (
-							<>
-								<CustomDivider />
-								<CustomContributorBadge>
-									<BadgeRow>
-										<ContributorsIconMobile src={pendingIcon} />
-										<BadgeLabelTimeMobile pending>Pending</BadgeLabelTimeMobile>
-									</BadgeRow>
-								</CustomContributorBadge>
-							</>
-						)}
 					</CustomFooter>
 				</FooterWrapper>
 			</HeaderInner>
