@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { mainContext } from '../../state';
-import { convertToBiobit, toast } from '../../utils';
-import LogCard from '../../components/LogCard/Index';
-import { useWeb3React } from '@web3-react/core';
-import styled from 'styled-components';
-import Spinner from '../../components/Spinner';
+import React, { useContext, useEffect, useState } from "react";
+import { mainContext } from "../../state";
+import { convertToBiobit, toast } from "../../utils";
+import LogCard from "../../components/LogCard/Index";
+import LogCardMobile from "../../components/LogCard/LogCardMobile";
+import { useWeb3React } from "@web3-react/core";
+import styled from "styled-components";
+import Spinner from "../../components/Spinner";
 
 const SpinnerWrapper = styled.div`
 	width: 100%;
@@ -50,8 +51,9 @@ const MyRequests = () => {
 											timestamp: result[10],
 											totalContributedCount: result[9],
 										};
-										requestsListObject[requestTemplate.requestID] =
-											requestTemplate;
+										requestsListObject[
+											requestTemplate.requestID
+										] = requestTemplate;
 									})
 									.catch((error) => {
 										console.error(error.message);
@@ -81,17 +83,29 @@ const MyRequests = () => {
 			) : Object.values(requests).length > 0 ? (
 				Object.values(requests)
 					.sort((a, b) => +b.requestID - +a.requestID)
-					.map((item) => (
-						<LogCard
-							key={item.requestID}
-							requestID={item.requestID}
-							title={item.title}
-							tokenPay={item.tokenPay}
-							timestamp={item.timestamp}
-							total={item.totalContributedCount}
-							contributors={`${item.totalContributed}/${item.totalContributors}`}
-						/>
-					))
+					.map((item) =>
+						appState.isMobile ? (
+							<LogCardMobile
+								key={item.requestID}
+								requestID={item.requestID}
+								title={item.title}
+								tokenPay={item.tokenPay}
+								timestamp={item.timestamp}
+								total={item.totalContributedCount}
+								contributors={`${item.totalContributed}/${item.totalContributors}`}
+							/>
+						) : (
+							<LogCard
+								key={item.requestID}
+								requestID={item.requestID}
+								title={item.title}
+								tokenPay={item.tokenPay}
+								timestamp={item.timestamp}
+								total={item.totalContributedCount}
+								contributors={`${item.totalContributed}/${item.totalContributors}`}
+							/>
+						)
+					)
 			) : (
 				"You haven't contributed to any requests yet."
 			)}

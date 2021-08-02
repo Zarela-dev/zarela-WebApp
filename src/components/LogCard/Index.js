@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import {
 	RequestNumber,
@@ -25,20 +25,17 @@ import bookmarkIcon from "../../assets/icons/bookmark-purple.svg";
 import checkedGreen from "../../assets/icons/check-green.svg";
 import pendingIcon from "../../assets/icons/pending.svg";
 import copyImage from "../../assets/icons/copy.svg";
-import { mainContext } from "../../state";
 
 const CustomRequestNumber = styled(RequestNumber)`
-	flex: ${(props) => (props.isMobile ? "" : "0 0 100px")};
-	height: ${(props) => (props.isMobile ? "26px;" : "50px")};
-	border-radius: ${(props) =>
-		props.isMobile ? "5px 5px 0px 5px" : "10px 10px 0px 10px"};
-	padding: ${(props) => (props.isMobile ? "7px 11px" : "10px 20px")};
-	margin-right: ${(props) =>
-		props.isMobile ? props.theme.spacing(1) : props.theme.spacing(2)};
+	flex: "0 0 100px";
+	height: "50px";
+	border-radius: "10px 10px 0px 10px";
+	padding: "10px 20px";
+	margin-right: ${(props) => props.theme.spacing(2)};
 	font-weight: bold;
 	background: linear-gradient(246.29deg, #3a68de 12.69%, #3a68de 100%);
-	font-size: ${(props) => (props.isMobile ? "15px" : "32px")};
-	line-height: ${(props) => (props.isMobile ? "11.4px" : "30px")};
+	font-size: "32px";
+	line-height: "30px";
 	color: #ffffff;
 	text-align: center;
 `;
@@ -53,7 +50,7 @@ const HeaderContainer = styled.header`
 
 const HeaderInner = styled(HeaderLayout)`
 	display: flex;
-	flex-direction: ${(props) => (props.isMobile ? "column" : "row")};
+	flex-direction: "row";
 	${maxWidthWrapper};
 	width: 100%;
 	justify-content: space-between;
@@ -65,9 +62,8 @@ const HeaderLayoutCustom = styled(HeaderLayout)`
 `;
 
 const CustomFooter = styled(Footer)`
-	margin-top: ${(props) =>
-		props.isMobile ? props.theme.spacing(3) : props.theme.spacing(0)};
-	padding-left: ${(props) => (props.isMobile ? "50px" : "0")};
+	margin-top: ${(props) => props.theme.spacing(0)};
+	padding-left: 0;
 	flex-wrap: nowrap;
 `;
 
@@ -81,9 +77,9 @@ const CustomBadgeRowGrow = styled(CustomBadgeRow)`
 `;
 
 const TitleContent = styled(Title)`
-	font-size: ${(props) => (props.isMobile ? "12px" : "14px")};
-	font-weight: ${(props) => (props.isMobile ? "400" : "600")};
-	line-height: ${(props) => (props.isMobile ? "16px" : "20px")};
+	font-size: "14px";
+	font-weight: "600";
+	line-height: "20px";
 	font-weight: 600;
 	line-heigh: 16px;
 `;
@@ -98,12 +94,12 @@ const BodyContainer = styled.div`
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
-	margin-top: ${(props) => (props.isMobile ? "10px" : "8px")};
+	margin-top: "8px";
 `;
 
 const HashContent = styled.div`
 	display: flex;
-	flex-direction: ${(props) => (props.isMobile ? "column" : "row")};
+	flex-direction: "row";
 `;
 
 const HashBody = styled.div`
@@ -115,21 +111,21 @@ const HashBody = styled.div`
 `;
 
 const HashTitle = styled(HashBody)`
-	font-size: ${(props) => (props.isMobile ? "10.5px" : "14px")};
+	font-size: "14px;
 	font-weight: 400;
-	line-height: ${(props) => (props.isMobile ? "16px" : "20px")};
-	color: ${(props) => (props.isMobile ? "" : "#000")};
-	margin-right: ${(props) => (props.isMobile ? "" : "6px")};
+	line-height: " 20px;
+	color: "#000";
+	margin-right: "6px";
 	align-items: center;
 `;
 
 const CustomContributorBadge = styled(ContributorBadge)`
-	margin-right: ${(props) => (props.isMobile ? "8px" : "25px")};
+	margin-right: "25px";
 `;
 
 const ContributorsIconMobile = styled(ContributorsIcon)`
-	width: ${(props) => (props.isMobile ? "16px" : "18px")};
-	height: ${(props) => (props.isMobile ? "16px" : "18px")};
+	width: "18px";
+	height: "18px";
 `;
 const ToeknIconMobile = styled(TokenIcon)`
 	width: 20px;
@@ -137,9 +133,9 @@ const ToeknIconMobile = styled(TokenIcon)`
 `;
 
 const BadgeLabelTimeMobile = styled(BadgeLabel)`
-	font-size: ${(props) => (props.isMobile ? "10.8px" : "14px")};
+	font-size: "14px";
 	line-height: 20px;
-	font-weight: ${(props) => (props.success ? "700" : props.pending && "700")};
+	font-weight: "700";
 	color: ${(props) =>
 		props.success
 			? "rgba(27, 204, 141, 1)"
@@ -147,8 +143,8 @@ const BadgeLabelTimeMobile = styled(BadgeLabel)`
 `;
 
 const BadgeLabelContributors = styled(BadgeLabel)`
-	font-size: ${(props) => (props.isMobile ? "10.8px" : "16px")};
-	line-height: ${(props) => (props.isMobile ? "14px" : "18px")};
+	font-size: "16px";
+	line-height: "18px";
 	font-weight: 400;
 	min-width: ${(props) => props.minWidth && "60px"};
 	white-space: nowrap;
@@ -171,127 +167,78 @@ const LogCard = ({
 	success,
 	pending,
 }) => {
-	const { appState } = useContext(mainContext);
 
 	return (
 		<HeaderContainer>
-			<HeaderInner isMobile={appState.isMobile}>
+			<HeaderInner>
 				<HeaderLayoutCustom>
-					<CustomRequestNumber isMobile={appState.isMobile}>
-						25
-					</CustomRequestNumber>
+					<CustomRequestNumber>25</CustomRequestNumber>
 					<ContentWrapper>
-						<TitleContent isMobile={appState.isMobile}>
+						<TitleContent>
 							Reactions while playing brutal games among 13 - 19 years teanagers
 						</TitleContent>
 						{HashAddress && (
-							<BodyContainer isMobile={appState.isMobile}>
-								<HashContent isMobile={appState.isMobile}>
-									<HashTitle isMobile={appState.isMobile}>TXN Hash</HashTitle>
+							<BodyContainer>
+								<HashContent>
+									<HashTitle>TXN Hash</HashTitle>
 									<HashBody>OXKMMSISIDNVIOISDUNVDUISUIAISOASNNFDUI</HashBody>
 								</HashContent>
-								{appState.isMobile ? <CopyIconWrapper src={copyImage} /> : null}
 							</BodyContainer>
 						)}
 					</ContentWrapper>
-					{success && appState.isMobile && (
-						<CustomContributorBadge isMobile={appState.isMobile}>
+					{/* {success && appState.isMobile && (
+						<CustomContributorBadge>
 							<BadgeRow>
-								<ContributorsIconMobile
-									isMobile={appState.isMobile}
-									src={checkedGreen}
-								/>
+								<ContributorsIconMobile src={checkedGreen} />
 							</BadgeRow>
 						</CustomContributorBadge>
-					)}
+					)} */}
 
-					{pending && appState.isMobile && (
-						<CustomContributorBadge isMobile={appState.isMobile}>
+					{/* {pending && appState.isMobile && (
+						<CustomContributorBadge>
 							<BadgeRow>
-								<ContributorsIconMobile
-									isMobile={appState.isMobile}
-									src={pendingIcon}
-								/>
+								<ContributorsIconMobile src={pendingIcon} />
 							</BadgeRow>
 						</CustomContributorBadge>
-					)}
+					)} */}
 				</HeaderLayoutCustom>
 
-				<CustomFooter isMobile={appState.isMobile}>
-					{!appState.isMobile && (
+				<CustomFooter>
+					{/* {!appState.isMobile && (
 						<>
-							<CustomContributorBadge isMobile={appState.isMobile}>
+							<CustomContributorBadge>
 								<BadgeRow>
-									<BadgeLabelTimeMobile isMobile={appState.isMobile}>
-										2020.08.02
-									</BadgeLabelTimeMobile>
+									<BadgeLabelTimeMobile>2020.08.02</BadgeLabelTimeMobile>
 								</BadgeRow>
 							</CustomContributorBadge>
-							<CustomContributorBadge isMobile={appState.isMobile}>
-								<BadgeLabelTimeMobile isMobile={appState.isMobile}>
-									13:57
-								</BadgeLabelTimeMobile>
+							<CustomContributorBadge>
+								<BadgeLabelTimeMobile>13:57</BadgeLabelTimeMobile>
 							</CustomContributorBadge>
 						</>
-					)}
-					{contributed && appState.isMobile && (
+					)} */}
+					{/* {contributed && appState.isMobile && (
 						<CustomBadgeRowGrow>
 							<ToeknIconMobile src={biobitIcon} />
-							<BadgeLabelContributors isMobile={appState.isMobile}>
-								20
-							</BadgeLabelContributors>
+							<BadgeLabelContributors>20</BadgeLabelContributors>
 							<BadgeLabelContributors
-								isMobile={appState.isMobile}
 								minWidth
 							>{`= $ 21`}</BadgeLabelContributors>
 						</CustomBadgeRowGrow>
-					)}
+					)} */}
 					{contributes &&
-						(appState.isMobile ? (
+
 							<>
-								<CustomBadgeRowGrow>
-									<ToeknIconMobile src={biobitIcon} />
-									<BadgeLabelContributors isMobile={appState.isMobile}>
-										20
-									</BadgeLabelContributors>
-									<BadgeLabelContributors
-										isMobile={appState.isMobile}
-										minWidth
-									>{`= $ 21`}</BadgeLabelContributors>
-								</CustomBadgeRowGrow>
-								<CustomContributorBadge isMobile={appState.isMobile}>
+								<CustomContributorBadge>
 									<BadgeRow>
-										<ContributorsIconMobile
-											isMobile={appState.isMobile}
-											src={contributorIcon}
-										/>
-										<BadgeLabelContributors isMobile={appState.isMobile}>
-											32
-										</BadgeLabelContributors>
-									</BadgeRow>
-								</CustomContributorBadge>
-							</>
-						) : (
-							<>
-								<CustomContributorBadge isMobile={appState.isMobile}>
-									<BadgeRow>
-										<ContributorsIconMobile
-											isMobile={appState.isMobile}
-											src={contributorIcon}
-										/>
-										<BadgeLabelContributors isMobile={appState.isMobile}>
-											32
-										</BadgeLabelContributors>
+										<ContributorsIconMobile src={contributorIcon} />
+										<BadgeLabelContributors>32</BadgeLabelContributors>
 									</BadgeRow>
 								</CustomContributorBadge>
 								<CustomDivider />
 								<CustomBadgeRow>
 									<ToeknIconMobile src={biobitIcon} />
-									<BadgeLabelContributors isMobile={appState.isMobile}>
-										20
-									</BadgeLabelContributors>
+									<BadgeLabelContributors>20</BadgeLabelContributors>
 									<BadgeLabelContributors
-										isMobile={appState.isMobile}
 										minWidth
 									>{`= $ 21`}</BadgeLabelContributors>
 								</CustomBadgeRow>
@@ -302,30 +249,24 @@ const LogCard = ({
 									</>
 								)}
 							</>
-						))}
-					{success && !appState.isMobile && (
+						}
+					{success && (
 						<>
 							<CustomDivider />
-							<CustomContributorBadge isMobile={appState.isMobile}>
+							<CustomContributorBadge>
 								<BadgeRow>
-									<ContributorsIconMobile
-										isMobile={appState.isMobile}
-										src={checkedGreen}
-									/>
+									<ContributorsIconMobile src={checkedGreen} />
 									<BadgeLabelTimeMobile success>Recieved</BadgeLabelTimeMobile>
 								</BadgeRow>
 							</CustomContributorBadge>
 						</>
 					)}
-					{pending && !appState.isMobile && (
+					{pending && (
 						<>
 							<CustomDivider />
-							<CustomContributorBadge isMobile={appState.isMobile}>
+							<CustomContributorBadge>
 								<BadgeRow>
-									<ContributorsIconMobile
-										isMobile={appState.isMobile}
-										src={pendingIcon}
-									/>
+									<ContributorsIconMobile src={pendingIcon} />
 									<BadgeLabelTimeMobile pending>Pending</BadgeLabelTimeMobile>
 								</BadgeRow>
 							</CustomContributorBadge>
