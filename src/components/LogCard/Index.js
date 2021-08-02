@@ -27,15 +27,15 @@ import pendingIcon from "../../assets/icons/pending.svg";
 import copyImage from "../../assets/icons/copy.svg";
 
 const CustomRequestNumber = styled(RequestNumber)`
-	flex: "0 0 100px";
-	height: "50px";
-	border-radius: "10px 10px 0px 10px";
-	padding: "10px 20px";
+	flex: 0 0 79px;
+	height: 50px;
+	border-radius: 10px 10px 0px 10px;
+	padding: 10px 20px;
 	margin-right: ${(props) => props.theme.spacing(2)};
-	font-weight: bold;
+	font-weight: 700;
 	background: linear-gradient(246.29deg, #3a68de 12.69%, #3a68de 100%);
-	font-size: "32px";
-	line-height: "30px";
+	font-size: 32px;
+	line-height: 30px;
 	color: #ffffff;
 	text-align: center;
 `;
@@ -50,7 +50,7 @@ const HeaderContainer = styled.header`
 
 const HeaderInner = styled(HeaderLayout)`
 	display: flex;
-	flex-direction: "row";
+	flex-direction: row;
 	${maxWidthWrapper};
 	width: 100%;
 	justify-content: space-between;
@@ -79,9 +79,8 @@ const CustomBadgeRowGrow = styled(CustomBadgeRow)`
 const TitleContent = styled(Title)`
 	font-size: 14px;
 	font-weight: 600;
-	line-height: 20px;
-	font-weight: 600;
-	line-heigh: 16px;
+	line-heigh: 16.5px;
+	margin-bottom: 5px;
 `;
 
 const CustomDivider = styled(Divider)`
@@ -94,12 +93,12 @@ const BodyContainer = styled.div`
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
-	margin-top: 8px;
 `;
 
 const HashContent = styled.div`
 	display: flex;
 	flex-direction: row;
+	align-items: center;
 `;
 
 const HashBody = styled.div`
@@ -114,7 +113,7 @@ const HashTitle = styled(HashBody)`
 	font-size: 14px;
 	font-weight: 400;
 	line-height: 20px;
-	color: #000;
+	color: #121213;
 	margin-right: 6px;
 	align-items: center;
 `;
@@ -155,13 +154,25 @@ const CopyIconWrapper = styled(Bookmark)`
 `;
 const ContentWrapper = styled.div`
 	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-grow: 1;
+`;
+const TitleWrapper = styled.div`
+	display: flex;
 	flex-direction: column;
 	justify-content: center;
+`;
+
+const ItemInformation = styled.div`
+	display: flex;
+	justify-self: self-end;
 `;
 
 const LogCard = ({
 	bookmark,
 	HashAddress,
+	MyRequests,
 	contributes,
 	contributed,
 	success,
@@ -172,19 +183,53 @@ const LogCard = ({
 			<HeaderInner>
 				<HeaderLayoutCustom>
 					<CustomRequestNumber>25</CustomRequestNumber>
+
 					<ContentWrapper>
-						<TitleContent>
-							Reactions while playing brutal games among 13 - 19 years teanagers
-						</TitleContent>
-						{HashAddress && (
-							<BodyContainer>
-								<HashContent>
-									<HashTitle>TXN Hash</HashTitle>
-									<HashBody>OXKMMSISIDNVIOISDUNVDUISUIAISOASNNFDUI</HashBody>
-								</HashContent>
-							</BodyContainer>
-						)}
+						<TitleWrapper>
+							<TitleContent>
+								Reactions while playing brutal games among 13 - 19 years
+								teanagers
+							</TitleContent>
+							{MyRequests && (
+								<BodyContainer>
+									<HashContent>
+										<HashTitle>TXN Hash</HashTitle>
+										<HashBody>OXKMMSISIDNVIOISDUNVDUISUIAISOASNNFDUI</HashBody>
+									</HashContent>
+								</BodyContainer>
+							)}
+						</TitleWrapper>
+
+						<ItemInformation>
+							{MyRequests && (
+								<>
+									<CustomContributorBadge>
+										<BadgeRow>
+											<BadgeLabelTimeMobile>2020.08.02</BadgeLabelTimeMobile>
+										</BadgeRow>
+									</CustomContributorBadge>
+									<CustomContributorBadge>
+										<BadgeLabelTimeMobile>13:57</BadgeLabelTimeMobile>
+									</CustomContributorBadge>
+									<CustomContributorBadge>
+										<BadgeRow>
+											<ContributorsIconMobile src={contributorIcon} />
+											<BadgeLabelContributors>32</BadgeLabelContributors>
+										</BadgeRow>
+									</CustomContributorBadge>
+									<CustomDivider />
+									<CustomBadgeRow>
+										<ToeknIconMobile src={biobitIcon} />
+										<BadgeLabelContributors>20</BadgeLabelContributors>
+										<BadgeLabelContributors
+											minWidth
+										>{`= $ 21`}</BadgeLabelContributors>
+									</CustomBadgeRow>
+								</>
+							)}
+						</ItemInformation>
 					</ContentWrapper>
+
 					{/* {success && appState.isMobile && (
 						<CustomContributorBadge>
 							<BadgeRow>
@@ -226,20 +271,6 @@ const LogCard = ({
 					)} */}
 					{contributes && (
 						<>
-							<CustomContributorBadge>
-								<BadgeRow>
-									<ContributorsIconMobile src={contributorIcon} />
-									<BadgeLabelContributors>32</BadgeLabelContributors>
-								</BadgeRow>
-							</CustomContributorBadge>
-							<CustomDivider />
-							<CustomBadgeRow>
-								<ToeknIconMobile src={biobitIcon} />
-								<BadgeLabelContributors>20</BadgeLabelContributors>
-								<BadgeLabelContributors
-									minWidth
-								>{`= $ 21`}</BadgeLabelContributors>
-							</CustomBadgeRow>
 							{bookmark && (
 								<>
 									<CustomDivider />

@@ -104,6 +104,7 @@ const MyRequests = () => {
 								timestamp={item.timestamp}
 								total={item.totalContributedCount}
 								contributors={`${item.totalContributed}/${item.totalContributors}`}
+								MyRequests
 							/>
 						)
 					)
