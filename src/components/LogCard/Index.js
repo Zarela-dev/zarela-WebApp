@@ -4,18 +4,13 @@ import {
 	RequestNumber,
 	HeaderLayout,
 	Footer,
-	Spacer,
 	TokenIcon,
 	Bookmark,
-	Typography,
 	ContributorBadge,
 	ContributorsIcon,
-	ProgressTrackerWrapper,
-	TokenValue,
 	Divider,
 	BadgeRow,
 	Title,
-	BiobitToDollarValue,
 	BadgeLabel,
 } from "../Elements/RequestCard/IndexMobile";
 import maxWidthWrapper from "../Elements/MaxWidth";
@@ -24,7 +19,6 @@ import contributorIcon from "../../assets/icons/user-black.svg";
 import bookmarkIcon from "../../assets/icons/bookmark-purple.svg";
 import checkedGreen from "../../assets/icons/check-green.svg";
 import pendingIcon from "../../assets/icons/pending.svg";
-import copyImage from "../../assets/icons/copy.svg";
 
 const CustomRequestNumber = styled(RequestNumber)`
 	flex: 0 0 79px;
@@ -72,10 +66,6 @@ const CustomBadgeRow = styled(BadgeRow)`
 	align-items: center;
 `;
 
-const CustomBadgeRowGrow = styled(CustomBadgeRow)`
-	flex-grow: 1;
-`;
-
 const TitleContent = styled(Title)`
 	font-size: 14px;
 	font-weight: 600;
@@ -119,7 +109,8 @@ const HashTitle = styled(HashBody)`
 `;
 
 const CustomContributorBadge = styled(ContributorBadge)`
-	margin-right: 25px;
+	margin-right: ${(props) => (props.nomargin ? 0 : "25px")};
+	min-width: ${(props) => (props.nomargin ? "90px" : "unset")};
 `;
 
 const ContributorsIconMobile = styled(ContributorsIcon)`
@@ -134,7 +125,7 @@ const ToeknIconMobile = styled(TokenIcon)`
 const BadgeLabelTimeMobile = styled(BadgeLabel)`
 	font-size: 14px;
 	line-height: 20px;
-	font-weight: ${props => props.subHeader ? 400 : 700};
+	font-weight: ${(props) => (props.subHeader ? 400 : 700)};
 	color: ${(props) =>
 		props.success
 			? "rgba(27, 204, 141, 1)"
@@ -150,9 +141,6 @@ const BadgeLabelContributors = styled(BadgeLabel)`
 	color: ${(props) => (props.highlight ? "#3A68DE" : "")};
 `;
 
-const CopyIconWrapper = styled(Bookmark)`
-	align-self: center;
-`;
 const ContentWrapper = styled.div`
 	display: flex;
 	justify-content: space-between;
@@ -174,17 +162,13 @@ const BookmarkIconWrapper = styled(Bookmark)`
 `;
 
 const SubHeaderRow = styled.div`
-		display: flex;
-		justify-content: flex-start;
+	display: flex;
+	justify-content: flex-start;
 `;
 
 const LogCard = ({
-	bookmark,
-	HashAddress,
 	MyRequests,
 	marketRequest,
-	contributes,
-	contributed,
 	success,
 	pending,
 }) => {
@@ -193,7 +177,6 @@ const LogCard = ({
 			<HeaderInner>
 				<HeaderLayoutCustom>
 					<CustomRequestNumber>25</CustomRequestNumber>
-
 					<ContentWrapper>
 						<TitleWrapper>
 							<TitleContent>
@@ -208,21 +191,21 @@ const LogCard = ({
 									</HashContent>
 								</BodyContainer>
 							)}
-
-							{marketRequest &&
+							{marketRequest && (
 								<SubHeaderRow>
-										<CustomContributorBadge>
+									<CustomContributorBadge>
 										<BadgeRow>
-											<BadgeLabelTimeMobile subHeader>2020.08.02</BadgeLabelTimeMobile>
+											<BadgeLabelTimeMobile subHeader>
+												2020.08.02
+											</BadgeLabelTimeMobile>
 										</BadgeRow>
 									</CustomContributorBadge>
 									<CustomContributorBadge>
 										<BadgeLabelTimeMobile subHeader>13:57</BadgeLabelTimeMobile>
 									</CustomContributorBadge>
 								</SubHeaderRow>
-							}
+							)}
 						</TitleWrapper>
-
 						<ItemInformation>
 							{MyRequests && (
 								<>
@@ -250,7 +233,6 @@ const LogCard = ({
 									</CustomBadgeRow>
 								</>
 							)}
-
 							{marketRequest && (
 								<>
 									<CustomContributorBadge>
@@ -261,7 +243,6 @@ const LogCard = ({
 											</BadgeLabelContributors>
 										</BadgeRow>
 									</CustomContributorBadge>
-
 									<CustomDivider />
 									<CustomBadgeRow>
 										<ToeknIconMobile src={biobitIcon} />
@@ -274,81 +255,50 @@ const LogCard = ({
 									<BookmarkIconWrapper src={bookmarkIcon} />
 								</>
 							)}
-						</ItemInformation>
-					</ContentWrapper>
-
-					{/* {success && appState.isMobile && (
-						<CustomContributorBadge>
-							<BadgeRow>
-								<ContributorsIconMobile src={checkedGreen} />
-							</BadgeRow>
-						</CustomContributorBadge>
-					)} */}
-
-					{/* {pending && appState.isMobile && (
-						<CustomContributorBadge>
-							<BadgeRow>
-								<ContributorsIconMobile src={pendingIcon} />
-							</BadgeRow>
-						</CustomContributorBadge>
-					)} */}
-				</HeaderLayoutCustom>
-
-				<CustomFooter>
-					{/* {!appState.isMobile && (
-						<>
-							<CustomContributorBadge>
-								<BadgeRow>
-									<BadgeLabelTimeMobile>2020.08.02</BadgeLabelTimeMobile>
-								</BadgeRow>
-							</CustomContributorBadge>
-							<CustomContributorBadge>
-								<BadgeLabelTimeMobile>13:57</BadgeLabelTimeMobile>
-							</CustomContributorBadge>
-						</>
-					)} */}
-					{/* {contributed && appState.isMobile && (
-						<CustomBadgeRowGrow>
-							<ToeknIconMobile src={biobitIcon} />
-							<BadgeLabelContributors>20</BadgeLabelContributors>
-							<BadgeLabelContributors
-								minWidth
-							>{`= $ 21`}</BadgeLabelContributors>
-						</CustomBadgeRowGrow>
-					)} */}
-					{contributes && (
-						<>
-							{bookmark && (
+							{success && (
 								<>
+									<CustomBadgeRow>
+										<ToeknIconMobile src={biobitIcon} />
+										<BadgeLabelContributors>20</BadgeLabelContributors>
+										<BadgeLabelContributors
+											minWidth
+										>{`= $ 21`}</BadgeLabelContributors>
+									</CustomBadgeRow>
 									<CustomDivider />
-									<CopyIconWrapper src={bookmarkIcon} />
+									<CustomContributorBadge nomargin>
+										<BadgeRow>
+											<ContributorsIconMobile src={checkedGreen} />
+											<BadgeLabelTimeMobile success>
+												Recieved
+											</BadgeLabelTimeMobile>
+										</BadgeRow>
+									</CustomContributorBadge>
 								</>
 							)}
-						</>
-					)}
-					{success && (
-						<>
-							<CustomDivider />
-							<CustomContributorBadge>
-								<BadgeRow>
-									<ContributorsIconMobile src={checkedGreen} />
-									<BadgeLabelTimeMobile success>Recieved</BadgeLabelTimeMobile>
-								</BadgeRow>
-							</CustomContributorBadge>
-						</>
-					)}
-					{pending && (
-						<>
-							<CustomDivider />
-							<CustomContributorBadge>
-								<BadgeRow>
-									<ContributorsIconMobile src={pendingIcon} />
-									<BadgeLabelTimeMobile pending>Pending</BadgeLabelTimeMobile>
-								</BadgeRow>
-							</CustomContributorBadge>
-						</>
-					)}
-				</CustomFooter>
+							{pending && (
+								<>
+									<CustomBadgeRow>
+										<ToeknIconMobile src={biobitIcon} />
+										<BadgeLabelContributors>20</BadgeLabelContributors>
+										<BadgeLabelContributors
+											minWidth
+										>{`= $ 21`}</BadgeLabelContributors>
+									</CustomBadgeRow>
+									<CustomDivider />
+									<CustomContributorBadge nomargin>
+										<BadgeRow>
+											<ContributorsIconMobile src={pendingIcon} />
+											<BadgeLabelTimeMobile pending>
+												Pending
+											</BadgeLabelTimeMobile>
+										</BadgeRow>
+									</CustomContributorBadge>
+								</>
+							)}
+						</ItemInformation>
+					</ContentWrapper>
+				</HeaderLayoutCustom>
+				<CustomFooter></CustomFooter>
 			</HeaderInner>
 		</HeaderContainer>
 	);
