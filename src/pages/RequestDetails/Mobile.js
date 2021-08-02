@@ -1,21 +1,32 @@
-import React from 'react';
-import RequestDetailsMobile from '../../components/RequestDetails/RequestDetailsMobile';
-import { timeSince, convertToBiobit } from '../../utils';
-import ConnectDialog from '../../components/Dialog/ConnectDialog';
-import Dialog from '../../components/Dialog';
+import React from "react";
+import RequestDetailsMobile from "../../components/RequestDetails/RequestDetailsMobile";
+import { timeSince, convertToBiobit } from "../../utils";
+import ConnectDialog from "../../components/Dialog/ConnectDialog";
+import Dialog from "../../components/Dialog";
 
-const App = ({ account, showDialog, isSubmitting, dialogMessage, request, sendSignalRef, submitSignal, error, setError }) => {
-  
+const App = ({
+	account,
+	showDialog,
+	isSubmitting,
+	setSubmitting,
+	dialogMessage,
+	request,
+	sendSignalRef,
+	submitSignal,
+	error,
+	setError,
+}) => {
 	return (
 		<div>
-			<ConnectDialog isOpen={!account && showDialog} />
+			<ConnectDialog
+				isOpen={!account && showDialog}
+				onClose={() => setSubmitting(false)}
+			/>
 			<Dialog
 				isOpen={isSubmitting}
-				content={(
-					dialogMessage
-				)}
+				content={dialogMessage}
 				hasSpinner
-				type='success'
+				type="success"
 			/>
 			<RequestDetailsMobile
 				request={request}
@@ -27,6 +38,6 @@ const App = ({ account, showDialog, isSubmitting, dialogMessage, request, sendSi
 			/>
 		</div>
 	);
-}
+};
 
 export default App;
