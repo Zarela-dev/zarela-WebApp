@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import styled from "styled-components";
+import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import {
 	RequestNumber,
 	HeaderLayout,
@@ -17,28 +17,27 @@ import {
 	Title,
 	BiobitToDollarValue,
 	BadgeLabel,
-} from "../Elements/RequestCard/IndexMobile";
-import maxWidthWrapper from "../Elements/MaxWidth";
-import biobitIcon from "../../assets/icons/biobit-black.svg";
-import contributorIcon from "../../assets/icons/user-black.svg";
-import bookmarkIcon from "../../assets/icons/bookmark-purple.svg";
-import checkedGreen from "../../assets/icons/check-green.svg";
-import pendingIcon from "../../assets/icons/pending.svg";
-import copyImage from "../../assets/icons/copy.svg";
-import { mainContext } from "../../state";
+} from '../Elements/RequestCard/IndexMobile';
+import maxWidthWrapper from '../Elements/MaxWidth';
+import biobitIcon from '../../assets/icons/biobit-black.svg';
+import contributorIcon from '../../assets/icons/user-black.svg';
+import bookmarkIcon from '../../assets/icons/bookmark-purple.svg';
+import checkedGreen from '../../assets/icons/check-green.svg';
+import pendingIcon from '../../assets/icons/pending.svg';
+import copyImage from '../../assets/icons/copy.svg';
+import { useWeb3React } from '@web3-react/core';
+import { mainContext } from '../../state';
 
 const CustomRequestNumber = styled(RequestNumber)`
-	flex: ${(props) => (props.isMobile ? "" : "0 0 100px")};
-	height: ${(props) => (props.isMobile ? "26px;" : "50px")};
-	border-radius: ${(props) =>
-		props.isMobile ? "5px 5px 0px 5px" : "10px 10px 0px 10px"};
-	padding: ${(props) => (props.isMobile ? "7px 11px" : "10px 20px")};
-	margin-right: ${(props) =>
-		props.isMobile ? props.theme.spacing(1) : props.theme.spacing(2)};
+	flex: ${(props) => (props.isMobile ? '' : '0 0 100px')};
+	height: ${(props) => (props.isMobile ? '26px;' : '50px')};
+	border-radius: ${(props) => (props.isMobile ? '5px 5px 0px 5px' : '10px 10px 0px 10px')};
+	padding: ${(props) => (props.isMobile ? '7px 11px' : '10px 20px')};
+	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(1) : props.theme.spacing(2))};
 	font-weight: bold;
 	background: linear-gradient(246.29deg, #3a68de 12.69%, #3a68de 100%);
-	font-size: ${(props) => (props.isMobile ? "15px" : "32px")};
-	line-height: ${(props) => (props.isMobile ? "11.4px" : "30px")};
+	font-size: ${(props) => (props.isMobile ? '15px' : '32px')};
+	line-height: ${(props) => (props.isMobile ? '11.4px' : '30px')};
 	color: #ffffff;
 	text-align: center;
 `;
@@ -53,7 +52,7 @@ const HeaderContainer = styled.header`
 
 const HeaderInner = styled(HeaderLayout)`
 	display: flex;
-	flex-direction: ${(props) => (props.isMobile ? "column" : "row")};
+	flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
 	${maxWidthWrapper};
 	width: 100%;
 	justify-content: space-between;
@@ -65,9 +64,8 @@ const HeaderLayoutCustom = styled(HeaderLayout)`
 `;
 
 const CustomFooter = styled(Footer)`
-	margin-top: ${(props) =>
-		props.isMobile ? props.theme.spacing(3) : props.theme.spacing(0)};
-	padding-left: ${(props) => (props.isMobile ? "50px" : "0")};
+	margin-top: ${(props) => (props.isMobile ? props.theme.spacing(3) : props.theme.spacing(0))};
+	padding-left: ${(props) => (props.isMobile ? '50px' : '0')};
 	flex-wrap: nowrap;
 `;
 
@@ -81,9 +79,9 @@ const CustomBadgeRowGrow = styled(CustomBadgeRow)`
 `;
 
 const TitleContent = styled(Title)`
-	font-size: ${(props) => (props.isMobile ? "12px" : "14px")};
-	font-weight: ${(props) => (props.isMobile ? "400" : "600")};
-	line-height: ${(props) => (props.isMobile ? "16px" : "20px")};
+	font-size: ${(props) => (props.isMobile ? '12px' : '14px')};
+	font-weight: ${(props) => (props.isMobile ? '400' : '600')};
+	line-height: ${(props) => (props.isMobile ? '16px' : '20px')};
 	font-weight: 600;
 	line-heigh: 16px;
 `;
@@ -98,12 +96,12 @@ const BodyContainer = styled.div`
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
-	margin-top: ${(props) => (props.isMobile ? "10px" : "8px")};
+	margin-top: ${(props) => (props.isMobile ? '10px' : '8px')};
 `;
 
 const HashContent = styled.div`
 	display: flex;
-	flex-direction: ${(props) => (props.isMobile ? "column" : "row")};
+	flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
 `;
 
 const HashBody = styled.div`
@@ -115,21 +113,21 @@ const HashBody = styled.div`
 `;
 
 const HashTitle = styled(HashBody)`
-	font-size: ${(props) => (props.isMobile ? "10.5px" : "14px")};
+	font-size: ${(props) => (props.isMobile ? '10.5px' : '14px')};
 	font-weight: 400;
-	line-height: ${(props) => (props.isMobile ? "16px" : "20px")};
-	color: ${(props) => (props.isMobile ? "" : "#000")};
-	margin-right: ${(props) => (props.isMobile ? "" : "6px")};
+	line-height: ${(props) => (props.isMobile ? '16px' : '20px')};
+	color: ${(props) => (props.isMobile ? '' : '#000')};
+	margin-right: ${(props) => (props.isMobile ? '' : '6px')};
 	align-items: center;
 `;
 
 const CustomContributorBadge = styled(ContributorBadge)`
-	margin-right: ${(props) => (props.isMobile ? "8px" : "25px")};
+	margin-right: ${(props) => (props.isMobile ? '8px' : '25px')};
 `;
 
 const ContributorsIconMobile = styled(ContributorsIcon)`
-	width: ${(props) => (props.isMobile ? "16px" : "18px")};
-	height: ${(props) => (props.isMobile ? "16px" : "18px")};
+	width: ${(props) => (props.isMobile ? '16px' : '18px')};
+	height: ${(props) => (props.isMobile ? '16px' : '18px')};
 `;
 const ToeknIconMobile = styled(TokenIcon)`
 	width: 20px;
@@ -137,26 +135,25 @@ const ToeknIconMobile = styled(TokenIcon)`
 `;
 
 const BadgeLabelTimeMobile = styled(BadgeLabel)`
-	font-size: ${(props) => (props.isMobile ? "10.8px" : "14px")};
+	font-size: ${(props) => (props.isMobile ? '10.8px' : '14px')};
 	line-height: 20px;
-	font-weight: ${(props) => (props.success ? "700" : props.pending && "700")};
+	font-weight: ${(props) => (props.success ? '700' : props.pending && '700')};
 	color: ${(props) =>
-		props.success
-			? "rgba(27, 204, 141, 1)"
-			: props.pending && "rgba(133, 133, 133, 1)"};
+		props.success ? 'rgba(27, 204, 141, 1)' : props.pending && 'rgba(133, 133, 133, 1)'};
 `;
 
 const BadgeLabelContributors = styled(BadgeLabel)`
-	font-size: ${(props) => (props.isMobile ? "10.8px" : "16px")};
-	line-height: ${(props) => (props.isMobile ? "14px" : "18px")};
+	font-size: ${(props) => (props.isMobile ? '10.8px' : '16px')};
+	line-height: ${(props) => (props.isMobile ? '14px' : '18px')};
 	font-weight: 400;
-	min-width: ${(props) => props.minWidth && "60px"};
+	min-width: ${(props) => props.minWidth && '60px'};
 	white-space: nowrap;
 `;
 
 const CopyIconWrapper = styled(Bookmark)`
 	align-self: center;
 `;
+
 const ContentWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -164,6 +161,7 @@ const ContentWrapper = styled.div`
 `;
 
 const LogCard = ({
+	requestID,
 	bookmark,
 	HashAddress,
 	contributes,
@@ -172,14 +170,75 @@ const LogCard = ({
 	pending,
 }) => {
 	const { appState } = useContext(mainContext);
+	const [contributions, setContributions] = useState([]);
+	const [isLoading, setLoading] = useState(false);
+	const { account } = useWeb3React();
 
+	useEffect(() => {
+		if (appState.contract !== null) {
+			if (account) {
+				appState.contract.methods
+					.GetOrderFiles(requestID)
+					.call((orderInfoError, orderInfo) => {
+						if (!orderInfoError) {
+							let status = orderInfo[2],
+								timestamp = orderInfo[1],
+								zarelaDay = orderInfo[3],
+								addresses = orderInfo[0];
+
+							let formatted = {};
+							let uniqueAddresses = [...new Set(addresses)];
+							let pairs = [];
+
+							addresses.forEach((address, index) => {
+								pairs.push({
+									address,
+									zarelaDay: zarelaDay[index],
+									timestamp: timestamp[index],
+									originalIndex: index,
+									status: status[index],
+								});
+							});
+
+							uniqueAddresses.forEach((uAddress, uIndex) => {
+								pairs.forEach((tempItem, tempIndex) => {
+									if (tempItem.address === uAddress) {
+										if (Object(formatted).hasOwnProperty(uAddress)) {
+											formatted[uAddress].push({
+												originalIndex: tempItem.originalIndex,
+												zarelaDay: tempItem.zarelaDay,
+												timestamp: tempItem.timestamp,
+												status: tempItem.status,
+											});
+										} else {
+											formatted[uAddress] = [
+												{
+													originalIndex: tempItem.originalIndex,
+													zarelaDay: tempItem.zarelaDay,
+													timestamp: tempItem.timestamp,
+													status: tempItem.status,
+												},
+											];
+										}
+									}
+								});
+							});
+
+							setContributions(formatted[account]);
+						} else {
+							console.error(orderInfoError.message);
+						}
+					});
+			}
+		}
+	}, [appState.contract, account]);
+
+	console.log(contributions);
 	return (
 		<HeaderContainer>
 			<HeaderInner isMobile={appState.isMobile}>
 				<HeaderLayoutCustom>
-					<CustomRequestNumber isMobile={appState.isMobile}>
-						25
-					</CustomRequestNumber>
+					<CustomRequestNumber isMobile={appState.isMobile}>25</CustomRequestNumber>
 					<ContentWrapper>
 						<TitleContent isMobile={appState.isMobile}>
 							Reactions while playing brutal games among 13 - 19 years teanagers
