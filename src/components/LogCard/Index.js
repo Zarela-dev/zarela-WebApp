@@ -134,7 +134,7 @@ const ToeknIconMobile = styled(TokenIcon)`
 const BadgeLabelTimeMobile = styled(BadgeLabel)`
 	font-size: 14px;
 	line-height: 20px;
-	font-weight: 700;
+	font-weight: ${props => props.subHeader ? 400 : 700};
 	color: ${(props) =>
 		props.success
 			? "rgba(27, 204, 141, 1)"
@@ -144,9 +144,10 @@ const BadgeLabelTimeMobile = styled(BadgeLabel)`
 const BadgeLabelContributors = styled(BadgeLabel)`
 	font-size: 16px;
 	line-height: 18px;
-	font-weight: 400;
+	font-weight: ${(props) => (props.highlight ? 700 : 400)};
 	min-width: ${(props) => props.minWidth && "60px"};
 	white-space: nowrap;
+	color: ${(props) => (props.highlight ? "#3A68DE" : "")};
 `;
 
 const CopyIconWrapper = styled(Bookmark)`
@@ -168,11 +169,20 @@ const ItemInformation = styled.div`
 	display: flex;
 	justify-self: self-end;
 `;
+const BookmarkIconWrapper = styled(Bookmark)`
+	align-self: center;
+`;
+
+const SubHeaderRow = styled.div`
+		display: flex;
+		justify-content: flex-start;
+`;
 
 const LogCard = ({
 	bookmark,
 	HashAddress,
 	MyRequests,
+	marketRequest,
 	contributes,
 	contributed,
 	success,
@@ -198,6 +208,19 @@ const LogCard = ({
 									</HashContent>
 								</BodyContainer>
 							)}
+
+							{marketRequest &&
+								<SubHeaderRow>
+										<CustomContributorBadge>
+										<BadgeRow>
+											<BadgeLabelTimeMobile subHeader>2020.08.02</BadgeLabelTimeMobile>
+										</BadgeRow>
+									</CustomContributorBadge>
+									<CustomContributorBadge>
+										<BadgeLabelTimeMobile subHeader>13:57</BadgeLabelTimeMobile>
+									</CustomContributorBadge>
+								</SubHeaderRow>
+							}
 						</TitleWrapper>
 
 						<ItemInformation>
@@ -225,6 +248,30 @@ const LogCard = ({
 											minWidth
 										>{`= $ 21`}</BadgeLabelContributors>
 									</CustomBadgeRow>
+								</>
+							)}
+
+							{marketRequest && (
+								<>
+									<CustomContributorBadge>
+										<BadgeRow>
+											<ContributorsIconMobile src={contributorIcon} />
+											<BadgeLabelContributors highlight>
+												32/5 left
+											</BadgeLabelContributors>
+										</BadgeRow>
+									</CustomContributorBadge>
+
+									<CustomDivider />
+									<CustomBadgeRow>
+										<ToeknIconMobile src={biobitIcon} />
+										<BadgeLabelContributors>20</BadgeLabelContributors>
+										<BadgeLabelContributors
+											minWidth
+										>{`= $ 21`}</BadgeLabelContributors>
+									</CustomBadgeRow>
+									<CustomDivider />
+									<BookmarkIconWrapper src={bookmarkIcon} />
 								</>
 							)}
 						</ItemInformation>

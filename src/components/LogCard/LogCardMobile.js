@@ -166,10 +166,7 @@ const BookmarkIconWrapper = styled(Bookmark)`
 const LogCardMobile = ({
 	bookmark,
 	MyRequests,
-	HashAddress,
 	marketRequest,
-	contributes,
-	contributed,
 	success,
 	pending,
 }) => {

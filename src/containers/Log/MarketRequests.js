@@ -10,7 +10,7 @@ const MarketRequests = () => {
 		{appState.isMobile ? 
 			<LogCardMobile marketRequest />
 			:
-			<LogCard />
+			<LogCard marketRequest/>
 		}
 		</>
 	);
