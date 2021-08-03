@@ -86,7 +86,7 @@ export const WalletMobile = ({ data, account, logs, isLoading }) => {
 							label: "Send",
 							component: (
 								<WalletInnerContainer elevated>
-									<WalletSendAssets mobile={true} />
+									<WalletSendAssets mobile />
 								</WalletInnerContainer>
 							),
 						},

@@ -27,7 +27,7 @@ import { useHistory } from "react-router";
 import { useWeb3React } from "@web3-react/core";
 
 const WalletInput = styled(Textfield)`
-	min-width: ${(props) => (props.mobile ? "100%" : "510px")};
+	min-width: ${(props) => (props.isMobile === true ? "100%" : "510px")};
 	margin-bottom: ${(props) => props.theme.spacing(4)};
 `;
 
@@ -59,7 +59,7 @@ const Wrapper = styled.form`
 
 /* #todo #fancy if the requested amount is more than user balance, give error */
 const WalletSendAssets = (mobile) => {
-	console.log('mobile', mobile);
+
 	const { appState } = useContext(mainContext);
 	const history = useHistory();
 	const { account } = useWeb3React();
@@ -137,7 +137,7 @@ const WalletSendAssets = (mobile) => {
 						</Token>
 					</TokenList>
 					<WalletInput
-						mobile
+						isMobile={appState.isMobile}
 						label={"Recipient's Address"}
 						placeholder={"Please enter the Recipient's address"}
 						adornment={"Paste"} // #todo
@@ -147,6 +147,7 @@ const WalletSendAssets = (mobile) => {
 						error={formik.errors?.address}
 					/>
 					<WalletInput
+						isMobile={appState.isMobile}
 						label={"Amount"}
 						placeholder={"Enter amount"}
 						hint={getBalanceHint()} // will change based on token chosen
