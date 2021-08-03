@@ -25,9 +25,10 @@ const Divider = styled.div`
 `;
 
 const options = [
-	{ value: "chocolate", label: "Chocolate" },
-	{ value: "strawberry", label: "Strawberry" },
-	{ value: "vanilla", label: "Vanilla" },
+	{ value: "EEG", label: "EEG" },
+	{ value: "EMG", label: "EMG" },
+	{ value: "ECG", label: "ECG" },
+	{ value: "EOG", label: "EOG" },
 ];
 
 const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
