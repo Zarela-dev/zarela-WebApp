@@ -1,13 +1,14 @@
-import React from 'react';
-import styled from 'styled-components';
-import FileInput from './UploadFileCard/FileInput';
-import Checkbox from './Elements/Checkbox';
-import Button from './Elements/Button';
-import TextField, { Error } from './Elements/TextField';
+import React, { useState } from "react";
+import styled from "styled-components";
+import FileInput from "./UploadFileCard/FileInput";
+import Checkbox from "./Elements/Checkbox";
+import Button from "./Elements/Button";
+import TextField, { Error } from "./Elements/TextField";
+import Select from "react-select";
 
 const SubmitButton = styled(Button)`
 	width: 190px;
-	margin-bottom: ${props => props.theme.spacing(4)};
+	margin-bottom: ${(props) => props.theme.spacing(4)};
 `;
 
 const Form = styled.form`
@@ -19,59 +20,68 @@ const Divider = styled.div`
 	background: rgba(144, 144, 144, 0.3);
 	border-radius: 24px;
 	height: 3px;
-	margin: ${props => props.theme.spacing(5)} 0 ${props => props.theme.spacing(6)};
+	margin: ${(props) => props.theme.spacing(5)} 0
+		${(props) => props.theme.spacing(6)};
 `;
 
+const options = [
+	{ value: "chocolate", label: "Chocolate" },
+	{ value: "strawberry", label: "Strawberry" },
+	{ value: "vanilla", label: "Vanilla" },
+];
+
 const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
+	const [selectedOption, setSelectedOption] = useState(null);
+
 	return (
 		<Form onSubmit={formik.handleSubmit}>
 			{children}
 			<TextField
-				placeholder={'write main topics in your study'}
-				label='Title *'
-				type='text'
-				name={'title'}
+				placeholder={"write main topics in your study"}
+				label="Title *"
+				type="text"
+				name={"title"}
 				error={formik.errors?.title}
 				value={formik.values.title}
 				onChange={(e) => {
-					formik.setFieldValue('title', e.target.value);
+					formik.setFieldValue("title", e.target.value);
 				}}
 			/>
 			<TextField
-				placeholder={'What’s your study about?'}
+				placeholder={"What’s your study about?"}
 				multiline
-				label='Description *'
-				type='text'
-				name={'desc'}
+				label="Description *"
+				type="text"
+				name={"desc"}
 				error={formik.errors?.desc}
 				value={formik.values.desc}
 				onChange={(e) => {
-					formik.setFieldValue('desc', e.target.value);
+					formik.setFieldValue("desc", e.target.value);
 				}}
 			/>
 			<TextField
-				placeholder={'How many BBits will you pay for each contributor?'}
-				label='Allocated BBits *'
-				type='text'
-				name={'tokenPay'}
+				placeholder={"How many BBits will you pay for each contributor?"}
+				label="Allocated BBits *"
+				type="text"
+				name={"tokenPay"}
 				error={formik.errors?.tokenPay}
 				value={formik.values.tokenPay}
 				onChange={(e) => {
-					formik.setFieldValue('tokenPay', e.target.value);
+					formik.setFieldValue("tokenPay", e.target.value);
 				}}
 			/>
 			<TextField
-				placeholder={'How many people do you need to done the study?'}
-				label='Contributors *'
-				type='text'
-				name={'instanceCount'}
+				placeholder={"How many people do you need to done the study?"}
+				label="Contributors *"
+				type="text"
+				name={"instanceCount"}
 				error={formik.errors?.instanceCount}
 				value={formik.values.instanceCount}
 				onChange={(e) => {
-					formik.setFieldValue('instanceCount', e.target.value);
+					formik.setFieldValue("instanceCount", e.target.value);
 				}}
 			/>
-			<TextField
+			{/* <TextField
 				placeholder={'Write your related hashtags here'}
 				label='Hashtags *'
 				type='text'
@@ -81,38 +91,50 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 				onChange={(e) => {
 					formik.setFieldValue('category', e.target.value);
 				}}
+			/> */}
+
+			<Select
+				value={selectedOption}
+				onChange={(e) => {
+					formik.setFieldValue("category", e);
+					setSelectedOption(e);
+				}}
+				options={options}
 			/>
+
 			<FileInput
 				hasBorder={false}
 				showSelected
-				buttonLabel='Select Files'
-				label={'Upload your Zpaper here'}
+				buttonLabel="Select Files"
+				label={"Upload your Zpaper here"}
 				ref={ref}
-				name={'zpaper'}
+				name={"zpaper"}
 				error={formik.errors?.zpaper}
 				value={formik.values.zpaper}
 				onChange={(e) => {
-					formik.setFieldValue('zpaper', e.target.value);
-					if (e.target.value !== '' && e.target.value !== null) {
-						formik.setFieldError('zpaper', null);
+					formik.setFieldValue("zpaper", e.target.value);
+					if (e.target.value !== "" && e.target.value !== null) {
+						formik.setFieldError("zpaper", null);
 						formik.setSubmitting(false);
 					}
 				}}
 			/>
-			<Checkbox checked={formik.values.terms} name='terms' onChange={(e) => formik.setFieldValue('terms', e.target.checked)}>
-				Your request won’t be able to be edited, make sure every data you added is correct and final. By marking this box you claim your agreement towards policies.
+			<Checkbox
+				checked={formik.values.terms}
+				name="terms"
+				onChange={(e) => formik.setFieldValue("terms", e.target.checked)}
+			>
+				Your request won’t be able to be edited, make sure every data you added
+				is correct and final. By marking this box you claim your agreement
+				towards policies.
 			</Checkbox>
-			{
-				formik.errors?.terms ?
-					<Error>
-						{
-							formik.errors?.terms
-						}
-					</Error>
-					: null
-			}
+			{formik.errors?.terms ? <Error>{formik.errors?.terms}</Error> : null}
 			<Divider />
-			<SubmitButton variant='primary' disabled={!formik.dirty || formik.isSubmitting} type='submit'>
+			<SubmitButton
+				variant="primary"
+				disabled={!formik.dirty || formik.isSubmitting}
+				type="submit"
+			>
 				Submit
 			</SubmitButton>
 		</Form>
