@@ -152,6 +152,7 @@ const ContentWrapper = styled.div`
 
 const CustomTimeStamp = styled(Timestamp)`
 	margin: 1px 0 0 0;
+	font-size: 12px;
 `;
 const FooterWrapper = styled.div`
 	display: flex;
