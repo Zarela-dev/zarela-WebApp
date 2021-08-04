@@ -23,7 +23,7 @@ const TabsHeaderItem = styled(Tab)`
 	opacity: 0.5;
 	line-height: ${(props) => (props.isMobile ? '17px' : '26px')};
 	padding: ${(props) => props.theme.spacing(0.9)} 0;
-	margin-right: ${(props) => props.theme.spacing(2)};
+	margin-right: ${(props) => props.isMobile ? props.theme.spacing(0.6) : props.theme.spacing(2)};
 	cursor: pointer;
 
 	@media (max-width: 768px) {

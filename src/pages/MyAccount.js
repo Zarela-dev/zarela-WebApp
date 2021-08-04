@@ -1,20 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { mainContext } from '../state';
-import TitleBar from '../components/TitleBar/TitleBar';
-import styled from 'styled-components';
-import maxWidthWrapper from '../components/Elements/MaxWidth';
-import RequestListItem from '../components/RequestListItem';
-import ConnectDialog from '../components/Dialog/ConnectDialog';
-import { convertToBiobit, toast } from '../utils';
-import { useWeb3React } from '@web3-react/core';
-import Spinner from '../components/Spinner';
+import React, { useContext, useEffect, useState } from "react";
+import { mainContext } from "../state";
+import TitleBar from "../components/TitleBar/TitleBar";
+import styled from "styled-components";
+import maxWidthWrapper from "../components/Elements/MaxWidth";
+import RequestListItem from "../components/RequestListItem";
+import ConnectDialog from "../components/Dialog/ConnectDialog";
+import { convertToBiobit, toast } from "../utils";
+import { useWeb3React } from "@web3-react/core";
+import Spinner from "../components/Spinner";
 
-const PageWrapper = styled.div`
-	
-`;
+const PageWrapper = styled.div``;
 
 const ContentWrapper = styled.div`
-	margin-top: ${props => props.theme.spacing(6)};
+	margin-top: ${(props) => props.theme.spacing(6)};
 	${maxWidthWrapper};
 `;
 
@@ -23,7 +21,7 @@ const WalletTitlebar = styled(TitleBar)`
 	flex-wrap: wrap;
 	justify-content: space-between;
 	align-items: center;
-  margin-top: -12px;
+	margin-top: -12px;
 	padding: 0 18px;
 `;
 
@@ -31,9 +29,9 @@ const Title = styled.div`
 	font-weight: 500;
 	font-size: 26px;
 	line-height: 34px;
-	color: ${props => props.theme.textPrimary};
+	color: ${(props) => props.theme.textPrimary};
 
-	@media(max-width: 768px) {
+	@media (max-width: 768px) {
 		font-size: 14px;
 	}
 `;
@@ -41,9 +39,7 @@ const Title = styled.div`
 const RewardWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
-
-
-	`;
+`;
 
 const RewardItem = styled.div`
 	display: flex;
@@ -55,7 +51,7 @@ const RewardLabel = styled.div`
 	font-size: 16px;
 	line-height: 21px;
 
-	@media(max-width: 768px) {
+	@media (max-width: 768px) {
 		font-size: 12.5px;
 	}
 `;
@@ -63,9 +59,9 @@ const RewardLabel = styled.div`
 const RewardValue = styled.div`
 	font-size: 16px;
 	font-weight: 700;
-	margin-left: ${props => props.theme.spacing(1)};
+	margin-left: ${(props) => props.theme.spacing(1)};
 
-	@media(max-width: 768px) {
+	@media (max-width: 768px) {
 		font-size: 13px;
 		font-weidth: 600;
 	}
@@ -85,6 +81,7 @@ const MyAccount = () => {
 	const [totalRevenueFromRequester, setTotalRevenueFromRequester] = useState(0);
 	const { account } = useWeb3React();
 	const [isLoading, setLoading] = useState(false);
+	const [ConnectionModalShow, setConnectionModalShow] = useState(true);
 
 	useEffect(() => {
 		if (appState.contract !== null) {
@@ -92,25 +89,28 @@ const MyAccount = () => {
 				setLoading(true);
 				appState.contract.methods.User_Map(account).call((error, result) => {
 					if (!error) {
-						const formatter = value => convertToBiobit(value);
+						const formatter = (value) => convertToBiobit(value);
 						setTotalRevenueFromRequester(formatter(result[1]));
 						setTotalRevenueFromZarela(formatter(result[0]));
-					}
-					else {
-						toast(error.message, 'error');
+					} else {
+						toast(error.message, "error");
 					}
 				});
 
-				appState.contract.methods.Order_Details().call({ from: account })
-					.then(result => {
+				appState.contract.methods
+					.Order_Details()
+					.call({ from: account })
+					.then((result) => {
 						const myRequests = result[1];
 
 						const getAllRequests = new Promise(async (resolve, reject) => {
 							const requestsListObject = {};
 
 							for (const currentRequest of myRequests) {
-								await appState.contract.methods.ord_file(currentRequest).call()
-									.then(result => {
+								await appState.contract.methods
+									.ord_file(currentRequest)
+									.call()
+									.then((result) => {
 										const requestTemplate = {
 											requestID: result[0],
 											title: result[1],
@@ -122,22 +122,25 @@ const MyAccount = () => {
 											categories: result[8], // NOT TO BE USED IN DEMO
 											whitePaper: result[5],
 											timestamp: result[10],
-											totalContributedCount: result[9]
+											totalContributedCount: result[9],
 										};
-										requestsListObject[requestTemplate.requestID] = requestTemplate;
+										requestsListObject[
+											requestTemplate.requestID
+										] = requestTemplate;
 									})
-									.catch(error => {
+									.catch((error) => {
 										console.error(error.message);
 									});
 							}
 							resolve(requestsListObject);
 						});
 
-						getAllRequests.then(result => {
+						getAllRequests.then((result) => {
 							setRequests(result);
 							setLoading(false);
 						});
-					}).catch(error => {
+					})
+					.catch((error) => {
 						console.error(error.message);
 					});
 			}
@@ -147,9 +150,7 @@ const MyAccount = () => {
 	return (
 		<PageWrapper>
 			<WalletTitlebar>
-				<Title>
-					My Contributions
-				</Title>
+				<Title>My Contributions</Title>
 				<RewardWrapper>
 					<RewardItem>
 						<RewardLabel>Reward Pool</RewardLabel>
@@ -162,25 +163,31 @@ const MyAccount = () => {
 				</RewardWrapper>
 			</WalletTitlebar>
 			<ContentWrapper>
-				{
-					!account ?
-						<ConnectDialog isOpen={true} /> :
-						isLoading ?
-							<SpinnerWrapper>
-								<Spinner />
-							</SpinnerWrapper> :
-							Object.values(requests).length > 0 ?
-								Object.values(requests).sort((a, b) => +b.requestID - +a.requestID).map(item => (
-									<RequestListItem
-										key={item.requestID}
-										requestID={item.requestID}
-										title={item.title}
-										tokenPay={item.tokenPay}
-										total={item.totalContributedCount}
-										contributors={`${item.totalContributed}/${item.totalContributors}`}
-									/>
-								)) : 'You haven\'t contributed to any requests yet.'
-				}
+				{!account ? (
+					<ConnectDialog
+						isOpen={ConnectionModalShow}
+						onClose={() => setConnectionModalShow(false)}
+					/>
+				) : isLoading ? (
+					<SpinnerWrapper>
+						<Spinner />
+					</SpinnerWrapper>
+				) : Object.values(requests).length > 0 ? (
+					Object.values(requests)
+						.sort((a, b) => +b.requestID - +a.requestID)
+						.map((item) => (
+							<RequestListItem
+								key={item.requestID}
+								requestID={item.requestID}
+								title={item.title}
+								tokenPay={item.tokenPay}
+								total={item.totalContributedCount}
+								contributors={`${item.totalContributed}/${item.totalContributors}`}
+							/>
+						))
+				) : (
+					"You haven't contributed to any requests yet."
+				)}
 			</ContentWrapper>
 		</PageWrapper>
 	);

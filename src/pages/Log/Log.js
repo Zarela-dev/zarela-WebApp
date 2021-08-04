@@ -1,22 +1,22 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { mainContext } from '../../state';
-import styled, { css } from 'styled-components';
-import TitleBar from '../../components/TitleBar/TitleBar';
-import { Tabs } from '../../components/Tabs';
-import MyRequests from '../../containers/Log/MyRequests';
-import MarketRequests from '../../containers/Log/MarketRequests';
-import { convertToBiobit, toast } from '../../utils';
-import Contributes from '../../containers/Log/Contributes';
-import { useWeb3React } from '@web3-react/core';
-import ConnectDialog from '../../components/Dialog/ConnectDialog';
-import MobileLayout from '../../components/MobileLayout';
+import React, { useContext, useState, useEffect } from "react";
+import { mainContext } from "../../state";
+import styled, { css } from "styled-components";
+import TitleBar from "../../components/TitleBar/TitleBar";
+import { Tabs } from "../../components/Tabs";
+import MyRequests from "../../containers/Log/MyRequests";
+import MarketRequests from "../../containers/Log/MarketRequests";
+import { convertToBiobit, toast } from "../../utils";
+import Contributes from "../../containers/Log/Contributes";
+import { useWeb3React } from "@web3-react/core";
+import ConnectDialog from "../../components/Dialog/ConnectDialog";
+import MobileLayout from "../../components/MobileLayout";
 
 const Wrapper = styled.div``;
 
 const LogInnerContainer = styled.div`
 	padding: 0;
 	margin: 0;
-	background: ${(props) => (props.elevated ? '#FFFFFF' : '#F4F8FE')};
+	background: ${(props) => (props.elevated ? "#FFFFFF" : "#F4F8FE")};
 	border: none;
 	box-shadow: none;
 	border-radius: 8px;
@@ -26,8 +26,8 @@ const WalletTitlebar = styled(TitleBar)`
 	display: flex;
 	flex-wrap: nowrap;
 	justify-content: space-between;
-	height: ${(props) => (props.isMobile ? '85px' : 'unset')};
-	padding: ${(props) => props.isMobile && '0 18px'};
+	height: ${(props) => (props.isMobile ? "85px" : "unset")};
+	padding: ${(props) => props.isMobile && "0 18px"};
 	flex-direction: row;
 	width: 100%;
 	align-items: center;
@@ -77,6 +77,7 @@ const Log = () => {
 	const { appState } = useContext(mainContext);
 	const [totalRevenueFromZarela, setTotalRevenueFromZarela] = useState(0);
 	const [totalRevenueFromRequester, setTotalRevenueFromRequester] = useState(0);
+	const [ConnectionModalShow, setConnectionModalShow] = useState(true);
 
 	useEffect(() => {
 		if (appState.contract !== null) {
@@ -87,7 +88,7 @@ const Log = () => {
 						setTotalRevenueFromRequester(formatter(result[1]));
 						setTotalRevenueFromZarela(formatter(result[0]));
 					} else {
-						toast(error.message, 'error');
+						toast(error.message, "error");
 					}
 				});
 			}
@@ -111,14 +112,17 @@ const Log = () => {
 			</WalletTitlebar>
 			<MobileLayout>
 				{!account ? (
-					<ConnectDialog isOpen={true} />
+					<ConnectDialog
+						isOpen={ConnectionModalShow}
+						onClose={() => setConnectionModalShow(false)}
+					/>
 				) : (
 					<Tabs
 						route="log"
 						isMobile={appState.isMobile}
 						data={[
 							{
-								label: 'My Requests',
+								label: "My Requests",
 								component: (
 									<LogInnerContainer elevated>
 										<MyRequests />
@@ -126,7 +130,7 @@ const Log = () => {
 								),
 							},
 							{
-								label: 'Marked Requests',
+								label: "Marked Requests",
 								component: (
 									<LogInnerContainer elevated>
 										<MarketRequests />
@@ -134,7 +138,7 @@ const Log = () => {
 								),
 							},
 							{
-								label: 'Contributed',
+								label: "Contributed",
 								component: (
 									<LogInnerContainer elevated>
 										<Contributes />
