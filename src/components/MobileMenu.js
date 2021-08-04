@@ -9,13 +9,13 @@ const menuItems = [
 		notifications: 0,
 	},
 	{
-		title: 'My requests',
-		path: '/notSupported',
+		title: 'Inbox',
+		path: '/inbox',
 		notifications: 0,
 	},
 	{
-		title: 'My contributions',
-		path: '/account',
+		title: 'Log',
+		path: '/log/my_requests',
 		notifications: 0,
 	},
 	{
