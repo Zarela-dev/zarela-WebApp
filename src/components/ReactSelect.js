@@ -64,9 +64,10 @@ const StyledSelect = Styled(Select)`
 	}
 `;
 
-const ReactSelect = ({options , onChange, isMulti, menuIsOpen, value}) => {
+const ReactSelect = ({ options, onChange, isMulti, menuIsOpen, value }, props) => {
 	return (
 		<StyledSelect
+			{...{ props }}
 			classNamePrefix="Select"
 			options={options}
 			onChange={onChange}

@@ -23,8 +23,6 @@ const Divider = styled.div`
 	margin: ${(props) => props.theme.spacing(5)} 0 ${(props) => props.theme.spacing(6)};
 `;
 
-
-
 const options = [
 	{ value: 'chocolate1', label: 'Chocolate' },
 	{ value: 'strawberry2', label: 'Strawberry' },
@@ -105,8 +103,6 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 					setSelectedOption(e);
 				}}
 				isMulti
-				autoFocus
-				menuIsOpen={true}
 				value={selectedOption}
 			/>
 
