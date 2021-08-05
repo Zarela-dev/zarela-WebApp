@@ -70,16 +70,18 @@ const CreateRequest = () => {
 				.number()
 				.typeError(validationErrors.number('Contributors'))
 				.required(validationErrors.required('Contributors')),
-			category: yup.string().required(validationErrors.required('category')),
+			category: yup.array().required(validationErrors.required('category')),
 			zpaper: yup.mixed(),
 			terms: yup.boolean().required(),
 		}),
 		onSubmit: (values) => {
+			console.log('values', values);
 			if (formik.isValid) {
 				if (
 					+values.tokenPay * +values.instanceCount >
 					+appState.biobitBalance / Math.pow(10, 9)
 				) {
+					console.log('if')
 					formik.setFieldError('tokenPay', validationErrors.notEnoughTokens);
 					formik.setSubmitting(false);
 				} else {

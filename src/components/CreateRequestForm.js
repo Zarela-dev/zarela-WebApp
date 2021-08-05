@@ -98,7 +98,7 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 				classNamePrefix="Select"
 				options={options}
 				onChange={(e) => {
-					console.log('e', e.keyCode);
+					console.log('changes ', e);
 					formik.setFieldValue('category', e);
 					setSelectedOption(e);
 				}}
