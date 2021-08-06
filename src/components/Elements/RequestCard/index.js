@@ -192,6 +192,26 @@ export const JoinButton = styled(GenericLinkButton)`
 	}
 `;
 
+export const TagsWrapper = styled.div`
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	width: 100%;
+`;
+
+export const TagItem = styled.div`
+	background: white;
+	padding: 8px 16px;
+	font-size: 14px;
+	line-height: 17px;
+	font-weight: 400;
+	border: 1px solid #E1E5F5;
+	border-radius: 4px;
+	margin-top: 5px;
+	margin-right: 5px;
+	color: #A0AAC3;
+`;
+
 export default RequestCardWrapper;
 export {
 	// Avatar,

@@ -15,6 +15,8 @@ import RequestCardWrapper, {
 	BiobitToDollarPair,
 	BadgeRow,
 	TokenIcon,
+	TagsWrapper,
+	TagItem,
 	TokenValue,
 	JoinButton,
 	BiobitToDollarValue,
@@ -23,7 +25,7 @@ import RequestCardWrapper, {
 	ProgressTrackerProcess,
 	ValueLabel,
 	BadgeLabel,
-	Hint
+	Hint,
 } from './../Elements/RequestCard';
 import bookmarkIcon from '../../assets/icons/bookmark-purple.svg';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
@@ -35,22 +37,27 @@ const RequestCard = (props) => {
 	return (
 		<RequestCardWrapper>
 			<HeaderLayout>
-				<RequestNumber>
-					{props.requestID}
-				</RequestNumber>
+				<RequestNumber>{props.requestID}</RequestNumber>
 				<Title>
 					{props.title.length < 115 ? props.title : props.title.substr(0, 115) + '...'}
 				</Title>
 				<Spacer />
 				<Bookmark src={bookmarkIcon} />
 			</HeaderLayout>
-			<Timestamp nowrap variant='caption'>
+			<Timestamp nowrap variant="caption">
 				{props.timestamp}
 			</Timestamp>
 			<Description>
-				<Typography variant='body'>
-					{props.description.length < 405 ? props.description : props.description.substr(0, 405) + '...'}
+				<Typography variant="body">
+					{props.description.length < 405
+						? props.description
+						: props.description.substr(0, 405) + '...'}
 				</Typography>
+				<TagsWrapper>
+					{['hello', 'blockchain', 'hardness'].map((item, index) => {
+						return <TagItem key={index}>#{item}</TagItem>;
+					})}
+				</TagsWrapper>
 			</Description>
 			<ProgressTrackerWrapper>
 				<ProgressTrackerTrack>
@@ -61,49 +68,35 @@ const RequestCard = (props) => {
 				<BiobitToDollarPair>
 					<BadgeRow>
 						<TokenIcon src={biobitIcon} />
-						<TokenValue>
-							{props.tokenPay}
-						</TokenValue>
-						<ValueLabel>
-							BBit
-						</ValueLabel>
+						<TokenValue>{props.tokenPay}</TokenValue>
+						<ValueLabel>BBit</ValueLabel>
 					</BadgeRow>
 					<BadgeRow>
-						<BiobitToDollarValue>
-							{`~ $ ${props.tokenPay}`}
-						</BiobitToDollarValue>
+						<BiobitToDollarValue>{`~ $ ${props.tokenPay}`}</BiobitToDollarValue>
 					</BadgeRow>
 				</BiobitToDollarPair>
 				<Divider />
 				<ContributorBadge>
 					<BadgeRow>
 						<ContributorsIcon src={documentsIcon} />
-						<BadgeLabel>
-							{props.contributors}
-						</BadgeLabel>
+						<BadgeLabel>{props.contributors}</BadgeLabel>
 					</BadgeRow>
 					<BadgeRow>
-						<Hint>
-							No. of accepted docs
-						</Hint>
+						<Hint>No. of accepted docs</Hint>
 					</BadgeRow>
 				</ContributorBadge>
 				<Divider />
 				<ContributorBadge>
 					<BadgeRow>
 						<ContributorsIcon src={contributorIcon} />
-						<BadgeLabel>
-							{props.totalContributedCount}
-						</BadgeLabel>
+						<BadgeLabel>{props.totalContributedCount}</BadgeLabel>
 					</BadgeRow>
 					<BadgeRow>
-						<Hint>
-							No. of people who contribute
-						</Hint>
+						<Hint>No. of people who contribute</Hint>
 					</BadgeRow>
 				</ContributorBadge>
 				<Spacer />
-				<JoinButton variant='secondary' to={`/request/${props.requestID}`}>
+				<JoinButton variant="secondary" to={`/request/${props.requestID}`}>
 					Join
 				</JoinButton>
 			</Footer>
