@@ -29,8 +29,7 @@ const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? "#EDFBF8" : "#EAF2FF")};
 	opacity: 0.8;
 	border-radius: 8px;
-	padding: ${(props) => props.theme.spacing(3)}
-		${(props) => props.theme.spacing(3.5)};
+	padding: ${(props) => props.theme.spacing(3)} ${(props) => props.theme.spacing(3.5)};
 	margin-bottom: ${(props) => props.theme.spacing(2)};
 `;
 
