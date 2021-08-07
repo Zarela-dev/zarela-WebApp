@@ -200,7 +200,6 @@ const RequestFilesTable = ({
 	changeAll,
 	signalDownloadHandler,
 }) => {
-	const [expandedAddress, setExpandedAddress] = useState(Object.keys(data)[0] || 0)
 	return (
 		<Table>
 			<Row>
@@ -250,7 +249,7 @@ const RequestFilesTable = ({
 						</CopyableText>
 					</CellWrapper>
 					<CellWrapper flex={1}>
-						{expandedAddress === reqAddress ? (
+						{true ? (
 							<FilesListWrapper>
 								<FilesTableHeader>
 									<FilesTableHeaderCol flex={3}>

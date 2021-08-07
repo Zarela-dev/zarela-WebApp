@@ -24,6 +24,9 @@ import axios from 'axios';
 import { Buffer } from 'buffer';
 import fileType from 'file-type';
 import { useWeb3React } from '@web3-react/core';
+import caretDownIcon from '../assets/icons/caret-down.svg';
+import caretUpIcon from '../assets/icons/caret-up.svg';
+import fulfilledIcon from '../assets/icons/check-green.svg';
 
 const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
@@ -84,7 +87,7 @@ const Title = styled(Typography)`
 `;
 
 const TotalBadge = styled.div`
-	border: 2px solid ${props => props.theme.primary};
+	border: 2px solid ${(props) => props.theme.primary};
 	background: transparent;
 	min-width: 32px;
 	height: 32px;
@@ -95,7 +98,11 @@ const TotalBadge = styled.div`
 	font-weight: bold;
 	font-size: 15px;
 	line-height: 18px;
-	color: ${props => props.theme.primary};
+	color: ${(props) => props.theme.primary};
+`;
+
+const ApprovedBadge = styled.img`
+	width: 36px;
 `;
 
 const Divider = styled.div`
@@ -137,6 +144,11 @@ const EqualSign = styled(BiobitToDollarValue)`
 	margin: 0 5px;
 `;
 
+const ExpandToggle = styled.img`
+	width: 24px;
+	margin-left: ${(props) => props.theme.spacing(1.5)};
+`;
+
 const RequestListItem = ({
 	showContributions,
 	total,
@@ -145,9 +157,11 @@ const RequestListItem = ({
 	tokenPay,
 	contributors,
 	handleConfirm,
+	fulfilled,
 }) => {
 	const [isOpen, setOpen] = useState(false);
 	const [unapprovedCount, setUnapprovedCount] = useState(0);
+	const [isFulfilled, setFulfilled] = useState(false);
 	const { appState } = useContext(mainContext);
 	const [formattedData, setFormattedData] = useState({});
 	const [selected, setSelected] = useState([]);
@@ -264,7 +278,10 @@ const RequestListItem = ({
 								let pairs = [];
 
 								// count all the unapproved files
-								setUnapprovedCount(status.filter(item => Boolean(item) === false).length);
+								setUnapprovedCount(
+									status.filter((item) => Boolean(item) === false).length
+								);
+
 								addresses.forEach((address, fileIndex) => {
 									pairs.push({
 										file: files[fileIndex],
@@ -344,7 +361,12 @@ const RequestListItem = ({
 					</CustomContributeBadge>
 
 					<Divider />
-					<TotalBadge>{unapprovedCount}</TotalBadge>
+					{fulfilled ? (
+						<ApprovedBadge src={fulfilledIcon} />
+					) : (
+						<TotalBadge>{unapprovedCount}</TotalBadge>
+					)}
+					<ExpandToggle src={!isOpen ? caretDownIcon : caretUpIcon} />
 				</DetailsColumn>
 			</Header>
 			{showContributions && isOpen ? (

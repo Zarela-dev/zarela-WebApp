@@ -140,6 +140,7 @@ const Inbox = () => {
 								tokenPay={convertToBiobit(item.tokenPay)}
 								total={item.totalContributedCount}
 								contributors={`${item.totalContributed}/${item.totalContributors}`}
+								fulfilled={+item.totalContributed === +item.totalContributors}
 								handleConfirm={handleConfirm}
 							/>
 						))
