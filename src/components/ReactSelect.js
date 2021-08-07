@@ -34,11 +34,6 @@ const StyledSelect = styled(Select)`
 		border: none !important;
 		outline: none;
 	}
-
-	.Select__placeholder{
-		padding: 0 7px;
-	}
-
 	.Select__indicator-separator {
 		display: none;
 	}
@@ -66,7 +61,7 @@ const StyledSelect = styled(Select)`
 		z-index: 2;
 		border: none !important;
 		box-shadow: none;
-		padding: 0 7px;
+		padding: 0 5px;
 	}
 	.Select__menu-list {
 		width: 100%;
@@ -115,12 +110,12 @@ const customStyles = {
 		flexWrap: 'wrap',
 		justifyContent: 'space-between',
 		border: 'none',
+		padding: '0 5px',
 	}),
 	menu: (provided, state) => ({
 		...provided,
 		position: 'absolute',
-		bottom: '10px',
-		top: 'unset',
+		top: '30px',
 	}),
 };
 
