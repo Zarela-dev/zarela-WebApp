@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import nextIcon from '../../assets/icons/next.svg';
 import prevIcon from '../../assets/icons/prev.svg';
 import { usePagination, DOTS } from './../../hooks/usePagination';
@@ -71,17 +70,18 @@ const Pagination = (props) => {
 	let lastPage = paginationRange[paginationRange.length - 1];
 	return (
 		<Wrapper>
-			<ArrowButtonPrev
-				disabled={currentPage === 1}
-				onClick={onPrevious}
-			>
+			<ArrowButtonPrev disabled={currentPage === 1} onClick={onPrevious}>
 				<Icon src={prevIcon} />
 			</ArrowButtonPrev>
-			{paginationRange.map((pageNumber) => {
+			{paginationRange.map((pageNumber, index) => {
+				if (pageNumber === DOTS) {
+					return <Button>&#8230;</Button>;
+				}
 				return (
 					<Button
 						active={pageNumber === currentPage && true}
 						onClick={() => onPageChange(pageNumber)}
+						key={index}
 					>
 						{pageNumber}
 					</Button>

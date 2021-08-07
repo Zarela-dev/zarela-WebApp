@@ -1,13 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { mainContext } from '../../state';
-import {
-	Title,
-	TokenList,
-	TokenIcon,
-	TokenName,
-	Token,
-} from './WalletDeposit/DepositChoices';
+import { Title, TokenList, TokenIcon, TokenName, Token } from './WalletDeposit/DepositChoices';
 import { Content, Row, Column } from './WalletDeposit/Layout';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import etherIcon from '../../assets/icons/ether-black.png';
@@ -127,6 +121,7 @@ const WalletSendAssets = (mobile) => {
 						label={"Recipient's Address"}
 						placeholder={"Please enter the Recipient's address"}
 						adornment={'Paste'} // #todo
+
 						onChange={(e) => formik.setFieldValue('address', e.target.value)}
 						name="address"
 						value={formik.values.address}

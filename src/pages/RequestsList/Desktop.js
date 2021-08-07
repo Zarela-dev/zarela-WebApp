@@ -4,8 +4,6 @@ import styled from 'styled-components';
 import TokenInfoSidebar from '../../components/Sidebar/TokenInfo';
 import TokenStatsSidebar from '../../components/Sidebar/TokenStats';
 import Pagination from '../../components/Pagination';
-// import Pagination from '../../hooks/Pagination';
-import { usePagination } from '../../hooks/usePagination';
 import maxWidthWrapper from '../../components/Elements/MaxWidth';
 import { timeSince, convertToBiobit } from '../../utils';
 import homepageBg from '../../assets/home-bg.jpg';
