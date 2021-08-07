@@ -24,9 +24,11 @@
 		"titlebar",
 		"toastify",
 		"tokentx",
+		"twofish",
 		"unstaged",
 		"wallet",
-		"zpaper"
+		"zpaper",
+		"zrng"
 	],
 	"compile-hero.disable-compile-files-on-did-save-code": false
 }

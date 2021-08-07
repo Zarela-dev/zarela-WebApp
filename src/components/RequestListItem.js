@@ -24,8 +24,8 @@ import axios from 'axios';
 import { Buffer } from 'buffer';
 import fileType from 'file-type';
 import { useWeb3React } from '@web3-react/core';
-import caretDownIcon from '../assets/icons/caret-down.svg';
 import caretUpIcon from '../assets/icons/caret-up.svg';
+import caretDownIcon from '../assets/icons/caret-down.svg';
 import fulfilledIcon from '../assets/icons/check-green.svg';
 import _ from 'lodash';
 
@@ -288,6 +288,19 @@ const RequestListItem = ({
 		axios
 			.get(`${process.env.REACT_APP_IPFS_LINK + fileHash}`)
 			.then((fileRes) => {
+				// window.ethereum
+				// 	.request({
+				// 		method: 'eth_decrypt',
+				// 		params: [encryptedAesKey, account],
+				// 	})
+				// 	.then((decryptedMessage) => {
+				// 		console.log('AES_KEY', AES_KEY);
+				// 		console.log('decryptedMessage', decryptedMessage);
+				// 	})
+				// 	.catch(function (error) {
+				// 		console.error(error);
+				// 	});
+
 				window.ethereum
 					.request({
 						method: 'eth_decrypt',

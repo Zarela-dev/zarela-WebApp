@@ -6,10 +6,11 @@ import { mainContext } from '../../state';
 import { convertToBiobit } from '../../utils';
 import * as ethUtil from 'ethereumjs-util';
 import { encrypt } from 'eth-sig-util';
-import { toast } from '../../utils';
+import { toast,ZRNG } from '../../utils';
 import { useWeb3React } from '@web3-react/core';
 import Mobile from './Mobile';
 import Desktop from './Desktop';
+import { twofish } from 'twofish';
 
 const RequestDetailsPage = () => {
 	const { id } = useParams();
@@ -45,34 +46,42 @@ const RequestDetailsPage = () => {
 						reader.onloadend = async () => {
 							const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
 							const buff = Buffer(reader.result); // Convert data into buffer
-							// encrypt
+							const AES_IV = ZRNG();
+							const AES_KEY = ZRNG();
+
+							// file encryption
+							var twF = twofish(AES_IV),
+								encryptedFile = twF.encryptCBC(AES_KEY, buff);
+
 							try {
-								const encryptedMessage = ethUtil.bufferToHex(
+								// AES key encryption
+								const encryptedAesKey = ethUtil.bufferToHex(
 									Buffer.from(
 										JSON.stringify(
 											encrypt(
 												request.encryptionPublicKey,
-												{ data: buff.toString('base64') },
+												{ data: AES_KEY.toString() },
 												'x25519-xsalsa20-poly1305'
 											)
 										),
 										'utf8'
 									)
 								);
+
 								setDialogMessage('uploading to ipfs');
-								const ipfsResponse = await ipfs.add(encryptedMessage);
+								const ipfsResponse = await ipfs.add(encryptedFile);
 
 								let url = `${process.env.REACT_APP_IPFS_LINK + ipfsResponse.path}`;
 								console.log(`Document Of Conditions --> ${url}`);
 
-								// const doc = document.getElementById("_White_Paper");
+								// // const doc = document.getElementById("_White_Paper");
 								setDialogMessage('awaiting confirmation');
 								appState.contract.methods
 									.contribute(
 										request.requestID,
 										request.requesterAddress,
 										ipfsResponse.path,
-										'x' // AesEncryption key
+										encryptedAesKey
 									)
 									.send(
 										{
