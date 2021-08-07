@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { SmallCheckbox } from './Elements/Checkbox';
 import downloadIcon from '../assets/icons/download.svg';
@@ -140,7 +140,7 @@ const FileItemRow = styled.div`
 
 const ConfirmedIcon = styled.img`
 	width: 24px;
-	margin-right: ${(props) => props.theme.spacing(1.5)};
+	margin-right: ${(props) => (props.noMargin ? 0 : props.theme.spacing(1.5))};
 `;
 
 const FileCheckbox = styled(SmallCheckbox)`
@@ -197,6 +197,7 @@ const RequestFilesTable = ({
 	onChange,
 	onBulkChange,
 	isBulkChecked,
+	isBulkApproved,
 	isAllChecked,
 	changeAll,
 	signalDownloadHandler,
@@ -229,16 +230,20 @@ const RequestFilesTable = ({
 				<Row key={contributorAddress}>
 					<CellWrapper>
 						<Cell>
-							<CustomCheckbox
-								checked={isBulkChecked(contributorAddress)}
-								onChange={(e) => {
-									if (e.target.checked === true) {
-										onBulkChange('check', contributorAddress);
-									} else {
-										onBulkChange('uncheck', contributorAddress);
-									}
-								}}
-							/>
+							{isBulkApproved(contributorAddress) ? (
+								<ConfirmedIcon src={confirmIcon} noMargin />
+							) : (
+								<CustomCheckbox
+									checked={isBulkChecked(contributorAddress)}
+									onChange={(e) => {
+										if (e.target.checked === true) {
+											onBulkChange('check', contributorAddress);
+										} else {
+											onBulkChange('uncheck', contributorAddress);
+										}
+									}}
+								/>
+							)}
 						</Cell>
 					</CellWrapper>
 					<CellWrapper>

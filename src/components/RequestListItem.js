@@ -192,6 +192,23 @@ const RequestListItem = ({
 		return chosen.length === total.length;
 	};
 
+	const isBulkApproved = (contributorAddress) => {
+		const originalIndexes = [];
+		const indexesAlreadyConfirmed = [];
+
+		formattedData[contributorAddress]?.forEach(({ originalIndex, status }) => {
+			originalIndexes.push(originalIndex);
+			if (Boolean(status) === true) {
+				indexesAlreadyConfirmed.push(originalIndex);
+			}
+		});
+		debugger;
+		if (_.isEqual(indexesAlreadyConfirmed.sort(), originalIndexes.sort())) {
+			return true;
+		}
+		return false;
+	};
+
 	const isBulkChecked = (contributorAddress) => {
 		const originalIndexes = [];
 		const selectedIndexes = [];
@@ -202,12 +219,17 @@ const RequestListItem = ({
 			if (selected.includes(originalIndex)) {
 				selectedIndexes.push(originalIndex);
 			}
-			if (Boolean(status)) {
+			if (Boolean(status) === true) {
 				indexesAlreadyConfirmed.push(originalIndex);
 			}
 		});
 
-		if (_.isEqual([...selectedIndexes, ...indexesAlreadyConfirmed].sort(), originalIndexes)) {
+		if (
+			_.isEqual(
+				[...selectedIndexes, ...indexesAlreadyConfirmed].sort(),
+				originalIndexes.sort()
+			)
+		) {
 			return true;
 		}
 		return false;
@@ -410,6 +432,7 @@ const RequestListItem = ({
 								onChange={onChange}
 								onBulkChange={onBulkChange}
 								isBulkChecked={isBulkChecked}
+								isBulkApproved={isBulkApproved}
 								isAllChecked={isAllChecked}
 								changeAll={changeAll}
 							/>
