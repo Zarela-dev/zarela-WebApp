@@ -35,6 +35,10 @@ const StyledSelect = styled(Select)`
 		outline: none;
 	}
 
+	.Select__placeholder{
+		padding: 0 7px;
+	}
+
 	.Select__indicator-separator {
 		display: none;
 	}
@@ -48,7 +52,7 @@ const StyledSelect = styled(Select)`
 	}
 	.Select__menu::before {
 		content: '';
-		width: 90%;
+		width: 480px;
 		height: 2px;
 		background: #9090904d;
 		margin: auto;
@@ -62,6 +66,7 @@ const StyledSelect = styled(Select)`
 		z-index: 2;
 		border: none !important;
 		box-shadow: none;
+		padding: 0 7px;
 	}
 	.Select__menu-list {
 		width: 100%;
