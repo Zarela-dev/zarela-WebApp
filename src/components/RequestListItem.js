@@ -27,6 +27,7 @@ import { useWeb3React } from '@web3-react/core';
 import caretDownIcon from '../assets/icons/caret-down.svg';
 import caretUpIcon from '../assets/icons/caret-up.svg';
 import fulfilledIcon from '../assets/icons/check-green.svg';
+import _ from 'lodash';
 
 const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
@@ -167,12 +168,6 @@ const RequestListItem = ({
 	const [selected, setSelected] = useState([]);
 	const { account } = useWeb3React();
 
-	const isAllChecked = () => {
-		const chosen = Object.values(selected).reduce((acc, curr) => acc.concat(...curr), []);
-		const total = Object.values(formattedData).reduce((acc, curr) => acc.concat(...curr), []);
-		return chosen.length === total.length;
-	};
-
 	const changeAll = (type) => {
 		const allSelected = {};
 		Object.keys(formattedData).forEach((address) => {
@@ -191,20 +186,55 @@ const RequestListItem = ({
 				return result;
 			});
 	};
+	const isAllChecked = () => {
+		const chosen = Object.values(selected).reduce((acc, curr) => acc.concat(...curr), []);
+		const total = Object.values(formattedData).reduce((acc, curr) => acc.concat(...curr), []);
+		return chosen.length === total.length;
+	};
 
-	const onBulkChange = (type, address) => {
-		if (type === 'check')
-			setSelected((values) => ({
-				...values,
-				[address]: formattedData[address].map((item) => item.ipfsHash),
-			}));
+	const isBulkChecked = (contributorAddress) => {
+		const originalIndexes = [];
+		const selectedIndexes = [];
+		const indexesAlreadyConfirmed = [];
+
+		formattedData[contributorAddress].forEach(({ originalIndex, status }) => {
+			originalIndexes.push(originalIndex);
+			if (selected.includes(originalIndex)) {
+				selectedIndexes.push(originalIndex);
+			}
+			if (Boolean(status)) {
+				indexesAlreadyConfirmed.push(originalIndex);
+			}
+		});
+
+		if (_.isEqual([...selectedIndexes, ...indexesAlreadyConfirmed].sort(), originalIndexes)) {
+			return true;
+		}
+		return false;
+	};
+
+	const onBulkChange = (type, contributorAddress) => {
+		const originalIndexes = [];
+		const indexesAlreadyConfirmed = [];
+
+		formattedData[contributorAddress].forEach(({ originalIndex, status }) => {
+			originalIndexes.push(originalIndex);
+			if (Boolean(status)) {
+				indexesAlreadyConfirmed.push(originalIndex);
+			}
+		});
+
+		const selectableIndexes = originalIndexes.filter(
+			(index) => !indexesAlreadyConfirmed.includes(index)
+		);
+
+		if (type === 'check') {
+			setSelected((values) => [...values, ...selectableIndexes]);
+		}
 		if (type === 'uncheck')
-			setSelected((values) => {
-				return {
-					...values,
-					[address]: [],
-				};
-			});
+			setSelected((values) =>
+				values.filter((selectedItem) => !originalIndexes.includes(selectedItem))
+			);
 	};
 
 	const onChange = (type, originalIndex) => {
@@ -379,6 +409,7 @@ const RequestListItem = ({
 								selected={selected}
 								onChange={onChange}
 								onBulkChange={onBulkChange}
+								isBulkChecked={isBulkChecked}
 								isAllChecked={isAllChecked}
 								changeAll={changeAll}
 							/>

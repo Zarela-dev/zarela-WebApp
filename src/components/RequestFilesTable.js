@@ -196,6 +196,7 @@ const RequestFilesTable = ({
 	selected,
 	onChange,
 	onBulkChange,
+	isBulkChecked,
 	isAllChecked,
 	changeAll,
 	signalDownloadHandler,
@@ -224,27 +225,27 @@ const RequestFilesTable = ({
 					<Cell>Uploaded files</Cell>
 				</CellWrapper>
 			</Row>
-			{Object.keys(data).map((reqAddress, index) => (
-				<Row key={reqAddress}>
+			{Object.keys(data).map((contributorAddress, index) => (
+				<Row key={contributorAddress}>
 					<CellWrapper>
 						<Cell>
-							{/* <CustomCheckbox
-								checked={selected[reqAddress].length === data[reqAddress].length}
+							<CustomCheckbox
+								checked={isBulkChecked(contributorAddress)}
 								onChange={(e) => {
 									if (e.target.checked === true) {
-										onBulkChange('check', reqAddress);
+										onBulkChange('check', contributorAddress);
 									} else {
-										onBulkChange('uncheck', reqAddress);
+										onBulkChange('uncheck', contributorAddress);
 									}
 								}}
-							/> */}
+							/>
 						</Cell>
 					</CellWrapper>
 					<CellWrapper>
-						<CopyableText textToCopy={reqAddress}>
+						<CopyableText textToCopy={contributorAddress}>
 							<Cell pointer>
 								<PublicKeyIcon src={publicKeyIcon} />
-								{reqAddress}
+								{contributorAddress}
 							</Cell>
 						</CopyableText>
 					</CellWrapper>
@@ -253,7 +254,7 @@ const RequestFilesTable = ({
 							<FilesListWrapper>
 								<FilesTableHeader>
 									<FilesTableHeaderCol flex={3}>
-										<FilesTableHeaderTitle>{`There are ${data[reqAddress].length} files available`}</FilesTableHeaderTitle>
+										<FilesTableHeaderTitle>{`There are ${data[contributorAddress].length} files available`}</FilesTableHeaderTitle>
 									</FilesTableHeaderCol>
 									<Spacer />
 									<FilesTableHeaderCol flex={'1 0 62px'}>
@@ -261,7 +262,7 @@ const RequestFilesTable = ({
 									</FilesTableHeaderCol>
 								</FilesTableHeader>
 								<FilesList>
-									{data[reqAddress].map(
+									{data[contributorAddress].map(
 										(
 											{ ipfsHash, status, originalIndex, timestamp },
 											fileIndex
@@ -325,7 +326,7 @@ const RequestFilesTable = ({
 							</FilesListWrapper>
 						) : (
 							<FilesListWrapper>
-								there are {data[reqAddress].length} files available
+								there are {data[contributorAddress].length} files available
 							</FilesListWrapper>
 						)}
 					</CellWrapper>
