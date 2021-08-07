@@ -110,6 +110,7 @@ const TextField = forwardRef(
 			actions,
 			isActionTypeIcon,
 			adornment,
+			adornmentOnClick,
 			...rest
 		},
 		ref
@@ -132,7 +133,7 @@ const TextField = forwardRef(
 					isActionTypeIcon={isActionTypeIcon}
 				>
 					{adornment ? (
-						<Adornment colored={coloredAdornment}>{adornment}</Adornment>
+						<Adornment colored={coloredAdornment} onClick={adornmentOnClick}>{adornment}</Adornment>
 					) : null}
 					{actions
 						? actions.map((action) => {

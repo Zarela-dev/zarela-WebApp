@@ -78,6 +78,10 @@ const Pagination = (props) => {
 				<Icon src={prevIcon} />
 			</ArrowButtonPrev>
 			{paginationRange.map((pageNumber) => {
+				     if (pageNumber === DOTS) {
+							return <Button className="pagination-item dots">&#8230;</Button>;
+						}
+
 				return (
 					<Button
 						active={pageNumber === currentPage && true}
