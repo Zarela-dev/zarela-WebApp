@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import { SmallCheckbox } from './Elements/Checkbox';
 import downloadIcon from '../assets/icons/download.svg';
@@ -6,6 +6,7 @@ import { Spacer } from './Elements/Spacer';
 import { Scrollbar } from './Elements/Scrollbar';
 import { timeSince, CopyableText } from '../utils';
 import publicKeyIcon from '../assets/icons/public-key.svg';
+import confirmIcon from '../assets/icons/confirmed.svg';
 
 const Table = styled.div`
 	display: flex;
@@ -15,7 +16,7 @@ const Table = styled.div`
 `;
 
 const CellWrapper = styled.div`
-	flex: 1;
+	flex: ${(props) => props.flex || 1};
 	padding: 5px;
 	background: white;
 
@@ -37,6 +38,10 @@ const Row = styled.section`
 
 	${CellWrapper}:nth-of-type(2) {
 		flex: 0 0 420px;
+	}
+
+	${CellWrapper}:nth-of-type(3) {
+		flex: 1 0 auto;
 	}
 `;
 
@@ -93,25 +98,82 @@ const FilesList = styled.div`
 	${Scrollbar};
 `;
 
-const FileItem = styled.div`
+const FileItemCol = styled.div`
 	flex: 1;
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: center;
 	font-size: 12px;
 	line-height: 20px;
-	color: #121213;
+	color: ${(props) => props.theme.textPrimary};
+
+	&:nth-child(1) {
+		flex: 1 0 250px;
+	}
+	&:nth-child(2) {
+		position: relative;
+		flex: 0 0 auto;
+		margin-right: ${(props) => props.theme.spacing(2)};
+		&::after {
+			content: '';
+			display: block;
+			position: relative;
+			top: 0;
+			height: 60px;
+			width: 1px;
+			border-right: 1px solid rgba(60, 135, 170, 0.2);
+		}
+	}
+`;
+
+const FileItemRow = styled.div`
+	display: flex;
+	width: 100%;
+	flex-wrap: nowrap;
+	align-items: center;
+	height: 40px;
 
 	&:not(:last-child) {
 		margin-bottom: ${(props) => props.theme.spacing(2)};
 	}
 `;
 
+const ConfirmedIcon = styled.img`
+	width: 24px;
+	margin-right: ${(props) => props.theme.spacing(1.5)};
+`;
+
 const FileCheckbox = styled(SmallCheckbox)`
-	margin-right: ${(props) => props.theme.spacing(1)};
+	width: 24px;
+	margin-right: ${(props) => props.theme.spacing(1.5)};
+`;
+
+const FilesTableRow = styled.section`
+	display: flex;
+	flex-direction: row;
+`;
+
+const FilesTableHeader = styled(FilesTableRow)`
+	border-bottom: 1px solid rgba(60, 135, 170, 0.2);
+	margin-bottom: ${(props) => props.theme.spacing(2)};
+`;
+
+const FilesTableHeaderCol = styled.div`
+	display: flex;
+	align-items: center;
+	flex: ${(props) => props.flex || 1};
+`;
+
+const FilesTableHeaderTitle = styled.div`
+	font-size: 14px;
+	line-height: 20px;
+	margin-bottom: ${(props) => props.theme.spacing(1)};
+	color: ${(props) => props.theme.textPrimary};
 `;
 
 const FileName = styled.div`
+	max-width: 248px;
+	word-break: break-word;
 	margin-right: ${(props) => props.theme.spacing(2)};
 `;
 
@@ -122,10 +184,12 @@ const DownloadButtonImage = styled.img`
 const DownloadButton = styled.button`
 	border: none;
 	background: white;
-	margin-right: ${(props) => props.theme.spacing(2)};
+	margin-right: ${(props) => props.theme.spacing(1.5)};
 `;
 
-const Timestamp = styled.div``;
+const Timestamp = styled.div`
+	white-space: nowrap;
+`;
 
 const RequestFilesTable = ({
 	data,
@@ -136,6 +200,7 @@ const RequestFilesTable = ({
 	changeAll,
 	signalDownloadHandler,
 }) => {
+	const [expandedAddress, setExpandedAddress] = useState(Object.keys(data)[0] || 0)
 	return (
 		<Table>
 			<Row>
@@ -184,47 +249,86 @@ const RequestFilesTable = ({
 							</Cell>
 						</CopyableText>
 					</CellWrapper>
-					<CellWrapper>
-						<FilesListWrapper>
-							<FilesCount>{`${data[reqAddress].length} files`}</FilesCount>
-							<FilesList>
-								{data[reqAddress].map(
-									({ ipfsHash, status, originalIndex, timestamp }, fileIndex) => {
-										return (
-											<FileItem key={fileIndex}>
-												{status === true ? (
-													'confirmed '
-												) : (
-													<FileCheckbox
-														checked={selected.includes(originalIndex)}
-														onChange={(e) => {
-															if (e.target.checked === true) {
-																onChange('check', originalIndex);
-															} else {
-																onChange('uncheck', originalIndex);
+					<CellWrapper flex={1}>
+						{expandedAddress === reqAddress ? (
+							<FilesListWrapper>
+								<FilesTableHeader>
+									<FilesTableHeaderCol flex={3}>
+										<FilesTableHeaderTitle>{`There are ${data[reqAddress].length} files available`}</FilesTableHeaderTitle>
+									</FilesTableHeaderCol>
+									<Spacer />
+									<FilesTableHeaderCol flex={'1 0 62px'}>
+										<FilesTableHeaderTitle>Date</FilesTableHeaderTitle>
+									</FilesTableHeaderCol>
+								</FilesTableHeader>
+								<FilesList>
+									{data[reqAddress].map(
+										(
+											{ ipfsHash, status, originalIndex, timestamp },
+											fileIndex
+										) => {
+											return (
+												<FileItemRow>
+													<FileItemCol>
+														{status === true ? (
+															<ConfirmedIcon src={confirmIcon} />
+														) : (
+															<FileCheckbox
+																checked={selected.includes(
+																	originalIndex
+																)}
+																onChange={(e) => {
+																	if (e.target.checked === true) {
+																		onChange(
+																			'check',
+																			originalIndex
+																		);
+																	} else {
+																		onChange(
+																			'uncheck',
+																			originalIndex
+																		);
+																	}
+																}}
+															/>
+														)}
+														<FileName>
+															{
+																// file.substr(0, 4) + '...' + file.substr(file.length - 4) + `  (File #${fileIndex + 1})`
+																fileIndex +
+																	'.' +
+																	ipfsHash +
+																	`  (File #${fileIndex + 1})`
 															}
-														}}
-													/>
-												)}
-												<FileName>
-													{
-														// file.substr(0, 4) + '...' + file.substr(file.length - 4) + `  (File #${fileIndex + 1})`
-														ipfsHash + `  (File #${fileIndex + 1})`
-													}
-												</FileName>
-												<Timestamp>{`${timeSince(timestamp)}`}</Timestamp>
-												<Spacer />
-												<DownloadButton
-													onClick={() => signalDownloadHandler(ipfsHash)}
-												>
-													<DownloadButtonImage src={downloadIcon} />
-												</DownloadButton>
-											</FileItem>
-										);
-									}
-								)}
-							</FilesList>
-						</FilesListWrapper>
+														</FileName>
+													</FileItemCol>
+													<FileItemCol>
+														<DownloadButton
+															onClick={() =>
+																signalDownloadHandler(ipfsHash)
+															}
+														>
+															<DownloadButtonImage
+																src={downloadIcon}
+															/>
+														</DownloadButton>
+													</FileItemCol>
+													<FileItemCol>
+														<Timestamp>{`${timeSince(
+															timestamp
+														)}`}</Timestamp>
+													</FileItemCol>
+												</FileItemRow>
+											);
+										}
+									)}
+								</FilesList>
+							</FilesListWrapper>
+						) : (
+							<FilesListWrapper>
+								there are {data[reqAddress].length} files available
+							</FilesListWrapper>
+						)}
 					</CellWrapper>
 				</Row>
 			))}

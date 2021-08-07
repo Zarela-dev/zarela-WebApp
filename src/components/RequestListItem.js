@@ -48,6 +48,8 @@ const DetailsColumn = styled.div`
 	display: flex;
 	flex: 4;
 	justify-content: flex-end;
+	height: 35px;
+	align-items: center;
 
 	@media (max-width: 768px) {
 		align-items: center;
@@ -82,23 +84,24 @@ const Title = styled(Typography)`
 `;
 
 const TotalBadge = styled.div`
-	background: #2eeca8;
+	border: 2px solid ${props => props.theme.primary};
+	background: transparent;
 	min-width: 32px;
 	height: 32px;
-	padding: ${(props) => props.theme.spacing(0.8)} ${(props) => props.theme.spacing(0.6)};
-	border-radius: 32px;
+	padding: ${(props) => props.theme.spacing(0.5)} ${(props) => props.theme.spacing(0.6)};
+	border-radius: 5px;
 
 	text-align: center;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: 15px;
 	line-height: 18px;
-	color: white;
+	color: ${props => props.theme.primary};
 `;
 
 const Divider = styled.div`
 	width: 1px;
 	background: #3c87aa;
-	min-height: 37px;
+	height: 100%;
 	margin: 0 ${(props) => props.theme.spacing(1)};
 `;
 
@@ -144,6 +147,7 @@ const RequestListItem = ({
 	handleConfirm,
 }) => {
 	const [isOpen, setOpen] = useState(false);
+	const [unapprovedCount, setUnapprovedCount] = useState(0);
 	const { appState } = useContext(mainContext);
 	const [formattedData, setFormattedData] = useState({});
 	const [selected, setSelected] = useState([]);
@@ -259,6 +263,8 @@ const RequestListItem = ({
 								let uniqueAddresses = [...new Set(addresses)];
 								let pairs = [];
 
+								// count all the unapproved files
+								setUnapprovedCount(status.filter(item => Boolean(item) === false).length);
 								addresses.forEach((address, fileIndex) => {
 									pairs.push({
 										file: files[fileIndex],
@@ -338,7 +344,7 @@ const RequestListItem = ({
 					</CustomContributeBadge>
 
 					<Divider />
-					<TotalBadge>{total}</TotalBadge>
+					<TotalBadge>{unapprovedCount}</TotalBadge>
 				</DetailsColumn>
 			</Header>
 			{showContributions && isOpen ? (
