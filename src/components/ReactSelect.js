@@ -1,17 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Select from 'react-select';
 import styled from 'styled-components';
 
-
-const Wrapper = styled.div`
-
-`;
+const Wrapper = styled.div``;
 
 const StyledSelect = styled(Select)`
 	.Select__control {
 		height: fit-content;
 		width: 100%;
-
 		border-radius: 4px;
 		cursor: pointer;
 	}
@@ -30,7 +26,7 @@ const StyledSelect = styled(Select)`
 		border: none;
 		outline: none;
 	}
-	.Select__control:focus{
+	.Select__control:focus {
 		border: none !important;
 	}
 
@@ -43,20 +39,29 @@ const StyledSelect = styled(Select)`
 		display: none;
 	}
 
-	.Select__multi-value__remove{
-		color: #7246D0;
+	.Select__multi-value__remove {
+		color: #7246d0;
 		&:hover {
-			color: #7246D0;
+			color: #7246d0;
 			background-color: transparent;
 		}
 	}
+	.Select__menu::before {
+		content: '';
+		width: 90%;
+		height: 2px;
+		background: #9090904d;
+		margin: auto;
+	}
+
 	.Select__menu {
 		color: #3c3d3e;
 		display: flex;
 		flex-direction: flex-row;
 		flex-wrap: wrap;
 		z-index: 2;
-
+		border: none !important;
+		box-shadow: none;
 	}
 	.Select__menu-list {
 		width: 100%;
@@ -85,14 +90,16 @@ const StyledSelect = styled(Select)`
 `;
 
 const customStyles = {
-
-	container: (provided , state) => ({
+	container: (provided, state) => ({
 		...provided,
+		
 		height: 'fit-content',
 		border: '1px solid #9090904D',
-		borderRadius: '4px'
+		borderRadius: '4px',
+		position: 'relative',
+		height: state.selectProps.isMenuOpen && '180px',
 	}),
-  control: () => ({
+	control: () => ({
 		border: 'none',
 		alignItems: 'center',
 		boxAlign: 'center',
@@ -103,15 +110,18 @@ const customStyles = {
 		flexWrap: 'wrap',
 		justifyContent: 'space-between',
 		border: 'none',
-
-  }),
-  menu: (provided, state) => ({
-    ...provided,
+	}),
+	menu: (provided, state) => ({
+		...provided,
 		position: 'absolute',
-  }),
-}
+		bottom: '10px',
+		top: 'unset',
+	}),
+};
 
 const ReactSelect = ({ options, onChange, isMulti, menuIsOpen, value }, props) => {
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
+
 	return (
 		<Wrapper>
 			<StyledSelect
@@ -119,10 +129,13 @@ const ReactSelect = ({ options, onChange, isMulti, menuIsOpen, value }, props) =
 				classNamePrefix="Select"
 				options={options}
 				onChange={onChange}
-				styles={customStyles }
+				styles={customStyles}
 				isMulti={isMulti}
 				autoFocus
 				menuIsOpen={menuIsOpen}
+				onMenuOpen={() => setIsMenuOpen(true)}
+				onMenuClose={() => setIsMenuOpen(false)}
+				isMenuOpen={isMenuOpen}
 				value={value}
 			/>
 		</Wrapper>
