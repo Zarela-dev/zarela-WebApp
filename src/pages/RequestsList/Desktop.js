@@ -72,7 +72,7 @@ const RequestsListContentWrapper = styled.section`
 	padding: 0 ${(props) => props.theme.spacing(2)};
 `;
 
-let PageSize = 3;
+let PageSize = 2;
 
 const Desktop = ({
 	requests,
