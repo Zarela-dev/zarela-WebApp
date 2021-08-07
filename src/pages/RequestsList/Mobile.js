@@ -127,7 +127,7 @@ const App = ({ requests }) => {
               }
             </RequestsListContentWrapper>
           </RequestsListLayout>
-          <Pagination />
+        
         </RequestsListWrapper>
       </MobileLayout>
     </>
