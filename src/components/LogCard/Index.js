@@ -195,16 +195,29 @@ const SubHeaderRow = styled.div`
 	justify-content: flex-start;
 `; */
 
-const LogCard = ({ MyRequests, marketRequest, allApproved }) => {
+const LogCard = ({ data, MyRequests, marketRequest, allApproved }) => {
+	const {
+		requestID,
+		title,
+		description,
+		requesterAddress,
+		tokenPay,
+		totalContributors,
+		totalContributed,
+		whitePaper,
+		timestamp,
+		totalContributedCount,
+	} = data;
+
 	return (
 		<CompactRequestCard>
 			<Header>
 				<Column flex="0 0 80px" alignSelf="flex-start">
-					<RequestNumber>2556698</RequestNumber>
+					<RequestNumber>{requestID}</RequestNumber>
 				</Column>
 				<Column flex="1 1 530px">
 					<Row>
-						<Title>title goes here</Title>
+						<Title>{title}</Title>
 					</Row>
 					<Row>
 						<QuickReport bold>{`${3} files: `}</QuickReport>
@@ -215,8 +228,8 @@ const LogCard = ({ MyRequests, marketRequest, allApproved }) => {
 				<Column displayFlex>
 					<Row>
 						<BiobitIcon src={biobitIcon} />
-						<BiobitValue>12</BiobitValue>
-						<DollarValue>~ $21.33403</DollarValue>
+						<BiobitValue>{tokenPay}</BiobitValue>
+						<DollarValue>{`~ $${tokenPay}`}</DollarValue>
 					</Row>
 				</Column>
 				<VerticalDivider />
@@ -235,9 +248,7 @@ const LogCard = ({ MyRequests, marketRequest, allApproved }) => {
 						)}
 					</Row>
 				</Column>
-				<Column flex="0">
-					{true ? <CaretIcon src={caretDownIcon} /> : <CaretIcon src={caretUpIcon} />}
-				</Column>
+				<Column flex="0">{true ? <CaretIcon src={caretDownIcon} /> : <CaretIcon src={caretUpIcon} />}</Column>
 			</Header>
 			<Body>
 				<Table>
