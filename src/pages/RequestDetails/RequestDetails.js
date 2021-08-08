@@ -127,7 +127,7 @@ const RequestDetailsPage = () => {
 
 	useEffect(() => {
 		if (appState.contract !== null) {
-			appState.contract.methods.ord_file(id).call((error, result) => {
+			appState.contract.methods.orders(id).call((error, result) => {
 				if (!error) {
 					const requestTemplate = {
 						requestID: result[0],

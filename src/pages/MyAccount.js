@@ -108,7 +108,7 @@ const MyAccount = () => {
 
 							for (const currentRequest of myRequests) {
 								await appState.contract.methods
-									.ord_file(currentRequest)
+									.orders(currentRequest)
 									.call()
 									.then((result) => {
 										const requestTemplate = {

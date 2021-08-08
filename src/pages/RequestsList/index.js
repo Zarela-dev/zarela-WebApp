@@ -29,13 +29,13 @@ const RequestsList = () => {
 			});
 
 			for (let i = 0; i < requestsCount; i++) {
-				appState.contract.methods.Cat(i).call((error, result) => {
+				appState.contract.methods.Categories(i).call((error, result) => {
 					if (!error) {
-						let businessCategory = result[2];
-
-						if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY)
-							// only show zarela requests
-							appState.contract.methods.ord_file(i).call((error, result) => {
+						let categories = result[0];
+						let businessCategory = result[1];
+						
+						if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY) // only show zarela requests
+							appState.contract.methods.orders(i).call((error, result) => {
 								if (!error) {
 									const requestTemplate = {
 										requestID: result[0],
@@ -47,6 +47,7 @@ const RequestsList = () => {
 										totalContributed: +result[4] - +result[7],
 										whitePaper: result[5],
 										timestamp: result[9],
+										categories,
 										totalContributedCount: result[8],
 									};
 									setRequests((requests) => ({

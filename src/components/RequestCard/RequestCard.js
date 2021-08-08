@@ -54,7 +54,7 @@ const RequestCard = (props) => {
 						: props.description.substr(0, 405) + '...'}
 				</Typography>
 				<TagsWrapper>
-					{['hello', 'blockchain', 'hardness'].map((item, index) => {
+					{props.categories.split(',').map((item, index) => {
 						return <TagItem key={index}>#{item}</TagItem>;
 					})}
 				</TagsWrapper>

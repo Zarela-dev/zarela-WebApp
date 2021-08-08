@@ -148,7 +148,7 @@ const Log = () => {
 
 							for (const currentRequest of myContributions) {
 								await appState.contract.methods
-									.ord_file(currentRequest)
+									.orders(currentRequest)
 									.call()
 									.then((result) => {
 										const requestTemplate = {

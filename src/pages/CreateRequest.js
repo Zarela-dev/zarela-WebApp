@@ -56,12 +56,8 @@ const CreateRequest = () => {
 			terms: false,
 		},
 		validationSchema: yup.object().shape({
-			title: yup
-				.string(validationErrors.string('title'))
-				.required(validationErrors.required('title')),
-			desc: yup
-				.string(validationErrors.string('description'))
-				.required(validationErrors.required('description')),
+			title: yup.string(validationErrors.string('title')).required(validationErrors.required('title')),
+			desc: yup.string(validationErrors.string('description')).required(validationErrors.required('description')),
 			tokenPay: yup
 				.number()
 				.typeError(validationErrors.number('Allocated Biobits'))
@@ -70,19 +66,14 @@ const CreateRequest = () => {
 				.number()
 				.typeError(validationErrors.number('Contributors'))
 				.required(validationErrors.required('Contributors')),
-			category: yup
-				.array()
-				.min(1, validationErrors.required('category')),
+			category: yup.array().min(1, validationErrors.required('category')),
 			zpaper: yup.mixed(),
 			terms: yup.boolean().required(),
 		}),
 		onSubmit: (values) => {
 			console.log('values', values);
 			if (formik.isValid) {
-				if (
-					+values.tokenPay * +values.instanceCount >
-					+appState.biobitBalance / Math.pow(10, 9)
-				) {
+				if (+values.tokenPay * +values.instanceCount > +appState.biobitBalance / Math.pow(10, 9)) {
 					formik.setFieldError('tokenPay', validationErrors.notEnoughTokens);
 					formik.setSubmitting(false);
 				} else {
@@ -119,10 +110,7 @@ const CreateRequest = () => {
 											try {
 												const ipfsResponse = await ipfs.add(buf);
 												formik.setFieldValue('zpaper', ipfsResponse.path);
-												let url = `${
-													process.env.REACT_APP_IPFS_LINK +
-													ipfsResponse.path
-												}`;
+												let url = `${process.env.REACT_APP_IPFS_LINK + ipfsResponse.path}`;
 												console.log(`Document Of Conditions --> ${url}`);
 
 												setDialogMessage('awaiting confirmation');
@@ -133,28 +121,20 @@ const CreateRequest = () => {
 														ipfsResponse.path,
 														+tokenPay * Math.pow(10, 9),
 														instanceCount,
-														category.map(item => item.value).join(','),
-														encryptionPublicKey,
-														process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY
+														category.map((item) => item.value).join(','),
+														process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY,
+														encryptionPublicKey
 													)
 													.send(
 														{
 															from: account,
-															to: process.env
-																.REACT_APP_ZARELA_CONTRACT_ADDRESS,
-															gasPrice:
-																+appState.gas.average *
-																Math.pow(10, 8),
+															to: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS,
+															gasPrice: +appState.gas.average * Math.pow(10, 8),
 														},
 														(error, result) => {
 															if (!error) {
 																clearSubmitDialog();
-																toast(
-																	result,
-																	'success',
-																	true,
-																	result
-																);
+																toast(result, 'success', true, result);
 															} else {
 																clearSubmitDialog();
 																toast(error.message, 'error');
@@ -176,9 +156,7 @@ const CreateRequest = () => {
 																toastId: event.id,
 															}
 														);
-														history.push(
-															`/request/${event.returnValues[1]}`
-														);
+														history.push(`/request/${event.returnValues[1]}`);
 													})
 													.on('error', (error, receipt) => {
 														clearSubmitDialog();
@@ -195,9 +173,7 @@ const CreateRequest = () => {
 										if (error.code === 4001) {
 											// EIP-1193 userRejectedRequest error
 											clearSubmitDialog();
-											console.log(
-												"We can't encrypt anything without the key."
-											);
+											console.log("We can't encrypt anything without the key.");
 										} else {
 											console.error(error);
 										}
