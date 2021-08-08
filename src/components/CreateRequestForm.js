@@ -107,7 +107,10 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 							...selectedOption,
 							{ value: e.target.value, label: e.target.value },
 						]);
-						formik.setFieldValue('category', selectInputValue);
+						formik.setFieldValue('category', [
+							...selectedOption,
+							{ value: e.target.value, label: e.target.value },
+						]);
 					}
 				}}
 				isMulti
