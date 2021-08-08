@@ -59,7 +59,7 @@ export const configureFallbackWeb3 = async (dispatch) => {
 
 export const setTimers = (dispatch, contract) => {
 	if (contract) {
-		contract.methods.timer_24Hour().call((error, result) => {
+		contract.methods.countDown24Hours().call((error, result) => {
 			if (!error) {
 				dispatch({
 					type: actionTypes.SET_ZARELA_DAILY_GIFT,

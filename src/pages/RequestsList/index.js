@@ -20,7 +20,7 @@ const RequestsList = () => {
 	// pagination hook
 	useEffect(() => {
 		if (appState.contract !== null) {
-			appState.contract.methods.OrderSize().call((error, result) => {
+			appState.contract.methods.orderSize().call((error, result) => {
 				if (!error) {
 					setRequestsCount(result);
 				} else {
@@ -68,7 +68,7 @@ const RequestsList = () => {
 
 	useEffect(() => {
 		if (appState.contract) {
-			appState.contract.methods.today_contribute().call((error, result) => {
+			appState.contract.methods.todayContributionsCount().call((error, result) => {
 				if (!error) setDailyContributors(result);
 				else console.error(error.message);
 			});

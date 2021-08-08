@@ -127,7 +127,7 @@ const CreateRequest = () => {
 
 												setDialogMessage('awaiting confirmation');
 												appState.contract.methods
-													.SetOrderBoard(
+													.submitNewOrder(
 														title,
 														desc,
 														ipfsResponse.path,
