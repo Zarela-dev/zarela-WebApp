@@ -37,6 +37,9 @@ const StyledSelect = styled(Select)`
 	.Select__indicator-separator {
 		display: none;
 	}
+	.Select__value-container {
+		padding: 3px 4px;
+	}
 
 	.Select__multi-value__remove {
 		color: #7246d0;
@@ -47,10 +50,10 @@ const StyledSelect = styled(Select)`
 	}
 	.Select__menu::before {
 		content: '';
-		width: 480px;
-		height: 2px;
+		width: 490px;
+		height: 1px;
 		background: #9090904d;
-		margin: auto;
+		margin: 0 auto 5px auto;
 	}
 
 	.Select__menu {
@@ -61,7 +64,6 @@ const StyledSelect = styled(Select)`
 		z-index: 2;
 		border: none !important;
 		box-shadow: none;
-		padding: 0 5px;
 	}
 	.Select__menu-list {
 		width: 100%;
@@ -81,18 +83,35 @@ const StyledSelect = styled(Select)`
 		font-weight: 500;
 		color: #333333;
 	}
+	.Select__placeholder {
+		font-size: 12px;
+		font-weight: 500;
+		line-height: 18px;
+		color: #c4c4c4;
+	}
 
 	.Select__multi-value {
 		background: #f4f8fe;
 		padding: 5px;
 		border-radius: 4px;
 	}
+	.Select__multi-value__label {
+		font-size: 14px;
+		font-weight: 400;
+		line-height: 16.8px;
+		color: #212121;
+	}
+	#react-select-3-input {
+		width: 100%;
+		font-size: 12px;
+		line-height: 18px;
+		font-weight: 500;
+	}
 `;
 
 const customStyles = {
 	container: (provided, state) => ({
 		...provided,
-		
 		height: 'fit-content',
 		border: '1px solid #9090904D',
 		borderRadius: '4px',
@@ -110,17 +129,21 @@ const customStyles = {
 		flexWrap: 'wrap',
 		justifyContent: 'space-between',
 		border: 'none',
-		padding: '0 5px',
 	}),
 	menu: (provided, state) => ({
 		...provided,
 		position: 'absolute',
-		top: '30px',
+		bottom: '5px',
+		top: 'unset',
 	}),
 };
 
-const ReactSelect = ({ options, onChange, isMulti, menuIsOpen, value }, props) => {
+const ReactSelect = (
+	{ options, onChange, isMulti, menuIsOpen, value, onKeyDown, inputValue },
+	props
+) => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [input, setInput] = useState('');
 
 	return (
 		<Wrapper>
@@ -128,15 +151,26 @@ const ReactSelect = ({ options, onChange, isMulti, menuIsOpen, value }, props) =
 				{...{ props }}
 				classNamePrefix="Select"
 				options={options}
-				onChange={onChange}
+				onChange={(e) => {
+					setIsMenuOpen(true);
+					onChange(e);
+				}}
+				onKeyDown={(e) => {
+					onKeyDown(e);
+					if (e.key === 'Enter') {
+						setInput('');
+					}
+				}}
 				styles={customStyles}
 				isMulti={isMulti}
 				autoFocus
-				menuIsOpen={menuIsOpen}
+				menuIsOpen={isMenuOpen}
 				onMenuOpen={() => setIsMenuOpen(true)}
 				onMenuClose={() => setIsMenuOpen(false)}
 				isMenuOpen={isMenuOpen}
 				value={value}
+				inputValue={input}
+				onInputChange={(e) => setInput(e)}
 			/>
 		</Wrapper>
 	);

@@ -51,7 +51,7 @@ const CreateRequest = () => {
 			desc: '',
 			tokenPay: '',
 			instanceCount: '',
-			category: '',
+			category: [],
 			zpaper: '',
 			terms: false,
 		},
@@ -81,7 +81,6 @@ const CreateRequest = () => {
 					+values.tokenPay * +values.instanceCount >
 					+appState.biobitBalance / Math.pow(10, 9)
 				) {
-					console.log('if')
 					formik.setFieldError('tokenPay', validationErrors.notEnoughTokens);
 					formik.setSubmitting(false);
 				} else {

@@ -113,11 +113,11 @@ const SpinnerContainer = styled.div``;
 
 const Dialog = ({ isOpen, hasSpinner, title, content, actions, type = 'error', onClose }) => {
 	useEffect(() => {
-		window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
 		if (isOpen) {
+			window.scrollTo({
+				top: 0,
+				behavior: 'smooth',
+			});
 			document.body.style.overflow = 'hidden';
 		} else {
 			document.body.style.overflow = 'auto';
