@@ -8,6 +8,7 @@ import maxWidthWrapper from '../../components/Elements/MaxWidth';
 import { timeSince, convertToBiobit } from '../../utils';
 import homepageBg from '../../assets/home-bg.jpg';
 import HomepageCounters from '../../components/HomepageCounters';
+import { Skeleton } from '@material-ui/lab';
 
 const RequestsListWrapper = styled.div`
 	position: relative;
@@ -72,8 +73,6 @@ const RequestsListContentWrapper = styled.section`
 	padding: 0 ${(props) => props.theme.spacing(2)};
 `;
 
-let PageSize = 2;
-
 const Desktop = ({
 	requests,
 	appState,
@@ -81,12 +80,14 @@ const Desktop = ({
 	ZarelaReward,
 	BiobitBasedOnEth,
 	dailyContributors,
+	PAGE_SIZE,
+	isLoading,
 }) => {
 	const [currentPage, setCurrentPage] = useState(1);
 
 	const currentTableData = useMemo(() => {
-		const firstPageIndex = (currentPage - 1) * PageSize;
-		const lastPageIndex = firstPageIndex + PageSize;
+		const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
+		const lastPageIndex = firstPageIndex + PAGE_SIZE;
 		return Object.values(requests)
 			.sort((a, b) => +b.requestID - +a.requestID)
 			.slice(firstPageIndex, lastPageIndex);
@@ -109,28 +110,34 @@ const Desktop = ({
 					/>
 					<TokenInfoSidebar data={appState} account={web3React.account} />
 				</RequestListSidebarWrapper>
-				<RequestsListContentWrapper>
-					{currentTableData.map((item) => {
-						return (
-							<RequestCard
-								key={item.requestID}
-								requestID={item.requestID}
-								title={item.title}
-								description={item.description}
-								tokenPay={item.tokenPay}
-								timestamp={timeSince(item.timestamp)}
-								progress={(+item.totalContributed / +item.totalContributors) * 100}
-								contributors={`${item.totalContributed}/${item.totalContributors}`}
-								totalContributedCount={item.totalContributedCount}
-							/>
-						);
-					})}
-				</RequestsListContentWrapper>
+				{isLoading ? (
+					<Skeleton variant="rect" width={210} height={118} />
+				) : (
+					<RequestsListContentWrapper>
+						{currentTableData.map((item) => {
+							return (
+								<RequestCard
+									key={item.requestID}
+									requestID={item.requestID}
+									title={item.title}
+									description={item.description}
+									tokenPay={item.tokenPay}
+									timestamp={timeSince(item.timestamp)}
+									progress={
+										(+item.totalContributed / +item.totalContributors) * 100
+									}
+									contributors={`${item.totalContributed}/${item.totalContributors}`}
+									totalContributedCount={item.totalContributedCount}
+								/>
+							);
+						})}
+					</RequestsListContentWrapper>
+				)}
 			</RequestsListLayout>
 			<Pagination
 				currentPage={currentPage}
 				totalCount={Object.values(requests).length}
-				pageSize={2}
+				pageSize={PAGE_SIZE}
 				onPageChange={(page) => setCurrentPage(page)}
 			/>
 		</RequestsListWrapper>
