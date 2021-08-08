@@ -81,56 +81,9 @@ const Log = () => {
 	const [totalRevenueFromRequester, setTotalRevenueFromRequester] = useState(0);
 	const [ConnectionModalShow, setConnectionModalShow] = useState(true);
 
-/* 	const onClick = () => {
-		appState.contract.methods.getOrderData(requestID).call({ from: account }, (error, result) => {
-			if (!error) {
-				let formatted = {};
-				let selected = [];
-				let uniqueAddresses = [...new Set(result[1])];
-				let pairs = [];
-
-				result[0].forEach((file, fileIndex) => {
-					pairs.push({
-						file,
-						address: result[1][fileIndex],
-						timestamp: result[2][fileIndex],
-						originalIndex: fileIndex,
-						status: result[3][fileIndex],
-					});
-				});
-
-				uniqueAddresses.forEach((uAddress, uIndex) => {
-					pairs.forEach((tempItem, tempIndex) => {
-						if (tempItem.address === uAddress) {
-							if (Object(formatted).hasOwnProperty(uAddress)) {
-								formatted[uAddress].push({
-									ipfsHash: tempItem.file,
-									timestamp: tempItem.timestamp,
-									originalIndex: tempItem.originalIndex,
-									status: tempItem.status,
-								});
-							} else {
-								formatted[uAddress] = [
-									{
-										ipfsHash: tempItem.file,
-										timestamp: tempItem.timestamp,
-										originalIndex: tempItem.originalIndex,
-										status: tempItem.status,
-									},
-								];
-							}
-							selected[uAddress] = [];
-						}
-					});
-				});
-
-				setFormattedData(formatted);
-				setSelected(selected);
-			} else {
-				console.error(error.message);
-			}
-		});
-	}; */
+	const onClick = () => {
+		
+	};
 
 	useEffect(() => {
 		if (appState.contract !== null) {
@@ -141,7 +94,6 @@ const Log = () => {
 					.then((result) => {
 						const myContributions = result[1];
 
-						debugger
 						const getAllRequests = new Promise(async (resolve, reject) => {
 							const requestsListObject = {};
 
@@ -173,7 +125,6 @@ const Log = () => {
 						});
 
 						getAllRequests.then((result) => {
-							console.log('res', result);
 							setContributions(result);
 							setIsLoading(false);
 						});
@@ -195,7 +146,6 @@ const Log = () => {
 		}
 	}, [account, appState.contract]);
 
-	console.log(contributions)
 	return (
 		<Wrapper>
 			<WalletTitlebar isMobile={appState.isMobile}>

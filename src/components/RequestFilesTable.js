@@ -294,8 +294,7 @@ const RequestFilesTable = ({
 														<FileName>
 															{
 																// file.substr(0, 4) + '...' + file.substr(file.length - 4) + `  (File #${fileIndex + 1})`
-																fileIndex +
-																	1 +
+																originalIndex +
 																	'.' +
 																	ipfsHash +
 																	`  (File #${fileIndex + 1})`

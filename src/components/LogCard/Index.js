@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 // import {
 // 	RequestNumber,
@@ -13,6 +13,8 @@ import styled from 'styled-components';
 // 	Title,
 // 	BadgeLabel,
 // } from "../Elements/RequestCard/IndexMobile";
+import { useWeb3React } from '@web3-react/core';
+import { mainContext } from '../../state';
 
 import maxWidthWrapper from '../Elements/MaxWidth';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
@@ -196,19 +198,52 @@ const SubHeaderRow = styled.div`
 `; */
 
 const LogCard = ({ data, MyRequests, marketRequest, allApproved }) => {
-	const {
-		requestID,
-		title,
-		description,
-		requesterAddress,
-		tokenPay,
-		totalContributors,
-		totalContributed,
-		whitePaper,
-		timestamp,
-		totalContributedCount,
-	} = data;
+	const { requestID, title, tokenPay } = data;
+	const [files, setFiles] = useState([]);
+	const { account } = useWeb3React();
+	const { appState } = useContext(mainContext);
 
+	useEffect(() => {
+		if (appState.contract !== null) {
+			if (account) {
+				appState.contract.methods.getOrderData(requestID).call({ from: account }, (error, result) => {
+					if (!error) {
+						let addresses = result[0];
+						let timestamps = result[1];
+						let status = result[2];
+						let zarelaDay = result[3];
+
+						let formatted = {};
+						let uniqueAddresses = [...new Set(result[1])];
+						let pairs = [];
+
+						addresses.forEach((address, originalIndex) => {
+							pairs.push({
+								originalIndex,
+								address,
+								timestamp: timestamps[originalIndex],
+								zarelaDay: zarelaDay[originalIndex],
+								status: status[originalIndex],
+							});
+						});
+
+						let userContributionIndexes = [];
+						addresses.forEach((item, index) => {
+							if (item.toLowerCase() === account.toLowerCase()) {
+								userContributionIndexes.push(index);
+							}
+						});
+
+						setFiles(userContributionIndexes);
+					} else {
+						console.error(error.message);
+					}
+				});
+			}
+		}
+	}, [appState.contract, account]);
+
+	console.log('files', files);
 	return (
 		<CompactRequestCard>
 			<Header>
