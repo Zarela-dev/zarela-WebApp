@@ -169,27 +169,61 @@ const RequestListItem = ({
 	const { account } = useWeb3React();
 
 	const changeAll = (type) => {
-		const allSelected = {};
-		Object.keys(formattedData).forEach((address) => {
-			allSelected[address] = formattedData[address].map((item) => item.ipfsHash);
+		const originalIndexes = [];
+		const indexesAlreadyConfirmed = [];
+		const all = Object.values(formattedData).reduce((acc, curr) => acc.concat(curr), []);
+
+		all.forEach(({ status, originalIndex }) => {
+			originalIndexes.push(originalIndex);
+			if (Boolean(status)) {
+				indexesAlreadyConfirmed.push(originalIndex);
+			}
 		});
 
-		if (type === 'check') setSelected(allSelected);
-		if (type === 'uncheck')
-			setSelected((values) => {
-				let result = {};
+		const selectableIndexes = originalIndexes.filter(
+			(index) => !indexesAlreadyConfirmed.includes(index)
+		);
 
-				Object.keys(values).forEach((address) => {
-					result[address] = [];
-				});
-
-				return result;
-			});
+		if (type === 'check') {
+			setSelected(selectableIndexes);
+		}
+		if (type === 'uncheck') setSelected([]);
 	};
+
 	const isAllChecked = () => {
-		const chosen = Object.values(selected).reduce((acc, curr) => acc.concat(...curr), []);
-		const total = Object.values(formattedData).reduce((acc, curr) => acc.concat(...curr), []);
-		return chosen.length === total.length;
+		const originalIndexes = [];
+		const indexesAlreadyConfirmed = [];
+		const selectedIndexes = [...selected];
+		const all = Object.values(formattedData).reduce((acc, curr) => acc.concat(curr), []);
+
+		all.forEach(({ status, originalIndex }) => {
+			originalIndexes.push(originalIndex);
+			if (Boolean(status) === true) indexesAlreadyConfirmed.push(originalIndex);
+		});
+
+		if (
+			_.isEqual(
+				[...selectedIndexes, ...indexesAlreadyConfirmed].sort(),
+				originalIndexes.sort()
+			)
+		) {
+			return true;
+		}
+		return false;
+	};
+
+	const isAllApproved = () => {
+		const originalIndexes = [];
+		const indexesAlreadyConfirmed = [];
+		const all = Object.values(formattedData).reduce((acc, curr) => acc.concat(curr), []);
+
+		all.forEach(({ status, originalIndex }) => {
+			originalIndexes.push(originalIndex);
+			if (Boolean(status) === true) indexesAlreadyConfirmed.push(originalIndex);
+		});
+
+		if (_.isEqual(originalIndexes.sort(), indexesAlreadyConfirmed.sort())) return true;
+		return false;
 	};
 
 	const isBulkApproved = (contributorAddress) => {
@@ -202,7 +236,7 @@ const RequestListItem = ({
 				indexesAlreadyConfirmed.push(originalIndex);
 			}
 		});
-		debugger;
+
 		if (_.isEqual(indexesAlreadyConfirmed.sort(), originalIndexes.sort())) {
 			return true;
 		}
@@ -325,7 +359,6 @@ const RequestListItem = ({
 								let status = orderInfo[2];
 
 								let formatted = {};
-								let selected = [];
 								let uniqueAddresses = [...new Set(addresses)];
 								let pairs = [];
 
@@ -364,13 +397,11 @@ const RequestListItem = ({
 													},
 												];
 											}
-											selected[uAddress] = [];
 										}
 									});
 								});
 
 								setFormattedData(formatted);
-								setSelected(selected);
 							} else {
 								console.error(fileError);
 							}
@@ -433,6 +464,7 @@ const RequestListItem = ({
 								onBulkChange={onBulkChange}
 								isBulkChecked={isBulkChecked}
 								isBulkApproved={isBulkApproved}
+								isAllApproved={isAllApproved}
 								isAllChecked={isAllChecked}
 								changeAll={changeAll}
 							/>

@@ -199,6 +199,7 @@ const RequestFilesTable = ({
 	isBulkChecked,
 	isBulkApproved,
 	isAllChecked,
+	isAllApproved,
 	changeAll,
 	signalDownloadHandler,
 }) => {
@@ -207,16 +208,20 @@ const RequestFilesTable = ({
 			<Row>
 				<CellWrapper>
 					<Cell>
-						{/* <CustomCheckbox
-							checked={isAllChecked()}
-							onChange={(e) => {
-								if (e.target.checked === true) {
-									changeAll('check');
-								} else {
-									changeAll('uncheck');
-								}
-							}}
-						/> */}
+						{isAllApproved() ? (
+							<ConfirmedIcon src={confirmIcon} noMargin />
+						) : (
+							<CustomCheckbox
+								checked={isAllChecked()}
+								onChange={(e) => {
+									if (e.target.checked === true) {
+										changeAll('check');
+									} else {
+										changeAll('uncheck');
+									}
+								}}
+							/>
+						)}
 					</Cell>
 				</CellWrapper>
 				<CellWrapper>
