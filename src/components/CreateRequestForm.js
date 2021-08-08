@@ -100,6 +100,7 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 					formik.setFieldValue('category', e);
 					setSelectedOption(e);
 				}}
+				error={formik.errors?.category}
 				onKeyDown={(e) => {
 					setSelectInputValue('');
 					if (e.key === 'Enter') {

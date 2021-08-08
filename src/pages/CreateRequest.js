@@ -70,7 +70,9 @@ const CreateRequest = () => {
 				.number()
 				.typeError(validationErrors.number('Contributors'))
 				.required(validationErrors.required('Contributors')),
-			category: yup.array().required(validationErrors.required('category')),
+			category: yup
+				.array()
+				.min(1, validationErrors.required('category')),
 			zpaper: yup.mixed(),
 			terms: yup.boolean().required(),
 		}),
@@ -124,7 +126,6 @@ const CreateRequest = () => {
 												console.log(`Document Of Conditions --> ${url}`);
 
 												setDialogMessage('awaiting confirmation');
-
 												appState.contract.methods
 													.SetOrderBoard(
 														title,
@@ -132,7 +133,7 @@ const CreateRequest = () => {
 														ipfsResponse.path,
 														+tokenPay * Math.pow(10, 9),
 														instanceCount,
-														category,
+														category.map(item => item.value).join(','),
 														encryptionPublicKey
 													)
 													.send(
