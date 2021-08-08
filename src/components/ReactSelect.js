@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import close from './../assets/icons/close-purple.svg';
 
 const Wrapper = styled.div`
-	margin-bottom: ${(props) => (props.isMenuOpen ? '83px' : '0')};
+	margin-bottom: 120px;
+	position: relative;
 `;
 
 const StyledSelect = styled(Select)`
@@ -13,6 +14,7 @@ const StyledSelect = styled(Select)`
 		border-radius: 4px;
 		cursor: pointer;
 		padding-left: 3px;
+		position: relative;
 	}
 	.Select__control::after {
 		content: '';
@@ -84,6 +86,7 @@ const StyledSelect = styled(Select)`
 		background-color: #fff;
 		margin: 0;
 		overflow-y: hidden;
+		position: relative;
 	}
 	.Select__menu-list {
 		width: 100%;
@@ -147,7 +150,6 @@ const customStyles = {
 		...provided,
 		border: '1px solid #9090904D',
 		borderRadius: '4px',
-		position: state.selectProps.isMenuOpen ? 'absolute' : 'relative',
 		width: '510px',
 		backgroundColor: '#fff',
 		height: state.selectProps.isMenuOpen ? '270px' : '',
