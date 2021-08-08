@@ -33,9 +33,11 @@ const Inbox = () => {
 	const { account } = useWeb3React();
 	const [ConnectionModalShow, setConnectionModalShow] = useState(true);
 
-	const handleConfirm = (requestID, addresses) => {
+	const handleConfirm = (requestID, originalIndexes) => {
+		console.log(originalIndexes)
+		debugger
 		appState.contract.methods
-			.ConfirmContributer(requestID, addresses)
+			.ConfirmContributer(requestID, originalIndexes)
 			.send({ from: account }, (error, result) => {
 				if (!error) {
 					toast(result, "success", true, result);
@@ -89,10 +91,9 @@ const Inbox = () => {
 											tokenPay: result[3],
 											totalContributors: result[4], // total contributors required
 											totalContributed: +result[4] - +result[7],
-											categories: result[8], // NOT TO BE USED IN DEMO
 											whitePaper: result[5],
-											timestamp: result[10],
-											totalContributedCount: result[9],
+											timestamp: result[9],
+											totalContributedCount: result[8],
 										};
 										requestsListObject[
 											requestTemplate.requestID
@@ -144,6 +145,7 @@ const Inbox = () => {
 								tokenPay={convertToBiobit(item.tokenPay)}
 								total={item.totalContributedCount}
 								contributors={`${item.totalContributed}/${item.totalContributors}`}
+								fulfilled={+item.totalContributed === +item.totalContributors}
 								handleConfirm={handleConfirm}
 							/>
 						))

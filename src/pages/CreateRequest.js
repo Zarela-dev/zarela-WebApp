@@ -134,7 +134,8 @@ const CreateRequest = () => {
 														+tokenPay * Math.pow(10, 9),
 														instanceCount,
 														category.map(item => item.value).join(','),
-														encryptionPublicKey
+														encryptionPublicKey,
+														process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY
 													)
 													.send(
 														{
