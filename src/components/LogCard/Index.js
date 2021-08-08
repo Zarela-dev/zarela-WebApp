@@ -1,26 +1,58 @@
-import React from "react";
-import styled from "styled-components";
-import {
-	RequestNumber,
-	HeaderLayout,
-	Footer,
-	TokenIcon,
-	Bookmark,
-	ContributorBadge,
-	ContributorsIcon,
-	Divider,
-	BadgeRow,
-	Title,
-	BadgeLabel,
-} from "../Elements/RequestCard/IndexMobile";
-import maxWidthWrapper from "../Elements/MaxWidth";
-import biobitIcon from "../../assets/icons/biobit-black.svg";
-import contributorIcon from "../../assets/icons/user-black.svg";
-import bookmarkIcon from "../../assets/icons/bookmark-purple.svg";
-import checkedGreen from "../../assets/icons/check-green.svg";
-import pendingIcon from "../../assets/icons/pending.svg";
+import React from 'react';
+import styled from 'styled-components';
+// import {
+// 	RequestNumber,
+// 	HeaderLayout,
+// 	Footer,
+// 	TokenIcon,
+// 	Bookmark,
+// 	ContributorBadge,
+// 	ContributorsIcon,
+// 	Divider,
+// 	BadgeRow,
+// 	Title,
+// 	BadgeLabel,
+// } from "../Elements/RequestCard/IndexMobile";
 
-const CustomRequestNumber = styled(RequestNumber)`
+import maxWidthWrapper from '../Elements/MaxWidth';
+import biobitIcon from '../../assets/icons/biobit-black.svg';
+import contributorIcon from '../../assets/icons/user-black.svg';
+import bookmarkIcon from '../../assets/icons/bookmark-purple.svg';
+import approvedIcon from '../../assets/icons/check-green.svg';
+import unapprovedIcon from '../../assets/icons/pending.svg';
+import caretDownIcon from '../../assets/icons/caret-down.svg';
+import caretUpIcon from '../../assets/icons/caret-up.svg';
+
+import {
+	CompactRequestCard,
+	Row,
+	Header,
+	Body,
+	Section,
+	Column,
+	BiobitIcon,
+	DollarValue,
+	CaretIcon,
+	StatusIcon,
+	ContributorIcon,
+	BookmarkIcon,
+	StatusLabel,
+	BiobitValue,
+	VerticalDivider,
+	ContributorCount,
+	Title,
+	Timestamp,
+	QuickReport,
+	RequestNumber,
+	Table,
+	TableCellWrapper,
+	TableCell,
+	TableRow,
+	TableBulkRow,
+} from './Elements';
+import { Spacer } from '../Elements/Spacer';
+
+/* const CustomRequestNumber = styled(RequestNumber)`
 	flex: 0 0 79px;
 	height: 50px;
 	border-radius: 10px 10px 0px 10px;
@@ -109,8 +141,8 @@ const HashTitle = styled(HashBody)`
 `;
 
 const CustomContributorBadge = styled(ContributorBadge)`
-	margin-right: ${(props) => (props.nomargin ? 0 : "25px")};
-	min-width: ${(props) => (props.nomargin ? "90px" : "unset")};
+	margin-right: ${(props) => (props.nomargin ? 0 : '25px')};
+	min-width: ${(props) => (props.nomargin ? '90px' : 'unset')};
 `;
 
 const ContributorsIconMobile = styled(ContributorsIcon)`
@@ -126,19 +158,16 @@ const BadgeLabelTimeMobile = styled(BadgeLabel)`
 	font-size: 14px;
 	line-height: 20px;
 	font-weight: ${(props) => (props.subHeader ? 400 : 700)};
-	color: ${(props) =>
-		props.success
-			? "rgba(27, 204, 141, 1)"
-			: props.pending && "rgba(133, 133, 133, 1)"};
+	color: ${(props) => (props.success ? 'rgba(27, 204, 141, 1)' : props.pending && 'rgba(133, 133, 133, 1)')};
 `;
 
 const BadgeLabelContributors = styled(BadgeLabel)`
 	font-size: 16px;
 	line-height: 18px;
 	font-weight: ${(props) => (props.highlight ? 700 : 400)};
-	min-width: ${(props) => props.minWidth && "60px"};
+	min-width: ${(props) => props.minWidth && '60px'};
 	white-space: nowrap;
-	color: ${(props) => (props.highlight ? "#3A68DE" : "")};
+	color: ${(props) => (props.highlight ? '#3A68DE' : '')};
 `;
 
 const ContentWrapper = styled.div`
@@ -164,143 +193,91 @@ const BookmarkIconWrapper = styled(Bookmark)`
 const SubHeaderRow = styled.div`
 	display: flex;
 	justify-content: flex-start;
-`;
+`; */
 
-const LogCard = ({
-	MyRequests,
-	marketRequest,
-	success,
-	pending,
-}) => {
+const LogCard = ({ MyRequests, marketRequest, allApproved }) => {
 	return (
-		<HeaderContainer>
-			<HeaderInner>
-				<HeaderLayoutCustom>
-					<CustomRequestNumber>25</CustomRequestNumber>
-					<ContentWrapper>
-						<TitleWrapper>
-							<TitleContent>
-								Reactions while playing brutal games among 13 - 19 years
-								teanagers
-							</TitleContent>
-							{MyRequests && (
-								<BodyContainer>
-									<HashContent>
-										<HashTitle>TXN Hash</HashTitle>
-										<HashBody>OXKMMSISIDNVIOISDUNVDUISUIAISOASNNFDUI</HashBody>
-									</HashContent>
-								</BodyContainer>
-							)}
-							{marketRequest && (
-								<SubHeaderRow>
-									<CustomContributorBadge>
-										<BadgeRow>
-											<BadgeLabelTimeMobile subHeader>
-												2020.08.02
-											</BadgeLabelTimeMobile>
-										</BadgeRow>
-									</CustomContributorBadge>
-									<CustomContributorBadge>
-										<BadgeLabelTimeMobile subHeader>13:57</BadgeLabelTimeMobile>
-									</CustomContributorBadge>
-								</SubHeaderRow>
-							)}
-						</TitleWrapper>
-						<ItemInformation>
-							{MyRequests && (
-								<>
-									<CustomContributorBadge>
-										<BadgeRow>
-											<BadgeLabelTimeMobile>2020.08.02</BadgeLabelTimeMobile>
-										</BadgeRow>
-									</CustomContributorBadge>
-									<CustomContributorBadge>
-										<BadgeLabelTimeMobile>13:57</BadgeLabelTimeMobile>
-									</CustomContributorBadge>
-									<CustomContributorBadge>
-										<BadgeRow>
-											<ContributorsIconMobile src={contributorIcon} />
-											<BadgeLabelContributors>32</BadgeLabelContributors>
-										</BadgeRow>
-									</CustomContributorBadge>
-									<CustomDivider />
-									<CustomBadgeRow>
-										<ToeknIconMobile src={biobitIcon} />
-										<BadgeLabelContributors>20</BadgeLabelContributors>
-										<BadgeLabelContributors
-											minWidth
-										>{`= $ 21`}</BadgeLabelContributors>
-									</CustomBadgeRow>
-								</>
-							)}
-							{marketRequest && (
-								<>
-									<CustomContributorBadge>
-										<BadgeRow>
-											<ContributorsIconMobile src={contributorIcon} />
-											<BadgeLabelContributors highlight>
-												32/5 left
-											</BadgeLabelContributors>
-										</BadgeRow>
-									</CustomContributorBadge>
-									<CustomDivider />
-									<CustomBadgeRow>
-										<ToeknIconMobile src={biobitIcon} />
-										<BadgeLabelContributors>20</BadgeLabelContributors>
-										<BadgeLabelContributors
-											minWidth
-										>{`= $ 21`}</BadgeLabelContributors>
-									</CustomBadgeRow>
-									<CustomDivider />
-									<BookmarkIconWrapper src={bookmarkIcon} />
-								</>
-							)}
-							{success && (
-								<>
-									<CustomBadgeRow>
-										<ToeknIconMobile src={biobitIcon} />
-										<BadgeLabelContributors>20</BadgeLabelContributors>
-										<BadgeLabelContributors
-											minWidth
-										>{`= $ 21`}</BadgeLabelContributors>
-									</CustomBadgeRow>
-									<CustomDivider />
-									<CustomContributorBadge nomargin>
-										<BadgeRow>
-											<ContributorsIconMobile src={checkedGreen} />
-											<BadgeLabelTimeMobile success>
-												Recieved
-											</BadgeLabelTimeMobile>
-										</BadgeRow>
-									</CustomContributorBadge>
-								</>
-							)}
-							{pending && (
-								<>
-									<CustomBadgeRow>
-										<ToeknIconMobile src={biobitIcon} />
-										<BadgeLabelContributors>20</BadgeLabelContributors>
-										<BadgeLabelContributors
-											minWidth
-										>{`= $ 21`}</BadgeLabelContributors>
-									</CustomBadgeRow>
-									<CustomDivider />
-									<CustomContributorBadge nomargin>
-										<BadgeRow>
-											<ContributorsIconMobile src={pendingIcon} />
-											<BadgeLabelTimeMobile pending>
-												Pending
-											</BadgeLabelTimeMobile>
-										</BadgeRow>
-									</CustomContributorBadge>
-								</>
-							)}
-						</ItemInformation>
-					</ContentWrapper>
-				</HeaderLayoutCustom>
-				<CustomFooter></CustomFooter>
-			</HeaderInner>
-		</HeaderContainer>
+		<CompactRequestCard>
+			<Header>
+				<Column flex="0 0 80px" alignSelf="flex-start">
+					<RequestNumber>2556698</RequestNumber>
+				</Column>
+				<Column flex="1 1 530px">
+					<Row>
+						<Title>title goes here</Title>
+					</Row>
+					<Row>
+						<QuickReport bold>{`${3} files: `}</QuickReport>
+						<QuickReport>{` ${2} approved, ${1} pending `}</QuickReport>
+					</Row>
+				</Column>
+				<Spacer />
+				<Column displayFlex>
+					<Row>
+						<BiobitIcon src={biobitIcon} />
+						<BiobitValue>12</BiobitValue>
+						<DollarValue>~ $21.33403</DollarValue>
+					</Row>
+				</Column>
+				<VerticalDivider />
+				<Column>
+					<Row>
+						{allApproved ? (
+							<>
+								<StatusIcon src={approvedIcon} />
+								<StatusLabel approved>Confirmed</StatusLabel>
+							</>
+						) : (
+							<>
+								<StatusIcon src={unapprovedIcon} />
+								<StatusLabel>Pending</StatusLabel>
+							</>
+						)}
+					</Row>
+				</Column>
+				<Column flex="0">
+					{true ? <CaretIcon src={caretDownIcon} /> : <CaretIcon src={caretUpIcon} />}
+				</Column>
+			</Header>
+			<Body>
+				<Table>
+					<TableRow header>
+						<TableCellWrapper>
+							<TableCell>File Names</TableCell>
+						</TableCellWrapper>
+						<TableCellWrapper>
+							<TableCell>Date</TableCell>
+						</TableCellWrapper>
+						<TableCellWrapper>
+							<TableCell>Zarela Day</TableCell>
+						</TableCellWrapper>
+						<TableCellWrapper>
+							<TableCell>Status</TableCell>
+						</TableCellWrapper>
+					</TableRow>
+					<TableBulkRow>
+						{Array(3)
+							.fill(null)
+							.map((contributorAddress, index) => (
+								<TableRow key={contributorAddress}>
+									<TableCellWrapper>
+										<TableCell>File Names</TableCell>
+									</TableCellWrapper>
+									<TableCellWrapper>
+										<TableCell>Date</TableCell>
+									</TableCellWrapper>
+									<TableCellWrapper>
+										<TableCell>Zarela Day</TableCell>
+									</TableCellWrapper>
+									<TableCellWrapper>
+										<TableCell>Status</TableCell>
+									</TableCellWrapper>
+								</TableRow>
+							))}
+					</TableBulkRow>
+				</Table>
+			</Body>
+		</CompactRequestCard>
 	);
 };
 

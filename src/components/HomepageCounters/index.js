@@ -23,7 +23,7 @@ function getDifferenceInMSeconds(date1, date2) {
 	return diffInMs;
 }
 
-const HomepageCounters = ({ zarelaInitDate, zarelaDailyGift, todayGift }) => {
+const HomepageCounters = ({ zarelaInitDate, zarelaDailyGift }) => {
 	const [bankCountdown, setBankCountdown] = useState(0);
 	const [giftCountdown, setGiftCountdown] = useState(0);
 	const bankInterval = 7776000000; // 90 days
@@ -43,7 +43,7 @@ const HomepageCounters = ({ zarelaInitDate, zarelaDailyGift, todayGift }) => {
 		<Wrapper>
 			{bankCountdown !== 0 ? <BankCountdown countdown={bankCountdown} /> : <Spacer />}
 			{bankCountdown !== 0 ? (
-				<DailyGift countdown={giftCountdown} giftValue={todayGift} />
+				<DailyGift countdown={giftCountdown} />
 			) : (
 				<Spacer />
 			)}
