@@ -71,10 +71,11 @@ const RequestDetailsPage = () => {
 								// const doc = document.getElementById("_White_Paper");
 								setDialogMessage('awaiting confirmation');
 								appState.contract.methods
-									.SendFile(
+									.contribute(
 										request.requestID,
 										request.requesterAddress,
-										ipfsResponse.path
+										ipfsResponse.path,
+										'encryption key'
 									)
 									.send(
 										{

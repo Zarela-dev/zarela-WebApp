@@ -25,7 +25,7 @@ const MyRequests = () => {
 			if (account) {
 				setLoading(true);
 				appState.contract.methods
-					.Order_Details()
+					.orderResult()
 					.call({ from: account })
 					.then((result) => {
 						const myRequests = result[1];

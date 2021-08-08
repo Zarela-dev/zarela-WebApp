@@ -37,7 +37,7 @@ const Inbox = () => {
 		console.log(originalIndexes)
 		debugger
 		appState.contract.methods
-			.ConfirmContributer(requestID, originalIndexes)
+			.confirmContributor(requestID, originalIndexes)
 			.send({ from: account }, (error, result) => {
 				if (!error) {
 					toast(result, "success", true, result);
@@ -70,7 +70,7 @@ const Inbox = () => {
 				setLoading(true);
 
 				appState.contract.methods
-					.Order_Details()
+					.orderResult()
 					.call({ from: account })
 					.then((result) => {
 						const myRequests = result[0];

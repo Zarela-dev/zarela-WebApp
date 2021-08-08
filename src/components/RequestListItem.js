@@ -348,10 +348,10 @@ const RequestListItem = ({
 
 	useEffect(() => {
 		if (showContributions && appState.contract !== null) {
-			appState.contract.methods.GetOrderFiles(requestID).call((orderInfoError, orderInfo) => {
+			appState.contract.methods.getOrderData(requestID).call((orderInfoError, orderInfo) => {
 				if (!orderInfoError) {
 					appState.contract.methods
-						.ShowFile(requestID)
+						.ownerSpecificData(requestID)
 						.call({ from: account }, (fileError, files) => {
 							if (!fileError) {
 								let addresses = orderInfo[0];
@@ -369,7 +369,8 @@ const RequestListItem = ({
 
 								addresses.forEach((address, fileIndex) => {
 									pairs.push({
-										file: files[fileIndex],
+										file: files[0][fileIndex],
+										AesEncryptionKey: files[1][fileIndex],
 										address: address,
 										timestamp: timestamp[fileIndex],
 										originalIndex: fileIndex,

@@ -273,10 +273,7 @@ const RequestFilesTable = ({
 								</FilesTableHeader>
 								<FilesList>
 									{data[contributorAddress].map(
-										(
-											{ ipfsHash, status, originalIndex, timestamp },
-											fileIndex
-										) => {
+										({ ipfsHash, status, originalIndex, timestamp }, fileIndex) => {
 											return (
 												<FileItemRow>
 													<FileItemCol>
@@ -284,20 +281,12 @@ const RequestFilesTable = ({
 															<ConfirmedIcon src={confirmIcon} />
 														) : (
 															<FileCheckbox
-																checked={selected.includes(
-																	originalIndex
-																)}
+																checked={selected.includes(originalIndex)}
 																onChange={(e) => {
 																	if (e.target.checked === true) {
-																		onChange(
-																			'check',
-																			originalIndex
-																		);
+																		onChange('check', originalIndex);
 																	} else {
-																		onChange(
-																			'uncheck',
-																			originalIndex
-																		);
+																		onChange('uncheck', originalIndex);
 																	}
 																}}
 															/>
@@ -306,6 +295,7 @@ const RequestFilesTable = ({
 															{
 																// file.substr(0, 4) + '...' + file.substr(file.length - 4) + `  (File #${fileIndex + 1})`
 																fileIndex +
+																	1 +
 																	'.' +
 																	ipfsHash +
 																	`  (File #${fileIndex + 1})`
@@ -313,20 +303,12 @@ const RequestFilesTable = ({
 														</FileName>
 													</FileItemCol>
 													<FileItemCol>
-														<DownloadButton
-															onClick={() =>
-																signalDownloadHandler(ipfsHash)
-															}
-														>
-															<DownloadButtonImage
-																src={downloadIcon}
-															/>
+														<DownloadButton onClick={() => signalDownloadHandler(ipfsHash)}>
+															<DownloadButtonImage src={downloadIcon} />
 														</DownloadButton>
 													</FileItemCol>
 													<FileItemCol>
-														<Timestamp>{`${timeSince(
-															timestamp
-														)}`}</Timestamp>
+														<Timestamp>{`${timeSince(timestamp)}`}</Timestamp>
 													</FileItemCol>
 												</FileItemRow>
 											);

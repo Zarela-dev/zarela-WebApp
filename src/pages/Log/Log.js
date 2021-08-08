@@ -83,7 +83,7 @@ const Log = () => {
 
 	/*const onClick = () => {
 		appState.contract.methods
-			.GetOrderFiles(requestID)
+			.getOrderData(requestID)
 			.call({ from: account }, (error, result) => {
 				if (!error) {
 					let formatted = {};
@@ -138,7 +138,7 @@ const Log = () => {
 		if (appState.contract !== null) {
 			if (account) {
 				/* appState.contract.methods
-					.Order_Details()
+					.orderResult()
 					.call({ from: account })
 					.then((result) => {
 						const myContributions = result[1];
@@ -182,7 +182,7 @@ const Log = () => {
 						console.error(error.message);
 					}); */
 
-				appState.contract.methods.User_Map(account).call((error, result) => {
+				appState.contract.methods.userMap(account).call((error, result) => {
 					if (!error) {
 						const formatter = (value) => convertToBiobit(value);
 						setTotalRevenueFromRequester(formatter(result[1]));

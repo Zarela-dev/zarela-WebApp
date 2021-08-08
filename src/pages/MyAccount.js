@@ -87,7 +87,7 @@ const MyAccount = () => {
 		if (appState.contract !== null) {
 			if (account) {
 				setLoading(true);
-				appState.contract.methods.User_Map(account).call((error, result) => {
+				appState.contract.methods.userMap(account).call((error, result) => {
 					if (!error) {
 						const formatter = (value) => convertToBiobit(value);
 						setTotalRevenueFromRequester(formatter(result[1]));
@@ -98,7 +98,7 @@ const MyAccount = () => {
 				});
 
 				appState.contract.methods
-					.Order_Details()
+					.orderResult()
 					.call({ from: account })
 					.then((result) => {
 						const myRequests = result[1];
