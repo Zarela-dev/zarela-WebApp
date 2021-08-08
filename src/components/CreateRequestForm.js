@@ -41,10 +41,9 @@ const options = [
 	{ value: 'vani12321sfesfasa', label: 'Vanilla' },
 ];
 
-
-
 const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
-	const [selectedOption, setSelectedOption] = useState(null);
+	const [selectedOption, setSelectedOption] = useState([]);
+	const [selectInputValue, setSelectInputValue] = useState('');
 
 	return (
 		<Form onSubmit={formik.handleSubmit}>
@@ -98,9 +97,18 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 				classNamePrefix="Select"
 				options={options}
 				onChange={(e) => {
-					console.log('changes ', e);
 					formik.setFieldValue('category', e);
 					setSelectedOption(e);
+				}}
+				onKeyDown={(e) => {
+					setSelectInputValue('');
+					if (e.key === 'Enter') {
+						setSelectedOption([
+							...selectedOption,
+							{ value: e.target.value, label: e.target.value },
+						]);
+						formik.setFieldValue('category', selectInputValue);
+					}
 				}}
 				isMulti
 				value={selectedOption}
