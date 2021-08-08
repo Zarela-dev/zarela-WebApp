@@ -72,7 +72,7 @@ const RequestsListContentWrapper = styled.section`
 	padding: 0 ${(props) => props.theme.spacing(2)};
 `;
 
-let PageSize = 3;
+let PageSize = 2;
 
 const Desktop = ({
 	requests,
@@ -110,25 +110,21 @@ const Desktop = ({
 					<TokenInfoSidebar data={appState} account={web3React.account} />
 				</RequestListSidebarWrapper>
 				<RequestsListContentWrapper>
-					{
-						currentTableData.map((item) => {
-							return (
-								<RequestCard
-									key={item.requestID}
-									requestID={item.requestID}
-									title={item.title}
-									description={item.description}
-									tokenPay={item.tokenPay}
-									timestamp={timeSince(item.timestamp)}
-									progress={
-										(+item.totalContributed / +item.totalContributors) * 100
-									}
-									contributors={`${item.totalContributed}/${item.totalContributors}`}
-									totalContributedCount={item.totalContributedCount}
-								/>
-							);
-						})
-					}
+					{currentTableData.map((item) => {
+						return (
+							<RequestCard
+								key={item.requestID}
+								requestID={item.requestID}
+								title={item.title}
+								description={item.description}
+								tokenPay={item.tokenPay}
+								timestamp={timeSince(item.timestamp)}
+								progress={(+item.totalContributed / +item.totalContributors) * 100}
+								contributors={`${item.totalContributed}/${item.totalContributors}`}
+								totalContributedCount={item.totalContributedCount}
+							/>
+						);
+					})}
 				</RequestsListContentWrapper>
 			</RequestsListLayout>
 			<Pagination

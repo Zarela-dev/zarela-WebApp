@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import closeIcon from '../../assets/icons/close-black.svg';
 import Spinner from '../Spinner';
@@ -64,13 +64,13 @@ const Backdrop = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	position: fixed;
+	position: absolute;
 	left: 0;
 	width: 100vw;
-	top: 70px;
-	height: calc(100vh - 70px);
+	top: 0;
+	height: 100vh;
 	background: rgba(255, 255, 255, 0.6);
-	z-index: ${props => props.theme.z_modal};
+	z-index: ${(props) => props.theme.z_modal};
 
 	@media only screen and (min-width: ${({ theme }) => theme.desktop_sm_breakpoint}) {
 		top: 110px;
@@ -112,6 +112,18 @@ const CloseIcon = styled.img``;
 const SpinnerContainer = styled.div``;
 
 const Dialog = ({ isOpen, hasSpinner, title, content, actions, type = 'error', onClose }) => {
+	useEffect(() => {
+		window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+		if (isOpen) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'auto';
+		}
+	}, [isOpen]);
+
 	if (!isOpen) return null;
 	return (
 		<Backdrop>
