@@ -177,8 +177,15 @@ const customStyles = {
 	}),
 };
 
+export const Error = styled.label`
+	font-weight: 500;
+	font-size: 10px;
+	line-height: 20px;
+	color: #f62d76;
+`;
+
 const ReactSelect = (
-	{ options, onChange, isMulti, menuIsOpen, value, onKeyDown, inputValue },
+	{ options, onChange, isMulti, menuIsOpen, value, onKeyDown, inputValue, error },
 	props
 ) => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -212,6 +219,7 @@ const ReactSelect = (
 				inputValue={input}
 				onInputChange={(e) => setInput(e)}
 			/>
+			{error ? <Error>{error}</Error> : null}
 		</Wrapper>
 	);
 };
