@@ -44,6 +44,11 @@ import {
 	Timestamp,
 	QuickReport,
 	RequestNumber,
+	Table,
+	TableCellWrapper,
+	TableCell,
+	TableRow,
+	TableBulkRow,
 } from './Elements';
 import { Spacer } from '../Elements/Spacer';
 
@@ -194,7 +199,7 @@ const LogCard = ({ MyRequests, marketRequest, allApproved }) => {
 	return (
 		<CompactRequestCard>
 			<Header>
-				<Column flex="0 0 80px" alignSelf='flex-start'>
+				<Column flex="0 0 80px" alignSelf="flex-start">
 					<RequestNumber>2556698</RequestNumber>
 				</Column>
 				<Column flex="1 1 530px">
@@ -234,6 +239,44 @@ const LogCard = ({ MyRequests, marketRequest, allApproved }) => {
 					{true ? <CaretIcon src={caretDownIcon} /> : <CaretIcon src={caretUpIcon} />}
 				</Column>
 			</Header>
+			<Body>
+				<Table>
+					<TableRow header>
+						<TableCellWrapper>
+							<TableCell>File Names</TableCell>
+						</TableCellWrapper>
+						<TableCellWrapper>
+							<TableCell>Date</TableCell>
+						</TableCellWrapper>
+						<TableCellWrapper>
+							<TableCell>Zarela Day</TableCell>
+						</TableCellWrapper>
+						<TableCellWrapper>
+							<TableCell>Status</TableCell>
+						</TableCellWrapper>
+					</TableRow>
+					<TableBulkRow>
+						{Array(3)
+							.fill(null)
+							.map((contributorAddress, index) => (
+								<TableRow key={contributorAddress}>
+									<TableCellWrapper>
+										<TableCell>File Names</TableCell>
+									</TableCellWrapper>
+									<TableCellWrapper>
+										<TableCell>Date</TableCell>
+									</TableCellWrapper>
+									<TableCellWrapper>
+										<TableCell>Zarela Day</TableCell>
+									</TableCellWrapper>
+									<TableCellWrapper>
+										<TableCell>Status</TableCell>
+									</TableCellWrapper>
+								</TableRow>
+							))}
+					</TableBulkRow>
+				</Table>
+			</Body>
 		</CompactRequestCard>
 	);
 };

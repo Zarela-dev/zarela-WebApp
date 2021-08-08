@@ -3,7 +3,7 @@ import styled from 'styled-components';
 // layout
 export const CompactRequestCard = styled.div`
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	align-items: center;
 	width: 100%;
 	min-height: 75px;
@@ -21,8 +21,14 @@ export const Row = styled.div`
 	flex: 1 0 100%;
 `;
 
-export const Header = styled(Row)``;
-export const Body = styled(Row)``;
+export const Header = styled(Row)`
+	width: 100%;
+	flex: 1;
+`;
+export const Body = styled(Row)`
+	width: 100%;
+	flex: 1;
+`;
 
 export const Column = styled.div`
 	display: ${(props) => (props.displayFlex ? 'flex' : 'block')};
@@ -103,4 +109,66 @@ export const RequestNumber = styled.div`
 	color: #ffffff;
 	text-align: center;
 	user-select: text;
+`;
+
+// files table
+export const Table = styled.div`
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	margin-top: ${(props) => props.theme.spacing(3)};
+`;
+
+export const TableCellWrapper = styled.div`
+	flex: ${(props) => props.flex || 1};
+	background: white;
+
+	&:first-child {
+		border-radius: 8px 0 0 8px;
+	}
+	&:last-child {
+		border-radius: 0 8px 8px 0;
+	}
+`;
+
+export const TableBulkRow = styled.div`
+	border-radius: 8px;
+	background: white;
+	padding: ${(props) => props.theme.spacing(2)} 0;
+`;
+
+export const TableRow = styled.section`
+	display: flex;
+	margin-bottom: ${(props) => (props.header ? props.theme.spacing(1) : 0)};
+
+	${TableCellWrapper}:first-of-type {
+		flex: 1 1 700px;
+	}
+
+	${TableCellWrapper}:nth-of-type(2) {
+		flex: 1 0 auto;
+	}
+
+	${TableCellWrapper}:nth-of-type(3) {
+		flex: 0 0 100px;
+	}
+	${TableCellWrapper}:nth-of-type(4) {
+		flex: 0 0 140p;
+	}
+`;
+
+export const TableCell = styled.div`
+	display: flex;
+	align-items: center;
+	min-height: 48px;
+	padding: ${(props) => props.theme.spacing(0.6)} ${(props) => props.theme.spacing(1)};
+	font-size: 12px;
+	height: 40px;
+	width: 100%;
+	font-weight: normal;
+	cursor: ${(props) => (props.pointer ? 'pointer' : 'normal')};
+
+	${TableCellWrapper}:not(:last-child) & {
+		border-right: 1px solid rgba(60, 135, 170, 0.6);
+	}
 `;
