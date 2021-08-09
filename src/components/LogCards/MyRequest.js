@@ -40,7 +40,7 @@ const LogCard = ({ data }) => {
 					</Row>
 					{+totalContributedCount === 0 ? (
 						<Row>
-							<QuickReport>{`No one has contributed yet!`}</QuickReport>
+							<QuickReport variant='primary'>{`No one has contributed yet!`}</QuickReport>
 						</Row>
 					) : null}
 				</Column>

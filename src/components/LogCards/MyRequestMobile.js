@@ -41,7 +41,7 @@ const LogCardMobile = ({ data }) => {
 					</MobileRow>
 					{+totalContributedCount === 0 ? (
 						<MobileRow>
-							<QuickReport>{`No one has contributed yet!`}</QuickReport>
+							<QuickReport variant='primary'>{`No one has contributed yet!`}</QuickReport>
 						</MobileRow>
 					) : null}
 				</MobileColumn>
