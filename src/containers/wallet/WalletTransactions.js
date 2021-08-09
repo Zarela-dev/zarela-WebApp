@@ -119,7 +119,7 @@ const WalletTransactions = ({ isLoading, account, data }) => {
 							{isLoading ? (
 								<Skeleton variant="rect" width={55} height={skeletonLineHeight} />
 							) : (
-								'TX Hash'
+								'TXN Hash'
 							)}
 						</Cell>
 					</CellWrapper>
@@ -173,7 +173,7 @@ const WalletTransactions = ({ isLoading, account, data }) => {
 							{isLoading ? (
 								<Skeleton variant="rect" width={45} height={skeletonLineHeight} />
 							) : (
-								'Tx Free'
+								'TXN fee'
 							)}
 						</Cell>
 					</CellWrapper>
