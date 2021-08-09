@@ -88,13 +88,21 @@ export const Title = styled.h4`
 	margin-bottom: ${(props) => props.theme.spacing(0.8)};
 `;
 
-export const Timestamp = styled.p``;
+export const Timestamp = styled.p`
+	white-space: nowrap;
+`;
 
 export const QuickReport = styled.p`
 	font-weight: ${(props) => (props.bold ? 'bold' : 'normal')};
 	font-size: 12px;
 	line-height: 16px;
 	color: #d13ade;
+	white-space: nowrap;
+`;
+
+export const QuickReportTitle = styled(QuickReport)`
+	font-weight: bold;
+	margin-right: 5px;
 `;
 
 export const RequestNumber = styled.div`
@@ -171,4 +179,110 @@ export const TableCell = styled.div`
 	${TableCellWrapper}:not(:last-child) & {
 		border-right: 1px solid rgba(60, 135, 170, 0.6);
 	}
+`;
+//  Mobile components
+
+export const MobileHeader = styled(Header)`
+	align-items: flex-start;
+	position: relative;
+`;
+
+export const MobileCompactRequestCard = styled(CompactRequestCard)`
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	padding: ${(props) => `${props.theme.spacing(2)} ${props.theme.spacing(1.5)}`};
+`;
+
+export const MobileColumn = styled(Column)`
+	display: flex;
+	flex-direction: column;
+	align-self: unset;
+	align-items: flex-start;
+`;
+
+export const MobileStatus = styled(StatusIcon)`
+	position: ${(props) => (props.static ? 'static' : 'absolute')};
+	right: 0;
+	top: 0;
+	width: 18px;
+`;
+
+export const MobileRequestNumber = styled(RequestNumber)`
+	height: 26px;
+	border-radius: 5px 5px 0px 5px;
+	padding: 7px 11px;
+	margin-right: ${(props) => props.theme.spacing(1)};
+	font-weight: bold;
+	background: linear-gradient(246.29deg, #3a68de 12.69%, #3a68de 100%);
+	font-size: 15px;
+	line-height: 11.4px;
+	color: #ffffff;
+	text-align: center;
+`;
+
+export const MobileTitle = styled(Title)`
+	font-weight: normal;
+	font-size: 12px;
+	line-height: 16px;
+	color: ${(props) => props.theme.textPrimary};
+`;
+
+export const MobileBiobitIcon = styled(BiobitIcon)`
+	padding: ${(props) => `${props.theme.spacing(1)} 0 ${props.theme.spacing(2)}`};
+`;
+
+export const MobileBiobitValue = styled(BiobitValue)`
+	font-weight: bold;
+	font-size: 12px;
+	line-height: 11px;
+	padding: ${(props) => `${props.theme.spacing(1)} 0 ${props.theme.spacing(2)}`};
+`;
+
+export const MobileRow = styled(Row)`
+	display: flex;
+	align-items: center;
+`;
+
+export const MobileBody = styled(Body)``;
+
+export const MobileTable = styled.div`
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	border-top: 1px solid #c4c4c4;
+	padding: ${(props) => `${props.theme.spacing(1.5)} 0 0`};
+	margin-top: ${(props) => props.theme.spacing(2.5)};
+`;
+
+export const MobileTableRow = styled.section`
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+
+	&:not(:last-child) {
+		border-bottom: 1px solid #c4c4c4;
+		margin-bottom: ${(props) => props.theme.spacing(1)};
+	}
+`;
+
+export const MobileTableColumn = styled.div`
+	flex: ${(props) => props.flex || 1};
+	display: flex;
+	flex-direction: column;
+`;
+
+export const MobileTableData = styled.p`
+	font-size: 12px;
+	line-height: 16px;
+	color: #858585;
+	margin-left: ${(props) => props.theme.spacing(1.5)};
+	margin-bottom: ${(props) => props.theme.spacing(0.5)};
+	white-space: nowrap;
+`;
+
+export const MobileTableTitle = styled(MobileTableData)`
+	margin-left: 0;
+	color: ${(props) => props.theme.textPrimary};
 `;

@@ -20,6 +20,7 @@ import {
 	VerticalDivider,
 	Title,
 	QuickReport,
+	QuickReportTitle,
 	RequestNumber,
 	Table,
 	TableCellWrapper,
@@ -48,7 +49,7 @@ const LogCard = ({ data }) => {
 						<Title>{title}</Title>
 					</Row>
 					<Row>
-						<QuickReport bold>{`${totalPending + totalConfirmed} files: `}</QuickReport>
+						<QuickReportTitle>{`${totalPending + totalConfirmed} files: `}</QuickReportTitle>
 						<QuickReport>{` ${totalConfirmed} approved, ${totalPending} pending `}</QuickReport>
 					</Row>
 				</Column>
