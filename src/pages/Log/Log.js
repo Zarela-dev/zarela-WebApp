@@ -75,8 +75,8 @@ const RewardValue = styled.div`
 const Log = () => {
 	const { account } = useWeb3React();
 	const { appState } = useContext(mainContext);
-	const [contributions, setContributions] = useState({});
-	const [isLoading, setIsLoading] = useState(false);
+	const [requests, setRequests] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 	const [totalRevenueFromZarela, setTotalRevenueFromZarela] = useState(0);
 	const [totalRevenueFromRequester, setTotalRevenueFromRequester] = useState(0);
 	const [ConnectionModalShow, setConnectionModalShow] = useState(true);
@@ -88,40 +88,74 @@ const Log = () => {
 					.orderResult()
 					.call({ from: account })
 					.then((result) => {
-						const myContributions = result[1];
+						const userContributionsSet = new Set(result[1]);
+						const userContributions = [...userContributionsSet];
 
 						const getAllRequests = new Promise(async (resolve, reject) => {
-							const requestsListObject = {};
+							const requests = [];
+							const getRequestFiles = (requestContributions) => {
+								let addresses = requestContributions[0];
+								let timestamps = requestContributions[1];
+								let status = requestContributions[2];
+								let zarelaDay = requestContributions[3];
 
-							for (const currentRequest of myContributions) {
-								await appState.contract.methods
-									.orders(currentRequest)
-									.call()
-									.then((result) => {
-										const requestTemplate = {
-											requestID: result[0],
-											title: result[1],
-											description: result[6],
-											requesterAddress: result[2],
-											tokenPay: convertToBiobit(result[3]),
-											totalContributors: result[4], // total contributors required
-											totalContributed: +result[4] - +result[7],
-											whitePaper: result[5],
-											timestamp: result[9],
-											totalContributedCount: result[8],
-										};
-										requestsListObject[requestTemplate.requestID] =
-											requestTemplate;
-									})
-									.catch((error) => {
-										console.error(error.message);
-									});
+								let formatted = {};
+								addresses.forEach((address, originalIndex) => {
+									formatted[originalIndex] = {
+										originalIndex,
+										timestamp: timestamps[originalIndex],
+										zarelaDay: zarelaDay[originalIndex],
+										status: status[originalIndex],
+									};
+								});
+
+								let userContributionIndexes = [];
+								addresses.forEach((item, index) => {
+									if (item.toLowerCase() === account.toLowerCase()) {
+										userContributionIndexes.push(index);
+									}
+								});
+
+								const userContributions = userContributionIndexes.map(
+									(originalIndex) => formatted[originalIndex] || null
+								);
+
+								return userContributions.filter((item) => item !== null);
+							};
+
+							try {
+								for (const currentRequest of userContributions) {
+									let requestInfo = await appState.contract.methods.orders(currentRequest).call();
+									let contributions = await appState.contract.methods
+										.getOrderData(currentRequest)
+										.call({ from: account });
+
+									const requestTemplate = {
+										requestID: requestInfo[0],
+										title: requestInfo[1],
+										description: requestInfo[6],
+										requesterAddress: requestInfo[2],
+										tokenPay: convertToBiobit(requestInfo[3]),
+										totalContributors: requestInfo[4],
+										totalContributed: +requestInfo[4] - +requestInfo[7],
+										whitePaper: requestInfo[5],
+										timestamp: requestInfo[9],
+										totalContributedCount: requestInfo[8],
+										// files contributed on this request filtered by current user
+										contributions: getRequestFiles(contributions),
+									};
+									requests.push(requestTemplate);
+								}
+								resolve(requests);
+							} catch (error) {
+								console.error(error.message);
+								reject(error.message);
 							}
-							resolve(requestsListObject);
 						});
 
-						getAllRequests.then((result) => {
-							setContributions(result);
+						getAllRequests.then((requestsList) => {
+							console.log('requestsList', requestsList);
+							setRequests(requestsList);
 							setIsLoading(false);
 						});
 					})
@@ -185,7 +219,7 @@ const Log = () => {
 								label: 'Contributed',
 								component: (
 									<LogInnerContainer elevated>
-										<Contributes contributions={contributions} />
+										<Contributes isLoading={isLoading} requests={requests} />
 									</LogInnerContainer>
 								),
 							},

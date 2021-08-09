@@ -3,9 +3,9 @@ import LogCard from '../../components/LogCard/Index';
 import LogCardMobile from '../../components/LogCard/LogCardMobile';
 import { mainContext } from './../../state';
 
-const Contributes = ({ contributions }) => {
+const Contributes = ({ requests, isLoading }) => {
 	const { appState } = useContext(mainContext);
-	// console.log(contributions)
+	console.log('requests', requests, requests.length);
 	return (
 		<>
 			{appState.isMobile ? (
@@ -13,8 +13,10 @@ const Contributes = ({ contributions }) => {
 					<LogCardMobile success contributed />
 					<LogCardMobile pending contributed />
 				</>
+			) : isLoading ? (
+				'isLoading'
 			) : (
-				Object.values(contributions).map((contribution) => <LogCard data={contribution} success contributed />)
+				requests.map((request) => <LogCard key={request.requestID} data={request} />)
 			)}
 		</>
 	);

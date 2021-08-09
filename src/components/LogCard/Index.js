@@ -1,25 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import styled from 'styled-components';
-// import {
-// 	RequestNumber,
-// 	HeaderLayout,
-// 	Footer,
-// 	TokenIcon,
-// 	Bookmark,
-// 	ContributorBadge,
-// 	ContributorsIcon,
-// 	Divider,
-// 	BadgeRow,
-// 	Title,
-// 	BadgeLabel,
-// } from "../Elements/RequestCard/IndexMobile";
-import { useWeb3React } from '@web3-react/core';
-import { mainContext } from '../../state';
-
-import maxWidthWrapper from '../Elements/MaxWidth';
+import React, { useState } from 'react';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
-import contributorIcon from '../../assets/icons/user-black.svg';
-import bookmarkIcon from '../../assets/icons/bookmark-purple.svg';
 import approvedIcon from '../../assets/icons/check-green.svg';
 import unapprovedIcon from '../../assets/icons/pending.svg';
 import caretDownIcon from '../../assets/icons/caret-down.svg';
@@ -30,20 +10,15 @@ import {
 	Row,
 	Header,
 	Body,
-	Section,
 	Column,
 	BiobitIcon,
 	DollarValue,
 	CaretIcon,
 	StatusIcon,
-	ContributorIcon,
-	BookmarkIcon,
 	StatusLabel,
 	BiobitValue,
 	VerticalDivider,
-	ContributorCount,
 	Title,
-	Timestamp,
 	QuickReport,
 	RequestNumber,
 	Table,
@@ -53,200 +28,18 @@ import {
 	TableBulkRow,
 } from './Elements';
 import { Spacer } from '../Elements/Spacer';
+import { timeSince } from '../../utils';
 
-/* const CustomRequestNumber = styled(RequestNumber)`
-	flex: 0 0 79px;
-	height: 50px;
-	border-radius: 10px 10px 0px 10px;
-	padding: 10px 20px;
-	margin-right: ${(props) => props.theme.spacing(2)};
-	font-weight: 700;
-	background: linear-gradient(246.29deg, #3a68de 12.69%, #3a68de 100%);
-	font-size: 32px;
-	line-height: 30px;
-	color: #ffffff;
-	text-align: center;
-`;
+const LogCard = ({ data }) => {
+	const { requestID, title, tokenPay, contributions } = data;
+	const [isOpen, setOpen] = useState(false);
+	const totalPending = contributions.filter((item) => item.status === false).length;
+	const totalConfirmed = contributions.filter((item) => item.status === true).length;
+	const allApproved = contributions.length === totalConfirmed;
 
-const HeaderContainer = styled.header`
-	background: #f4f8fe;
-	border-radius: 8px;
-	padding: 13px 21px;
-	width: 100%;
-	margin-bottom: 10px;
-`;
-
-const HeaderInner = styled(HeaderLayout)`
-	display: flex;
-	flex-direction: row;
-	${maxWidthWrapper};
-	width: 100%;
-	justify-content: space-between;
-`;
-
-const HeaderLayoutCustom = styled(HeaderLayout)`
-	width: unset;
-	flex-grow: 1;
-`;
-
-const CustomFooter = styled(Footer)`
-	margin-top: ${(props) => props.theme.spacing(0)};
-	padding-left: 0;
-	flex-wrap: nowrap;
-`;
-
-const CustomBadgeRow = styled(BadgeRow)`
-	flex: 0;
-	align-items: center;
-`;
-
-const TitleContent = styled(Title)`
-	font-size: 14px;
-	font-weight: 600;
-	line-heigh: 16.5px;
-	margin-bottom: 5px;
-`;
-
-const CustomDivider = styled(Divider)`
-	height: 48px;
-	background-color: rgba(60, 135, 170, 0.6);
-	margin: 0 20px;
-`;
-
-const BodyContainer = styled.div`
-	display: flex;
-	justify-content: flex-start;
-	align-items: center;
-`;
-
-const HashContent = styled.div`
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-`;
-
-const HashBody = styled.div`
-	word-break: break-all;
-	font-size: 12px;
-	font-weight: 500;
-	color: #3a68de;
-	line-height: 16px;
-`;
-
-const HashTitle = styled(HashBody)`
-	font-size: 14px;
-	font-weight: 400;
-	line-height: 20px;
-	color: #121213;
-	margin-right: 6px;
-	align-items: center;
-`;
-
-const CustomContributorBadge = styled(ContributorBadge)`
-	margin-right: ${(props) => (props.nomargin ? 0 : '25px')};
-	min-width: ${(props) => (props.nomargin ? '90px' : 'unset')};
-`;
-
-const ContributorsIconMobile = styled(ContributorsIcon)`
-	width: 18px;
-	height: 18px;
-`;
-const ToeknIconMobile = styled(TokenIcon)`
-	width: 20px;
-	height: 20px;
-`;
-
-const BadgeLabelTimeMobile = styled(BadgeLabel)`
-	font-size: 14px;
-	line-height: 20px;
-	font-weight: ${(props) => (props.subHeader ? 400 : 700)};
-	color: ${(props) => (props.success ? 'rgba(27, 204, 141, 1)' : props.pending && 'rgba(133, 133, 133, 1)')};
-`;
-
-const BadgeLabelContributors = styled(BadgeLabel)`
-	font-size: 16px;
-	line-height: 18px;
-	font-weight: ${(props) => (props.highlight ? 700 : 400)};
-	min-width: ${(props) => props.minWidth && '60px'};
-	white-space: nowrap;
-	color: ${(props) => (props.highlight ? '#3A68DE' : '')};
-`;
-
-const ContentWrapper = styled.div`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	flex-grow: 1;
-`;
-const TitleWrapper = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-`;
-
-const ItemInformation = styled.div`
-	display: flex;
-	justify-self: self-end;
-`;
-const BookmarkIconWrapper = styled(Bookmark)`
-	align-self: center;
-`;
-
-const SubHeaderRow = styled.div`
-	display: flex;
-	justify-content: flex-start;
-`; */
-
-const LogCard = ({ data, MyRequests, marketRequest, allApproved }) => {
-	const { requestID, title, tokenPay } = data;
-	const [files, setFiles] = useState([]);
-	const { account } = useWeb3React();
-	const { appState } = useContext(mainContext);
-
-	useEffect(() => {
-		if (appState.contract !== null) {
-			if (account) {
-				appState.contract.methods.getOrderData(requestID).call({ from: account }, (error, result) => {
-					if (!error) {
-						let addresses = result[0];
-						let timestamps = result[1];
-						let status = result[2];
-						let zarelaDay = result[3];
-
-						let formatted = {};
-						let uniqueAddresses = [...new Set(result[1])];
-						let pairs = [];
-
-						addresses.forEach((address, originalIndex) => {
-							pairs.push({
-								originalIndex,
-								address,
-								timestamp: timestamps[originalIndex],
-								zarelaDay: zarelaDay[originalIndex],
-								status: status[originalIndex],
-							});
-						});
-
-						let userContributionIndexes = [];
-						addresses.forEach((item, index) => {
-							if (item.toLowerCase() === account.toLowerCase()) {
-								userContributionIndexes.push(index);
-							}
-						});
-
-						setFiles(userContributionIndexes);
-					} else {
-						console.error(error.message);
-					}
-				});
-			}
-		}
-	}, [appState.contract, account]);
-
-	console.log('files', files);
 	return (
 		<CompactRequestCard>
-			<Header>
+			<Header onClick={() => setOpen((value) => !value)}>
 				<Column flex="0 0 80px" alignSelf="flex-start">
 					<RequestNumber>{requestID}</RequestNumber>
 				</Column>
@@ -255,8 +48,8 @@ const LogCard = ({ data, MyRequests, marketRequest, allApproved }) => {
 						<Title>{title}</Title>
 					</Row>
 					<Row>
-						<QuickReport bold>{`${3} files: `}</QuickReport>
-						<QuickReport>{` ${2} approved, ${1} pending `}</QuickReport>
+						<QuickReport bold>{`${totalPending + totalConfirmed} files: `}</QuickReport>
+						<QuickReport>{` ${totalConfirmed} approved, ${totalPending} pending `}</QuickReport>
 					</Row>
 				</Column>
 				<Spacer />
@@ -285,44 +78,56 @@ const LogCard = ({ data, MyRequests, marketRequest, allApproved }) => {
 				</Column>
 				<Column flex="0">{true ? <CaretIcon src={caretDownIcon} /> : <CaretIcon src={caretUpIcon} />}</Column>
 			</Header>
-			<Body>
-				<Table>
-					<TableRow header>
-						<TableCellWrapper>
-							<TableCell>File Names</TableCell>
-						</TableCellWrapper>
-						<TableCellWrapper>
-							<TableCell>Date</TableCell>
-						</TableCellWrapper>
-						<TableCellWrapper>
-							<TableCell>Zarela Day</TableCell>
-						</TableCellWrapper>
-						<TableCellWrapper>
-							<TableCell>Status</TableCell>
-						</TableCellWrapper>
-					</TableRow>
-					<TableBulkRow>
-						{Array(3)
-							.fill(null)
-							.map((contributorAddress, index) => (
-								<TableRow key={contributorAddress}>
+			{isOpen ? (
+				<Body>
+					<Table>
+						<TableRow header>
+							<TableCellWrapper>
+								<TableCell>File Names</TableCell>
+							</TableCellWrapper>
+							<TableCellWrapper>
+								<TableCell>Date</TableCell>
+							</TableCellWrapper>
+							<TableCellWrapper>
+								<TableCell>Zarela Day</TableCell>
+							</TableCellWrapper>
+							<TableCellWrapper>
+								<TableCell>Status</TableCell>
+							</TableCellWrapper>
+						</TableRow>
+						<TableBulkRow>
+							{contributions.map(({ originalIndex, timestamp, zarelaDay, status }, rowIndex) => (
+								<TableRow key={originalIndex}>
 									<TableCellWrapper>
-										<TableCell>File Names</TableCell>
+										<TableCell>{`${rowIndex + 1}. File #${originalIndex}`}</TableCell>
 									</TableCellWrapper>
 									<TableCellWrapper>
-										<TableCell>Date</TableCell>
+										<TableCell>{timeSince(timestamp)}</TableCell>
 									</TableCellWrapper>
 									<TableCellWrapper>
-										<TableCell>Zarela Day</TableCell>
+										<TableCell>{zarelaDay}</TableCell>
 									</TableCellWrapper>
 									<TableCellWrapper>
-										<TableCell>Status</TableCell>
+										<TableCell>
+											{status ? (
+												<>
+													<StatusIcon src={approvedIcon} />
+													<StatusLabel approved>Confirmed</StatusLabel>
+												</>
+											) : (
+												<>
+													<StatusIcon src={unapprovedIcon} />
+													<StatusLabel>Pending</StatusLabel>
+												</>
+											)}
+										</TableCell>
 									</TableCellWrapper>
 								</TableRow>
 							))}
-					</TableBulkRow>
-				</Table>
-			</Body>
+						</TableBulkRow>
+					</Table>
+				</Body>
+			) : null}
 		</CompactRequestCard>
 	);
 };

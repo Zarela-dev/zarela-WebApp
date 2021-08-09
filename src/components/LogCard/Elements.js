@@ -142,7 +142,7 @@ export const TableRow = styled.section`
 	margin-bottom: ${(props) => (props.header ? props.theme.spacing(1) : 0)};
 
 	${TableCellWrapper}:first-of-type {
-		flex: 1 1 700px;
+		flex: 0 0 58%;
 	}
 
 	${TableCellWrapper}:nth-of-type(2) {
@@ -153,7 +153,7 @@ export const TableRow = styled.section`
 		flex: 0 0 100px;
 	}
 	${TableCellWrapper}:nth-of-type(4) {
-		flex: 0 0 140p;
+		flex: 0 0 160px;
 	}
 `;
 
@@ -161,7 +161,7 @@ export const TableCell = styled.div`
 	display: flex;
 	align-items: center;
 	min-height: 48px;
-	padding: ${(props) => props.theme.spacing(0.6)} ${(props) => props.theme.spacing(1)};
+	padding: ${(props) => props.theme.spacing(0.6)} ${(props) => props.theme.spacing(2)};
 	font-size: 12px;
 	height: 40px;
 	width: 100%;
