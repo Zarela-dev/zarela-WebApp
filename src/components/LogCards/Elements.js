@@ -71,6 +71,7 @@ export const DollarValue = styled.p`
 `;
 
 export const VerticalDivider = styled.div`
+	visibility: ${(props) => (props.hide ? 'hidden' : 'visible')};
 	height: 50px;
 	width: 1px;
 	border-right: 1px solid rgba(60, 135, 170, 0.6);
@@ -90,6 +91,11 @@ export const Title = styled.h4`
 
 export const Timestamp = styled.p`
 	white-space: nowrap;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 130%;
+	color: ${(props) => props.theme.textPrimary};
 `;
 
 export const QuickReport = styled.p`
@@ -226,6 +232,7 @@ export const MobileTitle = styled(Title)`
 	font-size: 12px;
 	line-height: 16px;
 	color: ${(props) => props.theme.textPrimary};
+	margin-right: ${(props) => props.noMargin && 0};
 `;
 
 export const MobileBiobitIcon = styled(BiobitIcon)`
@@ -285,4 +292,11 @@ export const MobileTableData = styled.p`
 export const MobileTableTitle = styled(MobileTableData)`
 	margin-left: 0;
 	color: ${(props) => props.theme.textPrimary};
+`;
+
+export const TimestampMobile = styled(Timestamp)`
+	font-weight: normal;
+	font-size: 12px;
+	line-height: 16px;
+	color: #858585;
 `;

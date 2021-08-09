@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { mainContext } from '../../state';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import TitleBar from '../../components/TitleBar/TitleBar';
 import { Tabs } from '../../components/Tabs';
 import MyRequests from '../../containers/Log/MyRequests';
-import MarketRequests from '../../containers/Log/MarketRequests';
+import MarkedRequests from '../../containers/Log/MarkedRequests';
 import { convertToBiobit, toast } from '../../utils';
 import Contributes from '../../containers/Log/Contributes';
 import { useWeb3React } from '@web3-react/core';
@@ -75,8 +75,6 @@ const RewardValue = styled.div`
 const Log = () => {
 	const { account } = useWeb3React();
 	const { appState } = useContext(mainContext);
-	const [requests, setRequests] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
 	const [totalRevenueFromZarela, setTotalRevenueFromZarela] = useState(0);
 	const [totalRevenueFromRequester, setTotalRevenueFromRequester] = useState(0);
 	const [ConnectionModalShow, setConnectionModalShow] = useState(true);
@@ -84,85 +82,6 @@ const Log = () => {
 	useEffect(() => {
 		if (appState.contract !== null) {
 			if (account) {
-				appState.contract.methods
-					.orderResult()
-					.call({ from: account })
-					.then((result) => {
-						const userContributionsSet = new Set(result[1]);
-						const userContributions = [...userContributionsSet];
-
-						const getAllRequests = new Promise(async (resolve, reject) => {
-							const requests = [];
-							const getRequestFiles = (requestContributions) => {
-								let addresses = requestContributions[0];
-								let timestamps = requestContributions[1];
-								let status = requestContributions[2];
-								let zarelaDay = requestContributions[3];
-
-								let formatted = {};
-								addresses.forEach((address, originalIndex) => {
-									formatted[originalIndex] = {
-										originalIndex,
-										timestamp: timestamps[originalIndex],
-										zarelaDay: zarelaDay[originalIndex],
-										status: status[originalIndex],
-									};
-								});
-
-								let userContributionIndexes = [];
-								addresses.forEach((item, index) => {
-									if (item.toLowerCase() === account.toLowerCase()) {
-										userContributionIndexes.push(index);
-									}
-								});
-
-								const userContributions = userContributionIndexes.map(
-									(originalIndex) => formatted[originalIndex] || null
-								);
-
-								return userContributions.filter((item) => item !== null);
-							};
-
-							try {
-								for (const currentRequest of userContributions) {
-									let requestInfo = await appState.contract.methods.orders(currentRequest).call();
-									let contributions = await appState.contract.methods
-										.getOrderData(currentRequest)
-										.call({ from: account });
-
-									const requestTemplate = {
-										requestID: requestInfo[0],
-										title: requestInfo[1],
-										description: requestInfo[6],
-										requesterAddress: requestInfo[2],
-										tokenPay: convertToBiobit(requestInfo[3]),
-										totalContributors: requestInfo[4],
-										totalContributed: +requestInfo[4] - +requestInfo[7],
-										whitePaper: requestInfo[5],
-										timestamp: requestInfo[9],
-										totalContributedCount: requestInfo[8],
-										// files contributed on this request filtered by current user
-										contributions: getRequestFiles(contributions),
-									};
-									requests.push(requestTemplate);
-								}
-								resolve(requests);
-							} catch (error) {
-								console.error(error.message);
-								reject(error.message);
-							}
-						});
-
-						getAllRequests.then((requestsList) => {
-							console.log('requestsList', requestsList);
-							setRequests(requestsList);
-							setIsLoading(false);
-						});
-					})
-					.catch((error) => {
-						console.error(error.message);
-					});
-
 				appState.contract.methods.userMap(account).call((error, result) => {
 					if (!error) {
 						const formatter = (value) => convertToBiobit(value);
@@ -211,7 +130,7 @@ const Log = () => {
 								label: 'Marked Requests',
 								component: (
 									<LogInnerContainer elevated>
-										<MarketRequests />
+										<MarkedRequests />
 									</LogInnerContainer>
 								),
 							},
@@ -219,7 +138,7 @@ const Log = () => {
 								label: 'Contributed',
 								component: (
 									<LogInnerContainer elevated>
-										<Contributes isLoading={isLoading} requests={requests} />
+										<Contributes />
 									</LogInnerContainer>
 								),
 							},
