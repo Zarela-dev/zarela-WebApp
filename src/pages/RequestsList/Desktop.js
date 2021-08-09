@@ -14,6 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 const RequestsListWrapper = styled.div`
 	position: relative;
 	width: 100%;
+	background: ${(props) => (props.isLoading ? '#E5E5E5' : 'unset')};
 `;
 
 const Background = styled.div`
@@ -98,6 +99,13 @@ const SquerSection = styled.div`
 	flex-grow: 1;
 `;
 
+const SkeletonSidebarCard = styled.div`
+	width: 100%;
+	height: 210px;
+	background: #fff;
+	margin-bottom: 25px;
+`;
+
 const useStyles = makeStyles({
 	root: {
 		marginBottom: '19px',
@@ -127,17 +135,27 @@ const Desktop = ({
 	}, [currentPage, requests]);
 
 	return (
-		<RequestsListWrapper>
-			<Background />
+		<RequestsListWrapper isLoading={isLoading}>
+			{!isLoading && <Background />}
 			<HomepageCounters
 				zarelaDailyGift={appState.zarelaDailyGift}
 				zarelaInitDate={appState.zarelaInitDate}
 			/>
 			<RequestsListLayout>
-				<RequestListSidebarWrapper>
-					<TokenStatsSidebar dailyContributors={dailyContributors} />
-					<TokenInfoSidebar data={appState} account={web3React.account} />
-				</RequestListSidebarWrapper>
+				{isLoading ? (
+					<RequestListSidebarWrapper>
+						{[1,2,3].map(index => {
+							return(
+								<SkeletonSidebarCard />
+							)
+						})}
+					</RequestListSidebarWrapper>
+				) : (
+					<RequestListSidebarWrapper>
+						<TokenStatsSidebar dailyContributors={dailyContributors} />
+						<TokenInfoSidebar data={appState} account={web3React.account} />
+					</RequestListSidebarWrapper>
+				)}
 				<RequestsListContentWrapper>
 					{isLoading
 						? [1, 2, 3].map((index) => {
