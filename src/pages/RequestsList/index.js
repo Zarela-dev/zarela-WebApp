@@ -15,7 +15,7 @@ const RequestsList = () => {
 	const [dailyContributors, setDailyContributors] = useState(0);
 	// const [BiobitBasedOnEth, setBiobitBasedOnEth] = useState(0);
 	// const [ZarelaReward, setZarelaReward] = useState(0);
-	const [isLoading, setLoading] = useState(false);
+	const [isLoading, setLoading] = useState(true);
 
 	// pagination hook
 	useEffect(() => {
@@ -52,7 +52,7 @@ const RequestsList = () => {
 										...requests,
 										[requestTemplate.requestID]: requestTemplate,
 									}));
-									// if (i === +requestsCount - 1) setLoading(false);
+									if (i === +requestsCount - 1) setLoading(false);
 								} else {
 									console.error(error.message);
 								}
