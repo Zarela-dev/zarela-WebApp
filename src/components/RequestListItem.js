@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useContext } from "react";
-import styled from "styled-components";
-import { Spacer } from "./Elements/Spacer";
-import { WithPointerCursor } from "./Elements/WithPointerCursor";
+import React, { useEffect, useState, useContext } from 'react';
+import styled from 'styled-components';
+import { Spacer } from './Elements/Spacer';
+import { WithPointerCursor } from './Elements/WithPointerCursor';
 import {
 	ContributorsIcon,
 	ContributorBadge,
@@ -13,24 +13,27 @@ import {
 	TokenValue,
 	ValueLabel,
 	BiobitToDollarValue,
-} from "./Elements/RequestCard";
-import { Typography } from "./Elements/Typography";
-import biobitIcon from "../assets/icons/biobit-black.svg";
-import contributorIcon from "../assets/icons/user-blue.svg";
-import RequestFilesTable from "./RequestFilesTable";
-import { mainContext } from "../state";
-import { Button } from "./Elements/Button";
-import axios from "axios";
-import { Buffer } from "buffer";
-import fileType from "file-type";
-import { useWeb3React } from "@web3-react/core";
+} from './Elements/RequestCard';
+import { Typography } from './Elements/Typography';
+import biobitIcon from '../assets/icons/biobit-black.svg';
+import contributorIcon from '../assets/icons/user-blue.svg';
+import RequestFilesTable from './RequestFilesTable';
+import { mainContext } from '../state';
+import { Button } from './Elements/Button';
+import axios from 'axios';
+import { Buffer } from 'buffer';
+import fileType from 'file-type';
+import { useWeb3React } from '@web3-react/core';
+import caretDownIcon from '../assets/icons/caret-down.svg';
+import caretUpIcon from '../assets/icons/caret-up.svg';
+import fulfilledIcon from '../assets/icons/check-green.svg';
+import _ from 'lodash';
 
 const Wrapper = styled.div`
-	background: ${(props) => (props.seen ? "#EDFBF8" : "#EAF2FF")};
+	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
 	opacity: 0.8;
 	border-radius: 8px;
-	padding: ${(props) => props.theme.spacing(3)}
-		${(props) => props.theme.spacing(3.5)};
+	padding: ${(props) => props.theme.spacing(3)} ${(props) => props.theme.spacing(3.5)};
 	margin-bottom: ${(props) => props.theme.spacing(2)};
 `;
 
@@ -49,6 +52,8 @@ const DetailsColumn = styled.div`
 	display: flex;
 	flex: 4;
 	justify-content: flex-end;
+	height: 35px;
+	align-items: center;
 
 	@media (max-width: 768px) {
 		align-items: center;
@@ -83,24 +88,28 @@ const Title = styled(Typography)`
 `;
 
 const TotalBadge = styled.div`
-	background: #2eeca8;
+	border: 2px solid ${(props) => props.theme.primary};
+	background: transparent;
 	min-width: 32px;
 	height: 32px;
-	padding: ${(props) => props.theme.spacing(0.8)}
-		${(props) => props.theme.spacing(0.6)};
-	border-radius: 32px;
+	padding: ${(props) => props.theme.spacing(0.5)} ${(props) => props.theme.spacing(0.6)};
+	border-radius: 5px;
 
 	text-align: center;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: 15px;
 	line-height: 18px;
-	color: white;
+	color: ${(props) => props.theme.primary};
+`;
+
+const ApprovedBadge = styled.img`
+	width: 36px;
 `;
 
 const Divider = styled.div`
 	width: 1px;
 	background: #3c87aa;
-	min-height: 37px;
+	height: 100%;
 	margin: 0 ${(props) => props.theme.spacing(1)};
 `;
 
@@ -123,8 +132,7 @@ const SubmitButton = styled.button`
 	height: 35px;
 	margin-right: 0;
 	margin-top: ${(props) => props.theme.spacing(3)};
-	padding: ${(props) => props.theme.spacing(0.5)}
-		${(props) => props.theme.spacing(1.5)};
+	padding: ${(props) => props.theme.spacing(0.5)} ${(props) => props.theme.spacing(1.5)};
 	font-weight: 500;
 	font-size: 16px;
 	line-height: 18px;
@@ -137,6 +145,11 @@ const EqualSign = styled(BiobitToDollarValue)`
 	margin: 0 5px;
 `;
 
+const ExpandToggle = styled.img`
+	width: 24px;
+	margin-left: ${(props) => props.theme.spacing(1.5)};
+`;
+
 const RequestListItem = ({
 	showContributions,
 	total,
@@ -145,74 +158,145 @@ const RequestListItem = ({
 	tokenPay,
 	contributors,
 	handleConfirm,
+	fulfilled,
 }) => {
 	const [isOpen, setOpen] = useState(false);
+	const [unapprovedCount, setUnapprovedCount] = useState(0);
+	const [isFulfilled, setFulfilled] = useState(false);
 	const { appState } = useContext(mainContext);
 	const [formattedData, setFormattedData] = useState({});
-	const [selected, setSelected] = useState({});
+	const [selected, setSelected] = useState([]);
 	const { account } = useWeb3React();
 
-	const isAllChecked = () => {
-		const chosen = Object.values(selected).reduce(
-			(acc, curr) => acc.concat(...curr),
-			[]
-		);
-		const total = Object.values(formattedData).reduce(
-			(acc, curr) => acc.concat(...curr),
-			[]
-		);
-		return chosen.length === total.length;
-	};
-
 	const changeAll = (type) => {
-		const allSelected = {};
-		Object.keys(formattedData).forEach((address) => {
-			allSelected[address] = formattedData[address].map(
-				(item) => item.ipfsHash
-			);
+		const originalIndexes = [];
+		const indexesAlreadyConfirmed = [];
+		const all = Object.values(formattedData).reduce((acc, curr) => acc.concat(curr), []);
+
+		all.forEach(({ status, originalIndex }) => {
+			originalIndexes.push(originalIndex);
+			if (Boolean(status)) {
+				indexesAlreadyConfirmed.push(originalIndex);
+			}
 		});
 
-		if (type === "check") setSelected(allSelected);
-		if (type === "uncheck")
-			setSelected((values) => {
-				let result = {};
+		const selectableIndexes = originalIndexes.filter(
+			(index) => !indexesAlreadyConfirmed.includes(index)
+		);
 
-				Object.keys(values).forEach((address) => {
-					result[address] = [];
-				});
-
-				return result;
-			});
+		if (type === 'check') {
+			setSelected(selectableIndexes);
+		}
+		if (type === 'uncheck') setSelected([]);
 	};
 
-	const onBulkChange = (type, address) => {
-		if (type === "check")
-			setSelected((values) => ({
-				...values,
-				[address]: formattedData[address].map((item) => item.ipfsHash),
-			}));
-		if (type === "uncheck")
-			setSelected((values) => {
-				return {
-					...values,
-					[address]: [],
-				};
-			});
+	const isAllChecked = () => {
+		const originalIndexes = [];
+		const indexesAlreadyConfirmed = [];
+		const selectedIndexes = [...selected];
+		const all = Object.values(formattedData).reduce((acc, curr) => acc.concat(curr), []);
+
+		all.forEach(({ status, originalIndex }) => {
+			originalIndexes.push(originalIndex);
+			if (Boolean(status) === true) indexesAlreadyConfirmed.push(originalIndex);
+		});
+
+		if (
+			_.isEqual(
+				[...selectedIndexes, ...indexesAlreadyConfirmed].sort(),
+				originalIndexes.sort()
+			)
+		) {
+			return true;
+		}
+		return false;
 	};
 
-	const onChange = (type, address, fileHash) => {
-		if (type === "check")
-			setSelected((values) => ({
-				...values,
-				[address]: [...values[address], fileHash],
-			}));
-		if (type === "uncheck")
-			setSelected((values) => {
-				return {
-					...values,
-					[address]: values[address].filter((item) => item !== fileHash),
-				};
-			});
+	const isAllApproved = () => {
+		const originalIndexes = [];
+		const indexesAlreadyConfirmed = [];
+		const all = Object.values(formattedData).reduce((acc, curr) => acc.concat(curr), []);
+
+		all.forEach(({ status, originalIndex }) => {
+			originalIndexes.push(originalIndex);
+			if (Boolean(status) === true) indexesAlreadyConfirmed.push(originalIndex);
+		});
+
+		if (_.isEqual(originalIndexes.sort(), indexesAlreadyConfirmed.sort())) return true;
+		return false;
+	};
+
+	const isBulkApproved = (contributorAddress) => {
+		const originalIndexes = [];
+		const indexesAlreadyConfirmed = [];
+
+		formattedData[contributorAddress]?.forEach(({ originalIndex, status }) => {
+			originalIndexes.push(originalIndex);
+			if (Boolean(status) === true) {
+				indexesAlreadyConfirmed.push(originalIndex);
+			}
+		});
+
+		if (_.isEqual(indexesAlreadyConfirmed.sort(), originalIndexes.sort())) {
+			return true;
+		}
+		return false;
+	};
+
+	const isBulkChecked = (contributorAddress) => {
+		const originalIndexes = [];
+		const selectedIndexes = [];
+		const indexesAlreadyConfirmed = [];
+
+		formattedData[contributorAddress].forEach(({ originalIndex, status }) => {
+			originalIndexes.push(originalIndex);
+			if (selected.includes(originalIndex)) {
+				selectedIndexes.push(originalIndex);
+			}
+			if (Boolean(status) === true) {
+				indexesAlreadyConfirmed.push(originalIndex);
+			}
+		});
+
+		if (
+			_.isEqual(
+				[...selectedIndexes, ...indexesAlreadyConfirmed].sort(),
+				originalIndexes.sort()
+			)
+		) {
+			return true;
+		}
+		return false;
+	};
+
+	const onBulkChange = (type, contributorAddress) => {
+		const originalIndexes = [];
+		const indexesAlreadyConfirmed = [];
+
+		formattedData[contributorAddress].forEach(({ originalIndex, status }) => {
+			originalIndexes.push(originalIndex);
+			if (Boolean(status)) {
+				indexesAlreadyConfirmed.push(originalIndex);
+			}
+		});
+
+		const selectableIndexes = originalIndexes.filter(
+			(index) => !indexesAlreadyConfirmed.includes(index)
+		);
+
+		if (type === 'check') {
+			setSelected((values) => [...values, ...selectableIndexes]);
+		}
+		if (type === 'uncheck')
+			setSelected((values) =>
+				values.filter((selectedItem) => !originalIndexes.includes(selectedItem))
+			);
+	};
+
+	const onChange = (type, originalIndex) => {
+		if (type === 'check') setSelected((values) => [...values, originalIndex]);
+		if (type === 'uncheck')
+			setSelected((values) => values.filter((item) => +item !== +originalIndex));
 	};
 
 	const signalDownloadHandler = (fileHash) => {
@@ -222,7 +306,7 @@ const RequestListItem = ({
 			.then((fileRes) => {
 				window.ethereum
 					.request({
-						method: "eth_decrypt",
+						method: 'eth_decrypt',
 						params: [fileRes.data, account],
 					})
 					.then((decryptedMessage) => {
@@ -230,7 +314,7 @@ const RequestListItem = ({
 							var byteString = atob(base64);
 							var ab = new ArrayBuffer(byteString.length);
 							var ia = new Uint8Array(ab);
-							var buff = Buffer.from(base64, "base64");
+							var buff = Buffer.from(base64, 'base64');
 							var contributionFileExt = await fileType.fromBuffer(buff);
 							for (var i = 0; i < byteString.length; i++) {
 								ia[i] = byteString.charCodeAt(i);
@@ -239,9 +323,9 @@ const RequestListItem = ({
 						}
 
 						var saveByteArray = (function () {
-							var anchorTag = document.createElement("a");
+							var anchorTag = document.createElement('a');
 							document.body.appendChild(anchorTag);
-							anchorTag.style = "display: none";
+							anchorTag.style = 'display: none';
 
 							return async function (data, name) {
 								try {
@@ -264,50 +348,68 @@ const RequestListItem = ({
 
 	useEffect(() => {
 		if (showContributions && appState.contract !== null) {
-			appState.contract.methods
-				.GetOrderFiles(requestID)
-				.call({ from: account }, (error, result) => {
-					if (!error) {
-						let formatted = {};
-						let selected = {};
-						let uniqueAddresses = [...new Set(result[1])];
-						let pairs = [];
+			appState.contract.methods.GetOrderFiles(requestID).call((orderInfoError, orderInfo) => {
+				if (!orderInfoError) {
+					appState.contract.methods
+						.ShowFile(requestID)
+						.call({ from: account }, (fileError, files) => {
+							if (!fileError) {
+								let addresses = orderInfo[0];
+								let timestamp = orderInfo[1];
+								let status = orderInfo[2];
 
-						result[0].forEach((file, fileIndex) => {
-							pairs.push({
-								file,
-								address: result[1][fileIndex],
-								timestamp: result[2][fileIndex],
-							});
+								let formatted = {};
+								let uniqueAddresses = [...new Set(addresses)];
+								let pairs = [];
+
+								// count all the unapproved files
+								setUnapprovedCount(
+									status.filter((item) => Boolean(item) === false).length
+								);
+
+								addresses.forEach((address, fileIndex) => {
+									pairs.push({
+										file: files[fileIndex],
+										address: address,
+										timestamp: timestamp[fileIndex],
+										originalIndex: fileIndex,
+										status: status[fileIndex],
+									});
+								});
+
+								uniqueAddresses.forEach((uAddress, uIndex) => {
+									pairs.forEach((tempItem, tempIndex) => {
+										if (tempItem.address === uAddress) {
+											if (Object(formatted).hasOwnProperty(uAddress)) {
+												formatted[uAddress].push({
+													ipfsHash: tempItem.file,
+													timestamp: tempItem.timestamp,
+													originalIndex: tempItem.originalIndex,
+													status: tempItem.status,
+												});
+											} else {
+												formatted[uAddress] = [
+													{
+														ipfsHash: tempItem.file,
+														timestamp: tempItem.timestamp,
+														originalIndex: tempItem.originalIndex,
+														status: tempItem.status,
+													},
+												];
+											}
+										}
+									});
+								});
+
+								setFormattedData(formatted);
+							} else {
+								console.error(fileError);
+							}
 						});
-
-						uniqueAddresses.forEach((uAddress, uIndex) => {
-							pairs.forEach((tempItem, tempIndex) => {
-								if (tempItem.address === uAddress) {
-									if (Object(formatted).hasOwnProperty(uAddress)) {
-										formatted[uAddress].push({
-											ipfsHash: tempItem.file,
-											timestamp: tempItem.timestamp,
-										});
-									} else {
-										formatted[uAddress] = [
-											{
-												ipfsHash: tempItem.file,
-												timestamp: tempItem.timestamp,
-											},
-										];
-									}
-									selected[uAddress] = [];
-								}
-							});
-						});
-
-						setFormattedData(formatted);
-						setSelected(selected);
-					} else {
-						console.error(error.message);
-					}
-				});
+				} else {
+					console.error(orderInfoError.message);
+				}
+			});
 		}
 	}, [appState.contract]);
 
@@ -317,7 +419,7 @@ const RequestListItem = ({
 				<TitleColumn>
 					<RequestNumberWithPointer>{requestID}</RequestNumberWithPointer>
 					<Title variant="title" weight="semiBold">
-						{title.length < 135 ? title : title.substr(0, 135) + "..."}
+						{title.length < 135 ? title : title.substr(0, 135) + '...'}
 					</Title>
 					<Spacer />
 				</TitleColumn>
@@ -328,9 +430,7 @@ const RequestListItem = ({
 							<TokenIcon src={biobitIcon} />
 							<TokenValue>{tokenPay}</TokenValue>
 							<ValueLabel>BBit</ValueLabel>
-							<BiobitToDollarValue noMargin>
-								{"~ $" + tokenPay}
-							</BiobitToDollarValue>
+							<BiobitToDollarValue noMargin>{'~ $' + tokenPay}</BiobitToDollarValue>
 						</BadgeRow>
 					</BiobitToDollarPair>
 
@@ -344,7 +444,12 @@ const RequestListItem = ({
 					</CustomContributeBadge>
 
 					<Divider />
-					<TotalBadge>{total}</TotalBadge>
+					{fulfilled ? (
+						<ApprovedBadge src={fulfilledIcon} />
+					) : (
+						<TotalBadge>{unapprovedCount}</TotalBadge>
+					)}
+					<ExpandToggle src={!isOpen ? caretDownIcon : caretUpIcon} />
 				</DetailsColumn>
 			</Header>
 			{showContributions && isOpen ? (
@@ -357,6 +462,9 @@ const RequestListItem = ({
 								selected={selected}
 								onChange={onChange}
 								onBulkChange={onBulkChange}
+								isBulkChecked={isBulkChecked}
+								isBulkApproved={isBulkApproved}
+								isAllApproved={isAllApproved}
 								isAllChecked={isAllChecked}
 								changeAll={changeAll}
 							/>
@@ -364,17 +472,17 @@ const RequestListItem = ({
 						<Footer>
 							<SubmitButton
 								onClick={() => {
-									let payload = [];
+									// let payload = [];
 
-									Object.keys(selected).forEach((item) => {
-										payload.push(
-											...selected[item].map((fileHash) => {
-												// we need the duplicated addresses here
-												return item;
-											})
-										);
-									});
-									if (payload.length > 0) handleConfirm(requestID, payload);
+									// Object.keys(selected).forEach((item) => {
+									// 	payload.push(
+									// 		...selected[item].map((fileHash) => {
+									// 			// we need the duplicated addresses here
+									// 			return item;
+									// 		})
+									// 	);
+									// });
+									handleConfirm(requestID, selected);
 								}}
 							>
 								Send Tokens

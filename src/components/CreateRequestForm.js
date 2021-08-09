@@ -95,11 +95,14 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 			/>
 			<ReactSelect
 				classNamePrefix="Select"
+				placeholder="Choose the category of your project from the box"
+				label="Category"
 				options={options}
 				onChange={(e) => {
 					formik.setFieldValue('category', e);
 					setSelectedOption(e);
 				}}
+				error={formik.errors?.category}
 				onKeyDown={(e) => {
 					setSelectInputValue('');
 					if (e.key === 'Enter') {
@@ -107,7 +110,10 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 							...selectedOption,
 							{ value: e.target.value, label: e.target.value },
 						]);
-						formik.setFieldValue('category', selectInputValue);
+						formik.setFieldValue('category', [
+							...selectedOption,
+							{ value: e.target.value, label: e.target.value },
+						]);
 					}
 				}}
 				isMulti

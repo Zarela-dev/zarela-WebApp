@@ -99,15 +99,10 @@ const Desktop = ({
 			<HomepageCounters
 				zarelaDailyGift={appState.zarelaDailyGift}
 				zarelaInitDate={appState.zarelaInitDate}
-				todayGift={appState.bank}
 			/>
 			<RequestsListLayout>
 				<RequestListSidebarWrapper>
-					<TokenStatsSidebar
-						ZarelaRewardPool={ZarelaReward}
-						dailyContributors={dailyContributors}
-						BiobitBasedOnEth={BiobitBasedOnEth}
-					/>
+					<TokenStatsSidebar dailyContributors={dailyContributors} />
 					<TokenInfoSidebar data={appState} account={web3React.account} />
 				</RequestListSidebarWrapper>
 				{isLoading ? (

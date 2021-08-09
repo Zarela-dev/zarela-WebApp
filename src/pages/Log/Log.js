@@ -75,13 +75,113 @@ const RewardValue = styled.div`
 const Log = () => {
 	const { account } = useWeb3React();
 	const { appState } = useContext(mainContext);
+	const [requests, setRequests] = useState({});
+	const [isLoading, setIsLoading] = useState(false);
 	const [totalRevenueFromZarela, setTotalRevenueFromZarela] = useState(0);
 	const [totalRevenueFromRequester, setTotalRevenueFromRequester] = useState(0);
 	const [ConnectionModalShow, setConnectionModalShow] = useState(true);
 
+	/*const onClick = () => {
+		appState.contract.methods
+			.GetOrderFiles(requestID)
+			.call({ from: account }, (error, result) => {
+				if (!error) {
+					let formatted = {};
+					let selected = [];
+					let uniqueAddresses = [...new Set(result[1])];
+					let pairs = [];
+
+					result[0].forEach((file, fileIndex) => {
+						pairs.push({
+							file,
+							address: result[1][fileIndex],
+							timestamp: result[2][fileIndex],
+							originalIndex: fileIndex,
+							status: result[3][fileIndex],
+						});
+					});
+
+					uniqueAddresses.forEach((uAddress, uIndex) => {
+						pairs.forEach((tempItem, tempIndex) => {
+							if (tempItem.address === uAddress) {
+								if (Object(formatted).hasOwnProperty(uAddress)) {
+									formatted[uAddress].push({
+										ipfsHash: tempItem.file,
+										timestamp: tempItem.timestamp,
+										originalIndex: tempItem.originalIndex,
+										status: tempItem.status,
+									});
+								} else {
+									formatted[uAddress] = [
+										{
+											ipfsHash: tempItem.file,
+											timestamp: tempItem.timestamp,
+											originalIndex: tempItem.originalIndex,
+											status: tempItem.status,
+										},
+									];
+								}
+								selected[uAddress] = [];
+							}
+						});
+					});
+
+					setFormattedData(formatted);
+					setSelected(selected);
+				} else {
+					console.error(error.message);
+				}
+			});
+	};
+ */
 	useEffect(() => {
 		if (appState.contract !== null) {
 			if (account) {
+				/* appState.contract.methods
+					.Order_Details()
+					.call({ from: account })
+					.then((result) => {
+						const myContributions = result[1];
+
+						const getAllRequests = new Promise(async (resolve, reject) => {
+							const requestsListObject = {};
+
+							for (const currentRequest of myContributions) {
+								await appState.contract.methods
+									.ord_file(currentRequest)
+									.call()
+									.then((result) => {
+										const requestTemplate = {
+											requestID: result[0],
+											title: result[1],
+											description: result[6],
+											requesterAddress: result[2],
+											tokenPay: convertToBiobit(result[3]),
+											totalContributors: result[4], // total contributors required
+											totalContributed: +result[4] - +result[7],
+											whitePaper: result[5],
+											timestamp: result[9],
+											totalContributedCount: result[8],
+										};
+										requestsListObject[requestTemplate.requestID] =
+											requestTemplate;
+									})
+									.catch((error) => {
+										console.error(error.message);
+									});
+							}
+							resolve(requestsListObject);
+						});
+
+						getAllRequests.then((result) => {
+							setRequests(result);
+							setLoading(false);
+						});
+					})
+					.catch((error) => {
+						console.error(error.message);
+					}); */
+
 				appState.contract.methods.User_Map(account).call((error, result) => {
 					if (!error) {
 						const formatter = (value) => convertToBiobit(value);

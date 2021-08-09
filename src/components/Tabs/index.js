@@ -12,6 +12,10 @@ const TabsWrapper = styled(RaTabs)`
 const TabsHeader = styled(TabList)`
 	display: flex;
 	margin-bottom: ${(props) => (props.isMobile ? props.theme.spacing(2) : props.theme.spacing(3))};
+
+	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
+		justify-content: space-between;
+	}
 `;
 
 const TabsHeaderItem = styled(Tab)`
@@ -23,11 +27,13 @@ const TabsHeaderItem = styled(Tab)`
 	opacity: 0.5;
 	line-height: ${(props) => (props.isMobile ? '17px' : '26px')};
 	padding: ${(props) => props.theme.spacing(0.9)} 0;
-	margin-right: ${(props) => props.isMobile ? props.theme.spacing(0.6) : props.theme.spacing(2)};
+	margin-right: ${(props) =>
+		props.isMobile ? props.theme.spacing(0.6) : props.theme.spacing(2)};
 	cursor: pointer;
 
-	@media (max-width: 768px) {
+	@media (max-width: ${(props => props.theme.tablet_sm_breakpoint)}) {
 		min-width: calc((100% - 36px) / 3);
+		text-align: center;
 	}
 
 	&.is-active {

@@ -43,13 +43,12 @@ const MyRequests = () => {
 											title: result[1],
 											description: result[6],
 											requesterAddress: result[2],
-											tokenPay: convertToBiobit(result[3]),
+											tokenPay: result[3],
 											totalContributors: result[4], // total contributors required
 											totalContributed: +result[4] - +result[7],
-											categories: result[8], // NOT TO BE USED IN DEMO
 											whitePaper: result[5],
-											timestamp: result[10],
-											totalContributedCount: result[9],
+											timestamp: result[9],
+											totalContributedCount: result[8],
 										};
 										requestsListObject[
 											requestTemplate.requestID

@@ -47,7 +47,7 @@ const Sidebar = ({ data, account }) => {
 					Token Name
 				</Subtitle>
 				<Value>
-					BBit
+					Biobit
 				</Value>
 			</Row>
 			<Row>
@@ -56,14 +56,6 @@ const Sidebar = ({ data, account }) => {
 				</Subtitle>
 				<Value>
 					BBit
-				</Value>
-			</Row>
-			<Row>
-				<Subtitle>
-					Zarela Bank
-				</Subtitle>
-				<Value>
-					{`${data.bank} BBit`}
 				</Value>
 			</Row>
 			<Divider />

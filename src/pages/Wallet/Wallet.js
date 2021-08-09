@@ -15,7 +15,7 @@ const Wallet = () => {
 		if (account) {
 			setLoading(true);
 			axios
-				.get("https://api-kovan.etherscan.io/api", {
+				.get("https://api-ropsten.etherscan.io/api", {
 					params: {
 						module: "account",
 						action: "txlist",
@@ -27,7 +27,7 @@ const Wallet = () => {
 				.then((txListRes) => {
 					if (txListRes.data.message === "OK") {
 						axios
-							.get("https://api-kovan.etherscan.io/api", {
+							.get("https://api-ropsten.etherscan.io/api", {
 								params: {
 									module: "account",
 									action: "tokentx",
