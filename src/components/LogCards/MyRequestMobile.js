@@ -15,10 +15,14 @@ import biobitIcon from '../../assets/icons/biobit-black.svg';
 import { timeSince } from '../../utils';
 
 const LogCardMobile = ({ data }) => {
-	const { requestID, title, totalContributedCount, tokenPay, timestamp } = data;
+	const { requestID, title, totalContributedCount, totalContributed, totalContributors, tokenPay, timestamp } = data;
+	const getVariant = () => {
+		if (+totalContributedCount === 0) return 'primary';
+		if (+totalContributed === +totalContributors) return 'confirmed'; // fulfilled
+	};
 
 	return (
-		<MobileCompactRequestCard>
+		<MobileCompactRequestCard variant={getVariant()}>
 			<MobileHeader>
 				<MobileColumn flex={'0 1'}>
 					<MobileRequestNumber>{requestID}</MobileRequestNumber>

@@ -1,6 +1,37 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 // layout
+const getFontColorVariant = ({ variant, theme }) => {
+	if (variant === 'primary') {
+		return css`
+			color: #d13ade;
+		`;
+	} else if (variant === 'confirmed') {
+		return css`
+			color: #3adea3;
+		`;
+	} else {
+		return css`
+			color: ${theme.textPrimary};
+		`;
+	}
+};
+const getBorderVariant = ({ variant }) => {
+	if (variant === 'primary') {
+		return css`
+			border-color: #d13ade;
+		`;
+	} else if (variant === 'confirmed') {
+		return css`
+			border-color: #3adea3;
+		`;
+	} else {
+		return css`
+			border-color: transparent;
+		`;
+	}
+};
+
 export const CompactRequestCard = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -9,6 +40,9 @@ export const CompactRequestCard = styled.div`
 	min-height: 75px;
 	background: #f4f8fe;
 	border-radius: 8px;
+	border-width: 1px;
+	border-style: solid;
+	${(props) => getBorderVariant(props)};
 	margin-bottom: ${(props) => props.theme.spacing(1)};
 	padding: ${(props) => `${props.theme.spacing(1.3)} ${props.theme.spacing(2)}`};
 `;
@@ -102,7 +136,7 @@ export const QuickReport = styled.p`
 	font-weight: ${(props) => (props.bold ? 'bold' : 'normal')};
 	font-size: 12px;
 	line-height: 16px;
-	color: #d13ade;
+	${(props) => getFontColorVariant(props)};
 	white-space: nowrap;
 `;
 

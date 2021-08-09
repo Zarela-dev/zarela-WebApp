@@ -30,9 +30,13 @@ const LogCardMobile = ({ data }) => {
 	const totalPending = contributions.filter((item) => item.status === false).length;
 	const totalConfirmed = contributions.filter((item) => item.status === true).length;
 	const allApproved = contributions.length === totalConfirmed;
+	const getVariant = () => {
+		if (allApproved) return 'confirmed';
+		if (contributions.length !== totalConfirmed) return 'primary';
+	};
 
 	return (
-		<MobileCompactRequestCard>
+		<MobileCompactRequestCard variant={getVariant()}>
 			<MobileHeader onClick={() => setOpen((value) => !value)}>
 				<MobileColumn flex={'0 1'}>
 					<MobileRequestNumber>{requestID}</MobileRequestNumber>
@@ -47,8 +51,16 @@ const LogCardMobile = ({ data }) => {
 						<MobileBiobitValue>{`~ $${tokenPay}`}</MobileBiobitValue>
 					</MobileRow>
 					<MobileRow>
-						<QuickReportTitle>{`${totalPending + totalConfirmed} files: `}</QuickReportTitle>
-						<QuickReport>{` ${totalConfirmed} approved, ${totalPending} pending >>`}</QuickReport>
+						{allApproved ? (
+							<QuickReport variant="confirmed">{`all ${contributions.length} are confirmed. >>`}</QuickReport>
+						) : (
+							<>
+								<QuickReportTitle variant="primary">{`${
+									totalPending + totalConfirmed
+								} files: `}</QuickReportTitle>
+								<QuickReport variant="primary">{` ${totalConfirmed} approved, ${totalPending} pending >> `}</QuickReport>
+							</>
+						)}
 					</MobileRow>
 				</MobileColumn>
 				<MobileColumn flex={'0 0 35px'} />

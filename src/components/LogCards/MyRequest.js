@@ -22,11 +22,14 @@ import { Spacer } from '../Elements/Spacer';
 import { timeSince } from '../../utils';
 
 const LogCard = ({ data }) => {
-	console.log('data', data);
-	const { requestID, title, tokenPay, timestamp, totalContributors, totalContributedCount } = data;
-
+	const { requestID, title, tokenPay, timestamp, totalContributors, totalContributed, totalContributedCount } = data;
+	const getVariant = () => {
+		if (+totalContributedCount === 0) return 'primary';
+		if (+totalContributed === +totalContributors) return 'confirmed'; // fulfilled
+	};
+	
 	return (
-		<CompactRequestCard>
+		<CompactRequestCard variant={getVariant()}>
 			<Header>
 				<Column flex="0 0 80px" alignSelf="flex-start">
 					<RequestNumber>{requestID}</RequestNumber>

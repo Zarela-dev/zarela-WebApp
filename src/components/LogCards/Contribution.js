@@ -37,9 +37,13 @@ const LogCard = ({ data }) => {
 	const totalPending = contributions.filter((item) => item.status === false).length;
 	const totalConfirmed = contributions.filter((item) => item.status === true).length;
 	const allApproved = contributions.length === totalConfirmed;
+	const getVariant = () => {
+		if (allApproved) return 'confirmed';
+		if (contributions.length !== totalConfirmed) return 'primary';
+	};
 
 	return (
-		<CompactRequestCard>
+		<CompactRequestCard variant={getVariant()}>
 			<Header onClick={() => setOpen((value) => !value)}>
 				<Column flex="0 0 80px" alignSelf="flex-start">
 					<RequestNumber>{requestID}</RequestNumber>
@@ -49,8 +53,14 @@ const LogCard = ({ data }) => {
 						<Title>{title}</Title>
 					</Row>
 					<Row>
-						<QuickReportTitle>{`${totalPending + totalConfirmed} files: `}</QuickReportTitle>
-						<QuickReport>{` ${totalConfirmed} approved, ${totalPending} pending `}</QuickReport>
+						{allApproved ? (
+							<QuickReport variant="confirmed">{`all ${contributions.length} are confirmed.`}</QuickReport>
+						) : (
+							<>
+								<QuickReportTitle variant='primary'>{`${totalPending + totalConfirmed} files: `}</QuickReportTitle>
+								<QuickReport variant='primary'>{` ${totalConfirmed} approved, ${totalPending} pending `}</QuickReport>
+							</>
+						)}
 					</Row>
 				</Column>
 				<Spacer />
