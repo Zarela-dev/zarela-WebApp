@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import close from './../assets/icons/close-purple.svg';
 
 const Wrapper = styled.div`
-	margin-bottom: 120px;
+	margin-bottom: 50px;
 	position: relative;
 `;
 
@@ -87,6 +87,7 @@ const StyledSelect = styled(Select)`
 		margin: 0;
 		overflow-y: hidden;
 		position: relative;
+		padding: 0 10px;
 	}
 	.Select__menu-list {
 		width: 100%;
@@ -97,27 +98,17 @@ const StyledSelect = styled(Select)`
 	.Select__option {
 		display: inline;
 		width: fit-content;
-		margin: 3px 7px;
+		margin-bottom: 5px;
+		margin-right: 5px;
 		background: #f4f8fe;
 		border-radius: 4px;
-		padding: 4px 8px;
+		padding: 7.5px 16px;
 		font-size: 14px;
 		line-height: 15.5px;
 		font-weight: 500;
 		color: #333333;
 		display: flex;
 		align-items: center;
-	}
-	.Select__option::after {
-		content: url(${close});
-		width: 24px;
-		height: 24px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		position: relative;
-		top: 2px;
-		margin-left: 16px;
 	}
 	.Select__placeholder {
 		font-size: 12px;
@@ -154,6 +145,7 @@ const customStyles = {
 		backgroundColor: '#fff',
 		height: state.selectProps.isMenuOpen ? '270px' : '',
 		zIndex: 5,
+		overflow: 'hidden',
 	}),
 	control: () => ({
 		border: 'none',
@@ -186,8 +178,40 @@ export const Error = styled.label`
 	color: #f62d76;
 `;
 
+const Label = styled.label`
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	margin-bottom: ${(props) => props.theme.spacing(0.5)};
+`;
+
+const LabelText = styled.div`
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 20px;
+	color: #6c6c6c;
+`;
+
+const Hint = styled.div`
+	font-weight: normal;
+	font-size: 13px;
+	line-height: 16px;
+`;
+
 const ReactSelect = (
-	{ options, onChange, isMulti, menuIsOpen, value, onKeyDown, inputValue, error },
+	{
+		options,
+		onChange,
+		isMulti,
+		menuIsOpen,
+		value,
+		onKeyDown,
+		inputValue,
+		error,
+		label,
+		hint,
+		placeholder,
+	},
 	props
 ) => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -195,6 +219,10 @@ const ReactSelect = (
 
 	return (
 		<Wrapper isMenuOpen={isMenuOpen}>
+			<Label>
+				<LabelText>{label}</LabelText>
+				{hint ? <Hint>{hint}</Hint> : null}
+			</Label>
 			<StyledSelect
 				{...{ props }}
 				classNamePrefix="Select"
@@ -220,6 +248,9 @@ const ReactSelect = (
 				value={value}
 				inputValue={input}
 				onInputChange={(e) => setInput(e)}
+				label="iefji"
+				title="ifejf"
+				placeholder={placeholder}
 			/>
 			{error ? <Error>{error}</Error> : null}
 		</Wrapper>

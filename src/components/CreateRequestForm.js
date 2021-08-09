@@ -95,6 +95,8 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 			/>
 			<ReactSelect
 				classNamePrefix="Select"
+				placeholder="Choose the category of your project from the box"
+				label="Category"
 				options={options}
 				onChange={(e) => {
 					formik.setFieldValue('category', e);
