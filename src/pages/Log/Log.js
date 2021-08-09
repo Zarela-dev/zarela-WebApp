@@ -81,10 +81,6 @@ const Log = () => {
 	const [totalRevenueFromRequester, setTotalRevenueFromRequester] = useState(0);
 	const [ConnectionModalShow, setConnectionModalShow] = useState(true);
 
-	const onClick = () => {
-		
-	};
-
 	useEffect(() => {
 		if (appState.contract !== null) {
 			if (account) {

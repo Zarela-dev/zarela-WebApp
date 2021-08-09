@@ -260,7 +260,7 @@ const LogCard = ({ data, MyRequests, marketRequest, allApproved }) => {
 					</Row>
 				</Column>
 				<Spacer />
-				<Column displayFlex>
+				<Column displayFlex flex="0">
 					<Row>
 						<BiobitIcon src={biobitIcon} />
 						<BiobitValue>{tokenPay}</BiobitValue>
@@ -268,7 +268,7 @@ const LogCard = ({ data, MyRequests, marketRequest, allApproved }) => {
 					</Row>
 				</Column>
 				<VerticalDivider />
-				<Column>
+				<Column flex="0">
 					<Row>
 						{allApproved ? (
 							<>
