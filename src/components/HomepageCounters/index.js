@@ -13,10 +13,10 @@ const Wrapper = styled.div`
 	align-items: center;
 `;
 
-function getDifferenceInHours(date1, date2) {
-	const diffInMs = Math.abs(date2 - date1);
-	return diffInMs / (1000 * 60 * 60);
-}
+// function getDifferenceInHours(date1, date2) {
+// 	const diffInMs = Math.abs(date2 - date1);
+// 	return diffInMs / (1000 * 60 * 60);
+// }
 
 function getDifferenceInMSeconds(date1, date2) {
 	const diffInMs = Math.abs(date2 - date1);
@@ -26,7 +26,6 @@ function getDifferenceInMSeconds(date1, date2) {
 const HomepageCounters = ({ zarelaInitDate, zarelaDailyGift }) => {
 	const [bankCountdown, setBankCountdown] = useState(0);
 	const [giftCountdown, setGiftCountdown] = useState(0);
-	const bankInterval = 7776000000; // 90 days
 	const giftInterval = 86400000; // 24 hours
 
 	useEffect(() => {

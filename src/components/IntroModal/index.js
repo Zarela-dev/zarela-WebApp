@@ -113,12 +113,12 @@ const Divider = styled.div`
 	margin: ${(props) => props.theme.spacing(3)} 0;
 `;
 
-const SectionTitle = styled.h3`
-	font-weight: bold;
-	font-size: 16px;
-	line-height: 19px;
-	color: ${(props) => props.theme.textPrimary};
-`;
+// const SectionTitle = styled.h3`
+// 	font-weight: bold;
+// 	font-size: 16px;
+// 	line-height: 19px;
+// 	color: ${(props) => props.theme.textPrimary};
+// `;
 
 const MessageContainer = styled.div`
 	display: flex;

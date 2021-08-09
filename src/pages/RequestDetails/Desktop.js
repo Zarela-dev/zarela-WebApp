@@ -1,6 +1,6 @@
 import React from "react";
 import RequestDetails from "../../components/RequestDetails/RequestDetails";
-import { timeSince, convertToBiobit } from "../../utils";
+import { timeSince } from "../../utils";
 import ConnectDialog from "../../components/Dialog/ConnectDialog";
 import Dialog from "../../components/Dialog";
 

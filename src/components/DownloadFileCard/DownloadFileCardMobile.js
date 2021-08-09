@@ -5,7 +5,7 @@ import {
   FileInputTitle,
   FileInputIcon
 } from '../UploadFileCard/FileInputMobile';
-import { Card, HelperText } from '../UploadFileCard/FileCard';
+import { Card } from '../UploadFileCard/FileCard';
 import styled from 'styled-components';
 import fileDownloadIcon from '../../assets/icons/file-download.svg';
 

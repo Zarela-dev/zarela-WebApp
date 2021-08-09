@@ -5,7 +5,7 @@ import TokenInfoSidebar from '../../components/Sidebar/TokenInfo';
 import TokenStatsSidebar from '../../components/Sidebar/TokenStats';
 import Pagination from '../../components/Pagination';
 import maxWidthWrapper from '../../components/Elements/MaxWidth';
-import { timeSince, convertToBiobit } from '../../utils';
+import { timeSince } from '../../utils';
 import homepageBg from '../../assets/home-bg.jpg';
 import HomepageCounters from '../../components/HomepageCounters';
 import { Skeleton } from '@material-ui/lab';
@@ -34,8 +34,7 @@ const Background = styled.div`
 		width: 100%;
 		height: 80vh;
 
-		background-image: url(${homepageBg}),
-			linear-gradient(0deg, rgb(255 255 255), rgb(255 255 255 / 0%));
+		background-image: url(${homepageBg}), linear-gradient(0deg, rgb(255 255 255), rgb(255 255 255 / 0%));
 		background-size: 100%, 400px;
 		background-position: 0 -30px;
 		z-index: -3;
@@ -88,7 +87,7 @@ const Card = styled.div`
 const CircleSection = styled.div`
 	margin-right: 28px;
 `;
-const SquerSection = styled.div`
+const SquareSection = styled.div`
 	flex-grow: 1;
 `;
 
@@ -102,7 +101,7 @@ const SkeletonSidebarCard = styled.div`
 const useStyles = makeStyles({
 	root: {
 		marginBottom: '19px',
-		background: '#F1F6FC'
+		background: '#F1F6FC',
 	},
 });
 
@@ -126,22 +125,17 @@ const Desktop = ({
 		return Object.values(requests)
 			.sort((a, b) => +b.requestID - +a.requestID)
 			.slice(firstPageIndex, lastPageIndex);
-	}, [currentPage, requests]);
+	}, [currentPage, PAGE_SIZE, requests]);
 
 	return (
 		<RequestsListWrapper isLoading={isLoading}>
 			{!isLoading && <Background />}
-			<HomepageCounters
-				zarelaDailyGift={appState.zarelaDailyGift}
-				zarelaInitDate={appState.zarelaInitDate}
-			/>
+			<HomepageCounters zarelaDailyGift={appState.zarelaDailyGift} zarelaInitDate={appState.zarelaInitDate} />
 			<RequestsListLayout>
 				{isLoading ? (
 					<RequestListSidebarWrapper>
-						{[1,2,3].map(index => {
-							return(
-								<SkeletonSidebarCard />
-							)
+						{[1, 2, 3].map((index) => {
+							return <SkeletonSidebarCard />;
 						})}
 					</RequestListSidebarWrapper>
 				) : (
@@ -156,9 +150,14 @@ const Desktop = ({
 								return (
 									<Card key={index}>
 										<CircleSection>
-											<Skeleton variant="circle" width={72} height={72} className={classes.root} className={classes.root} />
+											<Skeleton
+												variant="circle"
+												width={72}
+												height={72}
+												className={classes.root}
+											/>
 										</CircleSection>
-										<SquerSection>
+										<SquareSection>
 											<Skeleton
 												variant="rect"
 												width={'100%'}
@@ -172,7 +171,7 @@ const Desktop = ({
 												height={'33px'}
 												className={classes.root}
 											/>
-										</SquerSection>
+										</SquareSection>
 									</Card>
 								);
 						  })
@@ -186,9 +185,7 @@ const Desktop = ({
 										description={item.description}
 										tokenPay={item.tokenPay}
 										timestamp={timeSince(item.timestamp)}
-										progress={
-											(+item.totalContributed / +item.totalContributors) * 100
-										}
+										progress={(+item.totalContributed / +item.totalContributors) * 100}
 										contributors={`${item.totalContributed}/${item.totalContributors}`}
 										totalContributedCount={item.totalContributedCount}
 									/>

@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect } from 'react';
+import React, { forwardRef } from 'react';
 import styled, { css } from 'styled-components';
 import fileDownloadIcon from '../../assets/icons/file-download.svg';
 import fileUploadIcon from '../../assets/icons/file-upload.svg';

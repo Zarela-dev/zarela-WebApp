@@ -1,6 +1,6 @@
 import React from "react";
 import Note from "./../../../components/Note";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import nextStepIcon from "./../../../assets/icons/next-step-arrow.svg";
 import qrCodeImage from "../../../assets/icons/qr-code.png";
 import { CopyableText } from "./../../../utils";

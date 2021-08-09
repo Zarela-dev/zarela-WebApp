@@ -38,25 +38,25 @@ const Content = styled.div`
 	padding: ${props => props.theme.spacing(2)};
 `;
 
-const Header = styled.div`
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: ${props => props.theme.spacing(3)};
-`;
+// const Header = styled.div`
+// 	display: flex;
+// 	justify-content: space-between;
+// 	margin-bottom: ${props => props.theme.spacing(3)};
+// `;
 
-const Title = styled.div`
-	font-weight: bold;
-	font-size: 24px;
-	line-height: 30px;
-	color: #FFFFFF;
-`;
+// const Title = styled.div`
+// 	font-weight: bold;
+// 	font-size: 24px;
+// 	line-height: 30px;
+// 	color: #FFFFFF;
+// `;
 
-const Subtitle = styled.div`
-	font-weight: bold;
-	font-size: 24px;
-	line-height: 30px;
-	color: #F1EA3A;
-`;
+// const Subtitle = styled.div`
+// 	font-weight: bold;
+// 	font-size: 24px;
+// 	line-height: 30px;
+// 	color: #F1EA3A;
+// `;
 
 const Segment = styled.div`
 	display: flex;

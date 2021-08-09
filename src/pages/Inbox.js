@@ -27,7 +27,6 @@ const SpinnerWrapper = styled.div`
 
 const Inbox = () => {
 	const { appState } = useContext(mainContext);
-	const PAGE_SIZE = 3;
 	const [requests, setRequests] = useState({});
 	const [isLoading, setLoading] = useState(false);
 	const { account } = useWeb3React();

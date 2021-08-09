@@ -68,7 +68,7 @@ const RewardValue = styled.div`
 
 	@media (max-width: 768px) {
 		font-size: 13px;
-		font-weidth: 600;
+		font-weight: 600;
 	}
 `;
 

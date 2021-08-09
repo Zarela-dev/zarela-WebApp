@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 import styled from 'styled-components';
-import close from './../assets/icons/close-purple.svg';
 
 const Wrapper = styled.div`
 	margin-bottom: 50px;
@@ -157,7 +156,6 @@ const customStyles = {
 		boxFlexWrap: 'wrap',
 		flexWrap: 'wrap',
 		justifyContent: 'space-between',
-		border: 'none',
 	}),
 	menu: (provided, state) => ({
 		...provided,

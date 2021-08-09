@@ -18,7 +18,6 @@ import {
 	Divider,
 	BadgeRow,
 	Title,
-	ValueLabel,
 	BiobitToDollarValue,
 	BadgeLabel,
 } from "../Elements/RequestCard/IndexMobile";
@@ -63,11 +62,11 @@ const DescriptionContainer = styled.div`
 	${maxWidthWrapper};
 `;
 
-const DescriptionTitle = styled.h4`
-	margin-bottom: ${(props) => props.theme.spacing(2)};
-	font-size: 18px;
-	font-weight: 600;
-`;
+// const DescriptionTitle = styled.h4`
+// 	margin-bottom: ${(props) => props.theme.spacing(2)};
+// 	font-size: 18px;
+// 	font-weight: 600;
+// `;
 
 const TitleContent = styled(Title)`
 	padding: 0 18px;

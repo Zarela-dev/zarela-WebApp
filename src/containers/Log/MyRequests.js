@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { mainContext } from '../../state';
-import { convertToBiobit, toast } from '../../utils';
+import { convertToBiobit } from '../../utils';
 import MyRequest from '../../components/LogCards/MyRequest';
 import MyRequestMobile from '../../components/LogCards/MyRequestMobile';
 import { useWeb3React } from '@web3-react/core';
-import styled from 'styled-components';
-import Spinner from '../../components/Spinner';
 
 const MyRequests = () => {
 	const { account } = useWeb3React();

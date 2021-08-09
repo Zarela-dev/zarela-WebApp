@@ -141,9 +141,9 @@ const CustomContributeBadge = styled(ContributorBadge)`
 	flex: 0 0 auto;
 `;
 
-const EqualSign = styled(BiobitToDollarValue)`
-	margin: 0 5px;
-`;
+// const EqualSign = styled(BiobitToDollarValue)`
+// 	margin: 0 5px;
+// `;
 
 const ExpandToggle = styled.img`
 	width: 24px;
@@ -162,7 +162,6 @@ const RequestListItem = ({
 }) => {
 	const [isOpen, setOpen] = useState(false);
 	const [unapprovedCount, setUnapprovedCount] = useState(0);
-	const [isFulfilled, setFulfilled] = useState(false);
 	const { appState } = useContext(mainContext);
 	const [formattedData, setFormattedData] = useState({});
 	const [selected, setSelected] = useState([]);

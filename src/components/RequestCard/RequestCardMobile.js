@@ -19,9 +19,7 @@ import RequestCardWrapper, {
 	ProgressTrackerWrapper,
 	ProgressTrackerTrack,
 	ProgressTrackerProcess,
-	ValueLabel,
 	BadgeLabel,
-	Hint,
 } from "../Elements/RequestCard/IndexMobile";
 import biobitIcon from "../../assets/icons/biobit-black.svg";
 import contributorIcon from "../../assets/icons/user-black.svg";

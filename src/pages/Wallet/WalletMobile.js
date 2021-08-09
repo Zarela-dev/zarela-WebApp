@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import TitleBar from "../../components/TitleBar/TitleBar";
 import { Tabs } from "../../components/Tabs";
 import { mainContext } from "../../state";

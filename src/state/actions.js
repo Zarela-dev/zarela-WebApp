@@ -87,13 +87,3 @@ export const getGasPrice = (dispatch) => {
 		console.log(error);
 	});
 };
-
-export const initializeContract = (web3Instance) => {
-	if (web3Instance !== null) {
-		const ZarelaContract = new web3Instance.eth.Contract(
-			JSON.parse(process.env.REACT_APP_ZARELA_CONTRACT_ABI),
-			process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS
-		);
-
-	}
-};

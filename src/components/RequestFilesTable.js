@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { SmallCheckbox } from './Elements/Checkbox';
 import downloadIcon from '../assets/icons/download.svg';
@@ -71,12 +71,12 @@ const CustomCheckbox = styled(SmallCheckbox)`
 	margin: 0;
 `;
 
-const FilesCount = styled.div`
-	font-size: 12px;
-	line-height: 20px;
-	color: #858585;
-	margin-bottom: ${(props) => props.theme.spacing(2)};
-`;
+// const FilesCount = styled.div`
+// 	font-size: 12px;
+// 	line-height: 20px;
+// 	color: #858585;
+// 	margin-bottom: ${(props) => props.theme.spacing(2)};
+// `;
 
 const FilesListWrapper = styled.div`
 	display: flex;

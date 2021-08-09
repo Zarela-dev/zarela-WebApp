@@ -9,7 +9,6 @@ import BottomNavigation from "./BottomNavigation";
 import styled from "styled-components";
 import Wallet from "../pages/Wallet/Wallet";
 import RequestsList from "../pages/RequestsList";
-import MyAccount from "../pages/MyAccount";
 import Log from "../pages/Log/Log";
 import { mainContext } from "./../state";
 

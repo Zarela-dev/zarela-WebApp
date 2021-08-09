@@ -111,9 +111,9 @@ const CustomContributeBadge = styled(ContributorBadge)`
 	flex: 0 0 auto;
 `;
 
-const EqualSign = styled(BiobitToDollarValue)`
-	margin: 0 5px;
-`;
+// const EqualSign = styled(BiobitToDollarValue)`
+// 	margin: 0 5px;
+// `;
 
 const FilesWrapper = styled.div`
 	${maxWidthWrapper};

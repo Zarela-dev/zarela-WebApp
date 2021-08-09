@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { mainContext } from '../../state';
-import { timeSince, convertToBiobit } from '../../utils';
+import { convertToBiobit } from '../../utils';
 import { useWeb3React } from '@web3-react/core';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
-import Splash from '../../components/Splash';
+// import Splash from '../../components/Splash';
 
 const RequestsList = () => {
 	const { appState } = useContext(mainContext);
@@ -13,8 +13,6 @@ const RequestsList = () => {
 	const [requests, setRequests] = useState({});
 	const [requestsCount, setRequestsCount] = useState(0);
 	const [dailyContributors, setDailyContributors] = useState(0);
-	// const [BiobitBasedOnEth, setBiobitBasedOnEth] = useState(0);
-	// const [ZarelaReward, setZarelaReward] = useState(0);
 	const [isLoading, setLoading] = useState(true);
 
 	// pagination hook

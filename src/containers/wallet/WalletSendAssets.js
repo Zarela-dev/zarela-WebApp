@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { mainContext } from '../../state';
 import { Title, TokenList, TokenIcon, TokenName, Token } from './WalletDeposit/DepositChoices';
-import { Content, Row, Column } from './WalletDeposit/Layout';
+import { Content, Column } from './WalletDeposit/Layout';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import etherIcon from '../../assets/icons/ether-black.png';
 import Textfield from './../../components/Elements/TextField';
