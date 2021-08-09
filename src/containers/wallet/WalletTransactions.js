@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { timeSince, convertToBiobit, CopyableText } from '../../utils';
 import { Skeleton } from '@material-ui/lab';
+import { makeStyles } from '@material-ui/core/styles';
 
 const Table = styled.div`
 	display: flex;
@@ -85,8 +86,14 @@ const SkeletonCol = styled.div`
 `;
 const skeletonLineHeight = 16;
 
-const WalletTransactions = ({ account, data }) => {
-	let isLoading = true;
+const useStyles = makeStyles({
+	root: {
+		background: '#F1F6FC',
+	},
+});
+
+const WalletTransactions = ({ isLoading, account, data, props }) => {
+	const classes = useStyles(props);
 	// if (!account || isLoading === true) return 'loading';
 	if (!account) return 'no accounts found';
 
@@ -118,7 +125,12 @@ const WalletTransactions = ({ account, data }) => {
 					<CellWrapper>
 						<Cell>
 							{isLoading ? (
-								<Skeleton variant="rect" width={55} height={skeletonLineHeight} />
+								<Skeleton
+									variant="rect"
+									width={55}
+									height={skeletonLineHeight}
+									className={classes.root}
+								/>
 							) : (
 								'TXN Hash'
 							)}
@@ -127,7 +139,12 @@ const WalletTransactions = ({ account, data }) => {
 					<CellWrapper>
 						<Cell>
 							{isLoading ? (
-								<Skeleton variant="rect" width={45} height={skeletonLineHeight} />
+								<Skeleton
+									variant="rect"
+									width={45}
+									height={skeletonLineHeight}
+									className={classes.root}
+								/>
 							) : (
 								'Date'
 							)}
@@ -136,7 +153,12 @@ const WalletTransactions = ({ account, data }) => {
 					<CellWrapper>
 						<Cell>
 							{isLoading ? (
-								<Skeleton variant="rect" width={45} height={skeletonLineHeight} />
+								<Skeleton
+									variant="rect"
+									width={45}
+									height={skeletonLineHeight}
+									className={classes.root}
+								/>
 							) : (
 								'From'
 							)}
@@ -145,7 +167,12 @@ const WalletTransactions = ({ account, data }) => {
 					<CellWrapper>
 						<Cell>
 							{isLoading ? (
-								<Skeleton variant="rect" width={30} height={skeletonLineHeight} />
+								<Skeleton
+									variant="rect"
+									width={30}
+									height={skeletonLineHeight}
+									className={classes.root}
+								/>
 							) : (
 								'To'
 							)}
@@ -154,7 +181,12 @@ const WalletTransactions = ({ account, data }) => {
 					<CellWrapper>
 						<Cell>
 							{isLoading ? (
-								<Skeleton variant="rect" width={45} height={skeletonLineHeight} />
+								<Skeleton
+									variant="rect"
+									width={45}
+									height={skeletonLineHeight}
+									className={classes.root}
+								/>
 							) : (
 								'Input'
 							)}
@@ -163,7 +195,12 @@ const WalletTransactions = ({ account, data }) => {
 					<CellWrapper>
 						<Cell>
 							{isLoading ? (
-								<Skeleton variant="rect" width={45} height={skeletonLineHeight} />
+								<Skeleton
+									variant="rect"
+									width={45}
+									height={skeletonLineHeight}
+									className={classes.root}
+								/>
 							) : (
 								'Value'
 							)}
@@ -172,7 +209,12 @@ const WalletTransactions = ({ account, data }) => {
 					<CellWrapper>
 						<Cell>
 							{isLoading ? (
-								<Skeleton variant="rect" width={45} height={skeletonLineHeight} />
+								<Skeleton
+									variant="rect"
+									width={45}
+									height={skeletonLineHeight}
+									className={classes.root}
+								/>
 							) : (
 								'TXN fee'
 							)}
@@ -180,130 +222,151 @@ const WalletTransactions = ({ account, data }) => {
 					</CellWrapper>
 				</Row>
 			</Header>
-			{data.map((transaction, index) => (
-				<Row key={index}>
-					<CellWrapper>
-						<CopyableText textToCopy={transaction.blockHash}>
-							<Cell copyable>
-								{isLoading ? (
+
+			{isLoading &&
+				[1, 2, 3].map((index) => (
+					<Row key={index}>
+						<CellWrapper>
+							<CopyableText>
+								<Cell copyable>
 									<SkeletonCol>
 										<Skeleton
 											variant="rect"
 											width={'100%'}
 											height={skeletonLineHeight}
+											className={classes.root}
 										/>
 										<Skeleton
 											variant="rect"
 											width={'95%'}
 											height={skeletonLineHeight}
+											className={classes.root}
 										/>
 									</SkeletonCol>
-								) : (
-									transaction.hash
-								)}
-							</Cell>
-						</CopyableText>
-					</CellWrapper>
-					<CellWrapper>
-						<Cell>
-							{isLoading ? (
+								</Cell>
+							</CopyableText>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>
 								<Skeleton
 									variant="rect"
 									width={'55%'}
 									height={skeletonLineHeight}
+									className={classes.root}
 								/>
-							) : (
-								timeSince(transaction.timeStamp)
-							)}
-						</Cell>
-					</CellWrapper>
-					<CellWrapper>
-						<CopyableText textToCopy={transaction.from}>
-							<Cell copyable>
-								{isLoading ? (
+							</Cell>
+						</CellWrapper>
+						<CellWrapper>
+							<CopyableText>
+								<Cell copyable>
 									<SkeletonCol>
 										<Skeleton
 											variant="rect"
 											width={'100%'}
 											height={skeletonLineHeight}
+											className={classes.root}
 										/>
 										<Skeleton
 											variant="rect"
 											width={'70%'}
 											height={skeletonLineHeight}
+											className={classes.root}
 										/>
 									</SkeletonCol>
-								) : (
-									transaction.from
-								)}
-							</Cell>
-						</CopyableText>
-					</CellWrapper>
-					<CellWrapper>
-						<CopyableText textToCopy={transaction.to}>
-							<Cell copyable>
-								{isLoading ? (
+								</Cell>
+							</CopyableText>
+						</CellWrapper>
+						<CellWrapper>
+							<CopyableText>
+								<Cell copyable>
 									<SkeletonCol>
 										<Skeleton
 											variant="rect"
 											width={'100%'}
 											height={skeletonLineHeight}
+											className={classes.root}
 										/>
 										<Skeleton
 											variant="rect"
 											width={'75%'}
 											height={skeletonLineHeight}
+											className={classes.root}
 										/>
 									</SkeletonCol>
-								) : (
-									transaction.to
-								)}
-							</Cell>
-						</CopyableText>
-					</CellWrapper>
-					<CellWrapper>
-						<Cell>
-							{isLoading ? (
+								</Cell>
+							</CopyableText>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>
 								<Skeleton
 									variant="rect"
 									width={'100%'}
 									height={skeletonLineHeight}
+									className={classes.root}
 								/>
-							) : (
-								getInput(transaction.input)
-							)}
-						</Cell>
-					</CellWrapper>
-					<CellWrapper>
-						<Cell bold>
-							{isLoading ? (
+							</Cell>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell bold>
 								<Skeleton
 									variant="rect"
 									width={'25%'}
 									height={skeletonLineHeight}
+									className={classes.root}
 								/>
-							) : transaction.input !== '0x' ? (
-								convertToBiobit(transaction.value)
-							) : (
-								+transaction.value / Math.pow(10, 18)
-							)}
-						</Cell>
-					</CellWrapper>
-					<CellWrapper>
-						<Cell>
-							{isLoading ? (
+							</Cell>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>
 								<Skeleton
 									variant="rect"
 									width={'70%'}
 									height={skeletonLineHeight}
+									className={classes.root}
 								/>
-							) : (
-								(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)
-							)}
-						</Cell>
-					</CellWrapper>
-				</Row>
-			))}
+							</Cell>
+						</CellWrapper>
+					</Row>
+				))}
+
+			{!isLoading &&
+				data.map((transaction, index) => (
+					<Row key={index}>
+						<CellWrapper>
+							<CopyableText textToCopy={transaction.blockHash}>
+								<Cell copyable>{transaction.hash}</Cell>
+							</CopyableText>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>{timeSince(transaction.timeStamp)}</Cell>
+						</CellWrapper>
+						<CellWrapper>
+							<CopyableText textToCopy={transaction.from}>
+								<Cell copyable>{transaction.from}</Cell>
+							</CopyableText>
+						</CellWrapper>
+						<CellWrapper>
+							<CopyableText textToCopy={transaction.to}>
+								<Cell copyable>{transaction.to}</Cell>
+							</CopyableText>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>{getInput(transaction.input)}</Cell>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell bold>
+								{transaction.input !== '0x'
+									? convertToBiobit(transaction.value)
+									: +transaction.value / Math.pow(10, 18)}
+							</Cell>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>
+								{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}
+							</Cell>
+						</CellWrapper>
+					</Row>
+				))}
 		</Table>
 	);
 };
