@@ -9,7 +9,7 @@ import Splash from '../../components/Splash';
 const RequestsList = () => {
 	const { appState } = useContext(mainContext);
 	const web3React = useWeb3React();
-	const PAGE_SIZE = 3;
+	const PAGE_SIZE = 2;
 	const [requests, setRequests] = useState({});
 	const [requestsCount, setRequestsCount] = useState(0);
 	const [dailyContributors, setDailyContributors] = useState(0);

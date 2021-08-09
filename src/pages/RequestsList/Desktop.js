@@ -9,6 +9,7 @@ import { timeSince, convertToBiobit } from '../../utils';
 import homepageBg from '../../assets/home-bg.jpg';
 import HomepageCounters from '../../components/HomepageCounters';
 import { Skeleton } from '@material-ui/lab';
+import { makeStyles } from '@material-ui/core/styles';
 
 const RequestsListWrapper = styled.div`
 	position: relative;
@@ -73,6 +74,36 @@ const RequestsListContentWrapper = styled.section`
 	padding: 0 ${(props) => props.theme.spacing(2)};
 `;
 
+const Box = styled.div`
+	width: 351px;
+	height: 210px;
+	background: #fff;
+	margin-bottom: 25px;
+`;
+
+const Card = styled.div`
+	width: 100%;
+	margin-right: 30px;
+	height: 320px;
+	margin-bottom: 25px;
+	background: #fff;
+	padding: 30px 33px;
+	display: flex;
+	flex-direction: row;
+`;
+const CircleSection = styled.div`
+	margin-right: 28px;
+`;
+const SquerSection = styled.div`
+	flex-grow: 1;
+`;
+
+const useStyles = makeStyles({
+	root: {
+		marginBottom: '19px',
+	},
+});
+
 const Desktop = ({
 	requests,
 	appState,
@@ -82,8 +113,10 @@ const Desktop = ({
 	dailyContributors,
 	PAGE_SIZE,
 	isLoading,
+	props,
 }) => {
 	const [currentPage, setCurrentPage] = useState(1);
+	const classes = useStyles(props);
 
 	const currentTableData = useMemo(() => {
 		const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
@@ -91,7 +124,7 @@ const Desktop = ({
 		return Object.values(requests)
 			.sort((a, b) => +b.requestID - +a.requestID)
 			.slice(firstPageIndex, lastPageIndex);
-	}, [currentPage]);
+	}, [currentPage, requests]);
 
 	return (
 		<RequestsListWrapper>
@@ -105,29 +138,49 @@ const Desktop = ({
 					<TokenStatsSidebar dailyContributors={dailyContributors} />
 					<TokenInfoSidebar data={appState} account={web3React.account} />
 				</RequestListSidebarWrapper>
-				{isLoading ? (
-					<Skeleton variant="rect" width={210} height={118} />
-				) : (
-					<RequestsListContentWrapper>
-						{currentTableData.map((item) => {
-							return (
-								<RequestCard
-									key={item.requestID}
-									requestID={item.requestID}
-									title={item.title}
-									description={item.description}
-									tokenPay={item.tokenPay}
-									timestamp={timeSince(item.timestamp)}
-									progress={
-										(+item.totalContributed / +item.totalContributors) * 100
-									}
-									contributors={`${item.totalContributed}/${item.totalContributors}`}
-									totalContributedCount={item.totalContributedCount}
-								/>
-							);
-						})}
-					</RequestsListContentWrapper>
-				)}
+				<RequestsListContentWrapper>
+					{isLoading
+						? [1, 2, 3].map((index) => {
+								return (
+									<Card key={index}>
+										<CircleSection>
+											<Skeleton variant="circle" width={72} height={72} />
+										</CircleSection>
+										<SquerSection>
+											<Skeleton
+												variant="rect"
+												width={'100%'}
+												height={33}
+												animation="wave"
+												className={classes.root}
+											/>
+											<Skeleton
+												variant="rect"
+												width={'33%'}
+												height={'33px'}
+											/>
+										</SquerSection>
+									</Card>
+								);
+						  })
+						: currentTableData.map((item) => {
+								return (
+									<RequestCard
+										key={item.requestID}
+										requestID={item.requestID}
+										title={item.title}
+										description={item.description}
+										tokenPay={item.tokenPay}
+										timestamp={timeSince(item.timestamp)}
+										progress={
+											(+item.totalContributed / +item.totalContributors) * 100
+										}
+										contributors={`${item.totalContributed}/${item.totalContributors}`}
+										totalContributedCount={item.totalContributedCount}
+									/>
+								);
+						  })}
+				</RequestsListContentWrapper>
 			</RequestsListLayout>
 			<Pagination
 				currentPage={currentPage}
