@@ -85,8 +85,9 @@ const SkeletonCol = styled.div`
 `;
 const skeletonLineHeight = 16;
 
-const WalletTransactions = ({ isLoading, account, data }) => {
-	if (!account || isLoading === true) return 'loading';
+const WalletTransactions = ({ account, data }) => {
+	let isLoading = true;
+	// if (!account || isLoading === true) return 'loading';
 	if (!account) return 'no accounts found';
 
 	function getInput(input) {

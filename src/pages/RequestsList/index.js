@@ -32,8 +32,9 @@ const RequestsList = () => {
 				appState.contract.methods.Cat(i).call((error, result) => {
 					if (!error) {
 						let businessCategory = result[2];
-						
-						if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY) // only show zarela requests
+
+						if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY)
+							// only show zarela requests
 							appState.contract.methods.ord_file(i).call((error, result) => {
 								if (!error) {
 									const requestTemplate = {
@@ -77,8 +78,10 @@ const RequestsList = () => {
 	if (appState.isMobile) {
 		return (
 			<>
-				<Splash isVisible={isLoading} />
-				<Mobile {...{ requests }} />
+				{/* <Splash isVisible={isLoading} /> */}
+				<Mobile
+					{...{ requests, isLoading }}
+				/>
 			</>
 		);
 	} else {
@@ -90,7 +93,7 @@ const RequestsList = () => {
 					web3React,
 					dailyContributors,
 					PAGE_SIZE,
-					isLoading
+					isLoading,
 				}}
 			/>
 		);

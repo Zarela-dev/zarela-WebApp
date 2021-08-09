@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 const RequestsListWrapper = styled.div`
 	position: relative;
 	width: 100%;
-	background: ${(props) => (props.isLoading ? '#E5E5E5' : 'unset')};
+	background: ${(props) => (props.isLoading ? '#F1F6FC' : 'unset')};
 `;
 
 const Background = styled.div`
@@ -75,13 +75,6 @@ const RequestsListContentWrapper = styled.section`
 	padding: 0 ${(props) => props.theme.spacing(2)};
 `;
 
-const Box = styled.div`
-	width: 351px;
-	height: 210px;
-	background: #fff;
-	margin-bottom: 25px;
-`;
-
 const Card = styled.div`
 	width: 100%;
 	margin-right: 30px;
@@ -109,6 +102,7 @@ const SkeletonSidebarCard = styled.div`
 const useStyles = makeStyles({
 	root: {
 		marginBottom: '19px',
+		background: '#F1F6FC'
 	},
 });
 
@@ -162,7 +156,7 @@ const Desktop = ({
 								return (
 									<Card key={index}>
 										<CircleSection>
-											<Skeleton variant="circle" width={72} height={72} />
+											<Skeleton variant="circle" width={72} height={72} className={classes.root} className={classes.root} />
 										</CircleSection>
 										<SquerSection>
 											<Skeleton
@@ -176,6 +170,7 @@ const Desktop = ({
 												variant="rect"
 												width={'33%'}
 												height={'33px'}
+												className={classes.root}
 											/>
 										</SquerSection>
 									</Card>
