@@ -181,6 +181,7 @@ const Desktop = ({
 									<RequestCard
 										key={item.requestID}
 										requestID={item.requestID}
+										categories={item.categories}
 										title={item.title}
 										description={item.description}
 										tokenPay={item.tokenPay}
