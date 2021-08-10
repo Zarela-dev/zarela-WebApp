@@ -57,22 +57,6 @@ export const configureFallbackWeb3 = async (dispatch) => {
 	}
 };
 
-export const setTimers = (dispatch, contract) => {
-	if (contract) {
-		contract.methods.countDown24Hours().call((error, result) => {
-			if (!error) {
-				dispatch({
-					type: actionTypes.SET_ZARELA_DAILY_GIFT,
-					payload: result * 1000
-				});
-			}
-			else {
-				console.error(error.message);
-			}
-		});
-	}
-};
-
 export const getGasPrice = (dispatch) => {
 	axios.get('https://ethgasstation.info/api/ethgasAPI.json', {
 		params: {

@@ -7,7 +7,6 @@ import Pagination from '../../components/Pagination';
 import maxWidthWrapper from '../../components/Elements/MaxWidth';
 import { timeSince } from '../../utils';
 import homepageBg from '../../assets/home-bg.jpg';
-import HomepageCounters from '../../components/HomepageCounters';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -130,7 +129,6 @@ const Desktop = ({
 	return (
 		<RequestsListWrapper isLoading={isLoading}>
 			{!isLoading && <Background />}
-			<HomepageCounters zarelaDailyGift={appState.zarelaDailyGift} zarelaInitDate={appState.zarelaInitDate} />
 			<RequestsListLayout>
 				{isLoading ? (
 					<RequestListSidebarWrapper>

@@ -1,28 +1,21 @@
-import React, { useEffect, useReducer } from "react";
-import { convertToBiobit, toast } from "../utils";
-import { actionTypes } from "./actionTypes";
-import {
-	configureFallbackWeb3,
-	setTimers,
-	getGasPrice,
-	configureWeb3,
-} from "./actions";
-import { useWeb3React } from "@web3-react/core";
-import { injectedConnector } from "../connectors";
+import React, { useEffect, useReducer } from 'react';
+import { convertToBiobit, toast } from '../utils';
+import { actionTypes } from './actionTypes';
+import { configureFallbackWeb3, getGasPrice, configureWeb3 } from './actions';
+import { useWeb3React } from '@web3-react/core';
+import { injectedConnector } from '../connectors';
 
 const appInitialState = {
 	error: null,
 
-	biobitBalance: "Hidden Info",
-	etherBalance: "Hidden Info",
+	biobitBalance: 'Hidden Info',
+	etherBalance: 'Hidden Info',
 
 	gas: {},
 
 	fallbackWeb3Instance: null,
 	contract: null,
 
-	zarelaInitDate: null,
-	zarelaDailyGift: null,
 	isMobile: null,
 };
 
@@ -65,11 +58,6 @@ const AppProvider = ({ children }) => {
 					...state,
 					gas: action.payload,
 				};
-			case actionTypes.SET_ZARELA_DAILY_GIFT:
-				return {
-					...state,
-					zarelaDailyGift: action.payload,
-				};
 			case actionTypes.SET_CLIENT_DEVICE:
 				return {
 					...state,
@@ -84,9 +72,7 @@ const AppProvider = ({ children }) => {
 		getGasPrice(dispatch);
 		dispatch({
 			type: actionTypes.SET_CLIENT_DEVICE,
-			payload: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-				navigator.userAgent
-			)
+			payload: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 				? true
 				: false,
 		});
@@ -99,32 +85,6 @@ const AppProvider = ({ children }) => {
 			configureFallbackWeb3(dispatch);
 		}
 	}, [library]);
-
-	useEffect(() => {
-		if (appState.contract) {
-			setTimers(dispatch, appState.contract);
-			if (appState.contract)
-				appState.contract.events
-					.Transfer({})
-					.on("data", (event) => {
-						toast(
-							`${convertToBiobit(
-								event.returnValues[2]
-							)} tokens were successfully sent to ${event.returnValues[1]}.`,
-							"success",
-							false,
-							null,
-							{
-								toastId: event.id,
-							}
-						);
-					})
-					.on("error", (error, receipt) => {
-						toast(error.message, "error");
-						console.error(error, receipt);
-					});
-		}
-	}, [appState.contract]);
 
 	useEffect(() => {
 		if (account !== undefined && appState.contract) {
@@ -150,7 +110,7 @@ const AppProvider = ({ children }) => {
 					.then(function (result) {
 						dispatch({
 							type: actionTypes.SET_ETHER_BALANCE,
-							payload: activeWeb3.utils.fromWei(result, "ether"),
+							payload: activeWeb3.utils.fromWei(result, 'ether'),
 						});
 					})
 					.catch((error) => {
