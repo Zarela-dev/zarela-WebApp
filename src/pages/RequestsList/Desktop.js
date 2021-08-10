@@ -140,7 +140,7 @@ const Desktop = ({
 				) : (
 					<RequestListSidebarWrapper>
 						<ZarelaDayBox currentDay={appState.zarelaCurrentDay} />
-						<TokenStatsSidebar dailyContributors={dailyContributors} />
+						{/* <TokenStatsSidebar dailyContributors={dailyContributors} /> */}
 						<TokenInfoSidebar data={appState} account={web3React.account} />
 					</RequestListSidebarWrapper>
 				)}
