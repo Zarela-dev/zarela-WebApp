@@ -89,18 +89,15 @@ const WalletSendAssets = (mobile) => {
 
 	const getBalanceHint = () => {
 		return `Available: ${
-			formik.values.token === 'Biobit'
-				? convertToBiobit(+appState.biobitBalance)
-				: +appState.etherBalance
+			formik.values.token === 'Biobit' ? convertToBiobit(+appState.biobitBalance) : +appState.etherBalance
 		} ${formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'}`;
 	};
 
-	const getClipboard = async() => {
-		var pasteTarget = document.getElementsByName("address")[0];
-    pasteTarget.focus();
-		console.log('navigator' , navigator.clipboard.readText())
-    document.execCommand('insertText', false, await navigator.clipboard.readText())
-};
+	const getClipboard = async () => {
+		var pasteTarget = document.getElementsByName('address')[0];
+		pasteTarget.focus();
+		if (navigator.clipboard) document.execCommand('insertText', false, await navigator.clipboard.readText());
+	};
 
 	return (
 		<Wrapper onSubmit={formik.handleSubmit} isMobile={appState.isMobile}>
@@ -127,7 +124,7 @@ const WalletSendAssets = (mobile) => {
 						isMobile={appState.isMobile}
 						label={"Recipient's Address"}
 						placeholder={"Please enter the Recipient's address"}
-						adornment={'Paste'} // #todo
+						adornment={navigator.clipboard ? 'Paste' : null} // #todo
 						adornmentOnClick={() => {
 							// let test = document.execCommand('paste')
 							// console.log('test ', test);
