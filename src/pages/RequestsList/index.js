@@ -31,8 +31,9 @@ const RequestsList = () => {
 					if (!error) {
 						let categories = result[0];
 						let businessCategory = result[1];
-						
-						if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY) // only show zarela requests
+
+						if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY)
+							// only show zarela requests
 							appState.contract.methods.orders(i).call((error, result) => {
 								if (!error) {
 									const requestTemplate = {
@@ -78,9 +79,7 @@ const RequestsList = () => {
 		return (
 			<>
 				{/* <Splash isVisible={isLoading} /> */}
-				<Mobile
-					{...{ requests, isLoading }}
-				/>
+				<Mobile {...{ requests, isLoading, appState }} />
 			</>
 		);
 	} else {

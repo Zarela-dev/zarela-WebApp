@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import MobileLayout from '../../components/MobileLayout';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
+import ZarelaDayBox from '../../components/ZarelaDayBox';
 
 const RequestsListWrapper = styled.div`
 	position: relative;
@@ -51,6 +52,13 @@ const Background = styled.div`
 		z-index: -2;
 		background: linear-gradient(0deg, rgb(255 255 255) 50%, rgb(255 255 255 / 0%));
 	}
+
+	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
+		&::before {
+			background-size: cover;
+			background-position: center;
+		}
+	}
 `;
 
 const RequestsListLayout = styled.section`
@@ -60,6 +68,9 @@ const RequestsListLayout = styled.section`
 	width: 100%;
 	padding-top: ${(props) => props.theme.spacing(4)};
 	${maxWidthWrapper};
+	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
+		padding-top: 0;
+	}
 `;
 
 const RequestsListContentWrapper = styled.section`
@@ -118,7 +129,7 @@ const useStyles = makeStyles({
 	},
 });
 
-const App = ({ requests, isLoading, props }) => {
+const App = ({ requests, isLoading, props, appState }) => {
 	const classes = useStyles(props);
 
 	return (
@@ -129,6 +140,7 @@ const App = ({ requests, isLoading, props }) => {
 			</TitleSection>
 			<MobileLayout>
 				<RequestsListWrapper isLoading={isLoading}>
+					<ZarelaDayBox currentDay={appState.zarelaCurrentDay} />
 					{!isLoading && <Background />}
 					<RequestsListLayout>
 						<RequestsListContentWrapper>
