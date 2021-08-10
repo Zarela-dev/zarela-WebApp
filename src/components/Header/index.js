@@ -66,7 +66,7 @@ const NavIcon = styled.img`
 // `;
 
 const Logo = styled.img`
-	height: 40px;
+	height: 65px;
 	margin-left: 20px;
 	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(1) : props.theme.spacing(4))};
 `;
@@ -113,8 +113,7 @@ const HeaderWrapperApp = styled(HeaderWrapper)`
 `;
 
 const LogoApp = styled(Logo)`
-	width: 78px;
-	height: 27px;
+	height: 33px;
 	margin-left: 0;
 `;
 // const NavLinkApp = styled(NavLink)`
