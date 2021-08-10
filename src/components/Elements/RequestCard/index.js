@@ -197,6 +197,9 @@ export const TagsWrapper = styled.div`
 	justify-content: flex-start;
 	align-items: center;
 	width: 100%;
+	max-width: 860px;
+	flex-wrap: wrap;
+	
 	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		margin-top: ${(props) => props.theme.spacing(1)};
 	}

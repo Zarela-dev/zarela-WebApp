@@ -33,10 +33,7 @@ const RequestDetailsPage = () => {
 			if (sendSignalRef !== null) {
 				setDialog(true);
 				if (account) {
-					if (
-						sendSignalRef.current.value !== null &&
-						sendSignalRef.current.value !== ''
-					) {
+					if (sendSignalRef.current.value !== null && sendSignalRef.current.value !== '') {
 						setDialog(false);
 						setSubmitting(true);
 						setDialogMessage('encrypting file');
@@ -86,8 +83,7 @@ const RequestDetailsPage = () => {
 												clearSubmitDialog();
 												toast(result, 'success', true, result);
 
-												if (sendSignalRef.current !== null)
-													sendSignalRef.current.value = null;
+												if (sendSignalRef.current !== null) sendSignalRef.current.value = null;
 											} else {
 												clearSubmitDialog();
 												toast(error.message, 'error');
@@ -128,22 +124,33 @@ const RequestDetailsPage = () => {
 
 	useEffect(() => {
 		if (appState.contract !== null) {
-			appState.contract.methods.orders(id).call((error, result) => {
+			appState.contract.methods.Categories(id).call((error, result) => {
 				if (!error) {
-					const requestTemplate = {
-						requestID: result[0],
-						title: result[1],
-						description: result[6],
-						requesterAddress: result[2],
-						tokenPay: convertToBiobit(result[3]),
-						totalContributors: result[4], // total contributors required
-						totalContributed: +result[4] - +result[7],
-						whitePaper: result[5],
-						timestamp: result[9],
-						totalContributedCount: result[8],
-						encryptionPublicKey: result[10],
-					};
-					setRequest(requestTemplate);
+					let categories = result[0];
+					let businessCategory = result[1];
+
+					if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY)
+						// only show zarela requests
+						appState.contract.methods.orders(id).call((error, result) => {
+							if (!error) {
+								const requestTemplate = {
+									requestID: result[0],
+									title: result[1],
+									description: result[6],
+									requesterAddress: result[2],
+									tokenPay: convertToBiobit(result[3]),
+									totalContributors: result[4], // total contributors required
+									totalContributed: +result[4] - +result[7],
+									whitePaper: result[5],
+									timestamp: result[9],
+									categories,
+									totalContributedCount: result[8],
+								};
+								setRequest(requestTemplate);
+							} else {
+								console.error(error.message);
+							}
+						});
 				} else {
 					console.error(error.message);
 				}

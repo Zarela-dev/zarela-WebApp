@@ -23,6 +23,7 @@ import {
 	BiobitToDollarValue,
 	BadgeLabel,
 } from './../Elements/RequestCard';
+import { TagsWrapper, TagItem } from '../Elements/RequestCard';
 import maxWidthWrapper from './../Elements/MaxWidth';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/user-blue.svg';
@@ -31,13 +32,11 @@ import bookmarkIcon from '../../assets/icons/bookmark-purple.svg';
 import publicKeyIcon from '../../assets/icons/public-key.svg';
 import { CopyableText } from '../../utils';
 
-const PageWrapper = styled.div`
-	
-`;
+const PageWrapper = styled.div``;
 
 const HeaderContainer = styled.header`
-	background: #F4F8FE;
-	padding: ${props => props.theme.spacing(5)} 0 0;
+	background: #f4f8fe;
+	padding: ${(props) => props.theme.spacing(5)} 0 0;
 	width: 100%;
 `;
 
@@ -45,11 +44,12 @@ const HeaderInner = styled(HeaderLayout)`
 	display: flex;
 	flex-direction: column;
 	${maxWidthWrapper};
+	padding: 0 ${(props) => props.theme.spacing(2)};
 `;
 
 const CustomFooter = styled(Footer)`
-	margin-top: ${props => props.theme.spacing(3)};
-	padding-left: ${props => props.theme.spacing(12)};
+	margin-top: ${(props) => props.theme.spacing(3)};
+	padding-left: ${(props) => props.theme.spacing(12)};
 	flex-wrap: nowrap;
 `;
 
@@ -60,12 +60,13 @@ const CustomBadgeRow = styled(BadgeRow)`
 
 const DescriptionContainer = styled.div`
 	position: relative;
-	padding-top: ${props => props.theme.spacing(6)};
 	${maxWidthWrapper};
+	padding: ${props => `${props.theme.spacing(4)} ${props.theme.spacing(2)}`};
 `;
 
 const DescriptionTitle = styled.h4`
-	margin-bottom: ${props => props.theme.spacing(2)};
+	margin-top: ${(props) => props.theme.spacing(3)};
+	margin-bottom: ${(props) => props.theme.spacing(2)};
 	font-size: 18px;
 	font-weight: 600;
 `;
@@ -74,7 +75,7 @@ const Description = styled.p`
 	font-size: 14px;
 	line-height: 25px;
 	text-align: justify;
-	margin-bottom: ${props => props.theme.spacing(5)};
+	margin-bottom: ${(props) => props.theme.spacing(5)};
 `;
 
 const PublicKeyBadge = styled.div`
@@ -88,23 +89,23 @@ const PublicKeyBadge = styled.div`
 const PublicKeyTextContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	padding: ${props => props.theme.spacing(1)} 0;
+	padding: ${(props) => props.theme.spacing(1)} 0;
 `;
 
 const PublicKey = styled(Typography)`
 	font-weight: 500;
 	font-size: 12px;
 	line-height: 20px;
-	
+
 	&:not(:last-child) {
-		margin-bottom: ${props => props.theme.spacing(0)};
+		margin-bottom: ${(props) => props.theme.spacing(0)};
 	}
 `;
 
 const PublicKeyIcon = styled.img`
 	flex: 0 0 36px;
 	width: 36px;
-	margin-right: ${props => props.theme.spacing(1)};
+	margin-right: ${(props) => props.theme.spacing(1)};
 `;
 
 const CustomContributeBadge = styled(ContributorBadge)`
@@ -117,7 +118,7 @@ const CustomContributeBadge = styled(ContributorBadge)`
 
 const FilesWrapper = styled.div`
 	${maxWidthWrapper};
-	display: flex; 
+	display: flex;
 	justify-content: space-between;
 `;
 
@@ -132,8 +133,8 @@ const CustomDivider = styled(Divider)`
 const CustomProgressTrackerWrapper = styled(ProgressTrackerWrapper)`
 	position: relative;
 	top: 2px;
-	margin-top: ${props => props.theme.spacing(1)};
-	margin-bottom: ${props => props.theme.spacing(0)};
+	margin-top: ${(props) => props.theme.spacing(1)};
+	margin-bottom: ${(props) => props.theme.spacing(0)};
 `;
 
 const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, submitSignal }, ref) => {
@@ -145,12 +146,8 @@ const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, 
 			<HeaderContainer>
 				<HeaderInner>
 					<HeaderLayout>
-						<RequestNumber>
-							{request.requestID}
-						</RequestNumber>
-						<Title>
-							{request.title}
-						</Title>
+						<RequestNumber>{request.requestID}</RequestNumber>
+						<Title>{request.title}</Title>
 						<Spacer />
 						<Bookmark src={bookmarkIcon} />
 					</HeaderLayout>
@@ -158,69 +155,58 @@ const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, 
 						<CustomContributeBadge>
 							<BadgeRow>
 								<ContributorsIcon src={documentsIcon} />
-								<BadgeLabel>
-									{contributors}
-								</BadgeLabel>
+								<BadgeLabel>{contributors}</BadgeLabel>
 							</BadgeRow>
 						</CustomContributeBadge>
 						<CustomDivider />
 						<CustomContributeBadge>
 							<BadgeRow>
 								<ContributorsIcon src={contributorIcon} />
-								<BadgeLabel>
-									{request.totalContributedCount}
-								</BadgeLabel>
+								<BadgeLabel>{request.totalContributedCount}</BadgeLabel>
 							</BadgeRow>
 						</CustomContributeBadge>
 						<CustomDivider />
 						<CustomContributeBadge>
 							<BadgeRow>
-								<BadgeLabel>
-									{timestamp}
-								</BadgeLabel>
+								<BadgeLabel>{timestamp}</BadgeLabel>
 							</BadgeRow>
 						</CustomContributeBadge>
 						<Spacer />
 						<CustomBadgeRow>
 							<TokenIcon src={biobitIcon} />
-							<TokenValue>
-								{request.tokenPay}
-							</TokenValue>
-							<ValueLabel>
-								BBit
-							</ValueLabel>
-							<BiobitToDollarValue noMargin>
-								{`~ $ ${request.tokenPay}`}
-							</BiobitToDollarValue>
+							<TokenValue>{request.tokenPay}</TokenValue>
+							<ValueLabel>BBit</ValueLabel>
+							<BiobitToDollarValue noMargin>{`~ $ ${request.tokenPay}`}</BiobitToDollarValue>
 						</CustomBadgeRow>
 					</CustomFooter>
 					<CustomProgressTrackerWrapper>
 						<ProgressTrackerTrack>
-							<ProgressTrackerProcess progress={+request.totalContributed / +request.totalContributors * 100} />
+							<ProgressTrackerProcess
+								progress={(+request.totalContributed / +request.totalContributors) * 100}
+							/>
 						</ProgressTrackerTrack>
 					</CustomProgressTrackerWrapper>
 				</HeaderInner>
 			</HeaderContainer>
 			<DescriptionContainer>
+				<TagsWrapper>
+					{request.categories?.split(',').map((item, index) => {
+						return <TagItem key={index}>#{item}</TagItem>;
+					})}
+				</TagsWrapper>
 				<PublicKeyBadge>
 					<PublicKeyIcon src={publicKeyIcon} />
 					<CopyableText textToCopy={request.requesterAddress}>
 						<PublicKeyTextContainer>
-							<PublicKey variant='body'>
-								Requester public key
-							</PublicKey>
-							<PublicKey variant='body2' weight='semiBold'>
+							<PublicKey variant="body">Requester public key</PublicKey>
+							<PublicKey variant="body2" weight="semiBold">
 								{request.requesterAddress}
 							</PublicKey>
 						</PublicKeyTextContainer>
 					</CopyableText>
 				</PublicKeyBadge>
-				<DescriptionTitle>
-					Description:
-				</DescriptionTitle>
-				<Description>
-					{request.description}
-				</Description>
+				<DescriptionTitle>Description:</DescriptionTitle>
+				<Description>{request.description}</Description>
 			</DescriptionContainer>
 			<FilesWrapper>
 				<DownloadFileCard
@@ -233,7 +219,7 @@ const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, 
 				<FileCardSpacer />
 				<UploadFileCard
 					showSelected
-					buttonLabel='Select Files'
+					buttonLabel="Select Files"
 					label={'select your files here'}
 					ref={ref}
 					name={'whitepaper'}

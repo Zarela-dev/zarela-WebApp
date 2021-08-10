@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import UploadFileCardMobile from "../UploadFileCard/UploadFileCardMobile";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import UploadFileCardMobile from '../UploadFileCard/UploadFileCardMobile';
 import {
 	RequestNumber,
 	HeaderLayout,
@@ -20,23 +20,23 @@ import {
 	Title,
 	BiobitToDollarValue,
 	BadgeLabel,
-} from "../Elements/RequestCard/IndexMobile";
-import maxWidthWrapper from "../Elements/MaxWidth";
-import biobitIcon from "../../assets/icons/biobit-black.svg";
-import contributorIcon from "../../assets/icons/user-black.svg";
-import documentsIcon from "../../assets/icons/document-black.svg";
-import bookmarkIcon from "../../assets/icons/bookmark-purple.svg";
-import publicKeyIcon from "../../assets/icons/public-key.svg";
-import { CopyableText } from "../../utils";
-import DownloadFileCardMobile from "../DownloadFileCard/DownloadFileCardMobile";
-import MobileLayout from "../MobileLayout";
+} from '../Elements/RequestCard/IndexMobile';
+import { TagsWrapper, TagItem } from '../Elements/RequestCard';
+import maxWidthWrapper from '../Elements/MaxWidth';
+import biobitIcon from '../../assets/icons/biobit-black.svg';
+import contributorIcon from '../../assets/icons/user-black.svg';
+import documentsIcon from '../../assets/icons/document-black.svg';
+import bookmarkIcon from '../../assets/icons/bookmark-purple.svg';
+import publicKeyIcon from '../../assets/icons/public-key.svg';
+import { CopyableText } from '../../utils';
+import DownloadFileCardMobile from '../DownloadFileCard/DownloadFileCardMobile';
+import MobileLayout from '../MobileLayout';
 
 const PageWrapper = styled.div``;
 
 const HeaderContainer = styled.header`
 	background: #f4f8fe;
-	padding: ${(props) => props.theme.spacing(3)}
-		${(props) => props.theme.spacing(2)} ${(props) => props.theme.spacing(3)};
+	padding: ${(props) => props.theme.spacing(3)} ${(props) => props.theme.spacing(2)} 0;
 	width: 100%;
 `;
 
@@ -60,6 +60,7 @@ const CustomBadgeRow = styled(BadgeRow)`
 const DescriptionContainer = styled.div`
 	position: relative;
 	${maxWidthWrapper};
+	padding: ${(props) => `${props.theme.spacing(2)}`};
 `;
 
 // const DescriptionTitle = styled.h4`
@@ -69,9 +70,10 @@ const DescriptionContainer = styled.div`
 // `;
 
 const TitleContent = styled(Title)`
-	padding: 0 18px;
 	font-size: 14px;
 	font-weight: 600;
+	margin-top: ${(props) => props.theme.spacing(2.5)};
+	margin-bottom: ${(props) => props.theme.spacing(1.5)};
 `;
 
 const Description = styled.p`
@@ -79,7 +81,6 @@ const Description = styled.p`
 	line-height: 17px;
 	text-align: justify;
 	margin-bottom: ${(props) => props.theme.spacing(5)};
-	padding: 0 18px;
 `;
 
 const PublicKeyBadge = styled.div`
@@ -136,101 +137,97 @@ const CustomProgressTrackerWrapper = styled(ProgressTrackerWrapper)`
 	margin-bottom: ${(props) => props.theme.spacing(0)};
 `;
 
-const RequestDetailsMobile = React.forwardRef(
-	({ setError, error, timestamp, request, submitSignal }, ref) => {
-		const contributors = `${request.totalContributed}/${request.totalContributors}`;
-		const [signalFile, setSignalFile] = useState(null);
+const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, request, submitSignal }, ref) => {
+	const contributors = `${request.totalContributed}/${request.totalContributors}`;
+	const [signalFile, setSignalFile] = useState(null);
 
-		return (
-			<MobileLayout>
-				<PageWrapper>
-					<HeaderContainer>
-						<HeaderInner>
-							<HeaderLayout>
-								<RequestNumber>{request.requestID}</RequestNumber>
-								<Title>{request.title}</Title>
-								<Spacer />
-								<Bookmark src={bookmarkIcon} />
-							</HeaderLayout>
-							<CustomFooter>
-								<CustomContributeBadge>
-									<BadgeRow>
-										<ContributorsIcon src={documentsIcon} />
-										<BadgeLabel>{contributors}</BadgeLabel>
-									</BadgeRow>
-								</CustomContributeBadge>
-								<CustomDivider />
-								<CustomContributeBadge>
-									<BadgeRow>
-										<ContributorsIcon src={contributorIcon} />
-										<BadgeLabel>{request.totalContributedCount}</BadgeLabel>
-									</BadgeRow>
-								</CustomContributeBadge>
-								<Spacer />
-								<CustomBadgeRow>
-									<TokenIcon src={biobitIcon} />
-									<TokenValue>{request.tokenPay}</TokenValue>
-									<BiobitToDollarValue noMargin>
-										{`= $ ${request.tokenPay}`}
-									</BiobitToDollarValue>
-								</CustomBadgeRow>
-							</CustomFooter>
-							<CustomProgressTrackerWrapper>
-								<ProgressTrackerTrack>
-									<ProgressTrackerProcess
-										progress={
-											(+request.totalContributed / +request.totalContributors) *
-											100
-										}
-									/>
-								</ProgressTrackerTrack>
-							</CustomProgressTrackerWrapper>
-						</HeaderInner>
-					</HeaderContainer>
-					<DescriptionContainer>
-						<UploadFileCardMobile
-							showSelected
-							buttonLabel="Select Files"
-							label={"Already have the file?"}
-							ref={ref}
-							name={"whitepaper"}
-							value={signalFile}
-							onChange={(e) => {
-								setSignalFile(e.target.files[0]);
-							}}
-							error={error}
-							setError={setError}
-							onClick={submitSignal}
-						/>
-						<TitleContent>Description</TitleContent>
-						<Description>{request.description}</Description>
-					</DescriptionContainer>
-					<PublicKeyBadge>
-						<PublicKeyIcon src={publicKeyIcon} />
-						<CopyableText textToCopy={request.requesterAddress}>
-							<PublicKeyTextContainer>
-								<PublicKey variant="body">Requester public key</PublicKey>
-								<PublicKey variant="body2" weight="semiBold">
-									{request.requesterAddress}
-								</PublicKey>
-							</PublicKeyTextContainer>
-						</CopyableText>
-					</PublicKeyBadge>
-					<FilesWrapper>
-						<DownloadFileCardMobile
-							fileName={"Download Zpaper"}
-							buttonLabel={"Download"}
-							label={"just label"}
-							helperText={
-								"This file contains Zpaper file and survey test files."
-							}
-							fileLink={process.env.REACT_APP_IPFS_LINK + request.whitePaper}
-						/>
-					</FilesWrapper>
-				</PageWrapper>
-			</MobileLayout>
-		);
-	}
-);
+	return (
+		<MobileLayout>
+			<PageWrapper>
+				<HeaderContainer>
+					<HeaderInner>
+						<HeaderLayout>
+							<RequestNumber>{request.requestID}</RequestNumber>
+							<Title>{request.title}</Title>
+							<Spacer />
+							<Bookmark src={bookmarkIcon} />
+						</HeaderLayout>
+						<CustomFooter>
+							<CustomContributeBadge>
+								<BadgeRow>
+									<ContributorsIcon src={documentsIcon} />
+									<BadgeLabel>{contributors}</BadgeLabel>
+								</BadgeRow>
+							</CustomContributeBadge>
+							<CustomDivider />
+							<CustomContributeBadge>
+								<BadgeRow>
+									<ContributorsIcon src={contributorIcon} />
+									<BadgeLabel>{request.totalContributedCount}</BadgeLabel>
+								</BadgeRow>
+							</CustomContributeBadge>
+							<Spacer />
+							<CustomBadgeRow>
+								<TokenIcon src={biobitIcon} />
+								<TokenValue>{request.tokenPay}</TokenValue>
+								<BiobitToDollarValue noMargin>{`= $ ${request.tokenPay}`}</BiobitToDollarValue>
+							</CustomBadgeRow>
+						</CustomFooter>
+						<CustomProgressTrackerWrapper>
+							<ProgressTrackerTrack>
+								<ProgressTrackerProcess
+									progress={(+request.totalContributed / +request.totalContributors) * 100}
+								/>
+							</ProgressTrackerTrack>
+						</CustomProgressTrackerWrapper>
+					</HeaderInner>
+				</HeaderContainer>
+				<DescriptionContainer>
+					<UploadFileCardMobile
+						showSelected
+						buttonLabel="Select Files"
+						label={'Already have the file?'}
+						ref={ref}
+						name={'whitepaper'}
+						value={signalFile}
+						onChange={(e) => {
+							setSignalFile(e.target.files[0]);
+						}}
+						error={error}
+						setError={setError}
+						onClick={submitSignal}
+					/>
+					<TagsWrapper>
+						{request.categories?.split(',').map((item, index) => {
+							return <TagItem key={index}>#{item}</TagItem>;
+						})}
+					</TagsWrapper>
+					<TitleContent>Description</TitleContent>
+					<Description>{request.description}</Description>
+				</DescriptionContainer>
+				<PublicKeyBadge>
+					<PublicKeyIcon src={publicKeyIcon} />
+					<CopyableText textToCopy={request.requesterAddress}>
+						<PublicKeyTextContainer>
+							<PublicKey variant="body">Requester public key</PublicKey>
+							<PublicKey variant="body2" weight="semiBold">
+								{request.requesterAddress}
+							</PublicKey>
+						</PublicKeyTextContainer>
+					</CopyableText>
+				</PublicKeyBadge>
+				<FilesWrapper>
+					<DownloadFileCardMobile
+						fileName={'Download Zpaper'}
+						buttonLabel={'Download'}
+						label={'just label'}
+						helperText={'This file contains Zpaper file and survey test files.'}
+						fileLink={process.env.REACT_APP_IPFS_LINK + request.whitePaper}
+					/>
+				</FilesWrapper>
+			</PageWrapper>
+		</MobileLayout>
+	);
+});
 
 export default RequestDetailsMobile;
