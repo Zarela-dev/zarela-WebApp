@@ -10,7 +10,7 @@ const Wallet = () => {
 	const [logs, setLogs] = useState([]);
 	const [isLoading, setLoading] = useState(false);
 	const { account, library } = useWeb3React();
-	const PAGE_SIZE = 100;
+	const PAGE_SIZE = 30;
 
 	useEffect(() => {
 		if (account) {

@@ -72,6 +72,13 @@ const Cell = styled.div`
 	}
 `;
 
+const NoTransactions = styled.div`
+	width: 100%;
+	background: white;
+	border-radius: 8px;
+	padding: ${(props) => props.theme.spacing(2)} ${(props) => props.theme.spacing(1)};
+`;
+
 const Header = styled.div`
 	${Cell} {
 		font-size: 14px;
@@ -322,7 +329,7 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 						</Row>
 					))}
 
-				{!isLoading &&
+				{!isLoading && currentTableData.length ? (
 					currentTableData.map((transaction, index) => (
 						<Row key={index}>
 							<CellWrapper>
@@ -357,7 +364,12 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 								<Cell>{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}</Cell>
 							</CellWrapper>
 						</Row>
-					))}
+					))
+				) : (
+					<Row>
+						<NoTransactions>You don't have any transactions on this account in Zarela.</NoTransactions>
+					</Row>
+				)}
 			</Table>
 
 			<Pagination
