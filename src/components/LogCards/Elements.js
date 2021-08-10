@@ -191,7 +191,7 @@ export const TableRow = styled.section`
 	margin-bottom: ${(props) => (props.header ? props.theme.spacing(1) : 0)};
 
 	${TableCellWrapper}:first-of-type {
-		flex: 0 0 58%;
+		flex: 0 0 53%;
 	}
 
 	${TableCellWrapper}:nth-of-type(2) {

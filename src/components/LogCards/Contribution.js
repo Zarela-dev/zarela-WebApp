@@ -25,7 +25,7 @@ import {
 	Table,
 	TableCellWrapper,
 	TableCell,
-	TableRow,
+	TableRow,TableTimestamp,
 	TableBulkRow,
 } from './Elements';
 import { Spacer } from '../Elements/Spacer';
