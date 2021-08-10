@@ -28,7 +28,7 @@ import contributorIcon from '../../assets/icons/user-black.svg';
 import documentsIcon from '../../assets/icons/document-black.svg';
 import bookmarkIcon from '../../assets/icons/bookmark-purple.svg';
 import publicKeyIcon from '../../assets/icons/public-key.svg';
-import { CopyableText } from '../../utils';
+import { CopyableText, timeSince } from '../../utils';
 import DownloadFileCardMobile from '../DownloadFileCard/DownloadFileCardMobile';
 import MobileLayout from '../MobileLayout';
 
@@ -137,6 +137,13 @@ const CustomProgressTrackerWrapper = styled(ProgressTrackerWrapper)`
 	margin-bottom: ${(props) => props.theme.spacing(0)};
 `;
 
+const Timestamp = styled.p`
+	font-size: 12px;
+	line-height: 16px;
+	color: #858585;
+	margin-top: ${(props) => props.theme.spacing(1)};
+`;
+
 const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, request, submitSignal }, ref) => {
 	const contributors = `${request.totalContributed}/${request.totalContributors}`;
 	const [signalFile, setSignalFile] = useState(null);
@@ -148,7 +155,10 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
 					<HeaderInner>
 						<HeaderLayout>
 							<RequestNumber>{request.requestID}</RequestNumber>
-							<Title>{request.title}</Title>
+							<Title>
+								<p>{request.title}</p>
+								<Timestamp>{timeSince(request.timestamp)}</Timestamp>
+							</Title>
 							<Spacer />
 							<Bookmark src={bookmarkIcon} />
 						</HeaderLayout>

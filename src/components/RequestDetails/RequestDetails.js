@@ -30,7 +30,7 @@ import contributorIcon from '../../assets/icons/user-blue.svg';
 import documentsIcon from '../../assets/icons/document-blue.svg';
 import bookmarkIcon from '../../assets/icons/bookmark-purple.svg';
 import publicKeyIcon from '../../assets/icons/public-key.svg';
-import { CopyableText } from '../../utils';
+import { CopyableText, timeSince } from '../../utils';
 
 const PageWrapper = styled.div``;
 
@@ -61,7 +61,7 @@ const CustomBadgeRow = styled(BadgeRow)`
 const DescriptionContainer = styled.div`
 	position: relative;
 	${maxWidthWrapper};
-	padding: ${props => `${props.theme.spacing(4)} ${props.theme.spacing(2)}`};
+	padding: ${(props) => `${props.theme.spacing(4)} ${props.theme.spacing(2)}`};
 `;
 
 const DescriptionTitle = styled.h4`
@@ -137,6 +137,14 @@ const CustomProgressTrackerWrapper = styled(ProgressTrackerWrapper)`
 	margin-bottom: ${(props) => props.theme.spacing(0)};
 `;
 
+const Timestamp = styled.p`
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 130%;
+	color: #6c6c6c;
+	margin-top: ${(props) => props.theme.spacing(1)};
+`;
+
 const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, submitSignal }, ref) => {
 	const contributors = `${request.totalContributed}/${request.totalContributors}`;
 	const [signalFile, setSignalFile] = useState(null);
@@ -147,7 +155,10 @@ const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, 
 				<HeaderInner>
 					<HeaderLayout>
 						<RequestNumber>{request.requestID}</RequestNumber>
-						<Title>{request.title}</Title>
+						<Title>
+							<p>{request.title}</p>
+							<Timestamp>{timeSince(request.timestamp)}</Timestamp>
+						</Title>
 						<Spacer />
 						<Bookmark src={bookmarkIcon} />
 					</HeaderLayout>
