@@ -9,6 +9,7 @@ import { timeSince } from '../../utils';
 import homepageBg from '../../assets/home-bg.jpg';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
+import ZarelaDayBox from '../../components/ZarelaDayBox';
 
 const RequestsListWrapper = styled.div`
 	position: relative;
@@ -138,6 +139,7 @@ const Desktop = ({
 					</RequestListSidebarWrapper>
 				) : (
 					<RequestListSidebarWrapper>
+						<ZarelaDayBox currentDay={appState.zarelaCurrentDay} />
 						<TokenStatsSidebar dailyContributors={dailyContributors} />
 						<TokenInfoSidebar data={appState} account={web3React.account} />
 					</RequestListSidebarWrapper>

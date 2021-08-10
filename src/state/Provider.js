@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import { convertToBiobit, toast } from '../utils';
 import { actionTypes } from './actionTypes';
-import { configureFallbackWeb3, getGasPrice, configureWeb3 } from './actions';
+import { configureFallbackWeb3, getZarelaCurrentDay, getGasPrice, configureWeb3 } from './actions';
 import { useWeb3React } from '@web3-react/core';
 import { injectedConnector } from '../connectors';
 
@@ -15,8 +15,9 @@ const appInitialState = {
 
 	fallbackWeb3Instance: null,
 	contract: null,
-
 	isMobile: null,
+
+	zarelaCurrent: null,
 };
 
 const mainContext = React.createContext(appInitialState);
@@ -42,6 +43,11 @@ const AppProvider = ({ children }) => {
 				return {
 					...state,
 					biobitBalance: action.payload,
+				};
+			case actionTypes.SET_ZARELA_CURRENT_DAY:
+				return {
+					...state,
+					zarelaCurrentDay: action.payload,
 				};
 			case actionTypes.SET_ETHER_BALANCE:
 				return {
@@ -88,6 +94,7 @@ const AppProvider = ({ children }) => {
 
 	useEffect(() => {
 		if (account !== undefined && appState.contract) {
+			getZarelaCurrentDay(dispatch, appState.contract);
 			appState.contract.methods.balanceOf(account).call((error, result) => {
 				if (!error) {
 					dispatch({
