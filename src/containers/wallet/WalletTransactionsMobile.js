@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import copyImage from '../../assets/icons/copy.svg';
-import { timeSince, convertToBiobit, CopyableText } from '../../utils';
+import { timeSince, convertToBiobit, getInput, CopyableText } from '../../utils';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '../../components/Pagination';
@@ -99,27 +99,6 @@ const WalletTransactionsMobile = ({ isLoading, account, data, props, PAGE_SIZE }
 	const classes = useStyles(props);
 	// if (!account || isLoading === true) return 'loading';
 	if (!account) return 'no accounts found';
-
-	function getInput(input) {
-		const inputInitials = input.substr(0, 10);
-
-		switch (inputInitials) {
-			case '0xd9f64981':
-				return 'Contribute';
-			case '0x827e6fd9':
-				return 'Create Request';
-			case '0xa9059cbb':
-				return 'BBit transfer';
-			case '0x5743b65d':
-				return 'Transaction Failed';
-			case '0xae615e8f':
-				return 'Confirmation';
-			case '0x':
-				return 'ETH transfer';
-			default:
-				return input;
-		}
-	}
 
 	return (
 		<Wrapper>

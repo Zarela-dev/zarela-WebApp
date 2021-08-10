@@ -34,8 +34,6 @@ const Inbox = () => {
 	const [ConnectionModalShow, setConnectionModalShow] = useState(true);
 
 	const handleConfirm = (requestID, originalIndexes) => {
-		console.log(originalIndexes);
-		debugger;
 		appState.contract.methods
 			.confirmContributor(requestID, originalIndexes)
 			.send({ from: account }, (error, result) => {
