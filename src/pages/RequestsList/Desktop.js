@@ -58,7 +58,7 @@ const RequestsListLayout = styled.section`
 	flex-direction: row-reverse;
 	flex-wrap: nowrap;
 	width: 100%;
-	padding-top: ${(props) => props.theme.spacing(4)};
+	padding: ${(props) => `${props.theme.spacing(4)} ${props.theme.spacing(2)}`};
 	${maxWidthWrapper};
 `;
 
@@ -71,7 +71,7 @@ const RequestListSidebarWrapper = styled.aside`
 
 const RequestsListContentWrapper = styled.section`
 	flex: 1 0;
-	padding: 0 ${(props) => props.theme.spacing(2)};
+	padding: ${(props) => ` 0 ${props.theme.spacing(2)} 0 0`};
 `;
 
 const Card = styled.div`
