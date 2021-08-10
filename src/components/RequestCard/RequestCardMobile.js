@@ -60,7 +60,7 @@ const RequestCardMobile = (props) => {
 		<RequestCardWrapper>
 			<HeaderLayout>
 				<RequestNumber isMobile={appState.isMobile}>{props.requestID}</RequestNumber>
-				<Title>{props.title.length < 115 ? props.title : props.title.substr(0, 115) + '...'}</Title>
+				<Title>{props.title.length < 70 ? props.title : props.title.substr(0, 70) + '...'}</Title>
 				<Spacer />
 			</HeaderLayout>
 			<Timestamp nowrap variant="caption">
@@ -68,7 +68,7 @@ const RequestCardMobile = (props) => {
 			</Timestamp>
 			<Description>
 				<Typography variant="body">
-					{props.description.length < 405 ? props.description : props.description.substr(0, 405) + '...'}
+					{props.description.length < 120 ? props.description : props.description.substr(0, 120) + '...'}
 				</Typography>
 				<TagsWrapper>
 					{props.categories.split(',').map((item, index) => {

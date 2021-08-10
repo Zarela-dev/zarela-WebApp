@@ -54,6 +54,7 @@ export const Description = styled.div`
 	line-height: 20px;
 	text-align: justify;
 	color: #121213;
+	min-height: 150px;
 `;
 
 export const Timestamp = styled(Typography)`
