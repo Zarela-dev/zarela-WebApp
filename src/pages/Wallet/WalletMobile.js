@@ -6,7 +6,7 @@ import { mainContext } from '../../state';
 import ConnectToMetamask from '../../components/ConnectToMetamask';
 import MobileLayout from '../../components/MobileLayout';
 import WalletTransactionsMobile from './../../containers/wallet/WalletTransactionsMobile';
-import WalletDepositMobile from './../../containers/wallet/WalletDeposit/Mobile';
+import WalletAccountMobile from './../../containers/wallet/WalletAccount/Mobile';
 import WalletSendAssets from './../../containers/wallet/WalletSendAssets';
 
 const Wrapper = styled.div``;
@@ -73,10 +73,10 @@ export const WalletMobile = ({ data, account, logs, isLoading, PAGE_SIZE }) => {
 					isMobile={appState.isMobile}
 					data={[
 						{
-							label: 'Deposit',
+							label: 'Account',
 							component: (
 								<WalletInnerContainer elevated>
-									<WalletDepositMobile address={account ? account : 'please connect to Metamask'} />
+									<WalletAccountMobile address={account ? account : 'please connect to Metamask'} />
 								</WalletInnerContainer>
 							),
 						},

@@ -20,7 +20,7 @@ const menuItems = [
 	},
 	{
 		title: 'Wallet',
-		path: '/wallet/deposit',
+		path: '/wallet/account',
 		notifications: 0,
 	},
 ];

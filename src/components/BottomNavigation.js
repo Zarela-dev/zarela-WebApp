@@ -137,7 +137,7 @@ const bottomNavItems = [
 	{
 		icon: walletIcon,
 		activeIcon: walletIcon_active,
-		path: '/wallet/deposit',
+		path: '/wallet/account',
 		notifications: 0,
 	},
 ];

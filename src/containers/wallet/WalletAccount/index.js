@@ -1,9 +1,9 @@
 import React from "react";
-import Note from "./../../../components/Note";
+import Note from "../../../components/Note";
 import styled from "styled-components";
 import nextStepIcon from "./../../../assets/icons/next-step-arrow.svg";
 import qrCodeImage from "../../../assets/icons/qr-code.png";
-import { CopyableText } from "./../../../utils";
+import { CopyableText } from "../../../utils";
 import { Wrapper, Content, Row, Column } from "./Layout";
 import {
 	QRCode,
@@ -48,7 +48,7 @@ const Notice = styled(Note)`
 	margin-left: -40px;
 `;
 
-const WalletDeposit = ({ address }) => {
+const WalletAccount = ({ address }) => {
 	return (
 		<Wrapper>
 			<Content>
@@ -69,7 +69,7 @@ const WalletDeposit = ({ address }) => {
 							</SaveQRCodeButton>
 						</Column>
 						<Column center>
-							<AddressTitle>BBit deposit address</AddressTitle>
+							<AddressTitle>BBit account address</AddressTitle>
 							<Address>{address}</Address>
 							<CopyableText textToCopy={address}>
 								<CopyAddressButton variant="secondary">
@@ -97,4 +97,4 @@ const WalletDeposit = ({ address }) => {
 	);
 };
 
-export default WalletDeposit;
+export default WalletAccount;

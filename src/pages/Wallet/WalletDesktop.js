@@ -4,7 +4,7 @@ import TitleBar from '../../components/TitleBar/TitleBar';
 import { Tabs } from '../../components/Tabs';
 import { mainContext } from '../../state';
 import WalletTransactions from './../../containers/wallet/WalletTransactions';
-import WalletDeposit from './../../containers/wallet/WalletDeposit';
+import WalletAccount from './../../containers/wallet/WalletAccount';
 import WalletSendAssets from './../../containers/wallet/WalletSendAssets';
 import ConnectToMetamask from '../../components/ConnectToMetamask';
 
@@ -74,10 +74,10 @@ export const WalletDesktop = ({ account, logs, isLoading, PAGE_SIZE }) => {
 				route="wallet"
 				data={[
 					{
-						label: 'Deposit',
+						label: 'Account',
 						component: (
 							<WalletInnerContainer elevated>
-								<WalletDeposit address={account ? account : 'please connect to Metamask'} />
+								<WalletAccount address={account ? account : 'please connect to Metamask'} />
 							</WalletInnerContainer>
 						),
 					},

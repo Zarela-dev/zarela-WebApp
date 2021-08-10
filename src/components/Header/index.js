@@ -187,7 +187,7 @@ export default function Header({ isMobile }) {
 						<NavIcon src={user} />
 						<NavLink>Log</NavLink>
 					</NavItem>
-					<NavItem isMobile={appState.isMobile} to="/wallet/deposit">
+					<NavItem isMobile={appState.isMobile} to="/wallet/account">
 						<NavIcon src={wallet} />
 						<NavLink>Wallet</NavLink>
 					</NavItem>

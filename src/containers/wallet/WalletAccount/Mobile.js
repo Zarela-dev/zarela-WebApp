@@ -7,7 +7,7 @@ import nextStepIcon from '../../../assets/icons/next-step-arrow-down.svg';
 import qrCodeImage from '../../../assets/icons/qr-code.png';
 import { CopyableText } from '../../../utils';
 import { Wrapper, Content, MobileColumn } from './Layout';
-import { Title } from './DepositChoices';
+import { Title } from './AccountChoices';
 import {
 	QRCodeMobile,
 	QRCodeImage,
@@ -16,7 +16,7 @@ import {
 	AddressMobile,
 	CopyAddressButton,
 } from './WalletInfo';
-import WalletsList from './../../../components/IntroModal/WalletsList';
+import WalletsList from '../../../components/IntroModal/WalletsList';
 
 const WrapperMobile = styled(Wrapper)`
 	padding: 19px;
@@ -59,7 +59,7 @@ const NextStepIcon = styled.img`
 // 	width: 100%;
 // `;
 
-const WalletDepositMobile = ({ address }) => {
+const WalletAccountMobile = ({ address }) => {
 	return (
 		<WrapperMobile>
 			<ContentMobile>
@@ -78,7 +78,7 @@ const WalletDepositMobile = ({ address }) => {
 						<SaveQRCodeButton variant="secondary">save QR code</SaveQRCodeButton>
 					</MobileColumn>
 					<MobileColumn center>
-						<AddressTitleMobile>BBit deposit address</AddressTitleMobile>
+						<AddressTitleMobile>BBit account address</AddressTitleMobile>
 						<AddressMobile>{address}</AddressMobile>
 						<CopyableText textToCopy={address}>
 							<CopyAddressButton variant="secondary">Copy address</CopyAddressButton>
@@ -98,4 +98,4 @@ const WalletDepositMobile = ({ address }) => {
 	);
 };
 
-export default WalletDepositMobile;
+export default WalletAccountMobile;
