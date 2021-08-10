@@ -176,12 +176,6 @@ const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, 
 								<BadgeLabel>{request.totalContributedCount}</BadgeLabel>
 							</BadgeRow>
 						</CustomContributeBadge>
-						<CustomDivider />
-						<CustomContributeBadge>
-							<BadgeRow>
-								<BadgeLabel>{timestamp}</BadgeLabel>
-							</BadgeRow>
-						</CustomContributeBadge>
 						<Spacer />
 						<CustomBadgeRow>
 							<TokenIcon src={biobitIcon} />
