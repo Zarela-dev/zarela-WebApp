@@ -47,6 +47,10 @@ const HashCol = styled.div`
 `;
 const TextCol = styled(HashCol)`
 	color: #121213;
+	max-width: ${props => props.fixed ? '165px' : 'unset'};
+	height: ${props => props.fixed ? '100%' : 'unset'};
+	white-space: ${props => props.fixed ? 'nowrap' : 'unset'};
+	overflow: ${props => props.fixed ? 'hidden' : 'unset'};
 `;
 
 const ValueCol = styled(HashCol)`
@@ -275,6 +279,24 @@ const WalletTransactionsMobile = ({ isLoading, account, data, props }) => {
 								<ValueCol>
 									<Skeleton
 										variant="rect"
+										width={'100%'}
+										height={skeletonLineHeight}
+										className={classes.root}
+									/>
+								</ValueCol>
+							</TransactionRow>
+							<TransactionRow>
+								<TitleCol>
+									<Skeleton
+										variant="rect"
+										width={'70%'}
+										height={skeletonLineHeight}
+										className={classes.root}
+									/>
+								</TitleCol>
+								<ValueCol>
+									<Skeleton
+										variant="rect"
 										width={'20%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -318,6 +340,12 @@ const WalletTransactionsMobile = ({ isLoading, account, data, props }) => {
 							<IconCol src={copyImage} />
 						</CopyableText>
 					</TransactionRow>
+					<TransactionRow>
+						<TitleCol>Input</TitleCol>
+						<TextCol fixed>
+						{getInput(transaction.input)}
+						</TextCol>
+						</TransactionRow>
 					<TransactionRow>
 						<TitleCol>Value</TitleCol>
 						<ValueCol>
