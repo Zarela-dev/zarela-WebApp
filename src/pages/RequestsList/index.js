@@ -79,7 +79,7 @@ const RequestsList = () => {
 		return (
 			<>
 				{/* <Splash isVisible={isLoading} /> */}
-				<Mobile {...{ requests, isLoading, appState }} />
+				<Mobile {...{ requests, isLoading, appState, PAGE_SIZE }} />
 			</>
 		);
 	} else {

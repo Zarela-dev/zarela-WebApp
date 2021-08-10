@@ -54,7 +54,7 @@ const Balance = styled.div`
 	color: ${(props) => props.theme.textPrimary};
 `;
 
-export const WalletDesktop = ({ account, logs, isLoading }) => {
+export const WalletDesktop = ({ account, logs, isLoading, PAGE_SIZE }) => {
 	const { appState } = useContext(mainContext);
 
 	return !account ? (
@@ -93,7 +93,12 @@ export const WalletDesktop = ({ account, logs, isLoading }) => {
 						label: 'Transactions',
 						component: (
 							<WalletInnerContainer>
-								<WalletTransactions isLoading={isLoading} account={account} data={logs} />
+								<WalletTransactions
+									isLoading={isLoading}
+									account={account}
+									data={logs}
+									PAGE_SIZE={PAGE_SIZE}
+								/>
 							</WalletInnerContainer>
 						),
 					},

@@ -10,6 +10,7 @@ const Wallet = () => {
 	const [logs, setLogs] = useState([]);
 	const [isLoading, setLoading] = useState(false);
 	const { account, library } = useWeb3React();
+	const PAGE_SIZE = 3;
 
 	useEffect(() => {
 		if (account) {
@@ -154,9 +155,9 @@ const Wallet = () => {
 	}, [account]);
 
 	if (appState.isMobile) {
-		return <WalletMobile {...{ account, logs, isLoading }} />;
+		return <WalletMobile {...{ account, logs, isLoading, PAGE_SIZE }} />;
 	} else {
-		return <WalletDesktop {...{ account, logs, isLoading }} />;
+		return <WalletDesktop {...{ account, logs, isLoading, PAGE_SIZE }} />;
 	}
 };
 
