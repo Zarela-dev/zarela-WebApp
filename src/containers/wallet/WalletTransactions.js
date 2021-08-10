@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import { timeSince, convertToBiobit, CopyableText } from '../../utils';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
+import Pagination from '../../components/Pagination';
 
 const Table = styled.div`
 	display: flex;
@@ -92,7 +93,17 @@ const useStyles = makeStyles({
 	},
 });
 
-const WalletTransactions = ({ isLoading, account, data, props }) => {
+const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
+	const [currentPage, setCurrentPage] = useState(1);
+
+	const currentTableData = useMemo(() => {
+		const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
+		const lastPageIndex = firstPageIndex + PAGE_SIZE;
+		return Object.values(data)
+			.sort((a, b) => +b.requestID - +a.requestID)
+			.slice(firstPageIndex, lastPageIndex);
+	}, [currentPage, PAGE_SIZE, data]);
+
 	const classes = useStyles(props);
 	// if (!account || isLoading === true) return 'loading';
 	if (!account) return 'no accounts found';
@@ -119,255 +130,262 @@ const WalletTransactions = ({ isLoading, account, data, props }) => {
 	}
 
 	return (
-		<Table>
-			<Header>
-				<Row>
-					<CellWrapper>
-						<Cell>
-							{isLoading ? (
-								<Skeleton
-									variant="rect"
-									width={55}
-									height={skeletonLineHeight}
-									className={classes.root}
-								/>
-							) : (
-								'TXN Hash'
-							)}
-						</Cell>
-					</CellWrapper>
-					<CellWrapper>
-						<Cell>
-							{isLoading ? (
-								<Skeleton
-									variant="rect"
-									width={45}
-									height={skeletonLineHeight}
-									className={classes.root}
-								/>
-							) : (
-								'Date'
-							)}
-						</Cell>
-					</CellWrapper>
-					<CellWrapper>
-						<Cell>
-							{isLoading ? (
-								<Skeleton
-									variant="rect"
-									width={45}
-									height={skeletonLineHeight}
-									className={classes.root}
-								/>
-							) : (
-								'From'
-							)}
-						</Cell>
-					</CellWrapper>
-					<CellWrapper>
-						<Cell>
-							{isLoading ? (
-								<Skeleton
-									variant="rect"
-									width={30}
-									height={skeletonLineHeight}
-									className={classes.root}
-								/>
-							) : (
-								'To'
-							)}
-						</Cell>
-					</CellWrapper>
-					<CellWrapper>
-						<Cell>
-							{isLoading ? (
-								<Skeleton
-									variant="rect"
-									width={45}
-									height={skeletonLineHeight}
-									className={classes.root}
-								/>
-							) : (
-								'Input'
-							)}
-						</Cell>
-					</CellWrapper>
-					<CellWrapper>
-						<Cell>
-							{isLoading ? (
-								<Skeleton
-									variant="rect"
-									width={45}
-									height={skeletonLineHeight}
-									className={classes.root}
-								/>
-							) : (
-								'Value'
-							)}
-						</Cell>
-					</CellWrapper>
-					<CellWrapper>
-						<Cell>
-							{isLoading ? (
-								<Skeleton
-									variant="rect"
-									width={45}
-									height={skeletonLineHeight}
-									className={classes.root}
-								/>
-							) : (
-								'TXN fee'
-							)}
-						</Cell>
-					</CellWrapper>
-				</Row>
-			</Header>
-
-			{isLoading &&
-				[1, 2, 3].map((index) => (
-					<Row key={index}>
-						<CellWrapper>
-							<CopyableText>
-								<Cell copyable>
-									<SkeletonCol>
-										<Skeleton
-											variant="rect"
-											width={'100%'}
-											height={skeletonLineHeight}
-											className={classes.root}
-										/>
-										<Skeleton
-											variant="rect"
-											width={'95%'}
-											height={skeletonLineHeight}
-											className={classes.root}
-										/>
-									</SkeletonCol>
-								</Cell>
-							</CopyableText>
-						</CellWrapper>
+		<>
+			<Table>
+				<Header>
+					<Row>
 						<CellWrapper>
 							<Cell>
-								<Skeleton
-									variant="rect"
-									width={'55%'}
-									height={skeletonLineHeight}
-									className={classes.root}
-								/>
-							</Cell>
-						</CellWrapper>
-						<CellWrapper>
-							<CopyableText>
-								<Cell copyable>
-									<SkeletonCol>
-										<Skeleton
-											variant="rect"
-											width={'100%'}
-											height={skeletonLineHeight}
-											className={classes.root}
-										/>
-										<Skeleton
-											variant="rect"
-											width={'70%'}
-											height={skeletonLineHeight}
-											className={classes.root}
-										/>
-									</SkeletonCol>
-								</Cell>
-							</CopyableText>
-						</CellWrapper>
-						<CellWrapper>
-							<CopyableText>
-								<Cell copyable>
-									<SkeletonCol>
-										<Skeleton
-											variant="rect"
-											width={'100%'}
-											height={skeletonLineHeight}
-											className={classes.root}
-										/>
-										<Skeleton
-											variant="rect"
-											width={'75%'}
-											height={skeletonLineHeight}
-											className={classes.root}
-										/>
-									</SkeletonCol>
-								</Cell>
-							</CopyableText>
-						</CellWrapper>
-						<CellWrapper>
-							<Cell>
-								<Skeleton
-									variant="rect"
-									width={'100%'}
-									height={skeletonLineHeight}
-									className={classes.root}
-								/>
-							</Cell>
-						</CellWrapper>
-						<CellWrapper>
-							<Cell bold>
-								<Skeleton
-									variant="rect"
-									width={'25%'}
-									height={skeletonLineHeight}
-									className={classes.root}
-								/>
+								{isLoading ? (
+									<Skeleton
+										variant="rect"
+										width={55}
+										height={skeletonLineHeight}
+										className={classes.root}
+									/>
+								) : (
+									'TXN Hash'
+								)}
 							</Cell>
 						</CellWrapper>
 						<CellWrapper>
 							<Cell>
-								<Skeleton
-									variant="rect"
-									width={'70%'}
-									height={skeletonLineHeight}
-									className={classes.root}
-								/>
+								{isLoading ? (
+									<Skeleton
+										variant="rect"
+										width={45}
+										height={skeletonLineHeight}
+										className={classes.root}
+									/>
+								) : (
+									'Date'
+								)}
+							</Cell>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>
+								{isLoading ? (
+									<Skeleton
+										variant="rect"
+										width={45}
+										height={skeletonLineHeight}
+										className={classes.root}
+									/>
+								) : (
+									'From'
+								)}
+							</Cell>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>
+								{isLoading ? (
+									<Skeleton
+										variant="rect"
+										width={30}
+										height={skeletonLineHeight}
+										className={classes.root}
+									/>
+								) : (
+									'To'
+								)}
+							</Cell>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>
+								{isLoading ? (
+									<Skeleton
+										variant="rect"
+										width={45}
+										height={skeletonLineHeight}
+										className={classes.root}
+									/>
+								) : (
+									'Input'
+								)}
+							</Cell>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>
+								{isLoading ? (
+									<Skeleton
+										variant="rect"
+										width={45}
+										height={skeletonLineHeight}
+										className={classes.root}
+									/>
+								) : (
+									'Value'
+								)}
+							</Cell>
+						</CellWrapper>
+						<CellWrapper>
+							<Cell>
+								{isLoading ? (
+									<Skeleton
+										variant="rect"
+										width={45}
+										height={skeletonLineHeight}
+										className={classes.root}
+									/>
+								) : (
+									'TXN fee'
+								)}
 							</Cell>
 						</CellWrapper>
 					</Row>
-				))}
+				</Header>
 
-			{!isLoading &&
-				data.map((transaction, index) => (
-					<Row key={index}>
-						<CellWrapper>
-							<CopyableText textToCopy={transaction.blockHash}>
-								<Cell copyable>{transaction.hash}</Cell>
-							</CopyableText>
-						</CellWrapper>
-						<CellWrapper>
-							<Cell>{timeSince(transaction.timeStamp)}</Cell>
-						</CellWrapper>
-						<CellWrapper>
-							<CopyableText textToCopy={transaction.from}>
-								<Cell copyable>{transaction.from}</Cell>
-							</CopyableText>
-						</CellWrapper>
-						<CellWrapper>
-							<CopyableText textToCopy={transaction.to}>
-								<Cell copyable>{transaction.to}</Cell>
-							</CopyableText>
-						</CellWrapper>
-						<CellWrapper>
-							<Cell>{getInput(transaction.input)}</Cell>
-						</CellWrapper>
-						<CellWrapper>
-							<Cell bold>
-								{transaction.input !== '0x'
-									? convertToBiobit(transaction.value)
-									: +transaction.value / Math.pow(10, 18)}
-							</Cell>
-						</CellWrapper>
-						<CellWrapper>
-							<Cell>
-								{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}
-							</Cell>
-						</CellWrapper>
-					</Row>
-				))}
-		</Table>
+				{isLoading &&
+					[1, 2, 3].map((index) => (
+						<Row key={index}>
+							<CellWrapper>
+								<CopyableText>
+									<Cell copyable>
+										<SkeletonCol>
+											<Skeleton
+												variant="rect"
+												width={'100%'}
+												height={skeletonLineHeight}
+												className={classes.root}
+											/>
+											<Skeleton
+												variant="rect"
+												width={'95%'}
+												height={skeletonLineHeight}
+												className={classes.root}
+											/>
+										</SkeletonCol>
+									</Cell>
+								</CopyableText>
+							</CellWrapper>
+							<CellWrapper>
+								<Cell>
+									<Skeleton
+										variant="rect"
+										width={'55%'}
+										height={skeletonLineHeight}
+										className={classes.root}
+									/>
+								</Cell>
+							</CellWrapper>
+							<CellWrapper>
+								<CopyableText>
+									<Cell copyable>
+										<SkeletonCol>
+											<Skeleton
+												variant="rect"
+												width={'100%'}
+												height={skeletonLineHeight}
+												className={classes.root}
+											/>
+											<Skeleton
+												variant="rect"
+												width={'70%'}
+												height={skeletonLineHeight}
+												className={classes.root}
+											/>
+										</SkeletonCol>
+									</Cell>
+								</CopyableText>
+							</CellWrapper>
+							<CellWrapper>
+								<CopyableText>
+									<Cell copyable>
+										<SkeletonCol>
+											<Skeleton
+												variant="rect"
+												width={'100%'}
+												height={skeletonLineHeight}
+												className={classes.root}
+											/>
+											<Skeleton
+												variant="rect"
+												width={'75%'}
+												height={skeletonLineHeight}
+												className={classes.root}
+											/>
+										</SkeletonCol>
+									</Cell>
+								</CopyableText>
+							</CellWrapper>
+							<CellWrapper>
+								<Cell>
+									<Skeleton
+										variant="rect"
+										width={'100%'}
+										height={skeletonLineHeight}
+										className={classes.root}
+									/>
+								</Cell>
+							</CellWrapper>
+							<CellWrapper>
+								<Cell bold>
+									<Skeleton
+										variant="rect"
+										width={'25%'}
+										height={skeletonLineHeight}
+										className={classes.root}
+									/>
+								</Cell>
+							</CellWrapper>
+							<CellWrapper>
+								<Cell>
+									<Skeleton
+										variant="rect"
+										width={'70%'}
+										height={skeletonLineHeight}
+										className={classes.root}
+									/>
+								</Cell>
+							</CellWrapper>
+						</Row>
+					))}
+
+				{!isLoading &&
+					currentTableData.map((transaction, index) => (
+						<Row key={index}>
+							<CellWrapper>
+								<CopyableText textToCopy={transaction.blockHash}>
+									<Cell copyable>{transaction.hash}</Cell>
+								</CopyableText>
+							</CellWrapper>
+							<CellWrapper>
+								<Cell>{timeSince(transaction.timeStamp)}</Cell>
+							</CellWrapper>
+							<CellWrapper>
+								<CopyableText textToCopy={transaction.from}>
+									<Cell copyable>{transaction.from}</Cell>
+								</CopyableText>
+							</CellWrapper>
+							<CellWrapper>
+								<CopyableText textToCopy={transaction.to}>
+									<Cell copyable>{transaction.to}</Cell>
+								</CopyableText>
+							</CellWrapper>
+							<CellWrapper>
+								<Cell>{getInput(transaction.input)}</Cell>
+							</CellWrapper>
+							<CellWrapper>
+								<Cell bold>
+									{transaction.input !== '0x'
+										? convertToBiobit(transaction.value)
+										: +transaction.value / Math.pow(10, 18)}
+								</Cell>
+							</CellWrapper>
+							<CellWrapper>
+								<Cell>{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}</Cell>
+							</CellWrapper>
+						</Row>
+					))}
+			</Table>
+
+			<Pagination
+				currentPage={currentPage}
+				totalCount={Object.values(data).length}
+				pageSize={PAGE_SIZE}
+				onPageChange={(page) => setCurrentPage(page)}
+			/>
+		</>
 	);
 };
 

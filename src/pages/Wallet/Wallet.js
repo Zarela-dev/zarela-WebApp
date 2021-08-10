@@ -1,40 +1,40 @@
-import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
-import { mainContext } from "../../state";
-import { useWeb3React } from "@web3-react/core";
-import { WalletDesktop } from "./WalletDesktop";
-import { WalletMobile } from "./WalletMobile";
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import { mainContext } from '../../state';
+import { useWeb3React } from '@web3-react/core';
+import { WalletDesktop } from './WalletDesktop';
+import { WalletMobile } from './WalletMobile';
 
 const Wallet = () => {
 	const { appState } = useContext(mainContext);
 	const [logs, setLogs] = useState([]);
 	const [isLoading, setLoading] = useState(false);
 	const { account } = useWeb3React();
+	const PAGE_SIZE = 3;
 
 	useEffect(() => {
 		if (account) {
 			setLoading(true);
 			axios
-				.get("https://api-ropsten.etherscan.io/api", {
+				.get('https://api-ropsten.etherscan.io/api', {
 					params: {
-						module: "account",
-						action: "txlist",
+						module: 'account',
+						action: 'txlist',
 						address: account,
-						sort: "desc",
+						sort: 'desc',
 						apikey: process.env.REACT_APP_ETHEREUM_API_KEY,
 					},
 				})
 				.then((txListRes) => {
-					if (txListRes.data.message === "OK") {
+					if (txListRes.data.message === 'OK') {
 						axios
-							.get("https://api-ropsten.etherscan.io/api", {
+							.get('https://api-ropsten.etherscan.io/api', {
 								params: {
-									module: "account",
-									action: "tokentx",
+									module: 'account',
+									action: 'tokentx',
 									address: account,
-									contractaddress:
-										process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS,
-									sort: "desc",
+									contractaddress: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS,
+									sort: 'desc',
 									apikey: process.env.REACT_APP_ETHEREUM_API_KEY,
 								},
 							})
@@ -56,8 +56,9 @@ const Wallet = () => {
 							results will include all transactions from above lists. but the values are overridden by tokentx.
 							also the inputs are overridden by txlist.
 						*/
-								if (tokentxRes.data.message === "OK") {
-									const smartContactAddress = process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS.toLowerCase();
+								if (tokentxRes.data.message === 'OK') {
+									const smartContactAddress =
+										process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS.toLowerCase();
 
 									const txlist = txListRes.data.result;
 									const tokentx = tokentxRes.data.result;
@@ -95,17 +96,12 @@ const Wallet = () => {
 									to detect if the address is a contract so we can filter it
 									(we don't want to show txs from other dApps or our previous smart contracts)
 								*/
-										let from = await appState.fallbackWeb3Instance.eth.getCode(
-											txObject.from
-										);
-										let to = await appState.fallbackWeb3Instance.eth.getCode(
-											txObject.to
-										);
+										let from = await appState.fallbackWeb3Instance.eth.getCode(txObject.from);
+										let to = await appState.fallbackWeb3Instance.eth.getCode(txObject.to);
 
 										if (
-											(from !== "0x" &&
-												txObject.from === smartContactAddress) ||
-											(to !== "0x" && txObject.to === smartContactAddress)
+											(from !== '0x' && txObject.from === smartContactAddress) ||
+											(to !== '0x' && txObject.to === smartContactAddress)
 										) {
 											return true;
 										} else {
@@ -120,12 +116,12 @@ const Wallet = () => {
 											if (hasZarela) {
 												result.push({
 													...txItem,
-													input: "Reward",
+													input: 'Reward',
 												});
 											} else {
 												result.push({
 													...txItem,
-													input: "BBit transfer",
+													input: 'BBit transfer',
 												});
 											}
 										}
@@ -158,7 +154,7 @@ const Wallet = () => {
 	if (appState.isMobile) {
 		return <WalletMobile {...{ account, logs, isLoading }} />;
 	} else {
-		return <WalletDesktop {...{ account, logs, isLoading }} />;
+		return <WalletDesktop {...{ account, logs, isLoading, PAGE_SIZE }} />;
 	}
 };
 
