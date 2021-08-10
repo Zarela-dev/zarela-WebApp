@@ -135,8 +135,7 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 				name="terms"
 				onChange={(e) => formik.setFieldValue('terms', e.target.checked)}
 			>
-				Your request won’t be able to be edited, make sure every data you added is correct and final. By marking
-				this box you claim your agreement towards policies.
+				Your request won’t be able to be edited, make sure every data you added is correct and final.
 			</CustomCheckbox>
 			{formik.errors?.terms ? <Error>{formik.errors?.terms}</Error> : null}
 			<Divider />
