@@ -81,6 +81,8 @@ const RequestNumberWithPointer = styled(RequestNumber)`
 
 const Title = styled(Typography)`
 	${WithPointerCursor};
+	font-size: 16px;
+	font-weight: 500;
 
 	@media (max-width: 768px) {
 		font-size: 12px;
@@ -179,9 +181,7 @@ const RequestListItem = ({
 			}
 		});
 
-		const selectableIndexes = originalIndexes.filter(
-			(index) => !indexesAlreadyConfirmed.includes(index)
-		);
+		const selectableIndexes = originalIndexes.filter((index) => !indexesAlreadyConfirmed.includes(index));
 
 		if (type === 'check') {
 			setSelected(selectableIndexes);
@@ -200,12 +200,7 @@ const RequestListItem = ({
 			if (Boolean(status) === true) indexesAlreadyConfirmed.push(originalIndex);
 		});
 
-		if (
-			_.isEqual(
-				[...selectedIndexes, ...indexesAlreadyConfirmed].sort(),
-				originalIndexes.sort()
-			)
-		) {
+		if (_.isEqual([...selectedIndexes, ...indexesAlreadyConfirmed].sort(), originalIndexes.sort())) {
 			return true;
 		}
 		return false;
@@ -257,12 +252,7 @@ const RequestListItem = ({
 			}
 		});
 
-		if (
-			_.isEqual(
-				[...selectedIndexes, ...indexesAlreadyConfirmed].sort(),
-				originalIndexes.sort()
-			)
-		) {
+		if (_.isEqual([...selectedIndexes, ...indexesAlreadyConfirmed].sort(), originalIndexes.sort())) {
 			return true;
 		}
 		return false;
@@ -279,23 +269,18 @@ const RequestListItem = ({
 			}
 		});
 
-		const selectableIndexes = originalIndexes.filter(
-			(index) => !indexesAlreadyConfirmed.includes(index)
-		);
+		const selectableIndexes = originalIndexes.filter((index) => !indexesAlreadyConfirmed.includes(index));
 
 		if (type === 'check') {
 			setSelected((values) => [...values, ...selectableIndexes]);
 		}
 		if (type === 'uncheck')
-			setSelected((values) =>
-				values.filter((selectedItem) => !originalIndexes.includes(selectedItem))
-			);
+			setSelected((values) => values.filter((selectedItem) => !originalIndexes.includes(selectedItem)));
 	};
 
 	const onChange = (type, originalIndex) => {
 		if (type === 'check') setSelected((values) => [...values, originalIndex]);
-		if (type === 'uncheck')
-			setSelected((values) => values.filter((item) => +item !== +originalIndex));
+		if (type === 'uncheck') setSelected((values) => values.filter((item) => +item !== +originalIndex));
 	};
 
 	const signalDownloadHandler = (fileHash) => {
@@ -362,9 +347,7 @@ const RequestListItem = ({
 								let pairs = [];
 
 								// count all the unapproved files
-								setUnapprovedCount(
-									status.filter((item) => Boolean(item) === false).length
-								);
+								setUnapprovedCount(status.filter((item) => Boolean(item) === false).length);
 
 								addresses.forEach((address, fileIndex) => {
 									pairs.push({
@@ -419,7 +402,7 @@ const RequestListItem = ({
 				<TitleColumn>
 					<RequestNumberWithPointer>{requestID}</RequestNumberWithPointer>
 					<Title variant="title" weight="semiBold">
-						{title.length < 135 ? title : title.substr(0, 135) + '...'}
+						{title.length < 160 ? title : title.substr(0, 160) + '...'}
 					</Title>
 					<Spacer />
 				</TitleColumn>
@@ -444,11 +427,7 @@ const RequestListItem = ({
 					</CustomContributeBadge>
 
 					<Divider />
-					{fulfilled ? (
-						<ApprovedBadge src={fulfilledIcon} />
-					) : (
-						<TotalBadge>{unapprovedCount}</TotalBadge>
-					)}
+					{fulfilled ? <ApprovedBadge src={fulfilledIcon} /> : <TotalBadge>{unapprovedCount}</TotalBadge>}
 					<ExpandToggle src={!isOpen ? caretDownIcon : caretUpIcon} />
 				</DetailsColumn>
 			</Header>
@@ -491,9 +470,7 @@ const RequestListItem = ({
 					</>
 				) : (
 					<Body>
-						<NoContributionMessage>
-							There are no contributions for now
-						</NoContributionMessage>
+						<NoContributionMessage>There are no contributions for now</NoContributionMessage>
 					</Body>
 				)
 			) : null}
