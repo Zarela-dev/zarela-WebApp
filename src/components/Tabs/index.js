@@ -6,7 +6,7 @@ import { Route, useHistory } from 'react-router-dom';
 
 const TabsWrapper = styled(RaTabs)`
 	${maxWidthWRapper};
-	padding: ${(props) => props.isMobile && '0 18px'};
+	padding: ${(props) => props.isMobile ? '0 18px' : `0 ${props.theme.spacing(2)}`};
 `;
 
 const TabsHeader = styled(TabList)`

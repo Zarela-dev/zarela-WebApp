@@ -15,6 +15,7 @@ const PageWrapper = styled.div``;
 
 const ContentWrapper = styled.div`
 	margin-top: ${(props) => props.theme.spacing(6)};
+	padding: ${(props) => `0 ${props.theme.spacing(2)}`};
 	${maxWidthWrapper};
 `;
 

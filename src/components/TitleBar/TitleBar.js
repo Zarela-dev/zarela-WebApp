@@ -7,9 +7,10 @@ const Wrapper = styled.div`
 	height: 100px;
 	padding: ${(props) => `${props.theme.spacing(3.5)} 0`};
 	margin-bottom: ${(props) => `${props.theme.spacing(4)}`};
-
+	
 	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		height: unset;
+		margin-bottom: ${(props) => `${props.theme.spacing(2)}`};
 		padding: ${(props) => props.isMobile && 'unset'};
 	}
 `;
