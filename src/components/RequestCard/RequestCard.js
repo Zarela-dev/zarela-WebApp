@@ -81,7 +81,7 @@ const RequestCard = (props) => {
 						<BadgeLabel>{props.contributors}</BadgeLabel>
 					</BadgeRow>
 					<BadgeRow>
-						<Hint>No. of accepted docs</Hint>
+						<Hint>No. of accepted responses</Hint>
 					</BadgeRow>
 				</ContributorBadge>
 				<Divider />
@@ -96,7 +96,7 @@ const RequestCard = (props) => {
 				</ContributorBadge>
 				<Spacer />
 				<JoinButton variant="secondary" to={`/request/${props.requestID}`}>
-					Join
+					Start
 				</JoinButton>
 			</Footer>
 		</RequestCardWrapper>

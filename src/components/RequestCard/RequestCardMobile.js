@@ -106,7 +106,7 @@ const RequestCardMobile = (props) => {
 					</BadgeRow>
 				</ContributorBadge>
 				<JoinButton variant="secondary" to={`/request/${props.requestID}`}>
-					Join
+					Start
 				</JoinButton>
 			</Footer>
 		</RequestCardWrapper>
