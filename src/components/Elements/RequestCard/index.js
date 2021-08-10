@@ -7,9 +7,10 @@ export const RequestCardWrapper = styled.div`
 	flex-wrap: wrap;
 	/* background: linear-gradient(220.57deg, rgba(107, 230, 238, 0.15) -15.95%, rgba(64, 76, 189, 0.15) 107.46%); */
 	background: white;
-	border: 1px solid #C4C4C4;
+	border: 1px solid #c4c4c4;
 	border-radius: 8px;
-	padding: ${props => props.theme.spacing(4)} ${props => props.theme.spacing(2.7)} ${props => props.theme.spacing(1.8)};
+	padding: ${(props) => props.theme.spacing(4)} ${(props) => props.theme.spacing(2.7)}
+		${(props) => props.theme.spacing(1.8)};
 
 	margin-bottom: 25px;
 	/* &:not(:last-child){
@@ -24,36 +25,36 @@ export const HeaderLayout = styled.div`
 `;
 
 export const RequestNumber = styled.div`
-	flex: 0 0 100px;
-	height: 50px;
-	border-radius: 10px 10px 0px 10px;
-	padding: ${props => props.theme.spacing(1)} ${props => props.theme.spacing(2)};
-	margin-right: ${props => props.theme.spacing(2)};
+	flex: ${(props) => (props.isMobile ? '' : '0 0 100px')};
+	height: ${(props) => (props.isMobile ? '38px;' : '50px')};
+	border-radius: ${(props) => (props.isMobile ? '5px 5px 0px 5px' : '10px 10px 0px 10px')};
+	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(2)};
+	margin-right: ${(props) => props.theme.spacing(2)};
 	font-weight: bold;
-	background: linear-gradient(246.29deg, #3A68DE 12.69%, #3A68DE 100%);
-	font-size: 32px;
-	line-height: 30px;
-	color: #FFFFFF;
+	background: linear-gradient(246.29deg, #3a68de 12.69%, #3a68de 100%);
+	font-size: ${(props) => (props.isMobile ? '15px' : '32px')};
+	line-height: ${(props) => (props.isMobile ? '11.4px' : '30px')};
+	color: #ffffff;
 	text-align: center;
 `;
 export const Title = styled.div`
 	font-weight: 500;
 	font-size: 24px;
-	line-height: 30px; 
-	color: ${props => props.theme.textPrimary};
+	line-height: 30px;
+	color: ${(props) => props.theme.textPrimary};
 `;
 
 export const Bookmark = styled.img`
 	width: 20px;
 	align-self: flex-start;
-	margin-left: ${props => props.theme.spacing(0.5)};
+	margin-left: ${(props) => props.theme.spacing(0.5)};
 `;
 
 export const Description = styled.div`
 	flex: 1 0 100%;
-	background: #EAF1FA;
+	background: #eaf1fa;
 	border-radius: 5px 5px 0 0;
-	padding: ${props => props.theme.spacing(2)};
+	padding: ${(props) => props.theme.spacing(2)};
 	font-weight: 300;
 	font-size: 14px;
 	line-height: 20px;
@@ -66,8 +67,8 @@ export const Timestamp = styled(Typography)`
 	font-size: 10px;
 	line-height: 20px;
 	color: #858585;
-	margin-left: ${props => props.theme.spacing(12)};
-	margin-bottom: ${props => props.theme.spacing(1.5)};
+	margin-left: ${(props) => props.theme.spacing(12)};
+	margin-bottom: ${(props) => props.theme.spacing(1.5)};
 `;
 
 export const ProgressTrackerWrapper = styled.div`
@@ -88,8 +89,8 @@ export const ProgressTrackerProcess = styled.div`
 	left: 0;
 	top: -1px;
 	height: 5px;
-	width: ${props => props.progress + '%' || '0%'};
-	background: #3A68DE;
+	width: ${(props) => props.progress + '%' || '0%'};
+	background: #3a68de;
 	border-radius: 0;
 `;
 
@@ -98,37 +99,37 @@ export const Footer = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	margin-top: ${props => props.theme.spacing(2)};
+	margin-top: ${(props) => props.theme.spacing(2)};
 `;
 
 export const BiobitToDollarPair = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	flex: 0 0 120px;
+	flex: 0 0 80px;
 `;
 
 export const BadgeRow = styled.div`
 	display: flex;
 	align-items: flex-end;
 	width: 100%;
-	margin-bottom: ${props => props.theme.spacing(0.5)};
+	margin-bottom: ${(props) => props.theme.spacing(0.5)};
 `;
 export const BadgeLabel = styled.div`
 	line-height: 1;
 	font-size: 14px;
 	font-weight: 700;
 	white-space: normal;
-	color: #3A68DE;
+	color: #3a68de;
 `;
 
 export const BiobitToDollarValue = styled.div`
 	font-weight: 600;
 	font-size: 15px;
 	line-height: 20px;
-	color: #3A68DE;
+	color: #3a68de;
 	margin-right: 3px;
-	margin-left: ${props => props.noMargin ? props.theme.spacing(1) : props.theme.spacing(2.3)};
+	margin-left: ${(props) => (props.noMargin ? props.theme.spacing(1) : props.theme.spacing(2.3))};
 	white-space: nowrap;
 `;
 
@@ -136,7 +137,7 @@ export const Hint = styled.div`
 	font-weight: 300;
 	font-size: 12px;
 	line-height: 20px;
-	color: #3A68DE;
+	color: #3a68de;
 	white-space: nowrap;
 `;
 
@@ -146,30 +147,29 @@ export const ValueLabel = styled.div`
 	font-weight: 700;
 	white-space: normal;
 	padding-bottom: 2px;
-	color: ${props => props.colored ? '#3A68DE' : props.theme.textPrimary};
+	color: ${(props) => (props.colored ? '#3A68DE' : props.theme.textPrimary)};
 `;
 
 export const TokenValue = styled.div`
 	font-weight: 600;
 	font-size: 18px;
 	line-height: 20px;
-	color: ${props => props.theme.textPrimary};
+	color: ${(props) => props.theme.textPrimary};
 	margin-right: 3px;
 `;
 
-export const ContributorBadge = styled(BiobitToDollarPair)`
-`;
+export const ContributorBadge = styled(BiobitToDollarPair)``;
 
 export const TokenIcon = styled.img`
-	flex:0 0 18px;
+	flex: 0 0 18px;
 	height: 18px;
-	margin-right: ${props => props.theme.spacing(0.5)};
+	margin-right: ${(props) => props.theme.spacing(0.5)};
 `;
 
 export const ContributorsIcon = styled.img`
 	width: 18px;
 	height: 18px;
-	margin-right: ${props => props.theme.spacing(0.5)};
+	margin-right: ${(props) => props.theme.spacing(0.5)};
 `;
 
 export const Spacer = styled.div`
@@ -178,9 +178,9 @@ export const Spacer = styled.div`
 
 export const Divider = styled.div`
 	height: 46px;
-	background: #3C87AA;
+	background: #3c87aa;
 	width: 1px;
-	margin: 0 ${props => props.theme.spacing(2)};
+	margin: 0 ${(props) => props.theme.spacing(1)};
 `;
 
 export const JoinButton = styled(GenericLinkButton)`
@@ -188,7 +188,36 @@ export const JoinButton = styled(GenericLinkButton)`
 	margin: 0;
 
 	& > * {
-		color: #7246D0;
+		color: #7246d0;
+	}
+`;
+
+export const TagsWrapper = styled.div`
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	width: 100%;
+	max-width: 860px;
+	flex-wrap: wrap;
+	
+	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
+		margin-top: ${(props) => props.theme.spacing(1)};
+	}
+`;
+
+export const TagItem = styled.div`
+	background: white;
+	padding: 8px 16px;
+	font-size: 14px;
+	line-height: 17px;
+	font-weight: 400;
+	border: 1px solid #e1e5f5;
+	border-radius: 4px;
+	margin-top: 5px;
+	margin-right: 5px;
+	color: #a0aac3;
+	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
+		padding: ${(props) => props.theme.spacing(0.5)};
 	}
 `;
 

@@ -9,13 +9,17 @@ import { useWeb3React } from '@web3-react/core';
 const Text = styled.p`
 	font-weight: normal;
 	font-size: 14px;
-	line-height: 12px;
+	line-height: 18px;
 	color: #121213;
 	margin-bottom: ${props => props.theme.spacing(3)};
 `;
 
 const Icon = styled.img`
-	max-width: 180px;
+	max-width: 120px;
+	
+	@media only screen and (min-width: ${({theme}) => theme.desktop_sm_breakpoint}) {
+		max-width: 180px;
+	}
 `;
 
 const Divider = styled.div`
@@ -35,6 +39,7 @@ const DownloadBox = styled.div`
 const DownloadButton = styled(LinkButton)`
 	width: 81px;
 	height: 30px;
+	margin: 0;
 
 	& > * {
 		font-weight: 500;

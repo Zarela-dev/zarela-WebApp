@@ -13,15 +13,20 @@
 		"ethersproject",
 		"gasstation",
 		"hash",
+		"icon",
 		"ipfs",
 		"key",
+		"linkedin",
+		"lockr",
 		"react",
 		"set",
 		"textfield",
 		"titlebar",
 		"toastify",
 		"tokentx",
+		"unstaged",
 		"wallet",
 		"zpaper"
-	]
+	],
+	"compile-hero.disable-compile-files-on-did-save-code": false
 }

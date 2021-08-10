@@ -109,6 +109,7 @@ const Wrapper = styled.div`
 	align-content: center;
 	width: 120px;
 	height: 60px;
+	z-index: ${props => props.theme.z_spinner};
 `;
 
 const Spinner = () => {

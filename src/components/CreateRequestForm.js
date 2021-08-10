@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import FileInput from './FileInput';
+import FileInput from './UploadFileCard/FileInput';
 import Checkbox from './Elements/Checkbox';
 import Button from './Elements/Button';
 import TextField, { Error } from './Elements/TextField';
+import ReactSelect from './ReactSelect';
 
 const SubmitButton = styled(Button)`
 	width: 190px;
-	margin-bottom: ${props => props.theme.spacing(4)};
+	margin-bottom: ${(props) => props.theme.spacing(4)};
 `;
 
 const Form = styled.form`
@@ -19,17 +20,34 @@ const Divider = styled.div`
 	background: rgba(144, 144, 144, 0.3);
 	border-radius: 24px;
 	height: 3px;
-	margin: ${props => props.theme.spacing(5)} 0 ${props => props.theme.spacing(6)};
+	margin: ${(props) => props.theme.spacing(5)} 0 ${(props) => props.theme.spacing(6)};
 `;
 
+const CustomCheckbox = styled(Checkbox)`
+	margin-top: ${(props) => props.theme.spacing(2)};
+`;
+
+const options = [
+	{ value: 'EEG', label: 'EEG' },
+	{ value: 'ECG', label: 'ECG' },
+	{ value: 'EMG', label: 'EMG' },
+	{ value: 'EOG ', label: 'EOG' },
+	{ value: 'ERG', label: 'ERG' },
+	{ value: 'EGG', label: 'EGG' },
+	{ value: 'GSR', label: 'GSR' },
+];
+
 const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
+	const [selectedOption, setSelectedOption] = useState([]);
+	const [selectInputValue, setSelectInputValue] = useState('');
+
 	return (
 		<Form onSubmit={formik.handleSubmit}>
 			{children}
 			<TextField
 				placeholder={'write main topics in your study'}
-				label='Title *'
-				type='text'
+				label="Title *"
+				type="text"
 				name={'title'}
 				error={formik.errors?.title}
 				value={formik.values.title}
@@ -40,8 +58,8 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 			<TextField
 				placeholder={'What’s your study about?'}
 				multiline
-				label='Description *'
-				type='text'
+				label="Description *"
+				type="text"
 				name={'desc'}
 				error={formik.errors?.desc}
 				value={formik.values.desc}
@@ -51,8 +69,8 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 			/>
 			<TextField
 				placeholder={'How many BBits will you pay for each contributor?'}
-				label='Allocated BBits *'
-				type='text'
+				label="Allocated BBits *"
+				type="text"
 				name={'tokenPay'}
 				error={formik.errors?.tokenPay}
 				value={formik.values.tokenPay}
@@ -62,8 +80,8 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 			/>
 			<TextField
 				placeholder={'How many people do you need to done the study?'}
-				label='Contributors *'
-				type='text'
+				label="Contributors *"
+				type="text"
 				name={'instanceCount'}
 				error={formik.errors?.instanceCount}
 				value={formik.values.instanceCount}
@@ -71,21 +89,34 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 					formik.setFieldValue('instanceCount', e.target.value);
 				}}
 			/>
-			<TextField
-				placeholder={'Write your related hashtags here'}
-				label='Hashtags *'
-				type='text'
-				name={'category'}
-				error={formik.errors?.category}
-				value={formik.values.category}
+			<ReactSelect
+				classNamePrefix="Select"
+				placeholder="Choose the category of your project from the box"
+				label="Category"
+				options={options}
 				onChange={(e) => {
-					formik.setFieldValue('category', e.target.value);
+					formik.setFieldValue('category', e);
+					setSelectedOption(e);
 				}}
+				error={formik.errors?.category}
+				onKeyDown={(e) => {
+					setSelectInputValue('');
+					if (e.key === 'Enter') {
+						setSelectedOption([...selectedOption, { value: e.target.value, label: e.target.value }]);
+						formik.setFieldValue('category', [
+							...selectedOption,
+							{ value: e.target.value, label: e.target.value },
+						]);
+					}
+				}}
+				isMulti
+				value={selectedOption}
 			/>
+
 			<FileInput
 				hasBorder={false}
 				showSelected
-				buttonLabel='Select Files'
+				buttonLabel="Select Files"
 				label={'Upload your Zpaper here'}
 				ref={ref}
 				name={'zpaper'}
@@ -99,20 +130,16 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 					}
 				}}
 			/>
-			<Checkbox checked={formik.values.terms} name='terms' onChange={(e) => formik.setFieldValue('terms', e.target.checked)}>
-				Your request won’t be able to be edited, make sure every data you added is correct and final. By marking this box you claim your agreement towards policies.
-			</Checkbox>
-			{
-				formik.errors?.terms ?
-					<Error>
-						{
-							formik.errors?.terms
-						}
-					</Error>
-					: null
-			}
+			<CustomCheckbox
+				checked={formik.values.terms}
+				name="terms"
+				onChange={(e) => formik.setFieldValue('terms', e.target.checked)}
+			>
+				Your request won’t be able to be edited, make sure every data you added is correct and final.
+			</CustomCheckbox>
+			{formik.errors?.terms ? <Error>{formik.errors?.terms}</Error> : null}
 			<Divider />
-			<SubmitButton variant='primary' disabled={!formik.dirty || formik.isSubmitting} type='submit'>
+			<SubmitButton variant="primary" disabled={!formik.dirty || formik.isSubmitting} type="submit">
 				Submit
 			</SubmitButton>
 		</Form>

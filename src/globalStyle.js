@@ -1,10 +1,10 @@
-import { createGlobalStyle, css } from "styled-components";
+import { createGlobalStyle, css } from 'styled-components';
 import leagueFont from './assets/fonts/LeagueGothic-Regular.otf';
 import overrides from './overrides';
 
 const fonts = css`
 	@font-face {
-		font-family: "LeagueGothic";
+		font-family: 'LeagueGothic';
 		src: url(${leagueFont});
 	}
 `;
@@ -17,6 +17,14 @@ export const GlobalStyle = createGlobalStyle`
 	License: none (public domain)
 	*/
 
+* {
+	-webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 	html,
 	body,
 	div,
@@ -240,6 +248,19 @@ export const GlobalStyle = createGlobalStyle`
 		padding: 0;
 		white-space: normal; /* 2 */
 		*margin-left: -7px; /* 3 */
+	}
+
+	button,
+	input,
+	select,
+	textarea,
+	a {
+		-webkit-touch-callout: default;
+		-webkit-user-select: text;
+		-khtml-user-select: text;
+		-moz-user-select: text;
+		-ms-user-select: text;
+		user-select: text;
 	}
 
 	button,

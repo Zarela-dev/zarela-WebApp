@@ -4,7 +4,7 @@ import { mainContext } from '../state';
 import { useHistory } from 'react-router-dom';
 import { create } from 'ipfs-http-client';
 import styled from 'styled-components';
-import TitleBar from '../components/TitleBar';
+import TitleBar from '../components/TitleBar/TitleBar';
 import CreateRequestForm from '../components/CreateRequestForm';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
@@ -14,6 +14,7 @@ import { Persist } from 'formik-persist';
 import { toast } from '../utils';
 import Dialog from '../components/Dialog';
 import { useWeb3React } from '@web3-react/core';
+import NoMobileSupportMessage from '../components/NoMobileSupportMessage';
 
 const Wrapper = styled.div`
 	${maxWidthWrapper}
@@ -34,15 +35,14 @@ const CreateRequest = () => {
 		setDialogMessage('');
 		formik.setSubmitting(false);
 
-		if (fileRef.current !== null)
-			fileRef.current.value = null;
+		if (fileRef.current !== null) fileRef.current.value = null;
 	};
 	const validationErrors = {
-		required: name => `${name} is required to create your request.`,
+		required: (name) => `${name} is required to create your request.`,
 		notEnoughTokens: 'you do not have enough tokens to create this request.',
 		terms: 'you must agree to the term before submitting your request',
-		number: name => `${name} must be a number`,
-		string: name => `${name} must be a string`,
+		number: (name) => `${name} must be a number`,
+		string: (name) => `${name} must be a string`,
 	};
 
 	const formik = useFormik({
@@ -51,20 +51,27 @@ const CreateRequest = () => {
 			desc: '',
 			tokenPay: '',
 			instanceCount: '',
-			category: '',
+			category: [],
 			zpaper: '',
-			terms: false
+			terms: false,
 		},
 		validationSchema: yup.object().shape({
 			title: yup.string(validationErrors.string('title')).required(validationErrors.required('title')),
 			desc: yup.string(validationErrors.string('description')).required(validationErrors.required('description')),
-			tokenPay: yup.number().typeError(validationErrors.number('Allocated Biobits')).required(validationErrors.required('Allocated Biobit')),
-			instanceCount: yup.number().typeError(validationErrors.number('Contributors')).required(validationErrors.required('Contributors')),
-			category: yup.string().required(validationErrors.required('category')),
+			tokenPay: yup
+				.number()
+				.typeError(validationErrors.number('Allocated Biobits'))
+				.required(validationErrors.required('Allocated Biobit')),
+			instanceCount: yup
+				.number()
+				.typeError(validationErrors.number('Contributors'))
+				.required(validationErrors.required('Contributors')),
+			category: yup.array().min(1, validationErrors.required('category')),
 			zpaper: yup.mixed(),
-			terms: yup.boolean().required()
+			terms: yup.boolean().required(),
 		}),
-		onSubmit: (values => {
+		onSubmit: (values) => {
+			console.log('values', values);
 			if (formik.isValid) {
 				if (+values.tokenPay * +values.instanceCount > +appState.biobitBalance / Math.pow(10, 9)) {
 					formik.setFieldError('tokenPay', validationErrors.notEnoughTokens);
@@ -78,7 +85,9 @@ const CreateRequest = () => {
 							setDialog(false);
 							if (fileRef.current.value !== null && fileRef.current.value !== '') {
 								setUploading(true);
-								setDialogMessage('in request to secure the file, so only you can access it we require your public key to encrypt the file');
+								setDialogMessage(
+									'in request to secure the file, so only you can access it we require your public key to encrypt the file'
+								);
 
 								const { title, desc, tokenPay, instanceCount, category } = values;
 								const reader = new FileReader();
@@ -105,21 +114,36 @@ const CreateRequest = () => {
 												console.log(`Document Of Conditions --> ${url}`);
 
 												setDialogMessage('awaiting confirmation');
-
-												appState.contract.methods.SetOrderBoard(title, desc, ipfsResponse.path, +tokenPay * Math.pow(10, 9), instanceCount, category, encryptionPublicKey)
-													.send({ from: account, to: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS, gasPrice: +appState.gas.average * Math.pow(10, 8) }, (error, result) => {
-														if (!error) {
-															clearSubmitDialog();
-															toast(result, 'success', true, result);
+												appState.contract.methods
+													.submitNewOrder(
+														title,
+														desc,
+														ipfsResponse.path,
+														+tokenPay * Math.pow(10, 9),
+														instanceCount,
+														category.map((item) => item.value).join(','),
+														process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY,
+														encryptionPublicKey
+													)
+													.send(
+														{
+															from: account,
+															to: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS,
+															gasPrice: +appState.gas.average * Math.pow(10, 8),
+														},
+														(error, result) => {
+															if (!error) {
+																clearSubmitDialog();
+																toast(result, 'success', true, result);
+															} else {
+																clearSubmitDialog();
+																toast(error.message, 'error');
+															}
 														}
-														else {
-															clearSubmitDialog();
-															toast(error.message, 'error');
-														}
-													});
+													);
 
-
-												appState.contract.events.OrderRegistered({})
+												appState.contract.events
+													.OrderRegistered({})
 													.on('data', (event) => {
 														clearSubmitDialog();
 
@@ -129,11 +153,10 @@ const CreateRequest = () => {
 															false,
 															null,
 															{
-																toastId: event.id
+																toastId: event.id,
 															}
 														);
 														history.push(`/request/${event.returnValues[1]}`);
-
 													})
 													.on('error', (error, receipt) => {
 														clearSubmitDialog();
@@ -164,7 +187,7 @@ const CreateRequest = () => {
 					}
 				}
 			}
-		})
+		},
 	});
 
 	useEffect(() => {
@@ -172,39 +195,38 @@ const CreateRequest = () => {
 			setDialog(false);
 			formik.setSubmitting(false);
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [account]);
 
 	return (
 		<>
-			<TitleBar>
-				Create Request
-			</TitleBar>
+			<TitleBar>Create Request</TitleBar>
 			<Wrapper>
-				{
+				{appState.isMobile ? (
+					<NoMobileSupportMessage />
+				) : (
 					<>
 						<Dialog
 							isOpen={isUploading}
-							content={(
-								dialogMessage
-							)}
+							content={dialogMessage}
 							onClose={() => {
 								clearSubmitDialog();
 							}}
 							hasSpinner
-							type='success'
+							type="success"
 						/>
-						<ConnectDialog isOpen={showDialog} onClose={() => {
-							formik.setSubmitting(false);
-							setDialog(false);
-						}} />
-						<CreateRequestForm
-							formik={formik}
-							ref={fileRef}
-						>
+						<ConnectDialog
+							isOpen={showDialog}
+							onClose={() => {
+								formik.setSubmitting(false);
+								setDialog(false);
+							}}
+						/>
+						<CreateRequestForm formik={formik} ref={fileRef}>
 							<Persist />
 						</CreateRequestForm>
 					</>
-				}
+				)}
 			</Wrapper>
 		</>
 	);

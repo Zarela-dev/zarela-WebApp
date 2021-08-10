@@ -1,9 +1,6 @@
-import React, { useContext } from 'react';
-import styled from 'styled-components';
+import React from 'react';
 import biobitBlack from '../../assets/icons/biobit-black.svg';
-import { mainContext } from '../../state';
 import walletBlack from '../../assets/icons/wallet-black.svg';
-import etherBlack from '../../assets/icons/ether-black.svg';
 import infoIcon from '../../assets/icons/info-purple.svg';
 import { convertToBiobit } from '../../utils';
 import {
@@ -16,93 +13,62 @@ import {
 	Value,
 	Divider,
 	NoConnectionMessage,
-	ConnectButton
+	ConnectButton,
 } from './Elements';
 import { Spacer } from '../Elements/Spacer';
 import { injectedConnector } from '../../connectors';
-import { useWeb3React } from '@web3-react/core'
+import { useWeb3React } from '@web3-react/core';
 
 const Sidebar = ({ data, account }) => {
-	const {activate} = useWeb3React();
+	const { activate } = useWeb3React();
 
 	return (
 		<SidebarCard>
 			<Header>
 				<Icon src={biobitBlack} />
-				<Title>
-					Token Info
-				</Title>
-
+				<Title>Token Info</Title>
 			</Header>
 			<Row>
-				<Subtitle>
-					Total Supply
-				</Subtitle>
-				<Value>
-					20,000,000
-				</Value>
+				<Subtitle>Total Supply</Subtitle>
+				<Value>20,000,000</Value>
 			</Row>
 			<Row>
-				<Subtitle>
-					Token Name
-				</Subtitle>
-				<Value>
-					BBit
-				</Value>
+				<Subtitle>Token Name</Subtitle>
+				<Value>Biobit</Value>
 			</Row>
 			<Row>
-				<Subtitle>
-					Symbol
-				</Subtitle>
-				<Value>
-					BBit
-				</Value>
-			</Row>
-			<Row>
-				<Subtitle>
-					Zarela Bank
-				</Subtitle>
-				<Value>
-					{`${data.bank} BBit`}
-				</Value>
+				<Subtitle>Symbol</Subtitle>
+				<Value>BBit</Value>
 			</Row>
 			<Divider />
 			<Header>
 				<Icon src={walletBlack} />
-				<Title>
-					Wallet Info
-				</Title>
+				<Title>Wallet Info</Title>
 				<Spacer />
 				<Icon src={infoIcon} />
 			</Header>
 			<Row hiddenInfo={account === undefined}>
-				<Subtitle>
-					BBit Balance
-				</Subtitle>
+				<Subtitle>BBit Balance</Subtitle>
 				<Value>
-					{`${!Number.isNaN(data.biobitBalance) ? convertToBiobit(data.biobitBalance) + '  BBit' : data.biobitBalance}`}
+					{`${
+						!Number.isNaN(data.biobitBalance)
+							? convertToBiobit(data.biobitBalance) + '  BBit'
+							: data.biobitBalance
+					}`}
 				</Value>
 			</Row>
 			<Row hiddenInfo={account === undefined}>
-				<Subtitle>
-					Ether Balance
-				</Subtitle>
-				<Value>
-					{data.etherBalance}
-				</Value>
+				<Subtitle>Ether Balance</Subtitle>
+				<Value>{data.etherBalance}</Value>
 			</Row>
-			{
-				account === undefined ?
-					<>
-						<NoConnectionMessage>
-							connect your wallet to see more data
-						</NoConnectionMessage>
-						<ConnectButton variant='primary' onClick={() => activate(injectedConnector)}>
-							connect
-						</ConnectButton>
-					</>
-					: null
-			}
+			{account === undefined ? (
+				<>
+					<NoConnectionMessage>connect your wallet to see more data</NoConnectionMessage>
+					<ConnectButton variant="primary" onClick={() => activate(injectedConnector)}>
+						connect
+					</ConnectButton>
+				</>
+			) : null}
 		</SidebarCard>
 	);
 };

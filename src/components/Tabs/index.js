@@ -6,24 +6,37 @@ import { Route, useHistory } from 'react-router-dom';
 
 const TabsWrapper = styled(RaTabs)`
 	${maxWidthWRapper};
+	padding: ${(props) => props.isMobile ? '0 18px' : `0 ${props.theme.spacing(2)}`};
 `;
 
 const TabsHeader = styled(TabList)`
 	display: flex;
-	margin-bottom: ${props => props.theme.spacing(3)};
+	margin-bottom: ${(props) => (props.isMobile ? props.theme.spacing(2) : props.theme.spacing(3))};
+
+	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
+		justify-content: flex-start;
+	}
 `;
 
 const TabsHeaderItem = styled(Tab)`
+	white-space: nowrap;
 	position: relative;
-	min-width: 180px;
-	height: 50px;
-	font-size: 20px;
+	min-width: ${(props) => (props.isMobile ? '100px' : '180px')};
+	height: ${(props) => (props.isMobile ? '35px' : '50px')};
+	font-size: ${(props) => (props.isMobile ? '12.5px' : '20px')};
 	opacity: 0.5;
-	line-height: 26px;
-	padding: ${props => props.theme.spacing(1)} ${props => props.theme.spacing(0.5)};
-	margin-right: ${props => props.theme.spacing(2)};
+	line-height: ${(props) => (props.isMobile ? '17px' : '26px')};
+	padding: ${(props) => props.theme.spacing(0.9)} 0;
+	margin-right: ${(props) =>
+		props.isMobile ? props.theme.spacing(0.6) : props.theme.spacing(2)};
 	cursor: pointer;
-	
+
+	@media (max-width: ${(props => props.theme.tablet_sm_breakpoint)}) {
+		min-width: calc((100% - 36px) / 3);
+		text-align: center;
+		flex: 1;
+	}
+
 	&.is-active {
 		opacity: 1;
 
@@ -39,45 +52,47 @@ const TabsHeaderItem = styled(Tab)`
 		bottom: 0;
 		left: 0;
 		height: 1px;
-		background: #7246D0;
+		background: #7246d0;
 		border-radius: 3px;
 		width: 100%;
 	}
 `;
 
-const TabsBody = styled(TabPanel)`
-`;
+const TabsBody = styled(TabPanel)``;
 
-export const Tabs = ({ data }) => {
+export const Tabs = ({ data, isMobile, route }) => {
 	const history = useHistory();
 	const activeTab = history.location.pathname.split('/').reverse()[0];
+	const formatUrl = (label) => {
+		if (label && typeof label === 'string') {
+			return label.replace(/ /g, '_').toLowerCase();
+		}
+		return;
+	};
 
 	return (
 		<TabsWrapper
-			selectedTabClassName='is-active'
-			selectedTabPanelClassName='is-active'
-			selectedIndex={data.findIndex(item => item.label.toLowerCase() === activeTab)}
+			isMobile={isMobile}
+			selectedTabClassName="is-active"
+			selectedTabPanelClassName="is-active"
+			selectedIndex={data.findIndex((item) => formatUrl(item.label) === activeTab)}
 			onSelect={(index, lastIndex) => {
-				history.push(`/wallet/${data[index].label?.toLowerCase()}`);
+				history.push(`/${route}/${formatUrl(data[index].label)}`);
 				return false;
 			}}
 		>
-			<TabsHeader>
-				{
-					data.map((tab, tabIndex) => (
-						<TabsHeaderItem tabIndex={tab.label} key={tabIndex}>
-							{tab.label}
-						</TabsHeaderItem>
-					))
-				}
+			<TabsHeader isMobile={isMobile}>
+				{data.map((tab, tabIndex) => (
+					<TabsHeaderItem isMobile={isMobile} tabIndex={tab.label} key={tabIndex}>
+						{tab.label}
+					</TabsHeaderItem>
+				))}
 			</TabsHeader>
-			{
-				data.map(({ component, label }, index) => (
-					<TabsBody tabIndex={label} key={index}>
-						<Route path={`/wallet/${label.toLowerCase()}`} exact render={() => component} />
-					</TabsBody>
-				))
-			}
+			{data.map(({ component, label }, index) => (
+				<TabsBody tabIndex={label} key={index}>
+					<Route path={`/${route}/${formatUrl(label)}`} exact render={() => component} />
+				</TabsBody>
+			))}
 		</TabsWrapper>
 	);
 };

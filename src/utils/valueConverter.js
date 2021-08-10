@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 export const scientificToDecimal = function (num) {
 	var nsign = Math.sign(num);
 	//remove the sign

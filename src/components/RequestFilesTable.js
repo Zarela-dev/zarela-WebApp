@@ -6,16 +6,17 @@ import { Spacer } from './Elements/Spacer';
 import { Scrollbar } from './Elements/Scrollbar';
 import { timeSince, CopyableText } from '../utils';
 import publicKeyIcon from '../assets/icons/public-key.svg';
+import confirmIcon from '../assets/icons/confirmed.svg';
 
 const Table = styled.div`
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	margin-top: ${props => props.theme.spacing(3)};
+	margin-top: ${(props) => props.theme.spacing(3)};
 `;
 
 const CellWrapper = styled.div`
-	flex: 1;
+	flex: ${(props) => props.flex || 1};
 	padding: 5px;
 	background: white;
 
@@ -38,96 +39,156 @@ const Row = styled.section`
 	${CellWrapper}:nth-of-type(2) {
 		flex: 0 0 420px;
 	}
-`;
 
+	${CellWrapper}:nth-of-type(3) {
+		flex: 1 0 auto;
+	}
+`;
 
 const Cell = styled.div`
 	display: flex;
 	align-items: center;
 	min-height: 48px;
-	padding: ${props => props.theme.spacing(0.6)} ${props => props.theme.spacing(1)};
+	padding: ${(props) => props.theme.spacing(0.6)} ${(props) => props.theme.spacing(1)};
 	font-size: 12px;
 	height: 40px;
 	width: 100%;
 	font-weight: normal;
-	cursor: ${props => props.pointer ? 'pointer' : 'normal'};
+	cursor: ${(props) => (props.pointer ? 'pointer' : 'normal')};
 
 	${CellWrapper}:not(:last-child) & {
-		border-right: 1px solid #3C87AA;
+		border-right: 1px solid #3c87aa;
 	}
 `;
 
 const PublicKeyIcon = styled.img`
 	flex: 0 0 40px;
 	height: 40px;
-	margin-right: ${props => props.theme.spacing(1)};
+	margin-right: ${(props) => props.theme.spacing(1)};
 `;
 
 const CustomCheckbox = styled(SmallCheckbox)`
 	margin: 0;
 `;
 
-const FilesCount = styled.div`
-	font-size: 12px;
-	line-height: 20px;
-	color: #858585;
-	margin-bottom: ${props => props.theme.spacing(2)};
-`;
+// const FilesCount = styled.div`
+// 	font-size: 12px;
+// 	line-height: 20px;
+// 	color: #858585;
+// 	margin-bottom: ${(props) => props.theme.spacing(2)};
+// `;
 
 const FilesListWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
-	padding: ${props => props.theme.spacing(1)};
-	margin-bottom: ${props => props.theme.spacing(2)};
+	padding: ${(props) => props.theme.spacing(1)};
+	margin-bottom: ${(props) => props.theme.spacing(2)};
 	height: 100%;
 `;
 
 const FilesList = styled.div`
 	flex: 1;
-	border-left: 1px solid #3C87AA;
-    margin-left: -21px;
-    padding-left: 20px;
+	border-left: 1px solid #3c87aa;
+	margin-left: -21px;
+	padding-left: 20px;
 	max-height: 238px;
 	min-height: 27px;
-    overflow: auto;
+	overflow: auto;
 
 	${Scrollbar};
 `;
 
-const FileItem = styled.div`
+const FileItemCol = styled.div`
 	flex: 1;
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: center;
 	font-size: 12px;
 	line-height: 20px;
-	color: #121213;
+	color: ${(props) => props.theme.textPrimary};
 
-	&:not(:last-child) {
-		margin-bottom: ${props => props.theme.spacing(2)};
+	&:nth-child(1) {
+		flex: 1 0 170px;
+	}
+	&:nth-child(2) {
+		position: relative;
+		flex: 0 0 auto;
+		margin-right: ${(props) => props.theme.spacing(2)};
+		&::after {
+			content: '';
+			display: block;
+			position: relative;
+			top: 0;
+			height: 60px;
+			width: 1px;
+			border-right: 1px solid rgba(60, 135, 170, 0.2);
+		}
 	}
 `;
 
+const FileItemRow = styled.div`
+	display: flex;
+	width: 100%;
+	flex-wrap: nowrap;
+	align-items: center;
+	height: 40px;
+
+	&:not(:last-child) {
+		margin-bottom: ${(props) => props.theme.spacing(2)};
+	}
+`;
+
+const ConfirmedIcon = styled.img`
+	width: 24px;
+	margin-right: ${(props) => (props.noMargin ? 0 : props.theme.spacing(1.5))};
+`;
+
 const FileCheckbox = styled(SmallCheckbox)`
-	margin-right: ${props => props.theme.spacing(1)};
+	width: 24px;
+	margin-right: ${(props) => props.theme.spacing(1.5)};
+`;
+
+const FilesTableRow = styled.section`
+	display: flex;
+	flex-direction: row;
+`;
+
+const FilesTableHeader = styled(FilesTableRow)`
+	border-bottom: 1px solid rgba(60, 135, 170, 0.2);
+	margin-bottom: ${(props) => props.theme.spacing(2)};
+`;
+
+const FilesTableHeaderCol = styled.div`
+	display: flex;
+	align-items: center;
+	flex: ${(props) => props.flex || 1};
+`;
+
+const FilesTableHeaderTitle = styled.div`
+	font-size: 14px;
+	line-height: 20px;
+	margin-bottom: ${(props) => props.theme.spacing(1)};
+	color: ${(props) => props.theme.textPrimary};
 `;
 
 const FileName = styled.div`
-	margin-right: ${props => props.theme.spacing(2)}
+	max-width: 248px;
+	word-break: break-word;
+	margin-right: ${(props) => props.theme.spacing(2)};
 `;
 
 const DownloadButtonImage = styled.img`
-	width: 	20px;
+	width: 20px;
 `;
 
 const DownloadButton = styled.button`
-	border:none;
+	border: none;
 	background: white;
-	margin-right: ${props => props.theme.spacing(2)};
+	margin-right: ${(props) => props.theme.spacing(1.5)};
 `;
 
 const Timestamp = styled.div`
-  
+	white-space: nowrap;
 `;
 
 const RequestFilesTable = ({
@@ -135,104 +196,133 @@ const RequestFilesTable = ({
 	selected,
 	onChange,
 	onBulkChange,
+	isBulkChecked,
+	isBulkApproved,
 	isAllChecked,
+	isAllApproved,
 	changeAll,
-	signalDownloadHandler
+	signalDownloadHandler,
 }) => {
 	return (
 		<Table>
 			<Row>
 				<CellWrapper>
 					<Cell>
-						<CustomCheckbox
-							checked={isAllChecked()}
-							onChange={(e) => {
-								if (e.target.checked === true) {
-									changeAll('check');
-								} else {
-									changeAll('uncheck');
-								}
-							}}
-						/>
+						{isAllApproved() ? (
+							<ConfirmedIcon src={confirmIcon} noMargin />
+						) : (
+							<CustomCheckbox
+								checked={isAllChecked()}
+								onChange={(e) => {
+									if (e.target.checked === true) {
+										changeAll('check');
+									} else {
+										changeAll('uncheck');
+									}
+								}}
+							/>
+						)}
 					</Cell>
 				</CellWrapper>
 				<CellWrapper>
-					<Cell>
-						Contributor's public key
-					</Cell>
+					<Cell>Contributor's public key</Cell>
 				</CellWrapper>
 				<CellWrapper>
-					<Cell>
-						Uploaded files
-					</Cell>
+					<Cell>Uploaded files</Cell>
 				</CellWrapper>
 			</Row>
-			{
-				Object.keys(data).map((reqAddress, index) => (
-					<Row key={reqAddress}>
-						<CellWrapper>
-							<Cell>
+			{Object.keys(data).map((contributorAddress, index) => (
+				<Row key={contributorAddress}>
+					<CellWrapper>
+						<Cell>
+							{isBulkApproved(contributorAddress) ? (
+								<ConfirmedIcon src={confirmIcon} noMargin />
+							) : (
 								<CustomCheckbox
-									checked={selected[reqAddress].length === data[reqAddress].length}
+									checked={isBulkChecked(contributorAddress)}
 									onChange={(e) => {
 										if (e.target.checked === true) {
-											onBulkChange('check', reqAddress);
+											onBulkChange('check', contributorAddress);
 										} else {
-											onBulkChange('uncheck', reqAddress);
+											onBulkChange('uncheck', contributorAddress);
 										}
-									}} />
+									}}
+								/>
+							)}
+						</Cell>
+					</CellWrapper>
+					<CellWrapper>
+						<CopyableText textToCopy={contributorAddress}>
+							<Cell pointer>
+								<PublicKeyIcon src={publicKeyIcon} />
+								{contributorAddress}
 							</Cell>
-						</CellWrapper>
-						<CellWrapper>
-							<CopyableText textToCopy={reqAddress}>
-								<Cell pointer>
-									<PublicKeyIcon src={publicKeyIcon} />
-									{reqAddress}
-								</Cell>
-							</CopyableText>
-						</CellWrapper>
-						<CellWrapper>
+						</CopyableText>
+					</CellWrapper>
+					<CellWrapper flex={1}>
+						{true ? (
 							<FilesListWrapper>
-								<FilesCount>
-									{`${data[reqAddress].length} files`}
-								</FilesCount>
+								<FilesTableHeader>
+									<FilesTableHeaderCol flex={3}>
+										<FilesTableHeaderTitle>{`There are ${data[contributorAddress].length} files available`}</FilesTableHeaderTitle>
+									</FilesTableHeaderCol>
+									<Spacer />
+									<FilesTableHeaderCol flex={'1 0 62px'}>
+										<FilesTableHeaderTitle>Date</FilesTableHeaderTitle>
+									</FilesTableHeaderCol>
+								</FilesTableHeader>
 								<FilesList>
-									{
-										data[reqAddress].map(({ ipfsHash, timestamp }, fileIndex) => {
+									{data[contributorAddress].map(
+										({ ipfsHash, status, originalIndex, timestamp }, fileIndex) => {
 											return (
-												<FileItem key={fileIndex}>
-													<FileCheckbox checked={selected[reqAddress].includes(ipfsHash)} onChange={(e) => {
-														if (e.target.checked === true) {
-															onChange('check', reqAddress, ipfsHash);
-														} else {
-															onChange('uncheck', reqAddress, ipfsHash);
-														}
-													}} />
-													<FileName>
-														{
-															// file.substr(0, 4) + '...' + file.substr(file.length - 4) + `  (File #${fileIndex + 1})`
-															ipfsHash + `  (File #${fileIndex + 1})`
-														}
-													</FileName>
-													<Timestamp>
-														{
-															`${timeSince(timestamp)}`
-														}
-													</Timestamp>
-													<Spacer />
-													<DownloadButton onClick={() => signalDownloadHandler(ipfsHash)}>
-														<DownloadButtonImage src={downloadIcon} />
-													</DownloadButton>
-												</FileItem>
+												<FileItemRow>
+													<FileItemCol>
+														{status === true ? (
+															<ConfirmedIcon src={confirmIcon} />
+														) : (
+															<FileCheckbox
+																checked={selected.includes(originalIndex)}
+																onChange={(e) => {
+																	if (e.target.checked === true) {
+																		onChange('check', originalIndex);
+																	} else {
+																		onChange('uncheck', originalIndex);
+																	}
+																}}
+															/>
+														)}
+														<FileName>
+															{
+																// file.substr(0, 4) + '...' + file.substr(file.length - 4) + `  (File #${fileIndex + 1})`
+																originalIndex +
+																	'.' +
+																	ipfsHash +
+																	`  (File #${fileIndex + 1})`
+															}
+														</FileName>
+													</FileItemCol>
+													<FileItemCol>
+														<DownloadButton onClick={() => signalDownloadHandler(ipfsHash)}>
+															<DownloadButtonImage src={downloadIcon} />
+														</DownloadButton>
+													</FileItemCol>
+													<FileItemCol>
+														<Timestamp>{`${timeSince(timestamp)}`}</Timestamp>
+													</FileItemCol>
+												</FileItemRow>
 											);
-										})
-									}
+										}
+									)}
 								</FilesList>
 							</FilesListWrapper>
-						</CellWrapper>
-					</Row>
-				))
-			}
+						) : (
+							<FilesListWrapper>
+								there are {data[contributorAddress].length} files available
+							</FilesListWrapper>
+						)}
+					</CellWrapper>
+				</Row>
+			))}
 		</Table>
 	);
 };
