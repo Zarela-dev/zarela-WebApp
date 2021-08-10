@@ -9,6 +9,7 @@ const Table = styled.div`
 	flex-direction: column;
 	width: 100%;
 	margin-top: ${(props) => props.theme.spacing(3)};
+	overflow: auto;
 `;
 
 const CellWrapper = styled.div`
@@ -44,7 +45,7 @@ const Row = styled.section`
 		flex: 0 0 105px; /* status */
 	}
 	${CellWrapper}:nth-of-type(6) {
-		flex: 1 0 auto; /* value */
+		flex: 1 0 90px; /* value */
 	}
 	${CellWrapper}:nth-of-type(7) {
 		flex: 0 0 170px; /* fee */
