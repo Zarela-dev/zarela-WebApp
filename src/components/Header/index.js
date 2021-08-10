@@ -1,16 +1,17 @@
-import { useState, useContext } from "react";
-import styled from "styled-components";
-import logo from "../../assets/icons/logo.png";
-import home from "../../assets/icons/home.svg";
-import inbox from "../../assets/icons/inbox.svg";
-import user from "../../assets/icons/user.svg";
-import wallet from "../../assets/icons/wallet.svg";
-import { Link } from "react-router-dom";
-import { Typography } from "../Elements/Typography";
-import { Button } from "../Elements/Button";
-import menu from "../../assets/icons/menu.svg";
-import MobileMenu from "../MobileMenu";
-import { mainContext } from "./../../state";
+import { useState, useContext } from 'react';
+import styled from 'styled-components';
+import logo from '../../assets/icons/logo.png';
+import home from '../../assets/icons/home.svg';
+import inbox from '../../assets/icons/inbox.svg';
+import user from '../../assets/icons/user.svg';
+import wallet from '../../assets/icons/wallet.svg';
+import { Link } from 'react-router-dom';
+import { Typography } from '../Elements/Typography';
+import { Button } from '../Elements/Button';
+import menu from '../../assets/icons/menu.svg';
+import MobileMenu from '../MobileMenu';
+import { mainContext } from './../../state';
+import maxWidthWrapper from '../Elements/MaxWidth';
 
 const NavItem = styled(Link)`
 	position: relative;
@@ -21,10 +22,8 @@ const NavItem = styled(Link)`
 	align-content: center;
 	justify-content: center;
 	text-decoration: none;
-	margin-right: ${(props) =>
-		props.isMobile ? props.theme.spacing(0) : props.theme.spacing(4)};
-	margin-left: ${(props) =>
-		props.isMobile ? props.theme.spacing(2) : props.theme.spacing(4)};
+	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(0) : props.theme.spacing(4))};
+	margin-left: ${(props) => (props.isMobile ? props.theme.spacing(2) : props.theme.spacing(4))};
 `;
 
 const NavLink = styled(Typography)`
@@ -69,8 +68,7 @@ const NavIcon = styled.img`
 const Logo = styled.img`
 	height: 40px;
 	margin-left: 20px;
-	margin-right: ${(props) =>
-		props.isMobile ? props.theme.spacing(1) : props.theme.spacing(4)};
+	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(1) : props.theme.spacing(4))};
 `;
 
 // const NotificationBadge = styled.div`
@@ -91,6 +89,7 @@ const SubmitRequestButton = styled(Link)`
 `;
 
 const HeaderWrapper = styled.header`
+	${maxWidthWrapper};
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
