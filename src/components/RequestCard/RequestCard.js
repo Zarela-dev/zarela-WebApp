@@ -38,7 +38,7 @@ const RequestCard = (props) => {
 			<HeaderLayout>
 				<RequestNumber>{props.requestID}</RequestNumber>
 				<Title>
-					{props.title.length < 115 ? props.title : props.title.substr(0, 115) + '...'}
+					{props.title.length < 85 ? props.title : props.title.substr(0, 85) + '...'}
 				</Title>
 				<Spacer />
 				<Bookmark src={bookmarkIcon} />
@@ -48,9 +48,9 @@ const RequestCard = (props) => {
 			</Timestamp>
 			<Description>
 				<Typography variant="body">
-					{props.description.length < 405
+					{props.description.length < 320
 						? props.description
-						: props.description.substr(0, 405) + '...'}
+						: props.description.substr(0, 320) + '...'}
 				</Typography>
 				<TagsWrapper>
 					{props.categories.split(',').map((item, index) => {
