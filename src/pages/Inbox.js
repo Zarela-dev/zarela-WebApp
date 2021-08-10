@@ -1,15 +1,15 @@
-import React, { useState, useContext, useEffect } from "react";
-import TitleBar from "../components/TitleBar/TitleBar";
-import styled from "styled-components";
-import maxWidthWrapper from "../components/Elements/MaxWidth";
-import RequestListItem from "../components/RequestListItem";
-import { mainContext } from "../state";
-import ConnectDialog from "../components/Dialog/ConnectDialog";
-import { convertToBiobit, toast } from "../utils";
-import NoRequestsFound from "../components/NoRequestsFound";
-import { useWeb3React } from "@web3-react/core";
-import Spinner from "../components/Spinner";
-import NoMobileSupportMessage from "../components/NoMobileSupportMessage";
+import React, { useState, useContext, useEffect } from 'react';
+import TitleBar from '../components/TitleBar/TitleBar';
+import styled from 'styled-components';
+import maxWidthWrapper from '../components/Elements/MaxWidth';
+import RequestListItem from '../components/RequestListItem';
+import { mainContext } from '../state';
+import ConnectDialog from '../components/Dialog/ConnectDialog';
+import { convertToBiobit, toast } from '../utils';
+import NoRequestsFound from '../components/NoRequestsFound';
+import { useWeb3React } from '@web3-react/core';
+import Spinner from '../components/Spinner';
+import NoMobileSupportMessage from '../components/NoMobileSupportMessage';
 
 const PageWrapper = styled.div``;
 
@@ -34,32 +34,26 @@ const Inbox = () => {
 	const [ConnectionModalShow, setConnectionModalShow] = useState(true);
 
 	const handleConfirm = (requestID, originalIndexes) => {
-		console.log(originalIndexes)
-		debugger
+		console.log(originalIndexes);
+		debugger;
 		appState.contract.methods
 			.confirmContributor(requestID, originalIndexes)
 			.send({ from: account }, (error, result) => {
 				if (!error) {
-					toast(result, "success", true, result);
+					toast(result, 'success', true, result);
 				} else {
-					toast(error.message, "error");
+					toast(error.message, 'error');
 				}
 			});
 		appState.contract.events
 			.Transfer({})
-			.on("data", (event) => {
-				toast(
-					`tokens were successfully sent to ${event.returnValues[1]}`,
-					"success",
-					false,
-					null,
-					{
-						toastId: event.id,
-					}
-				);
+			.on('data', (event) => {
+				toast(`tokens were successfully sent to ${event.returnValues[1]}`, 'success', false, null, {
+					toastId: event.id,
+				});
 			})
-			.on("error", (error, receipt) => {
-				toast(error.message, "error");
+			.on('error', (error, receipt) => {
+				toast(error.message, 'error');
 				console.error(error, receipt);
 			});
 	};
@@ -95,9 +89,7 @@ const Inbox = () => {
 											timestamp: result[9],
 											totalContributedCount: result[8],
 										};
-										requestsListObject[
-											requestTemplate.requestID
-										] = requestTemplate;
+										requestsListObject[requestTemplate.requestID] = requestTemplate;
 									})
 									.catch((error) => {
 										console.error(error.message);
@@ -125,10 +117,7 @@ const Inbox = () => {
 				{appState.isMobile ? (
 					<NoMobileSupportMessage />
 				) : !account ? (
-					<ConnectDialog
-						isOpen={ConnectionModalShow}
-						onClose={() => setConnectionModalShow(false)}
-					/>
+					<ConnectDialog isOpen={ConnectionModalShow} onClose={() => setConnectionModalShow(false)} />
 				) : isLoading ? (
 					<SpinnerWrapper>
 						<Spinner />

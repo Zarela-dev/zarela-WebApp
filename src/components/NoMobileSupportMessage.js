@@ -16,18 +16,17 @@ const ZarelaDesktopIcon = styled.img`
 `;
 
 const Message = styled.h3`
-	font-weight: bold;
-	font-size: 18px;
+	font-weight: 500;
+	font-size: 14px;
 	line-height: 22px;
 `;
 
-const NoMobileSupportMessage = () => {
+const NoMobileSupportMessage = ({message}) => {
 	return (
 		<Wrapper>
 			<ZarelaDesktopIcon src={zarelaDesktopImage} />
 			<Message>
-				You can not create a new request in your phone please open the web again in desktop
-				and continue...
+				{message || 'Because encryption/decryption is only available on the desktop version of Metamask. Please connect with Metamask desktop version'}
 			</Message>
 		</Wrapper>
 	);
