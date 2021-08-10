@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import RequestCardMobile from '../../components/RequestCard/RequestCardMobile';
 import styled from 'styled-components';
-// import Pagination from '../../components/Pagination';
 import maxWidthWrapper from '../../components/Elements/MaxWidth';
 import { timeSince } from '../../utils';
 import homepageBg from '../../assets/home-bg.jpg';
@@ -10,6 +9,7 @@ import { Link } from 'react-router-dom';
 import MobileLayout from '../../components/MobileLayout';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
+import Pagination from '../../components/Pagination';
 
 const RequestsListWrapper = styled.div`
 	position: relative;
@@ -118,8 +118,17 @@ const useStyles = makeStyles({
 	},
 });
 
-const App = ({ requests, isLoading, props }) => {
+const App = ({ requests, isLoading, props, PAGE_SIZE }) => {
+	const [currentPage, setCurrentPage] = useState(1);
 	const classes = useStyles(props);
+
+	const currentTableData = useMemo(() => {
+		const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
+		const lastPageIndex = firstPageIndex + PAGE_SIZE;
+		return Object.values(requests)
+			.sort((a, b) => +b.requestID - +a.requestID)
+			.slice(firstPageIndex, lastPageIndex);
+	}, [currentPage, PAGE_SIZE, requests]);
 
 	return (
 		<>
@@ -162,7 +171,7 @@ const App = ({ requests, isLoading, props }) => {
 											</Card>
 										);
 								  })
-								: Object.values(requests)
+								: Object.values(currentTableData)
 										.sort((a, b) => +b.requestID - +a.requestID)
 										.map((item) => {
 											return (
@@ -181,6 +190,13 @@ const App = ({ requests, isLoading, props }) => {
 										})}
 						</RequestsListContentWrapper>
 					</RequestsListLayout>
+					<Pagination
+						currentPage={currentPage}
+						totalCount={Object.values(requests).length}
+						pageSize={PAGE_SIZE}
+						onPageChange={(page) => setCurrentPage(page)}
+						isMobile={true}
+					/>
 				</RequestsListWrapper>
 			</MobileLayout>
 		</>
