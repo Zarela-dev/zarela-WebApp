@@ -34,11 +34,15 @@ const WalletTitlebar = styled(TitleBar)`
 `;
 
 const Title = styled.div`
-	font-weight: 500;
-	font-size: 22px;
+	font-weight: 700;
+	font-size: 24px;
 	line-height: 28px;
 	color: ${(props) => props.theme.textPrimary};
 	padding: 0;
+
+	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
+		font-size: 18px;
+	}
 `;
 
 const RewardWrapper = styled.div`

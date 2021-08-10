@@ -22,7 +22,7 @@ const WalletTitlebar = styled(TitleBar)`
 	justify-content: space-between;
 	align-items: center;
 	margin-top: -12px;
-	padding: 0 18px;
+	/* padding: 0 18px; */
 `;
 
 const Title = styled.div`
