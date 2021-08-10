@@ -14,7 +14,7 @@ const TabsHeader = styled(TabList)`
 	margin-bottom: ${(props) => (props.isMobile ? props.theme.spacing(2) : props.theme.spacing(3))};
 
 	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
-		justify-content: space-between;
+		justify-content: flex-start;
 	}
 `;
 
@@ -34,6 +34,7 @@ const TabsHeaderItem = styled(Tab)`
 	@media (max-width: ${(props => props.theme.tablet_sm_breakpoint)}) {
 		min-width: calc((100% - 36px) / 3);
 		text-align: center;
+		flex: 1;
 	}
 
 	&.is-active {

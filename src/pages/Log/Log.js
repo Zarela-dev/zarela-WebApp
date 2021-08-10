@@ -130,14 +130,14 @@ const Log = () => {
 									</LogInnerContainer>
 								),
 							},
-							{
-								label: 'Marked Requests',
-								component: (
-									<LogInnerContainer elevated>
-										<MarkedRequests />
-									</LogInnerContainer>
-								),
-							},
+							// {
+							// 	label: 'Marked Requests',
+							// 	component: (
+							// 		<LogInnerContainer elevated>
+							// 			<MarkedRequests />
+							// 		</LogInnerContainer>
+							// 	),
+							// },
 							{
 								label: 'Contributed',
 								component: (
