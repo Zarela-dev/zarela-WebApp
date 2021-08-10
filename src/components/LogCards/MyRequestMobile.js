@@ -29,7 +29,7 @@ const LogCardMobile = ({ data }) => {
 				</MobileColumn>
 				<MobileColumn flex={'1 1'}>
 					<MobileRow>
-						<MobileTitle noMargin>{title}</MobileTitle>
+						<MobileTitle noMargin>{title.length < 60 ? title : title.substr(0, 60) + '...'}</MobileTitle>
 					</MobileRow>
 					<MobileRow>
 						<TimestampMobile>{timeSince(timestamp)}</TimestampMobile>
@@ -41,7 +41,7 @@ const LogCardMobile = ({ data }) => {
 					</MobileRow>
 					{+totalContributedCount === 0 ? (
 						<MobileRow>
-							<QuickReport variant='primary'>{`No one has contributed yet!`}</QuickReport>
+							<QuickReport variant="primary">{`No one has contributed yet!`}</QuickReport>
 						</MobileRow>
 					) : null}
 				</MobileColumn>

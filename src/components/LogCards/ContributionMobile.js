@@ -43,7 +43,7 @@ const LogCardMobile = ({ data }) => {
 				</MobileColumn>
 				<MobileColumn flex={'1 1'}>
 					<MobileRow>
-						<MobileTitle>{title}</MobileTitle>
+						<MobileTitle>{title.length < 70 ? title : title.substr(0, 70) + '...'}</MobileTitle>
 					</MobileRow>
 					<MobileRow>
 						<MobileBiobitIcon src={biobitIcon} />

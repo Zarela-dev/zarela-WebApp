@@ -116,7 +116,7 @@ export const ContributorCount = styled.p``;
 
 export const Title = styled.h4`
 	font-weight: 700;
-	font-size: 18px;
+	font-size: 16px;
 	line-height: 1.8;
 	color: ${(props) => props.theme.textPrimary};
 	margin-right: ${(props) => props.theme.spacing(1.5)};
@@ -129,6 +129,7 @@ export const Timestamp = styled.p`
 	font-weight: normal;
 	font-size: 14px;
 	line-height: 130%;
+	min-width: 200px;
 	color: ${(props) => props.theme.textPrimary};
 `;
 

@@ -50,7 +50,7 @@ const LogCard = ({ data }) => {
 				</Column>
 				<Column flex="1 1 530px">
 					<Row>
-						<Title>{title}</Title>
+						<Title>{title.length < 120 ? title : title.substr(0, 120) + '...'}</Title>
 					</Row>
 					<Row>
 						{allApproved ? (

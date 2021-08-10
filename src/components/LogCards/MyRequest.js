@@ -27,7 +27,7 @@ const LogCard = ({ data }) => {
 		if (+totalContributedCount === 0) return 'primary';
 		if (+totalContributed === +totalContributors) return 'confirmed'; // fulfilled
 	};
-	
+
 	return (
 		<CompactRequestCard variant={getVariant()}>
 			<Header>
@@ -36,11 +36,11 @@ const LogCard = ({ data }) => {
 				</Column>
 				<Column flex="1 1 530px">
 					<Row>
-						<Title>{title}</Title>
+						<Title>{title.length < 120 ? title : title.substr(0, 120) + '...'}</Title>
 					</Row>
 					{+totalContributedCount === 0 ? (
 						<Row>
-							<QuickReport variant='primary'>{`No one has contributed yet!`}</QuickReport>
+							<QuickReport variant="primary">{`No one has contributed yet!`}</QuickReport>
 						</Row>
 					) : null}
 				</Column>
