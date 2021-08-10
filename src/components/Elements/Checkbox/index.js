@@ -72,7 +72,7 @@ const Label = styled.label`
 `;
 
 const Checkbox = ({ children, checked, ...props }) => (
-	<Label>
+	<Label className={props.className}>
 		<CheckboxContainer>
 			<HiddenCheckbox checked={checked} {...props} />
 			<StyledCheckboxWrapper checked={checked}>

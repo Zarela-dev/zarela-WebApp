@@ -23,6 +23,10 @@ const Divider = styled.div`
 	margin: ${(props) => props.theme.spacing(5)} 0 ${(props) => props.theme.spacing(6)};
 `;
 
+const CustomCheckbox = styled(Checkbox)`
+	margin-top: ${(props) => props.theme.spacing(2)};
+`;
+
 const options = [
 	{ value: 'EEG', label: 'EEG' },
 	{ value: 'ECG', label: 'ECG' },
@@ -98,10 +102,7 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 				onKeyDown={(e) => {
 					setSelectInputValue('');
 					if (e.key === 'Enter') {
-						setSelectedOption([
-							...selectedOption,
-							{ value: e.target.value, label: e.target.value },
-						]);
+						setSelectedOption([...selectedOption, { value: e.target.value, label: e.target.value }]);
 						formik.setFieldValue('category', [
 							...selectedOption,
 							{ value: e.target.value, label: e.target.value },
@@ -129,21 +130,17 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 					}
 				}}
 			/>
-			<Checkbox
+			<CustomCheckbox
 				checked={formik.values.terms}
 				name="terms"
 				onChange={(e) => formik.setFieldValue('terms', e.target.checked)}
 			>
-				Your request won’t be able to be edited, make sure every data you added is correct
-				and final. By marking this box you claim your agreement towards policies.
-			</Checkbox>
+				Your request won’t be able to be edited, make sure every data you added is correct and final. By marking
+				this box you claim your agreement towards policies.
+			</CustomCheckbox>
 			{formik.errors?.terms ? <Error>{formik.errors?.terms}</Error> : null}
 			<Divider />
-			<SubmitButton
-				variant="primary"
-				disabled={!formik.dirty || formik.isSubmitting}
-				type="submit"
-			>
+			<SubmitButton variant="primary" disabled={!formik.dirty || formik.isSubmitting} type="submit">
 				Submit
 			</SubmitButton>
 		</Form>

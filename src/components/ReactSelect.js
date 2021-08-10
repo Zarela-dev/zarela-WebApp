@@ -142,7 +142,7 @@ const customStyles = {
 		borderRadius: '4px',
 		width: '510px',
 		backgroundColor: '#fff',
-		height: state.selectProps.isMenuOpen ? '270px' : '',
+		maxHeight: state.selectProps.isMenuOpen ? '270px' : '',
 		zIndex: 5,
 		overflow: 'hidden',
 	}),
