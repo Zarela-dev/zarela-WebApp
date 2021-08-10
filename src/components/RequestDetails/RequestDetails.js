@@ -81,7 +81,7 @@ const Description = styled.p`
 const PublicKeyBadge = styled.div`
 	display: flex;
 	position: absolute;
-	right: 0;
+	right: 20px;
 	top: 40px;
 	max-width: 400px;
 `;

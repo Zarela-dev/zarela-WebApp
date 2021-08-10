@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import UploadFileCardMobile from '../UploadFileCard/UploadFileCardMobile';
+import UploadFileCard from '../UploadFileCard/UploadFileCard';
 import {
 	RequestNumber,
 	HeaderLayout,
@@ -183,7 +183,7 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
 					</HeaderInner>
 				</HeaderContainer>
 				<DescriptionContainer>
-					<UploadFileCardMobile
+					<UploadFileCard
 						showSelected
 						buttonLabel="Select Files"
 						label={'Already have the file?'}

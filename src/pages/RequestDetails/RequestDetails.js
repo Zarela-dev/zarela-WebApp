@@ -143,6 +143,7 @@ const RequestDetailsPage = () => {
 									totalContributed: +result[4] - +result[7],
 									whitePaper: result[5],
 									timestamp: result[9],
+									encryptionPublicKey: result[10],
 									categories,
 									totalContributedCount: result[8],
 								};
