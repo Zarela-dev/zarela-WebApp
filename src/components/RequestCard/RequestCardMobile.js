@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import styled from "styled-components";
+import React, { useContext } from 'react';
+import styled from 'styled-components';
 import RequestCardWrapper, {
 	Footer,
 	HeaderLayout,
@@ -20,11 +20,12 @@ import RequestCardWrapper, {
 	ProgressTrackerTrack,
 	ProgressTrackerProcess,
 	BadgeLabel,
-} from "../Elements/RequestCard/IndexMobile";
-import biobitIcon from "../../assets/icons/biobit-black.svg";
-import contributorIcon from "../../assets/icons/user-black.svg";
-import documentsIcon from "../../assets/icons/document-black.svg";
-import { mainContext } from "../../state";
+} from '../Elements/RequestCard/IndexMobile';
+import { TagsWrapper, TagItem } from '../Elements/RequestCard';
+import biobitIcon from '../../assets/icons/biobit-black.svg';
+import contributorIcon from '../../assets/icons/user-black.svg';
+import documentsIcon from '../../assets/icons/document-black.svg';
+import { mainContext } from '../../state';
 
 const BiobitToDollarValue = styled.div`
 	position: absolute;
@@ -37,8 +38,7 @@ const BiobitToDollarValue = styled.div`
 	margin-right: 2px;
 	margin-left: 8px;
 	white-space: nowrap;
-	margin-left: ${(props) =>
-		props.noMargin ? props.theme.spacing(1) : props.theme.spacing(0.8)};
+	margin-left: ${(props) => (props.noMargin ? props.theme.spacing(1) : props.theme.spacing(0.8))};
 	white-space: nowrap;
 `;
 
@@ -59,14 +59,8 @@ const RequestCardMobile = (props) => {
 	return (
 		<RequestCardWrapper>
 			<HeaderLayout>
-				<RequestNumber isMobile={appState.isMobile}>
-					{props.requestID}
-				</RequestNumber>
-				<Title>
-					{props.title.length < 115
-						? props.title
-						: props.title.substr(0, 115) + "..."}
-				</Title>
+				<RequestNumber isMobile={appState.isMobile}>{props.requestID}</RequestNumber>
+				<Title>{props.title.length < 115 ? props.title : props.title.substr(0, 115) + '...'}</Title>
 				<Spacer />
 			</HeaderLayout>
 			<Timestamp nowrap variant="caption">
@@ -74,10 +68,13 @@ const RequestCardMobile = (props) => {
 			</Timestamp>
 			<Description>
 				<Typography variant="body">
-					{props.description.length < 405
-						? props.description
-						: props.description.substr(0, 405) + "..."}
+					{props.description.length < 405 ? props.description : props.description.substr(0, 405) + '...'}
 				</Typography>
+				<TagsWrapper>
+					{props.categories.split(',').map((item, index) => {
+						return <TagItem key={index}>#{item}</TagItem>;
+					})}
+				</TagsWrapper>
 			</Description>
 			<ProgressTrackerWrapper>
 				<ProgressTrackerTrack>
