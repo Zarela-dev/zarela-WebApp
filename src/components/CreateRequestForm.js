@@ -24,21 +24,13 @@ const Divider = styled.div`
 `;
 
 const options = [
-	{ value: 'chocolate1', label: 'Chocolate' },
-	{ value: 'strawberry2', label: 'Strawberry' },
-	{ value: 'vanilla3', label: 'Vanilla' },
-	{ value: 'choc12321sfasate', label: 'Chocolate' },
-	{ value: 'stra12321sfaserry', label: 'Strawberry' },
-	{ value: 'vani1232fefsfasa', label: 'Vanilla' },
-	{ value: 'choc1232fefsfasate', label: 'Chocolate' },
-	{ value: 'stra1232fefsfaserry', label: 'Strawberry' },
-	{ value: 'vani12321sfasa', label: 'Vanilla' },
-	{ value: 'choc12321sfefasate', label: 'Chocolate' },
-	{ value: 'stra12321sfefaserry', label: 'Strawberry' },
-	{ value: 'vani12321sfefasa', label: 'Vanilla' },
-	{ value: 'choc12321sfasate', label: 'Chocolate' },
-	{ value: 'stra12321sfesfaserry', label: 'Strawberry' },
-	{ value: 'vani12321sfesfasa', label: 'Vanilla' },
+	{ value: 'EEG', label: 'EEG' },
+	{ value: 'ECG', label: 'ECG' },
+	{ value: 'EMG', label: 'EMG' },
+	{ value: 'EOG ', label: 'EOG' },
+	{ value: 'ERG', label: 'ERG' },
+	{ value: 'EGG', label: 'EGG' },
+	{ value: 'GSR', label: 'GSR' },
 ];
 
 const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {

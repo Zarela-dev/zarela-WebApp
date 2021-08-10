@@ -1,4 +1,5 @@
 import React from 'react';
+import {toast} from './../utils/toast';
 
 function copyToClipboard(text) {
 	const elem = document.createElement('textarea');
@@ -8,6 +9,7 @@ function copyToClipboard(text) {
 	document.execCommand('copy');
 	document.body.removeChild(elem);
 }
+
 
 // https://gist.github.com/jiggzson/b5f489af9ad931e3d186
 export const CopyableText = ({ children, textToCopy, ...rest }) => {
@@ -20,6 +22,7 @@ export const CopyableText = ({ children, textToCopy, ...rest }) => {
 			}
 			console.log('hash copied', textToCopy);
 			// show notification 
+			toast(`Copied : ${textToCopy}`, 'success', true, textToCopy);
 		},
 		...rest
 	});

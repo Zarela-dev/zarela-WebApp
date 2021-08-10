@@ -95,6 +95,13 @@ const WalletSendAssets = (mobile) => {
 		} ${formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'}`;
 	};
 
+	const getClipboard = async() => {
+		var pasteTarget = document.getElementsByName("address")[0];
+    pasteTarget.focus();
+		console.log('navigator' , navigator.clipboard.readText())
+    document.execCommand('insertText', false, await navigator.clipboard.readText())
+};
+
 	return (
 		<Wrapper onSubmit={formik.handleSubmit} isMobile={appState.isMobile}>
 			<Content>
@@ -121,7 +128,11 @@ const WalletSendAssets = (mobile) => {
 						label={"Recipient's Address"}
 						placeholder={"Please enter the Recipient's address"}
 						adornment={'Paste'} // #todo
-
+						adornmentOnClick={() => {
+							// let test = document.execCommand('paste')
+							// console.log('test ', test);
+							getClipboard();
+						}}
 						onChange={(e) => formik.setFieldValue('address', e.target.value)}
 						name="address"
 						value={formik.values.address}
