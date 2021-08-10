@@ -48,10 +48,13 @@ const HashCol = styled.div`
 `;
 const TextCol = styled(HashCol)`
 	color: #121213;
-	max-width: ${props => props.fixed ? '165px' : 'unset'};
-	height: ${props => props.fixed ? '100%' : 'unset'};
-	white-space: ${props => props.fixed ? 'nowrap' : 'unset'};
-	overflow: ${props => props.fixed ? 'hidden' : 'unset'};
+	max-width: ${(props) => (props.title ? '165px' : 'unset')};
+	height: ${(props) => (props.title ? '100%' : 'unset')};
+	white-space: ${(props) => (props.title ? 'nowrap' : 'unset')};
+	overflow: ${(props) => (props.title ? 'hidden' : 'unset')};
+	font-size: ${(props) => (props.title ? '16px' : '')};
+	line-height: ${(props) => (props.title ? '20.8px' : '')};
+	font-weight: ${(props) => (props.title ? '400' : '')};
 `;
 
 const ValueCol = styled(HashCol)`
@@ -321,6 +324,10 @@ const WalletTransactionsMobile = ({ isLoading, account, data, props, PAGE_SIZE }
 			{!isLoading &&
 				currentTableData.map((transaction, index) => (
 					<TransactionCard key={index} status="#F62D76">
+						<TransactionRow>
+							<TitleCol></TitleCol>
+							<TextCol title>{getInput(transaction.input)}</TextCol>
+						</TransactionRow>
 						<TransactionRow>
 							<TitleCol>TXN Hash</TitleCol>
 							<HashCol>{transaction.blockHash}</HashCol>
