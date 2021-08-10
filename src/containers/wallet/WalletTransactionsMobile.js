@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import copyImage from '../../assets/icons/copy.svg';
 import { timeSince, convertToBiobit, CopyableText } from '../../utils';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
+import Pagination from '../../components/Pagination';
 
 const Wrapper = styled.div`
 	width: 100%;
@@ -77,7 +78,17 @@ const useStyles = makeStyles({
 	},
 });
 
-const WalletTransactionsMobile = ({ isLoading, account, data, props }) => {
+const WalletTransactionsMobile = ({ isLoading, account, data, props, PAGE_SIZE }) => {
+	const [currentPage, setCurrentPage] = useState(1);
+
+	const currentTableData = useMemo(() => {
+		const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
+		const lastPageIndex = firstPageIndex + PAGE_SIZE;
+		return Object.values(data)
+			.sort((a, b) => +b.requestID - +a.requestID)
+			.slice(firstPageIndex, lastPageIndex);
+	}, [currentPage, PAGE_SIZE, data]);
+
 	const classes = useStyles(props);
 	// if (!account || isLoading === true) return 'loading';
 	if (!account) return 'no accounts found';
@@ -285,49 +296,55 @@ const WalletTransactionsMobile = ({ isLoading, account, data, props }) => {
 					);
 				})}
 
-			{!isLoading && data.map((transaction, index) => (
-				<TransactionCard key={index} status="#F62D76">
-					<TransactionRow>
-						<TitleCol>TXN Hash</TitleCol>
-						<HashCol>{transaction.blockHash}</HashCol>
-						<CopyableText textToCopy={transaction.blockHash}>
-							<IconCol src={copyImage} />
-						</CopyableText>
-					</TransactionRow>
-					<TransactionRow>
-						<TitleCol>Date</TitleCol>
-						<TextCol>{timeSince(transaction.timeStamp)}</TextCol>
-					</TransactionRow>
-					<TransactionRow>
-						<TitleCol>From</TitleCol>
-						<HashCol>{transaction.from}</HashCol>
-						<CopyableText textToCopy={transaction.from}>
-							<IconCol src={copyImage} />
-						</CopyableText>
-					</TransactionRow>
-					<TransactionRow>
-						<TitleCol>TXN fee</TitleCol>
-						<TextCol>
-							{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}
-						</TextCol>
-					</TransactionRow>
-					<TransactionRow>
-						<TitleCol>To</TitleCol>
-						<HashCol>{transaction.to}</HashCol>
-						<CopyableText textToCopy={transaction.to}>
-							<IconCol src={copyImage} />
-						</CopyableText>
-					</TransactionRow>
-					<TransactionRow>
-						<TitleCol>Value</TitleCol>
-						<ValueCol>
-							{transaction.input !== '0x'
-								? convertToBiobit(transaction.value)
-								: +transaction.value / Math.pow(10, 18)}
-						</ValueCol>
-					</TransactionRow>
-				</TransactionCard>
-			))}
+			{!isLoading &&
+				currentTableData.map((transaction, index) => (
+					<TransactionCard key={index} status="#F62D76">
+						<TransactionRow>
+							<TitleCol>TXN Hash</TitleCol>
+							<HashCol>{transaction.blockHash}</HashCol>
+							<CopyableText textToCopy={transaction.blockHash}>
+								<IconCol src={copyImage} />
+							</CopyableText>
+						</TransactionRow>
+						<TransactionRow>
+							<TitleCol>Date</TitleCol>
+							<TextCol>{timeSince(transaction.timeStamp)}</TextCol>
+						</TransactionRow>
+						<TransactionRow>
+							<TitleCol>From</TitleCol>
+							<HashCol>{transaction.from}</HashCol>
+							<CopyableText textToCopy={transaction.from}>
+								<IconCol src={copyImage} />
+							</CopyableText>
+						</TransactionRow>
+						<TransactionRow>
+							<TitleCol>TXN fee</TitleCol>
+							<TextCol>{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}</TextCol>
+						</TransactionRow>
+						<TransactionRow>
+							<TitleCol>To</TitleCol>
+							<HashCol>{transaction.to}</HashCol>
+							<CopyableText textToCopy={transaction.to}>
+								<IconCol src={copyImage} />
+							</CopyableText>
+						</TransactionRow>
+						<TransactionRow>
+							<TitleCol>Value</TitleCol>
+							<ValueCol>
+								{transaction.input !== '0x'
+									? convertToBiobit(transaction.value)
+									: +transaction.value / Math.pow(10, 18)}
+							</ValueCol>
+						</TransactionRow>
+					</TransactionCard>
+				))}
+			<Pagination
+				currentPage={currentPage}
+				totalCount={Object.values(data).length}
+				pageSize={PAGE_SIZE}
+				onPageChange={(page) => setCurrentPage(page)}
+				isMobile={true}
+			/>
 		</Wrapper>
 	);
 };

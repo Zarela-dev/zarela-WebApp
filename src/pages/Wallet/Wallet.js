@@ -152,7 +152,7 @@ const Wallet = () => {
 	}, [account]);
 
 	if (appState.isMobile) {
-		return <WalletMobile {...{ account, logs, isLoading }} />;
+		return <WalletMobile {...{ account, logs, isLoading, PAGE_SIZE }} />;
 	} else {
 		return <WalletDesktop {...{ account, logs, isLoading, PAGE_SIZE }} />;
 	}
