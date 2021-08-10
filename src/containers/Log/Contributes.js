@@ -1,9 +1,20 @@
 import React, { useContext, useState, useEffect } from 'react';
+import styled from 'styled-components';
+import Spinner from '../../components/Spinner';
 import LogCard from '../../components/LogCards/Contribution';
 import LogCardMobile from '../../components/LogCards/ContributionMobile';
 import { mainContext } from './../../state';
 import { useWeb3React } from '@web3-react/core';
 import { convertToBiobit } from '../../utils';
+import NoRequestsFound from '../../components/NoRequestsFound';
+
+const SpinnerWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	padding: ${(props) => props.theme.spacing(3)};
+	align-items: center;
+`;
 
 const Contributes = () => {
 	const { appState } = useContext(mainContext);
@@ -96,11 +107,26 @@ const Contributes = () => {
 		}
 	}, [account, appState.contract]);
 
+	const message = 'you have not contributed on any requests yet.';
 	if (appState.isMobile)
-		return isLoading
-			? 'loading'
-			: requests.map((request) => <LogCardMobile key={request.requestID} data={request} />);
-	return isLoading ? 'isLoading' : requests.map((request) => <LogCard key={request.requestID} data={request} />);
+		return isLoading ? (
+			<SpinnerWrapper>
+				<Spinner />
+			</SpinnerWrapper>
+		) : requests.length === 0 ? (
+			<NoRequestsFound message={message} />
+		) : (
+			requests.map((request) => <LogCardMobile key={request.requestID} data={request} />)
+		);
+	return isLoading ? (
+		<SpinnerWrapper>
+			<Spinner />
+		</SpinnerWrapper>
+	) : requests.length === 0 ? (
+		<NoRequestsFound message={message} />
+	) : (
+		requests.map((request) => <LogCard key={request.requestID} data={request} />)
+	);
 };
 
 export default Contributes;

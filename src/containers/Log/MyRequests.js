@@ -1,9 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { mainContext } from '../../state';
 import { convertToBiobit } from '../../utils';
+import Spinner from '../../components/Spinner';
 import MyRequest from '../../components/LogCards/MyRequest';
 import MyRequestMobile from '../../components/LogCards/MyRequestMobile';
+import NoRequestsFound from '../../components/NoRequestsFound';
 import { useWeb3React } from '@web3-react/core';
+
+const SpinnerWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: ${(props) => props.theme.spacing(3)};
+`;
 
 const MyRequests = () => {
 	const { account } = useWeb3React();
@@ -63,10 +74,24 @@ const MyRequests = () => {
 	}, [appState.contract, account]);
 
 	if (appState.isMobile)
-		return isLoading
-			? 'loading'
-			: requests.map((request) => <MyRequestMobile key={request.requestID} data={request} />);
-	return isLoading ? 'isLoading' : requests.map((request) => <MyRequest key={request.requestID} data={request} />);
+		return isLoading ? (
+			<SpinnerWrapper>
+				<Spinner />
+			</SpinnerWrapper>
+		) : requests.length === 0 ? (
+			<NoRequestsFound />
+		) : (
+			requests.map((request) => <MyRequestMobile key={request.requestID} data={request} />)
+		);
+	return isLoading ? (
+		<SpinnerWrapper>
+			<Spinner />
+		</SpinnerWrapper>
+	) : requests.length === 0 ? (
+		<NoRequestsFound />
+	) : (
+		requests.map((request) => <MyRequest key={request.requestID} data={request} />)
+	);
 };
 
 export default MyRequests;
