@@ -6,7 +6,7 @@ import { mainContext } from '../../state';
 import { convertToBiobit } from '../../utils';
 import * as ethUtil from 'ethereumjs-util';
 import { encrypt } from 'eth-sig-util';
-import { toast,ZRNG } from '../../utils';
+import { toast, ZRNG, getFileNameWithExt } from '../../utils';
 import { useWeb3React } from '@web3-react/core';
 import Mobile from './Mobile';
 import Desktop from './Desktop';
@@ -50,8 +50,9 @@ const RequestDetailsPage = () => {
 							const AES_KEY = ZRNG();
 
 							// file encryption
-							var twF = twofish(AES_IV),
-								encryptedFile = twF.encryptCBC(AES_KEY, buff);
+
+							// var twF = twofish(AES_IV),
+							// 	encryptedFile = twF.encryptCBC(AES_KEY, buff);
 
 							try {
 								// AES key encryption
@@ -68,10 +69,19 @@ const RequestDetailsPage = () => {
 									)
 								);
 
+								const fileStuff = {
+									AES_KEY: encryptedAesKey,
+									AES_IV,
+									FILE_EXT: getFileNameWithExt(sendSignalRef)[1],
+									FILE_NAME: getFileNameWithExt(sendSignalRef)[0],
+									FILE_MIMETYPE: getFileNameWithExt(sendSignalRef)[2],
+								};
+								
 								setDialogMessage('uploading to ipfs');
-								const ipfsResponse = await ipfs.add(encryptedFile);
+								const fileResponse = await ipfs.add(buff);
+								const fileStuffResponse = await ipfs.add(JSON.stringify(fileStuff));
 
-								let url = `${process.env.REACT_APP_IPFS_LINK + ipfsResponse.path}`;
+								let url = `${process.env.REACT_APP_IPFS_LINK + fileResponse.path}`;
 								console.log(`Document Of Conditions --> ${url}`);
 
 								// // const doc = document.getElementById("_White_Paper");
@@ -80,8 +90,8 @@ const RequestDetailsPage = () => {
 									.contribute(
 										request.requestID,
 										request.requesterAddress,
-										ipfsResponse.path,
-										encryptedAesKey
+										fileResponse.path,
+										fileStuffResponse.path
 									)
 									.send(
 										{
