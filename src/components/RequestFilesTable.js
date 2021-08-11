@@ -273,7 +273,7 @@ const RequestFilesTable = ({
 								</FilesTableHeader>
 								<FilesList>
 									{data[contributorAddress].map(
-										({ ipfsHash, status, originalIndex, timestamp }, fileIndex) => {
+										({ ipfsHash, status, originalIndex, AesEncryptedKey, timestamp }, fileIndex) => {
 											return (
 												<FileItemRow>
 													<FileItemCol>
@@ -302,7 +302,7 @@ const RequestFilesTable = ({
 														</FileName>
 													</FileItemCol>
 													<FileItemCol>
-														<DownloadButton onClick={() => signalDownloadHandler(ipfsHash)}>
+														<DownloadButton onClick={() => signalDownloadHandler(ipfsHash, AesEncryptedKey)}>
 															<DownloadButtonImage src={downloadIcon} />
 														</DownloadButton>
 													</FileItemCol>

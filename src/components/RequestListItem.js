@@ -28,6 +28,7 @@ import caretUpIcon from '../assets/icons/caret-up.svg';
 import caretDownIcon from '../assets/icons/caret-down.svg';
 import fulfilledIcon from '../assets/icons/check-green.svg';
 import _ from 'lodash';
+import { twofish } from 'twofish';
 
 const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
@@ -283,30 +284,20 @@ const RequestListItem = ({
 		if (type === 'uncheck') setSelected((values) => values.filter((item) => +item !== +originalIndex));
 	};
 
-	const signalDownloadHandler = (fileHash) => {
+	const signalDownloadHandler = (fileHash, AesEncryptedKey) => {
 		// Start file download.
 		axios
 			.get(`${process.env.REACT_APP_IPFS_LINK + fileHash}`)
 			.then((fileRes) => {
-				// window.ethereum
-				// 	.request({
-				// 		method: 'eth_decrypt',
-				// 		params: [encryptedAesKey, account],
-				// 	})
-				// 	.then((decryptedMessage) => {
-				// 		console.log('AES_KEY', AES_KEY);
-				// 		console.log('decryptedMessage', decryptedMessage);
-				// 	})
-				// 	.catch(function (error) {
-				// 		console.error(error);
-				// 	});
-
 				window.ethereum
 					.request({
 						method: 'eth_decrypt',
-						params: [fileRes.data, account],
+						params: [AesEncryptedKey, account],
 					})
-					.then((decryptedMessage) => {
+					.then((AesDecryptedKey) => {
+						var twF = twofish();
+						var decrypted = twF.decryptCBC(AesDecryptedKey, fileRes.data);
+
 						async function getDownloadUrl(base64) {
 							var byteString = atob(base64);
 							var ab = new ArrayBuffer(byteString.length);
@@ -336,9 +327,21 @@ const RequestListItem = ({
 								}
 							};
 						})();
-						saveByteArray(decryptedMessage, fileHash);
+						saveByteArray(decrypted, fileHash);
 					})
-					.catch((error) => console.log(error.message));
+					.catch(function (error) {
+						console.error(error);
+					});
+
+				// window.ethereum
+				// 	.request({
+				// 		method: 'eth_decrypt',
+				// 		params: [fileRes.data, account],
+				// 	})
+				// 	.then((decryptedMessage) => {
+
+				// 	})
+				// 	.catch((error) => console.log(error.message));
 			})
 			.catch((error) => console.log(error.message));
 	};
@@ -362,10 +365,11 @@ const RequestListItem = ({
 								// count all the unapproved files
 								setUnapprovedCount(status.filter((item) => Boolean(item) === false).length);
 
+								debugger;
 								addresses.forEach((address, fileIndex) => {
 									pairs.push({
 										file: files[0][fileIndex],
-										// AesEncryptionKey: files[1][fileIndex],
+										AesEncryptedKey: files[1][fileIndex],
 										address: address,
 										timestamp: timestamp[fileIndex],
 										originalIndex: fileIndex,
@@ -380,6 +384,7 @@ const RequestListItem = ({
 												formatted[uAddress].push({
 													ipfsHash: tempItem.file,
 													timestamp: tempItem.timestamp,
+													AesEncryptedKey: tempItem.AesEncryptedKey,
 													originalIndex: tempItem.originalIndex,
 													status: tempItem.status,
 												});
@@ -388,6 +393,7 @@ const RequestListItem = ({
 													{
 														ipfsHash: tempItem.file,
 														timestamp: tempItem.timestamp,
+														AesEncryptedKey: tempItem.AesEncryptedKey,
 														originalIndex: tempItem.originalIndex,
 														status: tempItem.status,
 													},

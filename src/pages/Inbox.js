@@ -25,7 +25,6 @@ const SpinnerWrapper = styled.div`
 	justify-content: center;
 	align-items: center;
 `;
-
 const Inbox = () => {
 	const { appState } = useContext(mainContext);
 	const [requests, setRequests] = useState({});
