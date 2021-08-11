@@ -72,7 +72,7 @@ const RequestDetailsPage = () => {
 										request.requestID,
 										request.requesterAddress,
 										ipfsResponse.path,
-										'encryption key'
+										'x' // AesEncryption key
 									)
 									.send(
 										{

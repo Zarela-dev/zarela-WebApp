@@ -352,7 +352,7 @@ const RequestListItem = ({
 								addresses.forEach((address, fileIndex) => {
 									pairs.push({
 										file: files[0][fileIndex],
-										AesEncryptionKey: files[1][fileIndex],
+										// AesEncryptionKey: files[1][fileIndex],
 										address: address,
 										timestamp: timestamp[fileIndex],
 										originalIndex: fileIndex,
