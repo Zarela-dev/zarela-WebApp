@@ -33,7 +33,7 @@ const UploadFileCard = React.forwardRef(
 		ref
 	) => {
 		return (
-			<Card>
+			<Card data-tour="request-details-three">
 				<CustomFileInput
 					hasBorder
 					disableUpload={disableUpload}

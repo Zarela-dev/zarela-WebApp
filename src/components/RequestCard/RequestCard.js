@@ -34,14 +34,14 @@ import documentsIcon from '../../assets/icons/document-blue.svg';
 
 const RequestCard = (props) => {
 	return (
-		<RequestCardWrapper>
+		<RequestCardWrapper data-tour="request-list-one">
 			<HeaderLayout>
-				<RequestNumber>{props.requestID}</RequestNumber>
-				<Title>
+				<RequestNumber data-tour="request-list-two" >{props.requestID}</RequestNumber>
+				<Title data-tour="request-list-three">
 					{props.title.length < 85 ? props.title : props.title.substr(0, 85) + '...'}
 				</Title>
 				<Spacer />
-				<Bookmark src={bookmarkIcon} />
+				<Bookmark data-tour="request-list-eight" src={bookmarkIcon} />
 			</HeaderLayout>
 			<Timestamp nowrap variant="caption">
 				{props.timestamp}
@@ -64,7 +64,7 @@ const RequestCard = (props) => {
 				</ProgressTrackerTrack>
 			</ProgressTrackerWrapper>
 			<Footer>
-				<BiobitToDollarPair>
+				<BiobitToDollarPair data-tour="request-list-four">
 					<BadgeRow>
 						<TokenIcon src={biobitIcon} />
 						<TokenValue>{props.tokenPay}</TokenValue>
@@ -75,7 +75,7 @@ const RequestCard = (props) => {
 					</BadgeRow>
 				</BiobitToDollarPair>
 				<Divider />
-				<ContributorBadge>
+				<ContributorBadge data-tour="request-list-five">
 					<BadgeRow>
 						<ContributorsIcon src={documentsIcon} />
 						<BadgeLabel>{props.contributors}</BadgeLabel>
@@ -85,7 +85,7 @@ const RequestCard = (props) => {
 					</BadgeRow>
 				</ContributorBadge>
 				<Divider />
-				<ContributorBadge>
+				<ContributorBadge data-tour="request-list-six">
 					<BadgeRow>
 						<ContributorsIcon src={contributorIcon} />
 						<BadgeLabel>{props.totalContributedCount}</BadgeLabel>
@@ -95,7 +95,7 @@ const RequestCard = (props) => {
 					</BadgeRow>
 				</ContributorBadge>
 				<Spacer />
-				<JoinButton variant="secondary" to={`/request/${props.requestID}`}>
+				<JoinButton data-tour="request-list-seven" variant="secondary" to={`/request/${props.requestID}`}>
 					Start
 				</JoinButton>
 			</Footer>

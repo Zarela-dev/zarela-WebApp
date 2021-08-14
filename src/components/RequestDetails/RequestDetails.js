@@ -199,7 +199,7 @@ const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, 
 						return <TagItem key={index}>#{item}</TagItem>;
 					})}
 				</TagsWrapper>
-				<PublicKeyBadge>
+				<PublicKeyBadge data-tour="request-details-one">
 					<PublicKeyIcon src={publicKeyIcon} />
 					<CopyableText textToCopy={request.requesterAddress}>
 						<PublicKeyTextContainer>

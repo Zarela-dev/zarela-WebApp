@@ -23,7 +23,7 @@ const Sidebar = ({ data, account }) => {
 	const { activate } = useWeb3React();
 
 	return (
-		<SidebarCard>
+		<SidebarCard data-tour="request-list-nine">
 			<Header>
 				<Icon src={biobitBlack} />
 				<Title>Token Info</Title>

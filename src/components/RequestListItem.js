@@ -162,6 +162,7 @@ const RequestListItem = ({
 	contributors,
 	handleConfirm,
 	fulfilled,
+	setAnyOpenBox,
 }) => {
 	const [isOpen, setOpen] = useState(false);
 	const [unapprovedCount, setUnapprovedCount] = useState(0);
@@ -482,7 +483,6 @@ const RequestListItem = ({
 						};
 					})();
 
-
 					var xhr = new XMLHttpRequest();
 					xhr.addEventListener('readystatechange', function () {
 						if (this.readyState === 4) {
@@ -492,7 +492,7 @@ const RequestListItem = ({
 						}
 					});
 
-					xhr.open('GET', process.env.REACT_APP_IPFS_LINK  + fileHash);
+					xhr.open('GET', process.env.REACT_APP_IPFS_LINK + fileHash);
 
 					xhr.send();
 				})
@@ -574,7 +574,12 @@ const RequestListItem = ({
 
 	return (
 		<Wrapper>
-			<Header onClick={() => setOpen(!isOpen)}>
+			<Header
+				onClick={() => {
+					setOpen(!isOpen);
+					setAnyOpenBox && setAnyOpenBox(true);
+				}}
+			>
 				<TitleColumn>
 					<RequestNumberWithPointer>{requestID}</RequestNumberWithPointer>
 					<Title variant="title" weight="semiBold">
@@ -610,7 +615,7 @@ const RequestListItem = ({
 			{showContributions && isOpen ? (
 				Object.keys(formattedData).length > 0 ? (
 					<>
-						<Body>
+						<Body data-tour="inbox-one">
 							<RequestFilesTable
 								signalDownloadHandler={signalDownloadHandler}
 								data={formattedData}
