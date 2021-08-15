@@ -137,7 +137,7 @@ const Inbox = () => {
 		if (anyOpenBox) {
 			setTimeout(() => {
 				setGuideIsOpen(true);
-			}, 1000);
+			}, 200);
 		}
 	}, [anyOpenBox]);
 
