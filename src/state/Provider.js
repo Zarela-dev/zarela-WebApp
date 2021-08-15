@@ -93,8 +93,13 @@ const AppProvider = ({ children }) => {
 	}, [library]);
 
 	useEffect(() => {
-		if (account !== undefined && appState.contract) {
+		if (appState.contract) {
 			getZarelaCurrentDay(dispatch, appState.contract);
+		}
+	}, [appState.contract]);
+
+	useEffect(() => {
+		if (account !== undefined && appState.contract) {
 			appState.contract.methods.balanceOf(account).call((error, result) => {
 				if (!error) {
 					dispatch({
