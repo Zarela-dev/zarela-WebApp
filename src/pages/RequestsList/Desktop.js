@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import RequestCard from '../../components/RequestCard/RequestCard';
 import styled from 'styled-components';
 import TokenInfoSidebar from '../../components/Sidebar/TokenInfo';
-import TokenStatsSidebar from '../../components/Sidebar/TokenStats';
 import Pagination from '../../components/Pagination';
 import maxWidthWrapper from '../../components/Elements/MaxWidth';
 import { timeSince } from '../../utils';
@@ -107,11 +106,6 @@ const useStyles = makeStyles({
 	},
 });
 
-const HightLight = styled.span`
-	color: red;
-	text-decoration: ${(props) => (props.underline ? 'underline' : 'unset')};
-`;
-
 const steps = [
 	{
 		selector: '[data-tour="request-list-one"]',
@@ -128,13 +122,7 @@ const steps = [
 	{
 		selector: '[data-tour="request-list-four"]',
 		title: 'hello',
-		content: (
-			<>
-				This number indicates the number of BBit tokens{' '}
-				<HightLight underline>that are to be paid by the mage</HightLight> to each angel who sends the
-				appropriate response.
-			</>
-		),
+		content: 'This number indicates the number of BBit tokens that are to be paid by the mage to each angel who sends the	appropriate response.'
 	},
 	{
 		selector: '[data-tour="request-list-five"]',
@@ -142,11 +130,7 @@ const steps = [
 	},
 	{
 		selector: '[data-tour="request-list-six"]',
-		content: (
-			<>
-				This number indicates the total number of responses sent <HightLight>to this request.</HightLight>
-			</>
-		),
+		content: 'This number indicates the total number of responses sent to this request.',
 	},
 	{
 		selector: '[data-tour="request-list-seven"]',
@@ -158,12 +142,7 @@ const steps = [
 	},
 	{
 		selector: '[data-tour="request-list-nine"]',
-		content: (
-			<>
-				This section displays information about the total number of biobit tokens,{' '}
-				<HightLight>biobit token name and code</HightLight>and your own Wallet balance.
-			</>
-		),
+		content: 'This section displays information about the total number of biobit tokens, biobit token name and code and your own Wallet balance.'
 	},
 	{
 		selector: '',
