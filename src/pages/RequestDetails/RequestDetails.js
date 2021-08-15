@@ -46,19 +46,16 @@ const RequestDetailsPage = () => {
 						reader.onloadend = async () => {
 							const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
 							const buff = Buffer(reader.result); // Convert data into buffer
+							// generate AES related keys
 							const AES_IV = ZRNG();
 							const AES_KEY = ZRNG();
 
 							// file encryption
-
 							var twF = twofish(AES_IV),
-								encryptedFile = twF.encryptCBC(AES_KEY, buff);
+								encryptedFile = twF.encryptCBC(AES_KEY, buff); /* twF.encryptCBC expects an array */
 
-							console.log('buff', buff);
-							console.log('encryptedFile', encryptedFile);
-							
 							try {
-								// AES key encryption
+								// AES key encryption using Metamask
 								const encryptedAesKey = ethUtil.bufferToHex(
 									Buffer.from(
 										JSON.stringify(
@@ -72,6 +69,11 @@ const RequestDetailsPage = () => {
 									)
 								);
 
+								/* 
+									to download file later (in the inbox page) with proper name and extension,
+									here we store these meta information in an object on IPFS then we store this IPFS
+									hash on the blockchain using our SC contribute method.
+								*/
 								const fileStuff = {
 									AES_KEY: encryptedAesKey,
 									AES_IV,
@@ -81,13 +83,13 @@ const RequestDetailsPage = () => {
 								};
 
 								setDialogMessage('uploading to ipfs');
+								/* encrypted is an array */
 								const fileResponse = await ipfs.add(encryptedFile);
 								const fileStuffResponse = await ipfs.add(JSON.stringify(fileStuff));
 
 								let url = `${process.env.REACT_APP_IPFS_LINK + fileResponse.path}`;
-								console.log(`Document Of Conditions --> ${url}`);
+								console.log(`uploaded document --> ${url}`);
 
-								// // const doc = document.getElementById("_White_Paper");
 								setDialogMessage('awaiting confirmation');
 								appState.contract.methods
 									.contribute(

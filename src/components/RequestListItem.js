@@ -287,19 +287,23 @@ const RequestListItem = ({
 	};
 
 	const signalDownloadHandler = async (fileHash, fileStuffPath) => {
-		// Start file download.
 		try {
+			/* fetch signal metadata from IPFS */
 			const fileStuffRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileStuffPath}`);
 			const { AES_KEY, AES_IV, FILE_NAME, FILE_EXT } = fileStuffRes.data;
 
+			/* decrypt secret key using metamask*/
 			const AesDecryptedKey = await window.ethereum.request({
 				method: 'eth_decrypt',
 				params: [AES_KEY, account],
 			});
 
 			var twF = twofish(Object.values(AES_IV));
+			/*
+			 in order to remove  the extra headers that IPFS sets on response payload, responseType: blob 
+			*/
 			const fileRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileHash}`, { responseType: 'blob' });
-
+			/* then to convert the blob into array buffer we use FileReader API */
 			var fileReader = new FileReader();
 
 			fileReader.readAsArrayBuffer(fileRes.data);
@@ -307,15 +311,17 @@ const RequestListItem = ({
 			fileReader.onloadend = () => {
 				var buffer = Buffer(fileReader.result);
 
+				/* decryptCBC input file must be array */
 				var decrypted = twF.decryptCBC(
 					AesDecryptedKey.split(',').map((item) => Number(item)),
 					buffer
 				);
 
-				saveByteArray(decrypted, `${FILE_NAME}.${FILE_EXT}`);
+				downloadFile(decrypted, `${FILE_NAME}.${FILE_EXT}`);
 			};
 
-			async function getDownloadUrl(buff) {
+			/* https://stackoverflow.com/a/9458996 */
+			function getDownloadUrl(buff) {
 				function _arrayBufferToBase64(buffer) {
 					var binary = '';
 					var bytes = new Uint8Array(buffer);
@@ -325,10 +331,14 @@ const RequestListItem = ({
 					}
 					return window.btoa(binary);
 				}
+				/*
+					we use application/octet-stream here because we will encounter files that don't have 
+					proper MIME types such as .edf
+				*/
 				return `data:application/octet-stream;base64,${_arrayBufferToBase64(buff)}`;
 			}
 
-			var saveByteArray = (function () {
+			var downloadFile = (function () {
 				var anchorTag = document.createElement('a');
 				document.body.appendChild(anchorTag);
 				anchorTag.style = 'display: none';
