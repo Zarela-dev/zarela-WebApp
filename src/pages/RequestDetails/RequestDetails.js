@@ -51,9 +51,12 @@ const RequestDetailsPage = () => {
 
 							// file encryption
 
-							// var twF = twofish(AES_IV),
-							// 	encryptedFile = twF.encryptCBC(AES_KEY, buff);
+							var twF = twofish(AES_IV),
+								encryptedFile = twF.encryptCBC(AES_KEY, buff);
 
+							console.log('buff', buff);
+							console.log('encryptedFile', encryptedFile);
+							
 							try {
 								// AES key encryption
 								const encryptedAesKey = ethUtil.bufferToHex(
@@ -76,9 +79,9 @@ const RequestDetailsPage = () => {
 									FILE_NAME: getFileNameWithExt(sendSignalRef)[0],
 									FILE_MIMETYPE: getFileNameWithExt(sendSignalRef)[2],
 								};
-								
+
 								setDialogMessage('uploading to ipfs');
-								const fileResponse = await ipfs.add(buff);
+								const fileResponse = await ipfs.add(encryptedFile);
 								const fileStuffResponse = await ipfs.add(JSON.stringify(fileStuff));
 
 								let url = `${process.env.REACT_APP_IPFS_LINK + fileResponse.path}`;
