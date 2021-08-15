@@ -29,6 +29,8 @@ import caretDownIcon from '../assets/icons/caret-down.svg';
 import fulfilledIcon from '../assets/icons/check-green.svg';
 import _ from 'lodash';
 import { twofish } from 'twofish';
+import { create } from 'ipfs-http-client';
+import { deflateSync } from 'zlib';
 
 const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
@@ -283,224 +285,68 @@ const RequestListItem = ({
 		if (type === 'check') setSelected((values) => [...values, originalIndex]);
 		if (type === 'uncheck') setSelected((values) => values.filter((item) => +item !== +originalIndex));
 	};
-	function download(data, strFileName, strMimeType) {
-		var self = window, // this script is only for browsers anyway...
-			u = 'application/octet-stream', // this default mime also triggers iframe downloads
-			m = strMimeType || u,
-			x = data,
-			D = document,
-			a = D.createElement('a'),
-			z = function (a) {
-				return String(a);
-			},
-			B = self.Blob || self.MozBlob || self.WebKitBlob || z,
-			BB = self.MSBlobBuilder || self.WebKitBlobBuilder || self.BlobBuilder,
-			fn = strFileName || 'download',
-			blob,
-			b,
-			ua,
-			fr;
 
-		//if(typeof B.bind === 'function' ){ B=B.bind(self); }
-
-		if (String(this) === 'true') {
-			//reverse arguments, allowing download.bind(true, "text/xml", "export.xml") to act as a callback
-			x = [x, m];
-			m = x[0];
-			x = x[1];
-		}
-
-		//go ahead and download dataURLs right away
-		if (String(x).match(/^data\:[\w+\-]+\/[\w+\-]+[,;]/)) {
-			return navigator.msSaveBlob // IE10 can't do a[download], only Blobs:
-				? navigator.msSaveBlob(d2b(x), fn)
-				: saver(x); // everyone else can save dataURLs un-processed
-		} //end if dataURL passed?
-
-		try {
-			blob = x instanceof B ? x : new B([x], { type: m });
-		} catch (y) {
-			if (BB) {
-				b = new BB();
-				b.append([x]);
-				blob = b.getBlob(m); // the blob
-			}
-		}
-
-		function d2b(u) {
-			var p = u.split(/[:;,]/),
-				t = p[1],
-				dec = p[2] == 'base64' ? atob : decodeURIComponent,
-				bin = dec(p.pop()),
-				mx = bin.length,
-				i = 0,
-				uia = new Uint8Array(mx);
-
-			for (i; i < mx; ++i) uia[i] = bin.charCodeAt(i);
-
-			return new B([uia], { type: t });
-		}
-
-		function saver(url, winMode) {
-			if ('download' in a) {
-				//html5 A[download]
-				a.href = url;
-				a.setAttribute('download', fn);
-				a.innerHTML = 'downloading...';
-				D.body.appendChild(a);
-				setTimeout(function () {
-					a.click();
-					D.body.removeChild(a);
-					if (winMode === true) {
-						setTimeout(function () {
-							self.URL.revokeObjectURL(a.href);
-						}, 250);
-					}
-				}, 66);
-				return true;
-			}
-
-			//do iframe dataURL download (old ch+FF):
-			var f = D.createElement('iframe');
-			D.body.appendChild(f);
-			if (!winMode) {
-				// force a mime that will download:
-				url = 'data:' + url.replace(/^data:([\w\/\-\+]+)/, u);
-			}
-
-			f.src = url;
-			setTimeout(function () {
-				D.body.removeChild(f);
-			}, 333);
-		} //end saver
-
-		if (navigator.msSaveBlob) {
-			// IE10+ : (has Blob, but not a[download] or URL)
-			return navigator.msSaveBlob(blob, fn);
-		}
-
-		if (self.URL) {
-			// simple fast and modern way using Blob and URL:
-			saver(self.URL.createObjectURL(blob), true);
-		} else {
-			// handle non-Blob()+non-URL browsers:
-			if (typeof blob === 'string' || blob.constructor === z) {
-				try {
-					return saver('data:' + m + ';base64,' + self.btoa(blob));
-				} catch (y) {
-					return saver('data:' + m + ',' + encodeURIComponent(blob));
-				}
-			}
-
-			// Blob but not URL:
-			fr = new FileReader();
-			fr.onload = function (e) {
-				saver(this.result);
-			};
-			fr.readAsDataURL(blob);
-		}
-		return true;
-	}
 	const signalDownloadHandler = async (fileHash, fileStuffPath) => {
 		// Start file download.
 		try {
 			const fileStuffRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileStuffPath}`);
-			// const fileRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileHash}`);
-			const fileStuffData = fileStuffRes.data;
+			const { AES_KEY, AES_IV, FILE_NAME, FILE_EXT } = fileStuffRes.data;
 
-			window.ethereum
-				.request({
-					method: 'eth_decrypt',
-					params: [fileStuffData.AES_KEY, account],
-				})
-				.then((AesDecryptedKey) => {
-					var twF = twofish(Object.values(fileStuffData.AES_IV));
+			const AesDecryptedKey = await window.ethereum.request({
+				method: 'eth_decrypt',
+				params: [AES_KEY, account],
+			});
 
-					// var decrypted = twF.decryptCBC(
-					// 	AesDecryptedKey.split(',').map((item) => Number(item)),
-					// 	Buffer.from(fileRes.data)
-					// );
+			var twF = twofish(Object.values(AES_IV));
+			const fileRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileHash}`, { responseType: 'blob' });
 
-					async function _getDownloadUrl(buff) {
-						// var byteString = atob(buff);
-						// var ab = new ArrayBuffer(byteString.length);
-						// var ia = new Uint8Array(ab);
-						// var buff = Buffer.from(base64, 'base64');
-						// var contributionFileExt = await fileType.fromBuffer(buff);
-						// for (var i = 0; i < byteString.length; i++) {
-						// 	ia[i] = byteString.charCodeAt(i);
-						// }
-						function _arrayBufferToBase64(buffer) {
-							var binary = '';
-							var bytes = new Uint8Array(buffer);
-							var len = bytes.byteLength;
-							for (var i = 0; i < len; i++) {
-								binary += String.fromCharCode(bytes[i]);
-							}
-							return window.btoa(binary);
-						}
-						// var base64 = btoa(
-						// 	new Uint8Array(decrypted).reduce((data, byte) => data + String.fromCharCode(byte), '')
-						// );
-						// const mime =
-						// 	fileStuffData.FILE_MIMETYPE && fileStuffData.FILE_MIMETYPE.trim().length === 0
-						// 		? 'application/octet-stream'
-						// 		: `${fileStuffData.FILE_MIMETYPE}`;
-						// var blob = new Blob([buff], {
-						// 	// type: fileStuffData.FILE_EXT,
-						// 	type: mime,
-						// });
-						// console.log(mime);
-						// let href = URL.createObjectURL(blob);
-						// window.open(href);
-						// return href;
+			var fileReader = new FileReader();
 
-						return `data:application/pdf;base64,${_arrayBufferToBase64(buff)}`;
+			fileReader.readAsArrayBuffer(fileRes.data);
+
+			fileReader.onloadend = () => {
+				var buffer = Buffer(fileReader.result);
+
+				var decrypted = twF.decryptCBC(
+					AesDecryptedKey.split(',').map((item) => Number(item)),
+					buffer
+				);
+
+				saveByteArray(decrypted, `${FILE_NAME}.${FILE_EXT}`);
+			};
+
+			async function getDownloadUrl(buff) {
+				function _arrayBufferToBase64(buffer) {
+					var binary = '';
+					var bytes = new Uint8Array(buffer);
+					var len = bytes.byteLength;
+					for (var i = 0; i < len; i++) {
+						binary += String.fromCharCode(bytes[i]);
 					}
-					function getDownloadUrl(file) {
-						var blob = new Blob([file], { type: 'application/pdf' });
-						var objectUrl = URL.createObjectURL(blob);
-						window.open(objectUrl);
+					return window.btoa(binary);
+				}
+				return `data:application/octet-stream;base64,${_arrayBufferToBase64(buff)}`;
+			}
+
+			var saveByteArray = (function () {
+				var anchorTag = document.createElement('a');
+				document.body.appendChild(anchorTag);
+				anchorTag.style = 'display: none';
+
+				return async function (file, name) {
+					try {
+						var url = await getDownloadUrl(file);
+
+						anchorTag.href = url;
+						anchorTag.download = name;
+						anchorTag.click();
+					} catch (error) {
+						console.error(error);
 					}
-
-					var saveByteArray = (function () {
-						var anchorTag = document.createElement('a');
-						document.body.appendChild(anchorTag);
-						anchorTag.style = 'display: none';
-
-						return async function (file, name) {
-							try {
-								// var url = await _getDownloadUrl(file);
-								var url = await getDownloadUrl(file);
-
-								anchorTag.href = url;
-								anchorTag.download = name;
-								anchorTag.click();
-							} catch (error) {
-								console.error(error);
-							}
-						};
-					})();
-
-
-					var xhr = new XMLHttpRequest();
-					xhr.addEventListener('readystatechange', function () {
-						if (this.readyState === 4) {
-							var blob = new Blob([this.responseText], { type: 'application/pdf' });
-							var objectUrl = URL.createObjectURL(blob);
-							window.open(objectUrl);
-						}
-					});
-
-					xhr.open('GET', process.env.REACT_APP_IPFS_LINK  + fileHash);
-
-					xhr.send();
-				})
-				.catch(function (error) {
-					console.error(error);
-				});
+				};
+			})();
 		} catch (error) {
-			console.log(error.message);
+			console.error(error);
 		}
 	};
 
