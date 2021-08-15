@@ -215,7 +215,7 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
 					<TitleContent>Description</TitleContent>
 					<Description>{request.description}</Description>
 				</DescriptionContainer>
-				<PublicKeyBadge>
+				<PublicKeyBadge data-tour="request-details-one">
 					<PublicKeyIcon src={publicKeyIcon} />
 					<CopyableText textToCopy={request.requesterAddress}>
 						<PublicKeyTextContainer>
