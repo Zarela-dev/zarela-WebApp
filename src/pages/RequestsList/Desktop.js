@@ -9,8 +9,6 @@ import homepageBg from '../../assets/home-bg.jpg';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 import ZarelaDayBox from '../../components/ZarelaDayBox';
-import Guide from './../../components/Guide/Guide';
-import { useLocation } from 'react-router';
 
 const RequestsListWrapper = styled.div`
 	position: relative;
@@ -106,50 +104,6 @@ const useStyles = makeStyles({
 	},
 });
 
-const steps = [
-	{
-		selector: '[data-tour="request-list-one"]',
-		content: 'A Request card contains all information regarding the request.',
-	},
-	{
-		selector: '[data-tour="request-list-two"]',
-		content: 'The unique ID assigned to each request.',
-	},
-	{
-		selector: '[data-tour="request-list-three"]',
-		content: 'The title given to each request submitted by the mage.',
-	},
-	{
-		selector: '[data-tour="request-list-four"]',
-		title: 'hello',
-		content: 'This number indicates the number of BBit tokens that are to be paid by the mage to each angel who sends the	appropriate response.'
-	},
-	{
-		selector: '[data-tour="request-list-five"]',
-		content: 'This number indicates the number of approved responses sent by angels.',
-	},
-	{
-		selector: '[data-tour="request-list-six"]',
-		content: 'This number indicates the total number of responses sent to this request.',
-	},
-	{
-		selector: '[data-tour="request-list-seven"]',
-		content: 'You can click here to see more information about applying and participating.',
-	},
-	{
-		selector: '[data-tour="request-list-eight"]',
-		content: 'Clicking on this icon will bookmark selected request.',
-	},
-	{
-		selector: '[data-tour="request-list-nine"]',
-		content: 'This section displays information about the total number of biobit tokens, biobit token name and code and your own Wallet balance.'
-	},
-	{
-		selector: '',
-		content:
-			'Well done! You earn 100 Biobits for this learning! want to earn more? learn every guide on pages and collect about 500 BBits!',
-	},
-];
 
 const Desktop = ({
 	requests,
@@ -164,8 +118,6 @@ const Desktop = ({
 }) => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const classes = useStyles(props);
-	const [guideIsOpen, setGuideIsOpen] = useState(true);
-	const location = useLocation();
 
 	const currentTableData = useMemo(() => {
 		const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
@@ -178,9 +130,6 @@ const Desktop = ({
 	return (
 		<RequestsListWrapper isLoading={isLoading}>
 			{!isLoading && <Background />}
-			{isLoading === false && !localStorage.getItem('guide/' + location.pathname.split('/')[1]) ? (
-				<Guide steps={steps} {...{ guideIsOpen, setGuideIsOpen }} />
-			) : null}
 			<RequestsListLayout>
 				{isLoading ? (
 					<RequestListSidebarWrapper>

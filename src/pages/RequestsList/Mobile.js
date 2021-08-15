@@ -129,6 +129,7 @@ const useStyles = makeStyles({
 	},
 });
 
+
 const App = ({ requests, isLoading, appState, props, PAGE_SIZE }) => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const classes = useStyles(props);
