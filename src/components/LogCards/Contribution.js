@@ -25,14 +25,15 @@ import {
 	Table,
 	TableCellWrapper,
 	TableCell,
-	TableRow,TableTimestamp,
+	TableRow,
+	TableTimestamp,
 	TableBulkRow,
 } from './Elements';
 import { Spacer } from '../Elements/Spacer';
 import { timeSince } from '../../utils';
 
 const LogCard = ({ data }) => {
-	const { requestID, title, tokenPay, contributions } = data;
+	const { requestID, title, angelTokenPay, laboratoryTokenPay, contributions } = data;
 	const [isOpen, setOpen] = useState(false);
 	const totalPending = contributions.filter((item) => item.status === false).length;
 	const totalConfirmed = contributions.filter((item) => item.status === true).length;
@@ -57,8 +58,10 @@ const LogCard = ({ data }) => {
 							<QuickReport variant="confirmed">{`all ${contributions.length} are confirmed.`}</QuickReport>
 						) : (
 							<>
-								<QuickReportTitle variant='primary'>{`${totalPending + totalConfirmed} files: `}</QuickReportTitle>
-								<QuickReport variant='primary'>{` ${totalConfirmed} approved, ${totalPending} pending `}</QuickReport>
+								<QuickReportTitle variant="primary">{`${
+									totalPending + totalConfirmed
+								} files: `}</QuickReportTitle>
+								<QuickReport variant="primary">{` ${totalConfirmed} approved, ${totalPending} pending `}</QuickReport>
 							</>
 						)}
 					</Row>
@@ -67,8 +70,16 @@ const LogCard = ({ data }) => {
 				<Column displayFlex flex="0">
 					<Row>
 						<BiobitIcon src={biobitIcon} />
-						<BiobitValue>{tokenPay}</BiobitValue>
-						<DollarValue>{`~ $${tokenPay}`}</DollarValue>
+						<BiobitValue>{angelTokenPay}</BiobitValue>
+						<DollarValue>{`~ $${angelTokenPay}`}</DollarValue>
+					</Row>
+				</Column>
+				<VerticalDivider />
+				<Column displayFlex flex="0">
+					<Row>
+						<BiobitIcon src={biobitIcon} />
+						<BiobitValue>{laboratoryTokenPay}</BiobitValue>
+						<DollarValue>{`~ $${laboratoryTokenPay}`}</DollarValue>
 					</Row>
 				</Column>
 				<VerticalDivider />

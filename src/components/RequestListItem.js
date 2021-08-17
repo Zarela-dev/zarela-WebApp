@@ -160,7 +160,8 @@ const RequestListItem = ({
 	total,
 	requestID,
 	title,
-	tokenPay,
+	angelTokenPay,
+	laboratoryTokenPay,
 	contributors,
 	handleConfirm,
 	fulfilled,
@@ -369,9 +370,12 @@ const RequestListItem = ({
 						.call({ from: account }, (fileError, files) => {
 							if (!fileError) {
 								let addresses = orderInfo[0];
-								let timestamp = orderInfo[1];
-								let status = orderInfo[2];
-
+								let laboratories = orderInfo[1];
+								let whoGainedReward = orderInfo[3];
+								let timestamp = orderInfo[2];
+								let status = orderInfo[4];
+								let zarelaDay = orderInfo[5];
+								
 								let formatted = {};
 								let uniqueAddresses = [...new Set(addresses)];
 								let pairs = [];
@@ -443,9 +447,19 @@ const RequestListItem = ({
 					<BiobitToDollarPair>
 						<BadgeRow>
 							<TokenIcon src={biobitIcon} />
-							<TokenValue>{tokenPay}</TokenValue>
+							<TokenValue>{angelTokenPay}</TokenValue>
 							<ValueLabel>BBit</ValueLabel>
-							<BiobitToDollarValue noMargin>{'~ $' + tokenPay}</BiobitToDollarValue>
+							<BiobitToDollarValue noMargin>{'~ $' + angelTokenPay}</BiobitToDollarValue>
+						</BadgeRow>
+					</BiobitToDollarPair>
+
+					<Divider />
+					<BiobitToDollarPair>
+						<BadgeRow>
+							<TokenIcon src={biobitIcon} />
+							<TokenValue>{laboratoryTokenPay}</TokenValue>
+							<ValueLabel>BBit</ValueLabel>
+							<BiobitToDollarValue noMargin>{'~ $' + laboratoryTokenPay}</BiobitToDollarValue>
 						</BadgeRow>
 					</BiobitToDollarPair>
 

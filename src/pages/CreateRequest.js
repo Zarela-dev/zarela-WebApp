@@ -49,7 +49,8 @@ const CreateRequest = () => {
 		initialValues: {
 			title: '',
 			desc: '',
-			tokenPay: '',
+			angelTokenPay: '',
+			laboratoryTokenPay: '',
 			instanceCount: '',
 			category: [],
 			zpaper: '',
@@ -77,8 +78,8 @@ const CreateRequest = () => {
 		onSubmit: (values) => {
 			console.log('values', values);
 			if (formik.isValid) {
-				if (+values.tokenPay * +values.instanceCount > +appState.biobitBalance / Math.pow(10, 9)) {
-					formik.setFieldError('tokenPay', validationErrors.notEnoughTokens);
+				if ((+values.angelTokenPay + +values.angelTokenPay) * +values.instanceCount > +appState.biobitBalance / Math.pow(10, 9)) {
+					formik.setFieldError('angelTokenPay', validationErrors.notEnoughTokens);
 					formik.setSubmitting(false);
 				} else {
 					if (!values.terms) {

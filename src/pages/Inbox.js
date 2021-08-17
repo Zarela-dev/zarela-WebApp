@@ -43,7 +43,7 @@ const Inbox = () => {
 				}
 			});
 		appState.contract.events
-			.transfer({})
+			.Transfer({})
 			.on('data', (event) => {
 				toast(`tokens were successfully sent to ${event.returnValues[1]}`, 'success', false, null, {
 					toastId: event.id,
@@ -77,14 +77,15 @@ const Inbox = () => {
 										const requestTemplate = {
 											requestID: result[0],
 											title: result[1],
-											description: result[6],
+											description: result[7],
 											requesterAddress: result[2],
-											tokenPay: result[3],
-											totalContributors: result[4], // total contributors required
-											totalContributed: +result[4] - +result[7],
-											whitePaper: result[5],
-											timestamp: result[9],
-											totalContributedCount: result[8],
+											angelTokenPay: convertToBiobit(result[3]),
+											laboratoryTokenPay: convertToBiobit(result[4]),
+											totalContributors: result[5], // total contributors required
+											totalContributed: +result[5] - +result[8],
+											whitePaper: result[6],
+											timestamp: result[10],
+											totalContributedCount: result[9],
 										};
 										requestsListObject[requestTemplate.requestID] = requestTemplate;
 									})
@@ -128,7 +129,8 @@ const Inbox = () => {
 								key={item.requestID}
 								requestID={item.requestID}
 								title={item.title}
-								tokenPay={convertToBiobit(item.tokenPay)}
+								angelTokenPay={item.angelTokenPay}
+								laboratoryTokenPay={item.laboratoryTokenPay}
 								total={item.totalContributedCount}
 								contributors={`${item.totalContributed}/${item.totalContributors}`}
 								fulfilled={+item.totalContributed === +item.totalContributors}

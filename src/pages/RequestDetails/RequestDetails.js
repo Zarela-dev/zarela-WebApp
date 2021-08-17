@@ -171,6 +171,7 @@ const RequestDetailsPage = () => {
 									whitePaper: result[6],
 									timestamp: result[10],
 									categories,
+									encryptionPublicKey: result[11],
 									totalContributedCount: result[9],
 								};
 								setRequest(requestTemplate);

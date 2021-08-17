@@ -22,7 +22,16 @@ import { Spacer } from '../Elements/Spacer';
 import { timeSince } from '../../utils';
 
 const LogCard = ({ data }) => {
-	const { requestID, title, tokenPay, timestamp, totalContributors, totalContributed, totalContributedCount } = data;
+	const {
+		requestID,
+		title,
+		angelTokenPay,
+		laboratoryTokenPay,
+		timestamp,
+		totalContributors,
+		totalContributed,
+		totalContributedCount,
+	} = data;
 	const getVariant = () => {
 		if (+totalContributedCount === 0) return 'primary';
 		if (+totalContributed === +totalContributors) return 'confirmed'; // fulfilled
@@ -51,8 +60,16 @@ const LogCard = ({ data }) => {
 				<Column displayFlex flex="0">
 					<Row>
 						<BiobitIcon src={biobitIcon} />
-						<BiobitValue>{tokenPay}</BiobitValue>
-						<DollarValue>{`~ $${tokenPay}`}</DollarValue>
+						<BiobitValue>{angelTokenPay}</BiobitValue>
+						<DollarValue>{`~ $${angelTokenPay}`}</DollarValue>
+					</Row>
+				</Column>
+				<VerticalDivider hide />
+				<Column displayFlex flex="0">
+					<Row>
+						<BiobitIcon src={biobitIcon} />
+						<BiobitValue>{laboratoryTokenPay}</BiobitValue>
+						<DollarValue>{`~ $${laboratoryTokenPay}`}</DollarValue>
 					</Row>
 				</Column>
 				<VerticalDivider hide />

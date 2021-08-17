@@ -36,9 +36,11 @@ const Contributes = () => {
 							const requests = [];
 							const getRequestFiles = (requestContributions) => {
 								let addresses = requestContributions[0];
-								let timestamps = requestContributions[1];
-								let status = requestContributions[2];
-								let zarelaDay = requestContributions[3];
+								let laboratories = requestContributions[1];
+								let whoGainedReward = requestContributions[3];
+								let timestamps = requestContributions[2];
+								let status = requestContributions[4];
+								let zarelaDay = requestContributions[5];
 
 								let formatted = {};
 								addresses.forEach((address, originalIndex) => {
@@ -70,18 +72,19 @@ const Contributes = () => {
 									let contributions = await appState.contract.methods
 										.getOrderData(currentRequest)
 										.call({ from: account });
-
+									// #to-do improve readability #chaiidi
 									const requestTemplate = {
 										requestID: requestInfo[0],
 										title: requestInfo[1],
-										description: requestInfo[6],
+										description: requestInfo[7],
 										requesterAddress: requestInfo[2],
-										tokenPay: convertToBiobit(requestInfo[3]),
-										totalContributors: requestInfo[4],
-										totalContributed: +requestInfo[4] - +requestInfo[7],
-										whitePaper: requestInfo[5],
-										timestamp: requestInfo[9],
-										totalContributedCount: requestInfo[8],
+										angelTokenPay: convertToBiobit(requestInfo[3]),
+										laboratoryTokenPay: convertToBiobit(requestInfo[4]),
+										totalContributors: requestInfo[5], // total contributors required
+										totalContributed: +requestInfo[5] - +requestInfo[8],
+										whitePaper: requestInfo[6],
+										timestamp: requestInfo[10],
+										totalContributedCount: requestInfo[9],
 										// files contributed on this request filtered by current user
 										contributions: getRequestFiles(contributions),
 									};
