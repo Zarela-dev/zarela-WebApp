@@ -94,6 +94,8 @@ const RequestDetailsPage = () => {
 								appState.contract.methods
 									.contribute(
 										request.requestID,
+										account, // angel
+										account, // laboratory
 										request.requesterAddress,
 										fileResponse.path,
 										fileStuffResponse.path
@@ -163,7 +165,7 @@ const RequestDetailsPage = () => {
 									description: result[7],
 									requesterAddress: result[2],
 									angelTokenPay: convertToBiobit(result[3]),
-									labTokenPay: convertToBiobit(result[4]),
+									laboratoryTokenPay: convertToBiobit(result[4]),
 									totalContributors: result[5], // total contributors required
 									totalContributed: +result[5] - +result[8],
 									whitePaper: result[6],

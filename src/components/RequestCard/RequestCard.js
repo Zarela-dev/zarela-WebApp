@@ -78,11 +78,11 @@ const RequestCard = (props) => {
 				<BiobitToDollarPair>
 					<BadgeRow>
 						<TokenIcon src={biobitIcon} />
-						<TokenValue>{props.labTokenPay}</TokenValue>
+						<TokenValue>{props.laboratoryTokenPay}</TokenValue>
 						<ValueLabel>BBit</ValueLabel>
 					</BadgeRow>
 					<BadgeRow>
-						<BiobitToDollarValue>{`~ $ ${props.labTokenPay}`}</BiobitToDollarValue>
+						<BiobitToDollarValue>{`~ $ ${props.laboratoryTokenPay}`}</BiobitToDollarValue>
 					</BadgeRow>
 				</BiobitToDollarPair>
 				<Divider />
