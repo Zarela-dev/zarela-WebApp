@@ -447,24 +447,12 @@ const RequestListItem = ({
 					<BiobitToDollarPair>
 						<BadgeRow>
 							<TokenIcon src={biobitIcon} />
-							<TokenValue>{angelTokenPay}</TokenValue>
+							<TokenValue>{+angelTokenPay + +laboratoryTokenPay}</TokenValue>
 							<ValueLabel>BBit</ValueLabel>
-							<BiobitToDollarValue noMargin>{'~ $' + angelTokenPay}</BiobitToDollarValue>
+							<BiobitToDollarValue noMargin>{`~ $${+angelTokenPay + +laboratoryTokenPay}`}</BiobitToDollarValue>
 						</BadgeRow>
 					</BiobitToDollarPair>
-
 					<Divider />
-					<BiobitToDollarPair>
-						<BadgeRow>
-							<TokenIcon src={biobitIcon} />
-							<TokenValue>{laboratoryTokenPay}</TokenValue>
-							<ValueLabel>BBit</ValueLabel>
-							<BiobitToDollarValue noMargin>{'~ $' + laboratoryTokenPay}</BiobitToDollarValue>
-						</BadgeRow>
-					</BiobitToDollarPair>
-
-					<Divider />
-
 					<CustomContributeBadge>
 						<BadgeRow>
 							<ContributorsIcon src={contributorIcon} />

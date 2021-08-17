@@ -45,13 +45,8 @@ const LogCardMobile = ({ data }) => {
 					</MobileRow>
 					<MobileRow>
 						<MobileBiobitIcon src={biobitIcon} />
-						<MobileBiobitValue>{angelTokenPay}</MobileBiobitValue>
-						<MobileBiobitValue>{`~ $${angelTokenPay}`}</MobileBiobitValue>
-					</MobileRow>
-					<MobileRow>
-						<MobileBiobitIcon src={biobitIcon} />
-						<MobileBiobitValue>{laboratoryTokenPay}</MobileBiobitValue>
-						<MobileBiobitValue>{`~ $${laboratoryTokenPay}`}</MobileBiobitValue>
+						<MobileBiobitValue>{+angelTokenPay + +laboratoryTokenPay}</MobileBiobitValue>
+						<MobileBiobitValue>{`~ $${+angelTokenPay + +laboratoryTokenPay}`}</MobileBiobitValue>
 					</MobileRow>
 					{+totalContributedCount === 0 ? (
 						<MobileRow>

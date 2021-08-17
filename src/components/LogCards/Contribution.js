@@ -70,16 +70,8 @@ const LogCard = ({ data }) => {
 				<Column displayFlex flex="0">
 					<Row>
 						<BiobitIcon src={biobitIcon} />
-						<BiobitValue>{angelTokenPay}</BiobitValue>
-						<DollarValue>{`~ $${angelTokenPay}`}</DollarValue>
-					</Row>
-				</Column>
-				<VerticalDivider />
-				<Column displayFlex flex="0">
-					<Row>
-						<BiobitIcon src={biobitIcon} />
-						<BiobitValue>{laboratoryTokenPay}</BiobitValue>
-						<DollarValue>{`~ $${laboratoryTokenPay}`}</DollarValue>
+						<BiobitValue>{+angelTokenPay + +laboratoryTokenPay }</BiobitValue>
+						<DollarValue>{`~ $${+angelTokenPay + +laboratoryTokenPay }`}</DollarValue>
 					</Row>
 				</Column>
 				<VerticalDivider />
