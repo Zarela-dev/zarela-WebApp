@@ -85,10 +85,20 @@ const RequestCardMobile = (props) => {
 				<BiobitToDollarPair>
 					<BadgeRow>
 						<TokenIcon src={biobitIcon} />
-						<TokenValue>{props.tokenPay}</TokenValue>
+						<TokenValue>{props.angelTokenPay}</TokenValue>
 					</BadgeRow>
 					<BadgeRow>
-						<BiobitToDollarValue>{`~ $ ${props.tokenPay}`}</BiobitToDollarValue>
+						<BiobitToDollarValue>{`~ $ ${props.angelTokenPay}`}</BiobitToDollarValue>
+					</BadgeRow>
+				</BiobitToDollarPair>
+				<Divider />
+				<BiobitToDollarPair>
+					<BadgeRow>
+						<TokenIcon src={biobitIcon} />
+						<TokenValue>{props.labTokenPay}</TokenValue>
+					</BadgeRow>
+					<BadgeRow>
+						<BiobitToDollarValue>{`~ $ ${props.labTokenPay}`}</BiobitToDollarValue>
 					</BadgeRow>
 				</BiobitToDollarPair>
 				<Divider />

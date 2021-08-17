@@ -179,8 +179,15 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
 							<Spacer />
 							<CustomBadgeRow>
 								<TokenIcon src={biobitIcon} />
-								<TokenValue>{request.tokenPay}</TokenValue>
-								<BiobitToDollarValue noMargin>{`= $ ${request.tokenPay}`}</BiobitToDollarValue>
+								<TokenValue>{request.angelTokenPay}</TokenValue>
+								<BiobitToDollarValue noMargin>{`= $ ${request.angelTokenPay}`}</BiobitToDollarValue>
+							</CustomBadgeRow>
+							<CustomDivider />
+
+							<CustomBadgeRow>
+								<TokenIcon src={biobitIcon} />
+								<TokenValue>{request.labTokenPay}</TokenValue>
+								<BiobitToDollarValue noMargin>{`= $ ${request.labTokenPay}`}</BiobitToDollarValue>
 							</CustomBadgeRow>
 						</CustomFooter>
 						<CustomProgressTrackerWrapper>

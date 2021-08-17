@@ -43,7 +43,7 @@ const Inbox = () => {
 				}
 			});
 		appState.contract.events
-			.Transfer({})
+			.transfer({})
 			.on('data', (event) => {
 				toast(`tokens were successfully sent to ${event.returnValues[1]}`, 'success', false, null, {
 					toastId: event.id,

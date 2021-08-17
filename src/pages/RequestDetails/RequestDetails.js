@@ -116,7 +116,7 @@ const RequestDetailsPage = () => {
 									);
 
 								appState.contract.events
-									.Contributed({})
+									.contributed({})
 									.on('data', (event) => {
 										clearSubmitDialog();
 										toast(
@@ -160,16 +160,16 @@ const RequestDetailsPage = () => {
 								const requestTemplate = {
 									requestID: result[0],
 									title: result[1],
-									description: result[6],
+									description: result[7],
 									requesterAddress: result[2],
-									tokenPay: convertToBiobit(result[3]),
-									totalContributors: result[4], // total contributors required
-									totalContributed: +result[4] - +result[7],
-									whitePaper: result[5],
-									timestamp: result[9],
-									encryptionPublicKey: result[10],
+									angelTokenPay: convertToBiobit(result[3]),
+									labTokenPay: convertToBiobit(result[4]),
+									totalContributors: result[5], // total contributors required
+									totalContributed: +result[5] - +result[8],
+									whitePaper: result[6],
+									timestamp: result[10],
 									categories,
-									totalContributedCount: result[8],
+									totalContributedCount: result[9],
 								};
 								setRequest(requestTemplate);
 							} else {

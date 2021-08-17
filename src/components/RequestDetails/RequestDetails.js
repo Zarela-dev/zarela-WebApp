@@ -179,9 +179,16 @@ const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, 
 						<Spacer />
 						<CustomBadgeRow>
 							<TokenIcon src={biobitIcon} />
-							<TokenValue>{request.tokenPay}</TokenValue>
+							<TokenValue>{request.angelTokenPay}</TokenValue>
 							<ValueLabel>BBit</ValueLabel>
-							<BiobitToDollarValue noMargin>{`~ $ ${request.tokenPay}`}</BiobitToDollarValue>
+							<BiobitToDollarValue noMargin>{`~ $ ${request.angelTokenPay}`}</BiobitToDollarValue>
+						</CustomBadgeRow>
+						<CustomDivider />
+						<CustomBadgeRow>
+							<TokenIcon src={biobitIcon} />
+							<TokenValue>{request.labTokenPay}</TokenValue>
+							<ValueLabel>BBit</ValueLabel>
+							<BiobitToDollarValue noMargin>{`~ $ ${request.labTokenPay}`}</BiobitToDollarValue>
 						</CustomBadgeRow>
 					</CustomFooter>
 					<CustomProgressTrackerWrapper>

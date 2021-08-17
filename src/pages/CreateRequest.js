@@ -58,10 +58,14 @@ const CreateRequest = () => {
 		validationSchema: yup.object().shape({
 			title: yup.string(validationErrors.string('title')).required(validationErrors.required('title')),
 			desc: yup.string(validationErrors.string('description')).required(validationErrors.required('description')),
-			tokenPay: yup
+			angelTokenPay: yup
 				.number()
-				.typeError(validationErrors.number('Allocated Biobits'))
-				.required(validationErrors.required('Allocated Biobit')),
+				.typeError(validationErrors.number('Angel Allocated Biobits'))
+				.required(validationErrors.required('Angel Allocated Biobit')),
+			labTokenPay: yup
+				.number()
+				.typeError(validationErrors.number('Lab Allocated Biobits'))
+				.required(validationErrors.required('Lab Allocated Biobit')),
 			instanceCount: yup
 				.number()
 				.typeError(validationErrors.number('Contributors'))
@@ -89,7 +93,7 @@ const CreateRequest = () => {
 									'in request to secure the file, so only you can access it we require your public key to encrypt the file'
 								);
 
-								const { title, desc, tokenPay, instanceCount, category } = values;
+								const { title, desc, angelTokenPay, labTokenPay, instanceCount, category } = values;
 								const reader = new FileReader();
 
 								window.ethereum
@@ -119,7 +123,8 @@ const CreateRequest = () => {
 														title,
 														desc,
 														ipfsResponse.path,
-														+tokenPay * Math.pow(10, 9),
+														+angelTokenPay * Math.pow(10, 9), // angel
+														+labTokenPay * Math.pow(10, 9),  // lab
 														instanceCount,
 														category.map((item) => item.value).join(','),
 														process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY,
@@ -143,7 +148,7 @@ const CreateRequest = () => {
 													);
 
 												appState.contract.events
-													.OrderRegistered({})
+													.orderRegistered({})
 													.on('data', (event) => {
 														clearSubmitDialog();
 
