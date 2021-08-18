@@ -116,7 +116,8 @@ const CreateRequest = () => {
 											const buf = Buffer(reader.result); // Convert data into buffer
 
 											try {
-												const ipfsResponse = await ipfs.add(buf);
+												const ipfsResponse = await ipfs.add(buf, { pin: true});
+
 												formik.setFieldValue('zpaper', ipfsResponse.path);
 												let url = `${process.env.REACT_APP_IPFS_LINK + ipfsResponse.path}`;
 												console.log(`Document Of Conditions --> ${url}`);

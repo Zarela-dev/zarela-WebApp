@@ -86,8 +86,8 @@ const RequestDetailsPage = () => {
 
 								setDialogMessage('uploading to ipfs');
 								/* encrypted is an array */
-								const fileResponse = await ipfs.add(encryptedFile);
-								const fileStuffResponse = await ipfs.add(JSON.stringify(fileStuff));
+								const fileResponse = await ipfs.add(encryptedFile, { pin: true });
+								const fileStuffResponse = await ipfs.add(JSON.stringify(fileStuff), { pin: true });
 
 								let url = `${process.env.REACT_APP_IPFS_LINK + fileResponse.path}`;
 								console.log(`uploaded document --> ${url}`);
