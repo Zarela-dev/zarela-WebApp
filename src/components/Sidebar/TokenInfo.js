@@ -50,11 +50,7 @@ const Sidebar = ({ data, account }) => {
 			<Row hiddenInfo={account === undefined}>
 				<Subtitle>BBit Balance</Subtitle>
 				<Value>
-					{`${
-						!Number.isNaN(data.biobitBalance)
-							? convertToBiobit(data.biobitBalance) + '  BBit'
-							: data.biobitBalance
-					}`}
+					{data.biobitBalance}
 				</Value>
 			</Row>
 			<Row hiddenInfo={account === undefined}>
