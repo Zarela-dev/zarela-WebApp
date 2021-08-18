@@ -49,7 +49,8 @@ const CreateRequest = () => {
 		initialValues: {
 			title: '',
 			desc: '',
-			tokenPay: '',
+			angelTokenPay: '',
+			laboratoryTokenPay: '',
 			instanceCount: '',
 			category: [],
 			zpaper: '',
@@ -58,10 +59,14 @@ const CreateRequest = () => {
 		validationSchema: yup.object().shape({
 			title: yup.string(validationErrors.string('title')).required(validationErrors.required('title')),
 			desc: yup.string(validationErrors.string('description')).required(validationErrors.required('description')),
-			tokenPay: yup
+			angelTokenPay: yup
 				.number()
-				.typeError(validationErrors.number('Allocated Biobits'))
-				.required(validationErrors.required('Allocated Biobit')),
+				.typeError(validationErrors.number('Angel Allocated Biobits'))
+				.required(validationErrors.required('Angel Allocated Biobit')),
+			laboratoryTokenPay: yup
+				.number()
+				.typeError(validationErrors.number('Lab Allocated Biobits'))
+				.required(validationErrors.required('Lab Allocated Biobit')),
 			instanceCount: yup
 				.number()
 				.typeError(validationErrors.number('Contributors'))
@@ -71,10 +76,12 @@ const CreateRequest = () => {
 			terms: yup.boolean().required(),
 		}),
 		onSubmit: (values) => {
-			console.log('values', values);
 			if (formik.isValid) {
-				if (+values.tokenPay * +values.instanceCount > +appState.biobitBalance / Math.pow(10, 9)) {
-					formik.setFieldError('tokenPay', validationErrors.notEnoughTokens);
+				if (
+					(+values.angelTokenPay + +values.laboratoryTokenPay) * +values.instanceCount >
+					+appState.biobitBalance
+				) {
+					formik.setFieldError('angelTokenPay', validationErrors.notEnoughTokens);
 					formik.setSubmitting(false);
 				} else {
 					if (!values.terms) {
@@ -89,7 +96,8 @@ const CreateRequest = () => {
 									'in request to secure the file, so only you can access it we require your public key to encrypt the file'
 								);
 
-								const { title, desc, tokenPay, instanceCount, category } = values;
+								const { title, desc, angelTokenPay, laboratoryTokenPay, instanceCount, category } =
+									values;
 								const reader = new FileReader();
 
 								window.ethereum
@@ -115,11 +123,12 @@ const CreateRequest = () => {
 
 												setDialogMessage('awaiting confirmation');
 												appState.contract.methods
-													.submitNewOrder(
+													.submitNewRequest(
 														title,
 														desc,
 														ipfsResponse.path,
-														+tokenPay * Math.pow(10, 9),
+														+angelTokenPay * Math.pow(10, 9), // angel
+														+laboratoryTokenPay * Math.pow(10, 9), // laboratory
 														instanceCount,
 														category.map((item) => item.value).join(','),
 														process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY,
@@ -143,7 +152,7 @@ const CreateRequest = () => {
 													);
 
 												appState.contract.events
-													.OrderRegistered({})
+													.orderRegistered({})
 													.on('data', (event) => {
 														clearSubmitDialog();
 
@@ -195,7 +204,7 @@ const CreateRequest = () => {
 			setDialog(false);
 			formik.setSubmitting(false);
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [account]);
 
 	return (

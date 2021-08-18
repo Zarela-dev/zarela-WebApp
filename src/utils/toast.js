@@ -13,42 +13,40 @@ const Container = styled.div`
 	display: flex;
 	align-items: center;
 	height: 100%;
-	padding: ${props => props.theme.spacing(2)};
+	padding: ${(props) => props.theme.spacing(2)};
 `;
 
 const ToastMessage = styled.div`
 	font-weight: 500;
 	font-size: 16px;
 	line-height: 18px;
-	color: ${props => props.theme.textPrimary};
-	margin: 0 ${props => props.theme.spacing(1)};
+	color: ${(props) => props.theme.textPrimary};
+	margin: 0 ${(props) => props.theme.spacing(1)};
+	white-space: ${props => props.isHash ? 'nowrap' : 'normal'};
+	overflow: hidden;
+	text-overflow: ellipsis;
 `;
 
 const Icon = styled.img`
 	width: 24px;
 `;
 
-
 const Message = ({ text, copyable, textToCopy, closeToast, toastProps }) => {
 	return (
 		<Container>
 			<Icon src={toastProps.type === 'success' ? checkedBoxImage : alertImage} />
-			<ToastMessage>
-				{text}
-			</ToastMessage>
+			<ToastMessage isHash={copyable}>{text}</ToastMessage>
 			<Spacer />
-			{
-				copyable ?
-					<CopyableText textToCopy={textToCopy}>
-						<Icon src={toastProps.type === 'success' ? copyImageGreen : copyImageRed} />
-					</CopyableText> :
-					null
-			}
+			{copyable ? (
+				<CopyableText textToCopy={textToCopy}>
+					<Icon src={toastProps.type === 'success' ? copyImageGreen : copyImageRed} />
+				</CopyableText>
+			) : null}
 			<Icon onClick={closeToast} src={toastProps.type === 'success' ? closeImageGreen : closeImageRed} />
 		</Container>
 	);
 };
-export const toast = (message, variant = 'info', copyable, textToCopy/*  = message */, toastOptions = {}) => {
+export const toast = (message, variant = 'info', copyable, textToCopy /*  = message */, toastOptions = {}) => {
 	return originalToast(<Message text={message} copyable={copyable} textToCopy={textToCopy} />, {
 		position: originalToast.POSITION.BOTTOM_CENTER,
 		pauseOnHover: true,
@@ -56,8 +54,9 @@ export const toast = (message, variant = 'info', copyable, textToCopy/*  = messa
 		closeOnClick: false,
 		draggable: true,
 		closeButton: false,
-		autoClose: 7 * 1000,
+		autoClose: 5 * 1000,
+		draggablePercent: 20,
 		type: variant,
-		...toastOptions
+		...toastOptions,
 	});
 };

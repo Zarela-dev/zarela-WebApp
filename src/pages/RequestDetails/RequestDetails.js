@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 import { Buffer } from 'buffer';
 import { create } from 'ipfs-http-client';
 import { mainContext } from '../../state';
+import { useHistory } from 'react-router-dom';
 import { convertToBiobit } from '../../utils';
 import * as ethUtil from 'ethereumjs-util';
 import { encrypt } from 'eth-sig-util';
@@ -22,6 +23,7 @@ const RequestDetailsPage = () => {
 	const [dialogMessage, setDialogMessage] = useState('');
 	const [error, setError] = useState(false);
 	const { account } = useWeb3React();
+	const history = useHistory();
 
 	const clearSubmitDialog = () => {
 		setSubmitting(false);
@@ -46,19 +48,16 @@ const RequestDetailsPage = () => {
 						reader.onloadend = async () => {
 							const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
 							const buff = Buffer(reader.result); // Convert data into buffer
+							// generate AES related keys
 							const AES_IV = ZRNG();
 							const AES_KEY = ZRNG();
 
 							// file encryption
-
 							var twF = twofish(AES_IV),
-								encryptedFile = twF.encryptCBC(AES_KEY, buff);
+								encryptedFile = twF.encryptCBC(AES_KEY, buff); /* twF.encryptCBC expects an array */
 
-							console.log('buff', buff);
-							console.log('encryptedFile', encryptedFile);
-							
 							try {
-								// AES key encryption
+								// AES key encryption using Metamask
 								const encryptedAesKey = ethUtil.bufferToHex(
 									Buffer.from(
 										JSON.stringify(
@@ -72,6 +71,11 @@ const RequestDetailsPage = () => {
 									)
 								);
 
+								/* 
+									to download file later (in the inbox page) with proper name and extension,
+									here we store these meta information in an object on IPFS then we store this IPFS
+									hash on the blockchain using our SC contribute method.
+								*/
 								const fileStuff = {
 									AES_KEY: encryptedAesKey,
 									AES_IV,
@@ -81,17 +85,19 @@ const RequestDetailsPage = () => {
 								};
 
 								setDialogMessage('uploading to ipfs');
+								/* encrypted is an array */
 								const fileResponse = await ipfs.add(encryptedFile);
 								const fileStuffResponse = await ipfs.add(JSON.stringify(fileStuff));
 
 								let url = `${process.env.REACT_APP_IPFS_LINK + fileResponse.path}`;
-								console.log(`Document Of Conditions --> ${url}`);
+								console.log(`uploaded document --> ${url}`);
 
-								// // const doc = document.getElementById("_White_Paper");
 								setDialogMessage('awaiting confirmation');
 								appState.contract.methods
 									.contribute(
 										request.requestID,
+										account, // angel
+										account, // laboratory
 										request.requesterAddress,
 										fileResponse.path,
 										fileStuffResponse.path
@@ -114,11 +120,19 @@ const RequestDetailsPage = () => {
 									);
 
 								appState.contract.events
-									.Contributed({})
+									.contributed()
 									.on('data', (event) => {
+										console.log(event);
 										clearSubmitDialog();
+										/* 
+											returnValues[0] contributor
+											returnValues[1] laboratory
+											returnValues[2] orderId
+											returnValues[3] orderOwner
+											returnValues[4] difficulty
+										*/
 										toast(
-											`signal submitted on request #${event.returnValues[1]} for address: ${event.returnValues[2]}`,
+											`signal submitted on request #${event.returnValues[2]} by: ${event.returnValues[0]}. Difficulty: ${event.returnValues[4]}`,
 											'success',
 											false,
 											null,
@@ -158,16 +172,17 @@ const RequestDetailsPage = () => {
 								const requestTemplate = {
 									requestID: result[0],
 									title: result[1],
-									description: result[6],
+									description: result[7],
 									requesterAddress: result[2],
-									tokenPay: convertToBiobit(result[3]),
-									totalContributors: result[4], // total contributors required
-									totalContributed: +result[4] - +result[7],
-									whitePaper: result[5],
-									timestamp: result[9],
-									encryptionPublicKey: result[10],
+									angelTokenPay: convertToBiobit(result[3]),
+									laboratoryTokenPay: convertToBiobit(result[4]),
+									totalContributors: result[5], // total contributors required
+									totalContributed: +result[5] - +result[8],
+									whitePaper: result[6],
+									timestamp: result[10],
 									categories,
-									totalContributedCount: result[8],
+									encryptionPublicKey: result[11],
+									totalContributedCount: result[9],
 								};
 								setRequest(requestTemplate);
 							} else {

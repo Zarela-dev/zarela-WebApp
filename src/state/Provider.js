@@ -99,12 +99,25 @@ const AppProvider = ({ children }) => {
 	}, [appState.contract]);
 
 	useEffect(() => {
+		if(account === undefined ) {
+			dispatch({
+				type: actionTypes.SET_BBIT_BALANCE,
+				payload: appInitialState.biobitBalance,
+			});
+			dispatch({
+				type: actionTypes.SET_ETHER_BALANCE,
+				payload: appInitialState.etherBalance,
+			});
+		}
+	}, [account]);
+
+	useEffect(() => {
 		if (account !== undefined && appState.contract) {
 			appState.contract.methods.balanceOf(account).call((error, result) => {
 				if (!error) {
 					dispatch({
 						type: actionTypes.SET_BBIT_BALANCE,
-						payload: result,
+						payload: convertToBiobit(+result),
 					});
 				} else {
 					console.error(error.message);
@@ -122,7 +135,7 @@ const AppProvider = ({ children }) => {
 					.then(function (result) {
 						dispatch({
 							type: actionTypes.SET_ETHER_BALANCE,
-							payload: activeWeb3.utils.fromWei(result, 'ether'),
+							payload: Number(activeWeb3.utils.fromWei(result, 'ether')).toFixed(4),
 						});
 					})
 					.catch((error) => {

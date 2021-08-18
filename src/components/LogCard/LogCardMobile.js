@@ -26,7 +26,7 @@ import { timeSince } from '../../utils';
 
 const LogCardMobile = ({ data }) => {
 	const [isOpen, setOpen] = useState(false);
-	const { requestID, title, tokenPay, contributions } = data;
+	const { requestID, title, angelTokenPay, laboratoryTokenPay, contributions } = data;
 	const totalPending = contributions.filter((item) => item.status === false).length;
 	const totalConfirmed = contributions.filter((item) => item.status === true).length;
 	const allApproved = contributions.length === totalConfirmed;
@@ -43,8 +43,8 @@ const LogCardMobile = ({ data }) => {
 					</MobileRow>
 					<MobileRow>
 						<MobileBiobitIcon src={biobitIcon} />
-						<MobileBiobitValue>{tokenPay}</MobileBiobitValue>
-						<MobileBiobitValue>{`~ $${tokenPay}`}</MobileBiobitValue>
+						<MobileBiobitValue>{+angelTokenPay + +laboratoryTokenPay}</MobileBiobitValue>
+						<MobileBiobitValue>{`~ $${+angelTokenPay + +laboratoryTokenPay}`}</MobileBiobitValue>
 					</MobileRow>
 					<MobileRow>
 						<QuickReportTitle>{`${totalPending + totalConfirmed} files: `}</QuickReportTitle>

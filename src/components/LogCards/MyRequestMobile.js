@@ -15,7 +15,16 @@ import biobitIcon from '../../assets/icons/biobit-black.svg';
 import { timeSince } from '../../utils';
 
 const LogCardMobile = ({ data }) => {
-	const { requestID, title, totalContributedCount, totalContributed, totalContributors, tokenPay, timestamp } = data;
+	const {
+		requestID,
+		title,
+		totalContributedCount,
+		totalContributed,
+		totalContributors,
+		angelTokenPay,
+		laboratoryTokenPay,
+		timestamp,
+	} = data;
 	const getVariant = () => {
 		if (+totalContributedCount === 0) return 'primary';
 		if (+totalContributed === +totalContributors) return 'confirmed'; // fulfilled
@@ -36,8 +45,8 @@ const LogCardMobile = ({ data }) => {
 					</MobileRow>
 					<MobileRow>
 						<MobileBiobitIcon src={biobitIcon} />
-						<MobileBiobitValue>{tokenPay}</MobileBiobitValue>
-						<MobileBiobitValue>{`~ $${tokenPay}`}</MobileBiobitValue>
+						<MobileBiobitValue>{+angelTokenPay + +laboratoryTokenPay}</MobileBiobitValue>
+						<MobileBiobitValue>{`~ $${+angelTokenPay + +laboratoryTokenPay}`}</MobileBiobitValue>
 					</MobileRow>
 					{+totalContributedCount === 0 ? (
 						<MobileRow>

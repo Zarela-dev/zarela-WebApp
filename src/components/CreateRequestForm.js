@@ -69,13 +69,24 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 			/>
 			<TextField
 				placeholder={'How many BBits will you pay for each contributor?'}
-				label="Allocated BBits *"
+				label="Allocated BBits For Angels*"
 				type="text"
-				name={'tokenPay'}
-				error={formik.errors?.tokenPay}
-				value={formik.values.tokenPay}
+				name={'angelTokenPay'}
+				error={formik.errors?.angelTokenPay}
+				value={formik.values.angelTokenPay}
 				onChange={(e) => {
-					formik.setFieldValue('tokenPay', e.target.value);
+					formik.setFieldValue('angelTokenPay', e.target.value);
+				}}
+			/>
+			<TextField
+				placeholder={'How many BBits will you pay for each laboratory?'}
+				label="Allocated BBits For laboratories*"
+				type="text"
+				name={'laboratoryTokenPay'}
+				error={formik.errors?.laboratoryTokenPay}
+				value={formik.values.laboratoryTokenPay}
+				onChange={(e) => {
+					formik.setFieldValue('laboratoryTokenPay', e.target.value);
 				}}
 			/>
 			<TextField

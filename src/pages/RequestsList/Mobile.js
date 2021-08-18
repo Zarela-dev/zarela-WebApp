@@ -192,7 +192,8 @@ const App = ({ requests, isLoading, appState, props, PAGE_SIZE }) => {
 													requestID={item.requestID}
 													title={item.title}
 													description={item.description}
-													tokenPay={item.tokenPay}
+													angelTokenPay={item.angelTokenPay}
+													laboratoryTokenPay={item.laboratoryTokenPay}
 													categories={item.categories}
 													timestamp={timeSince(item.timestamp)}
 													progress={(+item.totalContributed / +item.totalContributors) * 100}

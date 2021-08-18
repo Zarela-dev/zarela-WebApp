@@ -68,7 +68,7 @@ export const WalletDesktop = ({ account, logs, isLoading, PAGE_SIZE }) => {
 		<Wrapper>
 			<WalletTitlebar>
 				<Title>Wallet</Title>
-				<Balance>{`Balance: ${+appState.biobitBalance / Math.pow(10, 9)} BBit`}</Balance>
+				<Balance>{`Balance: ${+appState.biobitBalance} BBit`}</Balance>
 			</WalletTitlebar>
 			<Tabs
 				route="wallet"
