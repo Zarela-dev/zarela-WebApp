@@ -31,6 +31,7 @@ const Inbox = () => {
 	const [isLoading, setLoading] = useState(false);
 	const { account } = useWeb3React();
 	const [ConnectionModalShow, setConnectionModalShow] = useState(true);
+	const [shouldRefresh, setShouldRefresh] = useState(false);
 
 	const handleConfirm = (requestID, originalIndexes) => {
 		appState.contract.methods
@@ -43,17 +44,33 @@ const Inbox = () => {
 				}
 			});
 		appState.contract.events
-			.Transfer({})
+			.signalsApproved({})
 			.on('data', (event) => {
-				toast(`tokens were successfully sent to ${event.returnValues[1]}`, 'success', false, null, {
-					toastId: event.id,
-				});
+				/* 
+					event.returnValues[0] orderId
+					event.returnValues[1]	confirmationsCount
+				*/
+				toast(
+					`Tokens were successfully released for ${event.returnValues[1]} contributions.`,
+					'success',
+					false,
+					null,
+					{
+						toastId: event.id,
+					}
+				);
+				setShouldRefresh(true);
 			})
 			.on('error', (error, receipt) => {
 				toast(error.message, 'error');
 				console.error(error, receipt);
 			});
 	};
+	useEffect(() => {
+		if (shouldRefresh === true) {
+			setShouldRefresh(false);
+		}
+	}, [shouldRefresh]);
 	// pagination hook
 	useEffect(() => {
 		if (appState.contract !== null) {
@@ -125,6 +142,7 @@ const Inbox = () => {
 						.sort((a, b) => +b.requestID - +a.requestID)
 						.map((item) => (
 							<RequestListItem
+								shouldRefresh={shouldRefresh}
 								showContributions
 								key={item.requestID}
 								requestID={item.requestID}

@@ -158,6 +158,7 @@ const ExpandToggle = styled.img`
 const RequestListItem = ({
 	showContributions,
 	total,
+	shouldRefresh,
 	requestID,
 	title,
 	angelTokenPay,
@@ -430,7 +431,7 @@ const RequestListItem = ({
 				}
 			});
 		}
-	}, [appState.contract]);
+	}, [appState.contract, shouldRefresh]);
 
 	return (
 		<Wrapper>
