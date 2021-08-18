@@ -88,9 +88,9 @@ const WalletSendAssets = (mobile) => {
 	});
 
 	const getBalanceHint = () => {
-		return `Available: ${
-			formik.values.token === 'Biobit' ? convertToBiobit(+appState.biobitBalance) : +appState.etherBalance
-		} ${formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'}`;
+		return `Available: ${formik.values.token === 'Biobit' ? +appState.biobitBalance : +appState.etherBalance} ${
+			formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'
+		}`;
 	};
 
 	const getClipboard = async () => {
@@ -146,7 +146,7 @@ const WalletSendAssets = (mobile) => {
 								onClick: async () => {
 									const value =
 										formik.values.token === 'Biobit'
-											? convertToBiobit(+appState.biobitBalance)
+											? +appState.biobitBalance
 											: +appState.etherBalance;
 									await formik.setFieldValue('amount', value);
 								},

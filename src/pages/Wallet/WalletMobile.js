@@ -65,7 +65,7 @@ export const WalletMobile = ({ data, account, logs, isLoading, PAGE_SIZE }) => {
 		<Wrapper>
 			<WalletTitlebar isMobile={appState.isMobile}>
 				<Title>Wallet</Title>
-				<Balance>{`Balance: ${+appState.biobitBalance / Math.pow(10, 9)} BBit`}</Balance>
+				<Balance>{`Balance: ${+appState.biobitBalance} BBit`}</Balance>
 			</WalletTitlebar>
 			<MobileLayout>
 				<Tabs

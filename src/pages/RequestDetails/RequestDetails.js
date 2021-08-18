@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 import { Buffer } from 'buffer';
 import { create } from 'ipfs-http-client';
 import { mainContext } from '../../state';
+import { useHistory } from 'react-router-dom';
 import { convertToBiobit } from '../../utils';
 import * as ethUtil from 'ethereumjs-util';
 import { encrypt } from 'eth-sig-util';
@@ -22,6 +23,7 @@ const RequestDetailsPage = () => {
 	const [dialogMessage, setDialogMessage] = useState('');
 	const [error, setError] = useState(false);
 	const { account } = useWeb3React();
+	const history = useHistory();
 
 	const clearSubmitDialog = () => {
 		setSubmitting(false);
@@ -118,11 +120,19 @@ const RequestDetailsPage = () => {
 									);
 
 								appState.contract.events
-									.contributed({})
+									.contributed()
 									.on('data', (event) => {
+										console.log(event);
 										clearSubmitDialog();
+										/* 
+											returnValues[0] contributor
+											returnValues[1] laboratory
+											returnValues[2] orderId
+											returnValues[3] orderOwner
+											returnValues[4] difficulty
+										*/
 										toast(
-											`signal submitted on request #${event.returnValues[1]} for address: ${event.returnValues[2]}`,
+											`signal submitted on request #${event.returnValues[2]} by: ${event.returnValues[0]}. Difficulty: ${event.returnValues[4]}`,
 											'success',
 											false,
 											null,

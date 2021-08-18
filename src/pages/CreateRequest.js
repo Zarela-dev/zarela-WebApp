@@ -76,9 +76,11 @@ const CreateRequest = () => {
 			terms: yup.boolean().required(),
 		}),
 		onSubmit: (values) => {
-			console.log('values', values);
 			if (formik.isValid) {
-				if ((+values.angelTokenPay + +values.angelTokenPay) * +values.instanceCount > +appState.biobitBalance / Math.pow(10, 9)) {
+				if (
+					(+values.angelTokenPay + +values.laboratoryTokenPay) * +values.instanceCount >
+					+appState.biobitBalance
+				) {
 					formik.setFieldError('angelTokenPay', validationErrors.notEnoughTokens);
 					formik.setSubmitting(false);
 				} else {
@@ -94,7 +96,8 @@ const CreateRequest = () => {
 									'in request to secure the file, so only you can access it we require your public key to encrypt the file'
 								);
 
-								const { title, desc, angelTokenPay, laboratoryTokenPay, instanceCount, category } = values;
+								const { title, desc, angelTokenPay, laboratoryTokenPay, instanceCount, category } =
+									values;
 								const reader = new FileReader();
 
 								window.ethereum
@@ -125,7 +128,7 @@ const CreateRequest = () => {
 														desc,
 														ipfsResponse.path,
 														+angelTokenPay * Math.pow(10, 9), // angel
-														+laboratoryTokenPay * Math.pow(10, 9),  // laboratory
+														+laboratoryTokenPay * Math.pow(10, 9), // laboratory
 														instanceCount,
 														category.map((item) => item.value).join(','),
 														process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY,
@@ -201,7 +204,7 @@ const CreateRequest = () => {
 			setDialog(false);
 			formik.setSubmitting(false);
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [account]);
 
 	return (
