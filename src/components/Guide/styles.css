@@ -1,0 +1,9 @@
+.mask{
+  color: rgba(62, 56, 169, 0.7) !important;
+  opacity: 0.5 !important;
+}
+
+.tour-custom{
+  min-width: 25% !important;
+  min-height: 80px !important;
+}

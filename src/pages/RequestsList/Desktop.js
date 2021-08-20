@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import RequestCard from '../../components/RequestCard/RequestCard';
 import styled from 'styled-components';
 import TokenInfoSidebar from '../../components/Sidebar/TokenInfo';
-import TokenStatsSidebar from '../../components/Sidebar/TokenStats';
 import Pagination from '../../components/Pagination';
 import maxWidthWrapper from '../../components/Elements/MaxWidth';
 import { timeSince } from '../../utils';
@@ -104,6 +103,7 @@ const useStyles = makeStyles({
 		background: '#F1F6FC',
 	},
 });
+
 
 const Desktop = ({
 	requests,

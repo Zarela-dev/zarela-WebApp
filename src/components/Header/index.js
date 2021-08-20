@@ -13,6 +13,8 @@ import MobileMenu from '../MobileMenu';
 import { mainContext } from './../../state';
 import maxWidthWrapper from '../Elements/MaxWidth';
 import chainIdTag from '../../assets/icons/chainid-tag.svg';
+import help from './../../assets/icons/help.svg';
+import { useLocation } from 'react-router';
 
 const NavItem = styled(Link)`
 	position: relative;
@@ -155,6 +157,7 @@ const ChainBadge = styled.div`
 export default function Header({ isMobile }) {
 	const [isMenuOpen, setMenuOpen] = useState(false);
 	const { appState } = useContext(mainContext);
+	const location = useLocation();
 
 	if (isMobile) {
 		return (
@@ -216,9 +219,14 @@ export default function Header({ isMobile }) {
 						<NavIcon src={bell} />
 						<NotificationBadge>321</NotificationBadge>
 					</NavItem> */}
-					{/* <NavItem device="desktop">
-						<NavIcon src={help} />
-					</NavItem> */}
+					<NavItem>
+						<NavIcon
+							src={help}
+							onClick={() => {
+								localStorage.removeItem('guide/' + location.pathname.split('/')[1]);
+							}}
+						/>
+					</NavItem>
 				</LeftMenu>
 			</HeaderWrapper>
 		);

@@ -207,7 +207,7 @@ const RequestFilesTable = ({
 		<Table>
 			<Row>
 				<CellWrapper>
-					<Cell>
+					<Cell data-tour="inbox-three">
 						{isAllApproved() ? (
 							<ConfirmedIcon src={confirmIcon} noMargin />
 						) : (
@@ -251,7 +251,7 @@ const RequestFilesTable = ({
 							)}
 						</Cell>
 					</CellWrapper>
-					<CellWrapper>
+					<CellWrapper data-tour="inbox-two">
 						<CopyableText textToCopy={contributorAddress}>
 							<Cell pointer>
 								<PublicKeyIcon src={publicKeyIcon} />

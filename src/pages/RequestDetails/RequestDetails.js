@@ -11,7 +11,29 @@ import { toast, ZRNG, getFileNameWithExt } from '../../utils';
 import { useWeb3React } from '@web3-react/core';
 import Mobile from './Mobile';
 import Desktop from './Desktop';
+import Guide from './../../components/Guide/Guide';
+import { useLocation } from 'react-router';
 import { twofish } from 'twofish';
+
+const steps = [
+	{
+		selector: '[data-tour="request-details-one"]',
+		content: 'Mage’s public key on Ethereum Network is indicated here for checking by angles.',
+	},
+	{
+		selector: '[data-tour="request-details-two"]',
+		content: 'Mage creates the Zpaper, containing all the description and requirements.',
+	},
+	{
+		selector: '[data-tour="request-details-three"]',
+		content: 'For contributing, files must be selected here from your device.',
+	},
+	{
+		selector: '',
+		content:
+			'Well done! You earn 100 Biobits for this learning! want to earn more? learn every guide on pages and collect about 500 BBits!',
+	},
+];
 
 const RequestDetailsPage = () => {
 	const { id } = useParams();
@@ -24,6 +46,15 @@ const RequestDetailsPage = () => {
 	const [error, setError] = useState(false);
 	const { account } = useWeb3React();
 	const history = useHistory();
+	const location = useLocation();
+
+	let [guideIsOpen, setGuideIsOpen] = useState(false);
+
+	useEffect(() => {
+		setTimeout(() => {
+			setGuideIsOpen(true);
+		}, 1000);
+	}, []);
 
 	const clearSubmitDialog = () => {
 		setSubmitting(false);
@@ -198,37 +229,47 @@ const RequestDetailsPage = () => {
 
 	if (appState.isMobile) {
 		return (
-			<Mobile
-				{...{
-					account,
-					showDialog,
-					isSubmitting,
-					setSubmitting,
-					dialogMessage,
-					request,
-					sendSignalRef,
-					submitSignal,
-					error,
-					setError,
-				}}
-			/>
+			<>
+				{!localStorage.getItem('guide/' + location.pathname.split('/')[1]) ? (
+					<Guide isMobile={appState.isMobile} steps={steps} {...{ guideIsOpen, setGuideIsOpen }} />
+				) : null}
+				<Mobile
+					{...{
+						account,
+						showDialog,
+						isSubmitting,
+						setSubmitting,
+						dialogMessage,
+						request,
+						sendSignalRef,
+						submitSignal,
+						error,
+						setError,
+					}}
+				/>
+			</>
 		);
 	} else {
 		return (
-			<Desktop
-				{...{
-					account,
-					showDialog,
-					isSubmitting,
-					setSubmitting,
-					dialogMessage,
-					request,
-					sendSignalRef,
-					submitSignal,
-					error,
-					setError,
-				}}
-			/>
+			<>
+				{!localStorage.getItem('guide/' + location.pathname.split('/')[1]) ? (
+					<Guide steps={steps} {...{ guideIsOpen, setGuideIsOpen }} />
+				) : null}
+				<Desktop
+					{...{
+						account,
+						showDialog,
+						isSubmitting,
+						setSubmitting,
+						dialogMessage,
+						request,
+						sendSignalRef,
+						submitSignal,
+						error,
+						setError,
+					}}
+				/>
+			</>
 		);
 	}
 };
