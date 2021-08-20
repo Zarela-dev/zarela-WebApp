@@ -27,7 +27,6 @@ import RequestCardWrapper, {
 	BadgeLabel,
 	Hint,
 } from './../Elements/RequestCard';
-import bookmarkIcon from '../../assets/icons/bookmark-purple.svg';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/user-blue.svg';
 import documentsIcon from '../../assets/icons/document-blue.svg';
@@ -41,7 +40,6 @@ const RequestCard = (props) => {
 					{props.title.length < 85 ? props.title : props.title.substr(0, 85) + '...'}
 				</Title>
 				<Spacer />
-				<Bookmark data-tour="request-list-eight" src={bookmarkIcon} />
 			</HeaderLayout>
 			<Timestamp nowrap variant="caption">
 				{props.timestamp}

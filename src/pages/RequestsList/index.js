@@ -39,10 +39,6 @@ const DesktopSteps = [
 		content: 'You can click here to see more information about applying and participating.',
 	},
 	{
-		selector: '[data-tour="request-list-eight"]',
-		content: 'Clicking on this icon will bookmark selected request.',
-	},
-	{
 		selector: '[data-tour="request-list-nine"]',
 		content:
 			'This section displays information about the total number of biobit tokens, biobit token name and code and your own Wallet balance.',
