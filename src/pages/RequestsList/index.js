@@ -8,7 +8,6 @@ import Mobile from './Mobile';
 import Guide from './../../components/Guide/Guide';
 import { useLocation } from 'react-router';
 
-
 const DesktopSteps = [
 	{
 		selector: '[data-tour="request-list-one"]',
@@ -54,7 +53,6 @@ const DesktopSteps = [
 			'Well done! You earn 100 BBits for this learning! want to earn more? learn every guide on pages and collect about 500 BBits!',
 	},
 ];
-
 const MobileSteps = [
 	{
 		selector: '[data-tour="request-list-mobile-one"]',
@@ -91,8 +89,6 @@ const MobileSteps = [
 			'Well done! You earn 100 BBits for this learning! want to earn more? learn every guide on pages and collect about 500 BBits!',
 	},
 ];
-
-
 
 const RequestsList = () => {
 	const { appState } = useContext(mainContext);
