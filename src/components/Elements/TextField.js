@@ -92,7 +92,7 @@ const HelperText = styled.div`
 const InputAction = styled.button.attrs({ type: "button" })`
 	border: none;
 	background: none;
-	background: white;
+	background: transparent;
 	width: 24px;
 	margin-left: ${(props) => props.theme.spacing(1)};
 `;

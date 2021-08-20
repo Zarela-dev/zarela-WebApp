@@ -60,7 +60,7 @@ const WalletSendAssets = (mobile) => {
 		onSubmit: (values) => {
 			if (values.token === 'Biobit') {
 				appState.contract.methods
-					.Transfer(values.address, +values.amount * Math.pow(10, 9))
+					.transfer(values.address, +values.amount * Math.pow(10, 9))
 					.send({ from: account }, (error, result) => {
 						if (!error) {
 							toast(result, 'success', true, result);

@@ -51,7 +51,7 @@ const DesktopSteps = [
 	{
 		selector: '',
 		content:
-			'Well done! You earn 100 Biobits for this learning! want to earn more? learn every guide on pages and collect about 500 BBits!',
+			'Well done! You earn 100 BBits for this learning! want to earn more? learn every guide on pages and collect about 500 BBits!',
 	},
 ];
 
@@ -88,7 +88,7 @@ const MobileSteps = [
 	{
 		selector: '',
 		content:
-			'Well done! You earn 100 Biobits for this learning! want to earn more? learn every guide on pages and collect about 500 BBits!',
+			'Well done! You earn 100 BBits for this learning! want to earn more? learn every guide on pages and collect about 500 BBits!',
 	},
 ];
 

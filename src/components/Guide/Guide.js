@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Tour from 'reactour';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Next from './../../assets/icons/next.svg';
 import Prev from './../../assets/icons/prev.svg';
 import CloseSvg from './../../assets/icons/close-purple.svg';
 import { Button } from '../Elements/Button';
 import './styles.css';
 import { useLocation } from 'react-router-dom';
+import { useWeb3React } from '@web3-react/core';
+import { mainContext } from '../../state';
+import { toast } from '../../utils';
 
 const Wrapper = styled.div``;
 const NavButton = styled.div`
@@ -36,6 +39,7 @@ const Overlay = styled.div`
 	background: linear-gradient(225deg, rgba(72, 194, 185, 1) 0%, rgba(138, 100, 212, 1) 100%);
 	box-shadow: 0px 6.280374050140381px 28.261682510375977px 0px #dfecff80;
 `;
+
 const Close = styled.div`
 	width: ${(props) => (props.isMobile ? '27px' : '48px')};
 	height: ${(props) => (props.isMobile ? '27px' : '48px')};
@@ -45,9 +49,11 @@ const Close = styled.div`
 	justify-content: center;
 	align-items: center;
 `;
+
 const CloseIcon = styled.img`
 	color: #581d9f;
 `;
+
 const SubmitRequestButton = styled.a`
 	${Button};
 	margin: 0;
@@ -79,6 +85,10 @@ const Guide = React.memo(({ steps, guideIsOpen, setGuideIsOpen, isMobile }) => {
 		const route = location.pathname.split('/')[1];
 		localStorage.setItem('guide/' + route, true);
 	};
+
+	const { account } = useWeb3React();
+	const { appState } = useContext(mainContext);
+
 	return (
 		<Wrapper>
 			<CustomizedTour
@@ -122,6 +132,37 @@ const Guide = React.memo(({ steps, guideIsOpen, setGuideIsOpen, isMobile }) => {
 						onClick={() => {
 							document.body.style.overflowY = 'auto';
 							handleSaveLocalStorage();
+
+							if (appState.contract !== null) {
+								if (account) {
+									appState.contract.methods
+										.earnTestToken()
+										.send({ from: account })
+										.on('transactionHash', function (hash) {
+											toast(`TX Hash: ${hash}`, 'success', true, hash, {
+												toastId: hash,
+											});
+										});
+
+									appState.contract.events
+										.Transfer()
+										.on('data', (event) => {
+											toast(
+												`100 BBits were transferred to ${event.returnValues[0]} from Zarela smart contract`,
+												'success',
+												false,
+												null,
+												{
+													toastId: event.id,
+												}
+											);
+										})
+										.on('error', (error, receipt) => {
+											toast(error.message, 'error');
+											console.error(error, receipt);
+										});
+								}
+							}
 						}}
 					>
 						Collect
