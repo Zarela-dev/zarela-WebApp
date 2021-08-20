@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useParams } from 'react-router';
 import { Buffer } from 'buffer';
 import { create } from 'ipfs-http-client';
-import { mainContext } from '../../state';
+import { actionTypes, mainContext } from '../../state';
 import { useHistory } from 'react-router-dom';
 import { convertToBiobit } from '../../utils';
 import * as ethUtil from 'ethereumjs-util';
@@ -38,7 +38,7 @@ const steps = [
 const RequestDetailsPage = () => {
 	const { id } = useParams();
 	const [request, setRequest] = useState({});
-	const { appState } = useContext(mainContext);
+	const { appState, dispatch } = useContext(mainContext);
 	const sendSignalRef = useRef(null);
 	const [showDialog, setDialog] = useState(false);
 	const [isSubmitting, setSubmitting] = useState(false);
@@ -47,11 +47,12 @@ const RequestDetailsPage = () => {
 	const { account } = useWeb3React();
 	const location = useLocation();
 
-	let [guideIsOpen, setGuideIsOpen] = useState(false);
-
 	useEffect(() => {
 		setTimeout(() => {
-			setGuideIsOpen(true);
+			dispatch({
+				type: actionTypes.SET_GUIDE_IS_OPEN,
+				payload: true
+			})
 		}, 1000);
 	}, []);
 
@@ -230,7 +231,7 @@ const RequestDetailsPage = () => {
 		return (
 			<>
 				{!localStorage.getItem('guide/' + location.pathname.split('/')[1]) ? (
-					<Guide isMobile={appState.isMobile} steps={steps} {...{ guideIsOpen, setGuideIsOpen }} />
+					<Guide isMobile={appState.isMobile} steps={steps} guideIsOpen={appState.guideIsOpen} />
 				) : null}
 				<Mobile
 					{...{
@@ -252,7 +253,7 @@ const RequestDetailsPage = () => {
 		return (
 			<>
 				{!localStorage.getItem('guide/' + location.pathname.split('/')[1]) ? (
-					<Guide steps={steps} {...{ guideIsOpen, setGuideIsOpen }} />
+					<Guide steps={steps} guideIsOpen={appState.guideIsOpen} />
 				) : null}
 				<Desktop
 					{...{

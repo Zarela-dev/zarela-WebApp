@@ -15,6 +15,7 @@ import maxWidthWrapper from '../Elements/MaxWidth';
 import chainIdTag from '../../assets/icons/chainid-tag.svg';
 import help from './../../assets/icons/help.svg';
 import { useLocation } from 'react-router';
+import { actionTypes } from '../../state/actionTypes';
 
 const NavItem = styled(Link)`
 	position: relative;
@@ -151,12 +152,12 @@ const ChainBadge = styled.div`
 	padding: 10px 20px;
 	padding-right: 10px;
 	line-height: 22px;
-	color: #8C2595;
+	color: #8c2595;
 `;
 
 export default function Header({ isMobile }) {
 	const [isMenuOpen, setMenuOpen] = useState(false);
-	const { appState } = useContext(mainContext);
+	const { appState, dispatch } = useContext(mainContext);
 	const location = useLocation();
 
 	if (isMobile) {
@@ -224,6 +225,10 @@ export default function Header({ isMobile }) {
 							src={help}
 							onClick={() => {
 								localStorage.removeItem('guide/' + location.pathname.split('/')[1]);
+								dispatch({
+									type: actionTypes.SET_GUIDE_IS_OPEN,
+									payload: true,
+								});
 							}}
 						/>
 					</NavItem>

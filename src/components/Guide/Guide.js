@@ -8,7 +8,8 @@ import { Button } from '../Elements/Button';
 import './styles.css';
 import { useLocation } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
-import { mainContext } from '../../state';
+import { actionTypes, mainContext } from '../../state';
+import { SaveGuideToLocalStorage } from '../../state/actions';
 import { toast } from '../../utils';
 
 const Wrapper = styled.div``;
@@ -77,17 +78,12 @@ const CustomizedTour = styled(Tour)`
 	}
 `;
 
-const Guide = React.memo(({ steps, guideIsOpen, setGuideIsOpen, isMobile }) => {
+const Guide = React.memo(({ steps, guideIsOpen, isMobile }) => {
 	const [currentStep, setCurrentStep] = useState(0);
 	const location = useLocation();
 
-	const handleSaveLocalStorage = () => {
-		const route = location.pathname.split('/')[1];
-		localStorage.setItem('guide/' + route, true);
-	};
-
 	const { account } = useWeb3React();
-	const { appState } = useContext(mainContext);
+	const { appState, dispatch } = useContext(mainContext);
 
 	return (
 		<Wrapper>
@@ -95,10 +91,17 @@ const Guide = React.memo(({ steps, guideIsOpen, setGuideIsOpen, isMobile }) => {
 				isMobile={isMobile}
 				steps={steps}
 				isOpen={guideIsOpen}
-				onRequestClose={() => setGuideIsOpen(false)}
+				onRequestClose={() =>
+					dispatch({
+						type: actionTypes.SET_GUIDE_IS_OPEN,
+						payload: false,
+					})
+				}
 				closeWithMask={false}
 				disableDotsNavigation={true}
 				showButtons={true}
+				// disableFocusLock={true}
+				// inViewThreshold={1000}
 				prevButton={
 					currentStep === steps.length - 1 ? undefined : (
 						<NavButton className="prev-btn">
@@ -131,7 +134,7 @@ const Guide = React.memo(({ steps, guideIsOpen, setGuideIsOpen, isMobile }) => {
 					<SubmitRequestButton
 						onClick={() => {
 							document.body.style.overflowY = 'auto';
-							handleSaveLocalStorage();
+							SaveGuideToLocalStorage(dispatch, location.pathname.split('/')[1]);
 
 							if (appState.contract !== null) {
 								if (account) {
@@ -174,8 +177,7 @@ const Guide = React.memo(({ steps, guideIsOpen, setGuideIsOpen, isMobile }) => {
 				<Overlay
 					isMobile={isMobile}
 					onClick={() => {
-						setGuideIsOpen(!guideIsOpen);
-						handleSaveLocalStorage();
+						SaveGuideToLocalStorage(dispatch, location.pathname.split('/')[1]);
 						document.body.style.overflowY = 'auto';
 					}}
 				>

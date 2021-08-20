@@ -2,6 +2,7 @@ import getWeb3 from '../getFallbackWeb3';
 import { actionTypes } from './actionTypes';
 import axios from 'axios';
 
+
 export const getZarelaCurrentDay = (dispatch, contract) => {
 	contract.methods.zarelaDayCounter().call((error, data) => {
 		if (!error) {
@@ -80,4 +81,12 @@ export const getGasPrice = (dispatch) => {
 		.catch((error) => {
 			console.log(error);
 		});
+};
+
+export const SaveGuideToLocalStorage = (dispatch, route) => {
+	localStorage.setItem('guide/' + route, true);
+	dispatch({
+		type: actionTypes.SET_GUIDE_IS_OPEN,
+		payload: false,
+	});
 };
