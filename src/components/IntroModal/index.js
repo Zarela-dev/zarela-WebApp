@@ -5,6 +5,7 @@ import LogoImage from '../../assets/icons/logo.png';
 import { LinkButton } from '../Elements/Button';
 import twitterIcon from '../../assets/icons/social/twitter.svg';
 import instagramIcon from '../../assets/icons/social/instagram.svg';
+import discordIcon from '../../assets/icons/social/discord.svg';
 import linkedinIcon from '../../assets/icons/social/linkedin.svg';
 import { Spacer } from '../Elements/Spacer';
 import WalletsList from './WalletsList';
@@ -124,6 +125,7 @@ const MessageContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	align-items: center;
 `;
 
 const LearnMoreButton = styled(LinkButton).attrs((props) => {
@@ -176,8 +178,8 @@ const IntroModal = () => {
 					<WalletsList />
 					<Divider />
 					<MessageContainer>
-						<Message>you don't know ...</Message>
-						<LearnMoreButton>learn more</LearnMoreButton>
+						<Message>for more information visit our website</Message>
+						<LearnMoreButton href="https://zarela.io/about-us/" target="_blank">visit us</LearnMoreButton>
 					</MessageContainer>
 				</Content>
 				<Spacer />
@@ -192,8 +194,11 @@ const IntroModal = () => {
 						<SocialLink href="https://twitter.com/zarela_io" target="_blank">
 							<SocialIcon src={twitterIcon} />
 						</SocialLink>
-						<SocialLink href="https://twitter.com/zarela_io" target="_blank">
+						<SocialLink href="https://www.linkedin.com/company/zarela" target="_blank">
 							<SocialIcon src={linkedinIcon} />
+						</SocialLink>
+						<SocialLink href="https://discord.gg/tuWp4yGm" target="_blank">
+							<SocialIcon src={discordIcon} />
 						</SocialLink>
 					</SocialList>
 				</Footer>
