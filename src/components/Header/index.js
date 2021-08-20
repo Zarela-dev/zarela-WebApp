@@ -12,6 +12,7 @@ import menu from '../../assets/icons/menu.svg';
 import MobileMenu from '../MobileMenu';
 import { mainContext } from './../../state';
 import maxWidthWrapper from '../Elements/MaxWidth';
+import chainIdTag from '../../assets/icons/chainid-tag.svg';
 
 const NavItem = styled(Link)`
 	position: relative;
@@ -135,6 +136,22 @@ const NavIconApp = styled(NavIcon)`
 // 	height: 16px;
 // `;
 
+const ChainBadge = styled.div`
+	background-image: url(${chainIdTag});
+	background-repeat: no-repeat;
+	background-size: 100%;
+	position: absolute;
+	background-position: center;
+	right: -106px;
+	top: 14px;
+	height: 42px;
+	white-space: nowrap;
+	padding: 10px 20px;
+	padding-right: 10px;
+	line-height: 22px;
+	color: #8C2595;
+`;
+
 export default function Header({ isMobile }) {
 	const [isMenuOpen, setMenuOpen] = useState(false);
 	const { appState } = useContext(mainContext);
@@ -190,6 +207,7 @@ export default function Header({ isMobile }) {
 					<NavItem isMobile={appState.isMobile} to="/wallet/account">
 						<NavIcon src={wallet} />
 						<NavLink>Wallet</NavLink>
+						<ChainBadge>Ropsten</ChainBadge>
 					</NavItem>
 				</RightMenu>
 				<LeftMenu>

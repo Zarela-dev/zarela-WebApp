@@ -1,16 +1,19 @@
-import React, { useContext } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import CreateRequest from "../pages/CreateRequest";
-import Header from "./Header";
-import RequestDetails from "../pages/RequestDetails/RequestDetails";
-import Inbox from "../pages/Inbox";
-import IntroModal from "./IntroModal";
-import BottomNavigation from "./BottomNavigation";
-import styled from "styled-components";
-import Wallet from "../pages/Wallet/Wallet";
-import RequestsList from "../pages/RequestsList";
-import Log from "../pages/Log/Log";
-import { mainContext } from "./../state";
+import React, { useContext, useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
+import CreateRequest from '../pages/CreateRequest';
+import Header from './Header';
+import RequestDetails from '../pages/RequestDetails/RequestDetails';
+import Inbox from '../pages/Inbox';
+import IntroModal from './IntroModal';
+import BottomNavigation from './BottomNavigation';
+import styled from 'styled-components';
+import Wallet from '../pages/Wallet/Wallet';
+import RequestsList from '../pages/RequestsList';
+import Log from '../pages/Log/Log';
+import { mainContext } from './../state';
+import { supportedChains } from '../constants/index';
+import ChainError from './ChainError';
 
 const AppWrapper = styled.div`
 	padding-bottom: ${(props) => props.theme.spacing(5)};
@@ -19,6 +22,27 @@ const AppWrapper = styled.div`
 const AppRouter = () => {
 	const provider = window.ethereum;
 	const { appState } = useContext(mainContext);
+	const { error, chainId } = useWeb3React();
+	const metamaskChainId = provider?.request({ method: 'eth_chainId' });
+	const [hasChainError, setChainError] = useState(error instanceof UnsupportedChainIdError);
+
+	useEffect(() => {
+		if (provider) {
+			try {
+				metamaskChainId.then((currentChainId) => {
+					if (parseInt(currentChainId, 16) !== supportedChains.ROPSTEN) {
+						setChainError(true);
+					}
+				});
+				// watch for network changes
+				provider.on('chainChanged', async (_chainId) => {
+					window.location.reload();
+				});
+			} catch (error) {
+				console.error(error);
+			}
+		}
+	}, [error, chainId, provider]);
 
 	if (!provider)
 		return (
@@ -26,6 +50,9 @@ const AppRouter = () => {
 				<IntroModal />
 			</>
 		);
+
+	if (hasChainError) return <ChainError />;
+
 	return (
 		<Router>
 			<AppWrapper>

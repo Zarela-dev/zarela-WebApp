@@ -9,7 +9,7 @@ const Nav = styled.nav`
 	top: 0;
 	height: 100vh;
 	background: white;
-	transform: ${({isOpen}) => isOpen ? 'translateX(0%)': 'translateX(100%)'};
+	transform: ${({ isOpen }) => (isOpen ? 'translateX(0%)' : 'translateX(100%)')};
 	min-width: 276px;
 	border: 1.5px solid ${(props) => props.theme.success};
 	border-radius: 8px 0px 0px 0px;
@@ -69,6 +69,7 @@ const MenuList = styled.ul`
 `;
 
 const MenuItem = styled(Link)`
+	position: relative;
 	display: list-item;
 	font-weight: ${(props) => (props.active ? 'bold' : 'normal')};
 	font-size: 18px;
@@ -114,6 +115,7 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta }) => {
 									notification={item.notification}
 								>
 									{item.title}
+									{item.badge || null}
 								</MenuItem>
 								<MenuList>
 									{item.children.map((childItem) => (
@@ -126,6 +128,7 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta }) => {
 											notification={childItem.notification}
 										>
 											{childItem.title}
+											{childItem.badge || null}
 										</MenuItem>
 									))}
 								</MenuList>
@@ -140,6 +143,7 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta }) => {
 							notification={item.notification}
 						>
 							{item.title}
+							{item.badge || null}
 						</MenuItem>
 					);
 				})}
