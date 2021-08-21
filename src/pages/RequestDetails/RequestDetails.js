@@ -120,6 +120,7 @@ const RequestDetailsPage = () => {
 										request.requestID,
 										account, // angel
 										account, // laboratory
+										true, // true: angel receives reward. false: laboratory receives reward.
 										request.requesterAddress,
 										fileResponse.path,
 										fileStuffResponse.path
