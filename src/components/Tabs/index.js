@@ -83,7 +83,7 @@ export const Tabs = ({ data, isMobile, route }) => {
 		>
 			<TabsHeader isMobile={isMobile}>
 				{data.map((tab, tabIndex) => (
-					<TabsHeaderItem isMobile={isMobile} tabIndex={tab.label} key={tabIndex}>
+					<TabsHeaderItem data-tour={tab['data-tour']} isMobile={isMobile} tabIndex={tab.label} key={tabIndex}>
 						{tab.label}
 					</TabsHeaderItem>
 				))}
