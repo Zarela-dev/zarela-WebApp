@@ -330,41 +330,48 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 					))}
 
 				{!isLoading && currentTableData.length ? (
-					currentTableData.map((transaction, index) => (
-						<Row key={index}>
-							<CellWrapper>
-								<CopyableText textToCopy={transaction.blockHash}>
-									<Cell copyable>{transaction.hash}</Cell>
-								</CopyableText>
-							</CellWrapper>
-							<CellWrapper>
-								<Cell>{timeSince(transaction.timeStamp)}</Cell>
-							</CellWrapper>
-							<CellWrapper>
-								<CopyableText textToCopy={transaction.from}>
-									<Cell copyable>{transaction.from}</Cell>
-								</CopyableText>
-							</CellWrapper>
-							<CellWrapper>
-								<CopyableText textToCopy={transaction.to}>
-									<Cell copyable>{transaction.to}</Cell>
-								</CopyableText>
-							</CellWrapper>
-							<CellWrapper>
-								<Cell>{getInput(transaction.input)}</Cell>
-							</CellWrapper>
-							<CellWrapper>
-								<Cell bold>
-									{transaction.input !== '0x'
-										? convertToBiobit(transaction.value)
-										: +transaction.value / Math.pow(10, 18)}
-								</Cell>
-							</CellWrapper>
-							<CellWrapper>
-								<Cell>{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}</Cell>
-							</CellWrapper>
-						</Row>
-					))
+					currentTableData.map((transaction, index) => {
+						console.log(
+							transaction.input.substr(0,10),
+							convertToBiobit(transaction.value),
+							+transaction.value / Math.pow(10, 18)
+						);
+						return (
+							<Row key={index}>
+								<CellWrapper>
+									<CopyableText textToCopy={transaction.blockHash}>
+										<Cell copyable>{transaction.hash}</Cell>
+									</CopyableText>
+								</CellWrapper>
+								<CellWrapper>
+									<Cell>{timeSince(transaction.timeStamp)}</Cell>
+								</CellWrapper>
+								<CellWrapper>
+									<CopyableText textToCopy={transaction.from}>
+										<Cell copyable>{transaction.from}</Cell>
+									</CopyableText>
+								</CellWrapper>
+								<CellWrapper>
+									<CopyableText textToCopy={transaction.to}>
+										<Cell copyable>{transaction.to}</Cell>
+									</CopyableText>
+								</CellWrapper>
+								<CellWrapper>
+									<Cell>{getInput(transaction.input)}</Cell>
+								</CellWrapper>
+								<CellWrapper>
+									<Cell bold>
+										{transaction.input !== '0x'
+											? convertToBiobit(transaction.value)
+											: +transaction.value / Math.pow(10, 18)}
+									</Cell>
+								</CellWrapper>
+								<CellWrapper>
+									<Cell>{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}</Cell>
+								</CellWrapper>
+							</Row>
+						);
+					})
 				) : (
 					<Row>
 						<NoTransactions>You don't have any transactions on this account in Zarela.</NoTransactions>

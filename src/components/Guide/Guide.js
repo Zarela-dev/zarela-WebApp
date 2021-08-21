@@ -11,6 +11,7 @@ import { useWeb3React } from '@web3-react/core';
 import { actionTypes, mainContext } from '../../state';
 import { SaveGuideToLocalStorage } from '../../state/actions';
 import { toast } from '../../utils';
+import ConnectDialog from '../Dialog/ConnectDialog';
 
 const Wrapper = styled.div``;
 const NavButton = styled.div`
@@ -82,7 +83,7 @@ const CustomizedTour = styled(Tour)`
 const Guide = React.memo(({ steps, children, isLoading }) => {
 	const [currentStep, setCurrentStep] = useState(0);
 	const location = useLocation();
-
+	const [showConnectDialog, setShowConnectDialog] = useState(false);
 	const { account } = useWeb3React();
 	const { appState, dispatch } = useContext(mainContext);
 
@@ -104,108 +105,115 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 	}, []);
 
 	return (
-		<Wrapper>
-			<CustomizedTour
-				isMobile={appState.isMobile}
-				steps={steps}
-				isOpen={appState.guideIsOpen}
-				onRequestClose={() =>
-					dispatch({
-						type: actionTypes.SET_GUIDE_IS_OPEN,
-						payload: false,
-					})
-				}
-				closeWithMask={false}
-				disableDotsNavigation={true}
-				showButtons={true}
-				// disableFocusLock={true}
-				// inViewThreshold={1000}
-				prevButton={
-					currentStep === steps.length - 1 ? undefined : (
-						<NavButton className="prev-btn">
-							{' '}
-							<ArrowIcon src={Prev} /> prev
-						</NavButton>
-					)
-				}
-				nextButton={
-					currentStep === steps.length - 1 ? undefined : (
-						<NavButton className="next-btn">
-							next <ArrowIcon src={Next} />
-						</NavButton>
-					)
-				}
-				onAfterOpen={(target) => (document.body.style.overflowY = 'hidden')}
-				showNavigation={false}
-				showCloseButton={false}
-				getCurrentStep={(step) => {
-					setCurrentStep(step);
-				}}
-				scrollDuration={100}
-				className="tour-custom"
-				highlightedMaskClassName="highlight"
-				maskClassName="mask"
-				lastStep={steps.length - 1 === currentStep ? true : false}
-				rounded={10}
-				maskSpace={10}
-				lastStepNextButton={
-					<SubmitRequestButton
-						onClick={() => {
-							document.body.style.overflowY = 'auto';
-							SaveGuideToLocalStorage(dispatch, location.pathname.split('/')[1]);
+		<>
+			{showConnectDialog ? <ConnectDialog isOpen={true} /> : null}
+			<Wrapper>
+				<CustomizedTour
+					isMobile={appState.isMobile}
+					steps={steps}
+					isOpen={appState.guideIsOpen}
+					onRequestClose={() =>
+						dispatch({
+							type: actionTypes.SET_GUIDE_IS_OPEN,
+							payload: false,
+						})
+					}
+					closeWithMask={false}
+					disableDotsNavigation={true}
+					showButtons={true}
+					// disableFocusLock={true}
+					// inViewThreshold={1000}
+					prevButton={
+						currentStep === steps.length - 1 ? undefined : (
+							<NavButton className="prev-btn">
+								{' '}
+								<ArrowIcon src={Prev} /> prev
+							</NavButton>
+						)
+					}
+					nextButton={
+						currentStep === steps.length - 1 ? undefined : (
+							<NavButton className="next-btn">
+								next <ArrowIcon src={Next} />
+							</NavButton>
+						)
+					}
+					onAfterOpen={(target) => (document.body.style.overflowY = 'hidden')}
+					showNavigation={false}
+					showCloseButton={false}
+					getCurrentStep={(step) => {
+						setCurrentStep(step);
+					}}
+					scrollDuration={100}
+					className="tour-custom"
+					highlightedMaskClassName="highlight"
+					maskClassName="mask"
+					lastStep={steps.length - 1 === currentStep ? true : false}
+					rounded={10}
+					maskSpace={10}
+					lastStepNextButton={
+						<SubmitRequestButton
+							onClick={() => {
+								document.body.style.overflowY = 'auto';
+								SaveGuideToLocalStorage(dispatch, location.pathname.split('/')[1]);
+								setCurrentStep(0)
 
-							if (appState.contract !== null) {
-								if (account) {
-									appState.contract.methods
-										.earnTestToken()
-										.send({ from: account })
-										.on('transactionHash', function (hash) {
-											toast(`TX Hash: ${hash}`, 'success', true, hash, {
-												toastId: hash,
+								if (appState.contract !== null) {
+									if (account) {
+										setShowConnectDialog(false);
+										appState.contract.methods
+											.earnTestToken()
+											.send({ from: account })
+											.on('transactionHash', function (hash) {
+												toast(`TX Hash: ${hash}`, 'success', true, hash, {
+													toastId: hash,
+												});
 											});
-										});
 
-									appState.contract.events
-										.Transfer()
-										.on('data', (event) => {
-											toast(
-												`100 BBits were transferred to ${event.returnValues[0]} from Zarela smart contract`,
-												'success',
-												false,
-												null,
-												{
-													toastId: event.id,
-												}
-											);
-										})
-										.on('error', (error, receipt) => {
-											toast(error.message, 'error');
-											console.error(error, receipt);
-										});
+										appState.contract.events
+											.Transfer()
+											.on('data', (event) => {
+												toast(
+													`100 BBits were transferred to ${event.returnValues[0]} from Zarela smart contract`,
+													'success',
+													false,
+													null,
+													{
+														toastId: event.id,
+													}
+												);
+											})
+											.on('error', (error, receipt) => {
+												toast(error.message, 'error');
+												console.error(error, receipt);
+											});
+									} else {
+										setShowConnectDialog(true);
+									}
 								}
-							}
+							}}
+						>
+							Collect
+						</SubmitRequestButton>
+					}
+					disableKeyboardNavigation={['esc']}
+				></CustomizedTour>
+				{appState.guideIsOpen && (
+					<Overlay
+						isMobile={appState.isMobile}
+						onClick={() => {
+							SaveGuideToLocalStorage(dispatch, location.pathname.split('/')[1]);
+							document.body.style.overflowY = 'auto';
 						}}
 					>
-						Collect
-					</SubmitRequestButton>
-				}
-				disableKeyboardNavigation={['esc']}
-			></CustomizedTour>
-			{appState.guideIsOpen && (
-				<Overlay
-					isMobile={appState.isMobile}
-					onClick={() => {
-						SaveGuideToLocalStorage(dispatch, location.pathname.split('/')[1]);
-						document.body.style.overflowY = 'auto';
-					}}
-				>
-					<Close isMobile={appState.isMobile}>
-						<CloseIcon src={CloseSvg} />
-					</Close>
-				</Overlay>
-			)}
-			{children}
-		</Wrapper>
+						<Close isMobile={appState.isMobile}>
+							<CloseIcon src={CloseSvg} />
+						</Close>
+					</Overlay>
+				)}
+				{children}
+			</Wrapper>
+		</>
 	);
 });
 
