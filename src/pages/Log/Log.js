@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import TitleBar from '../../components/TitleBar/TitleBar';
 import { Tabs } from '../../components/Tabs';
 import MyRequests from '../../containers/Log/MyRequests';
-import MarkedRequests from '../../containers/Log/MarkedRequests';
+// import MarkedRequests from '../../containers/Log/MarkedRequests';
 import { convertToBiobit, toast } from '../../utils';
 import Contributes from '../../containers/Log/Contributes';
 import { useWeb3React } from '@web3-react/core';

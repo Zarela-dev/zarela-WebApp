@@ -6,7 +6,7 @@ import { mainContext } from '../../state';
 import WalletTransactions from './../../containers/wallet/WalletTransactions';
 import WalletAccount from './../../containers/wallet/WalletAccount';
 import WalletSendAssets from './../../containers/wallet/WalletSendAssets';
-import ConnectToMetamask from '../../components/ConnectToMetamask';
+import ConnectDialog from '../../components/Dialog/ConnectDialog';
 
 const Wrapper = styled.div``;
 
@@ -62,7 +62,7 @@ export const WalletDesktop = ({ account, logs, isLoading, PAGE_SIZE }) => {
 			<WalletTitlebar>
 				<Title>Wallet</Title>
 			</WalletTitlebar>
-			<ConnectToMetamask />
+			{!account ? <ConnectDialog isOpen={true} /> : null}
 		</Wrapper>
 	) : (
 		<Wrapper>
