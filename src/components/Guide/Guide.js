@@ -96,6 +96,42 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 		}, timer);
 	};
 
+	const sendGift = () => {
+		if (appState.contract !== null) {
+			if (account) {
+				setShowConnectDialog(false);
+				appState.contract.methods
+					.earnTestToken()
+					.send({ from: account })
+					.on('transactionHash', function (hash) {
+						toast(`TX Hash: ${hash}`, 'success', true, hash, {
+							toastId: hash,
+						});
+					});
+
+				appState.contract.events
+					.Transfer()
+					.on('data', (event) => {
+						toast(
+							`100 BBits were transferred to ${event.returnValues[0]} from Zarela smart contract`,
+							'success',
+							false,
+							null,
+							{
+								toastId: event.id,
+							}
+						);
+					})
+					.on('error', (error, receipt) => {
+						toast(error.message, 'error');
+						console.error(error, receipt);
+					});
+			} else {
+				setShowConnectDialog(true);
+			}
+		}
+	};
+
 	useEffect(() => {
 		if (!localStorage.getItem('guide/' + location.pathname.split('/')[1])) {
 			handleTimeOut(3000);
@@ -106,7 +142,7 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 
 	return (
 		<>
-			{showConnectDialog ? <ConnectDialog isOpen={true} /> : null}
+			{showConnectDialog ? <ConnectDialog onConnect={sendGift} isOpen={true} /> : null}
 			<Wrapper>
 				<CustomizedTour
 					isMobile={appState.isMobile}
@@ -156,41 +192,8 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 							onClick={() => {
 								document.body.style.overflowY = 'auto';
 								SaveGuideToLocalStorage(dispatch, location.pathname.split('/')[1]);
-								setCurrentStep(0)
-
-								if (appState.contract !== null) {
-									if (account) {
-										setShowConnectDialog(false);
-										appState.contract.methods
-											.earnTestToken()
-											.send({ from: account })
-											.on('transactionHash', function (hash) {
-												toast(`TX Hash: ${hash}`, 'success', true, hash, {
-													toastId: hash,
-												});
-											});
-
-										appState.contract.events
-											.Transfer()
-											.on('data', (event) => {
-												toast(
-													`100 BBits were transferred to ${event.returnValues[0]} from Zarela smart contract`,
-													'success',
-													false,
-													null,
-													{
-														toastId: event.id,
-													}
-												);
-											})
-											.on('error', (error, receipt) => {
-												toast(error.message, 'error');
-												console.error(error, receipt);
-											});
-									} else {
-										setShowConnectDialog(true);
-									}
-								}
+								setCurrentStep(0);
+								sendGift();
 							}}
 						>
 							Collect
