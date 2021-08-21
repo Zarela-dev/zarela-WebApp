@@ -1,6 +1,6 @@
-import React, { forwardRef } from "react";
-import styled from "styled-components";
-import { css } from "styled-components";
+import React, { forwardRef } from 'react';
+import styled from 'styled-components';
+import { css } from 'styled-components';
 
 const InputStyles = css`
 	font-family: Krub;
@@ -8,7 +8,7 @@ const InputStyles = css`
 	border: 1px solid rgba(144, 144, 144, 0.3);
 	border-radius: 4px;
 	padding: ${(props) => props.theme.spacing(1)};
-	padding-right: 100px;
+	${(props) => props.hasAdornment && 'padding-right: 80px'};
 	box-sizing: border-box;
 	font-weight: 500;
 	font-size: 12px;
@@ -21,12 +21,12 @@ const InputWrapper = styled.div`
 
 const Input = styled.input`
 	${InputStyles}
-	${(props) => (props.error ? "border-bottom: 2px solid #F62D76;" : null)};
+	${(props) => (props.error ? 'border-bottom: 2px solid #F62D76;' : null)};
 `;
 
 const TextArea = styled.textarea`
 	${InputStyles}
-	${(props) => (props.error ? "border-bottom: 2px solid #F62D76;" : null)};
+	${(props) => (props.error ? 'border-bottom: 2px solid #F62D76;' : null)};
 `;
 
 const Wrapper = styled.div`
@@ -66,9 +66,9 @@ export const Error = styled.label`
 
 const Adornment = styled.div`
 	font-weight: 600;
-	font-size: ${({ colored }) => (colored ? "12px" : "14px")};
+	font-size: ${({ colored }) => (colored ? '12px' : '14px')};
 	line-height: 23px;
-	color: ${({ colored, theme }) => (colored ? "#581D9F" : theme.textPrimary)};
+	color: ${({ colored, theme }) => (colored ? '#581D9F' : theme.textPrimary)};
 `;
 
 const ActionsContainer = styled.div`
@@ -76,8 +76,8 @@ const ActionsContainer = styled.div`
 	flex-wrap: nowrap;
 	align-items: center;
 	position: absolute;
-	right: ${(props) => (props.isActionTypeIcon ? "7px" : "19px")};
-	top: ${(props) => (props.shrink ? "7px" : "31px")};
+	right: ${(props) => (props.isActionTypeIcon ? '7px' : '19px')};
+	top: ${(props) => (props.shrink ? '7px' : '31px')};
 	z-index: 3;
 `;
 
@@ -89,7 +89,7 @@ const HelperText = styled.div`
 	margin-top: ${(props) => props.theme.spacing(0.7)};
 `;
 
-const InputAction = styled.button.attrs({ type: "button" })`
+const InputAction = styled.button.attrs({ type: 'button' })`
 	border: none;
 	background: none;
 	background: transparent;
@@ -123,25 +123,20 @@ const TextField = forwardRef(
 				</Label>
 				<InputWrapper>
 					{multiline ? (
-						<TextArea error={error} ref={ref} row={5} {...rest} />
+						<TextArea hasAdornment={!!adornment} error={error} ref={ref} row={5} {...rest} />
 					) : (
-						<Input error={error} ref={ref} {...rest} />
+						<Input hasAdornment={!!adornment} error={error} ref={ref} {...rest} />
 					)}
 				</InputWrapper>
-				<ActionsContainer
-					shrink={!label ? true : false}
-					isActionTypeIcon={isActionTypeIcon}
-				>
+				<ActionsContainer shrink={!label ? true : false} isActionTypeIcon={isActionTypeIcon}>
 					{adornment ? (
-						<Adornment colored={coloredAdornment} onClick={adornmentOnClick}>{adornment}</Adornment>
+						<Adornment colored={coloredAdornment} onClick={adornmentOnClick}>
+							{adornment}
+						</Adornment>
 					) : null}
 					{actions
 						? actions.map((action) => {
-								return (
-									<InputAction onClick={action.onClick}>
-										{action.content}
-									</InputAction>
-								);
+								return <InputAction onClick={action.onClick}>{action.content}</InputAction>;
 						  })
 						: null}
 				</ActionsContainer>
