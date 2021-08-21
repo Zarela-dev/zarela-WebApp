@@ -67,7 +67,7 @@ function App() {
 					<AppProvider>
 						<ThemeProvider theme={theme}>
 							<AppRouter />
-							<CustomContainer />
+							<CustomContainer limit={3}/>
 							<GlobalStyle />
 						</ThemeProvider>
 					</AppProvider>
