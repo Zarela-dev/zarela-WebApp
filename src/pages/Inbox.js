@@ -11,7 +11,6 @@ import { useWeb3React } from '@web3-react/core';
 import Spinner from '../components/Spinner';
 import NoMobileSupportMessage from '../components/NoMobileSupportMessage';
 import Guide from './../components/Guide/Guide';
-import { useLocation } from 'react-router';
 
 const PageWrapper = styled.div``;
 
@@ -162,7 +161,7 @@ const Inbox = () => {
 
 	return (
 		<PageWrapper>
-			{!appState.isMobile && <Guide steps={steps}></Guide>}
+			{!appState.isMobile && guideIsOpen && <Guide steps={steps}></Guide>}
 			<TitleBar>My Requests</TitleBar>
 			<ContentWrapper>
 				{appState.isMobile ? (
