@@ -57,7 +57,6 @@ const Inbox = () => {
 	const [shouldRefresh, setShouldRefresh] = useState(false);
 	const [guideIsOpen, setGuideIsOpen] = useState(false);
 	const [anyOpenBox, setAnyOpenBox] = useState(false);
-	const location = useLocation();
 
 	const handleConfirm = (requestID, originalIndexes) => {
 		appState.contract.methods
@@ -163,41 +162,40 @@ const Inbox = () => {
 
 	return (
 		<PageWrapper>
-			<Guide steps={steps}>
-				<TitleBar>My Requests</TitleBar>
-				<ContentWrapper>
-					{appState.isMobile ? (
-						<NoMobileSupportMessage />
-					) : !account ? (
-						<ConnectDialog isOpen={ConnectionModalShow} onClose={() => setConnectionModalShow(false)} />
-					) : isLoading ? (
-						<SpinnerWrapper>
-							<Spinner />
-						</SpinnerWrapper>
-					) : Object.values(requests).length > 0 ? (
-						Object.values(requests)
-							.sort((a, b) => +b.requestID - +a.requestID)
-							.map((item) => (
-								<RequestListItem
-									shouldRefresh={shouldRefresh}
-									showContributions
-									key={item.requestID}
-									requestID={item.requestID}
-									title={item.title}
-									angelTokenPay={item.angelTokenPay}
-									laboratoryTokenPay={item.laboratoryTokenPay}
-									total={item.totalContributedCount}
-									contributors={`${item.totalContributed}/${item.totalContributors}`}
-									fulfilled={+item.totalContributed === +item.totalContributors}
-									handleConfirm={handleConfirm}
-									setAnyOpenBox={setAnyOpenBox}
-								/>
-							))
-					) : (
-						<NoRequestsFound />
-					)}
-				</ContentWrapper>
-			</Guide>
+			{!appState.isMobile && <Guide steps={steps}></Guide>}
+			<TitleBar>My Requests</TitleBar>
+			<ContentWrapper>
+				{appState.isMobile ? (
+					<NoMobileSupportMessage />
+				) : !account ? (
+					<ConnectDialog isOpen={ConnectionModalShow} onClose={() => setConnectionModalShow(false)} />
+				) : isLoading ? (
+					<SpinnerWrapper>
+						<Spinner />
+					</SpinnerWrapper>
+				) : Object.values(requests).length > 0 ? (
+					Object.values(requests)
+						.sort((a, b) => +b.requestID - +a.requestID)
+						.map((item) => (
+							<RequestListItem
+								shouldRefresh={shouldRefresh}
+								showContributions
+								key={item.requestID}
+								requestID={item.requestID}
+								title={item.title}
+								angelTokenPay={item.angelTokenPay}
+								laboratoryTokenPay={item.laboratoryTokenPay}
+								total={item.totalContributedCount}
+								contributors={`${item.totalContributed}/${item.totalContributors}`}
+								fulfilled={+item.totalContributed === +item.totalContributors}
+								handleConfirm={handleConfirm}
+								setAnyOpenBox={setAnyOpenBox}
+							/>
+						))
+				) : (
+					<NoRequestsFound />
+				)}
+			</ContentWrapper>
 		</PageWrapper>
 	);
 };
