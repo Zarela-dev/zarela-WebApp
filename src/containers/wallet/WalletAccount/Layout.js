@@ -30,5 +30,6 @@ export const Column = styled.div`
 `;
 
 export const MobileColumn = styled(Column)`
+	margin-top: 10px;
 	margin-bottom: 40px;
 `;

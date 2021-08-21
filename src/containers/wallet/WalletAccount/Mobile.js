@@ -71,12 +71,12 @@ const WalletAccountMobile = ({ address }) => {
 					<NextStepIcon src={nextStepIcon} />
 				</NextStepArrow>
 				<MobileColumn>
-					<MobileColumn center>
+					{/* <MobileColumn center>
 						<QRCodeMobile>
 							<QRCodeImage src={qrCodeImage} />
 						</QRCodeMobile>
 						<SaveQRCodeButton variant="secondary">save QR code</SaveQRCodeButton>
-					</MobileColumn>
+					</MobileColumn> */}
 					<MobileColumn center>
 						<AddressTitleMobile>BBit account address</AddressTitleMobile>
 						<AddressMobile>{address}</AddressMobile>

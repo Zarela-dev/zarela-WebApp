@@ -53,12 +53,12 @@ const WalletAccount = ({ address }) => {
 				</NextStepArrow>
 				<Column>
 					<Row>
-						<Column center>
+						{/* <Column center>
 							<QRCode>
 								<QRCodeImage src={qrCodeImage} />
 							</QRCode>
 							<SaveQRCodeButton variant="secondary">save QR code</SaveQRCodeButton>
-						</Column>
+						</Column> */}
 						<Column center>
 							<AddressTitle>BBit account address</AddressTitle>
 							<Address>{address}</Address>
