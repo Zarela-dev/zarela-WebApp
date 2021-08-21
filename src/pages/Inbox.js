@@ -152,17 +152,16 @@ const Inbox = () => {
 	}, [appState.contract, account]);
 
 	useEffect(() => {
-		if (anyOpenBox) {
+		if (Object.values(requests).filter((item) => item.totalContributedCount > 0).length)
 			setTimeout(() => {
 				setGuideIsOpen(true);
 			}, 200);
-		}
-	}, [anyOpenBox]);
+	}, [requests]);
 
 	return (
 		<PageWrapper>
 			{!appState.isMobile && guideIsOpen && <Guide steps={steps}></Guide>}
-			<TitleBar>My Requests</TitleBar>
+			<TitleBar>Inbox</TitleBar>
 			<ContentWrapper>
 				{appState.isMobile ? (
 					<NoMobileSupportMessage />
@@ -174,11 +173,12 @@ const Inbox = () => {
 					</SpinnerWrapper>
 				) : Object.values(requests).length > 0 ? (
 					Object.values(requests)
+						.filter((item) => item.totalContributedCount > 0)
 						.sort((a, b) => +b.requestID - +a.requestID)
-						.map((item) => (
+						.map((item, index) => (
 							<RequestListItem
 								shouldRefresh={shouldRefresh}
-								showContributions
+								showContributions={index === 0}
 								key={item.requestID}
 								requestID={item.requestID}
 								title={item.title}

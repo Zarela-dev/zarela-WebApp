@@ -364,7 +364,7 @@ const RequestListItem = ({
 	};
 
 	useEffect(() => {
-		if (showContributions && appState.contract !== null) {
+		if (appState.contract !== null) {
 			appState.contract.methods.getOrderData(requestID).call((orderInfoError, orderInfo) => {
 				if (!orderInfoError) {
 					appState.contract.methods
@@ -377,7 +377,7 @@ const RequestListItem = ({
 								let timestamp = orderInfo[2];
 								let status = orderInfo[4];
 								let zarelaDay = orderInfo[5];
-								
+
 								let formatted = {};
 								let uniqueAddresses = [...new Set(addresses)];
 								let pairs = [];
@@ -434,6 +434,10 @@ const RequestListItem = ({
 		}
 	}, [appState.contract, shouldRefresh]);
 
+	useEffect(() => {
+		setOpen(showContributions);
+	}, []);
+
 	return (
 		<Wrapper>
 			<Header
@@ -456,7 +460,9 @@ const RequestListItem = ({
 							<TokenIcon src={biobitIcon} />
 							<TokenValue>{+angelTokenPay + +laboratoryTokenPay}</TokenValue>
 							<ValueLabel>BBit</ValueLabel>
-							<BiobitToDollarValue noMargin>{`~ $${+angelTokenPay + +laboratoryTokenPay}`}</BiobitToDollarValue>
+							<BiobitToDollarValue noMargin>{`~ $${
+								+angelTokenPay + +laboratoryTokenPay
+							}`}</BiobitToDollarValue>
 						</BadgeRow>
 					</BiobitToDollarPair>
 					<Divider />
@@ -472,7 +478,7 @@ const RequestListItem = ({
 					<ExpandToggle src={!isOpen ? caretDownIcon : caretUpIcon} />
 				</DetailsColumn>
 			</Header>
-			{showContributions && isOpen ? (
+			{isOpen ? (
 				Object.keys(formattedData).length > 0 ? (
 					<>
 						<Body data-tour="inbox-one">

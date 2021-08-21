@@ -35,7 +35,7 @@ const NoRequestsFound = ({ message }) => {
 	return (
 		<Container>
 			<Image src={noRequestsFoundImage} />
-			<Message>{message || 'You have not submitted any new requests!'}</Message>
+			<Message>{message || 'You have not received any files yet.'}</Message>
 		</Container>
 	);
 };
