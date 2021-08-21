@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import RequestDetails from '../../components/RequestDetails/RequestDetails';
 import { timeSince } from '../../utils';
 import ConnectDialog from '../../components/Dialog/ConnectDialog';
