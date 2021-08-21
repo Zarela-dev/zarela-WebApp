@@ -120,7 +120,7 @@ const bottomNavItems = [
 		icon: inboxIcon,
 		activeIcon: inboxIcon_active,
 		path: '/inbox',
-		notifications: 2,
+		notifications: 0,
 	},
 	{
 		center: true,
