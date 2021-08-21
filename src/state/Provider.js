@@ -16,6 +16,7 @@ const appInitialState = {
 	fallbackWeb3Instance: null,
 	contract: null,
 	isMobile: null,
+	guideIsOpen: null,
 
 	zarelaCurrent: null,
 };
@@ -69,6 +70,11 @@ const AppProvider = ({ children }) => {
 					...state,
 					isMobile: action.payload,
 				};
+			case actionTypes.SET_GUIDE_IS_OPEN:
+				return {
+					...state,
+					guideIsOpen: action.payload,
+				};
 			default:
 				return state;
 		}
@@ -82,6 +88,10 @@ const AppProvider = ({ children }) => {
 				? true
 				: false,
 		});
+		dispatch({
+			type: actionTypes.SET_GUIDE_IS_OPEN,
+			payload: false,
+		})
 	}, []);
 
 	useEffect(() => {
@@ -99,7 +109,7 @@ const AppProvider = ({ children }) => {
 	}, [appState.contract]);
 
 	useEffect(() => {
-		if(account === undefined ) {
+		if (account === undefined) {
 			dispatch({
 				type: actionTypes.SET_BBIT_BALANCE,
 				payload: appInitialState.biobitBalance,
@@ -156,6 +166,7 @@ const AppProvider = ({ children }) => {
 		<mainContext.Provider
 			value={{
 				appState,
+				dispatch
 			}}
 		>
 			{children}

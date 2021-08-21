@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useParams } from 'react-router';
 import { Buffer } from 'buffer';
 import { create } from 'ipfs-http-client';
-import { mainContext } from '../../state';
+import { actionTypes, mainContext } from '../../state';
 import { useHistory } from 'react-router-dom';
 import { convertToBiobit } from '../../utils';
 import * as ethUtil from 'ethereumjs-util';
@@ -11,19 +11,41 @@ import { toast, ZRNG, getFileNameWithExt } from '../../utils';
 import { useWeb3React } from '@web3-react/core';
 import Mobile from './Mobile';
 import Desktop from './Desktop';
+import Guide from './../../components/Guide/Guide';
+import { useLocation } from 'react-router';
 import { twofish } from 'twofish';
+
+const steps = [
+	{
+		selector: '[data-tour="request-details-one"]',
+		content: 'Mage’s public key on Ethereum Network is indicated here for checking by angles.',
+	},
+	{
+		selector: '[data-tour="request-details-two"]',
+		content: 'Mage creates the Zpaper, containing all the description and requirements.',
+	},
+	{
+		selector: '[data-tour="request-details-three"]',
+		content: 'For contributing, files must be selected here from your device.',
+	},
+	{
+		selector: '',
+		content:
+			'Well done! You earn 100 BBits for this learning! want to earn more? learn every guide on pages and collect about 500 BBits!',
+	},
+];
 
 const RequestDetailsPage = () => {
 	const { id } = useParams();
 	const [request, setRequest] = useState({});
-	const { appState } = useContext(mainContext);
+	const { appState, dispatch } = useContext(mainContext);
 	const sendSignalRef = useRef(null);
 	const [showDialog, setDialog] = useState(false);
 	const [isSubmitting, setSubmitting] = useState(false);
 	const [dialogMessage, setDialogMessage] = useState('');
 	const [error, setError] = useState(false);
 	const { account } = useWeb3React();
-	const history = useHistory();
+	const location = useLocation();
 
 	const clearSubmitDialog = () => {
 		setSubmitting(false);
@@ -98,6 +120,7 @@ const RequestDetailsPage = () => {
 										request.requestID,
 										account, // angel
 										account, // laboratory
+										true, // true: angel receives reward. false: laboratory receives reward.
 										request.requesterAddress,
 										fileResponse.path,
 										fileStuffResponse.path
@@ -109,8 +132,9 @@ const RequestDetailsPage = () => {
 										(error, result) => {
 											if (!error) {
 												clearSubmitDialog();
-												toast(result, 'success', true, result);
-
+												toast(`TX Hash: ${result}`, 'success', true, result, {
+													toastId: result,
+												});
 												if (sendSignalRef.current !== null) sendSignalRef.current.value = null;
 											} else {
 												clearSubmitDialog();
@@ -196,41 +220,41 @@ const RequestDetailsPage = () => {
 		}
 	}, [id, appState.contract]);
 
-	if (appState.isMobile) {
-		return (
-			<Mobile
-				{...{
-					account,
-					showDialog,
-					isSubmitting,
-					setSubmitting,
-					dialogMessage,
-					request,
-					sendSignalRef,
-					submitSignal,
-					error,
-					setError,
-				}}
-			/>
-		);
-	} else {
-		return (
-			<Desktop
-				{...{
-					account,
-					showDialog,
-					isSubmitting,
-					setSubmitting,
-					dialogMessage,
-					request,
-					sendSignalRef,
-					submitSignal,
-					error,
-					setError,
-				}}
-			/>
-		);
-	}
+	return (
+		<Guide steps={steps}>
+			{appState.isMobile ? (
+				<Mobile
+					{...{
+						account,
+						showDialog,
+						isSubmitting,
+						setSubmitting,
+						dialogMessage,
+						request,
+						sendSignalRef,
+						submitSignal,
+						error,
+						setError,
+					}}
+				/>
+			) : (
+				<Desktop
+					{...{
+						account,
+						showDialog,
+						isSubmitting,
+						setSubmitting,
+						dialogMessage,
+						request,
+						sendSignalRef,
+						submitSignal,
+						error,
+						setError,
+					}}
+				/>
+			)}
+		</Guide>
+	);
 };
 
 export default RequestDetailsPage;

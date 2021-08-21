@@ -10,6 +10,8 @@ import NoRequestsFound from '../components/NoRequestsFound';
 import { useWeb3React } from '@web3-react/core';
 import Spinner from '../components/Spinner';
 import NoMobileSupportMessage from '../components/NoMobileSupportMessage';
+import Guide from './../components/Guide/Guide';
+import { useLocation } from 'react-router';
 
 const PageWrapper = styled.div``;
 
@@ -25,6 +27,27 @@ const SpinnerWrapper = styled.div`
 	justify-content: center;
 	align-items: center;
 `;
+
+const steps = [
+	{
+		selector: '[data-tour="inbox-one"]',
+		content: 'List of submitted requests with current public key and received response files.',
+	},
+	{
+		selector: '[data-tour="inbox-two"]',
+		content: 'Public key of angels who contributed',
+	},
+	{
+		selector: '[data-tour="inbox-three"]',
+		content: 'approved responses which are checked, wage tokens will be sent to. ',
+	},
+	{
+		selector: '',
+		content:
+			'Well done! You earn 100 BBits for this learning! want to earn more? learn every guide on pages and collect about 500 BBits!',
+	},
+];
+
 const Inbox = () => {
 	const { appState } = useContext(mainContext);
 	const [requests, setRequests] = useState({});
@@ -32,13 +55,18 @@ const Inbox = () => {
 	const { account } = useWeb3React();
 	const [ConnectionModalShow, setConnectionModalShow] = useState(true);
 	const [shouldRefresh, setShouldRefresh] = useState(false);
+	const [guideIsOpen, setGuideIsOpen] = useState(false);
+	const [anyOpenBox, setAnyOpenBox] = useState(false);
+	const location = useLocation();
 
 	const handleConfirm = (requestID, originalIndexes) => {
 		appState.contract.methods
 			.confirmContributor(requestID, originalIndexes)
 			.send({ from: account }, (error, result) => {
 				if (!error) {
-					toast(result, 'success', true, result);
+					toast(`TX Hash: ${result}`, 'success', true, result, {
+						toastId: result,
+					});
 				} else {
 					toast(error.message, 'error');
 				}
@@ -125,40 +153,51 @@ const Inbox = () => {
 		}
 	}, [appState.contract, account]);
 
+	useEffect(() => {
+		if (anyOpenBox) {
+			setTimeout(() => {
+				setGuideIsOpen(true);
+			}, 200);
+		}
+	}, [anyOpenBox]);
+
 	return (
 		<PageWrapper>
-			<TitleBar>My Requests</TitleBar>
-			<ContentWrapper>
-				{appState.isMobile ? (
-					<NoMobileSupportMessage />
-				) : !account ? (
-					<ConnectDialog isOpen={ConnectionModalShow} onClose={() => setConnectionModalShow(false)} />
-				) : isLoading ? (
-					<SpinnerWrapper>
-						<Spinner />
-					</SpinnerWrapper>
-				) : Object.values(requests).length > 0 ? (
-					Object.values(requests)
-						.sort((a, b) => +b.requestID - +a.requestID)
-						.map((item) => (
-							<RequestListItem
-								shouldRefresh={shouldRefresh}
-								showContributions
-								key={item.requestID}
-								requestID={item.requestID}
-								title={item.title}
-								angelTokenPay={item.angelTokenPay}
-								laboratoryTokenPay={item.laboratoryTokenPay}
-								total={item.totalContributedCount}
-								contributors={`${item.totalContributed}/${item.totalContributors}`}
-								fulfilled={+item.totalContributed === +item.totalContributors}
-								handleConfirm={handleConfirm}
-							/>
-						))
-				) : (
-					<NoRequestsFound />
-				)}
-			</ContentWrapper>
+			<Guide steps={steps}>
+				<TitleBar>My Requests</TitleBar>
+				<ContentWrapper>
+					{appState.isMobile ? (
+						<NoMobileSupportMessage />
+					) : !account ? (
+						<ConnectDialog isOpen={ConnectionModalShow} onClose={() => setConnectionModalShow(false)} />
+					) : isLoading ? (
+						<SpinnerWrapper>
+							<Spinner />
+						</SpinnerWrapper>
+					) : Object.values(requests).length > 0 ? (
+						Object.values(requests)
+							.sort((a, b) => +b.requestID - +a.requestID)
+							.map((item) => (
+								<RequestListItem
+									shouldRefresh={shouldRefresh}
+									showContributions
+									key={item.requestID}
+									requestID={item.requestID}
+									title={item.title}
+									angelTokenPay={item.angelTokenPay}
+									laboratoryTokenPay={item.laboratoryTokenPay}
+									total={item.totalContributedCount}
+									contributors={`${item.totalContributed}/${item.totalContributors}`}
+									fulfilled={+item.totalContributed === +item.totalContributors}
+									handleConfirm={handleConfirm}
+									setAnyOpenBox={setAnyOpenBox}
+								/>
+							))
+					) : (
+						<NoRequestsFound />
+					)}
+				</ContentWrapper>
+			</Guide>
 		</PageWrapper>
 	);
 };

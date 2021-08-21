@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import TitleBar from '../../components/TitleBar/TitleBar';
 import { Tabs } from '../../components/Tabs';
 import { mainContext } from '../../state';
-import ConnectToMetamask from '../../components/ConnectToMetamask';
 import MobileLayout from '../../components/MobileLayout';
 import WalletTransactionsMobile from './../../containers/wallet/WalletTransactionsMobile';
 import WalletAccountMobile from './../../containers/wallet/WalletAccount/Mobile';
 import WalletSendAssets from './../../containers/wallet/WalletSendAssets';
+import ConnectDialog from '../../components/Dialog/ConnectDialog';
 
 const Wrapper = styled.div``;
 
@@ -59,7 +59,7 @@ export const WalletMobile = ({ data, account, logs, isLoading, PAGE_SIZE }) => {
 			<WalletTitlebar isMobile={appState.isMobile}>
 				<Title>Wallet</Title>
 			</WalletTitlebar>
-			<ConnectToMetamask />
+			{!account ? <ConnectDialog isOpen={true} /> : null}
 		</Wrapper>
 	) : (
 		<Wrapper>

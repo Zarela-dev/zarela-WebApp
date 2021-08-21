@@ -57,10 +57,10 @@ const RequestCardMobile = (props) => {
 	const { appState } = useContext(mainContext);
 
 	return (
-		<RequestCardWrapper>
+		<RequestCardWrapper data-tour="request-list-one">
 			<HeaderLayout>
-				<RequestNumber isMobile={appState.isMobile}>{props.requestID}</RequestNumber>
-				<Title>{props.title.length < 70 ? props.title : props.title.substr(0, 70) + '...'}</Title>
+				<RequestNumber data-tour="request-list-two" isMobile={appState.isMobile}>{props.requestID}</RequestNumber>
+				<Title data-tour="request-list-three">{props.title.length < 70 ? props.title : props.title.substr(0, 70) + '...'}</Title>
 				<Spacer />
 			</HeaderLayout>
 			<Timestamp nowrap variant="caption">
@@ -82,7 +82,7 @@ const RequestCardMobile = (props) => {
 				</ProgressTrackerTrack>
 			</ProgressTrackerWrapper>
 			<Footer>
-				<BiobitToDollarPair>
+				<BiobitToDollarPair data-tour="request-list-four">
 					<BadgeRow>
 						<TokenIcon src={biobitIcon} />
 						<TokenValue>{+props.angelTokenPay + +props.laboratoryTokenPay}</TokenValue>
@@ -92,20 +92,20 @@ const RequestCardMobile = (props) => {
 					</BadgeRow>
 				</BiobitToDollarPair>
 				<Divider />
-				<ContributorBadge>
+				<ContributorBadge data-tour="request-list-five">
 					<BadgeRow>
 						<ContributorsIcon src={documentsIcon} />
 						<BadgeLabel>{props.contributors}</BadgeLabel>
 					</BadgeRow>
 				</ContributorBadge>
 				<Divider />
-				<ContributorBadge>
+				<ContributorBadge data-tour="request-list-six">
 					<BadgeRow>
 						<ContributorsIcon src={contributorIcon} />
 						<BadgeLabel>{props.totalContributedCount}</BadgeLabel>
 					</BadgeRow>
 				</ContributorBadge>
-				<JoinButton variant="secondary" to={`/request/${props.requestID}`}>
+				<JoinButton data-tour="request-list-seven" variant="secondary" to={`/request/${props.requestID}`}>
 					Start
 				</JoinButton>
 			</Footer>

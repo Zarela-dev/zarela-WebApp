@@ -7,7 +7,6 @@ import {
 	Footer,
 	Spacer,
 	TokenIcon,
-	Bookmark,
 	Typography,
 	ContributorBadge,
 	ContributorsIcon,
@@ -26,7 +25,6 @@ import maxWidthWrapper from '../Elements/MaxWidth';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/user-black.svg';
 import documentsIcon from '../../assets/icons/document-black.svg';
-import bookmarkIcon from '../../assets/icons/bookmark-purple.svg';
 import publicKeyIcon from '../../assets/icons/public-key.svg';
 import { CopyableText, timeSince } from '../../utils';
 import DownloadFileCardMobile from '../DownloadFileCard/DownloadFileCardMobile';
@@ -160,7 +158,6 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
 								<Timestamp>{timeSince(request.timestamp)}</Timestamp>
 							</Title>
 							<Spacer />
-							<Bookmark src={bookmarkIcon} />
 						</HeaderLayout>
 						<CustomFooter>
 							<CustomContributeBadge>
@@ -216,7 +213,7 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
 					<TitleContent>Description</TitleContent>
 					<Description>{request.description}</Description>
 				</DescriptionContainer>
-				<PublicKeyBadge>
+				<PublicKeyBadge data-tour="request-details-one">
 					<PublicKeyIcon src={publicKeyIcon} />
 					<CopyableText textToCopy={request.requesterAddress}>
 						<PublicKeyTextContainer>

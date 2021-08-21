@@ -166,6 +166,7 @@ const RequestListItem = ({
 	contributors,
 	handleConfirm,
 	fulfilled,
+	setAnyOpenBox,
 }) => {
 	const [isOpen, setOpen] = useState(false);
 	const [unapprovedCount, setUnapprovedCount] = useState(0);
@@ -435,7 +436,12 @@ const RequestListItem = ({
 
 	return (
 		<Wrapper>
-			<Header onClick={() => setOpen(!isOpen)}>
+			<Header
+				onClick={() => {
+					setOpen(!isOpen);
+					setAnyOpenBox && setAnyOpenBox(true);
+				}}
+			>
 				<TitleColumn>
 					<RequestNumberWithPointer>{requestID}</RequestNumberWithPointer>
 					<Title variant="title" weight="semiBold">
@@ -469,7 +475,7 @@ const RequestListItem = ({
 			{showContributions && isOpen ? (
 				Object.keys(formattedData).length > 0 ? (
 					<>
-						<Body>
+						<Body data-tour="inbox-one">
 							<RequestFilesTable
 								signalDownloadHandler={signalDownloadHandler}
 								data={formattedData}

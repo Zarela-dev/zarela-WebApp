@@ -60,10 +60,12 @@ const WalletSendAssets = (mobile) => {
 		onSubmit: (values) => {
 			if (values.token === 'Biobit') {
 				appState.contract.methods
-					.Transfer(values.address, +values.amount * Math.pow(10, 9))
+					.transfer(values.address, +values.amount * Math.pow(10, 9))
 					.send({ from: account }, (error, result) => {
 						if (!error) {
-							toast(result, 'success', true, result);
+							toast(`TX Hash: ${result}`, 'success', true, result, {
+								toastId: result,
+							});
 							history.push('/wallet/transactions');
 							//#todo create the tab based routes
 						} else {
@@ -96,7 +98,7 @@ const WalletSendAssets = (mobile) => {
 	const getClipboard = async () => {
 		var pasteTarget = document.getElementsByName('address')[0];
 		pasteTarget.focus();
-		if (navigator.clipboard) document.execCommand('insertText', false, await navigator.clipboard.readText());
+		if (navigator.clipboard && navigator.clipboard?.readText) document.execCommand('insertText', false, await navigator.clipboard.readText());
 	};
 
 	return (
@@ -124,7 +126,7 @@ const WalletSendAssets = (mobile) => {
 						isMobile={appState.isMobile}
 						label={"Recipient's Address"}
 						placeholder={"Please enter the Recipient's address"}
-						adornment={navigator.clipboard ? 'Paste' : null} // #todo
+						adornment={navigator.clipboard && navigator.clipboard?.readText ? 'Paste' : null} // #todo
 						adornmentOnClick={() => {
 							// let test = document.execCommand('paste')
 							// console.log('test ', test);

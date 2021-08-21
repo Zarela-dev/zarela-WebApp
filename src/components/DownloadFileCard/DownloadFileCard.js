@@ -23,7 +23,7 @@ const DownloadFileCard = ({
 	fileLink
 }) => {
 	return (
-		<Card>
+		<Card data-tour="request-details-two">
 			<CustomFileInputWrapper hasBorder>
 				<FileInputLink href={fileLink} target='_blank'>
 					{buttonLabel}

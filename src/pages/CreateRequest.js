@@ -144,7 +144,9 @@ const CreateRequest = () => {
 														(error, result) => {
 															if (!error) {
 																clearSubmitDialog();
-																toast(result, 'success', true, result);
+																toast(`TX Hash: ${result}`, 'success', true, result, {
+																	toastId: result,
+																});
 															} else {
 																clearSubmitDialog();
 																toast(error.message, 'error');

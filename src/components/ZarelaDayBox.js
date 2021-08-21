@@ -7,11 +7,13 @@ const Container = styled.div`
 	flex-direction: column;
 	align-items: center;
 	margin-bottom: ${(props) => props.theme.spacing(5)};
+	max-height: 108px;
 
 	@media only screen and (max-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
 		flex-direction: row;
 		padding: ${(props) => `${props.theme.spacing(3)} ${props.theme.spacing(7)}`};
 		margin-bottom: 0;
+		max-height: 108px;
 	}
 `;
 

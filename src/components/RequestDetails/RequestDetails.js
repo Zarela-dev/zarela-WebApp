@@ -8,7 +8,6 @@ import {
 	Footer,
 	Spacer,
 	TokenIcon,
-	Bookmark,
 	Typography,
 	ContributorBadge,
 	ContributorsIcon,
@@ -28,7 +27,6 @@ import maxWidthWrapper from './../Elements/MaxWidth';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/user-blue.svg';
 import documentsIcon from '../../assets/icons/document-blue.svg';
-import bookmarkIcon from '../../assets/icons/bookmark-purple.svg';
 import publicKeyIcon from '../../assets/icons/public-key.svg';
 import { CopyableText, timeSince } from '../../utils';
 
@@ -160,7 +158,6 @@ const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, 
 							<Timestamp>{timeSince(request.timestamp)}</Timestamp>
 						</Title>
 						<Spacer />
-						<Bookmark src={bookmarkIcon} />
 					</HeaderLayout>
 					<CustomFooter>
 						<CustomContributeBadge>
@@ -199,7 +196,7 @@ const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, 
 						return <TagItem key={index}>#{item}</TagItem>;
 					})}
 				</TagsWrapper>
-				<PublicKeyBadge>
+				<PublicKeyBadge data-tour="request-details-one">
 					<PublicKeyIcon src={publicKeyIcon} />
 					<CopyableText textToCopy={request.requesterAddress}>
 						<PublicKeyTextContainer>

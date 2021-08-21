@@ -12,6 +12,10 @@ import menu from '../../assets/icons/menu.svg';
 import MobileMenu from '../MobileMenu';
 import { mainContext } from './../../state';
 import maxWidthWrapper from '../Elements/MaxWidth';
+import chainIdTag from '../../assets/icons/chainid-tag.svg';
+import help from './../../assets/icons/help.svg';
+import { useLocation } from 'react-router';
+import { actionTypes } from '../../state/actionTypes';
 
 const NavItem = styled(Link)`
 	position: relative;
@@ -24,6 +28,7 @@ const NavItem = styled(Link)`
 	text-decoration: none;
 	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(0) : props.theme.spacing(4))};
 	margin-left: ${(props) => (props.isMobile ? props.theme.spacing(2) : props.theme.spacing(4))};
+	outline: none !important;
 `;
 
 const NavLink = styled(Typography)`
@@ -135,9 +140,26 @@ const NavIconApp = styled(NavIcon)`
 // 	height: 16px;
 // `;
 
+const ChainBadge = styled.div`
+	background-image: url(${chainIdTag});
+	background-repeat: no-repeat;
+	background-size: 100%;
+	position: absolute;
+	background-position: center;
+	right: -106px;
+	top: 14px;
+	height: 42px;
+	white-space: nowrap;
+	padding: 10px 20px;
+	padding-right: 10px;
+	line-height: 22px;
+	color: #8c2595;
+`;
+
 export default function Header({ isMobile }) {
 	const [isMenuOpen, setMenuOpen] = useState(false);
-	const { appState } = useContext(mainContext);
+	const { appState, dispatch } = useContext(mainContext);
+	const location = useLocation();
 
 	if (isMobile) {
 		return (
@@ -190,6 +212,7 @@ export default function Header({ isMobile }) {
 					<NavItem isMobile={appState.isMobile} to="/wallet/account">
 						<NavIcon src={wallet} />
 						<NavLink>Wallet</NavLink>
+						<ChainBadge>Ropsten</ChainBadge>
 					</NavItem>
 				</RightMenu>
 				<LeftMenu>
@@ -198,9 +221,18 @@ export default function Header({ isMobile }) {
 						<NavIcon src={bell} />
 						<NotificationBadge>321</NotificationBadge>
 					</NavItem> */}
-					{/* <NavItem device="desktop">
-						<NavIcon src={help} />
-					</NavItem> */}
+					<NavItem>
+						<NavIcon
+							src={help}
+							onClick={() => {
+								localStorage.removeItem('guide/' + location.pathname.split('/')[1]);
+								dispatch({
+									type: actionTypes.SET_GUIDE_IS_OPEN,
+									payload: true,
+								});
+							}}
+						/>
+					</NavItem>
 				</LeftMenu>
 			</HeaderWrapper>
 		);
