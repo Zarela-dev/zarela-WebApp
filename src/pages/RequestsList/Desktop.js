@@ -104,7 +104,6 @@ const useStyles = makeStyles({
 	},
 });
 
-
 const Desktop = ({
 	requests,
 	appState,

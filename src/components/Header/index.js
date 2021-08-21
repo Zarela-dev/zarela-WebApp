@@ -28,6 +28,7 @@ const NavItem = styled(Link)`
 	text-decoration: none;
 	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(0) : props.theme.spacing(4))};
 	margin-left: ${(props) => (props.isMobile ? props.theme.spacing(2) : props.theme.spacing(4))};
+	outline: none !important;
 `;
 
 const NavLink = styled(Typography)`

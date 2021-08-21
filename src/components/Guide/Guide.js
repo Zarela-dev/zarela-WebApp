@@ -75,22 +75,40 @@ const CustomizedTour = styled(Tour)`
 	}
 	&.reactour__helper {
 		width: ${(props) => (props.isMobile ? '80%' : 'unset')};
+		line-height: 23px;
 	}
 `;
 
-const Guide = React.memo(({ steps, guideIsOpen, isMobile }) => {
+const Guide = React.memo(({ steps, children, isLoading }) => {
 	const [currentStep, setCurrentStep] = useState(0);
 	const location = useLocation();
 
 	const { account } = useWeb3React();
 	const { appState, dispatch } = useContext(mainContext);
 
+	const handleTimeOut = (timer) => {
+		setTimeout(() => {
+			dispatch({
+				type: actionTypes.SET_GUIDE_IS_OPEN,
+				payload: true,
+			});
+		}, timer);
+	};
+
+	useEffect(() => {
+		if (!localStorage.getItem('guide/' + location.pathname.split('/')[1])) {
+			handleTimeOut(3000);
+		} else if (location.pathname.split('/')[1] === '' && !isLoading) {
+			handleTimeOut(3000);
+		}
+	}, []);
+
 	return (
 		<Wrapper>
 			<CustomizedTour
-				isMobile={isMobile}
+				isMobile={appState.isMobile}
 				steps={steps}
-				isOpen={guideIsOpen}
+				isOpen={appState.guideIsOpen}
 				onRequestClose={() =>
 					dispatch({
 						type: actionTypes.SET_GUIDE_IS_OPEN,
@@ -173,19 +191,20 @@ const Guide = React.memo(({ steps, guideIsOpen, isMobile }) => {
 				}
 				disableKeyboardNavigation={['esc']}
 			></CustomizedTour>
-			{guideIsOpen ? (
+			{appState.guideIsOpen && (
 				<Overlay
-					isMobile={isMobile}
+					isMobile={appState.isMobile}
 					onClick={() => {
 						SaveGuideToLocalStorage(dispatch, location.pathname.split('/')[1]);
 						document.body.style.overflowY = 'auto';
 					}}
 				>
-					<Close isMobile={isMobile}>
+					<Close isMobile={appState.isMobile}>
 						<CloseIcon src={CloseSvg} />
 					</Close>
 				</Overlay>
-			) : null}
+			)}
+			{children}
 		</Wrapper>
 	);
 });

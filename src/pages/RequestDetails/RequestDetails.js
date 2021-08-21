@@ -47,15 +47,6 @@ const RequestDetailsPage = () => {
 	const { account } = useWeb3React();
 	const location = useLocation();
 
-	useEffect(() => {
-		setTimeout(() => {
-			dispatch({
-				type: actionTypes.SET_GUIDE_IS_OPEN,
-				payload: true
-			})
-		}, 1000);
-	}, []);
-
 	const clearSubmitDialog = () => {
 		setSubmitting(false);
 		setDialogMessage('');
@@ -227,12 +218,9 @@ const RequestDetailsPage = () => {
 		}
 	}, [id, appState.contract]);
 
-	if (appState.isMobile) {
-		return (
-			<>
-				{!localStorage.getItem('guide/' + location.pathname.split('/')[1]) ? (
-					<Guide isMobile={appState.isMobile} steps={steps} guideIsOpen={appState.guideIsOpen} />
-				) : null}
+	return (
+		<Guide steps={steps}>
+			{appState.isMobile ? (
 				<Mobile
 					{...{
 						account,
@@ -247,14 +235,7 @@ const RequestDetailsPage = () => {
 						setError,
 					}}
 				/>
-			</>
-		);
-	} else {
-		return (
-			<>
-				{!localStorage.getItem('guide/' + location.pathname.split('/')[1]) ? (
-					<Guide steps={steps} guideIsOpen={appState.guideIsOpen} />
-				) : null}
+			) : (
 				<Desktop
 					{...{
 						account,
@@ -269,9 +250,9 @@ const RequestDetailsPage = () => {
 						setError,
 					}}
 				/>
-			</>
-		);
-	}
+			)}
+		</Guide>
+	);
 };
 
 export default RequestDetailsPage;

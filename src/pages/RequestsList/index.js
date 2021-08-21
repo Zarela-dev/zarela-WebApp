@@ -8,7 +8,6 @@ import Mobile from './Mobile';
 import Guide from './../../components/Guide/Guide';
 import { useLocation } from 'react-router';
 
-
 const DesktopSteps = [
 	{
 		selector: '[data-tour="request-list-one"]',
@@ -57,32 +56,32 @@ const DesktopSteps = [
 
 const MobileSteps = [
 	{
-		selector: '[data-tour="request-list-mobile-one"]',
+		selector: '[data-tour="request-list-one"]',
 		content: 'A Request card contains all information regarding the request.',
 	},
 	{
-		selector: '[data-tour="request-list-mobile-two"]',
+		selector: '[data-tour="request-list-two"]',
 		content: 'The unique ID assigned to each request.',
 	},
 	{
-		selector: '[data-tour="request-list-mobile-three"]',
+		selector: '[data-tour="request-list-three"]',
 		content: 'The title given to each request submitted by the mage.',
 	},
 	{
-		selector: '[data-tour="request-list-mobile-four"]',
+		selector: '[data-tour="request-list-four"]',
 		content:
 			'This number indicates the number of BBit tokens that are to be paid by the mage to each angel who sends the	appropriate response.',
 	},
 	{
-		selector: '[data-tour="request-list-mobile-five"]',
+		selector: '[data-tour="request-list-five"]',
 		content: 'This number indicates the number of approved responses sent by angels.',
 	},
 	{
-		selector: '[data-tour="request-list-mobile-six"]',
+		selector: '[data-tour="request-list-six"]',
 		content: 'This number indicates the total number of responses sent to this request.',
 	},
 	{
-		selector: '[data-tour="request-list-mobile-seven"]',
+		selector: '[data-tour="request-list-seven"]',
 		content: 'You can click here to see more information about applying and participating.',
 	},
 	{
@@ -91,8 +90,6 @@ const MobileSteps = [
 			'Well done! You earn 100 BBits for this learning! want to earn more? learn every guide on pages and collect about 500 BBits!',
 	},
 ];
-
-
 
 const RequestsList = () => {
 	const { appState } = useContext(mainContext);
@@ -164,25 +161,11 @@ const RequestsList = () => {
 		}
 	}, [appState.contract]);
 
-	const [guideIsOpen, setGuideIsOpen] = useState(true);
-	const location = useLocation();
-
-	if (appState.isMobile) {
-		return (
-			<>
-				{isLoading === false && !localStorage.getItem('guide/' + location.pathname.split('/')[1]) ? (
-					<Guide isMobile={appState.isMobile} steps={MobileSteps} {...{ guideIsOpen, setGuideIsOpen }} />
-				) : null}
-				{/* <Splash isVisible={isLoading} /> */}
+	return (
+		<Guide steps={appState.isMobile ? MobileSteps : DesktopSteps} isLoading={isLoading}>
+			{appState.isMobile ? (
 				<Mobile {...{ requests, isLoading, appState, PAGE_SIZE }} />
-			</>
-		);
-	} else {
-		return (
-			<>
-				{isLoading === false && !localStorage.getItem('guide/' + location.pathname.split('/')[1]) ? (
-					<Guide steps={DesktopSteps} {...{ guideIsOpen, setGuideIsOpen }} />
-				) : null}
+			) : (
 				<Desktop
 					{...{
 						requests,
@@ -193,9 +176,9 @@ const RequestsList = () => {
 						isLoading,
 					}}
 				/>
-			</>
-		);
-	}
+			)}
+		</Guide>
+	);
 };
 
 export default RequestsList;
