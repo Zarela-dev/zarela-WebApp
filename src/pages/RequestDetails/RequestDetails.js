@@ -131,8 +131,9 @@ const RequestDetailsPage = () => {
 										(error, result) => {
 											if (!error) {
 												clearSubmitDialog();
-												toast(result, 'success', true, result);
-
+												toast(`TX Hash: ${result}`, 'success', true, result, {
+													toastId: result,
+												});
 												if (sendSignalRef.current !== null) sendSignalRef.current.value = null;
 											} else {
 												clearSubmitDialog();

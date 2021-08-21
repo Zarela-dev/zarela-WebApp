@@ -64,7 +64,9 @@ const Inbox = () => {
 			.confirmContributor(requestID, originalIndexes)
 			.send({ from: account }, (error, result) => {
 				if (!error) {
-					toast(result, 'success', true, result);
+					toast(`TX Hash: ${result}`, 'success', true, result, {
+						toastId: result,
+					});
 				} else {
 					toast(error.message, 'error');
 				}

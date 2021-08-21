@@ -63,7 +63,9 @@ const WalletSendAssets = (mobile) => {
 					.transfer(values.address, +values.amount * Math.pow(10, 9))
 					.send({ from: account }, (error, result) => {
 						if (!error) {
-							toast(result, 'success', true, result);
+							toast(`TX Hash: ${result}`, 'success', true, result, {
+								toastId: result,
+							});
 							history.push('/wallet/transactions');
 							//#todo create the tab based routes
 						} else {

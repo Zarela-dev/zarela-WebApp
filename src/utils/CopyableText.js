@@ -22,7 +22,7 @@ export const CopyableText = ({ children, textToCopy, ...rest }) => {
 			}
 			console.log('hash copied', textToCopy);
 			// show notification 
-			toast(`Copied : ${textToCopy}`, 'success', true, textToCopy);
+			toast(`Copied to clipboard: ${textToCopy}`, 'success', false, textToCopy);
 		},
 		...rest
 	});
