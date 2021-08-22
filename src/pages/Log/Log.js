@@ -131,11 +131,11 @@ const Log = () => {
 				<Title>Log</Title>
 				<RewardWrapper>
 					<RewardItem>
-						<RewardLabel>Reward Pool</RewardLabel>
+						<RewardLabel>My reward from Zarela</RewardLabel>
 						<RewardValue>{`${totalRevenueFromZarela} BBit`}</RewardValue>
 					</RewardItem>
 					<RewardItem>
-						<RewardLabel>Requesters Reward</RewardLabel>
+						<RewardLabel>My wage from mage</RewardLabel>
 						<RewardValue>{`${totalRevenueFromRequester} BBit`}</RewardValue>
 					</RewardItem>
 				</RewardWrapper>

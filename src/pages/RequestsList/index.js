@@ -6,7 +6,6 @@ import Desktop from './Desktop';
 import Mobile from './Mobile';
 // import Splash from '../../components/Splash';
 import Guide from './../../components/Guide/Guide';
-import { useLocation } from 'react-router';
 
 const DesktopSteps = [
 	{
@@ -89,7 +88,7 @@ const MobileSteps = [
 const RequestsList = () => {
 	const { appState } = useContext(mainContext);
 	const web3React = useWeb3React();
-	const PAGE_SIZE = 2;
+	const PAGE_SIZE = 5;
 	const [requests, setRequests] = useState({});
 	const [requestsCount, setRequestsCount] = useState(0);
 	const [dailyContributors, setDailyContributors] = useState(0);
