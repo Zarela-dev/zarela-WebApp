@@ -22,15 +22,13 @@ import { mainContext } from '../state';
 import { Button } from './Elements/Button';
 import axios from 'axios';
 import { Buffer } from 'buffer';
-import fileType from 'file-type';
 import { useWeb3React } from '@web3-react/core';
 import caretUpIcon from '../assets/icons/caret-up.svg';
 import caretDownIcon from '../assets/icons/caret-down.svg';
 import fulfilledIcon from '../assets/icons/check-green.svg';
 import _ from 'lodash';
 import { twofish } from 'twofish';
-import { create } from 'ipfs-http-client';
-import { deflateSync } from 'zlib';
+import Dialog from './Dialog';
 
 const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
@@ -174,6 +172,13 @@ const RequestListItem = ({
 	const [formattedData, setFormattedData] = useState({});
 	const [selected, setSelected] = useState([]);
 	const { account } = useWeb3React();
+	const [isSubmitting, setSubmitting] = useState(false);
+	const [dialogMessage, setDialogMessage] = useState('');
+
+	const clearSubmitDialog = () => {
+		setSubmitting(false);
+		setDialogMessage('');
+	};
 
 	const changeAll = (type) => {
 		const originalIndexes = [];
@@ -290,10 +295,13 @@ const RequestListItem = ({
 	};
 
 	const signalDownloadHandler = async (fileHash, fileStuffPath) => {
+		setSubmitting(true);
+		setDialogMessage('Downloading encrypted AES secret key from IPFS');
 		try {
 			/* fetch signal metadata from IPFS */
 			const fileStuffRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileStuffPath}`);
 			const { AES_KEY, AES_IV, FILE_NAME, FILE_EXT } = fileStuffRes.data;
+			setDialogMessage('Decrypting AES Secret key');
 
 			/* decrypt secret key using metamask*/
 			const AesDecryptedKey = await window.ethereum.request({
@@ -302,6 +310,8 @@ const RequestListItem = ({
 			});
 
 			var twF = twofish(Object.values(AES_IV));
+
+			setDialogMessage('Downloading encrypted file from IPFS');
 			/*
 			 in order to remove  the extra headers that IPFS sets on response payload, responseType: blob 
 			*/
@@ -310,6 +320,7 @@ const RequestListItem = ({
 			var fileReader = new FileReader();
 
 			fileReader.readAsArrayBuffer(fileRes.data);
+			setDialogMessage('decrypting file ...');
 
 			fileReader.onloadend = () => {
 				var buffer = Buffer(fileReader.result);
@@ -319,6 +330,7 @@ const RequestListItem = ({
 					AesDecryptedKey.split(',').map((item) => Number(item)),
 					buffer
 				);
+				setDialogMessage('downloading file ...');
 
 				downloadFile(decrypted, `${FILE_NAME}.${FILE_EXT}`);
 			};
@@ -353,12 +365,15 @@ const RequestListItem = ({
 						anchorTag.href = url;
 						anchorTag.download = name;
 						anchorTag.click();
+						// setDialogMessage('all done!');
+						clearSubmitDialog()
 					} catch (error) {
 						console.error(error);
 					}
 				};
 			})();
 		} catch (error) {
+			clearSubmitDialog()
 			console.error(error);
 		}
 	};
@@ -440,6 +455,7 @@ const RequestListItem = ({
 
 	return (
 		<Wrapper>
+			<Dialog isOpen={isSubmitting} content={dialogMessage} hasSpinner type="success" />
 			<Header
 				onClick={() => {
 					setOpen(!isOpen);
