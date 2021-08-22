@@ -48,6 +48,14 @@ const Button = styled.button`
 	margin-right: ${(props) => props.theme.spacing(1.2)};
 `;
 
+const scrollToTop = (e) => {
+	const c = document.documentElement.scrollTop || document.body.scrollTop;
+	if (c > 0) {
+		window.requestAnimationFrame(scrollToTop);
+		window.scrollTo(0, c - c / 20);
+	}
+};
+
 const Pagination = (props) => {
 	const { onPageChange, totalCount, siblingCount = 1, currentPage, pageSize } = props;
 
@@ -73,7 +81,14 @@ const Pagination = (props) => {
 	let lastPage = paginationRange[paginationRange.length - 1];
 	return (
 		<Wrapper>
-			<ArrowButtonPrev disabled={currentPage === 1} onClick={onPrevious} isMobile={props.isMobile}>
+			<ArrowButtonPrev
+				disabled={currentPage === 1}
+				onClick={(e) => {
+					scrollToTop(e);
+					onPrevious(e);
+				}}
+				isMobile={props.isMobile}
+			>
 				<Icon isMobile={props.isMobile} src={prevIcon} />
 			</ArrowButtonPrev>
 			{paginationRange.map((pageNumber, index) => {
@@ -84,11 +99,8 @@ const Pagination = (props) => {
 					<Button
 						active={pageNumber === currentPage && true}
 						onClick={(e) => {
+							scrollToTop(e);
 							onPageChange(pageNumber);
-							window.scroll({
-								top: 0,
-								behavior: 'smooth',
-							});
 						}}
 						key={index}
 						isMobile={props.isMobile}
@@ -97,7 +109,14 @@ const Pagination = (props) => {
 					</Button>
 				);
 			})}
-			<ArrowButtonNext disabled={currentPage === lastPage} onClick={onNext} isMobile={props.isMobile}>
+			<ArrowButtonNext
+				disabled={currentPage === lastPage}
+				onClick={(e) => {
+					scrollToTop(e);
+					onNext(e);
+				}}
+				isMobile={props.isMobile}
+			>
 				<Icon isMobile={props.isMobile} src={nextIcon} />
 			</ArrowButtonNext>
 		</Wrapper>

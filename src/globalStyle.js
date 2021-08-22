@@ -23,6 +23,7 @@ export const GlobalStyle = createGlobalStyle`
   -ms-user-select: none;
   user-select: none;
 }
+
 	html,
 	body,
 	div,
