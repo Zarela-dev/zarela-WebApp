@@ -48,11 +48,11 @@ const Button = styled.button`
 	margin-right: ${(props) => props.theme.spacing(1.2)};
 `;
 
-const scrollToTop = (e) => {
-	const c = document.documentElement.scrollTop || document.body.scrollTop;
+const scrollToTop = () => {
+	const c = document.documentElement.scrollTop;
 	if (c > 0) {
 		window.requestAnimationFrame(scrollToTop);
-		window.scrollTo(0, c - c / 20);
+		window.scrollTo(0, c - c / 5);
 	}
 };
 
@@ -84,7 +84,7 @@ const Pagination = (props) => {
 			<ArrowButtonPrev
 				disabled={currentPage === 1}
 				onClick={(e) => {
-					scrollToTop(e);
+					scrollToTop();
 					onPrevious(e);
 				}}
 				isMobile={props.isMobile}
@@ -99,7 +99,7 @@ const Pagination = (props) => {
 					<Button
 						active={pageNumber === currentPage && true}
 						onClick={(e) => {
-							scrollToTop(e);
+							scrollToTop();
 							onPageChange(pageNumber);
 						}}
 						key={index}
@@ -112,7 +112,7 @@ const Pagination = (props) => {
 			<ArrowButtonNext
 				disabled={currentPage === lastPage}
 				onClick={(e) => {
-					scrollToTop(e);
+					scrollToTop();
 					onNext(e);
 				}}
 				isMobile={props.isMobile}
