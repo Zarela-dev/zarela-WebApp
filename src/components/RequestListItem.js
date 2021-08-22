@@ -19,7 +19,7 @@ import biobitIcon from '../assets/icons/biobit-black.svg';
 import contributorIcon from '../assets/icons/user-blue.svg';
 import RequestFilesTable from './RequestFilesTable';
 import { mainContext } from '../state';
-import { Button } from './Elements/Button';
+import Button from './Elements/Button';
 import axios from 'axios';
 import { Buffer } from 'buffer';
 import { useWeb3React } from '@web3-react/core';
@@ -129,16 +129,18 @@ const Footer = styled.footer`
 	width: 100%;
 `;
 
-const SubmitButton = styled.button`
-	${Button};
-	width: 133px;
-	height: 35px;
+const SubmitButton = styled(Button)`
 	margin-right: 0;
 	margin-top: ${(props) => props.theme.spacing(3)};
-	padding: ${(props) => props.theme.spacing(0.5)} ${(props) => props.theme.spacing(1.5)};
 	font-weight: 500;
 	font-size: 16px;
+	white-space: nowrap;
 	line-height: 18px;
+
+	& > button {
+		padding-top: 0;
+		padding-bottom: 0;
+	}
 `;
 const CustomContributeBadge = styled(ContributorBadge)`
 	flex: 0 0 auto;
@@ -366,14 +368,14 @@ const RequestListItem = ({
 						anchorTag.download = name;
 						anchorTag.click();
 						// setDialogMessage('all done!');
-						clearSubmitDialog()
+						clearSubmitDialog();
 					} catch (error) {
 						console.error(error);
 					}
 				};
 			})();
 		} catch (error) {
-			clearSubmitDialog()
+			clearSubmitDialog();
 			console.error(error);
 		}
 	};
@@ -513,17 +515,9 @@ const RequestListItem = ({
 						</Body>
 						<Footer>
 							<SubmitButton
+								variant="primary"
+								disabled={selected.length === 0}
 								onClick={() => {
-									// let payload = [];
-
-									// Object.keys(selected).forEach((item) => {
-									// 	payload.push(
-									// 		...selected[item].map((fileHash) => {
-									// 			// we need the duplicated addresses here
-									// 			return item;
-									// 		})
-									// 	);
-									// });
 									handleConfirm(requestID, selected);
 								}}
 							>
