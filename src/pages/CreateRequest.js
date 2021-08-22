@@ -116,7 +116,7 @@ const CreateRequest = () => {
 											const buf = Buffer(reader.result); // Convert data into buffer
 
 											try {
-												const ipfsResponse = await ipfs.add(buf, { pin: true});
+												const ipfsResponse = await ipfs.add(buf, { pin: true });
 
 												formik.setFieldValue('zpaper', ipfsResponse.path);
 												let url = `${process.env.REACT_APP_IPFS_LINK + ipfsResponse.path}`;
@@ -147,6 +147,7 @@ const CreateRequest = () => {
 																toast(`TX Hash: ${result}`, 'success', true, result, {
 																	toastId: result,
 																});
+																history.replace(`/`);
 															} else {
 																clearSubmitDialog();
 																toast(error.message, 'error');
@@ -168,7 +169,6 @@ const CreateRequest = () => {
 																toastId: event.id,
 															}
 														);
-														history.push(`/request/${event.returnValues[1]}`);
 													})
 													.on('error', (error, receipt) => {
 														clearSubmitDialog();

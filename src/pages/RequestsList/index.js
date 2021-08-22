@@ -6,7 +6,6 @@ import Desktop from './Desktop';
 import Mobile from './Mobile';
 // import Splash from '../../components/Splash';
 import Guide from './../../components/Guide/Guide';
-import { useLocation } from 'react-router';
 
 const DesktopSteps = [
 	{
@@ -24,7 +23,7 @@ const DesktopSteps = [
 	{
 		selector: '[data-tour="request-list-four"]',
 		content:
-			'This number indicates the number of BBit tokens that are to be paid by the mage to each angel who sends the	appropriate response.',
+			'This number indicates the number of Biobit tokens that are to be paid by the mage to each angel who sends the	appropriate response.',
 	},
 	{
 		selector: '[data-tour="request-list-five"]',
@@ -41,7 +40,7 @@ const DesktopSteps = [
 	{
 		selector: '[data-tour="request-list-nine"]',
 		content:
-			'This section displays information about the total number of biobit tokens, biobit token name and code and your own Wallet balance.',
+			'This section displays information about the total number of Biobit tokens, Biobit token name and code and your own Wallet balance.',
 	},
 	{
 		selector: '',
@@ -65,7 +64,7 @@ const MobileSteps = [
 	{
 		selector: '[data-tour="request-list-four"]',
 		content:
-			'This number indicates the number of BBit tokens that are to be paid by the mage to each angel who sends the	appropriate response.',
+			'This number indicates the number of Biobit tokens that are to be paid by the mage to each angel who sends the	appropriate response.',
 	},
 	{
 		selector: '[data-tour="request-list-five"]',
@@ -89,7 +88,7 @@ const MobileSteps = [
 const RequestsList = () => {
 	const { appState } = useContext(mainContext);
 	const web3React = useWeb3React();
-	const PAGE_SIZE = 2;
+	const PAGE_SIZE = 5;
 	const [requests, setRequests] = useState({});
 	const [requestsCount, setRequestsCount] = useState(0);
 	const [dailyContributors, setDailyContributors] = useState(0);

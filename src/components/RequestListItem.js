@@ -19,18 +19,16 @@ import biobitIcon from '../assets/icons/biobit-black.svg';
 import contributorIcon from '../assets/icons/user-blue.svg';
 import RequestFilesTable from './RequestFilesTable';
 import { mainContext } from '../state';
-import { Button } from './Elements/Button';
+import Button from './Elements/Button';
 import axios from 'axios';
 import { Buffer } from 'buffer';
-import fileType from 'file-type';
 import { useWeb3React } from '@web3-react/core';
 import caretUpIcon from '../assets/icons/caret-up.svg';
 import caretDownIcon from '../assets/icons/caret-down.svg';
 import fulfilledIcon from '../assets/icons/check-green.svg';
 import _ from 'lodash';
 import { twofish } from 'twofish';
-import { create } from 'ipfs-http-client';
-import { deflateSync } from 'zlib';
+import Dialog from './Dialog';
 
 const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
@@ -131,16 +129,18 @@ const Footer = styled.footer`
 	width: 100%;
 `;
 
-const SubmitButton = styled.button`
-	${Button};
-	width: 133px;
-	height: 35px;
+const SubmitButton = styled(Button)`
 	margin-right: 0;
 	margin-top: ${(props) => props.theme.spacing(3)};
-	padding: ${(props) => props.theme.spacing(0.5)} ${(props) => props.theme.spacing(1.5)};
 	font-weight: 500;
 	font-size: 16px;
+	white-space: nowrap;
 	line-height: 18px;
+
+	& > button {
+		padding-top: 0;
+		padding-bottom: 0;
+	}
 `;
 const CustomContributeBadge = styled(ContributorBadge)`
 	flex: 0 0 auto;
@@ -174,6 +174,13 @@ const RequestListItem = ({
 	const [formattedData, setFormattedData] = useState({});
 	const [selected, setSelected] = useState([]);
 	const { account } = useWeb3React();
+	const [isSubmitting, setSubmitting] = useState(false);
+	const [dialogMessage, setDialogMessage] = useState('');
+
+	const clearSubmitDialog = () => {
+		setSubmitting(false);
+		setDialogMessage('');
+	};
 
 	const changeAll = (type) => {
 		const originalIndexes = [];
@@ -290,10 +297,13 @@ const RequestListItem = ({
 	};
 
 	const signalDownloadHandler = async (fileHash, fileStuffPath) => {
+		setSubmitting(true);
+		setDialogMessage('Downloading encrypted AES secret key from IPFS');
 		try {
 			/* fetch signal metadata from IPFS */
 			const fileStuffRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileStuffPath}`);
 			const { AES_KEY, AES_IV, FILE_NAME, FILE_EXT } = fileStuffRes.data;
+			setDialogMessage('Decrypting AES Secret key');
 
 			/* decrypt secret key using metamask*/
 			const AesDecryptedKey = await window.ethereum.request({
@@ -302,6 +312,8 @@ const RequestListItem = ({
 			});
 
 			var twF = twofish(Object.values(AES_IV));
+
+			setDialogMessage('Downloading encrypted file from IPFS');
 			/*
 			 in order to remove  the extra headers that IPFS sets on response payload, responseType: blob 
 			*/
@@ -310,6 +322,7 @@ const RequestListItem = ({
 			var fileReader = new FileReader();
 
 			fileReader.readAsArrayBuffer(fileRes.data);
+			setDialogMessage('decrypting file ...');
 
 			fileReader.onloadend = () => {
 				var buffer = Buffer(fileReader.result);
@@ -319,6 +332,7 @@ const RequestListItem = ({
 					AesDecryptedKey.split(',').map((item) => Number(item)),
 					buffer
 				);
+				setDialogMessage('downloading file ...');
 
 				downloadFile(decrypted, `${FILE_NAME}.${FILE_EXT}`);
 			};
@@ -353,18 +367,21 @@ const RequestListItem = ({
 						anchorTag.href = url;
 						anchorTag.download = name;
 						anchorTag.click();
+						// setDialogMessage('all done!');
+						clearSubmitDialog();
 					} catch (error) {
 						console.error(error);
 					}
 				};
 			})();
 		} catch (error) {
+			clearSubmitDialog();
 			console.error(error);
 		}
 	};
 
 	useEffect(() => {
-		if (showContributions && appState.contract !== null) {
+		if (appState.contract !== null) {
 			appState.contract.methods.getOrderData(requestID).call((orderInfoError, orderInfo) => {
 				if (!orderInfoError) {
 					appState.contract.methods
@@ -377,7 +394,7 @@ const RequestListItem = ({
 								let timestamp = orderInfo[2];
 								let status = orderInfo[4];
 								let zarelaDay = orderInfo[5];
-								
+
 								let formatted = {};
 								let uniqueAddresses = [...new Set(addresses)];
 								let pairs = [];
@@ -434,8 +451,13 @@ const RequestListItem = ({
 		}
 	}, [appState.contract, shouldRefresh]);
 
+	useEffect(() => {
+		setOpen(showContributions);
+	}, []);
+
 	return (
 		<Wrapper>
+			<Dialog isOpen={isSubmitting} content={dialogMessage} hasSpinner type="success" />
 			<Header
 				onClick={() => {
 					setOpen(!isOpen);
@@ -456,7 +478,9 @@ const RequestListItem = ({
 							<TokenIcon src={biobitIcon} />
 							<TokenValue>{+angelTokenPay + +laboratoryTokenPay}</TokenValue>
 							<ValueLabel>BBit</ValueLabel>
-							<BiobitToDollarValue noMargin>{`~ $${+angelTokenPay + +laboratoryTokenPay}`}</BiobitToDollarValue>
+							<BiobitToDollarValue noMargin>{`~ $${
+								+angelTokenPay + +laboratoryTokenPay
+							}`}</BiobitToDollarValue>
 						</BadgeRow>
 					</BiobitToDollarPair>
 					<Divider />
@@ -472,7 +496,7 @@ const RequestListItem = ({
 					<ExpandToggle src={!isOpen ? caretDownIcon : caretUpIcon} />
 				</DetailsColumn>
 			</Header>
-			{showContributions && isOpen ? (
+			{isOpen ? (
 				Object.keys(formattedData).length > 0 ? (
 					<>
 						<Body data-tour="inbox-one">
@@ -491,17 +515,9 @@ const RequestListItem = ({
 						</Body>
 						<Footer>
 							<SubmitButton
+								variant="primary"
+								disabled={selected.length === 0}
 								onClick={() => {
-									// let payload = [];
-
-									// Object.keys(selected).forEach((item) => {
-									// 	payload.push(
-									// 		...selected[item].map((fileHash) => {
-									// 			// we need the duplicated addresses here
-									// 			return item;
-									// 		})
-									// 	);
-									// });
 									handleConfirm(requestID, selected);
 								}}
 							>

@@ -83,7 +83,13 @@ const Pagination = (props) => {
 				return (
 					<Button
 						active={pageNumber === currentPage && true}
-						onClick={() => onPageChange(pageNumber)}
+						onClick={(e) => {
+							onPageChange(pageNumber);
+							window.scroll({
+								top: 0,
+								behavior: 'smooth',
+							});
+						}}
 						key={index}
 						isMobile={props.isMobile}
 					>
