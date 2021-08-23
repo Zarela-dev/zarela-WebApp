@@ -40,22 +40,22 @@ const Wallet = () => {
 							})
 							.then(async (tokentxRes) => {
 								/* 
-							here we have a two APIs from etherscan that each of them give parts of the list we want,
-							here we take the parts that we want from each list them merge and sort them.
+									here we have two APIs from etherscan that each of them give parts of the list we want,
+									here we take the parts that we want from each list, then merge and sort them.
 
-							here is a list of what we want and where they are located on the APIs.
+									here is a list of what we want and where they are located on the APIs.
 
-								tokentx																txlist		
-							-----------------------------------------------------------------------------------
-								reward (from both pool and request owners)							tx inputs
-								proper values														contribution
-								BBit transfers														ETH transfer
-																									confirmation
-																									create request
+									tokentx																										txlist		
+									-----------------------------------------------------------------------------------
+										reward (from both pool and request owners)							tx inputs
+										proper values																						contribution
+										BBit transfers																					ETH transfer
+																																						confirmation
+																																						create request
 
-							results will include all transactions from above lists. but the values are overridden by tokentx.
-							also the inputs are overridden by txlist.
-						*/
+									results will include all transactions from above lists. but the values are overridden by tokentx.
+									also the inputs are overridden by txlist.
+								*/
 								if (tokentxRes.data.message === 'OK') {
 									const smartContactAddress =
 										process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS.toLowerCase();
@@ -85,9 +85,9 @@ const Wallet = () => {
 												0,
 										});
 										/* 
-									we exclude the data that is already present on txlist to prevent duplication
-									on final results
-								*/
+											we exclude the data that is already present on txlist to prevent duplication
+											on final results
+										*/
 										delete tokentxFormatted[item.hash];
 									});
 
@@ -116,6 +116,8 @@ const Wallet = () => {
 										for (const txItem of Object.values(tokentxFormatted)) {
 											const hasZarela = await hasZarelaContract(txItem);
 
+											// to prevent the appearance of transactions that are not made
+											// to/from Zarela smart contract
 											if (hasZarela) {
 												result.push({
 													...txItem,

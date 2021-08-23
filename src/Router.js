@@ -43,6 +43,7 @@ const AppRouter = () => {
 				console.error(error);
 			}
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [error, chainId, provider]);
 
 	if (!provider)
