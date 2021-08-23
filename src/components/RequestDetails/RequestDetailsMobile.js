@@ -61,12 +61,6 @@ const DescriptionContainer = styled.div`
 	padding: ${(props) => `${props.theme.spacing(2)}`};
 `;
 
-// const DescriptionTitle = styled.h4`
-// 	margin-bottom: ${(props) => props.theme.spacing(2)};
-// 	font-size: 18px;
-// 	font-weight: 600;
-// `;
-
 const TitleContent = styled(Title)`
 	font-size: 14px;
 	font-weight: 600;
@@ -177,7 +171,9 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
 							<CustomBadgeRow>
 								<TokenIcon src={biobitIcon} />
 								<TokenValue>{+request.angelTokenPay + +request.laboratoryTokenPay}</TokenValue>
-								<BiobitToDollarValue noMargin>{`= $ ${+request.angelTokenPay + +request.laboratoryTokenPay}`}</BiobitToDollarValue>
+								<BiobitToDollarValue noMargin>{`= $ ${
+									+request.angelTokenPay + +request.laboratoryTokenPay
+								}`}</BiobitToDollarValue>
 							</CustomBadgeRow>
 							<CustomDivider />
 						</CustomFooter>

@@ -24,7 +24,7 @@ const Nav = styled.nav`
 	flex-wrap: nowrap;
 	justify-content: center;
 	align-items: flex-end;
-	z-index: ${props => props.theme.z_bottomNav};
+	z-index: ${(props) => props.theme.z_bottomNav};
 	background: url(${navBackground});
 	background-position: center bottom;
 	background-clip: revert;
@@ -99,7 +99,7 @@ const CreateRequestButton = styled(GenericLinkButton).attrs((props) => {
 	top: -7px;
 	left: 50%;
 	transform: translateX(-50%);
-	
+
 	& > a {
 		padding: ${(props) => props.theme.spacing(1)};
 	}

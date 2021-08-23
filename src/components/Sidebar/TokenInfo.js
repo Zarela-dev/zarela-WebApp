@@ -2,7 +2,6 @@ import React from 'react';
 import biobitBlack from '../../assets/icons/biobit-black.svg';
 import walletBlack from '../../assets/icons/wallet-black.svg';
 import infoIcon from '../../assets/icons/info-purple.svg';
-import { convertToBiobit } from '../../utils';
 import {
 	SidebarCard,
 	Header,
@@ -48,9 +47,7 @@ const Sidebar = ({ data, account }) => {
 			</Header>
 			<Row hiddenInfo={account === undefined}>
 				<Subtitle>BBit Balance</Subtitle>
-				<Value>
-					{data.biobitBalance}
-				</Value>
+				<Value>{data.biobitBalance}</Value>
 			</Row>
 			<Row hiddenInfo={account === undefined}>
 				<Subtitle>Ether Balance</Subtitle>

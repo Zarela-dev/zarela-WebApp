@@ -38,17 +38,6 @@ const NavLink = styled(Typography)`
 	white-space: nowrap;
 `;
 
-// const VerticalNavItem = styled(Link)`
-// 	position: relative;
-// 	height: 50px;
-// 	display: flex;
-// 	flex-direction: row;
-// 	align-items: center;
-// 	align-content: center;
-// 	justify-content: center;
-// 	text-decoration: none;
-// `;
-
 const RightMenu = styled.div`
 	display: flex;
 	align-items: center;
@@ -65,29 +54,11 @@ const NavIcon = styled.img`
 	height: 30px;
 `;
 
-// const VerticalNavIcon = styled.img`
-// 	height: 30px;
-// 	margin-right: ${(props) => props.theme.spacing(1)};
-// `;
-
 const Logo = styled.img`
 	height: 65px;
 	margin-left: 20px;
 	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(1) : props.theme.spacing(4))};
 `;
-
-// const NotificationBadge = styled.div`
-// 	position: absolute;
-// 	top: -12px;
-// 	left: 8px;
-// 	min-width: 24px;
-// 	height: 24px;
-// 	border-radius: 24px;
-// 	padding: 3px 6px;
-// 	text-align: center;
-// 	background: ${(props) => props.theme.notificationColor};
-// 	color: white;
-// `;
 
 const SubmitRequestButton = styled(Link)`
 	${Button};
@@ -103,11 +74,6 @@ const HeaderWrapper = styled.header`
 	padding: ${(props) => props.theme.spacing(3)} 0;
 `;
 
-// const MobileHeaderSpaceFixer = styled.div`
-// 	height: 70px;
-// 	width: 100%;
-// `;
-
 const HeaderWrapperApp = styled(HeaderWrapper)`
 	padding: 10px 18px;
 	height: 70px;
@@ -121,24 +87,10 @@ const LogoApp = styled(Logo)`
 	height: 33px;
 	margin-left: 0;
 `;
-// const NavLinkApp = styled(NavLink)`
-// 	font-size: 13.5px;
-// 	font-weight: 700px;
-// `;
 
 const NavIconApp = styled(NavIcon)`
 	height: 19.5px;
 `;
-
-// const VerticalNavIconApp = styled(VerticalNavIcon)`
-// 	height: 19.5px;
-// `;
-// const NotificationBadgeApp = styled(NotificationBadge)`
-// 	font-size: 10.5px;
-// 	font-weight: 700;
-// 	top: 4px;
-// 	height: 16px;
-// `;
 
 const ChainBadge = styled.div`
 	background-image: url(${chainIdTag});
@@ -170,14 +122,6 @@ export default function Header({ isMobile }) {
 					</Link>
 				</RightMenu>
 				<LeftMenu>
-					{/* <VerticalNavItem>
-						<VerticalNavIconApp src={live} />
-						<NavLinkApp>Live</NavLinkApp>
-					</VerticalNavItem> */}
-					{/* <NavItem>
-						<NavIconApp src={bell} />
-						<NotificationBadgeApp>321</NotificationBadgeApp>
-					</NavItem> */}
 					<NavItem isMobile={appState.isMobile}>
 						<NavIconApp src={menu} onClick={() => setMenuOpen(true)} />
 					</NavItem>
@@ -217,10 +161,6 @@ export default function Header({ isMobile }) {
 				</RightMenu>
 				<LeftMenu>
 					<SubmitRequestButton to="/request/create">New Request</SubmitRequestButton>
-					{/* <NavItem device="desktop" to="/account">
-						<NavIcon src={bell} />
-						<NotificationBadge>321</NotificationBadge>
-					</NavItem> */}
 					<NavItem>
 						<NavIcon
 							src={help}

@@ -39,7 +39,7 @@ const Overlay = styled.div`
 	border-radius: 27.5px;
 	background: rgb(72, 194, 185);
 	background: linear-gradient(225deg, rgba(72, 194, 185, 1) 0%, rgba(138, 100, 212, 1) 100%);
-	box-shadow: 0px 6.280374050140381px 28.261682510375977px 0px #dfecff80;
+	box-shadow: 0px 6px 28px 0px #dfecff80;
 `;
 
 const Close = styled.div`
@@ -157,8 +157,6 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 					closeWithMask={false}
 					disableDotsNavigation={true}
 					showButtons={true}
-					// disableFocusLock={true}
-					// inViewThreshold={1000}
 					prevButton={
 						currentStep === steps.length - 1 ? undefined : (
 							<NavButton className="prev-btn">

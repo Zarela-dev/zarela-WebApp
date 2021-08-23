@@ -1,5 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import { Buffer } from 'buffer';
+import { twofish } from 'twofish';
+import _ from 'lodash';
 import { Spacer } from './Elements/Spacer';
 import { WithPointerCursor } from './Elements/WithPointerCursor';
 import {
@@ -20,14 +24,10 @@ import contributorIcon from '../assets/icons/user-blue.svg';
 import RequestFilesTable from './RequestFilesTable';
 import { mainContext } from '../state';
 import Button from './Elements/Button';
-import axios from 'axios';
-import { Buffer } from 'buffer';
 import { useWeb3React } from '@web3-react/core';
 import caretUpIcon from '../assets/icons/caret-up.svg';
 import caretDownIcon from '../assets/icons/caret-down.svg';
 import fulfilledIcon from '../assets/icons/check-green.svg';
-import _ from 'lodash';
-import { twofish } from 'twofish';
 import Dialog from './Dialog';
 
 const Wrapper = styled.div`
@@ -146,10 +146,6 @@ const CustomContributeBadge = styled(ContributorBadge)`
 	flex: 0 0 auto;
 `;
 
-// const EqualSign = styled(BiobitToDollarValue)`
-// 	margin: 0 5px;
-// `;
-
 const ExpandToggle = styled.img`
 	width: 24px;
 	margin-left: ${(props) => props.theme.spacing(1.5)};
@@ -157,7 +153,6 @@ const ExpandToggle = styled.img`
 
 const RequestListItem = ({
 	showContributions,
-	total,
 	shouldRefresh,
 	requestID,
 	title,
@@ -182,6 +177,7 @@ const RequestListItem = ({
 		setDialogMessage('');
 	};
 
+	// files table selection methods START
 	const changeAll = (type) => {
 		const originalIndexes = [];
 		const indexesAlreadyConfirmed = [];
@@ -295,12 +291,13 @@ const RequestListItem = ({
 		if (type === 'check') setSelected((values) => [...values, originalIndex]);
 		if (type === 'uncheck') setSelected((values) => values.filter((item) => +item !== +originalIndex));
 	};
+	// files table selection methods END
 
 	const signalDownloadHandler = async (fileHash, fileStuffPath) => {
 		setSubmitting(true);
 		setDialogMessage('Downloading encrypted AES secret key from IPFS');
 		try {
-			/* fetch signal metadata from IPFS */
+			/* fetch signal file metadata from IPFS */
 			const fileStuffRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileStuffPath}`);
 			const { AES_KEY, AES_IV, FILE_NAME, FILE_EXT } = fileStuffRes.data;
 			setDialogMessage('Decrypting AES Secret key');
@@ -389,11 +386,11 @@ const RequestListItem = ({
 						.call({ from: account }, (fileError, files) => {
 							if (!fileError) {
 								let addresses = orderInfo[0];
-								let laboratories = orderInfo[1];
-								let whoGainedReward = orderInfo[3];
 								let timestamp = orderInfo[2];
 								let status = orderInfo[4];
-								let zarelaDay = orderInfo[5];
+								// let laboratories = orderInfo[1];
+								// let whoGainedReward = orderInfo[3];
+								// let zarelaDay = orderInfo[5];
 
 								let formatted = {};
 								let uniqueAddresses = [...new Set(addresses)];
@@ -449,10 +446,12 @@ const RequestListItem = ({
 				}
 			});
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [appState.contract, shouldRefresh]);
 
 	useEffect(() => {
 		setOpen(showContributions);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
@@ -478,6 +477,7 @@ const RequestListItem = ({
 							<TokenIcon src={biobitIcon} />
 							<TokenValue>{+angelTokenPay + +laboratoryTokenPay}</TokenValue>
 							<ValueLabel>BBit</ValueLabel>
+							{/* for this version, we combine both numbers, later both will be shown separately */}
 							<BiobitToDollarValue noMargin>{`~ $${
 								+angelTokenPay + +laboratoryTokenPay
 							}`}</BiobitToDollarValue>

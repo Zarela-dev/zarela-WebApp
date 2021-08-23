@@ -6,7 +6,6 @@ import coinbaseIcon from '../../../assets/icons/wallets/coinbase.svg';
 import portisIcon from '../../../assets/icons/wallets/portis.svg';
 import fortmaticIcon from '../../../assets/icons/wallets/fortmatic.svg';
 
-
 const wallets = [
 	{
 		name: 'Metamask',
@@ -169,11 +168,7 @@ function WalletsList({ view = 'grid' }) {
 							<ListItemIcon src={icon} />
 						</ListItemLink>
 					) : (
-						<ListItemButton
-							disabled={window.ethereum?.isMetaMask && !active}
-							onClick={onClick}
-							active
-						>
+						<ListItemButton disabled={window.ethereum?.isMetaMask && !active} onClick={onClick} active>
 							<ListItemTitle>{name}</ListItemTitle>
 							<ListItemIcon src={icon} />
 						</ListItemButton>

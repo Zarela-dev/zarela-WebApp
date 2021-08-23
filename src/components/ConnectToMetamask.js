@@ -12,7 +12,7 @@ const Wrapper = styled.div`
 
 const Message = styled.div`
 	font-size: 16px;
-	margin-bottom: ${props => props.theme.spacing(2)};
+	margin-bottom: ${(props) => props.theme.spacing(2)};
 `;
 
 const ConnectToMetamask = () => {
@@ -20,10 +20,8 @@ const ConnectToMetamask = () => {
 
 	return (
 		<Wrapper>
-			<Message>
-				Please connect to Metamask to continue
-			</Message>
-			<Button variant='primary' onClick={() => activate(injectedConnector)}>
+			<Message>Please connect to Metamask to continue</Message>
+			<Button variant="primary" onClick={() => activate(injectedConnector)}>
 				Connect
 			</Button>
 		</Wrapper>

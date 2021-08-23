@@ -5,7 +5,6 @@ import { GenericLinkButton } from '../Button';
 export const RequestCardWrapper = styled.div`
 	display: flex;
 	flex-wrap: wrap;
-	/* background: linear-gradient(220.57deg, rgba(107, 230, 238, 0.15) -15.95%, rgba(64, 76, 189, 0.15) 107.46%); */
 	background: white;
 	border: 1px solid #c4c4c4;
 	border-radius: 8px;
@@ -13,9 +12,6 @@ export const RequestCardWrapper = styled.div`
 		${(props) => props.theme.spacing(1.8)};
 
 	margin-bottom: 25px;
-	/* &:not(:last-child){
-		margin-bottom: 25px;
-	} */
 `;
 
 export const HeaderLayout = styled.div`
@@ -37,6 +33,7 @@ export const RequestNumber = styled.div`
 	color: #ffffff;
 	text-align: center;
 `;
+
 export const Title = styled.div`
 	font-weight: 500;
 	font-size: 24px;
@@ -199,7 +196,7 @@ export const TagsWrapper = styled.div`
 	width: 100%;
 	max-width: 860px;
 	flex-wrap: wrap;
-	
+
 	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		margin-top: ${(props) => props.theme.spacing(1)};
 	}
@@ -222,14 +219,4 @@ export const TagItem = styled.div`
 `;
 
 export default RequestCardWrapper;
-export {
-	// Avatar,
-	// Bookmark,
-	// Description,
-	Typography,
-	// ProgressLayout,
-	// TokenIcon,
-	// Spacer,
-	// AvatarImage,
-	// HeaderLayout
-};
+export { Typography };

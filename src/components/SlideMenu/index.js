@@ -79,12 +79,6 @@ const MenuItem = styled(Link)`
 	margin-bottom: ${(props) => props.theme.spacing(4)};
 `;
 
-// const Badge = styled.div`
-// 	width: 24px;
-// 	height: 24px;
-// 	border-radius: 24px;
-// `;
-
 const SlideMenu = ({ isOpen, onClose, title, listItems, cta }) => {
 	const { pathname } = useLocation();
 

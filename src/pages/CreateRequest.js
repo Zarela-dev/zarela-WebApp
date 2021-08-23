@@ -76,6 +76,7 @@ const CreateRequest = () => {
 			terms: yup.boolean().required(),
 		}),
 		onSubmit: (values) => {
+			console.log(values)
 			if (formik.isValid) {
 				/* to prevent the Mage from submitting the request with insufficient assets */
 				if (

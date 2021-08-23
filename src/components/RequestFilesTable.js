@@ -71,13 +71,6 @@ const CustomCheckbox = styled(SmallCheckbox)`
 	margin: 0;
 `;
 
-// const FilesCount = styled.div`
-// 	font-size: 12px;
-// 	line-height: 20px;
-// 	color: #858585;
-// 	margin-bottom: ${(props) => props.theme.spacing(2)};
-// `;
-
 const FilesListWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -296,7 +289,6 @@ const RequestFilesTable = ({
 														)}
 														<FileName>
 															{
-																// file.substr(0, 4) + '...' + file.substr(file.length - 4) + `  (File #${fileIndex + 1})`
 																originalIndex +
 																	'.' +
 																	ipfsHash +
@@ -306,11 +298,6 @@ const RequestFilesTable = ({
 													</FileItemCol>
 													<FileItemCol>
 														<DownloadButton onClick={() => signalDownloadHandler(ipfsHash, AesEncryptedKey)}>
-														{/* <DownloadButton
-															download="signal"
-															target="_blank"
-															href={`${process.env.REACT_APP_IPFS_LINK + ipfsHash}`}
-														> */}
 															<DownloadButtonImage src={downloadIcon} />
 														</DownloadButton>
 													</FileItemCol>

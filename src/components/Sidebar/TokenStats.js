@@ -22,11 +22,6 @@ const Title = styled.div`
 	flex: 0 0 190px;
 `;
 
-// const ValueColumn = styled.div`
-// 	display: flex;
-// 	flex-direction: column;
-// `;
-
 const Value = styled.div`
 	font-weight: 400;
 	font-size: 14px;

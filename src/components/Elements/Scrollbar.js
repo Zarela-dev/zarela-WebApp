@@ -7,14 +7,14 @@ export const Scrollbar = css`
 	}
 	&::-webkit-scrollbar-track {
 		width: 5px;
-		background: #F5F5F5;
+		background: #f5f5f5;
 	}
 	&::-webkit-scrollbar-track-piece {
 		background: transparent;
 	}
 	&::-webkit-scrollbar-thumb {
 		width: 2.5px;
-		background: #96C1D1;
+		background: #96c1d1;
 		border-radius: 4px;
 	}
 `;
