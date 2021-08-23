@@ -7,7 +7,7 @@ import { AppProvider } from './state';
 import { GlobalStyle } from './globalStyle';
 import { theme } from './theme';
 import getLibrary from './utils/getLibrary';
-import ErrorBoundary from './hooks/ErrorBoundary';
+import ErrorBoundary from './ErrorBoundary';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
