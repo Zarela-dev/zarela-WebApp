@@ -8,4 +8,4 @@ export const actionTypes = {
 	SET_ERROR: 'SET_ERROR',
 	SET_CLIENT_DEVICE: 'SET_CLIENT_DEVICE',
 	SET_GUIDE_IS_OPEN: 'SET_GUIDE_IS_OPEN',
-}
+};
