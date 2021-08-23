@@ -1,3 +1,5 @@
+// here's a dictionary for Zarela smart contracts methods
+
 export function getInput(input) {
 	const inputInitials = input.substr(0, 10);
 
