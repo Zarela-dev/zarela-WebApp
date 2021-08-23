@@ -202,8 +202,8 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
 						onClick={submitSignal}
 					/>
 					<TagsWrapper>
-						{request.categories?.split(',').map((item, index) => {
-							return <TagItem key={index}>#{item}</TagItem>;
+						{request.categories?.split(',').map((item) => {
+							return <TagItem key={item}>#{item}</TagItem>;
 						})}
 					</TagsWrapper>
 					<TitleContent>Description</TitleContent>

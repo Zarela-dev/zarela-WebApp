@@ -138,6 +138,7 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 		} else if (location.pathname.split('/')[1] === '' && !isLoading) {
 			handleTimeOut(3000);
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (

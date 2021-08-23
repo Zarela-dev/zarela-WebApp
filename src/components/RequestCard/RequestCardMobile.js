@@ -75,8 +75,8 @@ const RequestCardMobile = (props) => {
 					{props.description.length < 120 ? props.description : props.description.substr(0, 120) + '...'}
 				</Typography>
 				<TagsWrapper>
-					{props.categories.split(',').map((item, index) => {
-						return <TagItem key={index}>#{item}</TagItem>;
+					{props.categories.split(',').map((item) => {
+						return <TagItem key={item}>#{item}</TagItem>;
 					})}
 				</TagsWrapper>
 			</Description>

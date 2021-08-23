@@ -271,7 +271,7 @@ const RequestFilesTable = ({
 											fileIndex
 										) => {
 											return (
-												<FileItemRow>
+												<FileItemRow key={originalIndex}>
 													<FileItemCol>
 														{status === true ? (
 															<ConfirmedIcon src={confirmIcon} />

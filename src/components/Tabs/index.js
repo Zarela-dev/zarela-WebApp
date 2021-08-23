@@ -82,19 +82,19 @@ export const Tabs = ({ data, isMobile, route }) => {
 			}}
 		>
 			<TabsHeader isMobile={isMobile}>
-				{data.map((tab, tabIndex) => (
+				{data.map((tab) => (
 					<TabsHeaderItem
 						data-tour={tab['data-tour']}
 						isMobile={isMobile}
 						tabIndex={tab.label}
-						key={tabIndex}
+						key={tab.label}
 					>
 						{tab.label}
 					</TabsHeaderItem>
 				))}
 			</TabsHeader>
-			{data.map(({ component, label }, index) => (
-				<TabsBody tabIndex={label} key={index}>
+			{data.map(({ component, label }) => (
+				<TabsBody tabIndex={label} key={label}>
 					<Route path={`/${route}/${formatUrl(label)}`} exact render={() => component} />
 				</TabsBody>
 			))}

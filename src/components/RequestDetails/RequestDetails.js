@@ -190,8 +190,8 @@ const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, 
 			</HeaderContainer>
 			<DescriptionContainer>
 				<TagsWrapper>
-					{request.categories?.split(',').map((item, index) => {
-						return <TagItem key={index}>#{item}</TagItem>;
+					{request.categories?.split(',').map((item) => {
+						return <TagItem key={item}>#{item}</TagItem>;
 					})}
 				</TagsWrapper>
 				<PublicKeyBadge data-tour="request-details-one">

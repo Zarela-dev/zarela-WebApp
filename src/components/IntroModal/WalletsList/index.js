@@ -141,7 +141,7 @@ function WalletsList({ view = 'grid' }) {
 			<Wrapper>
 				{wallets.map(({ name, icon, active, link, onClick }) =>
 					!window.ethereum?.isMetaMask && link !== undefined && active ? (
-						<GridItemLink href={link} target="_blank" active={active}>
+						<GridItemLink key={name} href={link} target="_blank" active={active}>
 							<WalletIcon src={icon} />
 							<WalletTitle>{name}</WalletTitle>
 						</GridItemLink>
@@ -163,7 +163,7 @@ function WalletsList({ view = 'grid' }) {
 			<ListWrapper>
 				{wallets.map(({ name, icon, active, link, onClick }) =>
 					!window.ethereum?.isMetaMask && link !== undefined && active ? (
-						<ListItemLink href={link} target="_blank" active={active}>
+						<ListItemLink key={name} href={link} target="_blank" active={active}>
 							<ListItemTitle>{name}</ListItemTitle>
 							<ListItemIcon src={icon} />
 						</ListItemLink>
