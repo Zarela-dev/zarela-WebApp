@@ -171,7 +171,7 @@ const Inbox = () => {
 					<SpinnerWrapper>
 						<Spinner />
 					</SpinnerWrapper>
-				) : Object.values(requests).length > 0 ? (
+				) : Object.values(requests).filter((item) => item.totalContributedCount > 0).length > 0 ? (
 					Object.values(requests)
 						.filter((item) => item.totalContributedCount > 0)
 						.sort((a, b) => +b.requestID - +a.requestID)
