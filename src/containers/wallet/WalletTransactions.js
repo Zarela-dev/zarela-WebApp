@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import styled from 'styled-components';
-import { timeSince, convertToBiobit, CopyableText, getInput } from '../../utils';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
+import { timeSince, convertToBiobit, CopyableText, getInput } from '../../utils';
 import Pagination from '../../components/Pagination';
 
 const Table = styled.div`
@@ -113,7 +113,6 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 	}, [currentPage, PAGE_SIZE, data]);
 
 	const classes = useStyles(props);
-	// if (!account || isLoading === true) return 'loading';
 	if (!account) return 'no accounts found';
 
 	console.log('currentTableData', currentTableData);
@@ -332,7 +331,7 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 				{!isLoading && currentTableData.length ? (
 					currentTableData.map((transaction, index) => {
 						console.log(
-							transaction.input.substr(0,10),
+							transaction.input.substr(0, 10),
 							convertToBiobit(transaction.value),
 							+transaction.value / Math.pow(10, 18)
 						);

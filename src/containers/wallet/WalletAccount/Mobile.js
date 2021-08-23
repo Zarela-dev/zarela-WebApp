@@ -1,21 +1,11 @@
 import React from 'react';
 import Note from '../../../components/Note';
 import styled from 'styled-components';
-// import biobitIcon from "../../../../assets/icons/biobit-black.svg";
-// import etherIcon from "../../../../assets/icons/ether-black.png";
 import nextStepIcon from '../../../assets/icons/next-step-arrow-down.svg';
-import qrCodeImage from '../../../assets/icons/qr-code.png';
 import { CopyableText } from '../../../utils';
 import { Wrapper, Content, MobileColumn } from './Layout';
 import { Title } from './AccountChoices';
-import {
-	QRCodeMobile,
-	QRCodeImage,
-	SaveQRCodeButton,
-	AddressTitleMobile,
-	AddressMobile,
-	CopyAddressButton,
-} from './WalletInfo';
+import { AddressTitleMobile, AddressMobile, CopyAddressButton } from './WalletInfo';
 import WalletsList from '../../../components/IntroModal/WalletsList';
 
 const WrapperMobile = styled(Wrapper)`
@@ -54,11 +44,6 @@ const NextStepIcon = styled.img`
 	margin: ${(props) => props.theme.spacing(0.7)};
 `;
 
-// const MetaMaskContainer = styled.div`
-// 	min-height: 250px;
-// 	width: 100%;
-// `;
-
 const WalletAccountMobile = ({ address }) => {
 	return (
 		<WrapperMobile>
@@ -71,12 +56,6 @@ const WalletAccountMobile = ({ address }) => {
 					<NextStepIcon src={nextStepIcon} />
 				</NextStepArrow>
 				<MobileColumn>
-					{/* <MobileColumn center>
-						<QRCodeMobile>
-							<QRCodeImage src={qrCodeImage} />
-						</QRCodeMobile>
-						<SaveQRCodeButton variant="secondary">save QR code</SaveQRCodeButton>
-					</MobileColumn> */}
 					<MobileColumn center>
 						<AddressTitleMobile>BBit account address</AddressTitleMobile>
 						<AddressMobile>{address}</AddressMobile>

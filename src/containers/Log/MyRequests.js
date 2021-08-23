@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useWeb3React } from '@web3-react/core';
 import { mainContext } from '../../state';
 import { convertToBiobit } from '../../utils';
 import Spinner from '../../components/Spinner';
 import MyRequest from '../../components/LogCards/MyRequest';
 import MyRequestMobile from '../../components/LogCards/MyRequestMobile';
 import NoRequestsFound from '../../components/NoRequestsFound';
-import { useWeb3React } from '@web3-react/core';
 
 const SpinnerWrapper = styled.div`
 	width: 100%;

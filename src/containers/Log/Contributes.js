@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useWeb3React } from '@web3-react/core';
 import Spinner from '../../components/Spinner';
 import LogCard from '../../components/LogCards/Contribution';
 import LogCardMobile from '../../components/LogCards/ContributionMobile';
 import { mainContext } from './../../state';
-import { useWeb3React } from '@web3-react/core';
 import { convertToBiobit } from '../../utils';
 import NoRequestsFound from '../../components/NoRequestsFound';
 
@@ -36,8 +36,9 @@ const Contributes = () => {
 							const requests = [];
 							const getRequestFiles = (requestContributions) => {
 								let addresses = requestContributions[0];
-								let laboratories = requestContributions[1];
-								let whoGainedReward = requestContributions[3];
+								// these to values are obsolete in this version but it's a good reference
+								// let laboratories = requestContributions[1];
+								// let whoGainedReward = requestContributions[3];
 								let timestamps = requestContributions[2];
 								let status = requestContributions[4];
 								let zarelaDay = requestContributions[5];
@@ -72,7 +73,7 @@ const Contributes = () => {
 									let contributions = await appState.contract.methods
 										.getOrderData(currentRequest)
 										.call({ from: account });
-									// #to-do improve readability #chaiidi
+									// #to-do improve readability 
 									const requestTemplate = {
 										requestID: requestInfo[0],
 										title: requestInfo[1],
