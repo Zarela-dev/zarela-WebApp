@@ -77,6 +77,7 @@ export const Tabs = ({ data, isMobile, route }) => {
 			selectedIndex={data.findIndex((item) => formatUrl(item.label) === activeTab)}
 			onSelect={(index, lastIndex) => {
 				history.push(`/${route}/${formatUrl(data[index].label)}`);
+				// to manually control the routing when tabs are being switched
 				return false;
 			}}
 		>

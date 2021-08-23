@@ -94,6 +94,7 @@ export const getFileName = (inputRef, fallbackLabel) => {
 	return formatLabel(fallbackLabel);
 };
 
+// #refactor_candidate
 const FileInput = forwardRef(
 	({ disableUpload, className, hasBorder, showSelected, value, buttonLabel, icon, error, label, ...rest }, ref) => {
 		return (
