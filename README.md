@@ -18,7 +18,8 @@ Zarela smart contract is an open source project coded with solidity language on 
 
 this web application project is the dApp developed to create the interface for our Biosignals marketplace platform. there are features in this particular project that serve as a necessity to ensure our Zarela solutions are provided  correctly. these features are:
 - using IPFS as file storage 
-- creating a P2P connection between the Mage and the Angel by encrypting the files with Mage's public encryption key
+- providing secure P2P connection between parties using encryption
+
 
 
 ### Contributions

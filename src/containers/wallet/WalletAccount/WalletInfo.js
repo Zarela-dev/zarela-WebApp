@@ -8,8 +8,8 @@ export const QRCode = styled.div`
 	justify-content: center;
 	align-items: center;
 	box-shadow: 0px 4px 18px rgb(17 94 89 / 12%);
-    border-radius: 4px;
-	margin-bottom: ${props => props.theme.spacing(2)};
+	border-radius: 4px;
+	margin-bottom: ${(props) => props.theme.spacing(2)};
 `;
 
 export const QRCodeMobile = styled(QRCode)`
@@ -19,8 +19,7 @@ export const QRCodeMobile = styled(QRCode)`
 	margin: 25px 0;
 `;
 
-export const QRCodeImage = styled.img`
-`;
+export const QRCodeImage = styled.img``;
 
 export const customButton = css`
 	height: 40px;
@@ -43,20 +42,21 @@ export const AddressTitle = styled.div`
 	font-weight: 500;
 	font-size: 20px;
 	line-height: 26px;
-	margin-bottom: ${props => props.theme.spacing(1)};
-	`;
+	margin-bottom: ${(props) => props.theme.spacing(1)};
+`;
 
 export const AddressTitleMobile = styled(AddressTitle)`
 	font-size: 18px;
 	line-height: 23px;
 `;
+
 export const Address = styled.div`
 	font-size: 20px;
 	line-height: 28px;
 	text-align: center;
-	margin-bottom: ${props => props.theme.spacing(3.5)};
+	margin-bottom: ${(props) => props.theme.spacing(3.5)};
 	width: 240px;
-    word-break: break-word;
+	word-break: break-word;
 `;
 
 export const AddressMobile = styled(Address)`

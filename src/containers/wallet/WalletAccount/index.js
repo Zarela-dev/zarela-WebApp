@@ -2,10 +2,9 @@ import React from 'react';
 import Note from './../../../components/Note';
 import styled from 'styled-components';
 import nextStepIcon from './../../../assets/icons/next-step-arrow.svg';
-import qrCodeImage from '../../../assets/icons/qr-code.png';
 import { CopyableText } from './../../../utils';
 import { Wrapper, Content, Row, Column } from './Layout';
-import { QRCode, QRCodeImage, SaveQRCodeButton, AddressTitle, Address, CopyAddressButton } from './WalletInfo';
+import { AddressTitle, Address, CopyAddressButton } from './WalletInfo';
 import WalletsList from '../../../components/IntroModal/WalletsList';
 
 const NextStepArrow = styled.div`
@@ -53,12 +52,6 @@ const WalletAccount = ({ address }) => {
 				</NextStepArrow>
 				<Column>
 					<Row>
-						{/* <Column center>
-							<QRCode>
-								<QRCodeImage src={qrCodeImage} />
-							</QRCode>
-							<SaveQRCodeButton variant="secondary">save QR code</SaveQRCodeButton>
-						</Column> */}
 						<Column center>
 							<AddressTitle>BBit account address</AddressTitle>
 							<Address>{address}</Address>
@@ -70,8 +63,8 @@ const WalletAccount = ({ address }) => {
 					<Row>
 						<Notice title={'Advice'}>
 							By copying your account address and sending it to others, you can easily have financial
-							transactions, including Biobit, Ethereum, etc. Also, You must never give your private
-							keys to anyone.
+							transactions, including Biobit, Ethereum, etc. Also, You must never give your private keys
+							to anyone.
 						</Notice>
 					</Row>
 				</Column>

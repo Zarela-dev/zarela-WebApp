@@ -21,12 +21,13 @@ const Message = styled.h3`
 	line-height: 22px;
 `;
 
-const NoMobileSupportMessage = ({message}) => {
+const NoMobileSupportMessage = ({ message }) => {
 	return (
 		<Wrapper>
 			<ZarelaDesktopIcon src={zarelaDesktopImage} />
 			<Message>
-				{message || 'Because encryption/decryption is only available on the desktop version of Metamask. Please connect with Metamask desktop version'}
+				{message ||
+					'Because encryption/decryption is only available on the desktop version of Metamask. Please connect with Metamask desktop version'}
 			</Message>
 		</Wrapper>
 	);

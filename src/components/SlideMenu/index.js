@@ -79,12 +79,6 @@ const MenuItem = styled(Link)`
 	margin-bottom: ${(props) => props.theme.spacing(4)};
 `;
 
-// const Badge = styled.div`
-// 	width: 24px;
-// 	height: 24px;
-// 	border-radius: 24px;
-// `;
-
 const SlideMenu = ({ isOpen, onClose, title, listItems, cta }) => {
 	const { pathname } = useLocation();
 
@@ -106,6 +100,7 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta }) => {
 						return (
 							<>
 								<MenuItem
+									key={item.title}
 									onClick={onClose}
 									active={matchPath(pathname, {
 										path: item.path,
@@ -120,6 +115,7 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta }) => {
 								<MenuList>
 									{item.children.map((childItem) => (
 										<MenuItem
+											key={childItem.title}
 											active={matchPath(pathname, {
 												path: childItem.path,
 												exact: true,
@@ -137,6 +133,7 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta }) => {
 					}
 					return (
 						<MenuItem
+							key={item.title}
 							onClick={onClose}
 							active={matchPath(pathname, { path: item.path, exact: true })}
 							to={item.path}

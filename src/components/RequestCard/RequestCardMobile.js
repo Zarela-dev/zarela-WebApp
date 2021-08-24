@@ -59,8 +59,12 @@ const RequestCardMobile = (props) => {
 	return (
 		<RequestCardWrapper data-tour="request-list-one">
 			<HeaderLayout>
-				<RequestNumber data-tour="request-list-two" isMobile={appState.isMobile}>{props.requestID}</RequestNumber>
-				<Title data-tour="request-list-three">{props.title.length < 70 ? props.title : props.title.substr(0, 70) + '...'}</Title>
+				<RequestNumber data-tour="request-list-two" isMobile={appState.isMobile}>
+					{props.requestID}
+				</RequestNumber>
+				<Title data-tour="request-list-three">
+					{props.title.length < 70 ? props.title : props.title.substr(0, 70) + '...'}
+				</Title>
 				<Spacer />
 			</HeaderLayout>
 			<Timestamp nowrap variant="caption">
@@ -71,8 +75,8 @@ const RequestCardMobile = (props) => {
 					{props.description.length < 120 ? props.description : props.description.substr(0, 120) + '...'}
 				</Typography>
 				<TagsWrapper>
-					{props.categories.split(',').map((item, index) => {
-						return <TagItem key={index}>#{item}</TagItem>;
+					{props.categories.split(',').map((item) => {
+						return <TagItem key={item}>#{item}</TagItem>;
 					})}
 				</TagsWrapper>
 			</Description>
@@ -88,7 +92,9 @@ const RequestCardMobile = (props) => {
 						<TokenValue>{+props.angelTokenPay + +props.laboratoryTokenPay}</TokenValue>
 					</BadgeRow>
 					<BadgeRow>
-						<BiobitToDollarValue>{`~ $ ${+props.angelTokenPay + +props.laboratoryTokenPay}`}</BiobitToDollarValue>
+						<BiobitToDollarValue>{`~ $ ${
+							+props.angelTokenPay + +props.laboratoryTokenPay
+						}`}</BiobitToDollarValue>
 					</BadgeRow>
 				</BiobitToDollarPair>
 				<Divider />

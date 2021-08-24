@@ -28,7 +28,6 @@ export const FileInputTitle = styled.div`
 	color: ${(props) => props.theme.textPrimary};
 	overflow: hidden;
 
-	
 	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		font-size: 12px;
 		margin-bottom: ${(props) => props.theme.spacing(1)};
@@ -95,6 +94,7 @@ export const getFileName = (inputRef, fallbackLabel) => {
 	return formatLabel(fallbackLabel);
 };
 
+// #refactor_candidate
 const FileInput = forwardRef(
 	({ disableUpload, className, hasBorder, showSelected, value, buttonLabel, icon, error, label, ...rest }, ref) => {
 		return (

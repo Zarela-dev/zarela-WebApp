@@ -9,7 +9,6 @@ import RequestCardWrapper, {
 	Divider,
 	Description,
 	Timestamp,
-	Bookmark,
 	ContributorBadge,
 	ContributorsIcon,
 	BiobitToDollarPair,
@@ -35,7 +34,7 @@ const RequestCard = (props) => {
 	return (
 		<RequestCardWrapper data-tour="request-list-one">
 			<HeaderLayout>
-				<RequestNumber data-tour="request-list-two" >{props.requestID}</RequestNumber>
+				<RequestNumber data-tour="request-list-two">{props.requestID}</RequestNumber>
 				<Title data-tour="request-list-three">
 					{props.title.length < 85 ? props.title : props.title.substr(0, 85) + '...'}
 				</Title>
@@ -46,13 +45,11 @@ const RequestCard = (props) => {
 			</Timestamp>
 			<Description>
 				<Typography variant="body">
-					{props.description.length < 320
-						? props.description
-						: props.description.substr(0, 320) + '...'}
+					{props.description.length < 320 ? props.description : props.description.substr(0, 320) + '...'}
 				</Typography>
 				<TagsWrapper>
-					{props.categories.split(',').map((item, index) => {
-						return <TagItem key={index}>#{item}</TagItem>;
+					{props.categories.split(',').map((item) => {
+						return <TagItem key={item}>#{item}</TagItem>;
 					})}
 				</TagsWrapper>
 			</Description>
@@ -69,7 +66,9 @@ const RequestCard = (props) => {
 						<ValueLabel>BBit</ValueLabel>
 					</BadgeRow>
 					<BadgeRow>
-						<BiobitToDollarValue>{`~ $ ${+props.angelTokenPay + +props.laboratoryTokenPay}`}</BiobitToDollarValue>
+						<BiobitToDollarValue>{`~ $ ${
+							+props.angelTokenPay + +props.laboratoryTokenPay
+						}`}</BiobitToDollarValue>
 					</BadgeRow>
 				</BiobitToDollarPair>
 				<Divider />

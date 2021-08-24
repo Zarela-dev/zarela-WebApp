@@ -135,8 +135,8 @@ const TextField = forwardRef(
 						</Adornment>
 					) : null}
 					{actions
-						? actions.map((action) => {
-								return <InputAction onClick={action.onClick}>{action.content}</InputAction>;
+						? actions.map((action, index) => {
+								return <InputAction key={index} onClick={action.onClick}>{action.content}</InputAction>;
 						  })
 						: null}
 				</ActionsContainer>

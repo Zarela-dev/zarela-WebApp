@@ -97,7 +97,6 @@ const WalletTransactionsMobile = ({ isLoading, account, data, props, PAGE_SIZE }
 	}, [currentPage, PAGE_SIZE, data]);
 
 	const classes = useStyles(props);
-	// if (!account || isLoading === true) return 'loading';
 	if (!account) return 'no accounts found';
 
 	return (

@@ -6,7 +6,6 @@ import coinbaseIcon from '../../../assets/icons/wallets/coinbase.svg';
 import portisIcon from '../../../assets/icons/wallets/portis.svg';
 import fortmaticIcon from '../../../assets/icons/wallets/fortmatic.svg';
 
-
 const wallets = [
 	{
 		name: 'Metamask',
@@ -142,7 +141,7 @@ function WalletsList({ view = 'grid' }) {
 			<Wrapper>
 				{wallets.map(({ name, icon, active, link, onClick }) =>
 					!window.ethereum?.isMetaMask && link !== undefined && active ? (
-						<GridItemLink href={link} target="_blank" active={active}>
+						<GridItemLink key={name} href={link} target="_blank" active={active}>
 							<WalletIcon src={icon} />
 							<WalletTitle>{name}</WalletTitle>
 						</GridItemLink>
@@ -164,16 +163,12 @@ function WalletsList({ view = 'grid' }) {
 			<ListWrapper>
 				{wallets.map(({ name, icon, active, link, onClick }) =>
 					!window.ethereum?.isMetaMask && link !== undefined && active ? (
-						<ListItemLink href={link} target="_blank" active={active}>
+						<ListItemLink key={name} href={link} target="_blank" active={active}>
 							<ListItemTitle>{name}</ListItemTitle>
 							<ListItemIcon src={icon} />
 						</ListItemLink>
 					) : (
-						<ListItemButton
-							disabled={window.ethereum?.isMetaMask && !active}
-							onClick={onClick}
-							active
-						>
+						<ListItemButton disabled={window.ethereum?.isMetaMask && !active} onClick={onClick} active>
 							<ListItemTitle>{name}</ListItemTitle>
 							<ListItemIcon src={icon} />
 						</ListItemButton>

@@ -1,13 +1,13 @@
 import React, { useState, useMemo } from 'react';
-import RequestCard from '../../components/RequestCard/RequestCard';
 import styled from 'styled-components';
+import { Skeleton } from '@material-ui/lab';
+import { makeStyles } from '@material-ui/core/styles';
+import RequestCard from '../../components/RequestCard/RequestCard';
 import TokenInfoSidebar from '../../components/Sidebar/TokenInfo';
 import Pagination from '../../components/Pagination';
 import maxWidthWrapper from '../../components/Elements/MaxWidth';
 import { timeSince } from '../../utils';
 import homepageBg from '../../assets/home-bg.jpg';
-import { Skeleton } from '@material-ui/lab';
-import { makeStyles } from '@material-ui/core/styles';
 import ZarelaDayBox from '../../components/ZarelaDayBox';
 
 const RequestsListWrapper = styled.div`
@@ -108,9 +108,6 @@ const Desktop = ({
 	requests,
 	appState,
 	web3React,
-	ZarelaReward,
-	BiobitBasedOnEth,
-	dailyContributors,
 	PAGE_SIZE,
 	isLoading,
 	props,
@@ -132,14 +129,13 @@ const Desktop = ({
 			<RequestsListLayout>
 				{isLoading ? (
 					<RequestListSidebarWrapper>
-						{[1, 2, 3].map((index) => {
+						{[1, 2, 3].map(() => {
 							return <SkeletonSidebarCard />;
 						})}
 					</RequestListSidebarWrapper>
 				) : (
 					<RequestListSidebarWrapper>
 						<ZarelaDayBox currentDay={appState.zarelaCurrentDay} />
-						{/* <TokenStatsSidebar dailyContributors={dailyContributors} /> */}
 						<TokenInfoSidebar data={appState} account={web3React.account} />
 					</RequestListSidebarWrapper>
 				)}

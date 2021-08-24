@@ -1,14 +1,14 @@
 import React, { useState, useMemo } from 'react';
-import RequestCardMobile from '../../components/RequestCard/RequestCardMobile';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { Skeleton } from '@material-ui/lab';
+import { makeStyles } from '@material-ui/core/styles';
+import RequestCardMobile from '../../components/RequestCard/RequestCardMobile';
 import maxWidthWrapper from '../../components/Elements/MaxWidth';
 import { timeSince } from '../../utils';
 import homepageBg from '../../assets/home-bg.jpg';
 import { Button } from '../../components/Elements/Button';
-import { Link } from 'react-router-dom';
 import MobileLayout from '../../components/MobileLayout';
-import { Skeleton } from '@material-ui/lab';
-import { makeStyles } from '@material-ui/core/styles';
 import ZarelaDayBox from '../../components/ZarelaDayBox';
 import Pagination from '../../components/Pagination';
 
@@ -118,7 +118,7 @@ const Card = styled.div`
 const CircleSection = styled.div`
 	margin-right: 28px;
 `;
-const SquerSection = styled.div`
+const SquareSection = styled.div`
 	flex-grow: 1;
 `;
 
@@ -165,7 +165,7 @@ const App = ({ requests, isLoading, appState, props, PAGE_SIZE }) => {
 														className={classes.root}
 													/>
 												</CircleSection>
-												<SquerSection>
+												<SquareSection>
 													<Skeleton
 														variant="rect"
 														width={'100%'}
@@ -179,7 +179,7 @@ const App = ({ requests, isLoading, appState, props, PAGE_SIZE }) => {
 														height={19.1}
 														className={classes.root}
 													/>
-												</SquerSection>
+												</SquareSection>
 											</Card>
 										);
 								  })

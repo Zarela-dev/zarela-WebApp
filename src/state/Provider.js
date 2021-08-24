@@ -1,8 +1,8 @@
 import React, { useEffect, useReducer } from 'react';
-import { convertToBiobit, toast } from '../utils';
+import { useWeb3React } from '@web3-react/core';
+import { convertToBiobit } from '../utils';
 import { actionTypes } from './actionTypes';
 import { configureFallbackWeb3, getZarelaCurrentDay, getGasPrice, configureWeb3 } from './actions';
-import { useWeb3React } from '@web3-react/core';
 import { injectedConnector } from '../connectors';
 
 const appInitialState = {
@@ -82,19 +82,24 @@ const AppProvider = ({ children }) => {
 
 	useEffect(() => {
 		getGasPrice(dispatch);
+		// to detect device anywhere in the component tree
 		dispatch({
 			type: actionTypes.SET_CLIENT_DEVICE,
 			payload: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 				? true
 				: false,
 		});
+		// to trigger guide to open from header in each page
 		dispatch({
 			type: actionTypes.SET_GUIDE_IS_OPEN,
 			payload: false,
-		})
+		});
 	}, []);
 
 	useEffect(() => {
+		// we use a fallback web3 provider to be able to fetch data regardless
+		// of user's wallet connection to dApp (since @web3-react does not populate
+		// library unless there's a wallet connected to dApp)
 		if (library) {
 			configureWeb3(dispatch, library);
 		} else {
@@ -109,6 +114,7 @@ const AppProvider = ({ children }) => {
 	}, [appState.contract]);
 
 	useEffect(() => {
+		// populate homepage sidebar values
 		if (account === undefined) {
 			dispatch({
 				type: actionTypes.SET_BBIT_BALANCE,
@@ -122,6 +128,7 @@ const AppProvider = ({ children }) => {
 	}, [account]);
 
 	useEffect(() => {
+		// populate homepage sidebar values
 		if (account !== undefined && appState.contract) {
 			appState.contract.methods.balanceOf(account).call((error, result) => {
 				if (!error) {
@@ -166,7 +173,7 @@ const AppProvider = ({ children }) => {
 		<mainContext.Provider
 			value={{
 				appState,
-				dispatch
+				dispatch,
 			}}
 		>
 			{children}

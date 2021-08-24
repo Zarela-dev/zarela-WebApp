@@ -26,7 +26,6 @@ import {
 	TableCellWrapper,
 	TableCell,
 	TableRow,
-	TableTimestamp,
 	TableBulkRow,
 } from './Elements';
 import { Spacer } from '../Elements/Spacer';
@@ -70,8 +69,8 @@ const LogCard = ({ data }) => {
 				<Column displayFlex flex="0">
 					<Row>
 						<BiobitIcon src={biobitIcon} />
-						<BiobitValue>{+angelTokenPay + +laboratoryTokenPay }</BiobitValue>
-						<DollarValue>{`~ $${+angelTokenPay + +laboratoryTokenPay }`}</DollarValue>
+						<BiobitValue>{+angelTokenPay + +laboratoryTokenPay}</BiobitValue>
+						<DollarValue>{`~ $${+angelTokenPay + +laboratoryTokenPay}`}</DollarValue>
 					</Row>
 				</Column>
 				<VerticalDivider />

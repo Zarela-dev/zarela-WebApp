@@ -2,7 +2,6 @@ import getWeb3 from '../getFallbackWeb3';
 import { actionTypes } from './actionTypes';
 import axios from 'axios';
 
-
 export const getZarelaCurrentDay = (dispatch, contract) => {
 	contract.methods.zarelaDayCounter().call((error, data) => {
 		if (!error) {

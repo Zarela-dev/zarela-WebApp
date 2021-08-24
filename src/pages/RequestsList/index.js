@@ -1,89 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useWeb3React } from '@web3-react/core';
 import { mainContext } from '../../state';
 import { convertToBiobit } from '../../utils';
-import { useWeb3React } from '@web3-react/core';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
-// import Splash from '../../components/Splash';
 import Guide from './../../components/Guide/Guide';
-
-const DesktopSteps = [
-	{
-		selector: '[data-tour="request-list-one"]',
-		content: 'A Request card contains all information regarding the request.',
-	},
-	{
-		selector: '[data-tour="request-list-two"]',
-		content: 'The unique ID assigned to each request.',
-	},
-	{
-		selector: '[data-tour="request-list-three"]',
-		content: 'The title given to each request submitted by the mage.',
-	},
-	{
-		selector: '[data-tour="request-list-four"]',
-		content:
-			'This number indicates the number of Biobit tokens that are to be paid by the mage to each angel who sends the	appropriate response.',
-	},
-	{
-		selector: '[data-tour="request-list-five"]',
-		content: 'This number indicates the number of approved responses sent by angels.',
-	},
-	{
-		selector: '[data-tour="request-list-six"]',
-		content: 'This number indicates the total number of responses sent to this request.',
-	},
-	{
-		selector: '[data-tour="request-list-seven"]',
-		content: 'You can click here to see more information about applying and participating.',
-	},
-	{
-		selector: '[data-tour="request-list-nine"]',
-		content:
-			'This section displays information about the total number of Biobit tokens, Biobit token name and code and your own Wallet balance.',
-	},
-	{
-		selector: '',
-		content:
-			'Well done! You earn 100 BBits for this learning! want to earn more? learn every guide on pages and collect about 500 BBits!',
-	},
-];
-const MobileSteps = [
-	{
-		selector: '[data-tour="request-list-one"]',
-		content: 'A Request card contains all information regarding the request.',
-	},
-	{
-		selector: '[data-tour="request-list-two"]',
-		content: 'The unique ID assigned to each request.',
-	},
-	{
-		selector: '[data-tour="request-list-three"]',
-		content: 'The title given to each request submitted by the mage.',
-	},
-	{
-		selector: '[data-tour="request-list-four"]',
-		content:
-			'This number indicates the number of Biobit tokens that are to be paid by the mage to each angel who sends the	appropriate response.',
-	},
-	{
-		selector: '[data-tour="request-list-five"]',
-		content: 'This number indicates the number of approved responses sent by angels.',
-	},
-	{
-		selector: '[data-tour="request-list-six"]',
-		content: 'This number indicates the total number of responses sent to this request.',
-	},
-	{
-		selector: '[data-tour="request-list-seven"]',
-		content: 'You can click here to see more information about applying and participating.',
-	},
-	{
-		selector: '',
-		content:
-			'Well done! You earn 100 BBits for this learning! want to earn more? learn every guide on pages and collect about 500 BBits!',
-	},
-];
+import { RequestDetailsDesktopSteps, RequestDetailsMobileSteps } from '../../guides';
 
 const RequestsList = () => {
 	const { appState } = useContext(mainContext);
@@ -94,7 +16,6 @@ const RequestsList = () => {
 	const [dailyContributors, setDailyContributors] = useState(0);
 	const [isLoading, setLoading] = useState(true);
 
-	// pagination hook
 	useEffect(() => {
 		if (appState.contract !== null) {
 			appState.contract.methods.orderSize().call((error, result) => {
@@ -112,7 +33,7 @@ const RequestsList = () => {
 						let businessCategory = result[1];
 
 						if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY)
-							// only show zarela requests
+							// filter categories and only show Zarela requests
 							appState.contract.methods.orders(i).call((error, result) => {
 								if (!error) {
 									const requestTemplate = {
@@ -156,7 +77,7 @@ const RequestsList = () => {
 	}, [appState.contract]);
 
 	return (
-		<Guide steps={appState.isMobile ? MobileSteps : DesktopSteps} isLoading={isLoading}>
+		<Guide steps={appState.isMobile ? RequestDetailsMobileSteps : RequestDetailsDesktopSteps} isLoading={isLoading}>
 			{appState.isMobile ? (
 				<Mobile {...{ requests, isLoading, appState, PAGE_SIZE }} />
 			) : (

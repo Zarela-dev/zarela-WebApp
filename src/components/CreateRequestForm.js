@@ -13,6 +13,7 @@ const SubmitButton = styled(Button)`
 
 const Form = styled.form`
 	max-width: 510px;
+	padding-left: ${(props) => props.theme.spacing(2)};
 `;
 
 const Divider = styled.div`
@@ -39,7 +40,6 @@ const options = [
 
 const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 	const [selectedOption, setSelectedOption] = useState([]);
-	const [selectInputValue, setSelectInputValue] = useState('');
 
 	return (
 		<Form onSubmit={formik.handleSubmit}>
@@ -111,7 +111,6 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 				}}
 				error={formik.errors?.category}
 				onKeyDown={(e) => {
-					setSelectInputValue('');
 					if (e.key === 'Enter') {
 						setSelectedOption([...selectedOption, { value: e.target.value, label: e.target.value }]);
 						formik.setFieldValue('category', [

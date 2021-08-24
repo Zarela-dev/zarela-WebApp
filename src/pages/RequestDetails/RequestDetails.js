@@ -2,18 +2,16 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useParams } from 'react-router';
 import { Buffer } from 'buffer';
 import { create } from 'ipfs-http-client';
-import { actionTypes, mainContext } from '../../state';
-import { useHistory } from 'react-router-dom';
-import { convertToBiobit } from '../../utils';
 import * as ethUtil from 'ethereumjs-util';
 import { encrypt } from 'eth-sig-util';
-import { toast, ZRNG, getFileNameWithExt } from '../../utils';
 import { useWeb3React } from '@web3-react/core';
+import { twofish } from 'twofish';
+import { mainContext } from '../../state';
+import { convertToBiobit } from '../../utils';
+import { toast, ZRNG, getFileNameWithExt } from '../../utils';
 import Mobile from './Mobile';
 import Desktop from './Desktop';
 import Guide from './../../components/Guide/Guide';
-import { useLocation } from 'react-router';
-import { twofish } from 'twofish';
 
 const steps = [
 	{
@@ -38,14 +36,13 @@ const steps = [
 const RequestDetailsPage = () => {
 	const { id } = useParams();
 	const [request, setRequest] = useState({});
-	const { appState, dispatch } = useContext(mainContext);
+	const { appState } = useContext(mainContext);
 	const sendSignalRef = useRef(null);
 	const [showDialog, setDialog] = useState(false);
 	const [isSubmitting, setSubmitting] = useState(false);
 	const [dialogMessage, setDialogMessage] = useState('');
 	const [error, setError] = useState(false);
 	const { account } = useWeb3React();
-	const location = useLocation();
 
 	const clearSubmitDialog = () => {
 		setSubmitting(false);
@@ -190,7 +187,7 @@ const RequestDetailsPage = () => {
 					let businessCategory = result[1];
 
 					if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY)
-						// only show zarela requests
+						// filter categories and only show Zarela requests
 						appState.contract.methods.orders(id).call((error, result) => {
 							if (!error) {
 								const requestTemplate = {

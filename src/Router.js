@@ -1,19 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
-import CreateRequest from '../pages/CreateRequest';
-import Header from './Header';
-import RequestDetails from '../pages/RequestDetails/RequestDetails';
-import Inbox from '../pages/Inbox';
-import IntroModal from './IntroModal';
-import BottomNavigation from './BottomNavigation';
+
+import CreateRequest from './pages/CreateRequest';
+import Header from './components/Header';
+import RequestDetails from './pages/RequestDetails/RequestDetails';
+import Inbox from './pages/Inbox';
+import IntroModal from './components/IntroModal';
+import BottomNavigation from './components/BottomNavigation';
 import styled from 'styled-components';
-import Wallet from '../pages/Wallet/Wallet';
-import RequestsList from '../pages/RequestsList';
-import Log from '../pages/Log/Log';
-import { mainContext } from './../state';
-import { supportedChains } from '../constants/index';
-import ChainError from './ChainError';
+import Wallet from './pages/Wallet/Wallet';
+import RequestsList from './pages/RequestsList';
+import Log from './pages/Log/Log';
+import { mainContext } from './state';
+import { supportedChains } from './constants/index';
+import ChainError from './components/ChainError';
 
 const AppWrapper = styled.div`
 	padding-bottom: ${(props) => props.theme.spacing(5)};
@@ -42,6 +43,7 @@ const AppRouter = () => {
 				console.error(error);
 			}
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [error, chainId, provider]);
 
 	if (!provider)

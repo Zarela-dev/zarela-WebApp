@@ -196,22 +196,7 @@ const Hint = styled.div`
 	line-height: 16px;
 `;
 
-const ReactSelect = (
-	{
-		options,
-		onChange,
-		isMulti,
-		menuIsOpen,
-		value,
-		onKeyDown,
-		inputValue,
-		error,
-		label,
-		hint,
-		placeholder,
-	},
-	props
-) => {
+const ReactSelect = ({ options, onChange, isMulti, value, onKeyDown, error, label, hint, placeholder }, props) => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [input, setInput] = useState('');
 
@@ -246,8 +231,6 @@ const ReactSelect = (
 				value={value}
 				inputValue={input}
 				onInputChange={(e) => setInput(e)}
-				label="iefji"
-				title="ifejf"
 				placeholder={placeholder}
 			/>
 			{error ? <Error>{error}</Error> : null}

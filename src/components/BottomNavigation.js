@@ -24,7 +24,7 @@ const Nav = styled.nav`
 	flex-wrap: nowrap;
 	justify-content: center;
 	align-items: flex-end;
-	z-index: ${props => props.theme.z_bottomNav};
+	z-index: ${(props) => props.theme.z_bottomNav};
 	background: url(${navBackground});
 	background-position: center bottom;
 	background-clip: revert;
@@ -99,7 +99,7 @@ const CreateRequestButton = styled(GenericLinkButton).attrs((props) => {
 	top: -7px;
 	left: 50%;
 	transform: translateX(-50%);
-	
+
 	& > a {
 		padding: ${(props) => props.theme.spacing(1)};
 	}
@@ -147,7 +147,7 @@ const BottomNavigation = () => {
 
 	return (
 		<Nav>
-			{bottomNavItems.map(({ center, path, icon, activeIcon, notifications }) => {
+			{bottomNavItems.map(({ center, path, icon, activeIcon, notifications }, index) => {
 				const isActive = matchPath(pathname, {
 					path: path,
 					exact: true,
@@ -155,14 +155,14 @@ const BottomNavigation = () => {
 
 				if (!center)
 					return (
-						<NavItem to={path} active>
+						<NavItem key={index} to={path} active>
 							{+notifications > 0 ? <NavBadge>{notifications}</NavBadge> : null}
 							{isActive ? <NavIcon src={activeIcon} /> : <NavIcon src={icon} />}
 						</NavItem>
 					);
 				else if (center)
 					return (
-						<CreateRequestNavItem>
+						<CreateRequestNavItem key={index}>
 							<CreateRequestButton to={path}>
 								<CreateRequestIcon src={icon} />
 							</CreateRequestButton>

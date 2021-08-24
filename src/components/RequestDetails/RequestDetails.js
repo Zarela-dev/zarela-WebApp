@@ -110,10 +110,6 @@ const CustomContributeBadge = styled(ContributorBadge)`
 	flex: 0 0 auto;
 `;
 
-// const EqualSign = styled(BiobitToDollarValue)`
-// 	margin: 0 5px;
-// `;
-
 const FilesWrapper = styled.div`
 	${maxWidthWrapper};
 	display: flex;
@@ -178,7 +174,9 @@ const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, 
 							<TokenIcon src={biobitIcon} />
 							<TokenValue>{+request.angelTokenPay + +request.laboratoryTokenPay}</TokenValue>
 							<ValueLabel>BBit</ValueLabel>
-							<BiobitToDollarValue noMargin>{`~ $ ${+request.angelTokenPay + +request.laboratoryTokenPay}`}</BiobitToDollarValue>
+							<BiobitToDollarValue noMargin>{`~ $ ${
+								+request.angelTokenPay + +request.laboratoryTokenPay
+							}`}</BiobitToDollarValue>
 						</CustomBadgeRow>
 					</CustomFooter>
 					<CustomProgressTrackerWrapper>
@@ -192,8 +190,8 @@ const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, 
 			</HeaderContainer>
 			<DescriptionContainer>
 				<TagsWrapper>
-					{request.categories?.split(',').map((item, index) => {
-						return <TagItem key={index}>#{item}</TagItem>;
+					{request.categories?.split(',').map((item) => {
+						return <TagItem key={item}>#{item}</TagItem>;
 					})}
 				</TagsWrapper>
 				<PublicKeyBadge data-tour="request-details-one">

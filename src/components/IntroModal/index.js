@@ -114,13 +114,6 @@ const Divider = styled.div`
 	margin: ${(props) => props.theme.spacing(3)} 0;
 `;
 
-// const SectionTitle = styled.h3`
-// 	font-weight: bold;
-// 	font-size: 16px;
-// 	line-height: 19px;
-// 	color: ${(props) => props.theme.textPrimary};
-// `;
-
 const MessageContainer = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -172,23 +165,21 @@ const IntroModal = () => {
 				</Header>
 				<Content>
 					<Message>
-						To continue please sync your digital wallet or download one of these trusted
-						wallets.
+						To continue please sync your digital wallet or download one of these trusted wallets.
 					</Message>
 					<WalletsList />
 					<Divider />
 					<MessageContainer>
 						<Message>for more information visit our website</Message>
-						<LearnMoreButton href="https://zarela.io/about-us/" target="_blank">visit us</LearnMoreButton>
+						<LearnMoreButton href="https://zarela.io/about-us/" target="_blank">
+							visit us
+						</LearnMoreButton>
 					</MessageContainer>
 				</Content>
 				<Spacer />
 				<Footer>
 					<SocialList>
-						<SocialLink
-							href="https://www.instagram.com/zarela.io/?hl=en"
-							target="_blank"
-						>
+						<SocialLink href="https://www.instagram.com/zarela.io/?hl=en" target="_blank">
 							<SocialIcon src={instagramIcon} />
 						</SocialLink>
 						<SocialLink href="https://twitter.com/zarela_io" target="_blank">

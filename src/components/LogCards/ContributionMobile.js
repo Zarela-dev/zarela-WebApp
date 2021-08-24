@@ -78,7 +78,7 @@ const LogCardMobile = ({ data }) => {
 				<MobileBody>
 					<MobileTable>
 						{contributions.map(({ originalIndex, timestamp, zarelaDay, status }, rowIndex) => (
-							<MobileTableRow>
+							<MobileTableRow key={originalIndex}>
 								<MobileTableColumn flex={'6'}>
 									<MobileTableTitle>{`${rowIndex + 1}. File #${originalIndex}`}</MobileTableTitle>
 									<MobileTableData>{timeSince(timestamp)}</MobileTableData>

@@ -109,9 +109,7 @@ const ChainErrorDialog = () => {
 					<Title>Welcome to Zarela ! :)</Title>
 				</Header>
 				<Content>
-					<Message>
-							Zarela is currently on test network, switch your wallet network to Ropsten.
-					</Message>
+					<Message>Zarela is currently on test network, switch your wallet network to Ropsten.</Message>
 				</Content>
 			</Modal>
 		</Container>

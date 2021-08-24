@@ -1,37 +1,28 @@
-import styled, { css } from "styled-components";
-import { Link } from "react-router-dom";
+import styled, { css } from 'styled-components';
+import { Link } from 'react-router-dom';
 
 function getBackground(props) {
 	if (props.disabled)
 		return css`
 			background: transparent;
 		`;
-	if (props.variant === "primary")
+	if (props.variant === 'primary')
 		return css`
-			background: linear-gradient(
-				256.48deg,
-				#a2f0ea -37.74%,
-				#75f0e7 -37.73%,
-				#a981fe 103.72%
-			);
+			background: linear-gradient(256.48deg, #a2f0ea -37.74%, #75f0e7 -37.73%, #a981fe 103.72%);
 		`;
-	if (props.variant === "secondary")
+	if (props.variant === 'secondary')
 		return css`
-			background: linear-gradient(
-				256.48deg,
-				rgb(72 194 185 / 50%),
-				rgb(138 100 212 / 50%)
-			);
+			background: linear-gradient(256.48deg, rgb(72 194 185 / 50%), rgb(138 100 212 / 50%));
 		`;
 }
 function getColor(props) {
-	if (props.variant === "primary") {
+	if (props.variant === 'primary') {
 		return css`
 			background: transparent;
 			color: #252222;
 		`;
 	}
-	if (props.variant === "secondary") {
+	if (props.variant === 'secondary') {
 		return css`
 			background: white;
 			color: #7246d0;
@@ -60,12 +51,11 @@ const Container = styled.div`
 const TheButton = styled.button`
 	${(props) => getColor(props)};
 	${(props) => props.disabled && getDisabledStyles()};
-	padding: ${(props) =>
-			props.fontSize ? props.theme.spacing(0.9) : props.theme.spacing(1.5)}
+	padding: ${(props) => (props.fontSize ? props.theme.spacing(0.9) : props.theme.spacing(1.5))}
 		${(props) => props.theme.spacing(3)};
 	text-decoration: none;
 	font-weight: 500;
-	font-size: ${(props) => props.fontSize ?? "20px"};
+	font-size: ${(props) => props.fontSize ?? '20px'};
 	border: none;
 	width: calc(100% - 2px);
 	height: calc(100% - 2px);
@@ -78,8 +68,7 @@ const TheButton = styled.button`
 const LinkButtonAnchor = styled.a`
 	${(props) => getColor(props)};
 	display: block;
-	padding: ${(props) => props.theme.spacing(1.5)}
-		${(props) => props.theme.spacing(3)};
+	padding: ${(props) => props.theme.spacing(1.5)} ${(props) => props.theme.spacing(3)};
 	text-decoration: none;
 	font-weight: 500;
 	font-size: 20px;
@@ -97,8 +86,7 @@ const LinkButtonAnchor = styled.a`
 const TheLinkButton = styled(Link)`
 	${(props) => getColor(props)};
 	display: block;
-	padding: ${(props) => props.theme.spacing(1.5)}
-		${(props) => props.theme.spacing(3)};
+	padding: ${(props) => props.theme.spacing(1.5)} ${(props) => props.theme.spacing(3)};
 	text-decoration: none;
 	font-weight: 500;
 	font-size: 20px;
@@ -112,21 +100,9 @@ const TheLinkButton = styled(Link)`
 	line-height: 1;
 `;
 
-const GenericButton = ({
-	children,
-	variant,
-	type,
-	disabled,
-	fontSize,
-	...rest
-}) => (
+const GenericButton = ({ children, variant, type, disabled, fontSize, ...rest }) => (
 	<Container disabled={disabled} variant={variant} {...rest}>
-		<TheButton
-			variant={variant}
-			type={type}
-			disabled={disabled}
-			fontSize={fontSize}
-		>
+		<TheButton variant={variant} type={type} disabled={disabled} fontSize={fontSize}>
 			{children}
 		</TheButton>
 	</Container>
@@ -151,12 +127,7 @@ export const GenericLinkButton = ({ children, variant, to, type, ...rest }) => (
 export default GenericButton;
 
 export const Button = css`
-	background: linear-gradient(
-		256.48deg,
-		#a2f0ea -37.74%,
-		#75f0e7 -37.73%,
-		#a981fe 103.72%
-	);
+	background: linear-gradient(256.48deg, #a2f0ea -37.74%, #75f0e7 -37.73%, #a981fe 103.72%);
 	box-shadow: 0px 4px 18px #dfecff;
 	border-radius: 4px;
 	text-align: center;
@@ -164,8 +135,7 @@ export const Button = css`
 	font-size: 20px;
 	border: none;
 	height: 50px;
-	padding: ${(props) => props.theme.spacing(1.5)}
-		${(props) => props.theme.spacing(3)};
+	padding: ${(props) => props.theme.spacing(1.5)} ${(props) => props.theme.spacing(3)};
 	text-decoration: none;
 	color: ${(props) => props.theme.textPrimary};
 	margin-right: ${(props) => props.theme.spacing(3)};

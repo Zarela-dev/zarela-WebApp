@@ -5,16 +5,13 @@ import { GenericLinkButton } from '../Button';
 export const RequestCardWrapper = styled.div`
 	display: flex;
 	flex-wrap: wrap;
-	/* background: linear-gradient(220.57deg, rgba(107, 230, 238, 0.15) -15.95%, rgba(64, 76, 189, 0.15) 107.46%); */
 	background: white;
 	border: 1px solid #c4c4c4;
 	border-radius: 8px;
-	padding: ${(props) => props.theme.spacing(1.7)} ${(props) => props.theme.spacing(1.4)} ${(props) => props.theme.spacing(1.4)};
+	padding: ${(props) => props.theme.spacing(1.7)} ${(props) => props.theme.spacing(1.4)}
+		${(props) => props.theme.spacing(1.4)};
 
 	margin-bottom: 25px;
-	/* &:not(:last-child){
-		margin-bottom: 25px;
-	} */
 `;
 
 export const HeaderLayout = styled.div`
@@ -206,14 +203,4 @@ export const JoinButton = styled(GenericLinkButton)`
 `;
 
 export default RequestCardWrapper;
-export {
-	// Avatar,
-	// Bookmark,
-	// Description,
-	Typography,
-	// ProgressLayout,
-	// TokenIcon,
-	// Spacer,
-	// AvatarImage,
-	// HeaderLayout
-};
+export { Typography };

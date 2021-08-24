@@ -85,7 +85,7 @@ const ErrorBoundary = () => {
 	return (
 		<Wrapper>
 			<Header>
-				<Title>OoooppSs...</Title>
+				<Title>oops...</Title>
 				<Message>Don’t worry! we will catch you soon!</Message>
 			</Header>
 			<Body>

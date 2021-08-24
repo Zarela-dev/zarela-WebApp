@@ -1,5 +1,9 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { useHistory } from 'react-router';
+import { useWeb3React } from '@web3-react/core';
 import { mainContext } from '../../state';
 import { Title, TokenList, TokenIcon, TokenName, Token } from './WalletAccount/AccountChoices';
 import { Content, Column } from './WalletAccount/Layout';
@@ -7,11 +11,7 @@ import biobitIcon from '../../assets/icons/biobit-black.svg';
 import etherIcon from '../../assets/icons/ether-black.png';
 import Textfield from './../../components/Elements/TextField';
 import Button from './../../components/Elements/Button';
-import { toast, convertToBiobit } from '../../utils';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
-import { useHistory } from 'react-router';
-import { useWeb3React } from '@web3-react/core';
+import { toast } from '../../utils';
 
 const WalletInput = styled(Textfield)`
 	min-width: ${(props) => (props.isMobile === true ? '100%' : '510px')};
@@ -98,7 +98,8 @@ const WalletSendAssets = (mobile) => {
 	const getClipboard = async () => {
 		var pasteTarget = document.getElementsByName('address')[0];
 		pasteTarget.focus();
-		if (navigator.clipboard && navigator.clipboard?.readText) document.execCommand('insertText', false, await navigator.clipboard.readText());
+		if (navigator.clipboard && navigator.clipboard?.readText)
+			document.execCommand('insertText', false, await navigator.clipboard.readText());
 	};
 
 	return (

@@ -76,7 +76,9 @@ const CreateRequest = () => {
 			terms: yup.boolean().required(),
 		}),
 		onSubmit: (values) => {
+			console.log(values)
 			if (formik.isValid) {
+				/* to prevent the Mage from submitting the request with insufficient assets */
 				if (
 					(+values.angelTokenPay + +values.laboratoryTokenPay) * +values.instanceCount >
 					+appState.biobitBalance
@@ -112,10 +114,12 @@ const CreateRequest = () => {
 										reader.readAsArrayBuffer(fileRef.current.files[0]); // Read Provided File
 
 										reader.onloadend = async () => {
-											const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
+											const ipfs = create(process.env.REACT_APP_IPFS); // create IPFS instance, connecting to desired node
 											const buf = Buffer(reader.result); // Convert data into buffer
 
 											try {
+												// since it may take quite a while for a request to fulfill, we pin it
+												// on IPFS so it'd be available for later uses
 												const ipfsResponse = await ipfs.add(buf, { pin: true });
 
 												formik.setFieldValue('zpaper', ipfsResponse.path);

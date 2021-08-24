@@ -124,7 +124,7 @@ const Dialog = ({ isOpen, hasSpinner, title, content, actions, type = 'error', o
 		}
 		return () => {
 			document.body.style.overflow = 'auto';
-		}
+		};
 	}, [isOpen]);
 
 	if (!isOpen) return null;

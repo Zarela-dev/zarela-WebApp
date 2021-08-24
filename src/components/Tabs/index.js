@@ -6,7 +6,7 @@ import { Route, useHistory } from 'react-router-dom';
 
 const TabsWrapper = styled(RaTabs)`
 	${maxWidthWRapper};
-	padding: ${(props) => props.isMobile ? '0 18px' : `0 ${props.theme.spacing(2)}`};
+	padding: ${(props) => (props.isMobile ? '0 18px' : `0 ${props.theme.spacing(2)}`)};
 `;
 
 const TabsHeader = styled(TabList)`
@@ -27,11 +27,10 @@ const TabsHeaderItem = styled(Tab)`
 	opacity: 0.5;
 	line-height: ${(props) => (props.isMobile ? '17px' : '26px')};
 	padding: ${(props) => props.theme.spacing(0.9)} 0;
-	margin-right: ${(props) =>
-		props.isMobile ? props.theme.spacing(0.6) : props.theme.spacing(2)};
+	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(0.6) : props.theme.spacing(2))};
 	cursor: pointer;
 
-	@media (max-width: ${(props => props.theme.tablet_sm_breakpoint)}) {
+	@media (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		min-width: calc((100% - 36px) / 3);
 		text-align: center;
 		flex: 1;
@@ -78,18 +77,24 @@ export const Tabs = ({ data, isMobile, route }) => {
 			selectedIndex={data.findIndex((item) => formatUrl(item.label) === activeTab)}
 			onSelect={(index, lastIndex) => {
 				history.push(`/${route}/${formatUrl(data[index].label)}`);
+				// to manually control the routing when tabs are being switched
 				return false;
 			}}
 		>
 			<TabsHeader isMobile={isMobile}>
-				{data.map((tab, tabIndex) => (
-					<TabsHeaderItem data-tour={tab['data-tour']} isMobile={isMobile} tabIndex={tab.label} key={tabIndex}>
+				{data.map((tab) => (
+					<TabsHeaderItem
+						data-tour={tab['data-tour']}
+						isMobile={isMobile}
+						tabIndex={tab.label}
+						key={tab.label}
+					>
 						{tab.label}
 					</TabsHeaderItem>
 				))}
 			</TabsHeader>
-			{data.map(({ component, label }, index) => (
-				<TabsBody tabIndex={label} key={index}>
+			{data.map(({ component, label }) => (
+				<TabsBody tabIndex={label} key={label}>
 					<Route path={`/${route}/${formatUrl(label)}`} exact render={() => component} />
 				</TabsBody>
 			))}
