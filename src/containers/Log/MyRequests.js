@@ -80,7 +80,7 @@ const MyRequests = () => {
 				<Spinner />
 			</SpinnerWrapper>
 		) : requests.length === 0 ? (
-			<NoRequestsFound />
+			<NoRequestsFound message='You have not created any requests yet.'/>
 		) : (
 			requests.map((request) => <MyRequestMobile key={request.requestID} data={request} />)
 		);
@@ -89,7 +89,7 @@ const MyRequests = () => {
 			<Spinner />
 		</SpinnerWrapper>
 	) : requests.length === 0 ? (
-		<NoRequestsFound />
+		<NoRequestsFound message='You have not created any requests yet.'/>
 	) : (
 		requests.map((request) => <MyRequest key={request.requestID} data={request} />)
 	);
