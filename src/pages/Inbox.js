@@ -33,7 +33,6 @@ const Inbox = () => {
 	const { account } = useWeb3React();
 	const [requests, setRequests] = useState({});
 	const [isLoading, setLoading] = useState(false);
-	const [ConnectionModalShow, setConnectionModalShow] = useState(true);
 	// to manually trigger a data fetch, after the signalsApproved event is triggered
 	const [shouldRefresh, setShouldRefresh] = useState(false);
 	const [guideIsOpen, setGuideIsOpen] = useState(false);
@@ -155,7 +154,7 @@ const Inbox = () => {
 				{appState.isMobile ? (
 					<NoMobileSupportMessage />
 				) : !account ? (
-					<ConnectDialog isOpen={ConnectionModalShow} />
+					<ConnectDialog isOpen={true} />
 				) : isLoading ? (
 					<SpinnerWrapper>
 						<Spinner />

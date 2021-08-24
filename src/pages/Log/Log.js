@@ -82,7 +82,6 @@ const Log = () => {
 	const { appState } = useContext(mainContext);
 	const [totalRevenueFromZarela, setTotalRevenueFromZarela] = useState(0);
 	const [totalRevenueFromRequester, setTotalRevenueFromRequester] = useState(0);
-	const [ConnectionModalShow, setConnectionModalShow] = useState(true);
 	const [guideIsOpen, setGuideIsOpen] = useState(false);
 
 	useEffect(() => {
@@ -125,7 +124,7 @@ const Log = () => {
 			</WalletTitlebar>
 			<MobileLayout>
 				{!account ? (
-					<ConnectDialog isOpen={ConnectionModalShow} />
+					<ConnectDialog isOpen={true} />
 				) : (
 					<Tabs
 						route="log"
