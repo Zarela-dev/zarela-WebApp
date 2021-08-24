@@ -93,7 +93,6 @@ const ZarelaDayBox = ({ currentDay = 0 }) => {
 		<Container>
 			<Row>
 				<Title>Current Zarela Day</Title>
-				<QuestionIcon src={questionMarkIcon} />
 			</Row>
 			<Row>
 				<ZarelaDay>{`${currentDay}th`}</ZarelaDay>

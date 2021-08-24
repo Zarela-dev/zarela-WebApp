@@ -8,7 +8,7 @@ const Desktop = ({
 	account,
 	showDialog,
 	isSubmitting,
-	setSubmitting,
+	setDialog,
 	dialogMessage,
 	request,
 	sendSignalRef,
@@ -18,7 +18,7 @@ const Desktop = ({
 }) => {
 	return (
 		<>
-			<ConnectDialog isOpen={!account && showDialog} onClose={() => setSubmitting(false)} />
+			<ConnectDialog isOpen={!account && showDialog} onClose={() => setDialog(false)} />
 			<Dialog isOpen={isSubmitting} content={dialogMessage} hasSpinner type="success" />
 			<RequestDetails
 				request={request}

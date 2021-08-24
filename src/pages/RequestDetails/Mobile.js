@@ -8,7 +8,7 @@ const App = ({
 	account,
 	showDialog,
 	isSubmitting,
-	setSubmitting,
+	setDialog,
 	dialogMessage,
 	request,
 	sendSignalRef,
@@ -20,7 +20,7 @@ const App = ({
 		<div>
 			<ConnectDialog
 				isOpen={!account && showDialog}
-				onClose={() => setSubmitting(false)}
+				onClose={() => setDialog(false)}
 			/>
 			<Dialog
 				isOpen={isSubmitting}

@@ -45,7 +45,6 @@ const Sidebar = ({ data, account }) => {
 				<Icon src={walletBlack} />
 				<Title>Wallet Info</Title>
 				<Spacer />
-				<Icon src={infoIcon} />
 			</Header>
 			<Row hiddenInfo={account === undefined}>
 				<Subtitle>BBit Balance</Subtitle>
