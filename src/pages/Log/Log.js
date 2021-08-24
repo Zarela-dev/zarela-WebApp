@@ -142,7 +142,7 @@ const Log = () => {
 			</WalletTitlebar>
 			<MobileLayout>
 				{!account ? (
-					<ConnectDialog isOpen={ConnectionModalShow} onClose={() => setConnectionModalShow(false)} />
+					<ConnectDialog isOpen={ConnectionModalShow} />
 				) : (
 					<Tabs
 						route="log"

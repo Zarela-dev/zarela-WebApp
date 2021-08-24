@@ -228,12 +228,12 @@ const RequestDetailsPage = () => {
 						account,
 						showDialog,
 						isSubmitting,
-						setSubmitting,
 						dialogMessage,
 						request,
 						sendSignalRef,
 						submitSignal,
 						error,
+						setDialog,
 						setError,
 					}}
 				/>
@@ -243,12 +243,12 @@ const RequestDetailsPage = () => {
 						account,
 						showDialog,
 						isSubmitting,
-						setSubmitting,
 						dialogMessage,
 						request,
 						sendSignalRef,
 						submitSignal,
 						error,
+						setDialog,
 						setError,
 					}}
 				/>

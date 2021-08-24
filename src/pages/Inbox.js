@@ -166,7 +166,7 @@ const Inbox = () => {
 				{appState.isMobile ? (
 					<NoMobileSupportMessage />
 				) : !account ? (
-					<ConnectDialog isOpen={ConnectionModalShow} onClose={() => setConnectionModalShow(false)} />
+					<ConnectDialog isOpen={ConnectionModalShow} />
 				) : isLoading ? (
 					<SpinnerWrapper>
 						<Spinner />

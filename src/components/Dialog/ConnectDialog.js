@@ -52,6 +52,20 @@ const DownloadButton = styled(LinkButton)`
 const ConnectButton = styled(Button)`
 	margin: 0 auto;
 	min-width: 270px;
+
+	@media only screen and (max-width: ${({ theme }) => theme.tablet_sm_breakpoint}) {
+		min-width: unset;
+		max-width: unset;
+		height: auto;
+		margin: 0;
+		width: 100%;
+		
+		& > button {
+			font-size: 18px;
+			white-space: nowrap;
+			padding: 15px 10px;
+		}
+	}
 `;
 
 const ConnectDialog = (props) => {
@@ -61,10 +75,10 @@ const ConnectDialog = (props) => {
 		<Dialog
 			{...props}
 			type="success"
-			title={'Sync your wallet'}
+			title={'Connect to your wallet'}
 			content={
 				<>
-					<Text>Our recommended wallet is Metamask.</Text>
+					<Text>Our recommended wallet is Metamask. If you don't already have a wallet try Metamask.</Text>
 					<DownloadBox>
 						<Icon src={metamaskIcon} />
 						<DownloadButton variant="secondary" target="_blank" href="https://metamask.io/download.html">
