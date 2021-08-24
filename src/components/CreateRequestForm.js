@@ -13,6 +13,7 @@ const SubmitButton = styled(Button)`
 
 const Form = styled.form`
 	max-width: 510px;
+	padding-left: ${(props) => props.theme.spacing(2)};
 `;
 
 const Divider = styled.div`
