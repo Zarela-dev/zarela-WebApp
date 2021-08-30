@@ -10,9 +10,10 @@ import getLibrary from './utils/getLibrary';
 import ErrorBoundary from './ErrorBoundary';
 import 'react-toastify/dist/ReactToastify.css';
 
-function App() {
+
+function App() {	
 	return (
-		<div className="App">
+		<div className='App'>
 			<ErrorBoundary>
 				<Web3ReactProvider getLibrary={getLibrary}>
 					<AppProvider>

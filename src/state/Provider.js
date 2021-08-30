@@ -5,6 +5,7 @@ import { actionTypes } from './actionTypes';
 import { configureFallbackWeb3, getZarelaCurrentDay, getGasPrice, configureWeb3 } from './actions';
 import { injectedConnector } from '../connectors';
 
+
 const appInitialState = {
 	error: null,
 
@@ -170,6 +171,8 @@ const AppProvider = ({ children }) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [active, window.ethereum?.selectedAddress]);
 
+	
+	
 	return (
 		<mainContext.Provider
 			value={{
