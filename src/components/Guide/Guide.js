@@ -108,24 +108,6 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 							toastId: hash,
 						});
 					});
-
-				appState.contract.events
-					.Transfer()
-					.on('data', (event) => {
-						toast(
-							`100 BBits were transferred to ${event.returnValues[0]} from Zarela smart contract`,
-							'success',
-							false,
-							null,
-							{
-								toastId: event.id,
-							}
-						);
-					})
-					.on('error', (error, receipt) => {
-						toast(error.message, 'error');
-						console.error(error, receipt);
-					});
 			} else {
 				setShowConnectDialog(true);
 			}

@@ -185,28 +185,6 @@ const CreateRequest = () => {
 															}
 														}
 													);
-
-												appState.contract.events
-													.orderRegistered({})
-													.on('data', (event) => {
-														clearSubmitDialog();
-
-														toast(
-															`Transaction #${event.returnValues[1]} has been created successfully.`,
-															'success',
-															false,
-															null,
-															{
-																toastId: event.id,
-															}
-														);
-													})
-													.on('error', (error, receipt) => {
-														clearSubmitDialog();
-
-														toast(error.message, 'error');
-														console.error(error, receipt);
-													});
 											} catch (error) {
 												console.error(error);
 											}

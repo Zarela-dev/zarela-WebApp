@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
-import { NotificationHandler } from './state/NotificationHandler';
 
 import CreateRequest from './pages/CreateRequest';
 import Header from './components/Header';
@@ -16,7 +15,6 @@ import Log from './pages/Log/Log';
 import { mainContext } from './state';
 import { supportedChains } from './constants/index';
 import ChainError from './components/ChainError';
-import { toast } from './utils';
 
 const AppWrapper = styled.div`
 	padding-bottom: ${(props) => props.theme.spacing(5)};
@@ -49,10 +47,6 @@ const AppRouter = () => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [error, chainId, provider]);
-
-
-			NotificationHandler(appState);
-	
 
 	if (!provider)
 		return (

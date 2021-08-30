@@ -22,7 +22,7 @@ const ToastMessage = styled.div`
 	line-height: 18px;
 	color: ${(props) => props.theme.textPrimary};
 	margin: 0 ${(props) => props.theme.spacing(1)};
-	white-space: ${props => props.isHash ? 'nowrap' : 'normal'};
+	white-space: ${(props) => (props.isHash ? 'nowrap' : 'normal')};
 	overflow: hidden;
 	text-overflow: ellipsis;
 `;
@@ -34,30 +34,70 @@ const Icon = styled.img`
 const Message = ({ text, copyable, textToCopy, closeToast, toastProps }) => {
 	return (
 		<Container>
-			<Icon src={toastProps.type === 'success' ? checkedBoxImage : alertImage} />
+			<Icon
+				src={toastProps.type === 'success' ? checkedBoxImage : alertImage}
+			/>
 			<ToastMessage isHash={copyable}>{text}</ToastMessage>
 			<Spacer />
 			{copyable ? (
 				<CopyableText textToCopy={textToCopy}>
-					<Icon src={toastProps.type === 'success' ? copyImageGreen : copyImageRed} />
+					<Icon
+						src={toastProps.type === 'success' ? copyImageGreen : copyImageRed}
+					/>
 				</CopyableText>
 			) : null}
-			<Icon onClick={closeToast} src={toastProps.type === 'success' ? closeImageGreen : closeImageRed} />
+			<Icon
+				onClick={closeToast}
+				src={toastProps.type === 'success' ? closeImageGreen : closeImageRed}
+			/>
 		</Container>
 	);
 };
 
-export const toast = (message, variant = 'info', copyable, textToCopy /*  = message */, toastOptions = {}) => {
-	return originalToast(<Message text={message} copyable={copyable} textToCopy={textToCopy} />, {
-		position: originalToast.POSITION.BOTTOM_CENTER,
-		pauseOnHover: true,
-		pauseOnFocusLoss: true,
-		closeOnClick: false,
-		draggable: true,
-		closeButton: false,
-		autoClose: 5 * 1000,
-		draggablePercent: 20,
-		type: variant,
-		...toastOptions,
-	});
+export const toast = (
+	message,
+	variant = 'info',
+	copyable,
+	textToCopy /*  = message */,
+	toastOptions = {}
+) => {
+	return originalToast(
+		<Message text={message} copyable={copyable} textToCopy={textToCopy} />,
+		{
+			position: originalToast.POSITION.BOTTOM_CENTER,
+			pauseOnHover: true,
+			pauseOnFocusLoss: true,
+			closeOnClick: false,
+			draggable: true,
+			closeButton: false,
+			autoClose: 5 * 1000,
+			draggablePercent: 20,
+			type: variant,
+			...toastOptions,
+		}
+	);
+};
+
+export const log = (
+	message,
+	variant = 'info',
+	copyable,
+	textToCopy /*  = message */,
+	toastOptions = {}
+) => {
+	return originalToast(
+		<Message text={message} copyable={copyable} textToCopy={textToCopy} />,
+		{
+			position: originalToast.POSITION.TOP_CENTER,
+			pauseOnHover: true,
+			pauseOnFocusLoss: true,
+			closeOnClick: false,
+			draggable: true,
+			closeButton: false,
+			autoClose: false,
+			draggablePercent: 20,
+			type: variant,
+			...toastOptions,
+		}
+	);
 };

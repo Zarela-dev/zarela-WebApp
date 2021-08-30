@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import backIcon from '../../assets/icons/left-arrow.svg';
 import { matchPath, useLocation, Link } from 'react-router-dom';
+import { NotificationContainer } from './../../components/ToastifyContainer';
+import { toast } from 'react-toastify';
 
 const Nav = styled.nav`
 	position: fixed;
@@ -9,11 +11,13 @@ const Nav = styled.nav`
 	top: 0;
 	height: 100vh;
 	background: white;
-	transform: ${({ isOpen }) => (isOpen ? 'translateX(0%)' : 'translateX(100%)')};
+	transform: ${({ isOpen }) =>
+		isOpen ? 'translateX(0%)' : 'translateX(100%)'};
 	min-width: 276px;
 	border: 1.5px solid ${(props) => props.theme.success};
 	border-radius: 8px 0px 0px 0px;
-	padding: ${(props) => props.theme.spacing(2)} ${(props) => props.theme.spacing(3)};
+	padding: ${(props) => props.theme.spacing(2)}
+		${(props) => props.theme.spacing(3)};
 	overflow: auto;
 	z-index: ${(props) => props.theme.z_mobileSlideMenu};
 	transition: transform 0.4s ease-in-out;
@@ -55,7 +59,8 @@ const Divider = styled.div`
 	height: 1px;
 	background: #4fcfa1;
 	border-radius: 12px;
-	margin: ${(props) => props.theme.spacing(2)} 0 ${(props) => props.theme.spacing(4)};
+	margin: ${(props) => props.theme.spacing(2)} 0
+		${(props) => props.theme.spacing(4)};
 `;
 
 const CTAWrapper = styled.div``;
@@ -78,6 +83,7 @@ const MenuItem = styled(Link)`
 	text-decoration: ${(props) => (props.active ? 'underline' : 'none')};
 	margin-bottom: ${(props) => props.theme.spacing(4)};
 `;
+toast.configure();
 
 const SlideMenu = ({ isOpen, onClose, title, listItems, cta }) => {
 	const { pathname } = useLocation();
@@ -145,6 +151,31 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta }) => {
 					);
 				})}
 			</MenuList>
+		</Nav>
+	);
+};
+
+export const SlideMenuNotification = ({
+	isOpen,
+	onClose,
+	title,
+	listItems,
+	cta,
+}) => {
+	const { pathname } = useLocation();
+	return (
+		<Nav isOpen={isOpen}>
+			<Header>
+				<HeaderRow>
+					<BackIcon src={backIcon} onClick={onClose} />
+				</HeaderRow>
+				<NotificationContainer limit={3} />
+				<HeaderRow>
+					<Title>{title}</Title>
+					<CTAWrapper>{cta}</CTAWrapper>
+				</HeaderRow>
+			</Header>
+			<Divider />
 		</Nav>
 	);
 };

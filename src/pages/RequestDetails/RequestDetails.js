@@ -17,11 +17,13 @@ import worker from 'workerize-loader!../../workers/encrypt.js';
 const steps = [
 	{
 		selector: '[data-tour="request-details-one"]',
-		content: 'Mage’s public key on Ethereum Network is indicated here for checking by angles.',
+		content:
+			'Mage’s public key on Ethereum Network is indicated here for checking by angles.',
 	},
 	{
 		selector: '[data-tour="request-details-two"]',
-		content: 'Mage creates the Zpaper, containing all the description and requirements.',
+		content:
+			'Mage creates the Zpaper, containing all the description and requirements.',
 	},
 	{
 		selector: '[data-tour="request-details-three"]',
@@ -37,7 +39,7 @@ const steps = [
 const RequestDetailsPage = () => {
 	const { id } = useParams();
 	const [request, setRequest] = useState({});
-	const { appState } = useContext(mainContext);
+	const { appState, dispatch } = useContext(mainContext);
 	const sendSignalRef = useRef(null);
 	const [showDialog, setDialog] = useState(false);
 	const [isSubmitting, setSubmitting] = useState(false);
@@ -56,7 +58,10 @@ const RequestDetailsPage = () => {
 			if (sendSignalRef !== null) {
 				setDialog(true);
 				if (account) {
-					if (sendSignalRef.current.value !== null && sendSignalRef.current.value !== '') {
+					if (
+						sendSignalRef.current.value !== null &&
+						sendSignalRef.current.value !== ''
+					) {
 						setDialog(false);
 						setSubmitting(true);
 						setDialogMessage('encrypting file');
@@ -161,7 +166,10 @@ const RequestDetailsPage = () => {
 					let categories = result[0];
 					let businessCategory = result[1];
 
-					if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY)
+					if (
+						+businessCategory ===
+						+process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY
+					)
 						// filter categories and only show Zarela requests
 						appState.contract.methods.orders(id).call((error, result) => {
 							if (!error) {
