@@ -36,6 +36,16 @@ const Icon = styled.img`
 	width: 24px;
 `;
 
+const NotifySuccess = styled.div`
+	min-width: 20px;
+	min-height: 20px;
+	display: flex;
+	background-color: rgba(58, 222, 163, 1);
+	border-radius: 10px;
+	justify-content: center;
+	align-items: center;
+`;
+
 const Message = ({
 	text,
 	copyable,
@@ -47,9 +57,11 @@ const Message = ({
 	return (
 		<Container usage={usage}>
 			{usage === 'notify' ? (
-				<Icon
-					src={toastProps.type === 'success' ? checkedBoxImage : alertImage}
-				/>
+				toastProps.type === 'success' ? (
+					<NotifySuccess>3</NotifySuccess>
+				) : (
+					<Icon src={alertImage} />
+				)
 			) : (
 				<Icon
 					src={toastProps.type === 'success' ? checkedBoxImage : alertImage}
@@ -116,7 +128,7 @@ export const log = (
 			usage='notify'
 		/>,
 		{
-			position: originalToast.POSITION.TOP_CENTER,
+			position: originalToast.POSITION.TOP_RIGHT,
 			containerId: 'notify',
 			pauseOnHover: true,
 			pauseOnFocusLoss: true,

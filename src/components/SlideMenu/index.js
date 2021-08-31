@@ -20,6 +20,7 @@ const Nav = styled.nav`
 		${(props) => props.theme.spacing(3)};
 	padding-right: ${(props) => (props.usage === 'notify' ? '0 !important' : '')};
 	overflow: auto;
+	overflow-x: hidden !important;
 	z-index: ${(props) => props.theme.z_mobileSlideMenu};
 	transition: transform 0.4s ease-in-out;
 `;

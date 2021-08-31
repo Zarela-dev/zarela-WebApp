@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 const CustomContainer = styled(ToastContainer)`
 	@media only screen and (min-width: ${(props) =>
 			props.theme.tablet_sm_breakpoint}) {
-		width: ${(props) => (props.containerId === 'notify' ? '80%' : '750px')};
+		width: ${(props) => (props.containerId === 'notify' ? '93%' : '750px')};
 	}
 	@media only screen and (max-width: ${(props) =>
 			props.theme.tablet_sm_breakpoint}) {
@@ -23,6 +23,7 @@ const CustomContainer = styled(ToastContainer)`
 				: props.isMobile
 				? '125px'
 				: '105px'};
+		right: ${(props) => (props.containerId === 'notify' ? '-20px' : 'unset')};
 		height: fit-content;
 	}
 	@media only screen and (max-width: ${(props) =>
@@ -45,9 +46,11 @@ const CustomContainer = styled(ToastContainer)`
 				: 'rgba(79, 207, 161, 0.7)'};
 		border: ${(props) =>
 			props.containerId === 'notify' ? 'none' : '1px solid #1d8a7f'};
-		box-shadow: ${props => props.containerId === 'notify' ? 'none !important' : '	'};
+		box-shadow: ${(props) =>
+			props.containerId === 'notify' ? 'none !important' : '	'};
 		box-sizing: border-box;
-		border-radius: 3px;
+		border-radius: ${(props) =>
+			props.containerId === 'notify' ? '9px 0 0 9px' : '3px'};
 	}
 	.Toastify__toast--error {
 		background: #ffeff5;
