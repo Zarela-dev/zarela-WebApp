@@ -166,6 +166,9 @@ const BoxWrapper = styled.div`
 `;
 
 const WalletTitlebar = styled(TitleBar)`
+	min-width: ${(props) => (props.isMobile ? '20px' : '25px')};
+	max-height: ${(props) => (props.isMobile ? '20px' : '25px')};
+	min-height: ${(props) => (props.isMobile ? '20px' : '25px')};
 	display: flex;
 	flex-wrap: nowrap;
 	justify-content: space-between;
@@ -212,6 +215,14 @@ const RewardValue = styled.div`
 		font-size: 13px;
 		font-weight: 600;
 	}
+	border-radius: ${(props) => (props.isMobile ? '10px' : '12.5px')};
+	background-color: #d13ade;
+	color: #fff;
+	padding: 3px;
+	top: ${(props) => (props.isMobile ? '-3px' : '-9px')};
+	font-size: ${(props) => (props.isMobile ? '12px' : '18px')};
+	line-height: ${(props) => (props.isMobile ? '12px' : '18px')};
+	font-weight: 700;
 `;
 
 export default function Header({ isMobile }) {

@@ -22,6 +22,7 @@ const appInitialState = {
 	contract: null,
 	isMobile: null,
 	guideIsOpen: null,
+	notificationCount: null,
 
 	zarelaCurrent: null,
 };
@@ -80,6 +81,11 @@ const AppProvider = ({ children }) => {
 					...state,
 					guideIsOpen: action.payload,
 				};
+			case actionTypes.SET_NOTIFICATION_COUNT:
+				return {
+					...state,
+					notificationCount: action.payload,
+				};
 			default:
 				return state;
 		}
@@ -100,6 +106,11 @@ const AppProvider = ({ children }) => {
 		dispatch({
 			type: actionTypes.SET_GUIDE_IS_OPEN,
 			payload: false,
+		});
+
+		dispatch({
+			type: actionTypes.SET_NOTIFICATION_COUNT,
+			payload: 0,
 		});
 	}, []);
 

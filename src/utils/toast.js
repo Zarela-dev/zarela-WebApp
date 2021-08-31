@@ -1,3 +1,4 @@
+import React, { useEffect, useContext } from 'react';
 import { toast as originalToast } from 'react-toastify';
 import styled from 'styled-components';
 import checkedBoxImage from '../assets/icons/checked-box.svg';
@@ -8,6 +9,7 @@ import closeImageGreen from '../assets/icons/close-green.svg';
 import closeImageRed from '../assets/icons/close-red.svg';
 import { Spacer } from '../components/Elements/Spacer';
 import { CopyableText } from './CopyableText';
+import { actionTypes, mainContext } from '../state';
 
 const Container = styled.div`
 	display: flex;
@@ -54,6 +56,16 @@ const Message = ({
 	toastProps,
 	usage = 'toastify',
 }) => {
+	const { appState, dispatch } = useContext(mainContext);
+
+	useEffect(() => {
+		if (usage === 'notify') {
+			dispatch({
+				type: actionTypes.SET_NOTIFICATION_COUNT,
+				payload: +appState.notificationCount + 1,
+			});
+		}
+	}, [text]);
 	return (
 		<Container usage={usage}>
 			{usage === 'notify' ? (

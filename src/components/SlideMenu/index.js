@@ -92,15 +92,20 @@ const MenuItem = styled(Link)`
 
 const NotificationSideBarBadge = styled.div`
 	position: relative;
-	min-width: 20px;
-	min-height: 20px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	border-radius: 10px;
 	background-color: #d13ade;
 	color: #fff;
 	padding: 6px;
+	align-self: flex-end;
+	min-width: ${(props) => (props.isMobile ? '20px' : '25px')};
+	max-height: ${(props) => (props.isMobile ? '20px' : '25px')};
+	min-height: ${(props) => (props.isMobile ? '20px' : '25px')};
+	border-radius: ${(props) => (props.isMobile ? '10px' : '12.5px')};
+	font-size: ${(props) => (props.isMobile ? '12px' : '18px')};
+	line-height: ${(props) => (props.isMobile ? '12px' : '18px')};
+	font-weight: 700;
 `;
 
 const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
@@ -116,7 +121,11 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 				<HeaderRow>
 					<>
 						<Title>{title}</Title>
-						<NotificationSideBarBadge>4154</NotificationSideBarBadge>
+						{appState.notificationCount !== 0 ? (
+							<NotificationSideBarBadge isMobile={appState.isMobile}>
+								{appState.notificationCount}
+							</NotificationSideBarBadge>
+						) : null}
 					</>
 					<CTAWrapper>{cta}</CTAWrapper>
 				</HeaderRow>
