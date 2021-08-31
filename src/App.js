@@ -17,13 +17,13 @@ function App() {
 			<ErrorBoundary>
 				<Web3ReactProvider getLibrary={getLibrary}>
 					<AppProvider>
-						<NotificationProvider>
-							<ThemeProvider theme={theme}>
+						<ThemeProvider theme={theme}>
+							<NotificationProvider>
 								<AppRouter />
 								<ToastifyContainer limit={3} />
 								<GlobalStyle />
-							</ThemeProvider>
-						</NotificationProvider>
+							</NotificationProvider>
+						</ThemeProvider>
 					</AppProvider>
 				</Web3ReactProvider>
 			</ErrorBoundary>

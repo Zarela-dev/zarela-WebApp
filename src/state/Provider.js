@@ -122,7 +122,6 @@ const AppProvider = ({ children }) => {
 
 	useEffect(() => {
 		// populate homepage sidebar values
-		console.log('account', account);
 		if (account === undefined) {
 			dispatch({
 				type: actionTypes.SET_BBIT_BALANCE,

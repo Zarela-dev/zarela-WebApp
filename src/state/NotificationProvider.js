@@ -7,16 +7,6 @@ import { useWeb3React } from '@web3-react/core';
 export const NotificationProvider = ({ children }) => {
 	const { appState, dispatch } = useContext(mainContext);
 	const { account } = useWeb3React();
-	console.log('account 2 ', account);
-
-
-	appState.contract !== null &&
-	log(
-		`Transactiohas been created successfully.`,
-		'success',
-		false,
-		null
-	);
 
 	appState.contract !== null &&
 		appState.contract.events
@@ -39,7 +29,6 @@ export const NotificationProvider = ({ children }) => {
 						toastId: event.id,
 					}
 				);
-				console.log('return values', event.returnValues[0]);
 				if (
 					event.returnValues[0] === account ||
 					event.returnValues[3] === account
