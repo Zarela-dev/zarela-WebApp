@@ -1,5 +1,4 @@
-import React, { useEffect, useContext } from 'react';
-import { actionTypes } from '.';
+import React, { useContext } from 'react';
 import { toast, log } from '../utils';
 import { mainContext } from '.';
 import { useWeb3React } from '@web3-react/core';

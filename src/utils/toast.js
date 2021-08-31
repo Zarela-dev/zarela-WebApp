@@ -88,7 +88,7 @@ export const log = (
 	return originalToast(
 		<Message text={message} copyable={copyable} textToCopy={textToCopy} />,
 		{
-			position: originalToast.POSITION.TOP_CENTER,
+			position: originalToast.POSITION.BOTTOM_CENTER,
 			pauseOnHover: true,
 			pauseOnFocusLoss: true,
 			closeOnClick: false,
