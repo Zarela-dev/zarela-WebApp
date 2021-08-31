@@ -83,7 +83,6 @@ const MenuItem = styled(Link)`
 	text-decoration: ${(props) => (props.active ? 'underline' : 'none')};
 	margin-bottom: ${(props) => props.theme.spacing(4)};
 `;
-toast.configure();
 
 const SlideMenu = ({ isOpen, onClose, title, listItems, cta }) => {
 	const { pathname } = useLocation();
@@ -169,7 +168,7 @@ export const SlideMenuNotification = ({
 				<HeaderRow>
 					<BackIcon src={backIcon} onClick={onClose} />
 				</HeaderRow>
-				<NotificationContainer limit={3} />
+				<NotificationContainer enableMultiContainer containerId={'notify'} />
 				<HeaderRow>
 					<Title>{title}</Title>
 					<CTAWrapper>{cta}</CTAWrapper>

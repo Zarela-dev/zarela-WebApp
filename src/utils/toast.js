@@ -65,6 +65,7 @@ export const toast = (
 		<Message text={message} copyable={copyable} textToCopy={textToCopy} />,
 		{
 			position: originalToast.POSITION.BOTTOM_CENTER,
+			containerId: 'toastify',
 			pauseOnHover: true,
 			pauseOnFocusLoss: true,
 			closeOnClick: false,
@@ -88,7 +89,8 @@ export const log = (
 	return originalToast(
 		<Message text={message} copyable={copyable} textToCopy={textToCopy} />,
 		{
-			position: originalToast.POSITION.BOTTOM_CENTER,
+			position: originalToast.POSITION.TOP_CENTER,
+			containerId: 'notify',
 			pauseOnHover: true,
 			pauseOnFocusLoss: true,
 			closeOnClick: false,
