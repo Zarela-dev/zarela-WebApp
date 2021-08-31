@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import backIcon from '../../assets/icons/left-arrow.svg';
 import { matchPath, useLocation, Link } from 'react-router-dom';
 import CustomContainer from './../../components/ToastifyContainer';
+import { mainContext } from '../../state';
 
 const Nav = styled.nav`
 	position: fixed;
@@ -17,6 +18,7 @@ const Nav = styled.nav`
 	border-radius: 8px 0px 0px 0px;
 	padding: ${(props) => props.theme.spacing(2)}
 		${(props) => props.theme.spacing(3)};
+	padding-right: ${(props) => (props.usage === 'notify' ? '0 !important' : '')};
 	overflow: auto;
 	z-index: ${(props) => props.theme.z_mobileSlideMenu};
 	transition: transform 0.4s ease-in-out;
@@ -42,12 +44,13 @@ const Title = styled.h2`
 	line-height: 20px;
 	text-align: center;
 	color: #4fcfa1;
+	margin-top: 10px;
 `;
 
 const BackIcon = styled.img`
 	width: 28px;
 	width: content-box;
-	padding: 0 10px;
+	padding: 10px;
 	margin-left: -10px;
 	margin-bottom: 10px;
 	cursor: pointer;
@@ -86,11 +89,12 @@ const MenuItem = styled(Link)`
 	margin-bottom: ${(props) => props.theme.spacing(4)};
 `;
 
-const SlideMenu = ({ isOpen, onClose, title, listItems, cta }) => {
+const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 	const { pathname } = useLocation();
+	const { appState } = useContext(mainContext);
 
 	return (
-		<Nav isOpen={isOpen}>
+		<Nav isOpen={isOpen} usage={usage}>
 			<Header>
 				<HeaderRow>
 					<BackIcon src={backIcon} onClick={onClose} />
@@ -101,82 +105,66 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta }) => {
 				</HeaderRow>
 			</Header>
 			<Divider />
-			<MenuList>
-				{listItems.map((item) => {
-					if (item.children?.length) {
-						return (
-							<>
-								<MenuItem
-									key={item.title}
-									onClick={onClose}
-									active={matchPath(pathname, {
-										path: item.path,
-										exact: true,
-									})}
-									to={item.path}
-									notification={item.notification}
-								>
-									{item.title}
-									{item.badge || null}
-								</MenuItem>
-								<MenuList>
-									{item.children.map((childItem) => (
-										<MenuItem
-											key={childItem.title}
-											active={matchPath(pathname, {
-												path: childItem.path,
-												exact: true,
-											})}
-											to={childItem.path}
-											notification={childItem.notification}
-										>
-											{childItem.title}
-											{childItem.badge || null}
-										</MenuItem>
-									))}
-								</MenuList>
-							</>
-						);
-					}
-					return (
-						<MenuItem
-							key={item.title}
-							onClick={onClose}
-							active={matchPath(pathname, { path: item.path, exact: true })}
-							to={item.path}
-							notification={item.notification}
-						>
-							{item.title}
-							{item.badge || null}
-						</MenuItem>
-					);
-				})}
-			</MenuList>
-		</Nav>
-	);
-};
 
-export const SlideMenuNotification = ({
-	isOpen,
-	onClose,
-	title,
-	listItems,
-	cta,
-}) => {
-	const { pathname } = useLocation();
-	return (
-		<Nav isOpen={isOpen}>
-			<Header>
-				<HeaderRow>
-					<BackIconNotify src={backIcon} onClick={onClose} />
-				</HeaderRow>
-				<HeaderRow>
-					<Title>{title}</Title>
-					<CTAWrapper>{cta}</CTAWrapper>
-				</HeaderRow>
-			</Header>
-			<Divider />
-			<CustomContainer enableMultiContainer containerId={'notify'} />
+			{usage === 'notify' ? (
+				<CustomContainer
+					enableMultiContainer
+					containerId={'notify'}
+					isMobile={appState.isMobile}
+				/>
+			) : (
+				<MenuList>
+					{listItems.map((item) => {
+						if (item.children?.length) {
+							return (
+								<>
+									<MenuItem
+										key={item.title}
+										onClick={onClose}
+										active={matchPath(pathname, {
+											path: item.path,
+											exact: true,
+										})}
+										to={item.path}
+										notification={item.notification}
+									>
+										{item.title}
+										{item.badge || null}
+									</MenuItem>
+									<MenuList>
+										{item.children.map((childItem) => (
+											<MenuItem
+												key={childItem.title}
+												active={matchPath(pathname, {
+													path: childItem.path,
+													exact: true,
+												})}
+												to={childItem.path}
+												notification={childItem.notification}
+											>
+												{childItem.title}
+												{childItem.badge || null}
+											</MenuItem>
+										))}
+									</MenuList>
+								</>
+							);
+						}
+						return (
+							<MenuItem
+								key={item.title}
+								onClick={onClose}
+								active={matchPath(pathname, { path: item.path, exact: true })}
+								to={item.path}
+								notification={item.notification}
+							>
+								{item.title}
+								{item.badge || null}
+							</MenuItem>
+						);
+					})}
+				</MenuList>
+			)}
 		</Nav>
 	);
 };

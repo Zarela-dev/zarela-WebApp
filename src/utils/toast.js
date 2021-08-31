@@ -13,7 +13,10 @@ const Container = styled.div`
 	display: flex;
 	align-items: center;
 	height: 100%;
-	padding: ${(props) => props.theme.spacing(2)};
+	padding: ${(props) =>
+		props.usage === 'notify'
+			? props.theme.spacing(0.5)
+			: props.theme.spacing(2)};
 `;
 
 const ToastMessage = styled.div`
@@ -22,6 +25,8 @@ const ToastMessage = styled.div`
 	line-height: 18px;
 	color: ${(props) => props.theme.textPrimary};
 	margin: 0 ${(props) => props.theme.spacing(1)};
+	margin-right: ${(props) =>
+		props.usage === 'notify' ? '0 !important' : 'unset'};
 	white-space: ${(props) => (props.isHash ? 'nowrap' : 'normal')};
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -31,13 +36,28 @@ const Icon = styled.img`
 	width: 24px;
 `;
 
-const Message = ({ text, copyable, textToCopy, closeToast, toastProps }) => {
+const Message = ({
+	text,
+	copyable,
+	textToCopy,
+	closeToast,
+	toastProps,
+	usage = 'toastify',
+}) => {
 	return (
-		<Container>
-			<Icon
-				src={toastProps.type === 'success' ? checkedBoxImage : alertImage}
-			/>
-			<ToastMessage isHash={copyable}>{text}</ToastMessage>
+		<Container usage={usage}>
+			{usage === 'notify' ? (
+				<Icon
+					src={toastProps.type === 'success' ? checkedBoxImage : alertImage}
+				/>
+			) : (
+				<Icon
+					src={toastProps.type === 'success' ? checkedBoxImage : alertImage}
+				/>
+			)}
+			<ToastMessage isHash={copyable} usage={usage}>
+				{text}
+			</ToastMessage>
 			<Spacer />
 			{copyable ? (
 				<CopyableText textToCopy={textToCopy}>
@@ -46,10 +66,12 @@ const Message = ({ text, copyable, textToCopy, closeToast, toastProps }) => {
 					/>
 				</CopyableText>
 			) : null}
-			<Icon
-				onClick={closeToast}
-				src={toastProps.type === 'success' ? closeImageGreen : closeImageRed}
-			/>
+			{usage === 'notify' ? null : (
+				<Icon
+					onClick={closeToast}
+					src={toastProps.type === 'success' ? closeImageGreen : closeImageRed}
+				/>
+			)}
 		</Container>
 	);
 };
@@ -87,7 +109,12 @@ export const log = (
 	toastOptions = {}
 ) => {
 	return originalToast(
-		<Message text={message} copyable={copyable} textToCopy={textToCopy} />,
+		<Message
+			text={message}
+			copyable={copyable}
+			textToCopy={textToCopy}
+			usage='notify'
+		/>,
 		{
 			position: originalToast.POSITION.TOP_CENTER,
 			containerId: 'notify',

@@ -8,7 +8,7 @@ const CustomContainer = styled(ToastContainer)`
 	}
 	@media only screen and (max-width: ${(props) =>
 			props.theme.tablet_sm_breakpoint}) {
-		width: 90vw;
+		width: ${(props) => (props.containerId === 'notify' ? '58vw' : '90vw')};
 		transform: translateX(-50%);
 		left: 50%;
 		bottom: 70px;
@@ -17,7 +17,13 @@ const CustomContainer = styled(ToastContainer)`
 	& .Toastify__toast {
 		padding: 0;
 		margin-bottom: ${(props) => props.theme.spacing(1)};
-		top: ${(props) => (props.containerId === 'notify' ? '75px' : '0')};
+		top: ${(props) =>
+			props.containerId !== 'notify'
+				? '0'
+				: props.isMobile
+				? '125px'
+				: '105px'};
+		height: fit-content;
 	}
 	@media only screen and (max-width: ${(props) =>
 			props.theme.tablet_sm_breakpoint}) {
@@ -28,13 +34,18 @@ const CustomContainer = styled(ToastContainer)`
 	@media only screen and (min-width: ${(props) =>
 			props.theme.tablet_sm_breakpoint}) {
 		& .Toastify__toast {
-			height: 60px;
+			height: fit-content;
 		}
 	}
 
 	.Toastify__toast--success {
-		background: rgba(79, 207, 161, 0.7);
-		border: 1px solid #1d8a7f;
+		background: ${(props) =>
+			props.containerId === 'notify'
+				? 'rgba(232, 250, 246, 1)'
+				: 'rgba(79, 207, 161, 0.7)'};
+		border: ${(props) =>
+			props.containerId === 'notify' ? 'none' : '1px solid #1d8a7f'};
+		box-shadow: ${props => props.containerId === 'notify' ? 'none !important' : '	'};
 		box-sizing: border-box;
 		border-radius: 3px;
 	}
