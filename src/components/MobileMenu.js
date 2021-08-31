@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Button } from './Elements/Button';
-import SlideMenu from './SlideMenu';
+import SlideMenu, { SlideMenuNotification } from './SlideMenu';
 import chainIdTag from '../assets/icons/chainid-tag.svg';
 
 const ChainBadge = styled.div`
@@ -22,7 +22,7 @@ const ChainBadge = styled.div`
 	font-weight: normal;
 `;
 
-const MobileMenu = ({ isOpen, onClose }) => {
+const MobileMenu = ({ isOpen, onClose, notifyOnClose, usage = 'toastify' }) => {
 	const menuItems = [
 		{
 			title: 'Home',
@@ -48,13 +48,25 @@ const MobileMenu = ({ isOpen, onClose }) => {
 	];
 
 	return (
-		<SlideMenu
-			isOpen={isOpen}
-			onClose={onClose}
-			title={'Menu'}
-			cta={() => <Button variant="primary">New Request</Button>}
-			listItems={menuItems}
-		></SlideMenu>
+		<>
+			{usage === 'toastify' ? (
+				<SlideMenu
+					isOpen={isOpen}
+					onClose={onClose}
+					title={'Menu'}
+					cta={() => <Button variant='primary'>New Request</Button>}
+					listItems={menuItems}
+				></SlideMenu>
+			) : (
+				usage === 'notify' && (
+					<SlideMenuNotification
+						isOpen={isOpen}
+						onClose={onClose}
+						title={'Notifications'}
+					></SlideMenuNotification>
+				)
+			)}
+		</>
 	);
 };
 

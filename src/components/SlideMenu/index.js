@@ -2,8 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import backIcon from '../../assets/icons/left-arrow.svg';
 import { matchPath, useLocation, Link } from 'react-router-dom';
-import { NotificationContainer } from './../../components/ToastifyContainer';
-import { toast } from 'react-toastify';
+import CustomContainer from './../../components/ToastifyContainer';
 
 const Nav = styled.nav`
 	position: fixed;
@@ -52,6 +51,9 @@ const BackIcon = styled.img`
 	margin-left: -10px;
 	margin-bottom: 10px;
 	cursor: pointer;
+`;
+const BackIconNotify = styled(BackIcon)`
+	z-index: 99999;
 `;
 
 const Divider = styled.div`
@@ -166,15 +168,15 @@ export const SlideMenuNotification = ({
 		<Nav isOpen={isOpen}>
 			<Header>
 				<HeaderRow>
-					<BackIcon src={backIcon} onClick={onClose} />
+					<BackIconNotify src={backIcon} onClick={onClose} />
 				</HeaderRow>
-				<NotificationContainer enableMultiContainer containerId={'notify'} />
 				<HeaderRow>
 					<Title>{title}</Title>
 					<CTAWrapper>{cta}</CTAWrapper>
 				</HeaderRow>
 			</Header>
 			<Divider />
+			<CustomContainer enableMultiContainer containerId={'notify'} />
 		</Nav>
 	);
 };
