@@ -195,4 +195,34 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 	);
 };
 
+export const SlideMenuNotification = ({
+	isOpen,
+	onClose,
+	title,
+	listItems,
+	cta,
+}) => {
+	const { pathname } = useLocation();
+	return (
+		<Nav isOpen={isOpen}>
+			<Header>
+				<HeaderRow>
+					<BackIcon src={backIcon} onClick={onClose} />
+				</HeaderRow>
+				{/* <NotificationContainer enableMultiContainer containerId={'notify'} /> */}
+				<HeaderRow>
+					<Title>{title}</Title>
+					<CTAWrapper>{cta}</CTAWrapper>
+				</HeaderRow>
+			</Header>
+			<Divider />
+
+		</Nav>
+	);
+};
+
+
+
+
+
 export default SlideMenu;
