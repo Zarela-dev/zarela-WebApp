@@ -90,6 +90,19 @@ const MenuItem = styled(Link)`
 	margin-bottom: ${(props) => props.theme.spacing(4)};
 `;
 
+const NotificationSideBarBadge = styled.div`
+	position: relative;
+	min-width: 20px;
+	min-height: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 10px;
+	background-color: #d13ade;
+	color: #fff;
+	padding: 6px;
+`;
+
 const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 	const { pathname } = useLocation();
 	const { appState } = useContext(mainContext);
@@ -101,7 +114,10 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 					<BackIcon src={backIcon} onClick={onClose} />
 				</HeaderRow>
 				<HeaderRow>
-					<Title>{title}</Title>
+					<>
+						<Title>{title}</Title>
+						<NotificationSideBarBadge>4154</NotificationSideBarBadge>
+					</>
 					<CTAWrapper>{cta}</CTAWrapper>
 				</HeaderRow>
 			</Header>
