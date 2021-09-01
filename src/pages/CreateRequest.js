@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { create } from 'ipfs-http-client';
 import styled from 'styled-components';
 import TitleBar from '../components/TitleBar/TitleBar';
-import CreateRequestForm from '../components/CreateRequestForm';
+import CreateRequestForm from '../components/createRequest/CreateRequestForm';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { useFormik } from 'formik';
@@ -57,8 +57,12 @@ const CreateRequest = () => {
 			terms: false,
 		},
 		validationSchema: yup.object().shape({
-			title: yup.string(validationErrors.string('title')).required(validationErrors.required('title')),
-			desc: yup.string(validationErrors.string('description')).required(validationErrors.required('description')),
+			title: yup
+				.string(validationErrors.string('title'))
+				.required(validationErrors.required('title')),
+			desc: yup
+				.string(validationErrors.string('description'))
+				.required(validationErrors.required('description')),
 			angelTokenPay: yup
 				.number()
 				.typeError(validationErrors.number('Angel Allocated Biobits'))
@@ -76,14 +80,18 @@ const CreateRequest = () => {
 			terms: yup.boolean().required(),
 		}),
 		onSubmit: (values) => {
-			console.log(values)
+			console.log(values);
 			if (formik.isValid) {
 				/* to prevent the Mage from submitting the request with insufficient assets */
 				if (
-					(+values.angelTokenPay + +values.laboratoryTokenPay) * +values.instanceCount >
+					(+values.angelTokenPay + +values.laboratoryTokenPay) *
+						+values.instanceCount >
 					+appState.biobitBalance
 				) {
-					formik.setFieldError('angelTokenPay', validationErrors.notEnoughTokens);
+					formik.setFieldError(
+						'angelTokenPay',
+						validationErrors.notEnoughTokens
+					);
 					formik.setSubmitting(false);
 				} else {
 					if (!values.terms) {
@@ -92,14 +100,23 @@ const CreateRequest = () => {
 					} else {
 						if (account) {
 							setDialog(false);
-							if (fileRef.current.value !== null && fileRef.current.value !== '') {
+							if (
+								fileRef.current.value !== null &&
+								fileRef.current.value !== ''
+							) {
 								setUploading(true);
 								setDialogMessage(
 									'in request to secure the file, so only you can access it we require your public key to encrypt the file'
 								);
 
-								const { title, desc, angelTokenPay, laboratoryTokenPay, instanceCount, category } =
-									values;
+								const {
+									title,
+									desc,
+									angelTokenPay,
+									laboratoryTokenPay,
+									instanceCount,
+									category,
+								} = values;
 								const reader = new FileReader();
 
 								window.ethereum
@@ -123,7 +140,9 @@ const CreateRequest = () => {
 												const ipfsResponse = await ipfs.add(buf, { pin: true });
 
 												formik.setFieldValue('zpaper', ipfsResponse.path);
-												let url = `${process.env.REACT_APP_IPFS_LINK + ipfsResponse.path}`;
+												let url = `${
+													process.env.REACT_APP_IPFS_LINK + ipfsResponse.path
+												}`;
 												console.log(`Document Of Conditions --> ${url}`);
 
 												setDialogMessage('awaiting confirmation');
@@ -148,9 +167,15 @@ const CreateRequest = () => {
 														(error, result) => {
 															if (!error) {
 																clearSubmitDialog();
-																toast(`TX Hash: ${result}`, 'success', true, result, {
-																	toastId: result,
-																});
+																toast(
+																	`TX Hash: ${result}`,
+																	'success',
+																	true,
+																	result,
+																	{
+																		toastId: result,
+																	}
+																);
 																history.replace(`/`);
 															} else {
 																clearSubmitDialog();
@@ -229,7 +254,7 @@ const CreateRequest = () => {
 								clearSubmitDialog();
 							}}
 							hasSpinner
-							type="success"
+							type='success'
 						/>
 						<ConnectDialog
 							isOpen={showDialog}
