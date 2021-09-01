@@ -29,6 +29,8 @@ import caretUpIcon from '../assets/icons/caret-up.svg';
 import caretDownIcon from '../assets/icons/caret-down.svg';
 import fulfilledIcon from '../assets/icons/check-green.svg';
 import Dialog from './Dialog';
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import worker from 'workerize-loader!../workers/decrypt.js';
 
 const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
@@ -296,86 +298,73 @@ const RequestListItem = ({
 	const signalDownloadHandler = async (fileHash, fileStuffPath) => {
 		setSubmitting(true);
 		setDialogMessage('Downloading encrypted AES secret key from IPFS');
+		const workerInstance = worker();
+		workerInstance.initDecrypt();
+
 		try {
 			/* fetch signal file metadata from IPFS */
 			const fileStuffRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileStuffPath}`);
 			const { AES_KEY, AES_IV, FILE_NAME, FILE_EXT } = fileStuffRes.data;
 			setDialogMessage('Decrypting AES Secret key');
-
 			/* decrypt secret key using metamask*/
 			const AesDecryptedKey = await window.ethereum.request({
 				method: 'eth_decrypt',
 				params: [AES_KEY, account],
 			});
 
-			var twF = twofish(Object.values(AES_IV));
+			workerInstance.postMessage({
+				fileHash,
+				AES_KEY: AesDecryptedKey,
+				AES_IV,
+			});
 
-			setDialogMessage('Downloading encrypted file from IPFS');
-			/*
-			 in order to remove  the extra headers that IPFS sets on response payload, responseType: blob 
-			*/
-			const fileRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileHash}`, { responseType: 'blob' });
-			/* then to convert the blob into array buffer we use FileReader API */
-			var fileReader = new FileReader();
-
-			fileReader.readAsArrayBuffer(fileRes.data);
-			setDialogMessage('decrypting file ...');
-
-			fileReader.onloadend = () => {
-				var buffer = Buffer(fileReader.result);
-
-				/* decryptCBC input file must be array */
-				var decrypted = twF.decryptCBC(
-					AesDecryptedKey.split(',').map((item) => Number(item)),
-					buffer
-				);
-				setDialogMessage('downloading file ...');
-
-				downloadFile(decrypted, `${FILE_NAME}.${FILE_EXT}`);
-			};
-
-			/* https://stackoverflow.com/a/9458996 */
-			function getDownloadUrl(buff) {
-				function _arrayBufferToBase64(buffer) {
-					var binary = '';
-					var bytes = new Uint8Array(buffer);
-					var len = bytes.byteLength;
-					for (var i = 0; i < len; i++) {
-						binary += String.fromCharCode(bytes[i]);
-					}
-					return window.btoa(binary);
+			workerInstance.addEventListener('message', async (event) => {
+				if (event.data.type === 'feedback') {
+					setDialogMessage(event.data.message);
 				}
-				/*
-					we use application/octet-stream here because we will encounter files that don't have 
-					proper MIME types such as .edf
-				*/
-				return `data:application/octet-stream;base64,${_arrayBufferToBase64(buff)}`;
-			}
-
-			var downloadFile = (function () {
-				var anchorTag = document.createElement('a');
-				document.body.appendChild(anchorTag);
-				anchorTag.style = 'display: none';
-
-				return async function (file, name) {
-					try {
-						var url = await getDownloadUrl(file);
-
-						anchorTag.href = url;
-						anchorTag.download = name;
-						anchorTag.click();
-						// setDialogMessage('all done!');
-						clearSubmitDialog();
-					} catch (error) {
-						console.error(error);
-					}
-				};
-			})();
+				if (event.data.type === 'decrypted') {
+					downloadFile(event.data.decrypted_file, `${FILE_NAME}.${FILE_EXT}`);
+				}
+			});
 		} catch (error) {
 			clearSubmitDialog();
 			console.error(error);
 		}
 	};
+	/* https://stackoverflow.com/a/9458996 */
+	function getDownloadUrl(buff) {
+		function _arrayBufferToBase64(buffer) {
+			var binary = '';
+			var bytes = new Uint8Array(buffer);
+			var len = bytes.byteLength;
+			for (var i = 0; i < len; i++) {
+				binary += String.fromCharCode(bytes[i]);
+			}
+			return window.btoa(binary);
+		}
+		/*
+			we use application/octet-stream here because we will encounter files that don't have 
+			proper MIME types such as .edf
+		*/
+		return `data:application/octet-stream;base64,${_arrayBufferToBase64(buff)}`;
+	}
+	var downloadFile = (function () {
+		var anchorTag = document.createElement('a');
+		document.body.appendChild(anchorTag);
+		anchorTag.style = 'display: none';
+
+		return async function (file, name) {
+			try {
+				var url = await getDownloadUrl(file);
+				clearSubmitDialog();
+				anchorTag.href = url;
+				anchorTag.download = name;
+				anchorTag.click();
+			} catch (error) {
+				console.error(error);
+			}
+		};
+	})();
 
 	useEffect(() => {
 		if (appState.contract !== null) {
@@ -446,12 +435,12 @@ const RequestListItem = ({
 				}
 			});
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [appState.contract, shouldRefresh]);
 
 	useEffect(() => {
 		setOpen(showContributions);
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
