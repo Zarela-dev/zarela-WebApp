@@ -15,6 +15,7 @@ import { toast } from '../utils';
 import Dialog from '../components/Dialog';
 import { useWeb3React } from '@web3-react/core';
 import NoMobileSupportMessage from '../components/NoMobileSupportMessage';
+import { hexToRgb } from '@material-ui/core';
 
 const Wrapper = styled.div`
 	${maxWidthWrapper}
@@ -28,7 +29,7 @@ const CreateRequest = () => {
 	const history = useHistory();
 	const [isUploading, setUploading] = useState(false);
 	const [dialogMessage, setDialogMessage] = useState('');
-	const { account } = useWeb3React();
+	const { account, library } = useWeb3React();
 
 	const clearSubmitDialog = () => {
 		setUploading(false);
@@ -146,6 +147,7 @@ const CreateRequest = () => {
 												console.log(`Document Of Conditions --> ${url}`);
 
 												setDialogMessage('awaiting confirmation');
+
 												appState.contract.methods
 													.submitNewRequest(
 														title,

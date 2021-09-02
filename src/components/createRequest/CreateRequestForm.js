@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { mainContext } from '../../state';
 import styled from 'styled-components';
 import FileInput from './../UploadFileCard/FileInput';
 import Checkbox from './../Elements/Checkbox';
@@ -49,6 +50,56 @@ const options = [
 
 const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 	const [selectedOption, setSelectedOption] = useState([]);
+	const [estimateEthFee, setEstimateEthFee] = useState(null);
+	const [gas, setGas] = useState(null);
+	const { appState } = useContext(mainContext);
+
+	const estimateFeeHandler = (target, values) => {
+		let gas = +appState.gas.average / 10; //Gwei
+		setGas(gas);
+		const {
+			title,
+			desc,
+			angelTokenPay,
+			laboratoryTokenPay,
+			instanceCount,
+			category,
+		} = values;
+		let SeedString = [
+			title,
+			desc,
+			// ipfsResponse.path,
+			+angelTokenPay * Math.pow(10, 9), // angel
+			+laboratoryTokenPay * Math.pow(10, 9), // laboratory
+			instanceCount,
+			category.map((item) => item.value).join(','),
+			process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY,
+			// encryptionPublicKey,
+		].join('');
+		function ConvertStringToHex(str) {
+			var arr = [];
+			for (var i = 0; i < str.length; i++) {
+				arr[i] = str.charCodeAt(i).toString(16);
+			}
+			return arr.join('');
+		}
+		let zeros = 0;
+		function ZeroCounter(strHex) {
+			let total = strHex.length;
+			for (var i = 0; i < strHex.length; i++) {
+				if (strHex[i] == 0) {
+					zeros = zeros + 1;
+				}
+			}
+			return [total, zeros, total - zeros];
+		}
+		var HexString = ConvertStringToHex(SeedString);
+		const HexInfo = ZeroCounter(HexString);
+		let gaslimit = 21000 + HexInfo[0] * 270;
+		let ethFee = (gaslimit * gas) / 1000000000;
+		return Number(ethFee);
+		// setEstimateEthFee(Number(ethFee));
+	};
 
 	return (
 		<FormWrapper>
@@ -63,6 +114,9 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 					value={formik.values.title}
 					onChange={(e) => {
 						formik.setFieldValue('title', e.target.value);
+						setEstimateEthFee(
+							estimateFeeHandler(e.target.value, formik.values)
+						);
 					}}
 				/>
 				<TextField
@@ -75,6 +129,9 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 					value={formik.values.desc}
 					onChange={(e) => {
 						formik.setFieldValue('desc', e.target.value);
+						setEstimateEthFee(
+							estimateFeeHandler(e.target.value, formik.values)
+						);
 					}}
 				/>
 				<TextField
@@ -86,6 +143,9 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 					value={formik.values.angelTokenPay}
 					onChange={(e) => {
 						formik.setFieldValue('angelTokenPay', e.target.value);
+						setEstimateEthFee(
+							estimateFeeHandler(e.target.value, formik.values)
+						);
 					}}
 				/>
 				<TextField
@@ -97,6 +157,9 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 					value={formik.values.laboratoryTokenPay}
 					onChange={(e) => {
 						formik.setFieldValue('laboratoryTokenPay', e.target.value);
+						setEstimateEthFee(
+							estimateFeeHandler(e.target.value, formik.values)
+						);
 					}}
 				/>
 				<TextField
@@ -108,6 +171,9 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 					value={formik.values.instanceCount}
 					onChange={(e) => {
 						formik.setFieldValue('instanceCount', e.target.value);
+						setEstimateEthFee(
+							estimateFeeHandler(e.target.value, formik.values)
+						);
 					}}
 				/>
 				<ReactSelect
@@ -118,6 +184,7 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 					onChange={(e) => {
 						formik.setFieldValue('category', e);
 						setSelectedOption(e);
+						setEstimateEthFee(estimateFeeHandler(e, formik.values));
 					}}
 					error={formik.errors?.category}
 					onKeyDown={(e) => {
@@ -150,13 +217,21 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 						if (e.target.value !== '' && e.target.value !== null) {
 							formik.setFieldError('zpaper', null);
 							formik.setSubmitting(false);
+							setEstimateEthFee(
+								estimateFeeHandler(e.target.value, formik.values)
+							);
 						}
 					}}
 				/>
 				<CustomCheckbox
 					checked={formik.values.terms}
 					name='terms'
-					onChange={(e) => formik.setFieldValue('terms', e.target.checked)}
+					onChange={(e) => {
+						formik.setFieldValue('terms', e.target.checked);
+						setEstimateEthFee(
+							estimateFeeHandler(e.target.checked, formik.values)
+						);
+					}}
 				>
 					Your request won’t be able to be edited, make sure every data you
 					added is correct and final.
@@ -171,7 +246,7 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 					Submit
 				</SubmitButton>
 			</Form>
-			<FeeEstimation />
+			<FeeEstimation gas={gas} fee={estimateEthFee} />
 		</FormWrapper>
 	);
 });

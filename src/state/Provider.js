@@ -146,6 +146,7 @@ const AppProvider = ({ children }) => {
 	useEffect(() => {
 		const activeWeb3 = library || appState.fallbackWeb3Instance;
 		if (activeWeb3 && appState.contract) {
+
 			if (account)
 				activeWeb3.eth
 					.getBalance(account)
