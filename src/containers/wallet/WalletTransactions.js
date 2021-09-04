@@ -115,8 +115,6 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 	const classes = useStyles(props);
 	if (!account) return 'no accounts found';
 
-	console.log('currentTableData', currentTableData);
-
 	return (
 		<>
 			<Table>
