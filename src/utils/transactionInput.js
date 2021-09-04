@@ -22,3 +22,26 @@ export function getInput(input) {
 			return input.substr(0, 15);
 	}
 }
+
+export function getStatusColor(StatusText) {
+	const statusTextInitials = StatusText;
+
+	switch (statusTextInitials) {
+		case 'Zarela Gift':
+			return '#AA4586';
+		case 'Contribute':
+			return '#B6EEA6';
+		case 'Create Request':
+			return '#C0B298';
+		case 'BBit transfer':
+			return '#B6EEA6';
+		case 'Transaction Failed':
+			return '#9046CF';
+		case 'Confirmation':
+			return '#FDE12D';
+		case 'ETH transfer':
+			return '#F487B6';
+		default:
+			return '#fff';
+	}
+}
