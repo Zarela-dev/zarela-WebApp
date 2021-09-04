@@ -216,7 +216,7 @@ const CreateRequest = () => {
 
 	return (
 		<>
-			<TitleBar>Create Request</TitleBar>
+			
 			<Wrapper>
 				{appState.isMobile ? (
 					<NoMobileSupportMessage />

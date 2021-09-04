@@ -143,10 +143,6 @@ const App = ({ requests, isLoading, appState, props, PAGE_SIZE }) => {
 
 	return (
 		<>
-			<TitleSection>
-				<Title>Recent requests</Title>
-				<SubmitRequestButton to="/request/create">New Request</SubmitRequestButton>
-			</TitleSection>
 			<MobileLayout>
 				<RequestsListWrapper isLoading={isLoading}>
 					<ZarelaDayBox currentDay={appState.zarelaCurrentDay} />

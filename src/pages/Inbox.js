@@ -145,7 +145,6 @@ const Inbox = () => {
 	return (
 		<PageWrapper>
 			{!appState.isMobile && guideIsOpen && <Guide steps={InboxSteps}></Guide>}
-			<TitleBar>Inbox</TitleBar>
 			<ContentWrapper>
 				{/* 
 					because Metamask does not support decryption in mobile yet
