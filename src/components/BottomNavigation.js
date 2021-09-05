@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { GenericLinkButton } from './Elements/Button';
-import { Link, matchPath, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import plusIcon from '../assets/icons/nav/plus.svg';
 import inboxIcon from '../assets/icons/nav/inbox.svg';
 import profileIcon from '../assets/icons/nav/profile.svg';
@@ -30,7 +30,8 @@ const Nav = styled.nav`
 	background-clip: revert;
 	background-size: auto;
 
-	@media only screen and (min-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
+	@media only screen and (min-width: ${(props) =>
+			props.theme.desktop_sm_breakpoint}) {
 		display: none;
 	}
 `;
@@ -80,7 +81,8 @@ const CreateRequestNavItem = styled.div`
 	height: 50px;
 	min-width: 70px;
 
-	@media only screen and (min-width: ${({ theme }) => theme.mobile_xs_breakpoint}) {
+	@media only screen and (min-width: ${({ theme }) =>
+			theme.mobile_xs_breakpoint}) {
 		/* flex: 1 0 23px; */
 	}
 `;
@@ -147,29 +149,33 @@ const BottomNavigation = () => {
 
 	return (
 		<Nav>
-			{bottomNavItems.map(({ center, path, icon, activeIcon, notifications }, index) => {
-				const isActive = matchPath(pathname, {
-					path: path,
-					exact: true,
-				});
-
-				if (!center)
-					return (
-						<NavItem key={index} to={path} active>
-							{+notifications > 0 ? <NavBadge>{notifications}</NavBadge> : null}
-							{isActive ? <NavIcon src={activeIcon} /> : <NavIcon src={icon} />}
-						</NavItem>
-					);
-				else if (center)
-					return (
-						<CreateRequestNavItem key={index}>
-							<CreateRequestButton to={path}>
-								<CreateRequestIcon src={icon} />
-							</CreateRequestButton>
-						</CreateRequestNavItem>
-					);
-				return null;
-			})}
+			{bottomNavItems.map(
+				({ center, path, icon, activeIcon, notifications }, index) => {
+					const isActive = pathname.split('/')[1] === path.split('/')[1];
+					if (!center)
+						return (
+							<NavItem key={index} to={path} active>
+								{+notifications > 0 ? (
+									<NavBadge>{notifications}</NavBadge>
+								) : null}
+								{isActive ? (
+									<NavIcon src={activeIcon} />
+								) : (
+									<NavIcon src={icon} />
+								)}
+							</NavItem>
+						);
+					else if (center)
+						return (
+							<CreateRequestNavItem key={index}>
+								<CreateRequestButton to={path}>
+									<CreateRequestIcon src={icon} />
+								</CreateRequestButton>
+							</CreateRequestNavItem>
+						);
+					return null;
+				}
+			)}
 		</Nav>
 	);
 };
