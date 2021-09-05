@@ -241,31 +241,6 @@ const CreateRequest = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [account]);
 
-	useEffect(() => {
-		if (appState.oldDataForm) {
-			console.log('hello', appState.oldDataForm);
-
-			localStorage.setItem(
-				'create_request_values',
-				JSON.stringify(formik.values)
-			);
-
-			dispatch({
-				type: actionTypes.SET_OLD_DATA_FORM,
-				payload: {
-					title: 'hello',
-					desc: 'niesifj',
-					angelTokenPay: 'feaf',
-					laboratoryTokenPay: '',
-					instanceCount: '',
-					category: [],
-					zpaper: '',
-					terms: false,
-				},
-			});
-		}
-	}, [formik.values]);
-
 	return (
 		<>
 			<TitleBar>Create Request</TitleBar>
@@ -290,7 +265,11 @@ const CreateRequest = () => {
 								setDialog(false);
 							}}
 						/>
-						<CreateRequestForm formik={formik} ref={fileRef}>
+						<CreateRequestForm
+							formik={formik}
+							ref={fileRef}
+							appState={appState}
+						>
 							<Persist />
 						</CreateRequestForm>
 					</>
