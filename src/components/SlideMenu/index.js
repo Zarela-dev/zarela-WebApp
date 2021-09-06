@@ -207,16 +207,15 @@ export const SlideMenuNotification = ({
 		<Nav isOpen={isOpen}>
 			<Header>
 				<HeaderRow>
-					<BackIcon src={backIcon} onClick={onClose} />
+					<BackIconNotify src={backIcon} onClick={onClose} />
 				</HeaderRow>
-				{/* <NotificationContainer enableMultiContainer containerId={'notify'} /> */}
 				<HeaderRow>
 					<Title>{title}</Title>
 					<CTAWrapper>{cta}</CTAWrapper>
 				</HeaderRow>
 			</Header>
 			<Divider />
-
+			<CustomContainer enableMultiContainer containerId={'notify'} />
 		</Nav>
 	);
 };
