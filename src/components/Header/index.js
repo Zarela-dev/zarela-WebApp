@@ -20,6 +20,7 @@ import help from './../../assets/icons/help.svg';
 import bell from './../../assets/icons/bell.svg';
 import { useLocation } from 'react-router';
 import { actionTypes } from '../../state/actionTypes';
+import { makeStyles } from '@material-ui/core';
 
 import { useScrollPosition } from '../../hooks/useScrollPosition';
 import { Box } from '@material-ui/core';
@@ -229,7 +230,13 @@ const NotificationBadge = styled.div`
 	top: ${(props) => (props.isMobile ? '-3px' : '-10px')};
 `;
 
-export default function Header({ isMobile }) {
+const useStyles = makeStyles({
+	root: {
+		boxShadow: '0px 4px 18px 0px rgb(81 197 234 / 10%)',
+	},
+});
+
+export default function Header({ isMobile }, props) {
 	const { account } = useWeb3React();
 	const [isMenuOpen, setMenuOpen] = useState(false);
 	const [isNotificationMenuOpen, setIsNotificationMenuOpen] = useState(false);
@@ -239,6 +246,7 @@ export default function Header({ isMobile }) {
 	const [totalRevenueFromZarela, setTotalRevenueFromZarela] = useState(0);
 	const [totalRevenueFromRequester, setTotalRevenueFromRequester] = useState(0);
 	const routeGroup = location.pathname.split('/')[1];
+	const classes = useStyles(props);
 
 	useEffect(() => {
 		if (appState.contract !== null) {
@@ -305,6 +313,7 @@ export default function Header({ isMobile }) {
 
 					<BoxWrapper>
 						<Box
+							className={classes.root}
 							as="header"
 							mt="-1em"
 							sx={{
@@ -409,6 +418,7 @@ export default function Header({ isMobile }) {
 
 				<BoxWrapper>
 					<Box
+						className={classes.root}
 						as="header"
 						mt="-1em"
 						sx={{
