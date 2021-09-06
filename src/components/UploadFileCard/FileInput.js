@@ -9,7 +9,8 @@ export const FileInputWithBorder = css`
 	border: 1px dashed #3adea3;
 	box-shadow: 0px 4px 18px rgba(223, 236, 255, 0.3);
 	border-radius: 5px;
-	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(1)};
+	padding: ${(props) => props.theme.spacing(1)}
+		${(props) => props.theme.spacing(1)};
 `;
 
 export const FileInputWrapper = styled.div`
@@ -28,23 +29,27 @@ export const FileInputTitle = styled.div`
 	color: ${(props) => props.theme.textPrimary};
 	overflow: hidden;
 
-	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
+	@media only screen and (max-width: ${(props) =>
+			props.theme.tablet_sm_breakpoint}) {
 		font-size: 12px;
 		margin-bottom: ${(props) => props.theme.spacing(1)};
 	}
 `;
 
 export const FileInputLabel = styled.label`
+	white-space: nowrap;
 	background: #ffffff;
 	box-shadow: 0px 5.46667px 18px rgba(223, 236, 255, 0.5);
 	border-radius: 5.46667px;
 	border: 1px solid #bbbee6;
-	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(4)};
+	padding: ${(props) => props.theme.spacing(1)}
+		${(props) => props.theme.spacing(4)};
 	color: #7246d0;
 	cursor: pointer;
 	text-align: center;
 
-	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
+	@media only screen and (max-width: ${(props) =>
+			props.theme.tablet_sm_breakpoint}) {
 		font-size: 12px;
 		margin-bottom: ${(props) => props.theme.spacing(1)};
 	}
@@ -56,7 +61,8 @@ export const FileInputLink = styled.a`
 	border-radius: 5.46667px;
 	border: 1px solid #bbbee6;
 	text-decoration: none;
-	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(4)};
+	padding: ${(props) => props.theme.spacing(1)}
+		${(props) => props.theme.spacing(4)};
 	color: #7246d0;
 `;
 
@@ -65,7 +71,8 @@ const FileContainer = styled.div`
 	flex-direction: row-reverse;
 	justify-content: space-between;
 	width: 100%;
-	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
+	@media only screen and (max-width: ${(props) =>
+			props.theme.tablet_sm_breakpoint}) {
 		flex-direction: column-reverse;
 	}
 `;
@@ -79,7 +86,11 @@ export const FileInputIcon = styled.img`
 	margin-right: ${(props) => props.theme.spacing(1)};
 `;
 
-export const FileName = styled.div``;
+export const FileName = styled.div`
+	max-width: 80%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+`;
 
 export const formatLabel = (label) => {
 	const length = 28;
@@ -90,19 +101,41 @@ export const formatLabel = (label) => {
 export const getFileName = (inputRef, fallbackLabel) => {
 	if (inputRef && inputRef.current)
 		if (inputRef.current.files.length)
-			if (inputRef.current.files[0]) return formatLabel(inputRef.current.files[0].name);
+			if (inputRef.current.files[0])
+				return formatLabel(inputRef.current.files[0].name);
 	return formatLabel(fallbackLabel);
 };
 
 // #refactor_candidate
 const FileInput = forwardRef(
-	({ disableUpload, className, hasBorder, showSelected, value, buttonLabel, icon, error, label, ...rest }, ref) => {
+	(
+		{
+			disableUpload,
+			className,
+			hasBorder,
+			showSelected,
+			value,
+			buttonLabel,
+			icon,
+			error,
+			label,
+			...rest
+		},
+		ref
+	) => {
 		return (
 			<FileInputWrapper hasBorder={hasBorder} className={className}>
 				<FileContainer>
 					<FileInputLabel>
 						{buttonLabel}
-						{!disableUpload ? <input ref={ref} type="file" style={{ display: 'none' }} {...rest} /> : null}
+						{!disableUpload ? (
+							<input
+								ref={ref}
+								type='file'
+								style={{ display: 'none' }}
+								{...rest}
+							/>
+						) : null}
 					</FileInputLabel>
 					{showSelected ? (
 						<FileInputTitle>
