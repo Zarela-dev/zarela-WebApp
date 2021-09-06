@@ -2,12 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { convertToBiobit } from '../utils';
 import { actionTypes } from './actionTypes';
-import {
-	configureFallbackWeb3,
-	getZarelaCurrentDay,
-	getGasPrice,
-	configureWeb3,
-} from './actions';
+import { configureFallbackWeb3, getZarelaCurrentDay, getGasPrice, getEthPrice, configureWeb3 } from './actions';
 import { injectedConnector } from '../connectors';
 
 const appInitialState = {
@@ -17,6 +12,7 @@ const appInitialState = {
 	etherBalance: 'Hidden Info',
 
 	gas: {},
+	ethPrice: null,
 
 	fallbackWeb3Instance: null,
 	contract: null,
@@ -86,6 +82,11 @@ const AppProvider = ({ children }) => {
 					...state,
 					notificationCount: action.payload,
 				};
+			case actionTypes.SET_ETH_PRICE:
+				return {
+					...state,
+					ethPrice: action.payload,
+				};
 			default:
 				return state;
 		}
@@ -96,9 +97,7 @@ const AppProvider = ({ children }) => {
 		// to detect device anywhere in the component tree
 		dispatch({
 			type: actionTypes.SET_CLIENT_DEVICE,
-			payload: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-				navigator.userAgent
-			)
+			payload: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 				? true
 				: false,
 		});
@@ -164,16 +163,13 @@ const AppProvider = ({ children }) => {
 	useEffect(() => {
 		const activeWeb3 = library || appState.fallbackWeb3Instance;
 		if (activeWeb3 && appState.contract) {
-
 			if (account)
 				activeWeb3.eth
 					.getBalance(account)
 					.then(function (result) {
 						dispatch({
 							type: actionTypes.SET_ETHER_BALANCE,
-							payload: Number(
-								activeWeb3.utils.fromWei(result, 'ether')
-							).toFixed(4),
+							payload: Number(activeWeb3.utils.fromWei(result, 'ether')).toFixed(4),
 						});
 					})
 					.catch((error) => {
@@ -189,6 +185,10 @@ const AppProvider = ({ children }) => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [active, window.ethereum?.selectedAddress]);
+
+	useEffect(() => {
+		getEthPrice(dispatch);
+	}, [appState.gas]);
 
 	return (
 		<mainContext.Provider

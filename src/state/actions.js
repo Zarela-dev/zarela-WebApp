@@ -89,3 +89,22 @@ export const SaveGuideToLocalStorage = (dispatch, route) => {
 		payload: false,
 	});
 };
+
+export const getEthPrice = (dispatch) => {
+	/**
+	 * get ethereum price in USD
+	 */
+	const request = require('request');
+
+	axios
+		.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD')
+		.then((response) => {
+			dispatch({
+				type: actionTypes.SET_ETH_PRICE,
+				payload: response.data.USD,
+			});
+		})
+		.catch((error) => {
+			console.log('error', error);
+		});
+};

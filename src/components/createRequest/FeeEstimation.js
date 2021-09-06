@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import alertOrange from './../../assets/icons/alert.svg';
 import { mainContext } from '../../state';
@@ -43,28 +43,20 @@ const ContentText = styled.p`
 	margin-bottom: 3px;
 `;
 
-const FeeEstimation = ({fee}) => {
-  const {appState} = useContext(mainContext);
-  let gas = (+appState.gas.average * Math.pow(10, 8)) / Math.pow(10, 9);
-
-
-
-
-
-
-
-
+const FeeEstimation = ({ fee }) => {
+	const { appState } = useContext(mainContext);
+	let gas = (+appState.gas.average * Math.pow(10, 8)) / Math.pow(10, 9);
 
 	return (
 		<FeeEstimationContainer>
 			<GasFeeBox>
 				<Title>
 					<AlertIcon src={alertOrange} />
-					Current network Gas fee rate = {gas.toLocaleString()} Gwei
+					Current network Gas fee rate = {gas ? gas.toLocaleString() : '-'} Gwei
 				</Title>
 				<ContentText bold>Estimated minimum fee</ContentText>
-				<ContentText>ETH. ~ {fee}</ContentText>
-				<ContentText>$. ~ 0.0000023</ContentText>
+				<ContentText>ETH. ~ {fee ?? 0}</ContentText>
+				<ContentText>$. ~ {(appState.ethPrice * fee ?? 0).toLocaleString(3)}</ContentText>
 			</GasFeeBox>
 		</FeeEstimationContainer>
 	);

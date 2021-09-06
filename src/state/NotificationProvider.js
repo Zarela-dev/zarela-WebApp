@@ -29,10 +29,7 @@ export const NotificationProvider = ({ children }) => {
 							toastId: event.id,
 						}
 					);
-					if (
-						event.returnValues[0] === account ||
-						event.returnValues[3] === account
-					) {
+					if (event.returnValues[0] === account || event.returnValues[3] === account) {
 						toast(
 							`signal submitted on request #${event.returnValues[2]} by: ${event.returnValues[0]}. Difficulty: ${event.returnValues[4]}`,
 							'success',
@@ -63,10 +60,7 @@ export const NotificationProvider = ({ children }) => {
 							toastId: event.id,
 						}
 					);
-					if (
-						event.returnValues[0] === account ||
-						event.returnValues[3] === account
-					) {
+					if (event.returnValues[0] === account || event.returnValues[3] === account) {
 						toast(
 							`100 BBits were transferred to ${event.returnValues[0]} from Zarela smart contract`,
 							'success',
@@ -97,10 +91,7 @@ export const NotificationProvider = ({ children }) => {
 							toastId: event.id,
 						}
 					);
-					if (
-						event.returnValues[0] === account ||
-						event.returnValues[3] === account
-					) {
+					if (event.returnValues[0] === account || event.returnValues[3] === account) {
 						toast(
 							`Transaction #${event.returnValues[1]} has been created successfully.`,
 							'success',
@@ -134,10 +125,7 @@ export const NotificationProvider = ({ children }) => {
 							toastId: event.id,
 						}
 					);
-					if (
-						event.returnValues[0] === account ||
-						event.returnValues[3] === account
-					) {
+					if (event.returnValues[0] === account || event.returnValues[3] === account) {
 						toast(
 							`Tokens were successfully released for ${event.returnValues[1]} contributions.`,
 							'success',

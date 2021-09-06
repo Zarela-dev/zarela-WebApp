@@ -20,9 +20,12 @@ import help from './../../assets/icons/help.svg';
 import bell from './../../assets/icons/bell.svg';
 import { useLocation } from 'react-router';
 import { actionTypes } from '../../state/actionTypes';
+
 import { useScrollPosition } from '../../hooks/useScrollPosition';
 import { Box } from '@material-ui/core';
 import TitleBar from '../../components/TitleBar/TitleBar';
+
+import { Badge } from 'reactour';
 
 const NavItem = styled(Link)`
 	position: relative;
@@ -76,7 +79,7 @@ const HeaderWrapper = styled.header`
 	position: sticky;
 	top: 0;
 	z-index: 2;
-	height: 100px;
+	height: ${(props) => (props.isMobile ? '75px' : '100px')};
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -93,7 +96,7 @@ const HeaderWrapperApp = styled(HeaderWrapper)`
 	padding: 0;
 	display: flex;
 	flex-direction: column;
-	margin-bottom: ${(props) => (props.routeGroup === '' ? '50px' : '100px')};
+	margin-bottom: ${(props) => (props.routeGroup === '' ? '70px' : '100px')};
 `;
 
 const NavBarRow = styled.div`
@@ -166,9 +169,6 @@ const BoxWrapper = styled.div`
 `;
 
 const WalletTitlebar = styled(TitleBar)`
-	min-width: ${(props) => (props.isMobile ? '20px' : '25px')};
-	max-height: ${(props) => (props.isMobile ? '20px' : '25px')};
-	min-height: ${(props) => (props.isMobile ? '20px' : '25px')};
 	display: flex;
 	flex-wrap: nowrap;
 	justify-content: space-between;
@@ -215,14 +215,18 @@ const RewardValue = styled.div`
 		font-size: 13px;
 		font-weight: 600;
 	}
-	border-radius: ${(props) => (props.isMobile ? '10px' : '12.5px')};
+`;
+const NotificationBadge = styled.div`
+	min-width: ${(props) => (props.isMobile ? '20px' : '25px')};
+	min-height: ${(props) => (props.isMobile ? '20px' : '25px')};
 	background-color: #d13ade;
+	border-radius: ${(props) => (props.isMobile ? '10px' : '16px')};
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	color: #fff;
-	padding: 3px;
-	top: ${(props) => (props.isMobile ? '-3px' : '-9px')};
-	font-size: ${(props) => (props.isMobile ? '12px' : '18px')};
-	line-height: ${(props) => (props.isMobile ? '12px' : '18px')};
-	font-weight: 700;
+	position: absolute;
+	top: ${(props) => (props.isMobile ? '-3px' : '-10px')};
 `;
 
 export default function Header({ isMobile }) {
@@ -262,85 +266,92 @@ export default function Header({ isMobile }) {
 
 	if (isMobile) {
 		return (
-			<HeaderWrapperApp routeGroup={routeGroup}>
-				<NavBarRow isMobile={appState.isMobile}>
-					<RightMenu>
-						<Link to="/">
-							<LogoApp src={logo} />
-						</Link>
-					</RightMenu>
+			<>
+				<HeaderWrapperApp routeGroup={routeGroup} isMobile={appState.isMobile}>
+					<NavBarRow isMobile={appState.isMobile}>
+						<RightMenu>
+							<Link to="/">
+								<LogoApp src={logo} />
+							</Link>
+						</RightMenu>
 
-					<LeftMenu>
-						<NavItem>
-							<NavIcon src={bell} height="20px" onClick={() => setIsNotificationMenuOpen(true)} />
-						</NavItem>
-						<NavItem isMobile={appState.isMobile}>
-							<NavIconApp src={menu} onClick={() => setMenuOpen(true)} />
-						</NavItem>
-					</LeftMenu>
-					<MobileMenu
-						isOpen={isMenuOpen}
-						onClose={() => {
-							setMenuOpen(false);
-						}}
-					/>
-					<NotificationMenu
-						appState={appState}
-						isOpen={isNotificationMenuOpen}
-						onClose={() => {
-							setIsNotificationMenuOpen(false);
-						}}
-					/>
-				</NavBarRow>
+						<LeftMenu>
+							<NavItem>
+								<NavIcon src={bell} height="20px" onClick={() => setIsNotificationMenuOpen(true)} />
+								{appState.notificationCount !== 0 && (
+									<NotificationBadge isMobile={appState.isMobile}>
+										{appState.notificationCount}
+									</NotificationBadge>
+								)}
+							</NavItem>
+							<NavItem isMobile={appState.isMobile}>
+								<NavIconApp src={menu} onClick={() => setMenuOpen(true)} />
+							</NavItem>
+						</LeftMenu>
+						<MobileMenu
+							isOpen={isMenuOpen}
+							onClose={() => {
+								setMenuOpen(false);
+							}}
+						/>
+						<NotificationMenu
+							appState={appState}
+							isOpen={isNotificationMenuOpen}
+							onClose={() => {
+								setIsNotificationMenuOpen(false);
+							}}
+						/>
+					</NavBarRow>
 
-				<BoxWrapper>
-					<Box
-						as="header"
-						mt="-1em"
-						sx={{
-							position: 'sticky',
-							transform: sticky ? 'translateY(84px)' : 'translateY(0)',
-							transition: 'transform 400ms ease-in',
-							bottom: 0,
-							left: 0,
-						}}
-					>
-						{routeGroup === '' ? (
-							<TitleSection>
-								<Title>Recent requests</Title>
-								<SubmitRequestButtonSubHeader to="/request/create">
-									New Request
-								</SubmitRequestButtonSubHeader>
-							</TitleSection>
-						) : routeGroup === 'wallet' ? (
-							<WalletTitlebar isMobile={appState.isMobile}>
-								<Title>Wallet</Title>
-								<Balance>{`Balance: ${+appState.biobitBalance} BBit`}</Balance>
-							</WalletTitlebar>
-						) : routeGroup === 'log' ? (
-							<WalletTitlebar isMobile={appState.isMobile}>
-								<Title>Log</Title>
-								<RewardWrapper>
-									<RewardItem>
-										<RewardLabel>My reward from Zarela</RewardLabel>
-										<RewardValue>{`${totalRevenueFromZarela} BBit`}</RewardValue>
-									</RewardItem>
-									<RewardItem>
-										<RewardLabel>My wage from mage</RewardLabel>
-										<RewardValue>{`${totalRevenueFromRequester} BBit`}</RewardValue>
-									</RewardItem>
-								</RewardWrapper>
-							</WalletTitlebar>
-						) : routeGroup === 'inbox' ? (
-							<TitleBar>Inbox</TitleBar>
-						) : null}
-					</Box>
-				</BoxWrapper>
-			</HeaderWrapperApp>
+					<BoxWrapper>
+						<Box
+							as="header"
+							mt="-1em"
+							sx={{
+								position: 'sticky',
+								transform: sticky ? 'translateY(80px)' : 'translateY(0)',
+								transition: 'transform 400ms ease-in',
+								bottom: 0,
+								left: 0,
+							}}
+						>
+							{routeGroup === '' ? (
+								<TitleSection>
+									<Title>Recent requests</Title>
+									<SubmitRequestButtonSubHeader to="/request/create">
+										New Request
+									</SubmitRequestButtonSubHeader>
+								</TitleSection>
+							) : routeGroup === 'wallet' ? (
+								<WalletTitlebar isMobile={appState.isMobile}>
+									<Title>Wallet</Title>
+									<Balance>{`Balance: ${+appState.biobitBalance} BBit`}</Balance>
+								</WalletTitlebar>
+							) : routeGroup === 'log' ? (
+								<WalletTitlebar isMobile={appState.isMobile}>
+									<Title>Log</Title>
+									<RewardWrapper>
+										<RewardItem>
+											<RewardLabel>My reward from Zarela</RewardLabel>
+											<RewardValue>{`${totalRevenueFromZarela} BBit`}</RewardValue>
+										</RewardItem>
+										<RewardItem>
+											<RewardLabel>My wage from mage</RewardLabel>
+											<RewardValue>{`${totalRevenueFromRequester} BBit`}</RewardValue>
+										</RewardItem>
+									</RewardWrapper>
+								</WalletTitlebar>
+							) : routeGroup === 'inbox' ? (
+								<TitleBar>Inbox</TitleBar>
+							) : null}
+						</Box>
+					</BoxWrapper>
+				</HeaderWrapperApp>
+			</>
 		);
 	} else {
 		return (
-			<HeaderWrapper routeGroup={routeGroup}>
+			<HeaderWrapper routeGroup={routeGroup} isMobile={appState.isMobile}>
 				<NavBarRow isMobile={appState.isMobile}>
 					<RightMenu>
 						<Link to="/">
@@ -368,6 +379,11 @@ export default function Header({ isMobile }) {
 						<SubmitRequestButton to="/request/create">New Request</SubmitRequestButton>
 						<NavItem>
 							<NavIcon src={bell} onClick={() => setIsNotificationMenuOpen(true)} />
+							{appState.notificationCount !== 0 && (
+								<NotificationBadge isMobile={appState.isMobile}>
+									{appState.notificationCount}
+								</NotificationBadge>
+							)}
 						</NavItem>
 						<NavItem>
 							<NavIcon
