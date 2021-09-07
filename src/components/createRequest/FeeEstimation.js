@@ -20,7 +20,7 @@ const GasFeeBox = styled.div`
 	justify-content: center;
 	align-items: center;
 	max-width: 309px;
-	height: 162px;
+	height: 200px;
 `;
 
 const AlertIcon = styled.img`
@@ -43,6 +43,13 @@ const ContentText = styled.p`
 	margin-bottom: 3px;
 `;
 
+const Divider = styled.hr`
+	width: 80%;
+	min-height: 1px;
+	background: #d13ade;
+	border: none;
+`;
+
 const FeeEstimation = ({ fee }) => {
 	const { appState } = useContext(mainContext);
 	let gas = (+appState.gas.average * Math.pow(10, 8)) / Math.pow(10, 9);
@@ -57,6 +64,8 @@ const FeeEstimation = ({ fee }) => {
 				<ContentText bold>Estimated minimum fee</ContentText>
 				<ContentText>ETH. ~ {fee ?? 0}</ContentText>
 				<ContentText>$. ~ {(appState.ethPrice * fee ?? 0).toLocaleString(3)}</ContentText>
+				<Divider />
+				<ContentText>ETH Balance. ~ {appState.etherBalance}</ContentText>
 			</GasFeeBox>
 		</FeeEstimationContainer>
 	);
