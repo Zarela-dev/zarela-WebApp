@@ -1,9 +1,8 @@
-export const isValidHex = (Hex) => {
-	var re = /[0-9A-Fa-f]{6}/g;
-
-	if (re.test(Hex)) {
-		return true;
-	} else {
-		return false;
-	}
+import { getInput } from '.';
+/**
+ * transaction input type detector(covered or other types)
+ */
+export const isValidInput = (input) => {
+	if (getInput(input) === 'OtherTypes') return false;
+	else if (getInput(input) !== 'OtherTypes') return true;
 };

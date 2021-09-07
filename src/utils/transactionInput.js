@@ -19,7 +19,7 @@ export function getInput(input) {
 		case '0x':
 			return 'ETH transfer';
 		default:
-			return input.substr(0, 15);
+			return 'OtherTypes';
 	}
 }
 
