@@ -52,7 +52,7 @@ const NotificationMenu = ({ isOpen, onClose }) => {
 			usage="notify"
 			isOpen={isOpen}
 			onClose={onClose}
-			title={'Notifications'}
+			title={'Transactions on Zarela'}
 			cta={() => <Button variant="primary">New Request</Button>}
 			listItems={menuItems}
 		></SlideMenu>
