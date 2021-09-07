@@ -319,7 +319,7 @@ export default function Header({ isMobile }, props) {
 							mt="-1em"
 							sx={{
 								position: 'sticky',
-								transform: sticky ? 'translateY(80px)' : 'translateY(0)',
+								transform: sticky ? 'translateY(83px)' : 'translateY(0)',
 								transition: 'transform 400ms ease-in',
 								bottom: 0,
 								left: 0,

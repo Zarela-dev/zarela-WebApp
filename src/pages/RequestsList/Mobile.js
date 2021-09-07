@@ -19,8 +19,8 @@ const RequestsListWrapper = styled.div`
 `;
 
 const Background = styled.div`
-	position: absolute;
-	top: 0;
+	position: fixed;
+	top: 60px;
 	left: 0;
 	width: 100%;
 	height: 100vh;
@@ -44,9 +44,9 @@ const Background = styled.div`
 	&::after {
 		content: '';
 		display: block;
-		position: absolute;
+		position: fixed;
 		bottom: 0;
-		height: 80vh;
+		height: 61vh;
 		left: 0;
 		width: 100%;
 		z-index: -2;
