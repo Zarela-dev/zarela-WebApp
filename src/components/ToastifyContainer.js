@@ -5,13 +5,13 @@ const CustomContainer = styled(ToastContainer)`
 	width: ${(props) => (props.containerId === 'notify' && !props.isMobile ? '270px' : '')};
 	@media only screen and (min-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		width: ${(props) => (props.containerId === 'notify' ? '96%' : '750px')};
-		top: 124px;
+		top: ${(props) => (props.containerId === 'notify' ? '124px' : 'unset')};
 	}
 	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		width: ${(props) => (props.containerId === 'notify' ? '100%' : '90vw')};
 		transform: translateX(-50%);
 		left: 50%;
-		top: 125px;
+		top: ${(props) => (props.containerId === 'notify' ? '125px' : 'unset')};
 	}
 
 	& .Toastify__toast {
