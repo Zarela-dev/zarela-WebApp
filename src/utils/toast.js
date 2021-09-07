@@ -70,7 +70,8 @@ const Message = ({
 		<Container usage={usage}>
 			{usage === 'notify' ? (
 				toastProps.type === 'success' ? (
-					<NotifySuccess>3</NotifySuccess>
+					null
+					// <NotifySuccess>3</NotifySuccess>
 				) : (
 					<Icon src={alertImage} />
 				)
@@ -145,7 +146,7 @@ export const log = (
 			pauseOnHover: true,
 			pauseOnFocusLoss: true,
 			closeOnClick: false,
-			draggable: true,
+			draggable: false,
 			closeButton: false,
 			autoClose: false,
 			draggablePercent: 20,
