@@ -233,7 +233,7 @@ const NotificationBadge = styled.div`
 
 const useStyles = makeStyles({
 	root: {
-		boxShadow: '0px 4px 18px 0px rgb(81 197 234 / 10%)'
+		boxShadow: '0px 4px 18px 0px rgb(81 197 234 / 10%)',
 	},
 });
 
@@ -272,6 +272,13 @@ export default function Header({ isMobile }, props) {
 		},
 		[sticky]
 	);
+
+	useEffect(() => {
+		dispatch({
+			type: actionTypes.SET_NOTIFICATION_COUNT,
+			payload: 0,
+		});
+	}, [isNotificationMenuOpen]);
 
 	if (isMobile) {
 		return (
