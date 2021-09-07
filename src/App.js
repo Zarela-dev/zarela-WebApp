@@ -10,8 +10,15 @@ import { theme } from './theme';
 import getLibrary from './utils/getLibrary';
 import ErrorBoundary from './ErrorBoundary';
 import 'react-toastify/dist/ReactToastify.css';
+import {log} from './utils/toast';
 
 function App() {
+
+	React.useEffect(() => {
+		log('hefjeoifjeifojef', 'success')
+		log('hefjeoifjeifojef', 'success')
+
+	},[])
 	return (
 		<div className='App'>
 			<ErrorBoundary>

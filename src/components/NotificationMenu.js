@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Button } from './Elements/Button';
-import { SlideMenuNotification } from './SlideMenu';
 import chainIdTag from '../assets/icons/chainid-tag.svg';
+import SlideMenu from './SlideMenu';
 
 const ChainBadge = styled.div`
 	background-image: url(${chainIdTag});
@@ -48,13 +48,14 @@ const NotificationMenu = ({ isOpen, onClose }) => {
 	];
 
 	return (
-		<SlideMenuNotification
+		<SlideMenu
+			usage="notify"
 			isOpen={isOpen}
 			onClose={onClose}
 			title={'Notifications'}
 			cta={() => <Button variant="primary">New Request</Button>}
 			listItems={menuItems}
-		></SlideMenuNotification>
+		></SlideMenu>
 	);
 };
 

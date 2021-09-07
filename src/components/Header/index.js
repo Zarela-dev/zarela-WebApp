@@ -220,6 +220,7 @@ const RewardValue = styled.div`
 const NotificationBadge = styled.div`
 	min-width: ${(props) => (props.isMobile ? '20px' : '25px')};
 	min-height: ${(props) => (props.isMobile ? '20px' : '25px')};
+	font-size: ${(props) => (props.isMobile ? '12px' : '16px')};
 	background-color: #d13ade;
 	border-radius: ${(props) => (props.isMobile ? '10px' : '16px')};
 	display: flex;

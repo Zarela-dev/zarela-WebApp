@@ -2,38 +2,31 @@ import styled from 'styled-components';
 import { ToastContainer } from 'react-toastify';
 
 const CustomContainer = styled(ToastContainer)`
-	@media only screen and (min-width: ${(props) =>
-			props.theme.tablet_sm_breakpoint}) {
-		width: ${(props) => (props.containerId === 'notify' ? '93%' : '750px')};
+	width: ${(props) => (props.containerId === 'notify' && !props.isMobile ? '270px' : '')};
+	@media only screen and (min-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
+		width: ${(props) => (props.containerId === 'notify' ? '96%' : '750px')};
+		top: 124px;
 	}
-	@media only screen and (max-width: ${(props) =>
-			props.theme.tablet_sm_breakpoint}) {
-		width: ${(props) => (props.containerId === 'notify' ? '58vw' : '90vw')};
+	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
+		width: ${(props) => (props.containerId === 'notify' ? '100%' : '90vw')};
 		transform: translateX(-50%);
 		left: 50%;
-		bottom: 70px;
+		top: 125px;
 	}
 
 	& .Toastify__toast {
 		padding: 0;
 		margin-bottom: ${(props) => props.theme.spacing(1)};
-		top: ${(props) =>
-			props.containerId !== 'notify'
-				? '0'
-				: props.isMobile
-				? '125px'
-				: '105px'};
+		top: ${(props) => (props.containerId !== 'notify' ? '0' : props.isMobile ? '0' : '0')};
 		right: ${(props) => (props.containerId === 'notify' ? '-20px' : 'unset')};
 		height: fit-content;
 	}
-	@media only screen and (max-width: ${(props) =>
-			props.theme.tablet_sm_breakpoint}) {
+	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		& .Toastify__toast {
 			min-height: 45px;
 		}
 	}
-	@media only screen and (min-width: ${(props) =>
-			props.theme.tablet_sm_breakpoint}) {
+	@media only screen and (min-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		& .Toastify__toast {
 			height: fit-content;
 		}
@@ -41,16 +34,11 @@ const CustomContainer = styled(ToastContainer)`
 
 	.Toastify__toast--success {
 		background: ${(props) =>
-			props.containerId === 'notify'
-				? 'rgba(232, 250, 246, 1)'
-				: 'rgba(79, 207, 161, 0.7)'};
-		border: ${(props) =>
-			props.containerId === 'notify' ? 'none' : '1px solid #1d8a7f'};
-		box-shadow: ${(props) =>
-			props.containerId === 'notify' ? 'none !important' : '	'};
+			props.containerId === 'notify' ? 'rgba(232, 250, 246, 1)' : 'rgba(79, 207, 161, 0.7)'};
+		border: ${(props) => (props.containerId === 'notify' ? 'none' : '1px solid #1d8a7f')};
+		box-shadow: ${(props) => (props.containerId === 'notify' ? 'none !important' : '	')};
 		box-sizing: border-box;
-		border-radius: ${(props) =>
-			props.containerId === 'notify' ? '9px 0 0 9px' : '3px'};
+		border-radius: ${(props) => (props.containerId === 'notify' ? '9px 0 0 9px' : '3px')};
 	}
 	.Toastify__toast--error {
 		background: #ffeff5;
