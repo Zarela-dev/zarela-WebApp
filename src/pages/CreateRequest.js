@@ -78,7 +78,6 @@ const CreateRequest = () => {
 			terms: yup.boolean().required(),
 		}),
 		onSubmit: (values) => {
-			console.log(values);
 			if (formik.isValid) {
 				/* to prevent the Mage from submitting the request with insufficient assets */
 				if (
@@ -154,6 +153,11 @@ const CreateRequest = () => {
 																	toastId: result,
 																});
 																history.replace(`/`);
+																dispatch({
+																	type: actionTypes.SET_OLD_DATA_FORM,
+																	payload: {},
+																});
+																localStorage.removeItem('create_request_values')
 															} else {
 																clearSubmitDialog();
 																toast(error.message, 'error');
