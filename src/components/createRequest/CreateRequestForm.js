@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { mainContext } from '../../state';
 import styled from 'styled-components';
 import FileInput from './../UploadFileCard/FileInput';
@@ -7,6 +7,7 @@ import Button from './../Elements/Button';
 import TextField, { Error } from './../Elements/TextField';
 import ReactSelect from './../ReactSelect';
 import FeeEstimation from './FeeEstimation';
+import { actionTypes } from '../../state';
 
 const FormWrapper = styled.div`
 	width: 100%;
@@ -51,7 +52,54 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 	const [selectedOption, setSelectedOption] = useState([]);
 	const [estimateEthFee, setEstimateEthFee] = useState(null);
 	const [gas, setGas] = useState(null);
-	const { appState } = useContext(mainContext);
+	const { appState, dispatch } = useContext(mainContext);
+	const [prevDataFetched, setPrevDataFetched] = useState(false);
+
+
+	const initialValues = async() => {
+		const FormPrevData = appState.oldDataForm;
+		if (FormPrevData !== undefined && !prevDataFetched) {
+			const nonEmptyValues = Object.values(FormPrevData).filter((item) => {
+				if (typeof item === 'string' && item === '') return false;
+				if (Array.isArray(item) && item.length === 0) return false;
+				if (typeof item === 'boolean' && item === false) return false;
+				return true;
+			});
+			if (nonEmptyValues.length) {
+				setPrevDataFetched(true);
+				FormPrevData.title !== '' && await formik.setFieldValue('title', FormPrevData.title);
+				FormPrevData.desc !== '' && await formik.setFieldValue('desc', FormPrevData.desc);
+				FormPrevData.angelTokenPay !== '' && await formik.setFieldValue('angelTokenPay', FormPrevData.angelTokenPay);
+				FormPrevData.laboratoryTokenPay !== '' &&
+					await formik.setFieldValue('laboratoryTokenPay', FormPrevData.laboratoryTokenPay);
+				FormPrevData.instanceCount !== '' && await formik.setFieldValue('instanceCount', FormPrevData.instanceCount);
+				FormPrevData.category &&
+					FormPrevData.category.length > 0 &&
+					await formik.setFieldValue('category', FormPrevData.category);
+				FormPrevData.category && setSelectedOption(FormPrevData.category.map((item) => item));
+				FormPrevData.terms && await formik.setFieldValue('terms', FormPrevData.terms);
+				formik.validateForm();
+			}
+		}
+	};
+
+	useEffect(() => {
+		initialValues();
+	}, [appState.oldDataForm]);
+
+	useEffect(() => {
+		if (formik.values !== undefined) {
+			const data = appState.oldDataForm;
+			if (data !== undefined) {
+				localStorage.setItem('create_request_values', JSON.stringify(data));
+			}
+			dispatch({
+				type: actionTypes.SET_OLD_DATA_FORM,
+				payload: formik.values,
+			});
+		}
+	}, [formik.values]);
+
 
 	const estimateFeeHandler = (target, values) => {
 		let gas = +appState.gas.average / 10; //Gwei

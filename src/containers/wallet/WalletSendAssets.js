@@ -129,8 +129,6 @@ const WalletSendAssets = (mobile) => {
 						placeholder={"Please enter the Recipient's address"}
 						adornment={navigator.clipboard && navigator.clipboard?.readText ? 'Paste' : null} // #todo
 						adornmentOnClick={() => {
-							// let test = document.execCommand('paste')
-							// console.log('test ', test);
 							getClipboard();
 						}}
 						onChange={(e) => formik.setFieldValue('address', e.target.value)}
