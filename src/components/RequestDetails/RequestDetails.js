@@ -230,6 +230,7 @@ const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, 
 					error={error}
 					setError={setError}
 					onClick={submitSignal}
+					request={request}
 				/>
 			</FilesWrapper>
 		</PageWrapper>

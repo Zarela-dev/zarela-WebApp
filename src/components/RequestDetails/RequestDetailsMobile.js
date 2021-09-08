@@ -200,6 +200,7 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
 						error={error}
 						setError={setError}
 						onClick={submitSignal}
+						request={request}
 					/>
 					<TagsWrapper>
 						{request.categories?.split(',').map((item) => {
