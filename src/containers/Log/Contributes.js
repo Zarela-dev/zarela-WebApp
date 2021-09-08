@@ -47,34 +47,40 @@ const Contributes = (props) => {
 					.orderResult()
 					.call({ from: account })
 					.then((result) => {
-						const userContributionsSet = new Set(result[1]);
+						const userContributionsSet = new Set([...result[1], ...result[2]]);
 						const userContributions = [...userContributionsSet];
 
 						const getAllRequests = new Promise(async (resolve, reject) => {
 							const requests = [];
 							const getRequestFiles = (requestContributions) => {
-								let addresses = requestContributions[0];
-								// these to values are obsolete in this version but it's a good reference
-								// let laboratories = requestContributions[1];
-								// let whoGainedReward = requestContributions[3];
+								let angels = requestContributions[0];
+								let hubs = requestContributions[1];
 								let timestamps = requestContributions[2];
+								let rewardGainer = requestContributions[3];
 								let status = requestContributions[4];
 								let zarelaDay = requestContributions[5];
 
 								let formatted = {};
-								addresses.forEach((address, originalIndex) => {
+								angels.forEach((angelAddress, originalIndex) => {
 									formatted[originalIndex] = {
 										originalIndex,
 										timestamp: timestamps[originalIndex],
 										zarelaDay: zarelaDay[originalIndex],
 										status: status[originalIndex],
+										angel: angels[originalIndex],
+										hub: hubs[originalIndex],
+										rewardGainer: rewardGainer[originalIndex],
 									};
 								});
 
 								let userContributionIndexes = [];
-								addresses.forEach((item, index) => {
-									if (item.toLowerCase() === account.toLowerCase()) {
-										userContributionIndexes.push(index);
+								Object.keys(formatted).forEach((originalIndex) => {
+									const { angel, hub } = formatted[originalIndex];
+									if (
+										angel.toLowerCase() === account.toLowerCase() ||
+										hub.toLowerCase() === account.toLowerCase()
+									) {
+										userContributionIndexes.push(originalIndex);
 									}
 								});
 
@@ -87,9 +93,7 @@ const Contributes = (props) => {
 
 							try {
 								for (const currentRequest of userContributions) {
-									let requestInfo = await appState.contract.methods
-										.orders(currentRequest)
-										.call();
+									let requestInfo = await appState.contract.methods.orders(currentRequest).call();
 									let contributions = await appState.contract.methods
 										.getOrderData(currentRequest)
 										.call({ from: account });
@@ -119,7 +123,6 @@ const Contributes = (props) => {
 						});
 
 						getAllRequests.then((requestsList) => {
-							console.log('requestsList', requestsList);
 							setRequests(requestsList);
 							setIsLoading(false);
 						});
@@ -138,27 +141,17 @@ const Contributes = (props) => {
 				return (
 					<Card key={index} isMobile={appState.isMobile}>
 						<CircleSection>
-							<Skeleton
-								variant='circle'
-								width={41.72}
-								height={41.72}
-								className={classes.root}
-							/>
+							<Skeleton variant="circle" width={41.72} height={41.72} className={classes.root} />
 						</CircleSection>
 						<SquareSection>
 							<Skeleton
-								variant='rect'
+								variant="rect"
 								width={'100%'}
 								height={19}
-								animation='wave'
+								animation="wave"
 								className={classes.root}
 							/>
-							<Skeleton
-								variant='rect'
-								width={'80%'}
-								height={19.1}
-								className={classes.root}
-							/>
+							<Skeleton variant="rect" width={'80%'} height={19.1} className={classes.root} />
 						</SquareSection>
 					</Card>
 				);
@@ -166,36 +159,18 @@ const Contributes = (props) => {
 		) : requests.length === 0 ? (
 			<NoRequestsFound message={message} />
 		) : (
-			requests.map((request) => (
-				<LogCardMobile key={request.requestID} data={request} />
-			))
+			requests.map((request) => <LogCardMobile key={request.requestID} data={request} />)
 		);
 	return isLoading ? (
 		[1, 2, 3].map((index) => {
 			return (
 				<Card key={index} isMobile={appState.isMobile}>
 					<CircleSection>
-						<Skeleton
-							variant='circle'
-							width={72}
-							height={72}
-							className={classes.root}
-						/>
+						<Skeleton variant="circle" width={72} height={72} className={classes.root} />
 					</CircleSection>
 					<SquareSection>
-						<Skeleton
-							variant='rect'
-							width={'100%'}
-							height={33}
-							animation='wave'
-							className={classes.root}
-						/>
-						<Skeleton
-							variant='rect'
-							width={'33%'}
-							height={'33px'}
-							className={classes.root}
-						/>
+						<Skeleton variant="rect" width={'100%'} height={33} animation="wave" className={classes.root} />
+						<Skeleton variant="rect" width={'33%'} height={'33px'} className={classes.root} />
 					</SquareSection>
 				</Card>
 			);
@@ -203,9 +178,7 @@ const Contributes = (props) => {
 	) : requests.length === 0 ? (
 		<NoRequestsFound message={message} />
 	) : (
-		requests.map((request) => (
-			<LogCard key={request.requestID} data={request} />
-		))
+		requests.map((request) => <LogCard key={request.requestID} account={account} data={request} />)
 	);
 };
 

@@ -30,12 +30,12 @@ import {
 	IconListWrapper,
 	HubIcon,
 	AngelIcon,
-	RoleLabel
+	RoleLabel,
 } from './Elements';
 import { Spacer } from '../Elements/Spacer';
 import { timeSince } from '../../utils';
 
-const LogCard = ({ data }) => {
+const LogCard = ({ data, account }) => {
 	const { requestID, title, angelTokenPay, laboratoryTokenPay, contributions } = data;
 	const [isOpen, setOpen] = useState(false);
 	const totalPending = contributions.filter((item) => item.status === false).length;
@@ -119,52 +119,66 @@ const LogCard = ({ data }) => {
 							</TableCellWrapper>
 						</TableRow>
 						<TableBulkRow>
-							{contributions.map(({ originalIndex, timestamp, zarelaDay, status }, rowIndex) => (
-								<TableRow key={originalIndex}>
-									<TableCellWrapper>
-										<TableCell>
-											<IconListWrapper>
-												<HubIcon />
-												<AngelIcon />
-											</IconListWrapper>
-										</TableCell>
-									</TableCellWrapper>
-									<TableCellWrapper>
-										<TableCell>{`${rowIndex + 1}. File #${originalIndex}`}</TableCell>
-									</TableCellWrapper>
-									<TableCellWrapper>
-										<TableCell>{timeSince(timestamp)}</TableCell>
-									</TableCellWrapper>
-									<TableCellWrapper>
-										<TableCell>{zarelaDay}</TableCell>
-									</TableCellWrapper>
-									<TableCellWrapper>
-										<TableCell>
-											<IconListWrapper>
-												<HubIcon />
-												<RoleLabel>
-													Hub
-												</RoleLabel>
-											</IconListWrapper>
-										</TableCell>
-									</TableCellWrapper>
-									<TableCellWrapper>
-										<TableCell>
-											{status ? (
-												<>
-													<StatusIcon src={approvedIcon} />
-													<StatusLabel approved>Confirmed</StatusLabel>
-												</>
-											) : (
-												<>
-													<StatusIcon src={unapprovedIcon} />
-													<StatusLabel>Pending</StatusLabel>
-												</>
-											)}
-										</TableCell>
-									</TableCellWrapper>
-								</TableRow>
-							))}
+							{contributions.map(
+								(
+									{ originalIndex, timestamp, zarelaDay, status, angel, hub, rewardGainer },
+									rowIndex
+								) => {
+									return (
+										<TableRow key={originalIndex}>
+											<TableCellWrapper>
+												<TableCell>
+													<IconListWrapper>
+														{angel.toLowerCase() === account.toLowerCase() && <AngelIcon />}
+														{hub.toLowerCase() === account.toLowerCase() && <HubIcon />}
+													</IconListWrapper>
+												</TableCell>
+											</TableCellWrapper>
+											<TableCellWrapper>
+												<TableCell>{`${rowIndex + 1}. File #${originalIndex}`}</TableCell>
+											</TableCellWrapper>
+											<TableCellWrapper>
+												<TableCell>{timeSince(timestamp)}</TableCell>
+											</TableCellWrapper>
+											<TableCellWrapper>
+												<TableCell>{zarelaDay}</TableCell>
+											</TableCellWrapper>
+											<TableCellWrapper>
+												<TableCell>
+													<IconListWrapper>
+														{rewardGainer === true ? (
+															<>
+																<AngelIcon />
+																<RoleLabel>Angel</RoleLabel>
+															</>
+														) : (
+															<>
+																<HubIcon />
+																<RoleLabel>Hub</RoleLabel>
+															</>
+														)}
+													</IconListWrapper>
+												</TableCell>
+											</TableCellWrapper>
+											<TableCellWrapper>
+												<TableCell>
+													{status ? (
+														<>
+															<StatusIcon src={approvedIcon} />
+															<StatusLabel approved>Confirmed</StatusLabel>
+														</>
+													) : (
+														<>
+															<StatusIcon src={unapprovedIcon} />
+															<StatusLabel>Pending</StatusLabel>
+														</>
+													)}
+												</TableCell>
+											</TableCellWrapper>
+										</TableRow>
+									);
+								}
+							)}
 						</TableBulkRow>
 					</Table>
 				</Body>
