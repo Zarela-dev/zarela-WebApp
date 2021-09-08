@@ -27,6 +27,10 @@ import {
 	TableCell,
 	TableRow,
 	TableBulkRow,
+	IconListWrapper,
+	HubIcon,
+	AngelIcon,
+	RoleLabel
 } from './Elements';
 import { Spacer } from '../Elements/Spacer';
 import { timeSince } from '../../utils';
@@ -96,6 +100,9 @@ const LogCard = ({ data }) => {
 					<Table>
 						<TableRow header>
 							<TableCellWrapper>
+								<TableCell>Contribution Role</TableCell>
+							</TableCellWrapper>
+							<TableCellWrapper>
 								<TableCell>File Names</TableCell>
 							</TableCellWrapper>
 							<TableCellWrapper>
@@ -105,12 +112,23 @@ const LogCard = ({ data }) => {
 								<TableCell>Zarela Day</TableCell>
 							</TableCellWrapper>
 							<TableCellWrapper>
-								<TableCell>Status</TableCell>
+								<TableCell>Reward Gainer</TableCell>
+							</TableCellWrapper>
+							<TableCellWrapper>
+								<TableCell>Wage Status</TableCell>
 							</TableCellWrapper>
 						</TableRow>
 						<TableBulkRow>
 							{contributions.map(({ originalIndex, timestamp, zarelaDay, status }, rowIndex) => (
 								<TableRow key={originalIndex}>
+									<TableCellWrapper>
+										<TableCell>
+											<IconListWrapper>
+												<HubIcon />
+												<AngelIcon />
+											</IconListWrapper>
+										</TableCell>
+									</TableCellWrapper>
 									<TableCellWrapper>
 										<TableCell>{`${rowIndex + 1}. File #${originalIndex}`}</TableCell>
 									</TableCellWrapper>
@@ -119,6 +137,16 @@ const LogCard = ({ data }) => {
 									</TableCellWrapper>
 									<TableCellWrapper>
 										<TableCell>{zarelaDay}</TableCell>
+									</TableCellWrapper>
+									<TableCellWrapper>
+										<TableCell>
+											<IconListWrapper>
+												<HubIcon />
+												<RoleLabel>
+													Hub
+												</RoleLabel>
+											</IconListWrapper>
+										</TableCell>
 									</TableCellWrapper>
 									<TableCellWrapper>
 										<TableCell>

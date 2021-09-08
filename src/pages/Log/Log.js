@@ -23,8 +23,6 @@ const LogInnerContainer = styled.div`
 	border-radius: 8px;
 `;
 
-
-
 const Log = () => {
 	const { account } = useWeb3React();
 	const { appState } = useContext(mainContext);
@@ -36,8 +34,6 @@ const Log = () => {
 			setGuideIsOpen(true);
 		}, 200);
 	}, []);
-
-
 
 	return (
 		<Wrapper>

@@ -1,4 +1,6 @@
 import styled, { css } from 'styled-components';
+import hubIcon from '../../assets/icons/hub.svg';
+import angelIcon from '../../assets/icons/angel.svg';
 
 // layout
 const getFontColorVariant = ({ variant, theme }) => {
@@ -191,17 +193,23 @@ export const TableRow = styled.section`
 	margin-bottom: ${(props) => (props.header ? props.theme.spacing(1) : 0)};
 
 	${TableCellWrapper}:first-of-type {
-		flex: 0 0 53%;
+		flex: 0 0 140px;
 	}
 
 	${TableCellWrapper}:nth-of-type(2) {
-		flex: 1 0 auto;
+		flex: 0 0 250px;
 	}
 
 	${TableCellWrapper}:nth-of-type(3) {
-		flex: 0 0 100px;
+		flex: 1 0 auto;
 	}
 	${TableCellWrapper}:nth-of-type(4) {
+		flex: 0 0 100px;
+	}
+	${TableCellWrapper}:nth-of-type(5) {
+		flex: 0 0 125px;
+	}
+	${TableCellWrapper}:nth-of-type(6) {
 		flex: 0 0 160px;
 	}
 `;
@@ -334,4 +342,42 @@ export const TimestampMobile = styled(Timestamp)`
 	font-size: 12px;
 	line-height: 16px;
 	color: #858585;
+`;
+
+const RoleIcon = styled.img`
+	width: 24;
+	padding: 0 ${(props) => props.theme.spacing(1.5)};
+`;
+
+export const RoleLabel = styled.p`
+	font-size: 16px;
+	line-height: 2;
+`;
+
+export const HubIcon = styled(RoleIcon).attrs(() => {
+	return {
+		src: hubIcon,
+	};
+})``;
+
+export const AngelIcon = styled(RoleIcon).attrs(() => {
+	return {
+		src: angelIcon,
+	};
+})``;
+
+export const IconListWrapper = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+
+	& > ${RoleIcon}:not(:first-child) {
+		border-left: 1px solid rgba(60, 135, 170, 0.6);
+	}
+	& > ${RoleIcon}:first-child {
+		padding-left: 0;
+	}
+	& > ${RoleIcon}:last-child {
+		padding-right: 0;
+	}
 `;
