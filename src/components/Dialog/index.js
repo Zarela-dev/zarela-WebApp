@@ -64,10 +64,10 @@ const Backdrop = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	position: absolute;
+	position: fixed;
 	left: 0;
-	width: 100vw;
 	top: 0;
+	width: 100vw;
 	height: 100vh;
 	background: rgba(255, 255, 255, 0.6);
 	z-index: ${(props) => props.theme.z_modal};

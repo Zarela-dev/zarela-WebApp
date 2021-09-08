@@ -24,6 +24,7 @@ const ActionFooter = styled.div`
 	display: flex;
 	justify-content: center;
 `;
+
 const ref = React.createRef();
 
 const UploadFileCard = ({
