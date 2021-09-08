@@ -2,7 +2,13 @@ import React, { useEffect, useReducer } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { convertToBiobit } from '../utils';
 import { actionTypes } from './actionTypes';
-import { configureFallbackWeb3, getZarelaCurrentDay, getGasPrice, getEthPrice, configureWeb3 } from './actions';
+import {
+	configureFallbackWeb3,
+	getZarelaCurrentDay,
+	getGasPrice,
+	getEthPrice,
+	configureWeb3,
+} from './actions';
 import { injectedConnector } from '../connectors';
 
 const appInitialState = {
@@ -87,6 +93,11 @@ const AppProvider = ({ children }) => {
 					...state,
 					ethPrice: action.payload,
 				};
+			case actionTypes.SET_OLD_DATA_FORM:
+				return {
+					...state,
+					oldDataForm: action.payload,
+				};
 			default:
 				return state;
 		}
@@ -97,7 +108,9 @@ const AppProvider = ({ children }) => {
 		// to detect device anywhere in the component tree
 		dispatch({
 			type: actionTypes.SET_CLIENT_DEVICE,
-			payload: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+			payload: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+				navigator.userAgent
+			)
 				? true
 				: false,
 		});
@@ -169,7 +182,9 @@ const AppProvider = ({ children }) => {
 					.then(function (result) {
 						dispatch({
 							type: actionTypes.SET_ETHER_BALANCE,
-							payload: Number(activeWeb3.utils.fromWei(result, 'ether')).toFixed(4),
+							payload: Number(
+								activeWeb3.utils.fromWei(result, 'ether')
+							).toFixed(4),
 						});
 					})
 					.catch((error) => {
@@ -189,6 +204,15 @@ const AppProvider = ({ children }) => {
 	useEffect(() => {
 		getEthPrice(dispatch);
 	}, [appState.gas]);
+
+	useEffect(() => {
+		if (localStorage.getItem('create_request_values')) {
+			dispatch({
+				type: actionTypes.SET_OLD_DATA_FORM,
+				payload: JSON.parse(localStorage.getItem('create_request_values')),
+			});
+		}
+	}, []);
 
 	return (
 		<mainContext.Provider

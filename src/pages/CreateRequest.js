@@ -16,6 +16,7 @@ import Dialog from '../components/Dialog';
 import { useWeb3React } from '@web3-react/core';
 import NoMobileSupportMessage from '../components/NoMobileSupportMessage';
 import { hexToRgb } from '@material-ui/core';
+import { actionTypes } from '../state';
 
 const Wrapper = styled.div`
 	${maxWidthWrapper}
@@ -24,7 +25,7 @@ const Wrapper = styled.div`
 // #todo sync form data with localStorage
 const CreateRequest = () => {
 	const fileRef = useRef(null);
-	const { appState } = useContext(mainContext);
+	const { appState, dispatch } = useContext(mainContext);
 	const [showDialog, setDialog] = useState(false);
 	const history = useHistory();
 	const [isUploading, setUploading] = useState(false);
@@ -47,6 +48,7 @@ const CreateRequest = () => {
 	};
 
 	const formik = useFormik({
+		enableReinitialize: true,
 		initialValues: {
 			title: '',
 			desc: '',
@@ -81,7 +83,6 @@ const CreateRequest = () => {
 			terms: yup.boolean().required(),
 		}),
 		onSubmit: (values) => {
-			console.log(values);
 			if (formik.isValid) {
 				/* to prevent the Mage from submitting the request with insufficient assets */
 				if (
@@ -179,6 +180,11 @@ const CreateRequest = () => {
 																	}
 																);
 																history.replace(`/`);
+																dispatch({
+																	type: actionTypes.SET_OLD_DATA_FORM,
+																	payload: {},
+																});
+																localStorage.removeItem('create_request_values')
 															} else {
 																clearSubmitDialog();
 																toast(error.message, 'error');
@@ -243,7 +249,7 @@ const CreateRequest = () => {
 								setDialog(false);
 							}}
 						/>
-						<CreateRequestForm formik={formik} ref={fileRef}>
+						<CreateRequestForm formik={formik} ref={fileRef} appState={appState} dispatch={dispatch}>
 							<Persist />
 						</CreateRequestForm>
 					</>
