@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import logo from '../../assets/icons/logo.png';
 import home from '../../assets/icons/home.svg';
+import setting from '../../assets/icons/setting.svg';
 import inbox from '../../assets/icons/inbox.svg';
 import user from '../../assets/icons/user.svg';
 import wallet from '../../assets/icons/wallet.svg';
@@ -38,9 +39,9 @@ const NavItem = styled(Link)`
 	justify-content: center;
 	text-decoration: none;
 	margin-right: ${(props) =>
-		props.isMobile ? props.theme.spacing(0) : props.theme.spacing(3)};
+		props.isMobile ? props.theme.spacing(0) : props.theme.spacing(2.5)};
 	margin-left: ${(props) =>
-		props.isMobile ? props.theme.spacing(2) : props.theme.spacing(3)};
+		props.isMobile ? props.theme.spacing(2) : props.theme.spacing(2.5)};
 	outline: none !important;
 `;
 
@@ -434,6 +435,9 @@ export default function Header({ isMobile }, props) {
 								}}
 							/>
 						</NavItem>
+						<NavItem isMobile={appState.isMobile} to='/setting/contacts'>
+							<NavIcon src={setting} />
+						</NavItem>
 						<NotificationMenu
 							appState={appState}
 							isOpen={isNotificationMenuOpen}
@@ -478,6 +482,10 @@ export default function Header({ isMobile }, props) {
 							</WalletTitlebar>
 						) : routeGroup === 'inbox' ? (
 							<TitleBar>Inbox</TitleBar>
+						) : routeGroup === 'setting' ? (
+							<TitleBar>
+								<Title>Setting</Title>
+							</TitleBar>
 						) : null}
 					</Box>
 				</BoxWrapper>
