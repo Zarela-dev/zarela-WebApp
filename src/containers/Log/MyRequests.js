@@ -15,7 +15,7 @@ const Card = styled.div`
 	height: ${(props) => (props.isMobile ? '85px' : '180px')};
 	margin-bottom: 15px;
 	background: #fff;
-	padding: 30px 33px;
+	padding: 8px 5px;
 	display: flex;
 	flex-direction: row;
 `;
