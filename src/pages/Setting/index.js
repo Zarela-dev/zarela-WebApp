@@ -17,44 +17,38 @@ const LogInnerContainer = styled.div`
 
 const Setting = () => {
 	const { appState } = useContext(mainContext);
-
-	if (!appState.isMobile) {
-		return (
-			<Tabs
-				route="setting"
-				data-tour={'contacts'}
-				isMobile={appState.isMobile}
-				data={[
-					{
-						label: 'Contacts',
-						component: (
-							<LogInnerContainer elevated>
-								<Contacts />
-							</LogInnerContainer>
-						),
-					},
-					{
-						label: 'Blocked',
-						component: (
-							<LogInnerContainer elevated>
-								<Blocked />
-							</LogInnerContainer>
-						),
-					},
-					{
-						label: 'Hidden',
-						component: (
-							<LogInnerContainer elevated>
-								<Hidden />
-							</LogInnerContainer>
-						),
-					},
-				]}
-			/>
-		);
-	} else {
-		return null;
-	}
+	return (
+		<Tabs
+			route="setting"
+			isMobile={appState.isMobile}
+			data={[
+				{
+					label: 'Contacts',
+					component: (
+						<LogInnerContainer elevated>
+							<Contacts isMobile={appState.isMobile} />
+						</LogInnerContainer>
+					),
+				},
+				{
+					label: 'Blocked',
+					component: (
+						<LogInnerContainer elevated>
+							<Blocked isMobile={appState.isMobile} />
+						</LogInnerContainer>
+					),
+				},
+				{
+					label: 'Hidden',
+					component: (
+						<LogInnerContainer elevated>
+							<Hidden isMobile={appState.isMobile} />
+						</LogInnerContainer>
+					),
+				},
+			]}
+		/>
+	);
 };
 
 export default Setting;
