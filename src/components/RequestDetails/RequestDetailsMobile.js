@@ -136,7 +136,7 @@ const Timestamp = styled.p`
 	margin-top: ${(props) => props.theme.spacing(1)};
 `;
 
-const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, request, submitSignal }, ref) => {
+const RequestDetailsMobile = ({ setError, error, request }) => {
 	const contributors = `${request.totalContributed}/${request.totalContributors}`;
 	const [signalFile, setSignalFile] = useState(null);
 
@@ -188,18 +188,19 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
 				</HeaderContainer>
 				<DescriptionContainer>
 					<UploadFileCard
+						isMobile
 						showSelected
-						buttonLabel="Select Files"
-						label={'Already have the file?'}
-						ref={ref}
-						name={'whitepaper'}
+						disableUpload
+						buttonLabel="contribute"
+						label={'start here'}
+						name={'signal file'}
 						value={signalFile}
 						onChange={(e) => {
 							setSignalFile(e.target.files[0]);
 						}}
+						helperText={'here you will select and upload your biosignals.'}
 						error={error}
 						setError={setError}
-						onClick={submitSignal}
 						request={request}
 					/>
 					<TagsWrapper>
@@ -233,6 +234,6 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
 			</PageWrapper>
 		</MobileLayout>
 	);
-});
+};
 
 export default RequestDetailsMobile;

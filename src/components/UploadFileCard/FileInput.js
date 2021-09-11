@@ -36,19 +36,16 @@ export const FileInputTitle = styled.div`
 
 export const FileInputLabel = styled.label`
 	white-space: nowrap;
-	background: #ffffff;
-	box-shadow: 0px 5.46667px 18px rgba(223, 236, 255, 0.5);
-	border-radius: 5.46667px;
-	border: 1px solid #bbbee6;
-	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(4)};
-	color: #7246d0;
+	background: linear-gradient(226.69deg, #85ceee 10.5%, #a687fd 86.82%);
+	box-shadow: 0px 6px 20px rgba(81, 197, 234, 0.15);
+	border-radius: 4px;
+	padding: ${(props) => props.theme.spacing(0.6)};
+	color: ${(props) => props.theme.textPrimary};
 	cursor: pointer;
 	text-align: center;
-
-	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
-		font-size: 12px;
-		margin-bottom: ${(props) => props.theme.spacing(1)};
-	}
+	height: 32px;
+	width: 110px;
+	font-size: 12px;
 `;
 
 export const FileInputLink = styled.a`
@@ -101,15 +98,23 @@ export const getFileName = (inputRef, fallbackLabel) => {
 
 // #refactor_candidate
 const FileInput = forwardRef(
-	({ disableUpload, className, hasBorder, showSelected, value, buttonLabel, icon, error, label, ...rest }, ref) => {
-		console.log('ref', ref.current);
+	(
+		{ disableUpload, className, hasBorder, showSelected, value, buttonLabel, icon, onClick, error, label, ...rest },
+		ref
+	) => {
 		return (
 			<FileInputWrapper hasBorder={hasBorder} className={className}>
 				<FileContainer>
-					<FileInputLabel>
-						{buttonLabel}
-						{!disableUpload ? <input ref={ref} type="file" style={{ display: 'none' }} {...rest} /> : null}
-					</FileInputLabel>
+					{typeof onClick === 'function' ? (
+						<FileInputLabel onClick={onClick}>{buttonLabel}</FileInputLabel>
+					) : (
+						<FileInputLabel>
+							{buttonLabel}
+							{!disableUpload ? (
+								<input ref={ref} type="file" style={{ display: 'none' }} {...rest} />
+							) : null}
+						</FileInputLabel>
+					)}
 					{showSelected ? (
 						<FileInputTitle>
 							{icon === 'download' ? (

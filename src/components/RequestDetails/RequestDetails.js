@@ -139,7 +139,7 @@ const Timestamp = styled.p`
 	margin-top: ${(props) => props.theme.spacing(1)};
 `;
 
-const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, submitSignal }, ref) => {
+const RequestDetails = ({ setError, error, request }) => {
 	const contributors = `${request.totalContributed}/${request.totalContributors}`;
 	const [signalFile, setSignalFile] = useState(null);
 
@@ -219,22 +219,22 @@ const RequestDetails = React.forwardRef(({ setError, error, timestamp, request, 
 				<FileCardSpacer />
 				<UploadFileCard
 					showSelected
-					buttonLabel="Select Files"
-					label={'select your files here'}
-					ref={ref}
-					name={'whitepaper'}
+					disableUpload
+					buttonLabel="contribute"
+					label={'start here'}
+					name={'signal file'}
 					value={signalFile}
 					onChange={(e) => {
 						setSignalFile(e.target.files[0]);
 					}}
+					helperText={'here you will select and upload your biosignals.'}
 					error={error}
 					setError={setError}
-					onClick={submitSignal}
 					request={request}
 				/>
 			</FilesWrapper>
 		</PageWrapper>
 	);
-});
+};
 
 export default RequestDetails;

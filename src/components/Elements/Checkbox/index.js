@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import tick from '../../../assets/icons/tick.svg';
 
 const CheckboxContainer = styled.div`
-	margin-right: ${(props) => (!props.small ? props.theme.spacing(1.5) : 0)};
+	margin-right: ${(props) => (!props.small ? props.theme.spacing(1.5) : props.theme.spacing(1))};
 	margin-bottom: ${(props) => (!props.small ? props.theme.spacing(2.5) : 0)};
 	cursor: pointer;
 `;
@@ -68,6 +68,8 @@ const Label = styled.label`
 	font-size: 14px;
 	line-height: 20px;
 	max-width: 620px;
+	font-weight: normal;
+	color: ${(props) => props.theme.textPrimary};
 `;
 
 const Checkbox = ({ children, checked, ...props }) => (
