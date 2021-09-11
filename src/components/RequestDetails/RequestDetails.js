@@ -220,8 +220,8 @@ const RequestDetails = ({ setError, error, request }) => {
 				<UploadFileCard
 					showSelected
 					disableUpload
-					buttonLabel="contribute"
-					label={'start here'}
+					buttonLabel="Contribute"
+					label={'Already Have a File?'}
 					name={'signal file'}
 					value={signalFile}
 					onChange={(e) => {

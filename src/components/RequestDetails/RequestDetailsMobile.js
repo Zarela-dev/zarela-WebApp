@@ -191,8 +191,8 @@ const RequestDetailsMobile = ({ setError, error, request }) => {
 						isMobile
 						showSelected
 						disableUpload
-						buttonLabel="contribute"
-						label={'start here'}
+						buttonLabel="Contribute"
+						label={'Already Have a File?'}
 						name={'signal file'}
 						value={signalFile}
 						onChange={(e) => {

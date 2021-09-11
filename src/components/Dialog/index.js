@@ -30,7 +30,7 @@ const Header = styled.header`
 	align-items: center;
 	width: 100%;
 
-	margin: 0 auto ${(props) => props.theme.spacing(3)};
+	margin: 0 auto ${(props) => props.theme.spacing(4)};
 `;
 
 const Body = styled.section`
@@ -48,7 +48,7 @@ const Content = styled.div`
 	width: 100%;
 
 	@media only screen and (min-width: ${({ theme }) => theme.tablet_sm_breakpoint}) {
-		width: 70%;
+		width: 90%;
 	}
 `;
 

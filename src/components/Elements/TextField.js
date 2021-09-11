@@ -35,6 +35,7 @@ const Wrapper = styled.div`
 	flex-direction: column;
 	align-items: flex-start;
 	margin-bottom: ${(props) => props.theme.spacing(2)};
+	margin-top: ${(props) => (props.hasTopMargin ? props.theme.spacing(2) : 0)};
 `;
 
 const Label = styled.label`
@@ -107,6 +108,7 @@ const TextField = forwardRef(
 			error,
 			helperText,
 			hint,
+			hasTopMargin,
 			actions,
 			isActionTypeIcon,
 			adornment,
@@ -116,7 +118,7 @@ const TextField = forwardRef(
 		ref
 	) => {
 		return (
-			<Wrapper className={className}>
+			<Wrapper className={className} hasTopMargin={hasTopMargin}>
 				<Label>
 					<LabelText>{label}</LabelText>
 					{hint ? <Hint>{hint}</Hint> : null}
@@ -136,7 +138,11 @@ const TextField = forwardRef(
 					) : null}
 					{actions
 						? actions.map((action, index) => {
-								return <InputAction key={index} onClick={action.onClick}>{action.content}</InputAction>;
+								return (
+									<InputAction key={index} onClick={action.onClick}>
+										{action.content}
+									</InputAction>
+								);
 						  })
 						: null}
 				</ActionsContainer>

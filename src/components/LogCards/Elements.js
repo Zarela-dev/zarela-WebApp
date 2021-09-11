@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import hubIcon from '../../assets/icons/hub.svg';
-import angelIcon from '../../assets/icons/angel.svg';
+import hubIcon from '../../assets/icons/hub.png';
+import angelIcon from '../../assets/icons/angel.png';
 
 // layout
 const getFontColorVariant = ({ variant, theme }) => {
@@ -345,8 +345,9 @@ export const TimestampMobile = styled(Timestamp)`
 `;
 
 const RoleIcon = styled.img`
-	width: 24;
+	width: 24px;
 	padding: 0 ${(props) => props.theme.spacing(1.5)};
+	box-sizing: content-box;
 `;
 
 export const RoleLabel = styled.p`
@@ -364,7 +365,9 @@ export const AngelIcon = styled(RoleIcon).attrs(() => {
 	return {
 		src: angelIcon,
 	};
-})``;
+})`
+	/* width: 30px; */
+`;
 
 export const IconListWrapper = styled.div`
 	display: flex;

@@ -8,11 +8,15 @@ import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
 import { CustomFileInput } from './FileCard';
 import backIcon from '../../assets/icons/left-arrow.svg';
+import angelIcon from '../../assets/icons/angel.png';
+import hubIcon from '../../assets/icons/hub.png';
+import angelIconActive from '../../assets/icons/angel-active.png';
+import hubIconActive from '../../assets/icons/hub-active.png';
 
 const ModalBackIcon = styled.img`
 	position: absolute;
-	top: ${(props) => props.theme.spacing(2)};
-	left: ${(props) => props.theme.spacing(2)};
+	top: 26px;
+	left: 26px;
 	cursor: pointer;
 	width: 10px;
 `;
@@ -27,22 +31,23 @@ const ButtonWrapper = styled.div`
 const RewardGainerWrapper = styled.section`
 	display: flex;
 	flex-wrap: nowrap;
+	justify-content: center;
 `;
 
-const RewardGainerIcon = styled.img``;
+const RewardGainerIcon = styled.img`
+	height: 60px;
+`;
 
 const RewardGainerLabel = styled.p`
 	font-weight: bold;
 	font-size: 16px;
+	font-weight: ${(props) => (props.active ? 700 : 400)};
+	color: ${(props) => (props.active ? '#D13ADE' : props.theme.textPrimary)};
+	margin-top: ${(props) => props.theme.spacing(2)}
 `;
 
 const RewardGainerItem = styled.div`
-	flex: 1 0 50%;
-
-	& > ${RewardGainerLabel} {
-		font-weight: ${(props) => (props.active ? 700 : 400)};
-		color: ${(props) => (props.active ? '#D13ADE' : props.theme.textPrimary)};
-	}
+	flex: 0 0 120px;
 `;
 
 const ContinueButton = styled(Button)`
@@ -136,6 +141,7 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 				<CustomFileInput
 					ref={ref}
 					{...fileInputProps}
+					hasBorder
 					disableUpload={false}
 					label={'select your file here'}
 					buttonLabel="select file"
@@ -169,6 +175,7 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 			<Box show={formik.values.step == 2 && formik.values.hasHub}>
 				<TextField
 					placeholder={'Hub Address'}
+					hasTopMargin
 					label="Enter Hub Address"
 					type="text"
 					name={'hubAddress'}
@@ -185,15 +192,33 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 						active={formik.values.rewardGainer === 'angel'}
 						onClick={() => formik.setFieldValue('rewardGainer', 'angel')}
 					>
-						<RewardGainerIcon />
-						<RewardGainerLabel>Angel</RewardGainerLabel>
+						{formik.values.rewardGainer === 'angel' ? (
+							<>
+								<RewardGainerIcon src={angelIconActive} />
+								<RewardGainerLabel active>Angel</RewardGainerLabel>
+							</>
+						) : (
+							<>
+								<RewardGainerIcon src={angelIcon} />
+								<RewardGainerLabel>Angel</RewardGainerLabel>
+							</>
+						)}
 					</RewardGainerItem>
 					<RewardGainerItem
 						active={formik.values.rewardGainer === 'hub'}
 						onClick={() => formik.setFieldValue('rewardGainer', 'hub')}
 					>
-						<RewardGainerIcon />
-						<RewardGainerLabel>Hub</RewardGainerLabel>
+						{formik.values.rewardGainer === 'hub' ? (
+							<>
+								<RewardGainerIcon src={hubIconActive} />
+								<RewardGainerLabel active>Hub</RewardGainerLabel>
+							</>
+						) : (
+							<>
+								<RewardGainerIcon src={hubIcon} />
+								<RewardGainerLabel>Hub</RewardGainerLabel>
+							</>
+						)}
 					</RewardGainerItem>
 				</RewardGainerWrapper>
 			</Box>

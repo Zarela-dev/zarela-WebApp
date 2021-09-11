@@ -6,7 +6,7 @@ import { Error } from '../Elements/TextField';
 
 export const FileInputWithBorder = css`
 	background: #ffffff;
-	border: 1px dashed #3adea3;
+	border: 1px dashed rgb(58 222 163 / 50%);
 	box-shadow: 0px 4px 18px rgba(223, 236, 255, 0.3);
 	border-radius: 5px;
 	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(1)};
@@ -19,6 +19,7 @@ export const FileInputWrapper = styled.div`
 	justify-content: space-between;
 	flex-wrap: wrap;
 	max-width: 530px;
+	font-weight: 400;
 `;
 
 export const FileInputTitle = styled.div`
@@ -39,13 +40,13 @@ export const FileInputLabel = styled.label`
 	background: linear-gradient(226.69deg, #85ceee 10.5%, #a687fd 86.82%);
 	box-shadow: 0px 6px 20px rgba(81, 197, 234, 0.15);
 	border-radius: 4px;
-	padding: ${(props) => props.theme.spacing(0.6)};
+	padding: ${(props) => props.theme.spacing(1.2)};
 	color: ${(props) => props.theme.textPrimary};
 	cursor: pointer;
 	text-align: center;
-	height: 32px;
+	height: 40px;
 	width: 110px;
-	font-size: 12px;
+	font-size: 16px;
 `;
 
 export const FileInputLink = styled.a`
@@ -63,13 +64,12 @@ const FileContainer = styled.div`
 	flex-direction: row-reverse;
 	justify-content: space-between;
 	width: 100%;
-	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
-		flex-direction: column-reverse;
-	}
 `;
 
 const ErrorContainer = styled.div`
 	margin-top: ${(props) => props.theme.spacing(1)};
+	text-align: left;
+	width: 100%;
 `;
 
 export const FileInputIcon = styled.img`
@@ -78,8 +78,8 @@ export const FileInputIcon = styled.img`
 `;
 
 export const FileName = styled.div`
-	max-width: 80%;
 	overflow: hidden;
+	text-align: left;
 	text-overflow: ellipsis;
 `;
 
@@ -135,7 +135,11 @@ const FileInput = forwardRef(
 						</FileInputTitle>
 					)}
 				</FileContainer>
-				<ErrorContainer>{error ? <Error>{error}</Error> : null}</ErrorContainer>
+				{error ? (
+					<ErrorContainer>
+						<Error>{error}</Error>
+					</ErrorContainer>
+				) : null}
 			</FileInputWrapper>
 		);
 	}

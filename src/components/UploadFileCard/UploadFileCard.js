@@ -19,6 +19,12 @@ const StickyButton = styled(Button)`
 	bottom: 70px;
 	left: 50%;
 	transform: translate(-50%);
+	height: 34px;
+
+	& > * {
+		font-size: 12px;
+		padding: 0 ${props => props.theme.spacing(2)};
+	}
 `;
 
 const fileInputRef = React.createRef();
