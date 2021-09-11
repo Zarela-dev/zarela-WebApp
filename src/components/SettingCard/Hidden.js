@@ -26,6 +26,7 @@ import {
 	TableRow,
 	TableBulkRow,
 } from '../LogCards/Elements';
+import MobileCard from './MobileCard';
 
 const SettingTableCell = styled(TableCellWrapper)`
 	flex: ${(props) => props.flex} !important;
@@ -40,50 +41,59 @@ const ActionTitle = styled.span`
 	margin: 0 10%;
 `;
 
-const Hidden = () => {
-	return (
-		<CompactRequestCard>
-			<Body>
-				<Table>
-					<TableRow header>
-						<SettingTableCell flex="0 0 15%">
-							<TableCell>Request No.</TableCell>
-						</SettingTableCell>
-						<SettingTableCell flex="0 0 15%">
-							<TableCell>Name</TableCell>
-						</SettingTableCell>
-						<SettingTableCell flex="0 0 55%">
-							<TableCell>public key</TableCell>
-						</SettingTableCell>
+const Hidden = ({ isMobile }) => {
+	if (isMobile) {
+		return (
+			<>
+				<MobileCard type="contact" />
+				<MobileCard type="block" />
+			</>
+		);
+	} else {
+		return (
+			<CompactRequestCard>
+				<Body>
+					<Table>
+						<TableRow header>
+							<SettingTableCell flex="0 0 15%">
+								<TableCell>Request No.</TableCell>
+							</SettingTableCell>
+							<SettingTableCell flex="0 0 15%">
+								<TableCell>Name</TableCell>
+							</SettingTableCell>
+							<SettingTableCell flex="0 0 55%">
+								<TableCell>public key</TableCell>
+							</SettingTableCell>
 
-						<SettingTableCell flex="0 0 15%">
-							<TableCell>Hide/Unhide</TableCell>
-						</SettingTableCell>
-					</TableRow>
-					<TableBulkRow>
-						{[1, 2, 3, 4, 5, 6].map((item) => (
-							<TableRow key={1}>
-								<SettingTableCell flex="0 0 15%">
-									<TableCell> 145 </TableCell>
-								</SettingTableCell>
-								<SettingTableCell flex="0 0 15%">
-									<TableCell>Masood-beigi</TableCell>
-								</SettingTableCell>
-								<SettingTableCell flex="0 0 55%">
-									<TableCell>WEERTYUNBGWEERTYUNBGWEERTYUNBG</TableCell>
-								</SettingTableCell>
-								<SettingTableCell flex="0 0 15%">
-									<TableCell>
-										<ActionIcon src={hide} />
-									</TableCell>
-								</SettingTableCell>
-							</TableRow>
-						))}
-					</TableBulkRow>
-				</Table>
-			</Body>
-		</CompactRequestCard>
-	);
+							<SettingTableCell flex="0 0 15%">
+								<TableCell>Hide/Unhide</TableCell>
+							</SettingTableCell>
+						</TableRow>
+						<TableBulkRow>
+							{[1, 2, 3, 4, 5, 6].map((item) => (
+								<TableRow key={1}>
+									<SettingTableCell flex="0 0 15%">
+										<TableCell> 145 </TableCell>
+									</SettingTableCell>
+									<SettingTableCell flex="0 0 15%">
+										<TableCell>Masood-beigi</TableCell>
+									</SettingTableCell>
+									<SettingTableCell flex="0 0 55%">
+										<TableCell>WEERTYUNBGWEERTYUNBGWEERTYUNBG</TableCell>
+									</SettingTableCell>
+									<SettingTableCell flex="0 0 15%">
+										<TableCell>
+											<ActionIcon src={hide} />
+										</TableCell>
+									</SettingTableCell>
+								</TableRow>
+							))}
+						</TableBulkRow>
+					</Table>
+				</Body>
+			</CompactRequestCard>
+		);
+	}
 };
 
 export default Hidden;

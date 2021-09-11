@@ -25,6 +25,7 @@ import {
 	TableRow,
 	TableBulkRow,
 } from '../LogCards/Elements';
+import MobileCard from './MobileCard';
 
 const SettingTableCell = styled(TableCellWrapper)`
 	flex: ${(props) => props.flex} !important;
@@ -39,43 +40,52 @@ const ActionTitle = styled.span`
 	margin: 0 10%;
 `;
 
-const Blocked = () => {
-	return (
-		<CompactRequestCard>
-			<Body>
-				<Table>
-					<TableRow header>
-						<SettingTableCell flex='0 0 65%'>
-							<TableCell>public key</TableCell>
-						</SettingTableCell>
-						<SettingTableCell flex='0 0 20%'>
-							<TableCell>Name</TableCell>
-						</SettingTableCell>
-						<SettingTableCell flex='0 0 15%'>
-							<TableCell>Block/Unblock</TableCell>
-						</SettingTableCell>
-					</TableRow>
-					<TableBulkRow>
-						{[1, 2, 3, 4, 5, 6].map((item) => (
-							<TableRow key={1}>
-								<SettingTableCell flex='0 0 65%'>
-									<TableCell>WEERTYUNBGWEERTYUNBGWEERTYUNBG </TableCell>
-								</SettingTableCell>
-								<SettingTableCell flex='0 0 20%'>
-									<TableCell> Hub- Dr.Mohiri</TableCell>
-								</SettingTableCell>
-								<SettingTableCell flex='0 0 15%'>
-									<TableCell>
-										<ActionIcon src={unBlock} />
-									</TableCell>
-								</SettingTableCell>
-							</TableRow>
-						))}
-					</TableBulkRow>
-				</Table>
-			</Body>
-		</CompactRequestCard>
-	);
+const Blocked = ({isMobile}) => {
+	if (isMobile) {
+		return (
+			<>
+				<MobileCard type="contact" />
+				<MobileCard type="block" />
+			</>
+		);
+	} else {
+		return (
+			<CompactRequestCard>
+				<Body>
+					<Table>
+						<TableRow header>
+							<SettingTableCell flex="0 0 65%">
+								<TableCell>public key</TableCell>
+							</SettingTableCell>
+							<SettingTableCell flex="0 0 20%">
+								<TableCell>Name</TableCell>
+							</SettingTableCell>
+							<SettingTableCell flex="0 0 15%">
+								<TableCell>Block/Unblock</TableCell>
+							</SettingTableCell>
+						</TableRow>
+						<TableBulkRow>
+							{[1, 2, 3, 4, 5, 6].map((item) => (
+								<TableRow key={1}>
+									<SettingTableCell flex="0 0 65%">
+										<TableCell>WEERTYUNBGWEERTYUNBGWEERTYUNBG </TableCell>
+									</SettingTableCell>
+									<SettingTableCell flex="0 0 20%">
+										<TableCell> Hub- Dr.Mohiri</TableCell>
+									</SettingTableCell>
+									<SettingTableCell flex="0 0 15%">
+										<TableCell>
+											<ActionIcon src={unBlock} />
+										</TableCell>
+									</SettingTableCell>
+								</TableRow>
+							))}
+						</TableBulkRow>
+					</Table>
+				</Body>
+			</CompactRequestCard>
+		);
+	}
 };
 
 export default Blocked;
