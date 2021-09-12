@@ -96,6 +96,33 @@ export const getFileName = (inputRef, fallbackLabel) => {
 	return formatLabel(fallbackLabel);
 };
 
+const MainWrapper = styled.div``;
+const ContentRow = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: end;
+	height: 40px;
+	margin-bottom: 15px;
+`;
+const DownLoadText = styled.span`
+	font-size: 12px;
+	line-height: 10px;
+	color: #121213;
+	font-weight: ${(props) => (props.bold ? 'bold' : '')};
+`;
+const LinkWrapper = styled.div`
+	display: flex;
+	justify-content: center;
+	width: 110px;
+`;
+const DownLoadLink = styled.a`
+	color: #7246d0;
+	font-size: 12px;
+	line-height: 10px;
+	font-weight: bold;
+	cursor: pointer;
+`;
+
 // #refactor_candidate
 const FileInput = forwardRef(
 	(
@@ -103,44 +130,54 @@ const FileInput = forwardRef(
 		ref
 	) => {
 		return (
-			<FileInputWrapper hasBorder={hasBorder} className={className}>
-				<FileContainer>
-					{typeof onClick === 'function' ? (
-						<FileInputLabel onClick={onClick}>{buttonLabel}</FileInputLabel>
-					) : (
-						<FileInputLabel>
-							{buttonLabel}
-							{!disableUpload ? (
-								<input ref={ref} type="file" style={{ display: 'none' }} {...rest} />
-							) : null}
-						</FileInputLabel>
-					)}
-					{showSelected ? (
-						<FileInputTitle>
-							{icon === 'download' ? (
-								<FileInputIcon src={fileDownloadIcon} />
-							) : (
-								<FileInputIcon src={fileUploadIcon} />
-							)}
-							<FileName>{getFileName(ref, formatLabel(label))}</FileName>
-						</FileInputTitle>
-					) : (
-						<FileInputTitle>
-							{icon === 'download' ? (
-								<FileInputIcon src={fileDownloadIcon} />
-							) : (
-								<FileInputIcon src={fileUploadIcon} />
-							)}
-							<FileName>{formatLabel(label)}</FileName>
-						</FileInputTitle>
-					)}
-				</FileContainer>
-				{error ? (
-					<ErrorContainer>
-						<Error>{error}</Error>
-					</ErrorContainer>
-				) : null}
-			</FileInputWrapper>
+			<MainWrapper>
+				<FileInputWrapper hasBorder={hasBorder} className={className}>
+					<FileContainer>
+						{typeof onClick === 'function' ? (
+							<FileInputLabel onClick={onClick}>{buttonLabel}</FileInputLabel>
+						) : (
+							<FileInputLabel>
+								{buttonLabel}
+								{!disableUpload ? (
+									<input ref={ref} type="file" style={{ display: 'none' }} {...rest} />
+								) : null}
+							</FileInputLabel>
+						)}
+						{showSelected ? (
+							<FileInputTitle>
+								{icon === 'download' ? (
+									<FileInputIcon src={fileDownloadIcon} />
+								) : (
+									<FileInputIcon src={fileUploadIcon} />
+								)}
+								<FileName>{getFileName(ref, formatLabel(label))}</FileName>
+							</FileInputTitle>
+						) : (
+							<FileInputTitle>
+								{icon === 'download' ? (
+									<FileInputIcon src={fileDownloadIcon} />
+								) : (
+									<FileInputIcon src={fileUploadIcon} />
+								)}
+								<FileName>{formatLabel(label)}</FileName>
+							</FileInputTitle>
+						)}
+					</FileContainer>
+					{error ? (
+						<ErrorContainer>
+							<Error>{error}</Error>
+						</ErrorContainer>
+					) : null}
+				</FileInputWrapper>
+				<ContentRow>
+					<DownLoadText>
+						Don’t know how to make your Z-papaer? <DownLoadText bold>download the sample</DownLoadText>
+					</DownLoadText>
+					<LinkWrapper>
+						<DownLoadLink>DownLoad</DownLoadLink>
+					</LinkWrapper>
+				</ContentRow>
+			</MainWrapper>
 		);
 	}
 );
