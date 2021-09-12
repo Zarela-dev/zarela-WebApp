@@ -37,22 +37,22 @@ export const unBlockAddress = (dispatch, publicKey) => {
 	});
 };
 
-export const hideAddress = (dispatch, publicKey, orderId) => {
+export const hideAddress = (dispatch, publicKey, requestId) => {
 	dispatch({
 		type: actionTypes.HIDE_ADDRESS,
 		payload: {
 			publicKey,
-			orderId,
+			requestId,
 		},
 	});
 };
 
-export const unHideAddress = (dispatch, publicKey, orderId) => {
+export const unHideAddress = (dispatch, publicKey, requestId) => {
 	dispatch({
 		type: actionTypes.UNHIDE_ADDRESS,
 		payload: {
 			publicKey,
-			orderId,
+			requestId,
 		},
 	});
 };

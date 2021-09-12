@@ -2,7 +2,6 @@ import React, { useReducer, useEffect } from 'react';
 import { actionTypes } from './actionTypes';
 import * as lockr from 'lockr';
 import _ from 'lodash';
-import { addContact, removeContact } from './actions';
 import { useDeepCompareEffect } from 'use-deep-compare';
 
 const appInitialState = {
@@ -58,9 +57,9 @@ const LocalStorageProvider = ({ children }) => {
 			}
 
 			case actionTypes.HIDE_ADDRESS: {
-				const { publicKey, orderId } = action.payload;
+				const { publicKey, requestId } = action.payload;
 				const requestIdSet = new Set(
-					state.hideList[publicKey] ? [...state.hideList[publicKey], orderId] : [orderId]
+					state.hideList[publicKey] ? [...state.hideList[publicKey], requestId] : [requestId]
 				);
 				return {
 					...state,
@@ -72,8 +71,8 @@ const LocalStorageProvider = ({ children }) => {
 			}
 
 			case actionTypes.UNHIDE_ADDRESS: {
-				const { publicKey, orderId } = action.payload;
-				let hideList = state.hideList[publicKey].filter((item) => item !== orderId);
+				const { publicKey, requestId } = action.payload;
+				let hideList = state.hideList[publicKey].filter((item) => item !== requestId);
 				return {
 					...state,
 					hideList: {
