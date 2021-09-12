@@ -101,7 +101,7 @@ const ContentRow = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: end;
-	height: 40px;
+	padding: 23px 0;
 	margin-bottom: 15px;
 `;
 const DownLoadText = styled.span`
@@ -126,7 +126,20 @@ const DownLoadLink = styled.a`
 // #refactor_candidate
 const FileInput = forwardRef(
 	(
-		{ disableUpload, className, hasBorder, showSelected, value, buttonLabel, icon, onClick, error, label, ...rest },
+		{
+			disableUpload,
+			className,
+			hasBorder,
+			downLoadLink,
+			showSelected,
+			value,
+			buttonLabel,
+			icon,
+			onClick,
+			error,
+			label,
+			...rest
+		},
 		ref
 	) => {
 		return (
@@ -169,14 +182,16 @@ const FileInput = forwardRef(
 						</ErrorContainer>
 					) : null}
 				</FileInputWrapper>
-				<ContentRow>
-					<DownLoadText>
-						Don’t know how to make your Z-papaer? <DownLoadText bold>download the sample</DownLoadText>
-					</DownLoadText>
-					<LinkWrapper>
-						<DownLoadLink>DownLoad</DownLoadLink>
-					</LinkWrapper>
-				</ContentRow>
+				{downLoadLink && (
+					<ContentRow>
+						<DownLoadText>
+							Don’t know how to make your Z-papaer? <DownLoadText bold>download the sample</DownLoadText>
+						</DownLoadText>
+						<LinkWrapper>
+							<DownLoadLink>DownLoad</DownLoadLink>
+						</LinkWrapper>
+					</ContentRow>
+				)}
 			</MainWrapper>
 		);
 	}

@@ -55,8 +55,7 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 	const { appState, dispatch } = useContext(mainContext);
 	const [prevDataFetched, setPrevDataFetched] = useState(false);
 
-
-	const initialValues = async() => {
+	const initialValues = async () => {
 		const FormPrevData = appState.oldDataForm;
 		if (FormPrevData !== undefined && !prevDataFetched) {
 			const nonEmptyValues = Object.values(FormPrevData).filter((item) => {
@@ -67,17 +66,19 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 			});
 			if (nonEmptyValues.length) {
 				setPrevDataFetched(true);
-				FormPrevData.title !== '' && await formik.setFieldValue('title', FormPrevData.title);
-				FormPrevData.desc !== '' && await formik.setFieldValue('desc', FormPrevData.desc);
-				FormPrevData.angelTokenPay !== '' && await formik.setFieldValue('angelTokenPay', FormPrevData.angelTokenPay);
+				FormPrevData.title !== '' && (await formik.setFieldValue('title', FormPrevData.title));
+				FormPrevData.desc !== '' && (await formik.setFieldValue('desc', FormPrevData.desc));
+				FormPrevData.angelTokenPay !== '' &&
+					(await formik.setFieldValue('angelTokenPay', FormPrevData.angelTokenPay));
 				FormPrevData.laboratoryTokenPay !== '' &&
-					await formik.setFieldValue('laboratoryTokenPay', FormPrevData.laboratoryTokenPay);
-				FormPrevData.instanceCount !== '' && await formik.setFieldValue('instanceCount', FormPrevData.instanceCount);
+					(await formik.setFieldValue('laboratoryTokenPay', FormPrevData.laboratoryTokenPay));
+				FormPrevData.instanceCount !== '' &&
+					(await formik.setFieldValue('instanceCount', FormPrevData.instanceCount));
 				FormPrevData.category &&
 					FormPrevData.category.length > 0 &&
-					await formik.setFieldValue('category', FormPrevData.category);
+					(await formik.setFieldValue('category', FormPrevData.category));
 				FormPrevData.category && setSelectedOption(FormPrevData.category.map((item) => item));
-				FormPrevData.terms && await formik.setFieldValue('terms', FormPrevData.terms);
+				FormPrevData.terms && (await formik.setFieldValue('terms', FormPrevData.terms));
 				formik.validateForm();
 			}
 		}
@@ -99,7 +100,6 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 			});
 		}
 	}, [formik.values]);
-
 
 	const estimateFeeHandler = (target, values) => {
 		let gas = +appState.gas.average / 10; //Gwei
@@ -232,6 +232,7 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 
 				<FileInput
 					hasBorder={false}
+					downLoadLink={true}
 					showSelected
 					buttonLabel="Select Files"
 					label={'Upload your Zpaper here'}
