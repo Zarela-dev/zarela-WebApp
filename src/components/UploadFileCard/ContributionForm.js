@@ -43,7 +43,7 @@ const RewardGainerLabel = styled.p`
 	font-size: 16px;
 	font-weight: ${(props) => (props.active ? 700 : 400)};
 	color: ${(props) => (props.active ? '#D13ADE' : props.theme.textPrimary)};
-	margin-top: ${(props) => props.theme.spacing(2)}
+	margin-top: ${(props) => props.theme.spacing(2)};
 `;
 
 const RewardGainerItem = styled.div`
@@ -58,6 +58,18 @@ const Box = styled.div`
 	display: ${(props) => (props.show ? 'block' : 'none')};
 `;
 const Form = styled.form``;
+
+const RewardGainerDescription = styled.p`
+	color: #212121;
+	margin: 4px auto 19px auto;
+	font-size: 18px;
+	font-weight: bold;
+	width: 60%;
+
+	@media (max-width: 767px) {
+		width: 80%;
+	}
+`;
 
 const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref) => {
 	const addressRegex = new RegExp(/^0x[a-fA-F0-9]{40}$/);
@@ -187,6 +199,7 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 				/>
 			</Box>
 			<Box show={formik.values.step == 3}>
+				<RewardGainerDescription>Which contributor would you like to gain the reward?</RewardGainerDescription>
 				<RewardGainerWrapper>
 					<RewardGainerItem
 						active={formik.values.rewardGainer === 'angel'}
