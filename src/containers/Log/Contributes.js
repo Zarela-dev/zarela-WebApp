@@ -159,7 +159,7 @@ const Contributes = (props) => {
 		) : requests.length === 0 ? (
 			<NoRequestsFound message={message} />
 		) : (
-			requests.map((request) => <LogCardMobile key={request.requestID} data={request} />)
+			requests.map((request) => <LogCardMobile key={request.requestID} account={account} data={request} />)
 		);
 	return isLoading ? (
 		[1, 2, 3].map((index) => {

@@ -292,6 +292,8 @@ export const MobileBiobitValue = styled(BiobitValue)`
 export const MobileRow = styled(Row)`
 	display: flex;
 	align-items: center;
+	flex: ${(props) => (props.type === 'role' ? '0 0 16%' : '')};
+	margin-left: ${(props) => props.ml ?? '0'};
 `;
 
 export const MobileBody = styled(Body)``;
@@ -350,12 +352,18 @@ const RoleIcon = styled.img`
 	box-sizing: content-box;
 `;
 
+const RoleIconMobile = styled.img`
+	width: 24px;
+	padding: 0 ${(props) => props.theme.spacing(1.5)};
+	box-sizing: content-box;
+`;
+
 export const RoleLabel = styled.p`
 	font-size: 16px;
 	line-height: 2;
 `;
 
-export const HubIcon = styled(RoleIcon).attrs(() => {
+export const HubIcon = styled(RoleIcon).attrs((props) => {
 	return {
 		src: hubIcon,
 	};
@@ -367,6 +375,11 @@ export const AngelIcon = styled(RoleIcon).attrs(() => {
 	};
 })`
 	/* width: 30px; */
+`;
+
+export const MobileContributorIcon = styled.img`
+	height: 22px;
+	margin-left: 10px;
 `;
 
 export const IconListWrapper = styled.div`
@@ -383,4 +396,19 @@ export const IconListWrapper = styled.div`
 	& > ${RoleIcon}:last-child {
 		padding-right: 0;
 	}
+`;
+
+export const MobileRoleText = styled.span`
+	color: #121213;
+	font-size: 12px;
+	line-height: 16px;
+	white-space: nowrap;
+`;
+
+export const MobileVerticalDivider = styled.div`
+	height: 20px;
+	width: 1px;
+	border: none;
+	background: #c4c4c4;
+	margin: 0 10px;
 `;
