@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { SmallCheckbox } from './Elements/Checkbox';
 import downloadIcon from '../assets/icons/download.svg';
@@ -7,6 +7,8 @@ import { Scrollbar } from './Elements/Scrollbar';
 import { timeSince, CopyableText } from '../utils';
 import publicKeyIcon from '../assets/icons/public-key.svg';
 import confirmIcon from '../assets/icons/confirmed.svg';
+import caretDownIcon from '../assets/icons/caret-down.svg';
+import caretUpIcon from '../assets/icons/caret-up.svg';
 
 const Table = styled.div`
 	display: flex;
@@ -72,11 +74,32 @@ const CustomCheckbox = styled(SmallCheckbox)`
 `;
 
 const FilesListWrapper = styled.div`
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	padding: ${(props) => props.theme.spacing(1)};
 	margin-bottom: ${(props) => props.theme.spacing(2)};
 	height: 100%;
+`;
+
+const CollapseIcon = styled.img`
+	position: absolute;
+	right: 16px;
+	top: 10px;
+	width: 24px;
+`;
+
+const CollapsedFilesListWrapper = styled(FilesListWrapper)`
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	align-items: center;
+	margin: 0;
+`;
+
+const CollapsedLabel = styled.p`
+	font-size: 14px;
+	line-height: 20px;
 `;
 
 const FilesList = styled.div`
@@ -196,6 +219,8 @@ const RequestFilesTable = ({
 	changeAll,
 	signalDownloadHandler,
 }) => {
+	const [isExpanded, setExpanded] = useState(false);
+
 	return (
 		<Table>
 			<Row>
@@ -253,9 +278,9 @@ const RequestFilesTable = ({
 						</CopyableText>
 					</CellWrapper>
 					<CellWrapper flex={1}>
-						{true ? (
+						{isExpanded ? (
 							<FilesListWrapper>
-								<FilesTableHeader>
+								<FilesTableHeader onClick={() => setExpanded(false)}>
 									<FilesTableHeaderCol flex={3}>
 										<FilesTableHeaderTitle>{`There are ${data[contributorAddress].length} files available`}</FilesTableHeaderTitle>
 									</FilesTableHeaderCol>
@@ -263,6 +288,7 @@ const RequestFilesTable = ({
 									<FilesTableHeaderCol flex={'1 0 62px'}>
 										<FilesTableHeaderTitle>Date</FilesTableHeaderTitle>
 									</FilesTableHeaderCol>
+									<CollapseIcon src={caretUpIcon} />
 								</FilesTableHeader>
 								<FilesList>
 									{data[contributorAddress].map(
@@ -288,16 +314,18 @@ const RequestFilesTable = ({
 															/>
 														)}
 														<FileName>
-															{
-																originalIndex +
-																	'.' +
-																	ipfsHash +
-																	`  (File #${fileIndex + 1})`
-															}
+															{originalIndex +
+																'.' +
+																ipfsHash +
+																`  (File #${fileIndex + 1})`}
 														</FileName>
 													</FileItemCol>
 													<FileItemCol>
-														<DownloadButton onClick={() => signalDownloadHandler(ipfsHash, AesEncryptedKey)}>
+														<DownloadButton
+															onClick={() =>
+																signalDownloadHandler(ipfsHash, AesEncryptedKey)
+															}
+														>
 															<DownloadButtonImage src={downloadIcon} />
 														</DownloadButton>
 													</FileItemCol>
@@ -311,9 +339,12 @@ const RequestFilesTable = ({
 								</FilesList>
 							</FilesListWrapper>
 						) : (
-							<FilesListWrapper>
-								there are {data[contributorAddress].length} files available
-							</FilesListWrapper>
+							<CollapsedFilesListWrapper onClick={() => setExpanded(true)}>
+								<CollapsedLabel>
+									there are {data[contributorAddress].length} files available
+								</CollapsedLabel>
+								<CollapseIcon src={caretDownIcon} />
+							</CollapsedFilesListWrapper>
 						)}
 					</CellWrapper>
 				</Row>
