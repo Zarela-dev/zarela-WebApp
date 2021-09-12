@@ -219,7 +219,7 @@ const RequestFilesTable = ({
 	changeAll,
 	signalDownloadHandler,
 }) => {
-	const [isExpanded, setExpanded] = useState(false);
+	const [isExpanded, setExpanded] = useState(null);
 
 	return (
 		<Table>
@@ -278,7 +278,7 @@ const RequestFilesTable = ({
 						</CopyableText>
 					</CellWrapper>
 					<CellWrapper flex={1}>
-						{isExpanded ? (
+						{(isExpanded === null && index === 0) || isExpanded === contributorAddress ? (
 							<FilesListWrapper>
 								<FilesTableHeader onClick={() => setExpanded(false)}>
 									<FilesTableHeaderCol flex={3}>
@@ -339,7 +339,7 @@ const RequestFilesTable = ({
 								</FilesList>
 							</FilesListWrapper>
 						) : (
-							<CollapsedFilesListWrapper onClick={() => setExpanded(true)}>
+							<CollapsedFilesListWrapper onClick={() => setExpanded(contributorAddress)}>
 								<CollapsedLabel>
 									there are {data[contributorAddress].length} files available
 								</CollapsedLabel>
