@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import logo from '../../assets/icons/logo.png';
 import home from '../../assets/icons/home.svg';
+import setting from '../../assets/icons/setting.svg';
 import inbox from '../../assets/icons/inbox.svg';
 import user from '../../assets/icons/user.svg';
 import wallet from '../../assets/icons/wallet.svg';
@@ -37,10 +38,8 @@ const NavItem = styled(Link)`
 	align-content: center;
 	justify-content: center;
 	text-decoration: none;
-	margin-right: ${(props) =>
-		props.isMobile ? props.theme.spacing(0) : props.theme.spacing(3)};
-	margin-left: ${(props) =>
-		props.isMobile ? props.theme.spacing(2) : props.theme.spacing(3)};
+	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(0) : props.theme.spacing(2.5))};
+	margin-left: ${(props) => (props.isMobile ? props.theme.spacing(2) : props.theme.spacing(2.5))};
 	outline: none !important;
 `;
 
@@ -70,8 +69,7 @@ const NavIcon = styled.img`
 const Logo = styled.img`
 	height: 65px;
 	margin-left: 20px;
-	margin-right: ${(props) =>
-		props.isMobile ? props.theme.spacing(1) : props.theme.spacing(4)};
+	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(1) : props.theme.spacing(4))};
 `;
 
 const SubmitRequestButton = styled(Link)`
@@ -88,8 +86,7 @@ const HeaderWrapper = styled.header`
 	justify-content: space-between;
 	align-items: flex-end;
 	background: white;
-	margin-bottom: ${(props) =>
-		props.routeGroup === '' ? 0 : props.routeGroup === 'request' ? 0 : '130px'};
+	margin-bottom: ${(props) => (props.routeGroup === '' ? 0 : props.routeGroup === 'request' ? 0 : '130px')};
 `;
 
 const HeaderWrapperApp = styled(HeaderWrapper)`
@@ -99,12 +96,7 @@ const HeaderWrapperApp = styled(HeaderWrapper)`
 	padding: 0;
 	display: flex;
 	flex-direction: column;
-	margin-bottom: ${(props) =>
-		props.routeGroup === ''
-			? '70px'
-			: props.routeGroup === 'request'
-			? 0
-			: '100px'};
+	margin-bottom: ${(props) => (props.routeGroup === '' ? '70px' : props.routeGroup === 'request' ? 0 : '100px')};
 `;
 
 const NavBarRow = styled.div`
@@ -116,8 +108,7 @@ const NavBarRow = styled.div`
 	height: 100%;
 	background: #fff;
 	height: ${(props) => (props.isMobile ? '70px' : '100px')};
-	padding: ${(props) =>
-		props.isMobile ? '10px 18px' : `25px calc((100vw - 1255px) / 2)`};
+	padding: ${(props) => (props.isMobile ? '10px 18px' : `25px calc((100vw - 1255px) / 2)`)};
 `;
 
 const LogoApp = styled(Logo)`
@@ -295,18 +286,14 @@ export default function Header({ isMobile }, props) {
 				<HeaderWrapperApp routeGroup={routeGroup} isMobile={appState.isMobile}>
 					<NavBarRow isMobile={appState.isMobile}>
 						<RightMenu>
-							<Link to='/'>
+							<Link to="/">
 								<LogoApp src={logo} />
 							</Link>
 						</RightMenu>
 
 						<LeftMenu>
 							<NavItem>
-								<NavIcon
-									src={bell}
-									height='20px'
-									onClick={() => setIsNotificationMenuOpen(true)}
-								/>
+								<NavIcon src={bell} height="20px" onClick={() => setIsNotificationMenuOpen(true)} />
 								{appState.notificationCount !== 0 && (
 									<NotificationBadge isMobile={appState.isMobile}>
 										{appState.notificationCount}
@@ -335,8 +322,8 @@ export default function Header({ isMobile }, props) {
 					<BoxWrapper>
 						<Box
 							className={classes.root}
-							as='header'
-							mt='-1em'
+							as="header"
+							mt="-1em"
 							sx={{
 								position: 'sticky',
 								transform: sticky ? 'translateY(83px)' : 'translateY(0)',
@@ -348,7 +335,7 @@ export default function Header({ isMobile }, props) {
 							{routeGroup === '' ? (
 								<TitleSection>
 									<Title>Recent requests</Title>
-									<SubmitRequestButtonSubHeader to='/request/create'>
+									<SubmitRequestButtonSubHeader to="/request/create">
 										New Request
 									</SubmitRequestButtonSubHeader>
 								</TitleSection>
@@ -373,6 +360,10 @@ export default function Header({ isMobile }, props) {
 								</WalletTitlebar>
 							) : routeGroup === 'inbox' ? (
 								<TitleBar>Inbox</TitleBar>
+							) : routeGroup === 'setting' ? (
+								<TitleBar>
+									<Title>Setting</Title>
+								</TitleBar>
 							) : null}
 						</Box>
 					</BoxWrapper>
@@ -384,36 +375,31 @@ export default function Header({ isMobile }, props) {
 			<HeaderWrapper routeGroup={routeGroup} isMobile={appState.isMobile}>
 				<NavBarRow isMobile={appState.isMobile}>
 					<RightMenu>
-						<Link to='/'>
+						<Link to="/">
 							<Logo isMobile={appState.isMobile} src={logo} />
 						</Link>
-						<NavItem isMobile={appState.isMobile} to='/'>
+						<NavItem isMobile={appState.isMobile} to="/">
 							<NavIcon src={home} />
 							<NavLink>Home</NavLink>
 						</NavItem>
-						<NavItem isMobile={appState.isMobile} to='/inbox'>
+						<NavItem isMobile={appState.isMobile} to="/inbox">
 							<NavIcon src={inbox} />
 							<NavLink>Inbox</NavLink>
 						</NavItem>
-						<NavItem isMobile={appState.isMobile} to='/log/my_requests'>
+						<NavItem isMobile={appState.isMobile} to="/log/my_requests">
 							<NavIcon src={user} />
 							<NavLink>Log</NavLink>
 						</NavItem>
-						<NavItem isMobile={appState.isMobile} to='/wallet/account'>
+						<NavItem isMobile={appState.isMobile} to="/wallet/account">
 							<NavIcon src={wallet} />
 							<NavLink>Wallet</NavLink>
 							<ChainBadge>Ropsten</ChainBadge>
 						</NavItem>
 					</RightMenu>
 					<LeftMenu>
-						<SubmitRequestButton to='/request/create'>
-							New Request
-						</SubmitRequestButton>
+						<SubmitRequestButton to="/request/create">New Request</SubmitRequestButton>
 						<NavItem>
-							<NavIcon
-								src={bell}
-								onClick={() => setIsNotificationMenuOpen(true)}
-							/>
+							<NavIcon src={bell} onClick={() => setIsNotificationMenuOpen(true)} />
 							{appState.notificationCount !== 0 && (
 								<NotificationBadge isMobile={appState.isMobile}>
 									{appState.notificationCount}
@@ -424,15 +410,16 @@ export default function Header({ isMobile }, props) {
 							<NavIcon
 								src={help}
 								onClick={() => {
-									localStorage.removeItem(
-										'guide/' + location.pathname.split('/')[1]
-									);
+									localStorage.removeItem('guide/' + location.pathname.split('/')[1]);
 									dispatch({
 										type: actionTypes.SET_GUIDE_IS_OPEN,
 										payload: true,
 									});
 								}}
 							/>
+						</NavItem>
+						<NavItem isMobile={appState.isMobile} to="/setting/contacts">
+							<NavIcon src={setting} />
 						</NavItem>
 						<NotificationMenu
 							appState={appState}
@@ -447,8 +434,8 @@ export default function Header({ isMobile }, props) {
 				<BoxWrapper>
 					<Box
 						className={classes.root}
-						as='header'
-						mt='-1em'
+						as="header"
+						mt="-1em"
 						sx={{
 							position: 'sticky',
 							transform: sticky ? 'translateY(110px)' : 'translateY(0)',
@@ -478,6 +465,10 @@ export default function Header({ isMobile }, props) {
 							</WalletTitlebar>
 						) : routeGroup === 'inbox' ? (
 							<TitleBar>Inbox</TitleBar>
+						) : routeGroup === 'setting' ? (
+							<TitleBar>
+								<Title>Setting</Title>
+							</TitleBar>
 						) : null}
 					</Box>
 				</BoxWrapper>
