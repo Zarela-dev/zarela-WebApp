@@ -86,11 +86,6 @@ const LocalStorageProvider = ({ children }) => {
 		}
 	}, appInitialState);
 
-	useDeepCompareEffect(() => {
-		if (!_.isEmpty(localState)) lockr.set('contacts_list', localState);
-		else lockr.flush('contacts_list');
-	}, [localState]);
-
 	useEffect(() => {
 		let localStorageData = lockr.get('contacts_list');
 		dispatch({
@@ -98,6 +93,10 @@ const LocalStorageProvider = ({ children }) => {
 			payload: localStorageData,
 		});
 	}, []);
+
+	useDeepCompareEffect(() => {
+		lockr.set('contacts_list', localState);
+	}, [localState]);
 
 	return (
 		<localStorageContext.Provider

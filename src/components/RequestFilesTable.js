@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { SmallCheckbox } from './Elements/Checkbox';
 import downloadIcon from '../assets/icons/download.svg';
 import { Spacer } from './Elements/Spacer';
@@ -9,6 +9,7 @@ import publicKeyIcon from '../assets/icons/public-key.svg';
 import confirmIcon from '../assets/icons/confirmed.svg';
 import caretDownIcon from '../assets/icons/caret-down.svg';
 import caretUpIcon from '../assets/icons/caret-up.svg';
+import WalletAddress from './WalletAddress';
 
 const Table = styled.div`
 	display: flex;
@@ -39,7 +40,7 @@ const Row = styled.section`
 	}
 
 	${CellWrapper}:nth-of-type(2) {
-		flex: 0 0 420px;
+		flex: 0 0 500px;
 	}
 
 	${CellWrapper}:nth-of-type(3) {
@@ -47,7 +48,7 @@ const Row = styled.section`
 	}
 `;
 
-const Cell = styled.div`
+const CellStyles = css`
 	display: flex;
 	align-items: center;
 	min-height: 48px;
@@ -61,6 +62,14 @@ const Cell = styled.div`
 	${CellWrapper}:not(:last-child) & {
 		border-right: 1px solid #3c87aa;
 	}
+`;
+
+const Cell = styled.div`
+	${CellStyles};
+`;
+
+const Address = styled(WalletAddress)`
+	${CellStyles};
 `;
 
 const PublicKeyIcon = styled.img`
@@ -270,12 +279,7 @@ const RequestFilesTable = ({
 						</Cell>
 					</CellWrapper>
 					<CellWrapper data-tour="inbox-two">
-						<CopyableText textToCopy={contributorAddress}>
-							<Cell pointer>
-								<PublicKeyIcon src={publicKeyIcon} />
-								{contributorAddress}
-							</Cell>
-						</CopyableText>
+						<Address publicKey={contributorAddress} pointer></Address>
 					</CellWrapper>
 					<CellWrapper flex={1}>
 						{(isExpanded === null && index === 0) || isExpanded === contributorAddress ? (
