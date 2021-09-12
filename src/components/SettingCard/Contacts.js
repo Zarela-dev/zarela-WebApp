@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import deleteIcon from '../../assets/icons/actionIcons/delete.svg';
 import edit from '../../assets/icons/actionIcons/edit.svg';
 import block from '../../assets/icons/actionIcons/block.svg';
+import { localStorageContext } from '../../state/localStorageProvider/LocalStoragePriveder';
+import { addContact, blockAddress, hideAddress, removeContact, unBlockAddress, unHideAddress } from '../../state/localStorageProvider/actions';
 
 import {
 	CompactRequestCard,
@@ -30,6 +32,9 @@ const ActionTitle = styled.span`
 `;
 
 const Contacts = ({ isMobile }) => {
+
+	const { localState , dispatch } = useContext(localStorageContext);
+
 	if (isMobile) {
 		return (
 			<>
@@ -41,6 +46,20 @@ const Contacts = ({ isMobile }) => {
 		return (
 			<CompactRequestCard>
 				<Body>
+					<div>
+						{/* <button onClick={() => addContact(dispatch , 'publickeyExmaple' , 'name' )}>add contact</button>
+						<button onClick={() => removeContact(dispatch , 'publickeyExmaple' )}>remove contact</button> */}
+						{/* <button onClick={() => blockAddress(dispatch , 'one')}>block contact</button>
+						<button onClick={() => blockAddress(dispatch , 'two')}>block contact</button>
+						<button onClick={() => unBlockAddress(dispatch , 'one' )}>unblock contact</button> */}
+						<button onClick={() => hideAddress(dispatch , 'one' , 2 )}>hide contact</button>
+						<button onClick={() => hideAddress(dispatch , 'one' , 2 )}>hide contact</button>
+						<button onClick={() => hideAddress(dispatch , 'one' , 3 )}>hide contact</button>
+						<button onClick={() => hideAddress(dispatch , 'one' , 3 )}>hide contact</button>
+						<button onClick={() => hideAddress(dispatch , 'one' , 3 )}>hide contact</button>
+						<button onClick={() => hideAddress(dispatch , 'one' , 2 )}>hide contact</button>
+						<button onClick={() => unHideAddress(dispatch , 'one' , 2 )}>unhide contact</button>
+						</div>
 					<Table>
 						<TableRow header>
 							<SettingTableCell flex="0 0 35%">
