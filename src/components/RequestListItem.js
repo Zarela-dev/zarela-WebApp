@@ -500,6 +500,7 @@ const RequestListItem = ({
 								isAllApproved={isAllApproved}
 								isAllChecked={isAllChecked}
 								changeAll={changeAll}
+								requestID={requestID}
 							/>
 						</Body>
 						<Footer>

@@ -227,6 +227,7 @@ const RequestFilesTable = ({
 	isAllApproved,
 	changeAll,
 	signalDownloadHandler,
+	requestID,
 }) => {
 	const [isExpanded, setExpanded] = useState(null);
 
@@ -279,7 +280,7 @@ const RequestFilesTable = ({
 						</Cell>
 					</CellWrapper>
 					<CellWrapper data-tour="inbox-two">
-						<Address publicKey={contributorAddress} pointer></Address>
+						<Address publicKey={contributorAddress} requestID={requestID} pointer></Address>
 					</CellWrapper>
 					<CellWrapper flex={1}>
 						{(isExpanded === null && index === 0) || isExpanded === contributorAddress ? (

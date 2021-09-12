@@ -88,10 +88,12 @@ const LocalStorageProvider = ({ children }) => {
 
 	useEffect(() => {
 		let localStorageData = lockr.get('contacts_list');
-		dispatch({
-			type: actionTypes.SET_LOCALSTATE,
-			payload: localStorageData,
-		});
+		if (localStorageData !== undefined) {
+			dispatch({
+				type: actionTypes.SET_LOCALSTATE,
+				payload: localStorageData,
+			});
+		}
 	}, []);
 
 	useDeepCompareEffect(() => {

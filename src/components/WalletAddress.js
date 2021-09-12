@@ -84,7 +84,7 @@ const SubmitButton = styled.button`
 	background: none;
 `;
 
-const WalletAddress = ({ className, publicKey, showIcons = true, children }) => {
+const WalletAddress = ({ className, publicKey, showIcons = true, requestID }) => {
 	const { dispatch, localState } = useContext(localStorageContext);
 	const { contacts } = localState;
 	const [alias, setAlias] = useState('');
@@ -132,6 +132,7 @@ const WalletAddress = ({ className, publicKey, showIcons = true, children }) => 
 									placeholder="Add your contact name"
 									name="alias"
 									value={alias}
+									autoFocus
 									onChange={(e) => setAlias(e.target.value)}
 								/>
 								<SubmitButton type="submit">
@@ -145,10 +146,10 @@ const WalletAddress = ({ className, publicKey, showIcons = true, children }) => 
 						<Icon src={contacts[publicKey] ? editContactIcon : addToContactIcon} />
 					</Action>
 				</Tooltip>
-				<Action>
+				<Action onClick={() => blockAddress(dispatch, publicKey)}>
 					<Icon src={blockIcon} />
 				</Action>
-				<Action>
+				<Action onClick={() => hideAddress(dispatch, publicKey, requestID)}>
 					<Icon src={unhideIcon} />
 				</Action>
 			</ActionsWrapper>
