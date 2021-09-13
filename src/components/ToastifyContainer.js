@@ -20,6 +20,7 @@ const CustomContainer = styled(ToastContainer)`
 		top: ${(props) => (props.containerId !== 'notify' ? '0' : props.isMobile ? '0' : '0')};
 		right: ${(props) => (props.containerId === 'notify' ? '-20px' : 'unset')};
 		height: fit-content;
+		width: calc(100% - 20px);
 	}
 	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		& .Toastify__toast {
