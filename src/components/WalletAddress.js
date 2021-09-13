@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { CopyableText, toast } from '../utils';
+import { CopyableText, toast, normalizeAddress } from '../utils';
 import styled from 'styled-components';
 import addToContactIcon from '../assets/icons/actionIcons/add-to-contact.svg';
 import blockIcon from '../assets/icons/actionIcons/block.svg';
@@ -91,7 +91,7 @@ const WalletAddress = ({ className, publicKey, showIcons = true, requestID }) =>
 	const [isTooltipOpen, setTooltipOpen] = useState(false);
 
 	useEffect(() => {
-		contacts[publicKey] && setAlias(contacts[publicKey]);
+		contacts[normalizeAddress(publicKey)] && setAlias(contacts[normalizeAddress(publicKey)]);
 	}, [contacts[publicKey]]);
 
 	return (
@@ -100,7 +100,9 @@ const WalletAddress = ({ className, publicKey, showIcons = true, requestID }) =>
 				<PublicKeyIcon src={publicKeyIcon} />
 				<CopyableText textToCopy={publicKey}>
 					<Address>
-						{contacts[publicKey] ? `${contacts[publicKey]} (${publicKey.substr(0, 12)}...)` : publicKey}
+						{contacts[normalizeAddress(publicKey)]
+							? `${contacts[normalizeAddress(publicKey)]} (${publicKey.substr(0, 12)}...)`
+							: publicKey}
 					</Address>
 				</CopyableText>
 			</AddressWrapper>
@@ -143,7 +145,7 @@ const WalletAddress = ({ className, publicKey, showIcons = true, requestID }) =>
 					}
 				>
 					<Action onClick={() => setTooltipOpen(true)}>
-						<Icon src={contacts[publicKey] ? editContactIcon : addToContactIcon} />
+						<Icon src={contacts[[normalizeAddress(publicKey)]] ? editContactIcon : addToContactIcon} />
 					</Action>
 				</Tooltip>
 				<Action onClick={() => blockAddress(dispatch, publicKey)}>
