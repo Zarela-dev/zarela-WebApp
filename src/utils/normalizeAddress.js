@@ -1,1 +1,1 @@
-export const normalizeAddress = (address) => address.toLowerCase();
+export const normalizeAddress = (address) => address && address.toLowerCase();
