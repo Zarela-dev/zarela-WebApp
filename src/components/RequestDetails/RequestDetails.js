@@ -52,8 +52,9 @@ const CustomFooter = styled(Footer)`
 `;
 
 const CustomBadgeRow = styled(BadgeRow)`
-	flex: 0;
+	flex: 1;
 	align-items: center;
+	justify-content: end;
 `;
 
 const DescriptionContainer = styled.div`
@@ -172,8 +173,10 @@ const RequestDetails = ({ setError, error, request }) => {
 						<Spacer />
 						<CustomBadgeRow>
 							<TokenIcon src={biobitIcon} />
-							<TokenValue>{+request.angelTokenPay + +request.laboratoryTokenPay}</TokenValue>
-							<ValueLabel>BBit</ValueLabel>
+							<TokenValue>{+request.angelTokenPay + +request.laboratoryTokenPay} BBit</TokenValue>
+							<ValueLabel>
+								({+request.angelTokenPay} A + {+request.laboratoryTokenPay} H)
+							</ValueLabel>
 							<BiobitToDollarValue noMargin>{`~ $ ${
 								+request.angelTokenPay + +request.laboratoryTokenPay
 							}`}</BiobitToDollarValue>
