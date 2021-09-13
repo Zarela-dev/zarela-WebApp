@@ -1,12 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import copyImage from '../../assets/icons/copy.svg';
-import {
-	timeSince,
-	convertToBiobit,
-	getInput,
-	CopyableText,
-} from '../../utils';
+import { timeSince, convertToBiobit, getInput, CopyableText } from '../../utils';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '../../components/Pagination';
@@ -20,7 +15,7 @@ const Wrapper = styled.div`
 
 const TransactionCard = styled.div`
 	border: 1px solid #c4c4c4;
-	border-left: 4px solid ${(props) => props.status};
+	${(props) => props.status !== null && `border-left: 4px solid ${props.status}`};
 	padding: 16px 14px;
 	margin: ${(props) => props.theme.spacing(2)} 0;
 	border-radius: 3px;
@@ -91,13 +86,7 @@ const useStyles = makeStyles({
 	},
 });
 
-const WalletTransactionsMobile = ({
-	isLoading,
-	account,
-	data,
-	props,
-	PAGE_SIZE,
-}) => {
+const WalletTransactionsMobile = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 	const [currentPage, setCurrentPage] = useState(1);
 
 	const currentTableData = useMemo(() => {
@@ -121,13 +110,13 @@ const WalletTransactionsMobile = ({
 								<TitleCol>
 									<SkeletonCol>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'80%'}
 											height={skeletonLineHeight}
 											className={classes.root}
 										/>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'60%'}
 											height={skeletonLineHeight}
 											className={classes.root}
@@ -137,19 +126,19 @@ const WalletTransactionsMobile = ({
 								<HashCol>
 									<SkeletonCol>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'100%'}
 											height={skeletonLineHeight}
 											className={classes.root}
 										/>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'100%'}
 											height={skeletonLineHeight}
 											className={classes.root}
 										/>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'80%'}
 											height={skeletonLineHeight}
 											className={classes.root}
@@ -159,7 +148,7 @@ const WalletTransactionsMobile = ({
 
 								<CopyableText>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={24}
 										height={skeletonLineHeight + 12}
 										className={classes.root}
@@ -170,7 +159,7 @@ const WalletTransactionsMobile = ({
 							<TransactionRow>
 								<TitleCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'65%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -178,7 +167,7 @@ const WalletTransactionsMobile = ({
 								</TitleCol>
 								<TextCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'45%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -188,7 +177,7 @@ const WalletTransactionsMobile = ({
 							<TransactionRow>
 								<TitleCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'70%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -197,13 +186,13 @@ const WalletTransactionsMobile = ({
 								<HashCol>
 									<SkeletonCol>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'100%'}
 											height={skeletonLineHeight}
 											className={classes.root}
 										/>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'75%'}
 											height={skeletonLineHeight}
 											className={classes.root}
@@ -212,7 +201,7 @@ const WalletTransactionsMobile = ({
 								</HashCol>
 								<CopyableText>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={24}
 										height={skeletonLineHeight + 12}
 										className={classes.root}
@@ -222,7 +211,7 @@ const WalletTransactionsMobile = ({
 							<TransactionRow>
 								<TitleCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'70%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -230,7 +219,7 @@ const WalletTransactionsMobile = ({
 								</TitleCol>
 								<TextCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'75%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -240,7 +229,7 @@ const WalletTransactionsMobile = ({
 							<TransactionRow>
 								<TitleCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'40%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -249,13 +238,13 @@ const WalletTransactionsMobile = ({
 								<HashCol>
 									<SkeletonCol>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'100%'}
 											height={skeletonLineHeight}
 											className={classes.root}
 										/>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'75%'}
 											height={skeletonLineHeight}
 											className={classes.root}
@@ -264,7 +253,7 @@ const WalletTransactionsMobile = ({
 								</HashCol>
 								<CopyableText>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={24}
 										height={skeletonLineHeight + 12}
 										className={classes.root}
@@ -274,7 +263,7 @@ const WalletTransactionsMobile = ({
 							<TransactionRow>
 								<TitleCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'70%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -282,7 +271,7 @@ const WalletTransactionsMobile = ({
 								</TitleCol>
 								<ValueCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'100%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -292,7 +281,7 @@ const WalletTransactionsMobile = ({
 							<TransactionRow>
 								<TitleCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'70%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -300,7 +289,7 @@ const WalletTransactionsMobile = ({
 								</TitleCol>
 								<ValueCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'20%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -313,10 +302,7 @@ const WalletTransactionsMobile = ({
 
 			{!isLoading &&
 				currentTableData.map((transaction, index) => (
-					<TransactionCard
-						key={index}
-						status={getStatusColor(getInput(transaction.input))}
-					>
+					<TransactionCard key={index} status={getStatusColor(getInput(transaction.input))}>
 						<TransactionRow>
 							<TitleCol></TitleCol>
 							<TextCol title>{getInput(transaction.input)}</TextCol>
@@ -341,10 +327,7 @@ const WalletTransactionsMobile = ({
 						</TransactionRow>
 						<TransactionRow>
 							<TitleCol>TXN fee</TitleCol>
-							<TextCol>
-								{(+transaction.gasUsed * +transaction.gasPrice) /
-									Math.pow(10, 18)}
-							</TextCol>
+							<TextCol>{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}</TextCol>
 						</TransactionRow>
 						<TransactionRow>
 							<TitleCol>To</TitleCol>
