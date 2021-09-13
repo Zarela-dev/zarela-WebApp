@@ -224,6 +224,7 @@ export const TableCell = styled.div`
 	width: 100%;
 	font-weight: normal;
 	cursor: ${(props) => (props.pointer ? 'pointer' : 'normal')};
+	color: ${(props) => (props.isBlocked ? '#D13ADE' : props.theme.textPrimary)};
 
 	${TableCellWrapper}:not(:last-child) & {
 		border-right: 1px solid rgba(60, 135, 170, 0.6);

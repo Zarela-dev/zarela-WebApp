@@ -1,9 +1,6 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import deleteIcon from '../../assets/icons/actionIcons/delete.svg';
-import edit from '../../assets/icons/actionIcons/edit.svg';
-import block from '../../assets/icons/actionIcons/block.svg';
-
+import { localStorageContext } from '../../state/localStorageProvider/LocalStoragePriveder';
 import {
 	CompactRequestCard,
 	Body,
@@ -14,22 +11,36 @@ import {
 	TableRow,
 	TableBulkRow,
 } from '../LogCards/Elements';
+import { normalizeAddress } from '../../utils';
 import MobileCard from './MobileCard';
+import AddContact from '../WalletAddress/AddContact';
+import BlockAddress from '../WalletAddress/BlockAddress';
+import DeleteContact from '../WalletAddress/DeleteContact';
 
 const SettingTableCell = styled(TableCellWrapper)`
 	flex: ${(props) => props.flex} !important;
 `;
 
-const ActionIcon = styled(StatusIcon)`
-	width: 22px;
-	margin: 0px calc((100% - (3 * 25px)) / 6);
+const EmptyMessage = styled.div`
+	padding: 0 ${(props) => props.theme.spacing(2)};
 `;
 
 const ActionTitle = styled.span`
 	margin: 0 9%;
 `;
 
+const Actions = styled.div`
+	width: 100%;
+	& > * {
+		width: 22px;
+		margin: 0px calc((100% - (3 * 25px)) / 6);
+	}
+`;
+
 const Contacts = ({ isMobile }) => {
+	const { localState } = useContext(localStorageContext);
+	const { contacts, blockList } = localState;
+
 	if (isMobile) {
 		return (
 			<>
@@ -47,7 +58,7 @@ const Contacts = ({ isMobile }) => {
 								<TableCell>Name</TableCell>
 							</SettingTableCell>
 							<SettingTableCell flex="0 0 40%">
-								<TableCell>public key</TableCell>
+								<TableCell>Public key</TableCell>
 							</SettingTableCell>
 							<SettingTableCell flex="0 0 25%">
 								<TableCell>
@@ -58,23 +69,32 @@ const Contacts = ({ isMobile }) => {
 							</SettingTableCell>
 						</TableRow>
 						<TableBulkRow>
-							{[1, 2, 3, 4, 5, 6].map((item) => (
-								<TableRow key={1}>
-									<SettingTableCell flex="0 0 35%">
-										<TableCell> Hub- Dr.Mohiri </TableCell>
-									</SettingTableCell>
-									<SettingTableCell flex="0 0 40%">
-										<TableCell>WEERTYUNBGWEERTYUNBGWEERTYUNBG</TableCell>
-									</SettingTableCell>
-									<SettingTableCell flex="0 0 25%">
-										<TableCell>
-											<ActionIcon src={block} />
-											<ActionIcon src={deleteIcon} />
-											<ActionIcon src={edit} />
-										</TableCell>
-									</SettingTableCell>
-								</TableRow>
-							))}
+							{Object.keys(contacts).length ? (
+								Object.keys(contacts).map((address) => {
+									const isBlocked = blockList.includes(normalizeAddress(address));
+									return (
+										<TableRow key={1}>
+											<SettingTableCell flex="0 0 35%">
+												<TableCell isBlocked={isBlocked}> {contacts[address]} </TableCell>
+											</SettingTableCell>
+											<SettingTableCell flex="0 0 40%">
+												<TableCell isBlocked={isBlocked}> {address} </TableCell>
+											</SettingTableCell>
+											<SettingTableCell flex="0 0 25%">
+												<TableCell>
+													<Actions>
+														<BlockAddress publicKey={address} />
+														<DeleteContact publicKey={address} />
+														<AddContact publicKey={address} edit disabled={isBlocked} />
+													</Actions>
+												</TableCell>
+											</SettingTableCell>
+										</TableRow>
+									);
+								})
+							) : (
+								<EmptyMessage>no contacts</EmptyMessage>
+							)}
 						</TableBulkRow>
 					</Table>
 				</Body>

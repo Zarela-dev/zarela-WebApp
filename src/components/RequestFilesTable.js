@@ -250,7 +250,6 @@ const RequestFilesTable = ({
 
 	//filter hidden
 	Object.keys(data).forEach((address) => {
-		debugger
 		if (hideList[address.toLowerCase()]?.includes(requestID.toString())) delete renderableData[address];
 	});
 
