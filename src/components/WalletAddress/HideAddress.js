@@ -4,10 +4,20 @@ import { hideAddress, unHideAddress } from '../../state/localStorageProvider/act
 import { localStorageContext } from '../../state/localStorageProvider/LocalStoragePriveder';
 import hideIcon from '../../assets/icons/actionIcons/hide.svg';
 import unhideIcon from '../../assets/icons/actionIcons/unHide.svg';
+import { normalizeAddress, toast } from '../../utils';
 
-const HideAddress = ({ publicKey, requestID, justUnhide }) => {
-	const { dispatch } = useContext(localStorageContext);
+const HideAddress = ({ publicKey, requestID }) => {
+	const { dispatch, localState } = useContext(localStorageContext);
+	const { hideList } = localState;
 
+	debugger
+	if (hideList[normalizeAddress(publicKey)])
+		if (hideList[normalizeAddress(publicKey)].includes(requestID.toString()))
+			return (
+				<Action onClick={() => unHideAddress(dispatch, publicKey, requestID)}>
+					<Icon src={hideIcon} />
+				</Action>
+			);
 	return (
 		<Action onClick={() => hideAddress(dispatch, publicKey, requestID)}>
 			<Icon src={unhideIcon} />

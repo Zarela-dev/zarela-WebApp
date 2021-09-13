@@ -10,6 +10,7 @@ import {
 	Table,
 	TableCellWrapper,
 	TableCell,
+	EmptyMessage,
 	TableRow,
 	TableBulkRow,
 } from '../LogCards/Elements';
@@ -47,21 +48,25 @@ const Blocked = ({ isMobile }) => {
 							</SettingTableCell>
 						</TableRow>
 						<TableBulkRow>
-							{blockList.map((blockedAddress) => (
-								<TableRow key={blockedAddress}>
-									<SettingTableCell flex="1 0 auto">
-										<TableCell>{blockedAddress}</TableCell>
-									</SettingTableCell>
-									<SettingTableCell flex="0 0 20%">
-										<TableCell> {contacts[normalizeAddress(blockedAddress)] || '-'}</TableCell>
-									</SettingTableCell>
-									<SettingTableCell flex="0 0 10%">
-										<TableCell>
-											<BlockAddress publicKey={blockedAddress} />
-										</TableCell>
-									</SettingTableCell>
-								</TableRow>
-							))}
+							{blockList.length ? (
+								blockList.map((blockedAddress) => (
+									<TableRow key={blockedAddress}>
+										<SettingTableCell flex="1 0 auto">
+											<TableCell>{blockedAddress}</TableCell>
+										</SettingTableCell>
+										<SettingTableCell flex="0 0 20%">
+											<TableCell> {contacts[normalizeAddress(blockedAddress)] || '-'}</TableCell>
+										</SettingTableCell>
+										<SettingTableCell flex="0 0 10%">
+											<TableCell>
+												<BlockAddress publicKey={blockedAddress} />
+											</TableCell>
+										</SettingTableCell>
+									</TableRow>
+								))
+							) : (
+								<EmptyMessage>You have no blocked addresses</EmptyMessage>
+							)}
 						</TableBulkRow>
 					</Table>
 				</Body>

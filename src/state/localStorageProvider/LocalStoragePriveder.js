@@ -73,13 +73,24 @@ const LocalStorageProvider = ({ children }) => {
 			case actionTypes.UNHIDE_ADDRESS: {
 				const { publicKey, requestId } = action.payload;
 				let hideList = state.hideList[publicKey].filter((item) => item !== requestId);
-				return {
-					...state,
-					hideList: {
-						...state.hideList,
-						[publicKey]: [...hideList],
-					},
-				};
+				if (hideList.length) {
+					return {
+						...state,
+						hideList: {
+							...state.hideList,
+							[publicKey]: [...hideList],
+						},
+					};
+				} else {
+					const _hideList = { ...state.hideList };
+					delete _hideList[publicKey];
+					return {
+						...state,
+						hideList: {
+							..._hideList,
+						},
+					};
+				}
 			}
 			default:
 				return state;

@@ -385,3 +385,7 @@ export const IconListWrapper = styled.div`
 		padding-right: 0;
 	}
 `;
+
+export const EmptyMessage = styled.div`
+	padding: 0 ${(props) => props.theme.spacing(2)};
+`;

@@ -8,6 +8,7 @@ import {
 	TableCellWrapper,
 	TableCell,
 	TableRow,
+	EmptyMessage,
 	TableBulkRow,
 } from '../LogCards/Elements';
 import { normalizeAddress } from '../../utils';
@@ -18,10 +19,6 @@ import DeleteContact from '../WalletAddress/DeleteContact';
 
 const SettingTableCell = styled(TableCellWrapper)`
 	flex: ${(props) => props.flex} !important;
-`;
-
-const EmptyMessage = styled.div`
-	padding: 0 ${(props) => props.theme.spacing(2)};
 `;
 
 const ActionTitle = styled.span`
@@ -92,7 +89,7 @@ const Contacts = ({ isMobile }) => {
 									);
 								})
 							) : (
-								<EmptyMessage>no contacts</EmptyMessage>
+								<EmptyMessage>You have no contacts</EmptyMessage>
 							)}
 						</TableBulkRow>
 					</Table>
