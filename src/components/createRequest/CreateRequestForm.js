@@ -265,7 +265,7 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 					Submit
 				</SubmitButton>
 			</Form>
-			<FeeEstimation gas={gas} fee={estimateEthFee} />
+			{/* <FeeEstimation gas={gas} fee={estimateEthFee} /> */}
 		</FormWrapper>
 	);
 });
