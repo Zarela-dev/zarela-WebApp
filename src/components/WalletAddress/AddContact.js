@@ -16,7 +16,7 @@ const AddContact = ({ publicKey, edit, disabled }) => {
 
 	useEffect(() => {
 		contacts[normalizeAddress(publicKey)] && setAlias(contacts[normalizeAddress(publicKey)]);
-	}, [contacts[publicKey]]);
+	}, [contacts[normalizeAddress(publicKey)]]);
 
 	return (
 		<Tooltip
