@@ -104,22 +104,26 @@ const ContentRow = styled.div`
 	padding: 23px 0;
 	margin-bottom: 15px;
 `;
+
 const DownLoadText = styled.span`
 	font-size: 12px;
 	line-height: 10px;
 	color: #121213;
 	font-weight: ${(props) => (props.bold ? 'bold' : '')};
 `;
+
 const LinkWrapper = styled.div`
 	display: flex;
 	justify-content: center;
 	width: 110px;
 `;
+
 const DownLoadLink = styled.a`
 	color: #7246d0;
 	font-size: 12px;
 	line-height: 10px;
 	font-weight: bold;
+	text-decoration: none;
 	cursor: pointer;
 `;
 
@@ -185,10 +189,15 @@ const FileInput = forwardRef(
 				{downLoadLink && (
 					<ContentRow>
 						<DownLoadText>
-							Don’t know how to make your Z-papaer? <DownLoadText bold>download the sample</DownLoadText>
+							Don’t know how to make your Z-paper? <DownLoadText bold>download the sample</DownLoadText>
 						</DownLoadText>
 						<LinkWrapper>
-							<DownLoadLink>DownLoad</DownLoadLink>
+							<DownLoadLink
+								href={`${process.env.REACT_APP_IPFS_LINK + downLoadLink}?filename=Zpaper-sample.zip`}
+								target="_blank"
+							>
+								DownLoad
+							</DownLoadLink>
 						</LinkWrapper>
 					</ContentRow>
 				)}

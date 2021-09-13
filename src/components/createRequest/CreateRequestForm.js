@@ -232,9 +232,9 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 
 				<FileInput
 					hasBorder={false}
-					downLoadLink={true}
 					showSelected
 					buttonLabel="Select Files"
+					downLoadLink="Qmf2rNPBTtvC5jdowwGhjQmxx8Wq2rvvxZdJpQ79a6yRX2"
 					label={'Upload your Zpaper here'}
 					ref={ref}
 					name={'zpaper'}
