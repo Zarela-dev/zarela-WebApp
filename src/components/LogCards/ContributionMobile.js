@@ -25,7 +25,7 @@ import biobitIcon from '../../assets/icons/biobit-black.svg';
 import checkedGreen from '../../assets/icons/check-green.svg';
 import pendingIcon from '../../assets/icons/pending.svg';
 import angelIcon from '../../assets/icons/angel.png';
-import brainHubIcon from '../../assets/icons/brain.svg';
+import brainHubIcon from '../../assets/icons/hub.svg';
 import { Spacer } from '../Elements/Spacer';
 import { timeSince } from '../../utils';
 
@@ -49,14 +49,6 @@ const LogCardMobile = ({ data, account }) => {
 				<MobileColumn flex={'1 1'}>
 					<MobileRow>
 						<MobileTitle>{title.length < 70 ? title : title.substr(0, 70) + '...'}</MobileTitle>
-					</MobileRow>
-					<MobileRow type="role">
-						<MobileRoleText>Role : </MobileRoleText>
-						<MobileContributorIcon src={angelIcon} />
-						<MobileContributorIcon src={brainHubIcon} />
-						<MobileVerticalDivider />
-						<MobileRoleText>Gainer : </MobileRoleText>
-						<MobileContributorIcon src={brainHubIcon} />
 					</MobileRow>
 					<MobileRow>
 						<MobileBiobitIcon src={biobitIcon} />
@@ -95,6 +87,8 @@ const LogCardMobile = ({ data, account }) => {
 								<MobileTableRow key={originalIndex}>
 									<MobileTableColumn flex={'6'}>
 										<MobileTableTitle>{`${rowIndex + 1}. File #${originalIndex}`}</MobileTableTitle>
+										<MobileTableData>{timeSince(timestamp)}</MobileTableData>
+										<MobileTableData>{`Zarela Day: ${zarelaDay} th`}</MobileTableData>
 										<MobileRow ml="15px" type="role">
 											<MobileRoleText>Role : </MobileRoleText>
 											{angel.toLowerCase() === account.toLowerCase() && (
@@ -109,8 +103,6 @@ const LogCardMobile = ({ data, account }) => {
 												src={rewardGainer === true ? angelIcon : brainHubIcon}
 											/>
 										</MobileRow>
-										<MobileTableData>{timeSince(timestamp)}</MobileTableData>
-										<MobileTableData>{`Zarela Day: ${zarelaDay} th`}</MobileTableData>
 									</MobileTableColumn>
 									<Spacer />
 									<MobileTableColumn flex="0">

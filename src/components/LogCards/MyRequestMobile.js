@@ -31,7 +31,7 @@ const LogCardMobile = ({ data }) => {
 	};
 
 	return (
-		<MobileCompactRequestCard variant={getVariant()}>
+		<MobileCompactRequestCard variant={getVariant()} noPaddingBottom>
 			<MobileHeader>
 				<MobileColumn flex={'0 1'}>
 					<MobileRequestNumber>{requestID}</MobileRequestNumber>

@@ -242,6 +242,7 @@ export const MobileCompactRequestCard = styled(CompactRequestCard)`
 	flex-direction: column;
 	flex-wrap: nowrap;
 	padding: ${(props) => `${props.theme.spacing(2)} ${props.theme.spacing(1.5)}`};
+	padding-bottom: ${(props) => props.noPaddingBottom && 0};
 `;
 
 export const MobileColumn = styled(Column)`
@@ -295,6 +296,7 @@ export const MobileRow = styled(Row)`
 	align-items: center;
 	flex: ${(props) => (props.type === 'role' ? '0 0 16%' : '')};
 	margin-left: ${(props) => props.ml ?? '0'};
+	margin-bottom: ${(props) => props.theme.spacing(1)};
 `;
 
 export const MobileBody = styled(Body)``;
