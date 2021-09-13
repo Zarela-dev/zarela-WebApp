@@ -290,9 +290,8 @@ export default function Header({ isMobile }, props) {
 								<LogoApp src={logo} />
 							</Link>
 						</RightMenu>
-
 						<LeftMenu>
-							<NavItem>
+							<NavItem isMobile={appState.isMobile}>
 								<NavIcon src={bell} height="20px" onClick={() => setIsNotificationMenuOpen(true)} />
 								{appState.notificationCount !== 0 && (
 									<NotificationBadge isMobile={appState.isMobile}>
