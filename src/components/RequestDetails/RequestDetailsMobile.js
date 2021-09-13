@@ -154,6 +154,17 @@ const RequestDetailsMobile = ({ setError, error, request }) => {
 							<Spacer />
 						</HeaderLayout>
 						<CustomFooter>
+							<CustomBadgeRow>
+								<TokenIcon src={biobitIcon} />
+								<TokenValue>
+									{+request.angelTokenPay + +request.laboratoryTokenPay} ({+request.angelTokenPay} A +{' '}
+									{+request.laboratoryTokenPay} H)
+								</TokenValue>
+								<BiobitToDollarValue noMargin>{`= $ ${
+									+request.angelTokenPay + +request.laboratoryTokenPay
+								}`}</BiobitToDollarValue>
+							</CustomBadgeRow>
+							<Spacer />
 							<CustomContributeBadge>
 								<BadgeRow>
 									<ContributorsIcon src={documentsIcon} />
@@ -167,18 +178,6 @@ const RequestDetailsMobile = ({ setError, error, request }) => {
 									<BadgeLabel>{request.totalContributedCount}</BadgeLabel>
 								</BadgeRow>
 							</CustomContributeBadge>
-							<Spacer />
-							<CustomBadgeRow>
-								<TokenIcon src={biobitIcon} />
-								<TokenValue>
-									{+request.angelTokenPay + +request.laboratoryTokenPay} BBit (
-									{+request.angelTokenPay} A + {+request.laboratoryTokenPay} H)
-								</TokenValue>
-								<BiobitToDollarValue noMargin>{`= $ ${
-									+request.angelTokenPay + +request.laboratoryTokenPay
-								}`}</BiobitToDollarValue>
-							</CustomBadgeRow>
-							<CustomDivider />
 						</CustomFooter>
 						<CustomProgressTrackerWrapper>
 							<ProgressTrackerTrack>
