@@ -1,19 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import { CopyableText, toast, normalizeAddress } from '../../utils';
-import {
-	addContact,
-	RemoveContact,
-	blockAddress,
-	unBlockAddress,
-	hideAddress,
-	unHideAddress,
-} from '../../state/localStorageProvider/actions';
+import { toast, normalizeAddress } from '../../utils';
+import { addContact } from '../../state/localStorageProvider/actions';
 import { localStorageContext } from '../../state/localStorageProvider/LocalStoragePriveder';
 import addToContactIcon from '../../assets/icons/actionIcons/add-to-contact.svg';
 import confirmAddToContactIcon from '../../assets/icons/actionIcons/confirm-add-to-contact.svg';
 import editContactIcon from '../../assets/icons/actionIcons/edit.svg';
-import publicKeyIcon from '../../assets/icons/public-key.svg';
 import { Icon, TextField, SubmitButton, AddToContactFrom, Tooltip, Action } from './Elements';
 
 const AddContact = ({ publicKey, edit, disabled }) => {

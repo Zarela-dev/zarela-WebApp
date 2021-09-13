@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Action, Icon } from './Elements';
-import { hideAddress, removeContact, unHideAddress } from '../../state/localStorageProvider/actions';
+import { removeContact } from '../../state/localStorageProvider/actions';
 import { localStorageContext } from '../../state/localStorageProvider/LocalStoragePriveder';
 import hideIcon from '../../assets/icons/actionIcons/delete.svg';
 import { toast, normalizeAddress } from '../../utils';
