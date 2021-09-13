@@ -1,10 +1,9 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { localStorageContext } from '../../state/localStorageProvider/LocalStoragePriveder';
 import {
 	CompactRequestCard,
 	Body,
-	StatusIcon,
 	Table,
 	TableCellWrapper,
 	TableCell,
@@ -73,7 +72,7 @@ const Contacts = ({ isMobile }) => {
 								Object.keys(contacts).map((address) => {
 									const isBlocked = blockList.includes(normalizeAddress(address));
 									return (
-										<TableRow key={1}>
+										<TableRow key={address}>
 											<SettingTableCell flex="0 0 35%">
 												<TableCell isBlocked={isBlocked}> {contacts[address]} </TableCell>
 											</SettingTableCell>

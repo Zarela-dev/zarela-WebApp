@@ -1,24 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { localStorageContext } from '../../state/localStorageProvider/LocalStoragePriveder';
+import { normalizeAddress } from '../../utils';
 import styled from 'styled-components';
-import unBlock from '../../assets/icons/actionIcons/unBlock.svg';
+import BlockAddress from '../WalletAddress/BlockAddress';
 
 import {
 	CompactRequestCard,
-	Row,
-	Header,
 	Body,
-	Column,
-	BiobitIcon,
-	DollarValue,
-	CaretIcon,
-	StatusIcon,
-	StatusLabel,
-	BiobitValue,
-	VerticalDivider,
-	Title,
-	QuickReport,
-	QuickReportTitle,
-	RequestNumber,
 	Table,
 	TableCellWrapper,
 	TableCell,
@@ -31,16 +19,10 @@ const SettingTableCell = styled(TableCellWrapper)`
 	flex: ${(props) => props.flex} !important;
 `;
 
-const ActionIcon = styled(StatusIcon)`
-	width: 25px;
-	margin: 0px calc((100% - (3 * 25px)) / 6);
-`;
+const Blocked = ({ isMobile }) => {
+	const { localState } = useContext(localStorageContext);
+	const { contacts, blockList } = localState;
 
-const ActionTitle = styled.span`
-	margin: 0 10%;
-`;
-
-const Blocked = ({isMobile}) => {
 	if (isMobile) {
 		return (
 			<>
@@ -54,28 +36,28 @@ const Blocked = ({isMobile}) => {
 				<Body>
 					<Table>
 						<TableRow header>
-							<SettingTableCell flex="0 0 65%">
+							<SettingTableCell flex="1 0 auto">
 								<TableCell>public key</TableCell>
 							</SettingTableCell>
 							<SettingTableCell flex="0 0 20%">
 								<TableCell>Name</TableCell>
 							</SettingTableCell>
-							<SettingTableCell flex="0 0 15%">
-								<TableCell>Block/Unblock</TableCell>
+							<SettingTableCell flex="0 0 10%">
+								<TableCell>Unblock</TableCell>
 							</SettingTableCell>
 						</TableRow>
 						<TableBulkRow>
-							{[1, 2, 3, 4, 5, 6].map((item) => (
-								<TableRow key={1}>
-									<SettingTableCell flex="0 0 65%">
-										<TableCell>WEERTYUNBGWEERTYUNBGWEERTYUNBG </TableCell>
+							{blockList.map((blockedAddress) => (
+								<TableRow key={blockedAddress}>
+									<SettingTableCell flex="1 0 auto">
+										<TableCell>{blockedAddress}</TableCell>
 									</SettingTableCell>
 									<SettingTableCell flex="0 0 20%">
-										<TableCell> Hub- Dr.Mohiri</TableCell>
+										<TableCell> {contacts[normalizeAddress(blockedAddress)] || '-'}</TableCell>
 									</SettingTableCell>
-									<SettingTableCell flex="0 0 15%">
+									<SettingTableCell flex="0 0 10%">
 										<TableCell>
-											<ActionIcon src={unBlock} />
+											<BlockAddress publicKey={blockedAddress} />
 										</TableCell>
 									</SettingTableCell>
 								</TableRow>
