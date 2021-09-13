@@ -17,14 +17,19 @@ import {
 	MobileTableColumn,
 	MobileTableData,
 	MobileTableTitle,
+	MobileContributorIcon,
+	MobileRoleText,
+	MobileVerticalDivider,
 } from './Elements';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import checkedGreen from '../../assets/icons/check-green.svg';
 import pendingIcon from '../../assets/icons/pending.svg';
+import angelIcon from '../../assets/icons/angel.png';
+import brainHubIcon from '../../assets/icons/hub.svg';
 import { Spacer } from '../Elements/Spacer';
 import { timeSince } from '../../utils';
 
-const LogCardMobile = ({ data }) => {
+const LogCardMobile = ({ data, account }) => {
 	const [isOpen, setOpen] = useState(false);
 	const { requestID, title, angelTokenPay, laboratoryTokenPay, contributions } = data;
 	const totalPending = contributions.filter((item) => item.status === false).length;
@@ -77,23 +82,39 @@ const LogCardMobile = ({ data }) => {
 			{isOpen ? (
 				<MobileBody>
 					<MobileTable>
-						{contributions.map(({ originalIndex, timestamp, zarelaDay, status }, rowIndex) => (
-							<MobileTableRow key={originalIndex}>
-								<MobileTableColumn flex={'6'}>
-									<MobileTableTitle>{`${rowIndex + 1}. File #${originalIndex}`}</MobileTableTitle>
-									<MobileTableData>{timeSince(timestamp)}</MobileTableData>
-									<MobileTableData>{`Zarela Day: ${zarelaDay} th`}</MobileTableData>
-								</MobileTableColumn>
-								<Spacer />
-								<MobileTableColumn flex="0">
-									{status ? (
-										<MobileStatus static src={checkedGreen} />
-									) : (
-										<MobileStatus static src={pendingIcon} />
-									)}
-								</MobileTableColumn>
-							</MobileTableRow>
-						))}
+						{contributions.map(
+							({ originalIndex, timestamp, zarelaDay, angel, hub, rewardGainer, status }, rowIndex) => (
+								<MobileTableRow key={originalIndex}>
+									<MobileTableColumn flex={'6'}>
+										<MobileTableTitle>{`${rowIndex + 1}. File #${originalIndex}`}</MobileTableTitle>
+										<MobileTableData>{timeSince(timestamp)}</MobileTableData>
+										<MobileTableData>{`Zarela Day: ${zarelaDay} th`}</MobileTableData>
+										<MobileRow ml="15px" type="role">
+											<MobileRoleText>Role : </MobileRoleText>
+											{angel.toLowerCase() === account.toLowerCase() && (
+												<MobileContributorIcon src={angelIcon} />
+											)}
+											{hub.toLowerCase() === account.toLowerCase() && (
+												<MobileContributorIcon src={brainHubIcon} />
+											)}
+											<MobileVerticalDivider />
+											<MobileRoleText>Gainer : </MobileRoleText>
+											<MobileContributorIcon
+												src={rewardGainer === true ? angelIcon : brainHubIcon}
+											/>
+										</MobileRow>
+									</MobileTableColumn>
+									<Spacer />
+									<MobileTableColumn flex="0">
+										{status ? (
+											<MobileStatus static src={checkedGreen} />
+										) : (
+											<MobileStatus static src={pendingIcon} />
+										)}
+									</MobileTableColumn>
+								</MobileTableRow>
+							)
+						)}
 					</MobileTable>
 				</MobileBody>
 			) : null}

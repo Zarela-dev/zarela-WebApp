@@ -1,26 +1,44 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
-import Spinner from '../../components/Spinner';
 import LogCard from '../../components/LogCards/Contribution';
 import LogCardMobile from '../../components/LogCards/ContributionMobile';
 import { mainContext } from './../../state';
 import { convertToBiobit } from '../../utils';
 import NoRequestsFound from '../../components/NoRequestsFound';
+import { Skeleton } from '@material-ui/lab';
+import { makeStyles } from '@material-ui/core/styles';
 
-const SpinnerWrapper = styled.div`
+const Card = styled.div`
 	width: 100%;
+	margin-right: 30px;
+	height: ${(props) => (props.isMobile ? '85px' : '180px')};
+	margin-bottom: 15px;
+	background: #fff;
+	padding: 8px 5px;
 	display: flex;
-	justify-content: center;
-	padding: ${(props) => props.theme.spacing(3)};
-	align-items: center;
+	flex-direction: row;
+`;
+const CircleSection = styled.div`
+	margin-right: 28px;
+`;
+const SquareSection = styled.div`
+	flex-grow: 1;
 `;
 
-const Contributes = () => {
+const useStyles = makeStyles({
+	root: {
+		marginBottom: '12px',
+		background: '#F1F6FC',
+	},
+});
+
+const Contributes = (props) => {
 	const { appState } = useContext(mainContext);
 	const [requests, setRequests] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const { account } = useWeb3React();
+	const classes = useStyles(props);
 
 	useEffect(() => {
 		if (appState.contract !== null) {
@@ -29,34 +47,40 @@ const Contributes = () => {
 					.orderResult()
 					.call({ from: account })
 					.then((result) => {
-						const userContributionsSet = new Set(result[1]);
+						const userContributionsSet = new Set([...result[1], ...result[2]]);
 						const userContributions = [...userContributionsSet];
 
 						const getAllRequests = new Promise(async (resolve, reject) => {
 							const requests = [];
 							const getRequestFiles = (requestContributions) => {
-								let addresses = requestContributions[0];
-								// these to values are obsolete in this version but it's a good reference
-								// let laboratories = requestContributions[1];
-								// let whoGainedReward = requestContributions[3];
+								let angels = requestContributions[0];
+								let hubs = requestContributions[1];
 								let timestamps = requestContributions[2];
+								let rewardGainer = requestContributions[3];
 								let status = requestContributions[4];
 								let zarelaDay = requestContributions[5];
 
 								let formatted = {};
-								addresses.forEach((address, originalIndex) => {
+								angels.forEach((angelAddress, originalIndex) => {
 									formatted[originalIndex] = {
 										originalIndex,
 										timestamp: timestamps[originalIndex],
 										zarelaDay: zarelaDay[originalIndex],
 										status: status[originalIndex],
+										angel: angels[originalIndex],
+										hub: hubs[originalIndex],
+										rewardGainer: rewardGainer[originalIndex],
 									};
 								});
 
 								let userContributionIndexes = [];
-								addresses.forEach((item, index) => {
-									if (item.toLowerCase() === account.toLowerCase()) {
-										userContributionIndexes.push(index);
+								Object.keys(formatted).forEach((originalIndex) => {
+									const { angel, hub } = formatted[originalIndex];
+									if (
+										angel.toLowerCase() === account.toLowerCase() ||
+										hub.toLowerCase() === account.toLowerCase()
+									) {
+										userContributionIndexes.push(originalIndex);
 									}
 								});
 
@@ -73,7 +97,7 @@ const Contributes = () => {
 									let contributions = await appState.contract.methods
 										.getOrderData(currentRequest)
 										.call({ from: account });
-									// #to-do improve readability 
+									// #to-do improve readability
 									const requestTemplate = {
 										requestID: requestInfo[0],
 										title: requestInfo[1],
@@ -99,7 +123,6 @@ const Contributes = () => {
 						});
 
 						getAllRequests.then((requestsList) => {
-							console.log('requestsList', requestsList);
 							setRequests(requestsList);
 							setIsLoading(false);
 						});
@@ -114,22 +137,48 @@ const Contributes = () => {
 	const message = 'you have not contributed on any requests yet.';
 	if (appState.isMobile)
 		return isLoading ? (
-			<SpinnerWrapper>
-				<Spinner />
-			</SpinnerWrapper>
+			[1, 2, 3].map((index) => {
+				return (
+					<Card key={index} isMobile={appState.isMobile}>
+						<CircleSection>
+							<Skeleton variant="circle" width={41.72} height={41.72} className={classes.root} />
+						</CircleSection>
+						<SquareSection>
+							<Skeleton
+								variant="rect"
+								width={'100%'}
+								height={19}
+								animation="wave"
+								className={classes.root}
+							/>
+							<Skeleton variant="rect" width={'80%'} height={19.1} className={classes.root} />
+						</SquareSection>
+					</Card>
+				);
+			})
 		) : requests.length === 0 ? (
 			<NoRequestsFound message={message} />
 		) : (
-			requests.map((request) => <LogCardMobile key={request.requestID} data={request} />)
+			requests.map((request) => <LogCardMobile key={request.requestID} account={account} data={request} />)
 		);
 	return isLoading ? (
-		<SpinnerWrapper>
-			<Spinner />
-		</SpinnerWrapper>
+		[1, 2, 3].map((index) => {
+			return (
+				<Card key={index} isMobile={appState.isMobile}>
+					<CircleSection>
+						<Skeleton variant="circle" width={72} height={72} className={classes.root} />
+					</CircleSection>
+					<SquareSection>
+						<Skeleton variant="rect" width={'100%'} height={33} animation="wave" className={classes.root} />
+						<Skeleton variant="rect" width={'33%'} height={'33px'} className={classes.root} />
+					</SquareSection>
+				</Card>
+			);
+		})
 	) : requests.length === 0 ? (
 		<NoRequestsFound message={message} />
 	) : (
-		requests.map((request) => <LogCard key={request.requestID} data={request} />)
+		requests.map((request) => <LogCard key={request.requestID} account={account} data={request} />)
 	);
 };
 

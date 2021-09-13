@@ -30,7 +30,7 @@ const Header = styled.header`
 	align-items: center;
 	width: 100%;
 
-	margin: 0 auto ${(props) => props.theme.spacing(3)};
+	margin: 0 auto ${(props) => props.theme.spacing(4)};
 `;
 
 const Body = styled.section`
@@ -47,8 +47,8 @@ const Content = styled.div`
 	color: #4fcfa1;
 	width: 100%;
 
-	@media only screen and (min-width: ${({ theme }) => theme.desktop_sm_breakpoint}) {
-		width: 70%;
+	@media only screen and (min-width: ${({ theme }) => theme.tablet_sm_breakpoint}) {
+		width: 90%;
 	}
 `;
 
@@ -64,21 +64,22 @@ const Backdrop = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	position: absolute;
+	position: fixed;
 	left: 0;
-	width: 100vw;
 	top: 0;
+	width: 100vw;
 	height: 100vh;
 	background: rgba(255, 255, 255, 0.6);
 	z-index: ${(props) => props.theme.z_modal};
 
-	@media only screen and (min-width: ${({ theme }) => theme.desktop_sm_breakpoint}) {
+	@media only screen and (min-width: ${({ theme }) => theme.tablet_sm_breakpoint}) {
 		top: 110px;
 		height: calc(100vh - 110px);
 	}
 `;
 
 const Card = styled.div`
+	position: relative;
 	background: #fff;
 	${(props) => getBorder(props.type)};
 	box-sizing: border-box;
@@ -87,7 +88,7 @@ const Card = styled.div`
 	padding: ${(props) => props.theme.spacing(2.1)};
 	width: calc(100% - 36px);
 
-	@media only screen and (min-width: ${({ theme }) => theme.desktop_sm_breakpoint}) {
+	@media only screen and (min-width: ${({ theme }) => theme.tablet_sm_breakpoint}) {
 		width: 680px;
 	}
 `;

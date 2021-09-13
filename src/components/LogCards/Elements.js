@@ -1,4 +1,6 @@
 import styled, { css } from 'styled-components';
+import hubIcon from '../../assets/icons/hub.png';
+import angelIcon from '../../assets/icons/angel.png';
 
 // layout
 const getFontColorVariant = ({ variant, theme }) => {
@@ -191,17 +193,23 @@ export const TableRow = styled.section`
 	margin-bottom: ${(props) => (props.header ? props.theme.spacing(1) : 0)};
 
 	${TableCellWrapper}:first-of-type {
-		flex: 0 0 53%;
+		flex: 0 0 140px;
 	}
 
 	${TableCellWrapper}:nth-of-type(2) {
-		flex: 1 0 auto;
+		flex: 0 0 250px;
 	}
 
 	${TableCellWrapper}:nth-of-type(3) {
-		flex: 0 0 100px;
+		flex: 1 0 auto;
 	}
 	${TableCellWrapper}:nth-of-type(4) {
+		flex: 0 0 100px;
+	}
+	${TableCellWrapper}:nth-of-type(5) {
+		flex: 0 0 125px;
+	}
+	${TableCellWrapper}:nth-of-type(6) {
 		flex: 0 0 160px;
 	}
 `;
@@ -216,6 +224,7 @@ export const TableCell = styled.div`
 	width: 100%;
 	font-weight: normal;
 	cursor: ${(props) => (props.pointer ? 'pointer' : 'normal')};
+	color: ${(props) => (props.isBlocked ? '#D13ADE' : props.theme.textPrimary)};
 
 	${TableCellWrapper}:not(:last-child) & {
 		border-right: 1px solid rgba(60, 135, 170, 0.6);
@@ -233,6 +242,7 @@ export const MobileCompactRequestCard = styled(CompactRequestCard)`
 	flex-direction: column;
 	flex-wrap: nowrap;
 	padding: ${(props) => `${props.theme.spacing(2)} ${props.theme.spacing(1.5)}`};
+	padding-bottom: ${(props) => props.noPaddingBottom && 0};
 `;
 
 export const MobileColumn = styled(Column)`
@@ -284,6 +294,9 @@ export const MobileBiobitValue = styled(BiobitValue)`
 export const MobileRow = styled(Row)`
 	display: flex;
 	align-items: center;
+	flex: ${(props) => (props.type === 'role' ? '0 0 16%' : '')};
+	margin-left: ${(props) => props.ml ?? '0'};
+	margin-bottom: ${(props) => props.theme.spacing(1)};
 `;
 
 export const MobileBody = styled(Body)``;
@@ -334,4 +347,75 @@ export const TimestampMobile = styled(Timestamp)`
 	font-size: 12px;
 	line-height: 16px;
 	color: #858585;
+`;
+
+const RoleIcon = styled.img`
+	width: 24px;
+	padding: 0 ${(props) => props.theme.spacing(1.5)};
+	box-sizing: content-box;
+`;
+
+const RoleIconMobile = styled.img`
+	width: 24px;
+	padding: 0 ${(props) => props.theme.spacing(1.5)};
+	box-sizing: content-box;
+`;
+
+export const RoleLabel = styled.p`
+	font-size: 16px;
+	line-height: 2;
+`;
+
+export const HubIcon = styled(RoleIcon).attrs((props) => {
+	return {
+		src: hubIcon,
+	};
+})``;
+
+export const AngelIcon = styled(RoleIcon).attrs(() => {
+	return {
+		src: angelIcon,
+	};
+})`
+	/* width: 30px; */
+`;
+
+export const MobileContributorIcon = styled.img`
+	height: 22px;
+	margin-left: 10px;
+`;
+
+export const IconListWrapper = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+
+	& > ${RoleIcon}:not(:first-child) {
+		border-left: 1px solid rgba(60, 135, 170, 0.6);
+	}
+	& > ${RoleIcon}:first-child {
+		padding-left: 0;
+	}
+	& > ${RoleIcon}:last-child {
+		padding-right: 0;
+	}
+`;
+
+export const EmptyMessage = styled.div`
+	padding: 0 ${(props) => props.theme.spacing(2)};
+`;
+
+export const MobileRoleText = styled.span`
+	color: #121213;
+	font-size: 12px;
+	line-height: 16px;
+	white-space: nowrap;
+`;
+
+export const MobileVerticalDivider = styled.div`
+	height: 20px;
+	width: 1px;
+	border: none;
+	background: #c4c4c4;
+	margin: 0 10px;
 `;

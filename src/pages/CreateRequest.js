@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { create } from 'ipfs-http-client';
 import styled from 'styled-components';
 import TitleBar from '../components/TitleBar/TitleBar';
-import CreateRequestForm from '../components/CreateRequestForm';
+import CreateRequestForm from '../components/createRequest/CreateRequestForm';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { useFormik } from 'formik';
@@ -15,6 +15,8 @@ import { toast } from '../utils';
 import Dialog from '../components/Dialog';
 import { useWeb3React } from '@web3-react/core';
 import NoMobileSupportMessage from '../components/NoMobileSupportMessage';
+import { hexToRgb } from '@material-ui/core';
+import { actionTypes } from '../state';
 
 const Wrapper = styled.div`
 	${maxWidthWrapper}
@@ -23,12 +25,12 @@ const Wrapper = styled.div`
 // #todo sync form data with localStorage
 const CreateRequest = () => {
 	const fileRef = useRef(null);
-	const { appState } = useContext(mainContext);
+	const { appState, dispatch } = useContext(mainContext);
 	const [showDialog, setDialog] = useState(false);
 	const history = useHistory();
 	const [isUploading, setUploading] = useState(false);
 	const [dialogMessage, setDialogMessage] = useState('');
-	const { account } = useWeb3React();
+	const { account, library } = useWeb3React();
 
 	const clearSubmitDialog = () => {
 		setUploading(false);
@@ -46,6 +48,7 @@ const CreateRequest = () => {
 	};
 
 	const formik = useFormik({
+		enableReinitialize: true,
 		initialValues: {
 			title: '',
 			desc: '',
@@ -57,8 +60,12 @@ const CreateRequest = () => {
 			terms: false,
 		},
 		validationSchema: yup.object().shape({
-			title: yup.string(validationErrors.string('title')).required(validationErrors.required('title')),
-			desc: yup.string(validationErrors.string('description')).required(validationErrors.required('description')),
+			title: yup
+				.string(validationErrors.string('title'))
+				.required(validationErrors.required('title')),
+			desc: yup
+				.string(validationErrors.string('description'))
+				.required(validationErrors.required('description')),
 			angelTokenPay: yup
 				.number()
 				.typeError(validationErrors.number('Angel Allocated Biobits'))
@@ -76,14 +83,17 @@ const CreateRequest = () => {
 			terms: yup.boolean().required(),
 		}),
 		onSubmit: (values) => {
-			console.log(values)
 			if (formik.isValid) {
 				/* to prevent the Mage from submitting the request with insufficient assets */
 				if (
-					(+values.angelTokenPay + +values.laboratoryTokenPay) * +values.instanceCount >
+					(+values.angelTokenPay + +values.laboratoryTokenPay) *
+						+values.instanceCount >
 					+appState.biobitBalance
 				) {
-					formik.setFieldError('angelTokenPay', validationErrors.notEnoughTokens);
+					formik.setFieldError(
+						'angelTokenPay',
+						validationErrors.notEnoughTokens
+					);
 					formik.setSubmitting(false);
 				} else {
 					if (!values.terms) {
@@ -92,14 +102,23 @@ const CreateRequest = () => {
 					} else {
 						if (account) {
 							setDialog(false);
-							if (fileRef.current.value !== null && fileRef.current.value !== '') {
+							if (
+								fileRef.current.value !== null &&
+								fileRef.current.value !== ''
+							) {
 								setUploading(true);
 								setDialogMessage(
 									'in request to secure the file, so only you can access it we require your public key to encrypt the file'
 								);
 
-								const { title, desc, angelTokenPay, laboratoryTokenPay, instanceCount, category } =
-									values;
+								const {
+									title,
+									desc,
+									angelTokenPay,
+									laboratoryTokenPay,
+									instanceCount,
+									category,
+								} = values;
 								const reader = new FileReader();
 
 								window.ethereum
@@ -123,10 +142,13 @@ const CreateRequest = () => {
 												const ipfsResponse = await ipfs.add(buf, { pin: true });
 
 												formik.setFieldValue('zpaper', ipfsResponse.path);
-												let url = `${process.env.REACT_APP_IPFS_LINK + ipfsResponse.path}`;
+												let url = `${
+													process.env.REACT_APP_IPFS_LINK + ipfsResponse.path
+												}`;
 												console.log(`Document Of Conditions --> ${url}`);
 
 												setDialogMessage('awaiting confirmation');
+
 												appState.contract.methods
 													.submitNewRequest(
 														title,
@@ -148,38 +170,27 @@ const CreateRequest = () => {
 														(error, result) => {
 															if (!error) {
 																clearSubmitDialog();
-																toast(`TX Hash: ${result}`, 'success', true, result, {
-																	toastId: result,
-																});
+																toast(
+																	`TX Hash: ${result}`,
+																	'success',
+																	true,
+																	result,
+																	{
+																		toastId: result,
+																	}
+																);
 																history.replace(`/`);
+																dispatch({
+																	type: actionTypes.SET_OLD_DATA_FORM,
+																	payload: {},
+																});
+																localStorage.removeItem('create_request_values')
 															} else {
 																clearSubmitDialog();
 																toast(error.message, 'error');
 															}
 														}
 													);
-
-												appState.contract.events
-													.orderRegistered({})
-													.on('data', (event) => {
-														clearSubmitDialog();
-
-														toast(
-															`Transaction #${event.returnValues[1]} has been created successfully.`,
-															'success',
-															false,
-															null,
-															{
-																toastId: event.id,
-															}
-														);
-													})
-													.on('error', (error, receipt) => {
-														clearSubmitDialog();
-
-														toast(error.message, 'error');
-														console.error(error, receipt);
-													});
 											} catch (error) {
 												console.error(error);
 											}
@@ -216,7 +227,7 @@ const CreateRequest = () => {
 
 	return (
 		<>
-			<TitleBar>Create Request</TitleBar>
+			
 			<Wrapper>
 				{appState.isMobile ? (
 					<NoMobileSupportMessage />
@@ -229,7 +240,7 @@ const CreateRequest = () => {
 								clearSubmitDialog();
 							}}
 							hasSpinner
-							type="success"
+							type='success'
 						/>
 						<ConnectDialog
 							isOpen={showDialog}
@@ -238,7 +249,7 @@ const CreateRequest = () => {
 								setDialog(false);
 							}}
 						/>
-						<CreateRequestForm formik={formik} ref={fileRef}>
+						<CreateRequestForm formik={formik} ref={fileRef} appState={appState} dispatch={dispatch}>
 							<Persist />
 						</CreateRequestForm>
 					</>

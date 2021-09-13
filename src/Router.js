@@ -12,6 +12,7 @@ import styled from 'styled-components';
 import Wallet from './pages/Wallet/Wallet';
 import RequestsList from './pages/RequestsList';
 import Log from './pages/Log/Log';
+import Setting from './pages/Setting';
 import { mainContext } from './state';
 import { supportedChains } from './constants/index';
 import ChainError from './components/ChainError';
@@ -25,7 +26,9 @@ const AppRouter = () => {
 	const { appState } = useContext(mainContext);
 	const { error, chainId } = useWeb3React();
 	const metamaskChainId = provider?.request({ method: 'eth_chainId' });
-	const [hasChainError, setChainError] = useState(error instanceof UnsupportedChainIdError);
+	const [hasChainError, setChainError] = useState(
+		error instanceof UnsupportedChainIdError
+	);
 
 	useEffect(() => {
 		if (provider) {
@@ -43,7 +46,7 @@ const AppRouter = () => {
 				console.error(error);
 			}
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [error, chainId, provider]);
 
 	if (!provider)
@@ -67,12 +70,13 @@ const AppRouter = () => {
 					<Header isMobile={appState.isMobile ?? false} />
 				)}
 				<Switch>
-					<Route exact path="/" component={RequestsList} />
-					<Route exact path="/request/create" component={CreateRequest} />
-					<Route exact path="/request/:id" component={RequestDetails} />
-					<Route exact path="/inbox" component={Inbox} />
-					<Route path="/wallet" component={Wallet} />
-					<Route path="/log" component={Log} />
+					<Route exact path='/' component={RequestsList} />
+					<Route exact path='/request/create' component={CreateRequest} />
+					<Route exact path='/request/:id' component={RequestDetails} />
+					<Route exact path='/inbox' component={Inbox} />
+					<Route path='/wallet' component={Wallet} />
+					<Route path='/log' component={Log} />
+					<Route path='/setting' component={Setting} />
 				</Switch>
 			</AppWrapper>
 		</Router>

@@ -3,29 +3,46 @@ import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { mainContext } from '../../state';
 import { convertToBiobit } from '../../utils';
-import Spinner from '../../components/Spinner';
 import MyRequest from '../../components/LogCards/MyRequest';
 import MyRequestMobile from '../../components/LogCards/MyRequestMobile';
 import NoRequestsFound from '../../components/NoRequestsFound';
+import { Skeleton } from '@material-ui/lab';
+import { makeStyles } from '@material-ui/core/styles';
 
-const SpinnerWrapper = styled.div`
+const Card = styled.div`
 	width: 100%;
+	margin-right: 30px;
+	height: ${(props) => (props.isMobile ? '85px' : '180px')};
+	margin-bottom: 15px;
+	background: #fff;
+	padding: 8px 5px;
 	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: ${(props) => props.theme.spacing(3)};
+	flex-direction: row;
+`;
+const CircleSection = styled.div`
+	margin-right: 28px;
+`;
+const SquareSection = styled.div`
+	flex-grow: 1;
 `;
 
-const MyRequests = () => {
+const useStyles = makeStyles({
+	root: {
+		marginBottom: '12px',
+		background: '#F1F6FC',
+	},
+});
+
+const MyRequests = (props) => {
 	const { account } = useWeb3React();
 	const { appState } = useContext(mainContext);
 	const [requests, setRequests] = useState([]);
-	const [isLoading, setLoading] = useState(false);
+	const [isLoading, setLoading] = useState(true);
+	const classes = useStyles(props);
 
 	useEffect(() => {
 		if (appState.contract !== null) {
 			if (account) {
-				setLoading(true);
 				appState.contract.methods
 					.orderResult()
 					.call({ from: account })
@@ -37,7 +54,9 @@ const MyRequests = () => {
 							const requests = [];
 							try {
 								for (const currentRequest of userContributions) {
-									let requestInfo = await appState.contract.methods.orders(currentRequest).call();
+									let requestInfo = await appState.contract.methods
+										.orders(currentRequest)
+										.call();
 
 									const requestTemplate = {
 										requestID: requestInfo[0],
@@ -76,22 +95,78 @@ const MyRequests = () => {
 
 	if (appState.isMobile)
 		return isLoading ? (
-			<SpinnerWrapper>
-				<Spinner />
-			</SpinnerWrapper>
+			[1, 2, 3].map((index) => {
+				return (
+					<Card key={index} isMobile={appState.isMobile}>
+						<CircleSection>
+							<Skeleton
+								variant='circle'
+								width={41.72}
+								height={41.72}
+								className={classes.root}
+							/>
+						</CircleSection>
+						<SquareSection>
+							<Skeleton
+								variant='rect'
+								width={'100%'}
+								height={19}
+								animation='wave'
+								className={classes.root}
+							/>
+							<Skeleton
+								variant='rect'
+								width={'80%'}
+								height={19.1}
+								className={classes.root}
+							/>
+						</SquareSection>
+					</Card>
+				);
+			})
 		) : requests.length === 0 ? (
-			<NoRequestsFound message='You have not created any requests yet.'/>
+			<NoRequestsFound message='You have not created any requests yet.' />
 		) : (
-			requests.map((request) => <MyRequestMobile key={request.requestID} data={request} />)
+			requests.map((request) => (
+				<MyRequestMobile key={request.requestID} data={request} />
+			))
 		);
 	return isLoading ? (
-		<SpinnerWrapper>
-			<Spinner />
-		</SpinnerWrapper>
+		[1, 2].map((index) => {
+			return (
+				<Card key={index} isMobile={appState.isMobile}>
+					<CircleSection>
+						<Skeleton
+							variant='circle'
+							width={72}
+							height={72}
+							className={classes.root}
+						/>
+					</CircleSection>
+					<SquareSection>
+						<Skeleton
+							variant='rect'
+							width={'100%'}
+							height={33}
+							animation='wave'
+							className={classes.root}
+						/>
+						<Skeleton
+							variant='rect'
+							width={'33%'}
+							height={'33px'}
+							className={classes.root}
+						/>
+					</SquareSection>
+				</Card>
+			);
+		})
 	) : requests.length === 0 ? (
-		<NoRequestsFound message='You have not created any requests yet.'/>
+		<NoRequestsFound message='You have not created any requests yet.' />
 	) : (
-		requests.map((request) => <MyRequest key={request.requestID} data={request} />)
+		requests.map((request) => (
+			<MyRequest key={request.requestID} data={request} />
+		))
 	);
 };
 

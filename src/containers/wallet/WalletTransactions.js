@@ -1,7 +1,9 @@
-import React, { useState, useMemo } from 'react';
-import styled from 'styled-components';
+import React, { useState, useMemo, useEffect } from 'react';
+import styled, { css } from 'styled-components';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
+import { isValidInput } from '../../utils/helpers';
+import { getStatusColor } from '../../utils/transactionInput';
 import { timeSince, convertToBiobit, CopyableText, getInput } from '../../utils';
 import Pagination from '../../components/Pagination';
 
@@ -23,6 +25,24 @@ const CellWrapper = styled.div`
 	}
 	&:last-child {
 		border-radius: 0 8px 8px 0;
+	}
+`;
+
+const getStatus = (props) => {
+	if (props.isError != 0)
+		return css`
+			color: #f62d76 !important;
+		`;
+	else if (props.status !== null)
+		return css`
+			color: ${props.status} !important;
+		`;
+	else return props.theme.textPrimary;
+};
+
+const InputCellWrapper = styled(CellWrapper)`
+	& * {
+		${(props) => getStatus(props)};
 	}
 `;
 
@@ -114,8 +134,6 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 
 	const classes = useStyles(props);
 	if (!account) return 'no accounts found';
-
-	console.log('currentTableData', currentTableData);
 
 	return (
 		<>
@@ -330,11 +348,6 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 
 				{!isLoading && currentTableData.length ? (
 					currentTableData.map((transaction, index) => {
-						console.log(
-							transaction.input.substr(0, 10),
-							convertToBiobit(transaction.value),
-							+transaction.value / Math.pow(10, 18)
-						);
 						return (
 							<Row key={index}>
 								<CellWrapper>
@@ -355,9 +368,18 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 										<Cell copyable>{transaction.to}</Cell>
 									</CopyableText>
 								</CellWrapper>
-								<CellWrapper>
-									<Cell>{getInput(transaction.input)}</Cell>
-								</CellWrapper>
+								<InputCellWrapper
+									isError={transaction.isError}
+									status={getStatusColor(getInput(transaction.input))}
+								>
+									{isValidInput(transaction.input) ? (
+										<Cell>{getInput(transaction.input)}</Cell>
+									) : (
+										<CopyableText textToCopy={transaction.input}>
+											<Cell copyable>{transaction.input.substr(0, 10)}</Cell>
+										</CopyableText>
+									)}
+								</InputCellWrapper>
 								<CellWrapper>
 									<Cell bold>
 										{transaction.input !== '0x'

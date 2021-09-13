@@ -49,28 +49,7 @@ const Inbox = () => {
 					toast(error.message, 'error');
 				}
 			});
-		appState.contract.events
-			.signalsApproved({})
-			.on('data', (event) => {
-				/* 
-					event.returnValues[0] orderId
-					event.returnValues[1]	confirmationsCount
-				*/
-				toast(
-					`Tokens were successfully released for ${event.returnValues[1]} contributions.`,
-					'success',
-					false,
-					null,
-					{
-						toastId: event.id,
-					}
-				);
-				setShouldRefresh(true);
-			})
-			.on('error', (error, receipt) => {
-				toast(error.message, 'error');
-				console.error(error, receipt);
-			});
+	
 	};
 
 	useEffect(() => {
@@ -145,7 +124,6 @@ const Inbox = () => {
 	return (
 		<PageWrapper>
 			{!appState.isMobile && guideIsOpen && <Guide steps={InboxSteps}></Guide>}
-			<TitleBar>Inbox</TitleBar>
 			<ContentWrapper>
 				{/* 
 					because Metamask does not support decryption in mobile yet

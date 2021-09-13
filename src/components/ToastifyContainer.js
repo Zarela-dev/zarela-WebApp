@@ -2,19 +2,25 @@ import styled from 'styled-components';
 import { ToastContainer } from 'react-toastify';
 
 const CustomContainer = styled(ToastContainer)`
+	width: ${(props) => (props.containerId === 'notify' && !props.isMobile ? '270px' : '')};
 	@media only screen and (min-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
-		width: 750px;
+		width: ${(props) => (props.containerId === 'notify' ? '96%' : '750px')};
+		top: ${(props) => (props.containerId === 'notify' ? '124px' : 'unset')};
 	}
 	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
-		width: 90vw;
+		width: ${(props) => (props.containerId === 'notify' ? '100%' : '90vw')};
 		transform: translateX(-50%);
 		left: 50%;
-		bottom: 70px;
+		top: ${(props) => (props.containerId === 'notify' ? '125px' : 'unset')};
 	}
 
 	& .Toastify__toast {
 		padding: 0;
 		margin-bottom: ${(props) => props.theme.spacing(1)};
+		top: ${(props) => (props.containerId !== 'notify' ? '0' : props.isMobile ? '0' : '0')};
+		right: ${(props) => (props.containerId === 'notify' ? '-20px' : 'unset')};
+		height: fit-content;
+		width: calc(100% - 20px);
 	}
 	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		& .Toastify__toast {
@@ -23,15 +29,17 @@ const CustomContainer = styled(ToastContainer)`
 	}
 	@media only screen and (min-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		& .Toastify__toast {
-			height: 60px;
+			height: fit-content;
 		}
 	}
 
 	.Toastify__toast--success {
-		background: rgba(79, 207, 161, 0.7);
-		border: 1px solid #1d8a7f;
+		background: ${(props) =>
+			props.containerId === 'notify' ? 'rgba(232, 250, 246, 1)' : 'rgba(79, 207, 161, 0.7)'};
+		border: ${(props) => (props.containerId === 'notify' ? 'none' : '1px solid #1d8a7f')};
+		box-shadow: ${(props) => (props.containerId === 'notify' ? 'none !important' : '	')};
 		box-sizing: border-box;
-		border-radius: 3px;
+		border-radius: ${(props) => (props.containerId === 'notify' ? '9px 0 0 9px' : '3px')};
 	}
 	.Toastify__toast--error {
 		background: #ffeff5;

@@ -28,7 +28,8 @@ const StyledSelect = styled(Select)`
 	}
 	.Select__dropdown-indicator {
 		color: #7246d0;
-		transform: ${(props) => (props.isMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
+		transform: ${(props) =>
+			props.isMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)'};
 		transition: all 0.3s;
 	}
 
@@ -143,7 +144,7 @@ const customStyles = {
 		width: '510px',
 		backgroundColor: '#fff',
 		maxHeight: state.selectProps.isMenuOpen ? '270px' : '',
-		zIndex: 5,
+		zIndex: 1,
 		overflow: 'hidden',
 	}),
 	control: () => ({
@@ -196,7 +197,20 @@ const Hint = styled.div`
 	line-height: 16px;
 `;
 
-const ReactSelect = ({ options, onChange, isMulti, value, onKeyDown, error, label, hint, placeholder }, props) => {
+const ReactSelect = (
+	{
+		options,
+		onChange,
+		isMulti,
+		value,
+		onKeyDown,
+		error,
+		label,
+		hint,
+		placeholder,
+	},
+	props
+) => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [input, setInput] = useState('');
 
@@ -208,7 +222,7 @@ const ReactSelect = ({ options, onChange, isMulti, value, onKeyDown, error, labe
 			</Label>
 			<StyledSelect
 				{...{ props }}
-				classNamePrefix="Select"
+				classNamePrefix='Select'
 				options={options}
 				onChange={(e) => {
 					setIsMenuOpen(true);

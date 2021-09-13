@@ -22,7 +22,7 @@ const ChainBadge = styled.div`
 	font-weight: normal;
 `;
 
-const MobileMenu = ({ isOpen, onClose }) => {
+const MobileMenu = ({ isOpen, onClose, notifyOnClose, usage = 'toastify' }) => {
 	const menuItems = [
 		{
 			title: 'Home',
@@ -51,9 +51,10 @@ const MobileMenu = ({ isOpen, onClose }) => {
 		<SlideMenu
 			isOpen={isOpen}
 			onClose={onClose}
-			title={'Menu'}
-			cta={() => <Button variant="primary">New Request</Button>}
+			title={usage === 'notify' ? 'notifications' : 'Menu'}
+			cta={() => <Button variant='primary'>New Request</Button>}
 			listItems={menuItems}
+			usage={usage}
 		></SlideMenu>
 	);
 };

@@ -19,6 +19,17 @@ export function getInput(input) {
 		case '0x':
 			return 'ETH transfer';
 		default:
-			return input.substr(0, 15);
+			return 'OtherTypes';
+	}
+}
+
+export function getStatusColor(StatusText) {
+	const statusTextInitials = StatusText;
+
+	switch (statusTextInitials) {
+		case 'Zarela Gift':
+			return '#7246D0';
+		default:
+			return null;
 	}
 }

@@ -6,7 +6,7 @@ import { Error } from '../Elements/TextField';
 
 export const FileInputWithBorder = css`
 	background: #ffffff;
-	border: 1px dashed #3adea3;
+	border: 1px dashed rgb(58 222 163 / 50%);
 	box-shadow: 0px 4px 18px rgba(223, 236, 255, 0.3);
 	border-radius: 5px;
 	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(1)};
@@ -19,6 +19,7 @@ export const FileInputWrapper = styled.div`
 	justify-content: space-between;
 	flex-wrap: wrap;
 	max-width: 530px;
+	font-weight: 400;
 `;
 
 export const FileInputTitle = styled.div`
@@ -35,19 +36,17 @@ export const FileInputTitle = styled.div`
 `;
 
 export const FileInputLabel = styled.label`
-	background: #ffffff;
-	box-shadow: 0px 5.46667px 18px rgba(223, 236, 255, 0.5);
-	border-radius: 5.46667px;
-	border: 1px solid #bbbee6;
-	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(4)};
-	color: #7246d0;
+	white-space: nowrap;
+	background: linear-gradient(226.69deg, #85ceee 10.5%, #a687fd 86.82%);
+	box-shadow: 0px 6px 20px rgba(81, 197, 234, 0.15);
+	border-radius: 4px;
+	padding: ${(props) => props.theme.spacing(1.2)};
+	color: ${(props) => props.theme.textPrimary};
 	cursor: pointer;
 	text-align: center;
-
-	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
-		font-size: 12px;
-		margin-bottom: ${(props) => props.theme.spacing(1)};
-	}
+	height: 40px;
+	width: 110px;
+	font-size: 16px;
 `;
 
 export const FileInputLink = styled.a`
@@ -65,13 +64,12 @@ const FileContainer = styled.div`
 	flex-direction: row-reverse;
 	justify-content: space-between;
 	width: 100%;
-	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
-		flex-direction: column-reverse;
-	}
 `;
 
 const ErrorContainer = styled.div`
 	margin-top: ${(props) => props.theme.spacing(1)};
+	text-align: left;
+	width: 100%;
 `;
 
 export const FileInputIcon = styled.img`
@@ -79,7 +77,11 @@ export const FileInputIcon = styled.img`
 	margin-right: ${(props) => props.theme.spacing(1)};
 `;
 
-export const FileName = styled.div``;
+export const FileName = styled.div`
+	overflow: hidden;
+	text-align: left;
+	text-overflow: ellipsis;
+`;
 
 export const formatLabel = (label) => {
 	const length = 28;
@@ -94,38 +96,103 @@ export const getFileName = (inputRef, fallbackLabel) => {
 	return formatLabel(fallbackLabel);
 };
 
+const MainWrapper = styled.div``;
+const ContentRow = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: end;
+	padding: 23px 0;
+	margin-bottom: 15px;
+`;
+const DownLoadText = styled.span`
+	font-size: 12px;
+	line-height: 10px;
+	color: #121213;
+	font-weight: ${(props) => (props.bold ? 'bold' : '')};
+`;
+const LinkWrapper = styled.div`
+	display: flex;
+	justify-content: center;
+	width: 110px;
+`;
+const DownLoadLink = styled.a`
+	color: #7246d0;
+	font-size: 12px;
+	line-height: 10px;
+	font-weight: bold;
+	cursor: pointer;
+`;
+
 // #refactor_candidate
 const FileInput = forwardRef(
-	({ disableUpload, className, hasBorder, showSelected, value, buttonLabel, icon, error, label, ...rest }, ref) => {
+	(
+		{
+			disableUpload,
+			className,
+			hasBorder,
+			downLoadLink,
+			showSelected,
+			value,
+			buttonLabel,
+			icon,
+			onClick,
+			error,
+			label,
+			...rest
+		},
+		ref
+	) => {
 		return (
-			<FileInputWrapper hasBorder={hasBorder} className={className}>
-				<FileContainer>
-					<FileInputLabel>
-						{buttonLabel}
-						{!disableUpload ? <input ref={ref} type="file" style={{ display: 'none' }} {...rest} /> : null}
-					</FileInputLabel>
-					{showSelected ? (
-						<FileInputTitle>
-							{icon === 'download' ? (
-								<FileInputIcon src={fileDownloadIcon} />
-							) : (
-								<FileInputIcon src={fileUploadIcon} />
-							)}
-							<FileName>{getFileName(ref, formatLabel(label))}</FileName>
-						</FileInputTitle>
-					) : (
-						<FileInputTitle>
-							{icon === 'download' ? (
-								<FileInputIcon src={fileDownloadIcon} />
-							) : (
-								<FileInputIcon src={fileUploadIcon} />
-							)}
-							<FileName>{formatLabel(label)}</FileName>
-						</FileInputTitle>
-					)}
-				</FileContainer>
-				<ErrorContainer>{error ? <Error>{error}</Error> : null}</ErrorContainer>
-			</FileInputWrapper>
+			<MainWrapper>
+				<FileInputWrapper hasBorder={hasBorder} className={className}>
+					<FileContainer>
+						{typeof onClick === 'function' ? (
+							<FileInputLabel onClick={onClick}>{buttonLabel}</FileInputLabel>
+						) : (
+							<FileInputLabel>
+								{buttonLabel}
+								{!disableUpload ? (
+									<input ref={ref} type="file" style={{ display: 'none' }} {...rest} />
+								) : null}
+							</FileInputLabel>
+						)}
+						{showSelected ? (
+							<FileInputTitle>
+								{icon === 'download' ? (
+									<FileInputIcon src={fileDownloadIcon} />
+								) : (
+									<FileInputIcon src={fileUploadIcon} />
+								)}
+								<FileName>{getFileName(ref, formatLabel(label))}</FileName>
+							</FileInputTitle>
+						) : (
+							<FileInputTitle>
+								{icon === 'download' ? (
+									<FileInputIcon src={fileDownloadIcon} />
+								) : (
+									<FileInputIcon src={fileUploadIcon} />
+								)}
+								<FileName>{formatLabel(label)}</FileName>
+							</FileInputTitle>
+						)}
+					</FileContainer>
+					{error ? (
+						<ErrorContainer>
+							<Error>{error}</Error>
+						</ErrorContainer>
+					) : null}
+				</FileInputWrapper>
+				{downLoadLink && (
+					<ContentRow>
+						<DownLoadText>
+							Don’t know how to make your Z-papaer? <DownLoadText bold>download the sample</DownLoadText>
+						</DownLoadText>
+						<LinkWrapper>
+							<DownLoadLink>DownLoad</DownLoadLink>
+						</LinkWrapper>
+					</ContentRow>
+				)}
+			</MainWrapper>
 		);
 	}
 );

@@ -51,7 +51,7 @@ const CustomFooter = styled(Footer)`
 `;
 
 const CustomBadgeRow = styled(BadgeRow)`
-	flex: 0;
+	flex: 6;
 	align-items: center;
 `;
 
@@ -136,7 +136,7 @@ const Timestamp = styled.p`
 	margin-top: ${(props) => props.theme.spacing(1)};
 `;
 
-const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, request, submitSignal }, ref) => {
+const RequestDetailsMobile = ({ setError, error, request }) => {
 	const contributors = `${request.totalContributed}/${request.totalContributors}`;
 	const [signalFile, setSignalFile] = useState(null);
 
@@ -154,6 +154,17 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
 							<Spacer />
 						</HeaderLayout>
 						<CustomFooter>
+							<CustomBadgeRow>
+								<TokenIcon src={biobitIcon} />
+								<TokenValue>
+									{+request.angelTokenPay + +request.laboratoryTokenPay} ({+request.angelTokenPay} A +{' '}
+									{+request.laboratoryTokenPay} H)
+								</TokenValue>
+								<BiobitToDollarValue noMargin>{`= $ ${
+									+request.angelTokenPay + +request.laboratoryTokenPay
+								}`}</BiobitToDollarValue>
+							</CustomBadgeRow>
+							<Spacer />
 							<CustomContributeBadge>
 								<BadgeRow>
 									<ContributorsIcon src={documentsIcon} />
@@ -167,15 +178,6 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
 									<BadgeLabel>{request.totalContributedCount}</BadgeLabel>
 								</BadgeRow>
 							</CustomContributeBadge>
-							<Spacer />
-							<CustomBadgeRow>
-								<TokenIcon src={biobitIcon} />
-								<TokenValue>{+request.angelTokenPay + +request.laboratoryTokenPay}</TokenValue>
-								<BiobitToDollarValue noMargin>{`= $ ${
-									+request.angelTokenPay + +request.laboratoryTokenPay
-								}`}</BiobitToDollarValue>
-							</CustomBadgeRow>
-							<CustomDivider />
 						</CustomFooter>
 						<CustomProgressTrackerWrapper>
 							<ProgressTrackerTrack>
@@ -188,18 +190,20 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
 				</HeaderContainer>
 				<DescriptionContainer>
 					<UploadFileCard
+						isMobile
 						showSelected
-						buttonLabel="Select Files"
-						label={'Already have the file?'}
-						ref={ref}
-						name={'whitepaper'}
+						disableUpload
+						buttonLabel="Contribute"
+						label={'Already Have a File?'}
+						name={'signal file'}
 						value={signalFile}
 						onChange={(e) => {
 							setSignalFile(e.target.files[0]);
 						}}
+						helperText={'here you will select and upload your biosignals.'}
 						error={error}
 						setError={setError}
-						onClick={submitSignal}
+						request={request}
 					/>
 					<TagsWrapper>
 						{request.categories?.split(',').map((item) => {
@@ -232,6 +236,6 @@ const RequestDetailsMobile = React.forwardRef(({ setError, error, timestamp, req
 			</PageWrapper>
 		</MobileLayout>
 	);
-});
+};
 
 export default RequestDetailsMobile;
