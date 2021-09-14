@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { localStorageContext } from '../../state/localStorageProvider/LocalStoragePriveder';
-import { normalizeAddress } from '../../utils';
+import { CopyableText, normalizeAddress } from '../../utils';
 import styled from 'styled-components';
 import hide from '../../assets/icons/actionIcons/hide.svg';
 import HideAddress from '../WalletAddress/HideAddress';
@@ -12,6 +12,7 @@ import {
 	TableCell,
 	EmptyMessage,
 	TableRow,
+	CopyIcon,
 	TableBulkRow,
 } from '../LogCards/Elements';
 import MobileCard from './MobileCard';
@@ -64,7 +65,11 @@ const Hidden = ({ isMobile }) => {
 												</TableCell>
 											</SettingTableCell>
 											<SettingTableCell flex="1 0 auto">
-												<TableCell>{hiddenAddress}</TableCell>
+												<CopyableText textToCopy={hiddenAddress}>
+													<TableCell>
+														{hiddenAddress} <CopyIcon />
+													</TableCell>
+												</CopyableText>
 											</SettingTableCell>
 											<SettingTableCell flex="0 0 10%">
 												<TableCell>

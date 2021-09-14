@@ -25,7 +25,7 @@ import biobitIcon from '../../assets/icons/biobit-black.svg';
 import checkedGreen from '../../assets/icons/check-green.svg';
 import pendingIcon from '../../assets/icons/pending.svg';
 import angelIcon from '../../assets/icons/angel.png';
-import brainHubIcon from '../../assets/icons/hub.svg';
+import hubIcon from '../../assets/icons/hub.png';
 import { Spacer } from '../Elements/Spacer';
 import { timeSince } from '../../utils';
 
@@ -95,12 +95,12 @@ const LogCardMobile = ({ data, account }) => {
 												<MobileContributorIcon src={angelIcon} />
 											)}
 											{hub.toLowerCase() === account.toLowerCase() && (
-												<MobileContributorIcon src={brainHubIcon} />
+												<MobileContributorIcon src={hubIcon} />
 											)}
 											<MobileVerticalDivider />
 											<MobileRoleText>Gainer : </MobileRoleText>
 											<MobileContributorIcon
-												src={rewardGainer === true ? angelIcon : brainHubIcon}
+												src={rewardGainer === true ? angelIcon : hubIcon}
 											/>
 										</MobileRow>
 									</MobileTableColumn>

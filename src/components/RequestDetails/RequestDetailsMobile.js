@@ -157,8 +157,8 @@ const RequestDetailsMobile = ({ setError, error, request }) => {
 							<CustomBadgeRow>
 								<TokenIcon src={biobitIcon} />
 								<TokenValue>
-									{+request.angelTokenPay + +request.laboratoryTokenPay} ({+request.angelTokenPay} A +{' '}
-									{+request.laboratoryTokenPay} H)
+									{+request.angelTokenPay + +request.laboratoryTokenPay} ({+request.angelTokenPay} Angel +{' '}
+									{+request.laboratoryTokenPay} Hub)
 								</TokenValue>
 								<BiobitToDollarValue noMargin>{`= $ ${
 									+request.angelTokenPay + +request.laboratoryTokenPay

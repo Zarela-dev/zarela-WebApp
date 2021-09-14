@@ -373,10 +373,18 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 									status={getStatusColor(getInput(transaction.input))}
 								>
 									{isValidInput(transaction.input) ? (
-										<Cell>{getInput(transaction.input)}</Cell>
+										<Cell>
+											{`${getInput(transaction.input)} ${
+												transaction.isError != 0 ? '(failed)' : ''
+											}`}
+										</Cell>
 									) : (
 										<CopyableText textToCopy={transaction.input}>
-											<Cell copyable>{transaction.input.substr(0, 10)}</Cell>
+											<Cell copyable>
+												{`${transaction.input.substr(0, 10)} ${
+													transaction.isError != 0 ? '(failed)' : ''
+												}`}
+											</Cell>
 										</CopyableText>
 									)}
 								</InputCellWrapper>

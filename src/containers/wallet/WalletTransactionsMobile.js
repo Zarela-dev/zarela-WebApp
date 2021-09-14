@@ -6,6 +6,7 @@ import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '../../components/Pagination';
 import { getStatusColor } from '../../utils/transactionInput';
+import { isValidInput } from '../../utils/helpers';
 
 const Wrapper = styled.div`
 	width: 100%;
@@ -61,9 +62,7 @@ const HashCol = styled.div`
 `;
 const TextCol = styled(HashCol)`
 	color: #121213;
-	max-width: ${(props) => (props.title ? '165px' : 'unset')};
 	height: ${(props) => (props.title ? '100%' : 'unset')};
-	white-space: ${(props) => (props.title ? 'nowrap' : 'unset')};
 	overflow: ${(props) => (props.title ? 'hidden' : 'unset')};
 	font-size: ${(props) => (props.title ? '16px' : '')};
 	line-height: ${(props) => (props.title ? '20.8px' : '')};
@@ -321,7 +320,19 @@ const WalletTransactionsMobile = ({ isLoading, account, data, props, PAGE_SIZE }
 					>
 						<TransactionRow>
 							<TitleCol></TitleCol>
-							<TextCol title>{getInput(transaction.input)}</TextCol>
+							{isValidInput(transaction.input) ? (
+								<TextCol title>
+									{`${getInput(transaction.input)} ${transaction.isError != 0 ? '(failed)' : ''}`}
+								</TextCol>
+							) : (
+								<CopyableText textToCopy={transaction.input}>
+									<TextCol title>
+										{`${transaction.input.substr(0, 10)} ${
+											transaction.isError != 0 ? '(failed)' : ''
+										}`}
+									</TextCol>
+								</CopyableText>
+							)}
 						</TransactionRow>
 						<TransactionRow>
 							<TitleCol>TXN Hash</TitleCol>

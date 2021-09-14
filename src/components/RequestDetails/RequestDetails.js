@@ -175,7 +175,7 @@ const RequestDetails = ({ setError, error, request }) => {
 							<TokenIcon src={biobitIcon} />
 							<TokenValue>{+request.angelTokenPay + +request.laboratoryTokenPay} BBit</TokenValue>
 							<ValueLabel>
-								({+request.angelTokenPay} A + {+request.laboratoryTokenPay} H)
+								({+request.angelTokenPay} Angel + {+request.laboratoryTokenPay} Hub)
 							</ValueLabel>
 							<BiobitToDollarValue noMargin>{`~ $ ${
 								+request.angelTokenPay + +request.laboratoryTokenPay
