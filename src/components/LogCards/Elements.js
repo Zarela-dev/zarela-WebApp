@@ -350,7 +350,7 @@ export const TimestampMobile = styled(Timestamp)`
 `;
 
 const RoleIcon = styled.img`
-	width: 24px;
+	height: 32px;
 	padding: 0 ${(props) => props.theme.spacing(1.5)};
 	box-sizing: content-box;
 `;
