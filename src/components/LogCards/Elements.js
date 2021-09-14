@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import hubIcon from '../../assets/icons/hub.png';
 import angelIcon from '../../assets/icons/angel.png';
+import copyIcon from '../../assets/icons/copy.svg';
 
 // layout
 const getFontColorVariant = ({ variant, theme }) => {
@@ -418,4 +419,13 @@ export const MobileVerticalDivider = styled.div`
 	border: none;
 	background: #c4c4c4;
 	margin: 0 10px;
+`;
+
+export const CopyIcon = styled.img.attrs((props) => {
+	return {
+		src: copyIcon,
+	};
+})`
+	width: 22px;
+	margin-left: 8px;
 `;

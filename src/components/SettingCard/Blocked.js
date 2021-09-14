@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { localStorageContext } from '../../state/localStorageProvider/LocalStoragePriveder';
-import { normalizeAddress } from '../../utils';
+import { CopyableText, normalizeAddress } from '../../utils';
 import styled from 'styled-components';
 import BlockAddress from '../WalletAddress/BlockAddress';
 
@@ -13,6 +13,7 @@ import {
 	EmptyMessage,
 	TableRow,
 	TableBulkRow,
+	CopyIcon,
 } from '../LogCards/Elements';
 import MobileCard from './MobileCard';
 
@@ -52,7 +53,11 @@ const Blocked = ({ isMobile }) => {
 								blockList.map((blockedAddress) => (
 									<TableRow key={blockedAddress}>
 										<SettingTableCell flex="1 0 auto">
-											<TableCell>{blockedAddress}</TableCell>
+											<CopyableText textToCopy={blockedAddress}>
+												<TableCell>
+													{blockedAddress} <CopyIcon />
+												</TableCell>
+											</CopyableText>
 										</SettingTableCell>
 										<SettingTableCell flex="0 0 20%">
 											<TableCell> {contacts[normalizeAddress(blockedAddress)] || '-'}</TableCell>

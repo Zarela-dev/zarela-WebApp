@@ -10,8 +10,9 @@ import {
 	TableRow,
 	EmptyMessage,
 	TableBulkRow,
+	CopyIcon,
 } from '../LogCards/Elements';
-import { normalizeAddress } from '../../utils';
+import { CopyableText, normalizeAddress } from '../../utils';
 import MobileCard from './MobileCard';
 import AddContact from '../WalletAddress/AddContact';
 import BlockAddress from '../WalletAddress/BlockAddress';
@@ -74,7 +75,11 @@ const Contacts = ({ isMobile }) => {
 												<TableCell isBlocked={isBlocked}> {contacts[address]} </TableCell>
 											</SettingTableCell>
 											<SettingTableCell flex="0 0 40%">
-												<TableCell isBlocked={isBlocked}> {address} </TableCell>
+												<CopyableText textToCopy={address}>
+													<TableCell isBlocked={isBlocked}>
+														{address} <CopyIcon />
+													</TableCell>
+												</CopyableText>
 											</SettingTableCell>
 											<SettingTableCell flex="0 0 25%">
 												<TableCell>
