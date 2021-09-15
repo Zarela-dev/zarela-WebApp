@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import DownloadFileCard from '../DownloadFileCard/DownloadFileCard';
 import UploadFileCard from '../UploadFileCard/UploadFileCard';
@@ -28,8 +28,10 @@ import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/user-blue.svg';
 import documentsIcon from '../../assets/icons/document-blue.svg';
 import publicKeyIcon from '../../assets/icons/public-key.svg';
-import { CopyableText, timeSince } from '../../utils';
+import { CopyableText, timeSince, getFileNameWithExt } from '../../utils';
+import { create } from 'ipfs-http-client';
 
+import all from 'it-all';
 const PageWrapper = styled.div``;
 
 const HeaderContainer = styled.header`
@@ -143,6 +145,20 @@ const Timestamp = styled.p`
 const RequestDetails = ({ setError, error, request }) => {
 	const contributors = `${request.totalContributed}/${request.totalContributors}`;
 	const [signalFile, setSignalFile] = useState(null);
+	const [zpaperDownloadLink, setZpaperLink] = useState(null);
+	const ipfs = create(process.env.REACT_APP_IPFS);
+
+	useEffect(() => {
+		if (request.whitePaper) {
+			const getFilename = async () => {
+				const output = await all(ipfs.ls(request.whitePaper));
+				return output;
+			};
+			getFilename()
+				.then((res) => res.length && setZpaperLink(res[0].path))
+				.catch((err) => console.error(err));
+		}
+	}, [request.whitePaper]);
 
 	return (
 		<PageWrapper>
@@ -213,11 +229,12 @@ const RequestDetails = ({ setError, error, request }) => {
 			</DescriptionContainer>
 			<FilesWrapper>
 				<DownloadFileCard
+					isLoading={!zpaperDownloadLink}
 					fileName={'Download Zpaper'}
 					buttonLabel={'Download'}
 					label={'just label'}
 					helperText={'This file contains Zpaper file and survey test files.'}
-					fileLink={process.env.REACT_APP_IPFS_LINK + request.whitePaper}
+					fileLink={process.env.REACT_APP_IPFS_LINK + zpaperDownloadLink}
 				/>
 				<FileCardSpacer />
 				<UploadFileCard
