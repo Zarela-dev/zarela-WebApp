@@ -4,7 +4,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import TagManager from 'react-gtm-module';
 
-if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_IS_TEST_NET === 'true') {
+if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_IS_TEST_NET !== 'true') {
 	const tagManagerArgs = {
 		gtmId: 'GTM-M2G7MQ6',
 	};
