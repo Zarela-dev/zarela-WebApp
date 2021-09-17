@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router';
-import { useWeb3React } from '@web3-react/core';
 import { mainContext } from '../../state';
 import { convertToBiobit } from '../../utils';
 import Mobile from './Mobile';
@@ -31,9 +30,7 @@ const RequestDetailsPage = () => {
 	const { id } = useParams();
 	const [request, setRequest] = useState({});
 	const { appState } = useContext(mainContext);
-	const [showDialog, setDialog] = useState(false);
 	const [error, setError] = useState(false);
-	const { account } = useWeb3React();
 
 	useEffect(() => {
 		if (appState.contract !== null) {
@@ -78,22 +75,16 @@ const RequestDetailsPage = () => {
 			{appState.isMobile ? (
 				<Mobile
 					{...{
-						account,
-						showDialog,
 						request,
 						error,
-						setDialog,
 						setError,
 					}}
 				/>
 			) : (
 				<Desktop
 					{...{
-						account,
-						showDialog,
 						request,
 						error,
-						setDialog,
 						setError,
 					}}
 				/>
