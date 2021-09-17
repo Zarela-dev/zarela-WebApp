@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SmallCheckbox } from '../Elements/Checkbox';
 import TextField from '../Elements/TextField';
 import Button from '../Elements/Button';
+import ConnectDialog from '../Dialog/ConnectDialog';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useWeb3React } from '@web3-react/core';
@@ -74,6 +75,7 @@ const RewardGainerDescription = styled.p`
 const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref) => {
 	const addressRegex = new RegExp(/^0x[a-fA-F0-9]{40}$/);
 	const { account } = useWeb3React();
+	const [showConnectDialog, setConnectDialogVisibility] = useState(false);
 
 	const formik = useFormik({
 		initialValues: {
@@ -110,41 +112,48 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 			}),
 		}),
 		onSubmit: (values) => {
-			const { angelAddress, hasHub, hubAddress, rewardGainer, step } = values;
-			if (step == 1) {
-				if (ref.current?.files?.length > 0) {
-					formik.setFieldValue('step', 2);
-				} else {
-					formik.setFieldError('file', 'you must select a file to upload');
-				}
-			} else if (step == 2) {
-				if (hasHub) {
+			if (!account) {
+				setConnectDialogVisibility(true);
+			} else {
+				setConnectDialogVisibility(false);
+				const { angelAddress, hasHub, hubAddress, rewardGainer, step } = values;
+				if (step == 1) {
+					if (ref.current?.files?.length > 0) {
+						formik.setFieldValue('step', 2);
+					} else {
+						formik.setFieldError('file', 'you must select a file to upload');
+					}
+				} else if (step == 2) {
+					if (hasHub) {
+						if (
+							angelAddress.toLowerCase() === account.toLowerCase() ||
+							hubAddress.toLowerCase() === account.toLowerCase()
+						)
+							formik.setFieldValue('step', 3);
+						else formik.setFieldError('angelAddress', 'your connected account must be either hub or angel');
+					} else {
+						if (angelAddress.toLowerCase() === account.toLowerCase())
+							submitSignal(angelAddress, angelAddress, rewardGainer);
+						else formik.setFieldError('angelAddress', "you need to enter your connected account's address");
+					}
+				} else if (step == 3) {
 					if (
 						angelAddress.toLowerCase() === account.toLowerCase() ||
 						hubAddress.toLowerCase() === account.toLowerCase()
 					)
-						formik.setFieldValue('step', 3);
+						submitSignal(angelAddress, hubAddress, rewardGainer);
 					else formik.setFieldError('angelAddress', 'your connected account must be either hub or angel');
 				} else {
-					if (angelAddress.toLowerCase() === account.toLowerCase())
-						submitSignal(angelAddress, angelAddress, rewardGainer);
-					else formik.setFieldError('angelAddress', "you need to enter your connected account's address");
+					return;
 				}
-			} else if (step == 3) {
-				if (
-					angelAddress.toLowerCase() === account.toLowerCase() ||
-					hubAddress.toLowerCase() === account.toLowerCase()
-				)
-					submitSignal(angelAddress, hubAddress, rewardGainer);
-				else formik.setFieldError('angelAddress', 'your connected account must be either hub or angel');
-			} else {
-				return;
 			}
 		},
 	});
 
 	return (
 		<Form onSubmit={formik.handleSubmit}>
+			<ConnectDialog isOpen={!account && showConnectDialog} onClose={() => setConnectDialogVisibility(false)} />
+
 			<input type="hidden" name={'step'} value={formik.values.step} />
 			{formik.values.step > 1 && (
 				<ModalBackIcon src={backIcon} onClick={() => formik.setFieldValue('step', formik.values.step - 1)} />

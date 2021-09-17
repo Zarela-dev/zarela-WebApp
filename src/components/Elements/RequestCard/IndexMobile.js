@@ -164,7 +164,7 @@ export const Bookmark = styled.img`
 
 export const TokenIcon = styled.img`
 	flex: 0 0 14px;
-	height: 14px;
+	height: 18px;
 	margin-right: ${(props) => props.theme.spacing(0.5)};
 `;
 

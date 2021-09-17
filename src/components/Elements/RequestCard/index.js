@@ -159,7 +159,7 @@ export const ContributorBadge = styled(BiobitToDollarPair)``;
 
 export const TokenIcon = styled.img`
 	flex: 0 0 18px;
-	height: 18px;
+	height: 24px;
 	margin-right: ${(props) => props.theme.spacing(0.5)};
 `;
 
