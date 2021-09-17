@@ -248,7 +248,9 @@ export default function Header({ isMobile }, props) {
 	const [totalRevenueFromRequester, setTotalRevenueFromRequester] = useState(0);
 	const routeGroup = location.pathname.split('/')[1];
 	const classes = useStyles(props);
+	const GUIDES = ['/', '/inbox', '/log'];
 
+	console.log(location.pathname);
 	useEffect(() => {
 		if (appState.contract !== null) {
 			if (account) {
@@ -405,18 +407,22 @@ export default function Header({ isMobile }, props) {
 								</NotificationBadge>
 							)}
 						</NavItem>
-						<NavItem>
-							<NavIcon
-								src={help}
-								onClick={() => {
-									localStorage.removeItem('guide/' + location.pathname.split('/')[1]);
-									dispatch({
-										type: actionTypes.SET_GUIDE_IS_OPEN,
-										payload: true,
-									});
-								}}
-							/>
-						</NavItem>
+						{GUIDES.find(
+							(page) => location.pathname === page || (location.pathname.startsWith(page) && page !== '/')
+						) && (
+							<NavItem>
+								<NavIcon
+									src={help}
+									onClick={() => {
+										localStorage.removeItem('guide/' + location.pathname.split('/')[1]);
+										dispatch({
+											type: actionTypes.SET_GUIDE_IS_OPEN,
+											payload: true,
+										});
+									}}
+								/>
+							</NavItem>
+						)}
 						<NavItem isMobile={appState.isMobile} to="/setting/contacts">
 							<NavIcon src={setting} />
 						</NavItem>
