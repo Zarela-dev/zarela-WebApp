@@ -29,7 +29,7 @@ const CellWrapper = styled.div`
 `;
 
 const getStatus = (props) => {
-	if (props.isError != 0)
+	if (props.isError && props.isError !== '0')
 		return css`
 			color: #f62d76 !important;
 		`;
@@ -351,7 +351,7 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 						return (
 							<Row key={index}>
 								<CellWrapper>
-									<CopyableText textToCopy={transaction.blockHash}>
+									<CopyableText textToCopy={transaction.hash}>
 										<Cell copyable>{transaction.hash}</Cell>
 									</CopyableText>
 								</CellWrapper>
@@ -372,17 +372,17 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 									isError={transaction.isError}
 									status={getStatusColor(getInput(transaction.input))}
 								>
-									{isValidInput(transaction.input) ? (
+									{isValidInput(transaction.input) || transaction.input === 'BBit transfer' ? (
 										<Cell>
 											{`${getInput(transaction.input)} ${
-												transaction.isError != 0 ? '(failed)' : ''
+												transaction.isError && transaction.isError !== '0' ? '(failed)' : ''
 											}`}
 										</Cell>
 									) : (
 										<CopyableText textToCopy={transaction.input}>
 											<Cell copyable>
 												{`${transaction.input.substr(0, 10)} ${
-													transaction.isError != 0 ? '(failed)' : ''
+													transaction.isError && transaction.isError !== '0' ? '(failed)' : ''
 												}`}
 											</Cell>
 										</CopyableText>
