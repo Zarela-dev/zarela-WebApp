@@ -250,7 +250,6 @@ export default function Header({ isMobile }, props) {
 	const classes = useStyles(props);
 	const GUIDES = ['/', '/inbox', '/log'];
 
-	console.log(location.pathname);
 	useEffect(() => {
 		if (appState.contract !== null) {
 			if (account) {

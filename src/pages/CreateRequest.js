@@ -115,7 +115,6 @@ const CreateRequest = () => {
 										// since it may take quite a while for a request to fulfill, we pin it
 										// on IPFS so it'd be available for later uses
 										const fileMeta = getFileNameWithExt(fileRef);
-										debugger;
 										const ipfsResponse = await ipfs.add(
 											{
 												content: fileRef.current.files[0],
@@ -127,7 +126,6 @@ const CreateRequest = () => {
 											*/
 										);
 										const zpaper_CID = ipfsResponse.cid.toString();
-										debugger;
 
 										formik.setFieldValue('zpaper', zpaper_CID);
 										let url = `${process.env.REACT_APP_IPFS_LINK + zpaper_CID}`;
