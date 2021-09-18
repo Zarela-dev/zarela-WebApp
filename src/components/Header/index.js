@@ -393,7 +393,7 @@ export default function Header({ isMobile }, props) {
 						<NavItem isMobile={appState.isMobile} to="/wallet/account">
 							<NavIcon src={wallet} />
 							<NavLink>Wallet</NavLink>
-							<ChainBadge>Ropsten</ChainBadge>
+							<ChainBadge onClick={(e) => e.preventDefault()}>Ropsten</ChainBadge>
 						</NavItem>
 					</RightMenu>
 					<LeftMenu>
