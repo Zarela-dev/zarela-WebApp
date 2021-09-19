@@ -23,7 +23,7 @@ const StickyButton = styled(Button)`
 
 	& > * {
 		font-size: 12px;
-		padding: 0 ${props => props.theme.spacing(2)};
+		padding: 0 ${(props) => props.theme.spacing(2)};
 	}
 `;
 
@@ -84,6 +84,12 @@ const UploadFileCard = (props) => {
 					workerInstance.addEventListener('message', async (event) => {
 						if (event.data.type === 'feedback') {
 							setDialogMessage(event.data.message);
+						}
+						if (event.data.type === 'raw') {
+							console.log(event.data.raw);
+						}
+						if (event.data.type === 'dec') {
+							console.log(event.data.decFile);
 						}
 						if (event.data.type === 'encryption') {
 							try {
