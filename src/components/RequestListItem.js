@@ -314,8 +314,8 @@ const RequestListItem = ({
 
 			workerInstance.postMessage({
 				fileHash,
-				AES_KEY: AesDecryptedKey,
-				AES_IV,
+				AES_KEY: AesDecryptedKey.split(',').map((item) => Number(item)),
+				AES_IV: Object.values(AES_IV),
 			});
 
 			workerInstance.addEventListener('message', async (event) => {
@@ -323,6 +323,7 @@ const RequestListItem = ({
 					setDialogMessage(event.data.message);
 				}
 				if (event.data.type === 'decrypted') {
+					console.log(event.data.decrypted_file);
 					downloadFile(event.data.decrypted_file, `${FILE_NAME}.${FILE_EXT}`);
 				}
 			});

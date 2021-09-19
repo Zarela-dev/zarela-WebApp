@@ -1,6 +1,7 @@
 import { twofish } from 'twofish';
 import { Buffer } from 'buffer';
 import axios from 'axios';
+import chacha from 'chacha20';
 
 export const initDecrypt = () => {
 	onmessage = async function (event) {
@@ -20,12 +21,9 @@ export const initDecrypt = () => {
 
 		fileReader.onloadend = () => {
 			var buffer = Buffer(fileReader.result);
+			
+			const decrypted = chacha.decrypt(AES_IV, AES_KEY, buffer);
 
-			/* decryptCBC input file must be array */
-			var decrypted = twF.decryptCBC(
-				AES_KEY.split(',').map((item) => Number(item)),
-				buffer
-			);
 			postMessage({ type: 'feedback', message: 'saving file' });
 			postMessage({ type: 'decrypted', decrypted_file: decrypted });
 		};

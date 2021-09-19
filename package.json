@@ -13,6 +13,7 @@
     "@web3-react/walletconnect-connector": "^6.2.0",
     "axios": "^0.21.1",
     "buffer": "^6.0.3",
+    "chacha20": "^0.1.4",
     "eth-sig-util": "^3.0.1",
     "file-type": "^16.5.0",
     "formik": "^2.2.9",

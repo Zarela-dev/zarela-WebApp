@@ -1,6 +1,6 @@
-import { twofish } from 'twofish';
 import { Buffer } from 'buffer';
 import { create } from 'ipfs-http-client';
+import chacha from 'chacha20';
 
 export const initEncrypt = () => {
 	onmessage = function (event) {
@@ -14,8 +14,7 @@ export const initEncrypt = () => {
 		reader.onloadend = async function () {
 			const buff = Buffer(reader.result); // Convert data into buffer
 
-			var twF = twofish(AES_IV),
-				encryptedFile = twF.encryptCBC(AES_KEY, buff); /* twF.encryptCBC expects an array */
+			const encryptedFile = chacha.encrypt(AES_IV, AES_KEY, buff);
 
 			postMessage({ type: 'feedback', message: 'uploading file to IPFS' });
 			const fileResponse = await ipfs.add(encryptedFile, { pin: true });
