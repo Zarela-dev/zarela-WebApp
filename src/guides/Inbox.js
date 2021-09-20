@@ -11,9 +11,4 @@ export const InboxSteps = [
 		selector: '[data-tour="inbox-three"]',
 		content: 'approved responses which are checked, wage tokens will be sent to. ',
 	},
-	{
-		selector: '',
-		content:
-			'Well done! You earn 100 BBits for this learning! want to earn more? learn every guide on pages and collect about 500 BBits!',
-	},
 ];

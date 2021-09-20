@@ -33,11 +33,6 @@ export const RequestDetailsDesktopSteps = [
 		content:
 			'This section displays information about the total number of Biobit tokens, Biobit token name and code and your own Wallet balance.',
 	},
-	{
-		selector: '',
-		content:
-			'Well done! You earn 100 BBits for this learning! want to earn more? learn every guide on pages and collect about 500 BBits!',
-	},
 ];
 
 export const RequestDetailsMobileSteps = [
@@ -69,10 +64,5 @@ export const RequestDetailsMobileSteps = [
 	{
 		selector: '[data-tour="request-list-seven"]',
 		content: 'You can click here to see more information about applying and participating.',
-	},
-	{
-		selector: '',
-		content:
-			'Well done! You earn 100 BBits for this learning! want to earn more? learn every guide on pages and collect about 500 BBits!',
 	},
 ];

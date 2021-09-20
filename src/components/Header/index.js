@@ -248,7 +248,7 @@ export default function Header({ isMobile }, props) {
 	const [totalRevenueFromRequester, setTotalRevenueFromRequester] = useState(0);
 	const routeGroup = location.pathname.split('/')[1];
 	const classes = useStyles(props);
-	const GUIDES = ['/', '/inbox', '/log'];
+	const GUIDES = ['/', '/inbox', '/log', '/request'];
 
 	useEffect(() => {
 		if (appState.contract !== null) {
