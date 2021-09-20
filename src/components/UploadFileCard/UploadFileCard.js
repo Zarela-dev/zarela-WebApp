@@ -85,12 +85,6 @@ const UploadFileCard = (props) => {
 						if (event.data.type === 'feedback') {
 							setDialogMessage(event.data.message);
 						}
-						if (event.data.type === 'raw') {
-							console.log(event.data.raw);
-						}
-						if (event.data.type === 'dec') {
-							console.log(event.data.decFile);
-						}
 						if (event.data.type === 'encryption') {
 							try {
 								// AES key encryption using Metamask

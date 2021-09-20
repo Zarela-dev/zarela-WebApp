@@ -323,7 +323,6 @@ const RequestListItem = ({
 					setDialogMessage(event.data.message);
 				}
 				if (event.data.type === 'decrypted') {
-					console.log(event.data.decrypted_file);
 					downloadFile(event.data.decrypted_file, `${FILE_NAME}.${FILE_EXT}`);
 				}
 			});

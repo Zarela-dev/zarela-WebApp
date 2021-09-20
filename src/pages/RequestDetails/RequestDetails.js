@@ -88,9 +88,6 @@ const RequestDetailsPage = () => {
 		}
 	}, [id, appState.contract]);
 
-	console.log(zpaperDownloadLink
-		? process.env.REACT_APP_IPFS_LINK + zpaperDownloadLink
-		: null);
 	return (
 		<Guide steps={steps}>
 			{appState.isMobile ? (

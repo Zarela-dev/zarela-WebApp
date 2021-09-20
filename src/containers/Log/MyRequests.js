@@ -81,7 +81,6 @@ const MyRequests = (props) => {
 						});
 
 						getAllRequests.then((requestsList) => {
-							console.log('requestsList', requestsList);
 							setRequests(requestsList);
 							setLoading(false);
 						});
