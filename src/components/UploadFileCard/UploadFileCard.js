@@ -82,7 +82,7 @@ const UploadFileCard = (props) => {
 					});
 
 					workerInstance.addEventListener('message', async (event) => {
-						if (event.data.type === 'feedback') {
+						if (event.data.type === 'encryption:feedback') {
 							setDialogMessage(event.data.message);
 						}
 						if (event.data.type === 'encryption') {
