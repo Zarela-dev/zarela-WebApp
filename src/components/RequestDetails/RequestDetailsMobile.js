@@ -136,7 +136,7 @@ const Timestamp = styled.p`
 	margin-top: ${(props) => props.theme.spacing(1)};
 `;
 
-const RequestDetailsMobile = ({ setError, error, request }) => {
+const RequestDetailsMobile = ({ setError, zpaperDownloadLink, error, request }) => {
 	const contributors = `${request.totalContributed}/${request.totalContributors}`;
 	const [signalFile, setSignalFile] = useState(null);
 
@@ -157,8 +157,8 @@ const RequestDetailsMobile = ({ setError, error, request }) => {
 							<CustomBadgeRow>
 								<TokenIcon src={biobitIcon} />
 								<TokenValue>
-									{+request.angelTokenPay + +request.laboratoryTokenPay} ({+request.angelTokenPay} Angel +{' '}
-									{+request.laboratoryTokenPay} Hub)
+									{+request.angelTokenPay + +request.laboratoryTokenPay} ({+request.angelTokenPay}{' '}
+									Angel + {+request.laboratoryTokenPay} Hub)
 								</TokenValue>
 								<BiobitToDollarValue noMargin>{`= $ ${
 									+request.angelTokenPay + +request.laboratoryTokenPay
@@ -226,11 +226,12 @@ const RequestDetailsMobile = ({ setError, error, request }) => {
 				</PublicKeyBadge>
 				<FilesWrapper>
 					<DownloadFileCardMobile
+						isLoading={!zpaperDownloadLink}
 						fileName={'Download Zpaper'}
 						buttonLabel={'Download'}
 						label={'just label'}
 						helperText={'This file contains Zpaper file and survey test files.'}
-						fileLink={process.env.REACT_APP_IPFS_LINK + request.whitePaper}
+						fileLink={zpaperDownloadLink}
 					/>
 				</FilesWrapper>
 			</PageWrapper>

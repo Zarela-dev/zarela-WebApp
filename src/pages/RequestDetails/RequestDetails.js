@@ -5,6 +5,8 @@ import { convertToBiobit } from '../../utils';
 import Mobile from './Mobile';
 import Desktop from './Desktop';
 import Guide from './../../components/Guide/Guide';
+import { create } from 'ipfs-http-client';
+import all from 'it-all';
 
 const steps = [
 	{
@@ -31,6 +33,22 @@ const RequestDetailsPage = () => {
 	const [request, setRequest] = useState({});
 	const { appState } = useContext(mainContext);
 	const [error, setError] = useState(false);
+	const [zpaperDownloadLink, setZpaperLink] = useState(null);
+	const ipfs = create(process.env.REACT_APP_IPFS);
+
+	useEffect(() => {
+		if (request.whitePaper) {
+			const getFilename = async () => {
+				const output = await all(ipfs.ls(request.whitePaper));
+				return output;
+			};
+			getFilename()
+				.then((res) => {
+					res.length && setZpaperLink(res[0].path);
+				})
+				.catch((err) => console.error(err));
+		}
+	}, [request]);
 
 	useEffect(() => {
 		if (appState.contract !== null) {
@@ -70,6 +88,9 @@ const RequestDetailsPage = () => {
 		}
 	}, [id, appState.contract]);
 
+	console.log(zpaperDownloadLink
+		? process.env.REACT_APP_IPFS_LINK + zpaperDownloadLink
+		: null);
 	return (
 		<Guide steps={steps}>
 			{appState.isMobile ? (
@@ -78,6 +99,9 @@ const RequestDetailsPage = () => {
 						request,
 						error,
 						setError,
+						zpaperDownloadLink: zpaperDownloadLink
+							? process.env.REACT_APP_IPFS_LINK + zpaperDownloadLink
+							: null,
 					}}
 				/>
 			) : (
@@ -86,6 +110,9 @@ const RequestDetailsPage = () => {
 						request,
 						error,
 						setError,
+						zpaperDownloadLink: zpaperDownloadLink
+							? process.env.REACT_APP_IPFS_LINK + zpaperDownloadLink
+							: null,
 					}}
 				/>
 			)}
