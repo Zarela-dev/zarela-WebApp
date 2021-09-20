@@ -18,17 +18,21 @@ export const initEncrypt = () => {
 			const encryptedFile = chacha.encrypt(AES_IV, AES_KEY, buff);
 
 			postMessage({ type: 'encryption:feedback', message: 'uploading file to IPFS' });
-			const fileResponse = await ipfs.add(encryptedFile, {
-				pin: true,
-				progress: (uploaded) => {
-					const uploadedPercent = Math.ceil((uploaded / fileSize) * 100);
-					postMessage({
-						type: 'encryption:feedback',
-						message: `uploading file to IPFS - ${uploadedPercent}%`,
-					});
-				},
-			});
-			postMessage({ type: 'encryption', ipfs_path: fileResponse.path });
+			try {
+				const fileResponse = await ipfs.add(encryptedFile, {
+					pin: true,
+					progress: (uploaded) => {
+						const uploadedPercent = Math.ceil((uploaded / fileSize) * 100);
+						postMessage({
+							type: 'encryption:feedback',
+							message: `uploading file to IPFS - ${uploadedPercent}%`,
+						});
+					},
+				});
+				postMessage({ type: 'encryption', ipfs_path: fileResponse.path });
+			} catch (uploadError) {
+				postMessage({ type: 'encryption:error', error: uploadError });
+			}
 		};
 	};
 };

@@ -82,6 +82,15 @@ const UploadFileCard = (props) => {
 					});
 
 					workerInstance.addEventListener('message', async (event) => {
+						if (event.data.type === 'encryption:error') {
+							clearSubmitDialog();
+							console.error(error);
+							toast(
+								error.message ||
+									'there was an error uploading your signal, please try again or reach support for help.',
+								'error'
+							);
+						}
 						if (event.data.type === 'encryption:feedback') {
 							setDialogMessage(event.data.message);
 						}
