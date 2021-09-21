@@ -15,8 +15,6 @@ export const initDecrypt = () => {
 		const fileRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileHash}`, {
 			responseType: 'blob',
 			onDownloadProgress: (progressEvent) => {
-				// https://stackoverflow.com/a/63067578
-				console.log(progressEvent.loaded);
 				const { loaded, total } = progressEvent;
 				let percentCompleted = Math.floor((loaded / total) * 100);
 
