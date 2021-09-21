@@ -55,7 +55,7 @@ export const Address = styled.div`
 	line-height: 28px;
 	text-align: center;
 	margin-bottom: ${(props) => props.theme.spacing(3.5)};
-	width: 240px;
+	width: fit-content;
 	word-break: break-word;
 `;
 
