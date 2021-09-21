@@ -168,7 +168,7 @@ function WalletsList({ view = 'grid' }) {
 							<ListItemIcon src={icon} />
 						</ListItemLink>
 					) : (
-						<ListItemButton disabled={window.ethereum?.isMetaMask && !active} onClick={onClick} active>
+						<ListItemButton disabled={window.ethereum?.isMetaMask && !active} onClick={onClick} active={active}>
 							<ListItemTitle>{name}</ListItemTitle>
 							<ListItemIcon src={icon} />
 						</ListItemButton>
