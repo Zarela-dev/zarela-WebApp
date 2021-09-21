@@ -42,7 +42,7 @@ const Blocked = ({ isMobile }) => {
 								<TableCell>public key</TableCell>
 							</SettingTableCell>
 							<SettingTableCell flex="0 0 20%">
-								<TableCell>Name</TableCell>
+								<TableCell>Nick Name</TableCell>
 							</SettingTableCell>
 							<SettingTableCell flex="0 0 10%">
 								<TableCell>Unblock</TableCell>

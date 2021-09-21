@@ -43,7 +43,7 @@ const AddContact = ({ publicKey, edit, disabled }) => {
 						}}
 					>
 						<TextField
-							placeholder="Add your contact name"
+							placeholder="Add your contact nick name"
 							name="alias"
 							value={alias}
 							autoFocus
