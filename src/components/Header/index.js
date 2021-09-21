@@ -422,7 +422,7 @@ export default function Header({ isMobile }, props) {
 								/>
 							</NavItem>
 						)}
-						<NavItem isMobile={appState.isMobile} to="/setting/contacts">
+						<NavItem isMobile={appState.isMobile} to="/settings/contacts">
 							<NavIcon src={setting} />
 						</NavItem>
 						<NotificationMenu
