@@ -31,7 +31,7 @@ export const RequestDetailsDesktopSteps = [
 	{
 		selector: '[data-tour="request-list-nine"]',
 		content:
-			'This section displays information about the total number of Biobit tokens, Biobit token name and code and your own Wallet balance.',
+			'This section displays information about the total number of Biobit tokens, Biobit token name and symbol and your own Wallet balance.',
 	},
 ];
 
