@@ -42,7 +42,7 @@ const Hidden = ({ isMobile }) => {
 								<TableCell>Request No.</TableCell>
 							</SettingTableCell>
 							<SettingTableCell flex="0 0 15%">
-								<TableCell>Name</TableCell>
+								<TableCell>Nick Name</TableCell>
 							</SettingTableCell>
 							<SettingTableCell flex="1 0 auto">
 								<TableCell>public key</TableCell>
