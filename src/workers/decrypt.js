@@ -12,7 +12,20 @@ export const initDecrypt = () => {
 		/*
 		 in order to remove  the extra headers that IPFS sets on response payload, responseType: blob 
 		*/
-		const fileRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileHash}`, { responseType: 'blob' });
+		const fileRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileHash}`, {
+			responseType: 'blob',
+			onDownloadProgress: (progressEvent) => {
+				// https://stackoverflow.com/a/63067578
+				console.log(progressEvent.loaded);
+				const { loaded, total } = progressEvent;
+				let percentCompleted = Math.floor((loaded / total) * 100);
+
+				postMessage({
+					type: 'feedback',
+					message: `Downloading encrypted file from IPFS - ${percentCompleted}%`,
+				});
+			},
+		});
 		/* then to convert the blob into array buffer we use FileReader API */
 		var fileReader = new FileReader();
 
@@ -21,7 +34,7 @@ export const initDecrypt = () => {
 
 		fileReader.onloadend = () => {
 			var buffer = Buffer(fileReader.result);
-			
+
 			const decrypted = chacha.decrypt(AES_IV, AES_KEY, buffer);
 
 			postMessage({ type: 'feedback', message: 'saving file' });
