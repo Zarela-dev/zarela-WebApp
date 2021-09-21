@@ -31,6 +31,7 @@ import fulfilledIcon from '../assets/icons/check-green.svg';
 import Dialog from './Dialog';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import worker from 'workerize-loader!../workers/decrypt.js';
+import { saveAs } from 'file-saver';
 
 const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
@@ -323,7 +324,8 @@ const RequestListItem = ({
 					setDialogMessage(event.data.message);
 				}
 				if (event.data.type === 'decrypted') {
-					downloadFile(event.data.decrypted_file, `${FILE_NAME}.${FILE_EXT}`);
+					saveAs(new Blob([event.data.decrypted_file]), `${FILE_NAME}.${FILE_EXT}`);
+					clearSubmitDialog();
 				}
 			});
 		} catch (error) {
@@ -331,40 +333,6 @@ const RequestListItem = ({
 			console.error(error);
 		}
 	};
-	/* https://stackoverflow.com/a/9458996 */
-	function getDownloadUrl(buff) {
-		function _arrayBufferToBase64(buffer) {
-			var binary = '';
-			var bytes = new Uint8Array(buffer);
-			var len = bytes.byteLength;
-			for (var i = 0; i < len; i++) {
-				binary += String.fromCharCode(bytes[i]);
-			}
-			return window.btoa(binary);
-		}
-		/*
-			we use application/octet-stream here because we will encounter files that don't have 
-			proper MIME types such as .edf
-		*/
-		return `data:application/octet-stream;base64,${_arrayBufferToBase64(buff)}`;
-	}
-	var downloadFile = (function () {
-		var anchorTag = document.createElement('a');
-		document.body.appendChild(anchorTag);
-		anchorTag.style = 'display: none';
-
-		return async function (file, name) {
-			try {
-				var url = await getDownloadUrl(file);
-				clearSubmitDialog();
-				anchorTag.href = url;
-				anchorTag.download = name;
-				anchorTag.click();
-			} catch (error) {
-				console.error(error);
-			}
-		};
-	})();
 
 	useEffect(() => {
 		if (appState.contract !== null) {

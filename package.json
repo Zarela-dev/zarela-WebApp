@@ -15,6 +15,7 @@
     "buffer": "^6.0.3",
     "chacha20": "^0.1.4",
     "eth-sig-util": "^3.0.1",
+    "file-saver": "^2.0.5",
     "file-type": "^16.5.0",
     "formik": "^2.2.9",
     "formik-persist": "^1.1.0",
