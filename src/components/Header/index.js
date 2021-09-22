@@ -382,9 +382,9 @@ export default function Header({ isMobile }, props) {
 								</WalletTitlebar>
 							) : routeGroup === 'inbox' ? (
 								<TitleBar>Inbox</TitleBar>
-							) : routeGroup === 'setting' ? (
+							) : routeGroup === 'settings' ? (
 								<TitleBar>
-									<Title>Setting</Title>
+									<Title>Settings</Title>
 								</TitleBar>
 							) : null}
 						</Box>
@@ -490,10 +490,12 @@ export default function Header({ isMobile }, props) {
 								</RewardWrapper>
 							</WalletTitlebar>
 						) : routeGroup === 'inbox' ? (
-							<TitleBar>Inbox</TitleBar>
-						) : routeGroup === 'setting' ? (
 							<TitleBar>
-								<Title>Setting</Title>
+								<Title>Inbox</Title>
+							</TitleBar>
+						) : routeGroup === 'settings' ? (
+							<TitleBar>
+								<Title>Settings</Title>
 							</TitleBar>
 						) : null}
 					</Box>
