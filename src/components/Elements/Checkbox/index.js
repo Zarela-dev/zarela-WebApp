@@ -16,7 +16,7 @@ const Icon = styled.img`
 `;
 // Hide checkbox visually but remain accessible to screen readers.
 // Source: https://polished.js.org/docs/#hidevisually
-const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
+const HiddenCheckbox = styled.input`
 	border: 0;
 	clip: rect(0 0 0 0);
 	clip-path: inset(50%);
@@ -40,7 +40,7 @@ const StyledCheckboxWrapper = styled.div`
 	transition: all 150ms;
 	text-align: center;
 
-	border: 3px solid ${(props) => props.theme.primaryFaded};
+	border: ${(props) => (props.disabled ? '3px solid transparent' : `3px solid ${props.theme.primaryFaded}`)};
 
 	${Icon} {
 		visibility: ${(props) => (props.checked ? 'visible' : 'hidden')};
@@ -59,8 +59,10 @@ const StyledCheckbox = styled.div`
 	box-sizing: border-box;
 	border-radius: 4px;
 	transition: all 150ms;
-	background: ${(props) => (props.checked ? '#2EECA8' : 'transparent')};
+	background: ${(props) => (props.disabled ? '#F4F8FE' : props.checked ? '#2EECA8' : 'transparent')};
 	text-align: center;
+	/* opacity: ${(props) => (props.disabled ? 0.5 : 1)}; */
+	cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
 `;
 
 const Label = styled.label`
@@ -86,12 +88,12 @@ const Checkbox = ({ children, checked, ...props }) => (
 	</Label>
 );
 
-export const SmallCheckbox = ({ children, checked, className, ...props }) => (
-	<Label className={className}>
+export const SmallCheckbox = ({ children, checked, disabled, className, ...props }) => (
+	<Label className={className} disabled={disabled}>
 		<CheckboxContainer small>
-			<HiddenCheckbox checked={checked} {...props} />
-			<StyledCheckboxWrapper small checked={checked}>
-				<StyledCheckbox small checked={checked}>
+			<HiddenCheckbox type='checkbox' checked={checked} disabled={disabled} {...props} />
+			<StyledCheckboxWrapper small checked={checked} disabled={disabled}>
+				<StyledCheckbox small checked={checked} disabled={disabled}>
 					<Icon small src={tick} />
 				</StyledCheckbox>
 			</StyledCheckboxWrapper>

@@ -240,6 +240,7 @@ const RequestFilesTable = ({
 	isAllChecked,
 	isAllApproved,
 	changeAll,
+	fulfilled,
 	signalDownloadHandler,
 	requestID,
 }) => {
@@ -248,6 +249,7 @@ const RequestFilesTable = ({
 	const { pendingFiles } = PendingFiles;
 	const { blockList, hideList } = localState;
 	const [isExpanded, setExpanded] = useState(null);
+
 	const getFileStatus = useCallback(
 		(originalIndex, originalStatus) => {
 			if (originalStatus === true) return 'approved';
@@ -297,6 +299,7 @@ const RequestFilesTable = ({
 							<PendingFileIcon src={pendingFileSpinner} noMargin />
 						) : (
 							<CustomCheckbox
+								disabled={fulfilled}
 								checked={isAllChecked()}
 								onChange={(e) => {
 									if (e.target.checked === true) {
@@ -326,6 +329,7 @@ const RequestFilesTable = ({
 								<PendingFileIcon src={pendingFileSpinner} noMargin />
 							) : (
 								<CustomCheckbox
+									disabled={fulfilled}
 									checked={isBulkChecked(contributorAddress)}
 									onChange={(e) => {
 										if (e.target.checked === true) {
@@ -369,6 +373,7 @@ const RequestFilesTable = ({
 															<PendingFileIcon src={pendingFileSpinner} />
 														) : (
 															<FileCheckbox
+																disabled={fulfilled}
 																checked={selected.includes(originalIndex)}
 																onChange={(e) => {
 																	if (e.target.checked === true) {

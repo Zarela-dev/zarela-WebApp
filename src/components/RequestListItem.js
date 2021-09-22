@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useCallback, useState, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import _ from 'lodash';
@@ -161,44 +161,49 @@ const RequestListItem = ({
 	angelTokenPay,
 	laboratoryTokenPay,
 	contributors,
-	selected,
 	pendingFiles,
-	setSelected,
+	cleanSelected,
+	setCleanSelected,
 	handleConfirm,
 	fulfilled,
 	setAnyOpenBox,
 }) => {
 	const [isOpen, setOpen] = useState(false);
 	const [unapprovedCount, setUnapprovedCount] = useState(0);
+	const [selected, setSelected] = useState([]);
 	const { appState } = useContext(mainContext);
 	const [formattedData, setFormattedData] = useState({});
 	const { account } = useWeb3React();
 	const [isSubmitting, setSubmitting] = useState(false);
 	const [dialogMessage, setDialogMessage] = useState('');
 
+	const getPendingIndexes = useCallback(
+		(requestID) => {
+			let temp_pending = {
+				...pendingFiles.pending,
+			};
+			let filteredIndexes = [];
+
+			Object.keys(temp_pending).forEach((txHash) => {
+				if (temp_pending[txHash].requestID !== requestID) {
+					delete temp_pending[txHash];
+				}
+			});
+
+			Object.values(temp_pending).forEach(({ originalIndexes }) => {
+				filteredIndexes = [...filteredIndexes, ...originalIndexes];
+			});
+
+			return filteredIndexes;
+		},
+		[pendingFiles]
+	);
+
 	const clearSubmitDialog = () => {
 		setSubmitting(false);
 		setDialogMessage('');
 	};
 
-	const getPendingIndexes = (requestID) => {
-		let temp_pending = {
-			...pendingFiles.pending,
-		};
-		let filteredIndexes = [];
-
-		Object.keys(temp_pending).forEach((txHash) => {
-			if (temp_pending[txHash].requestID !== requestID) {
-				delete temp_pending[txHash];
-			}
-		});
-
-		Object.values(temp_pending).forEach(({ originalIndexes }) => {
-			filteredIndexes = [...filteredIndexes, ...originalIndexes];
-		});
-
-		return filteredIndexes;
-	};
 	// files table selection methods START
 	const changeAll = (type) => {
 		const originalIndexes = [];
@@ -233,7 +238,11 @@ const RequestListItem = ({
 		});
 		if (
 			_.isEqual(
-				[...selectedIndexes, ...indexesAlreadyConfirmed, ...pendingIndexes].sort(),
+				[
+					...selectedIndexes,
+					...indexesAlreadyConfirmed,
+					...arrayIntersection(pendingIndexes, originalIndexes),
+				].sort(),
 				originalIndexes.sort()
 			)
 		) {
@@ -303,7 +312,11 @@ const RequestListItem = ({
 
 		if (
 			_.isEqual(
-				[...selectedIndexes, ...indexesAlreadyConfirmed, ...pendingIndexes].sort(),
+				[
+					...selectedIndexes,
+					...indexesAlreadyConfirmed,
+					...arrayIntersection(pendingIndexes, originalIndexes),
+				].sort(),
 				originalIndexes.sort()
 			)
 		) {
@@ -381,6 +394,15 @@ const RequestListItem = ({
 			console.error(error);
 		}
 	};
+
+	useEffect(() => {
+		if (cleanSelected) {
+			if (requestID === cleanSelected) {
+				setSelected([]);
+				setCleanSelected(null);
+			}
+		}
+	}, [cleanSelected]);
 
 	useEffect(() => {
 		if (appState.contract !== null) {
@@ -510,6 +532,7 @@ const RequestListItem = ({
 								data={formattedData}
 								selected={selected}
 								onChange={onChange}
+								fulfilled={fulfilled}
 								onBulkChange={onBulkChange}
 								isBulkChecked={isBulkChecked}
 								isBulkApproved={isBulkApproved}

@@ -33,14 +33,15 @@ const Inbox = () => {
 	const PendingFiles = useContext(pendingFilesContext);
 	const { pendingFiles, setPendingFile, removePendingFile } = PendingFiles;
 	const { account } = useWeb3React();
-	const [selected, setSelected] = useState([]);
 	const [requests, setRequests] = useState({});
 	const [isLoading, setLoading] = useState(false);
 	// to manually trigger a data fetch, after the signalsApproved event is triggered
 	const [shouldRefresh, setShouldRefresh] = useState(false);
 	const [guideIsOpen, setGuideIsOpen] = useState(false);
+	const [cleanSelected, setCleanSelected] = useState(null);
 
 	const handleConfirm = (requestID, originalIndexes) => {
+		console.log('releasing for',  originalIndexes)
 		appState.contract.methods
 			.confirmContributor(requestID, originalIndexes)
 			.send({ from: account }, (error, txHash) => {
@@ -50,7 +51,7 @@ const Inbox = () => {
 						requestID,
 						originalIndexes,
 					});
-					setSelected([]);
+					setCleanSelected(requestID);
 					toast(`TX Hash: ${txHash}`, 'success', true, txHash, {
 						toastId: txHash,
 					});
@@ -58,10 +59,6 @@ const Inbox = () => {
 					toast(error.message, 'error');
 				}
 			});
-		appState.contract.events.signalsApproved({}).on('data', ({ transactionHash }) => {
-			removePendingFile(transactionHash);
-			setShouldRefresh(true);
-		});
 	};
 
 	useEffect(() => {
@@ -69,6 +66,14 @@ const Inbox = () => {
 			setShouldRefresh(false);
 		}
 	}, [shouldRefresh]);
+
+	useEffect(() => {
+		if (appState.contract && removePendingFile !== undefined)
+			appState.contract.events.signalsApproved({}).on('data', ({ transactionHash }) => {
+				removePendingFile(transactionHash);
+				setShouldRefresh(true);
+			});
+	}, [appState.contract, removePendingFile]);
 
 	useEffect(() => {
 		if (appState.contract !== null) {
@@ -158,11 +163,11 @@ const Inbox = () => {
 								shouldRefresh={shouldRefresh}
 								showContributions={index === 0}
 								key={item.requestID}
-								selected={selected}
-								setSelected={setSelected}
 								pendingFiles={pendingFiles}
 								requestID={item.requestID}
 								title={item.title}
+								setCleanSelected={setCleanSelected}
+								cleanSelected={cleanSelected}
 								angelTokenPay={item.angelTokenPay}
 								laboratoryTokenPay={item.laboratoryTokenPay}
 								total={item.totalContributedCount}
