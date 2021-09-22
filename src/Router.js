@@ -12,7 +12,7 @@ import styled from 'styled-components';
 import Wallet from './pages/Wallet/Wallet';
 import RequestsList from './pages/RequestsList';
 import Log from './pages/Log/Log';
-import Setting from './pages/Setting';
+import Settings from './pages/Settings';
 import { mainContext } from './state';
 import { supportedChains } from './constants/index';
 import ChainError from './components/ChainError';
@@ -76,7 +76,7 @@ const AppRouter = () => {
 					<Route exact path='/inbox' component={Inbox} />
 					<Route path='/wallet' component={Wallet} />
 					<Route path='/log' component={Log} />
-					<Route path='/setting' component={Setting} />
+					<Route path='/settings' component={Settings} />
 				</Switch>
 			</AppWrapper>
 		</Router>

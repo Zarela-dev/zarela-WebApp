@@ -5,6 +5,8 @@ import { convertToBiobit } from '../../utils';
 import Mobile from './Mobile';
 import Desktop from './Desktop';
 import Guide from './../../components/Guide/Guide';
+import { create } from 'ipfs-http-client';
+import all from 'it-all';
 
 const steps = [
 	{
@@ -19,11 +21,6 @@ const steps = [
 		selector: '[data-tour="request-details-three"]',
 		content: 'For contributing, files must be selected here from your device.',
 	},
-	{
-		selector: '',
-		content:
-			'Well done! You earn 100 BBits for this learning! want to earn more? learn every guide on pages and collect about 500 BBits!',
-	},
 ];
 
 const RequestDetailsPage = () => {
@@ -31,6 +28,22 @@ const RequestDetailsPage = () => {
 	const [request, setRequest] = useState({});
 	const { appState } = useContext(mainContext);
 	const [error, setError] = useState(false);
+	const [zpaperDownloadLink, setZpaperLink] = useState(null);
+	const ipfs = create(process.env.REACT_APP_IPFS);
+
+	useEffect(() => {
+		if (request.whitePaper) {
+			const getFilename = async () => {
+				const output = await all(ipfs.ls(request.whitePaper));
+				return output;
+			};
+			getFilename()
+				.then((res) => {
+					res.length && setZpaperLink(res[0].path);
+				})
+				.catch((err) => console.error(err));
+		}
+	}, [request]);
 
 	useEffect(() => {
 		if (appState.contract !== null) {
@@ -78,6 +91,9 @@ const RequestDetailsPage = () => {
 						request,
 						error,
 						setError,
+						zpaperDownloadLink: zpaperDownloadLink
+							? process.env.REACT_APP_IPFS_LINK + zpaperDownloadLink
+							: null,
 					}}
 				/>
 			) : (
@@ -86,6 +102,9 @@ const RequestDetailsPage = () => {
 						request,
 						error,
 						setError,
+						zpaperDownloadLink: zpaperDownloadLink
+							? process.env.REACT_APP_IPFS_LINK + zpaperDownloadLink
+							: null,
 					}}
 				/>
 			)}

@@ -2,7 +2,7 @@ import React from 'react';
 import RequestDetails from '../../components/RequestDetails/RequestDetails';
 import { timeSince } from '../../utils';
 
-const Desktop = ({ request, error, setError }) => {
+const Desktop = ({ request, error, zpaperDownloadLink, setError }) => {
 	return (
 		<>
 			<RequestDetails
@@ -10,6 +10,7 @@ const Desktop = ({ request, error, setError }) => {
 				timestamp={timeSince(request.timestamp)}
 				error={error}
 				setError={setError}
+				zpaperDownloadLink={zpaperDownloadLink}
 			/>
 		</>
 	);

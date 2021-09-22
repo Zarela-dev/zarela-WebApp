@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
-import TitleBar from '../components/TitleBar/TitleBar';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import RequestListItem from '../components/RequestListItem';
 import { mainContext } from '../state';
+import { pendingFilesContext } from '../state/pendingFilesProvider';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { convertToBiobit, toast } from '../utils';
 import NoRequestsFound from '../components/NoRequestsFound';
@@ -30,30 +30,34 @@ const SpinnerWrapper = styled.div`
 
 const Inbox = () => {
 	const { appState } = useContext(mainContext);
+	const PendingFiles = useContext(pendingFilesContext);
+	const { pendingFiles, setPendingFile, removePendingFile } = PendingFiles;
 	const { account } = useWeb3React();
 	const [requests, setRequests] = useState({});
 	const [isLoading, setLoading] = useState(false);
 	// to manually trigger a data fetch, after the signalsApproved event is triggered
 	const [shouldRefresh, setShouldRefresh] = useState(false);
 	const [guideIsOpen, setGuideIsOpen] = useState(false);
+	const [cleanSelected, setCleanSelected] = useState(null);
 
 	const handleConfirm = (requestID, originalIndexes) => {
 		appState.contract.methods
 			.confirmContributor(requestID, originalIndexes)
-			.send({ from: account }, (error, result) => {
+			.send({ from: account }, (error, txHash) => {
 				if (!error) {
-					toast(`TX Hash: ${result}`, 'success', true, result, {
-						toastId: result,
+					setPendingFile({
+						txHash,
+						requestID,
+						originalIndexes,
+					});
+					setCleanSelected(requestID);
+					toast(`TX Hash: ${txHash}`, 'success', true, txHash, {
+						toastId: txHash,
 					});
 				} else {
 					toast(error.message, 'error');
 				}
 			});
-		appState.contract.events
-			.signalsApproved({})
-			.on('data', () => {
-				setShouldRefresh(true);
-			})
 	};
 
 	useEffect(() => {
@@ -61,6 +65,14 @@ const Inbox = () => {
 			setShouldRefresh(false);
 		}
 	}, [shouldRefresh]);
+
+	useEffect(() => {
+		if (appState.contract && removePendingFile !== undefined)
+			appState.contract.events.signalsApproved({}).on('data', ({ transactionHash }) => {
+				removePendingFile(transactionHash);
+				setShouldRefresh(true);
+			});
+	}, [appState.contract, removePendingFile]);
 
 	useEffect(() => {
 		if (appState.contract !== null) {
@@ -150,8 +162,11 @@ const Inbox = () => {
 								shouldRefresh={shouldRefresh}
 								showContributions={index === 0}
 								key={item.requestID}
+								pendingFiles={pendingFiles}
 								requestID={item.requestID}
 								title={item.title}
+								setCleanSelected={setCleanSelected}
+								cleanSelected={cleanSelected}
 								angelTokenPay={item.angelTokenPay}
 								laboratoryTokenPay={item.laboratoryTokenPay}
 								total={item.totalContributedCount}

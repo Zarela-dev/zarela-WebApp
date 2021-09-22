@@ -1,7 +1,8 @@
 import React from 'react';
 import { FileInputLink, FileInputWrapper, FileInputTitle, FileInputIcon } from '../UploadFileCard/FileInputMobile';
-import { Card } from '../UploadFileCard/FileCard';
+import { Card, HelperText } from '../UploadFileCard/FileCard';
 import styled from 'styled-components';
+import loaderImage from '../../assets/loader/rolling.svg';
 import fileDownloadIcon from '../../assets/icons/file-download.svg';
 
 const CustomFileInputWrapper = styled(FileInputWrapper)`
@@ -13,36 +14,34 @@ const CustomFileInputWrapper = styled(FileInputWrapper)`
 	margin-bottom: ${(props) => props.theme.spacing(5)};
 `;
 
-const MobileCard = styled(Card)`
-	margin-bottom: 0;
-	padding: 0 18px;
-	border: none;
-	margin-top: 25px;
-`;
-const FileInputLinkMobile = styled(FileInputLink)`
-	padding: 9px 13px;
-	font-size: 12px;
-	margin: auto 0;
+const Loader = styled.img`
+	width: 25px;
+	margin: 0 auto;
 `;
 
-const CustomFileInputIcon = styled(FileInputIcon)`
-	width: 33px;
-	margin-right: 6px;
-`;
-
-const DownloadFileCardMobile = ({ fileName, buttonLabel, label, helperText, fileLink }) => {
+const DownloadFileCardMobile = ({ isLoading, fileName, buttonLabel, label, helperText, fileLink }) => {
+	if (isLoading)
+		return (
+			<Card data-tour="request-details-two">
+				<CustomFileInputWrapper hasBorder>
+					<Loader src={loaderImage} />
+				</CustomFileInputWrapper>
+				<HelperText>preparing download link ...</HelperText>
+			</Card>
+		);
 	return (
-		<MobileCard>
-			<CustomFileInputWrapper hasBorder data-tour="request-details-two">
-				<FileInputLinkMobile href={fileLink} target="_blank">
+		<Card data-tour="request-details-two">
+			<CustomFileInputWrapper hasBorder>
+				<FileInputLink href={fileLink} target="_blank">
 					{buttonLabel}
-				</FileInputLinkMobile>
+				</FileInputLink>
 				<FileInputTitle>
-					<CustomFileInputIcon src={fileDownloadIcon} />
+					<FileInputIcon src={fileDownloadIcon} />
 					{fileName}
 				</FileInputTitle>
 			</CustomFileInputWrapper>
-		</MobileCard>
+			<HelperText>{helperText}</HelperText>
+		</Card>
 	);
 };
 

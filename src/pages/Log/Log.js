@@ -57,7 +57,7 @@ const Log = () => {
 								),
 							},
 							{
-								label: 'Contributed',
+								label: 'My Contributions',
 								'data-tour': 'my-contributions',
 								component: (
 									<LogInnerContainer elevated>

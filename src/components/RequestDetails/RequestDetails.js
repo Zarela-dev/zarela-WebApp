@@ -28,10 +28,8 @@ import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/user-blue.svg';
 import documentsIcon from '../../assets/icons/document-blue.svg';
 import publicKeyIcon from '../../assets/icons/public-key.svg';
-import { CopyableText, timeSince, getFileNameWithExt } from '../../utils';
-import { create } from 'ipfs-http-client';
+import { CopyableText, timeSince } from '../../utils';
 
-import all from 'it-all';
 const PageWrapper = styled.div``;
 
 const HeaderContainer = styled.header`
@@ -142,23 +140,9 @@ const Timestamp = styled.p`
 	margin-top: ${(props) => props.theme.spacing(1)};
 `;
 
-const RequestDetails = ({ setError, error, request }) => {
+const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 	const contributors = `${request.totalContributed}/${request.totalContributors}`;
 	const [signalFile, setSignalFile] = useState(null);
-	const [zpaperDownloadLink, setZpaperLink] = useState(null);
-	const ipfs = create(process.env.REACT_APP_IPFS);
-
-	useEffect(() => {
-		if (request.whitePaper) {
-			const getFilename = async () => {
-				const output = await all(ipfs.ls(request.whitePaper));
-				return output;
-			};
-			getFilename()
-				.then((res) => res.length && setZpaperLink(res[0].path))
-				.catch((err) => console.error(err));
-		}
-	}, [request.whitePaper]);
 
 	return (
 		<PageWrapper>
@@ -234,7 +218,7 @@ const RequestDetails = ({ setError, error, request }) => {
 					buttonLabel={'Download'}
 					label={'just label'}
 					helperText={'This file contains Zpaper file and survey test files.'}
-					fileLink={process.env.REACT_APP_IPFS_LINK + zpaperDownloadLink}
+					fileLink={zpaperDownloadLink}
 				/>
 				<FileCardSpacer />
 				<UploadFileCard

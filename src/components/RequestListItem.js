@@ -1,8 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useCallback, useState, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { Buffer } from 'buffer';
-import { twofish } from 'twofish';
 import _ from 'lodash';
 import { Spacer } from './Elements/Spacer';
 import { WithPointerCursor } from './Elements/WithPointerCursor';
@@ -23,6 +21,7 @@ import biobitIcon from '../assets/icons/biobit-black.svg';
 import contributorIcon from '../assets/icons/user-blue.svg';
 import RequestFilesTable from './RequestFilesTable';
 import { mainContext } from '../state';
+import { arraySymmetricDiff, arrayIntersection } from '../utils';
 import Button from './Elements/Button';
 import { useWeb3React } from '@web3-react/core';
 import caretUpIcon from '../assets/icons/caret-up.svg';
@@ -31,6 +30,7 @@ import fulfilledIcon from '../assets/icons/check-green.svg';
 import Dialog from './Dialog';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import worker from 'workerize-loader!../workers/decrypt.js';
+import { saveAs } from 'file-saver';
 
 const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
@@ -161,18 +161,43 @@ const RequestListItem = ({
 	angelTokenPay,
 	laboratoryTokenPay,
 	contributors,
+	pendingFiles,
+	cleanSelected,
+	setCleanSelected,
 	handleConfirm,
 	fulfilled,
 	setAnyOpenBox,
 }) => {
 	const [isOpen, setOpen] = useState(false);
 	const [unapprovedCount, setUnapprovedCount] = useState(0);
+	const [selected, setSelected] = useState([]);
 	const { appState } = useContext(mainContext);
 	const [formattedData, setFormattedData] = useState({});
-	const [selected, setSelected] = useState([]);
 	const { account } = useWeb3React();
 	const [isSubmitting, setSubmitting] = useState(false);
 	const [dialogMessage, setDialogMessage] = useState('');
+
+	const getPendingIndexes = useCallback(
+		(requestID) => {
+			let temp_pending = {
+				...pendingFiles.pending,
+			};
+			let filteredIndexes = [];
+
+			Object.keys(temp_pending).forEach((txHash) => {
+				if (temp_pending[txHash].requestID !== requestID) {
+					delete temp_pending[txHash];
+				}
+			});
+
+			Object.values(temp_pending).forEach(({ originalIndexes }) => {
+				filteredIndexes = [...filteredIndexes, ...originalIndexes];
+			});
+
+			return filteredIndexes;
+		},
+		[pendingFiles]
+	);
 
 	const clearSubmitDialog = () => {
 		setSubmitting(false);
@@ -203,6 +228,7 @@ const RequestListItem = ({
 	const isAllChecked = () => {
 		const originalIndexes = [];
 		const indexesAlreadyConfirmed = [];
+		const pendingIndexes = getPendingIndexes(requestID);
 		const selectedIndexes = [...selected];
 		const all = Object.values(formattedData).reduce((acc, curr) => acc.concat(curr), []);
 
@@ -210,8 +236,16 @@ const RequestListItem = ({
 			originalIndexes.push(originalIndex);
 			if (Boolean(status) === true) indexesAlreadyConfirmed.push(originalIndex);
 		});
-
-		if (_.isEqual([...selectedIndexes, ...indexesAlreadyConfirmed].sort(), originalIndexes.sort())) {
+		if (
+			_.isEqual(
+				[
+					...selectedIndexes,
+					...indexesAlreadyConfirmed,
+					...arrayIntersection(pendingIndexes, originalIndexes),
+				].sort(),
+				originalIndexes.sort()
+			)
+		) {
 			return true;
 		}
 		return false;
@@ -220,6 +254,7 @@ const RequestListItem = ({
 	const isAllApproved = () => {
 		const originalIndexes = [];
 		const indexesAlreadyConfirmed = [];
+		const pendingIndexes = getPendingIndexes(requestID);
 		const all = Object.values(formattedData).reduce((acc, curr) => acc.concat(curr), []);
 
 		all.forEach(({ status, originalIndex }) => {
@@ -227,13 +262,16 @@ const RequestListItem = ({
 			if (Boolean(status) === true) indexesAlreadyConfirmed.push(originalIndex);
 		});
 
-		if (_.isEqual(originalIndexes.sort(), indexesAlreadyConfirmed.sort())) return true;
-		return false;
+		if (_.isEqual(originalIndexes.sort(), indexesAlreadyConfirmed.sort())) return 'approved';
+		if (_.isEqual(arraySymmetricDiff(indexesAlreadyConfirmed, pendingIndexes).sort(), originalIndexes.sort()))
+			return 'pending';
+		return 'available';
 	};
 
 	const isBulkApproved = (contributorAddress) => {
 		const originalIndexes = [];
 		const indexesAlreadyConfirmed = [];
+		const pendingIndexes = getPendingIndexes(requestID);
 
 		formattedData[contributorAddress]?.forEach(({ originalIndex, status }) => {
 			originalIndexes.push(originalIndex);
@@ -243,15 +281,24 @@ const RequestListItem = ({
 		});
 
 		if (_.isEqual(indexesAlreadyConfirmed.sort(), originalIndexes.sort())) {
-			return true;
+			return 'approved';
 		}
-		return false;
+		if (
+			_.isEqual(
+				arraySymmetricDiff(indexesAlreadyConfirmed, arrayIntersection(originalIndexes, pendingIndexes)).sort(),
+				originalIndexes.sort()
+			)
+		) {
+			return 'pending';
+		}
+		return 'available';
 	};
 
 	const isBulkChecked = (contributorAddress) => {
 		const originalIndexes = [];
 		const selectedIndexes = [];
 		const indexesAlreadyConfirmed = [];
+		const pendingIndexes = getPendingIndexes(requestID);
 
 		formattedData[contributorAddress].forEach(({ originalIndex, status }) => {
 			originalIndexes.push(originalIndex);
@@ -263,7 +310,16 @@ const RequestListItem = ({
 			}
 		});
 
-		if (_.isEqual([...selectedIndexes, ...indexesAlreadyConfirmed].sort(), originalIndexes.sort())) {
+		if (
+			_.isEqual(
+				[
+					...selectedIndexes,
+					...indexesAlreadyConfirmed,
+					...arrayIntersection(pendingIndexes, originalIndexes),
+				].sort(),
+				originalIndexes.sort()
+			)
+		) {
 			return true;
 		}
 		return false;
@@ -272,6 +328,7 @@ const RequestListItem = ({
 	const onBulkChange = (type, contributorAddress) => {
 		const originalIndexes = [];
 		const indexesAlreadyConfirmed = [];
+		const pendingIndexes = getPendingIndexes(requestID);
 
 		formattedData[contributorAddress].forEach(({ originalIndex, status }) => {
 			originalIndexes.push(originalIndex);
@@ -280,10 +337,15 @@ const RequestListItem = ({
 			}
 		});
 
-		const selectableIndexes = originalIndexes.filter((index) => !indexesAlreadyConfirmed.includes(index));
+		const selectableIndexes = originalIndexes.filter(
+			(index) => ![...indexesAlreadyConfirmed, ...pendingIndexes].includes(index)
+		);
 
 		if (type === 'check') {
-			setSelected((values) => [...values, ...selectableIndexes]);
+			setSelected((values) => {
+				let unique = new Set([...values, ...selectableIndexes]);
+				return [...unique];
+			});
 		}
 		if (type === 'uncheck')
 			setSelected((values) => values.filter((selectedItem) => !originalIndexes.includes(selectedItem)));
@@ -314,8 +376,8 @@ const RequestListItem = ({
 
 			workerInstance.postMessage({
 				fileHash,
-				AES_KEY: AesDecryptedKey,
-				AES_IV,
+				AES_KEY: AesDecryptedKey.split(',').map((item) => Number(item)),
+				AES_IV: Object.values(AES_IV),
 			});
 
 			workerInstance.addEventListener('message', async (event) => {
@@ -323,7 +385,8 @@ const RequestListItem = ({
 					setDialogMessage(event.data.message);
 				}
 				if (event.data.type === 'decrypted') {
-					downloadFile(event.data.decrypted_file, `${FILE_NAME}.${FILE_EXT}`);
+					saveAs(new Blob([event.data.decrypted_file]), `${FILE_NAME}.${FILE_EXT}`);
+					clearSubmitDialog();
 				}
 			});
 		} catch (error) {
@@ -331,40 +394,15 @@ const RequestListItem = ({
 			console.error(error);
 		}
 	};
-	/* https://stackoverflow.com/a/9458996 */
-	function getDownloadUrl(buff) {
-		function _arrayBufferToBase64(buffer) {
-			var binary = '';
-			var bytes = new Uint8Array(buffer);
-			var len = bytes.byteLength;
-			for (var i = 0; i < len; i++) {
-				binary += String.fromCharCode(bytes[i]);
-			}
-			return window.btoa(binary);
-		}
-		/*
-			we use application/octet-stream here because we will encounter files that don't have 
-			proper MIME types such as .edf
-		*/
-		return `data:application/octet-stream;base64,${_arrayBufferToBase64(buff)}`;
-	}
-	var downloadFile = (function () {
-		var anchorTag = document.createElement('a');
-		document.body.appendChild(anchorTag);
-		anchorTag.style = 'display: none';
 
-		return async function (file, name) {
-			try {
-				var url = await getDownloadUrl(file);
-				clearSubmitDialog();
-				anchorTag.href = url;
-				anchorTag.download = name;
-				anchorTag.click();
-			} catch (error) {
-				console.error(error);
+	useEffect(() => {
+		if (cleanSelected) {
+			if (requestID === cleanSelected) {
+				setSelected([]);
+				setCleanSelected(null);
 			}
-		};
-	})();
+		}
+	}, [cleanSelected]);
 
 	useEffect(() => {
 		if (appState.contract !== null) {
@@ -494,6 +532,7 @@ const RequestListItem = ({
 								data={formattedData}
 								selected={selected}
 								onChange={onChange}
+								fulfilled={fulfilled}
 								onBulkChange={onBulkChange}
 								isBulkChecked={isBulkChecked}
 								isBulkApproved={isBulkApproved}

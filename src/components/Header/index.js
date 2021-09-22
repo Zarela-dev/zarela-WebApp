@@ -248,9 +248,8 @@ export default function Header({ isMobile }, props) {
 	const [totalRevenueFromRequester, setTotalRevenueFromRequester] = useState(0);
 	const routeGroup = location.pathname.split('/')[1];
 	const classes = useStyles(props);
-	const GUIDES = ['/', '/inbox', '/log'];
+	const GUIDES = ['/', '/inbox', '/log', '/request'];
 
-	console.log(location.pathname);
 	useEffect(() => {
 		if (appState.contract !== null) {
 			if (account) {
@@ -294,6 +293,27 @@ export default function Header({ isMobile }, props) {
 						</RightMenu>
 						<LeftMenu>
 							<NavItem isMobile={appState.isMobile}>
+								{GUIDES.find(
+									(page) =>
+										location.pathname === page ||
+										(location.pathname.startsWith(page) && page !== '/')
+								) &&
+									!location.pathname.startsWith('/inbox') &&
+									!location.pathname.startsWith('/request/create') && (
+										<NavIcon
+											height="20px"
+											src={help}
+											onClick={() => {
+												localStorage.removeItem('guide/' + location.pathname.split('/')[1]);
+												dispatch({
+													type: actionTypes.SET_GUIDE_IS_OPEN,
+													payload: true,
+												});
+											}}
+										/>
+									)}
+							</NavItem>
+							<NavItem isMobile={appState.isMobile}>
 								<NavIcon src={bell} height="20px" onClick={() => setIsNotificationMenuOpen(true)} />
 								{appState.notificationCount !== 0 && (
 									<NotificationBadge isMobile={appState.isMobile}>
@@ -311,6 +331,7 @@ export default function Header({ isMobile }, props) {
 								setMenuOpen(false);
 							}}
 						/>
+
 						<NotificationMenu
 							appState={appState}
 							isOpen={isNotificationMenuOpen}
@@ -361,9 +382,9 @@ export default function Header({ isMobile }, props) {
 								</WalletTitlebar>
 							) : routeGroup === 'inbox' ? (
 								<TitleBar>Inbox</TitleBar>
-							) : routeGroup === 'setting' ? (
+							) : routeGroup === 'settings' ? (
 								<TitleBar>
-									<Title>Setting</Title>
+									<Title>Settings</Title>
 								</TitleBar>
 							) : null}
 						</Box>
@@ -394,7 +415,7 @@ export default function Header({ isMobile }, props) {
 						<NavItem isMobile={appState.isMobile} to="/wallet/account">
 							<NavIcon src={wallet} />
 							<NavLink>Wallet</NavLink>
-							<ChainBadge>Ropsten</ChainBadge>
+							<ChainBadge onClick={(e) => e.preventDefault()}>Ropsten</ChainBadge>
 						</NavItem>
 					</RightMenu>
 					<LeftMenu>
@@ -423,7 +444,7 @@ export default function Header({ isMobile }, props) {
 								/>
 							</NavItem>
 						)}
-						<NavItem isMobile={appState.isMobile} to="/setting/contacts">
+						<NavItem isMobile={appState.isMobile} to="/settings/contacts">
 							<NavIcon src={setting} />
 						</NavItem>
 						<NotificationMenu
@@ -469,10 +490,12 @@ export default function Header({ isMobile }, props) {
 								</RewardWrapper>
 							</WalletTitlebar>
 						) : routeGroup === 'inbox' ? (
-							<TitleBar>Inbox</TitleBar>
-						) : routeGroup === 'setting' ? (
 							<TitleBar>
-								<Title>Setting</Title>
+								<Title>Inbox</Title>
+							</TitleBar>
+						) : routeGroup === 'settings' ? (
+							<TitleBar>
+								<Title>Settings</Title>
 							</TitleBar>
 						) : null}
 					</Box>

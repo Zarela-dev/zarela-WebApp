@@ -15,7 +15,7 @@ const Wrapper = styled.div`
 `;
 
 const getStatus = (props) => {
-	if (props.isError != 0)
+	if (props.isError && props.isError !== '0')
 		return css`
 			border-left: 4px solid #f62d76;
 		`;
@@ -116,7 +116,7 @@ const WalletTransactionsMobile = ({ isLoading, account, data, props, PAGE_SIZE }
 			{isLoading &&
 				[1, 2, 3].map((index) => {
 					return (
-						<TransactionCard isError={0}>
+						<TransactionCard isError={'0'}>
 							<TransactionRow>
 								<TitleCol>
 									<SkeletonCol>
@@ -322,13 +322,15 @@ const WalletTransactionsMobile = ({ isLoading, account, data, props, PAGE_SIZE }
 							<TitleCol></TitleCol>
 							{isValidInput(transaction.input) ? (
 								<TextCol title>
-									{`${getInput(transaction.input)} ${transaction.isError != 0 ? '(failed)' : ''}`}
+									{`${getInput(transaction.input)} ${
+										transaction.isError && transaction.isError !== '0' ? '(failed)' : ''
+									}`}
 								</TextCol>
 							) : (
 								<CopyableText textToCopy={transaction.input}>
 									<TextCol title>
 										{`${transaction.input.substr(0, 10)} ${
-											transaction.isError != 0 ? '(failed)' : ''
+											transaction.isError && transaction.isError !== '0' ? '(failed)' : ''
 										}`}
 									</TextCol>
 								</CopyableText>

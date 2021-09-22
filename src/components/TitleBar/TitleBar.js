@@ -5,7 +5,7 @@ import maxWidthWrapper from '../Elements/MaxWidth';
 const Wrapper = styled.div`
 	background: #f4f8fe;
 	height: 100px;
-	padding: ${(props) => `${props.theme.spacing(3.5)} 0`};
+	padding: ${(props) => `${props.theme.spacing(4)} 0`};
 	margin-bottom: ${(props) => `${props.theme.spacing(4)}`};
 
 	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {

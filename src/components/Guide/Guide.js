@@ -10,7 +10,6 @@ import { useLocation } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import { actionTypes, mainContext } from '../../state';
 import { SaveGuideToLocalStorage } from '../../state/actions';
-import { toast } from '../../utils';
 import ConnectDialog from '../Dialog/ConnectDialog';
 
 const Wrapper = styled.div``;
@@ -23,6 +22,7 @@ const NavButton = styled.div`
 const ArrowIcon = styled.img`
 	fill: #581d9f;
 `;
+
 const Overlay = styled.div`
 	color: red;
 	width: ${(props) => (props.isMobile ? '32px' : '55px')};
@@ -96,40 +96,23 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 		}, timer);
 	};
 
-	const sendGift = () => {
-		if (appState.contract !== null) {
-			if (account) {
-				setShowConnectDialog(false);
-				appState.contract.methods
-					.earnTestToken()
-					.send({ from: account })
-					.on('transactionHash', function (hash) {
-						toast(`TX Hash: ${hash}`, 'success', true, hash, {
-							toastId: hash,
-						});
-					});
-			} else {
-				setShowConnectDialog(true);
-			}
-		}
-	};
-
 	useEffect(() => {
 		if (!localStorage.getItem('guide/' + location.pathname.split('/')[1])) {
 			handleTimeOut(3000);
 		} else if (location.pathname.split('/')[1] === '' && !isLoading) {
 			handleTimeOut(3000);
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
 		<>
-			{showConnectDialog ? <ConnectDialog onConnect={sendGift} isOpen={true} /> : null}
+			{showConnectDialog ? <ConnectDialog isOpen={true} /> : null}
 			<Wrapper>
 				<CustomizedTour
 					isMobile={appState.isMobile}
 					steps={steps}
+					currentStep={currentStep}
 					isOpen={appState.guideIsOpen}
 					onRequestClose={() =>
 						dispatch({
@@ -165,19 +148,17 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 					className="tour-custom"
 					highlightedMaskClassName="highlight"
 					maskClassName="mask"
-					lastStep={steps.length - 1 === currentStep ? true : false}
 					rounded={10}
 					maskSpace={10}
 					lastStepNextButton={
 						<SubmitRequestButton
 							onClick={() => {
+								// setCurrentStep(0);
 								document.body.style.overflowY = 'auto';
 								SaveGuideToLocalStorage(dispatch, location.pathname.split('/')[1]);
-								setCurrentStep(0);
-								sendGift();
 							}}
 						>
-							Collect
+							Done
 						</SubmitRequestButton>
 					}
 					disableKeyboardNavigation={['esc']}

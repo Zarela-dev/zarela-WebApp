@@ -12,6 +12,8 @@ export function getInput(input) {
 			return 'Create Request';
 		case '0xa9059cbb':
 			return 'BBit transfer';
+		case 'BBit trans':
+			return 'BBit transfer';
 		case '0x5743b65d':
 			return 'Transaction Failed';
 		case '0x1e801cd8':
