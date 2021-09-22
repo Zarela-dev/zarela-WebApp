@@ -297,19 +297,21 @@ export default function Header({ isMobile }, props) {
 									(page) =>
 										location.pathname === page ||
 										(location.pathname.startsWith(page) && page !== '/')
-								) && (
-									<NavIcon
-										height="20px"
-										src={help}
-										onClick={() => {
-											localStorage.removeItem('guide/' + location.pathname.split('/')[1]);
-											dispatch({
-												type: actionTypes.SET_GUIDE_IS_OPEN,
-												payload: true,
-											});
-										}}
-									/>
-								)}
+								) &&
+									!location.pathname.startsWith('/inbox') &&
+									!location.pathname.startsWith('/request/create') && (
+										<NavIcon
+											height="20px"
+											src={help}
+											onClick={() => {
+												localStorage.removeItem('guide/' + location.pathname.split('/')[1]);
+												dispatch({
+													type: actionTypes.SET_GUIDE_IS_OPEN,
+													payload: true,
+												});
+											}}
+										/>
+									)}
 							</NavItem>
 							<NavItem isMobile={appState.isMobile}>
 								<NavIcon src={bell} height="20px" onClick={() => setIsNotificationMenuOpen(true)} />
