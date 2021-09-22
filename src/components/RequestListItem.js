@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { Buffer } from 'buffer';
-import { twofish } from 'twofish';
 import _ from 'lodash';
 import { Spacer } from './Elements/Spacer';
 import { WithPointerCursor } from './Elements/WithPointerCursor';
@@ -21,6 +19,7 @@ import {
 import { Typography } from './Elements/Typography';
 import biobitIcon from '../assets/icons/biobit-black.svg';
 import contributorIcon from '../assets/icons/user-blue.svg';
+import { pendingFilesContext } from '../state/pendingFilesProvider';
 import RequestFilesTable from './RequestFilesTable';
 import { mainContext } from '../state';
 import Button from './Elements/Button';
@@ -162,15 +161,18 @@ const RequestListItem = ({
 	angelTokenPay,
 	laboratoryTokenPay,
 	contributors,
+	selected,
+	setSelected,
 	handleConfirm,
 	fulfilled,
 	setAnyOpenBox,
 }) => {
 	const [isOpen, setOpen] = useState(false);
 	const [unapprovedCount, setUnapprovedCount] = useState(0);
+	const PendingFiles = useContext(pendingFilesContext);
+	const { pendingFiles } = PendingFiles;
 	const { appState } = useContext(mainContext);
 	const [formattedData, setFormattedData] = useState({});
-	const [selected, setSelected] = useState([]);
 	const { account } = useWeb3React();
 	const [isSubmitting, setSubmitting] = useState(false);
 	const [dialogMessage, setDialogMessage] = useState('');
@@ -180,6 +182,9 @@ const RequestListItem = ({
 		setDialogMessage('');
 	};
 
+	const getPendingFilesForRequest = (requestID) => {
+		Object.values(pendingFiles.pending)
+	}
 	// files table selection methods START
 	const changeAll = (type) => {
 		const originalIndexes = [];
@@ -281,7 +286,7 @@ const RequestListItem = ({
 			}
 		});
 
-		const selectableIndexes = originalIndexes.filter((index) => !indexesAlreadyConfirmed.includes(index));
+		const selectableIndexes = originalIndexes.filter((index) => !indexesAlreadyConfirmed.includes(index) || PendingFiles);
 
 		if (type === 'check') {
 			setSelected((values) => [...values, ...selectableIndexes]);

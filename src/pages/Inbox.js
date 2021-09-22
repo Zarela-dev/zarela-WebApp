@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
-import TitleBar from '../components/TitleBar/TitleBar';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import RequestListItem from '../components/RequestListItem';
 import { mainContext } from '../state';
+import { pendingFilesContext } from '../state/pendingFilesProvider';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { convertToBiobit, toast } from '../utils';
 import NoRequestsFound from '../components/NoRequestsFound';
@@ -30,7 +30,10 @@ const SpinnerWrapper = styled.div`
 
 const Inbox = () => {
 	const { appState } = useContext(mainContext);
+	const PendingFiles = useContext(pendingFilesContext);
+	const { pendingFiles, setPendingFile, removePendingFile } = PendingFiles;
 	const { account } = useWeb3React();
+	const [selected, setSelected] = useState([]);
 	const [requests, setRequests] = useState({});
 	const [isLoading, setLoading] = useState(false);
 	// to manually trigger a data fetch, after the signalsApproved event is triggered
@@ -40,20 +43,25 @@ const Inbox = () => {
 	const handleConfirm = (requestID, originalIndexes) => {
 		appState.contract.methods
 			.confirmContributor(requestID, originalIndexes)
-			.send({ from: account }, (error, result) => {
+			.send({ from: account }, (error, txHash) => {
 				if (!error) {
-					toast(`TX Hash: ${result}`, 'success', true, result, {
-						toastId: result,
+					setPendingFile({
+						txHash,
+						requestID,
+						originalIndexes,
+					});
+					setSelected([]);
+					toast(`TX Hash: ${txHash}`, 'success', true, txHash, {
+						toastId: txHash,
 					});
 				} else {
 					toast(error.message, 'error');
 				}
 			});
-		appState.contract.events
-			.signalsApproved({})
-			.on('data', () => {
-				setShouldRefresh(true);
-			})
+		appState.contract.events.signalsApproved({}).on('data', ({ transactionHash }) => {
+			removePendingFile(transactionHash);
+			setShouldRefresh(true);
+		});
 	};
 
 	useEffect(() => {
@@ -150,6 +158,8 @@ const Inbox = () => {
 								shouldRefresh={shouldRefresh}
 								showContributions={index === 0}
 								key={item.requestID}
+								selected={selected}
+								setSelected={setSelected}
 								requestID={item.requestID}
 								title={item.title}
 								angelTokenPay={item.angelTokenPay}

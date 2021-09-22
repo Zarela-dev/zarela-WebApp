@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import styled, { css } from 'styled-components';
 import { SmallCheckbox } from './Elements/Checkbox';
 import downloadIcon from '../assets/icons/download.svg';
+import { pendingFilesContext } from '../state/pendingFilesProvider';
 import { Spacer } from './Elements/Spacer';
 import { Scrollbar } from './Elements/Scrollbar';
 import { timeSince, CopyableText } from '../utils';
@@ -9,6 +10,7 @@ import publicKeyIcon from '../assets/icons/public-key.svg';
 import confirmIcon from '../assets/icons/confirmed.svg';
 import caretDownIcon from '../assets/icons/caret-down.svg';
 import caretUpIcon from '../assets/icons/caret-up.svg';
+import pendingFileSpinner from '../assets/loader/pending-file-spinner.svg';
 import WalletAddress from './WalletAddress';
 import { localStorageContext } from '../state/localStorageProvider/LocalStoragePriveder';
 
@@ -17,6 +19,11 @@ const Table = styled.div`
 	flex-direction: column;
 	width: 100%;
 	margin-top: ${(props) => props.theme.spacing(3)};
+`;
+
+const PendingFileIcon = styled.img`
+	width: 22px;
+	margin-right: ${(props) => props.theme.spacing(1.5)};
 `;
 
 const CellWrapper = styled.div`
@@ -237,12 +244,27 @@ const RequestFilesTable = ({
 	requestID,
 }) => {
 	const { localState } = useContext(localStorageContext);
+	const PendingFiles = useContext(pendingFilesContext);
+	const { pendingFiles } = PendingFiles;
 	const { blockList, hideList } = localState;
 	const [isExpanded, setExpanded] = useState(null);
 
 	// filter data with hidden and blocked addresses
 	const renderableData = { ...data };
 
+	const getFileStatus = (originalIndex, originalStatus) => {
+		if (originalStatus === true) return 'approved';
+		let status = 'available';
+
+		Object.values(pendingFiles.pending).forEach((item) => {
+			if (item.requestID === requestID && item.originalIndexes.includes(originalIndex)) {
+				status = 'pending';
+				return;
+			}
+		});
+
+		return status;
+	};
 	// filter blocked
 	Object.keys(data).forEach((address) => {
 		if (blockList.find((item) => item.toLowerCase() === address.toLowerCase())) delete renderableData[address];
@@ -334,8 +356,10 @@ const RequestFilesTable = ({
 											return (
 												<FileItemRow key={originalIndex}>
 													<FileItemCol>
-														{status === true ? (
+														{getFileStatus(originalIndex, status) === 'approved' ? (
 															<ConfirmedIcon src={confirmIcon} />
+														) : getFileStatus(originalIndex, status) === 'pending' ? (
+															<PendingFileIcon src={pendingFileSpinner} />
 														) : (
 															<FileCheckbox
 																checked={selected.includes(originalIndex)}
