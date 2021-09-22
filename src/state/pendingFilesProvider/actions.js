@@ -55,7 +55,7 @@ export const initialize =
 				},
 			});
 
-			if (response.data.result.status === '1') {
+			if (response.data.result.status === '1' || response.data.result.status === '0') {
 				delete _pending[txHash];
 			}
 		}
