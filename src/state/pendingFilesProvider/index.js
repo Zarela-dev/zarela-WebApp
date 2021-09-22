@@ -68,7 +68,6 @@ const PendingFilesProvider = ({ children }) => {
 	const injectState = useCallback((fn) => fn({ dispatch, pendingFiles }), [pendingFiles, dispatch]);
 
 	useDeepCompareEffect(() => {
-		console.log('readyForUpdate', readyForUpdate);
 		if (readyForUpdate) lockr.set(lockerKey, pendingFiles);
 	}, [pendingFiles, readyForUpdate]);
 
@@ -98,10 +97,8 @@ const PendingFilesProvider = ({ children }) => {
 	}, []);
 
 	useEffect(() => {
-		console.log('contract', appState.contract);
 		if (appState.contract)
 			appState.contract.events.signalsApproved({}).on('data', ({ transactionHash }) => {
-				console.log('from there', transactionHash);
 				injectState(removePendingFile)(transactionHash);
 			});
 	}, [appState.contract, injectState]);

@@ -19,9 +19,9 @@ import {
 import { Typography } from './Elements/Typography';
 import biobitIcon from '../assets/icons/biobit-black.svg';
 import contributorIcon from '../assets/icons/user-blue.svg';
-import { pendingFilesContext } from '../state/pendingFilesProvider';
 import RequestFilesTable from './RequestFilesTable';
 import { mainContext } from '../state';
+import { arraySymmetricDiff, arrayIntersection } from '../utils';
 import Button from './Elements/Button';
 import { useWeb3React } from '@web3-react/core';
 import caretUpIcon from '../assets/icons/caret-up.svg';
@@ -162,6 +162,7 @@ const RequestListItem = ({
 	laboratoryTokenPay,
 	contributors,
 	selected,
+	pendingFiles,
 	setSelected,
 	handleConfirm,
 	fulfilled,
@@ -169,8 +170,6 @@ const RequestListItem = ({
 }) => {
 	const [isOpen, setOpen] = useState(false);
 	const [unapprovedCount, setUnapprovedCount] = useState(0);
-	const PendingFiles = useContext(pendingFilesContext);
-	const { pendingFiles } = PendingFiles;
 	const { appState } = useContext(mainContext);
 	const [formattedData, setFormattedData] = useState({});
 	const { account } = useWeb3React();
@@ -182,9 +181,24 @@ const RequestListItem = ({
 		setDialogMessage('');
 	};
 
-	const getPendingFilesForRequest = (requestID) => {
-		Object.values(pendingFiles.pending)
-	}
+	const getPendingIndexes = (requestID) => {
+		let temp_pending = {
+			...pendingFiles.pending,
+		};
+		let filteredIndexes = [];
+
+		Object.keys(temp_pending).forEach((txHash) => {
+			if (temp_pending[txHash].requestID !== requestID) {
+				delete temp_pending[txHash];
+			}
+		});
+
+		Object.values(temp_pending).forEach(({ originalIndexes }) => {
+			filteredIndexes = [...filteredIndexes, ...originalIndexes];
+		});
+
+		return filteredIndexes;
+	};
 	// files table selection methods START
 	const changeAll = (type) => {
 		const originalIndexes = [];
@@ -209,6 +223,7 @@ const RequestListItem = ({
 	const isAllChecked = () => {
 		const originalIndexes = [];
 		const indexesAlreadyConfirmed = [];
+		const pendingIndexes = getPendingIndexes(requestID);
 		const selectedIndexes = [...selected];
 		const all = Object.values(formattedData).reduce((acc, curr) => acc.concat(curr), []);
 
@@ -216,8 +231,12 @@ const RequestListItem = ({
 			originalIndexes.push(originalIndex);
 			if (Boolean(status) === true) indexesAlreadyConfirmed.push(originalIndex);
 		});
-
-		if (_.isEqual([...selectedIndexes, ...indexesAlreadyConfirmed].sort(), originalIndexes.sort())) {
+		if (
+			_.isEqual(
+				[...selectedIndexes, ...indexesAlreadyConfirmed, ...pendingIndexes].sort(),
+				originalIndexes.sort()
+			)
+		) {
 			return true;
 		}
 		return false;
@@ -226,6 +245,7 @@ const RequestListItem = ({
 	const isAllApproved = () => {
 		const originalIndexes = [];
 		const indexesAlreadyConfirmed = [];
+		const pendingIndexes = getPendingIndexes(requestID);
 		const all = Object.values(formattedData).reduce((acc, curr) => acc.concat(curr), []);
 
 		all.forEach(({ status, originalIndex }) => {
@@ -233,13 +253,16 @@ const RequestListItem = ({
 			if (Boolean(status) === true) indexesAlreadyConfirmed.push(originalIndex);
 		});
 
-		if (_.isEqual(originalIndexes.sort(), indexesAlreadyConfirmed.sort())) return true;
-		return false;
+		if (_.isEqual(originalIndexes.sort(), indexesAlreadyConfirmed.sort())) return 'approved';
+		if (_.isEqual(arraySymmetricDiff(indexesAlreadyConfirmed, pendingIndexes).sort(), originalIndexes.sort()))
+			return 'pending';
+		return 'available';
 	};
 
 	const isBulkApproved = (contributorAddress) => {
 		const originalIndexes = [];
 		const indexesAlreadyConfirmed = [];
+		const pendingIndexes = getPendingIndexes(requestID);
 
 		formattedData[contributorAddress]?.forEach(({ originalIndex, status }) => {
 			originalIndexes.push(originalIndex);
@@ -249,15 +272,24 @@ const RequestListItem = ({
 		});
 
 		if (_.isEqual(indexesAlreadyConfirmed.sort(), originalIndexes.sort())) {
-			return true;
+			return 'approved';
 		}
-		return false;
+		if (
+			_.isEqual(
+				arraySymmetricDiff(indexesAlreadyConfirmed, arrayIntersection(originalIndexes, pendingIndexes)).sort(),
+				originalIndexes.sort()
+			)
+		) {
+			return 'pending';
+		}
+		return 'available';
 	};
 
 	const isBulkChecked = (contributorAddress) => {
 		const originalIndexes = [];
 		const selectedIndexes = [];
 		const indexesAlreadyConfirmed = [];
+		const pendingIndexes = getPendingIndexes(requestID);
 
 		formattedData[contributorAddress].forEach(({ originalIndex, status }) => {
 			originalIndexes.push(originalIndex);
@@ -269,7 +301,12 @@ const RequestListItem = ({
 			}
 		});
 
-		if (_.isEqual([...selectedIndexes, ...indexesAlreadyConfirmed].sort(), originalIndexes.sort())) {
+		if (
+			_.isEqual(
+				[...selectedIndexes, ...indexesAlreadyConfirmed, ...pendingIndexes].sort(),
+				originalIndexes.sort()
+			)
+		) {
 			return true;
 		}
 		return false;
@@ -278,6 +315,7 @@ const RequestListItem = ({
 	const onBulkChange = (type, contributorAddress) => {
 		const originalIndexes = [];
 		const indexesAlreadyConfirmed = [];
+		const pendingIndexes = getPendingIndexes(requestID);
 
 		formattedData[contributorAddress].forEach(({ originalIndex, status }) => {
 			originalIndexes.push(originalIndex);
@@ -286,10 +324,15 @@ const RequestListItem = ({
 			}
 		});
 
-		const selectableIndexes = originalIndexes.filter((index) => !indexesAlreadyConfirmed.includes(index) || PendingFiles);
+		const selectableIndexes = originalIndexes.filter(
+			(index) => ![...indexesAlreadyConfirmed, ...pendingIndexes].includes(index)
+		);
 
 		if (type === 'check') {
-			setSelected((values) => [...values, ...selectableIndexes]);
+			setSelected((values) => {
+				let unique = new Set([...values, ...selectableIndexes]);
+				return [...unique];
+			});
 		}
 		if (type === 'uncheck')
 			setSelected((values) => values.filter((selectedItem) => !originalIndexes.includes(selectedItem)));

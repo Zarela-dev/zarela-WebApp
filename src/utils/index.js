@@ -7,6 +7,7 @@ import { getInput } from './transactionInput';
 import { ZRNG } from './ZRNG';
 import { getFileNameWithExt } from './getFileExt';
 import { normalizeAddress } from './normalizeAddress';
+import { arraySymmetricDiff, arrayIntersection } from './arrayOperations';
 
 export {
 	timeSince,
@@ -16,6 +17,8 @@ export {
 	CopyableText,
 	getInput,
 	ZRNG,
+	arraySymmetricDiff,
+	arrayIntersection,
 	toast,
 	log,
 	getFileNameWithExt,

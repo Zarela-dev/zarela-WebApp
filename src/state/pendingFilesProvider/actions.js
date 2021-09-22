@@ -45,6 +45,6 @@ export const initialize =
 
 		dispatch({
 			type: actionTypes.INITIALIZE,
-			payload: pendingFilesLocal.pending,
+			payload: pendingFilesLocal?.pending,
 		});
 	};

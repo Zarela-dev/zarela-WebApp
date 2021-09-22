@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { SmallCheckbox } from './Elements/Checkbox';
 import downloadIcon from '../assets/icons/download.svg';
@@ -23,7 +23,7 @@ const Table = styled.div`
 
 const PendingFileIcon = styled.img`
 	width: 22px;
-	margin-right: ${(props) => props.theme.spacing(1.5)};
+	margin-right: ${(props) => (props.noMargin ? 0 : props.theme.spacing(1.5))};
 `;
 
 const CellWrapper = styled.div`
@@ -248,23 +248,26 @@ const RequestFilesTable = ({
 	const { pendingFiles } = PendingFiles;
 	const { blockList, hideList } = localState;
 	const [isExpanded, setExpanded] = useState(null);
+	const getFileStatus = useCallback(
+		(originalIndex, originalStatus) => {
+			if (originalStatus === true) return 'approved';
+			let status = 'available';
+
+			for (let i = 0; i < Object.values(pendingFiles.pending).length; i++) {
+				const item = Object.values(pendingFiles.pending)[i];
+				if (item.requestID === requestID && item.originalIndexes.includes(originalIndex)) {
+					status = 'pending';
+					break;
+				}
+			}
+			return status;
+		},
+		[pendingFiles.pending]
+	);
 
 	// filter data with hidden and blocked addresses
 	const renderableData = { ...data };
 
-	const getFileStatus = (originalIndex, originalStatus) => {
-		if (originalStatus === true) return 'approved';
-		let status = 'available';
-
-		Object.values(pendingFiles.pending).forEach((item) => {
-			if (item.requestID === requestID && item.originalIndexes.includes(originalIndex)) {
-				status = 'pending';
-				return;
-			}
-		});
-
-		return status;
-	};
 	// filter blocked
 	Object.keys(data).forEach((address) => {
 		if (blockList.find((item) => item.toLowerCase() === address.toLowerCase())) delete renderableData[address];
@@ -288,8 +291,10 @@ const RequestFilesTable = ({
 			<Row>
 				<CellWrapper>
 					<Cell data-tour="inbox-three">
-						{isAllApproved() ? (
+						{isAllApproved() === 'approved' ? (
 							<ConfirmedIcon src={confirmIcon} noMargin />
+						) : isAllApproved() === 'pending' ? (
+							<PendingFileIcon src={pendingFileSpinner} noMargin />
 						) : (
 							<CustomCheckbox
 								checked={isAllChecked()}
@@ -315,8 +320,10 @@ const RequestFilesTable = ({
 				<Row key={contributorAddress}>
 					<CellWrapper>
 						<Cell>
-							{isBulkApproved(contributorAddress) ? (
+							{isBulkApproved(contributorAddress) === 'approved' ? (
 								<ConfirmedIcon src={confirmIcon} noMargin />
+							) : isBulkApproved(contributorAddress) === 'pending' ? (
+								<PendingFileIcon src={pendingFileSpinner} noMargin />
 							) : (
 								<CustomCheckbox
 									checked={isBulkChecked(contributorAddress)}

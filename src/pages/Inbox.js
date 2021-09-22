@@ -160,6 +160,7 @@ const Inbox = () => {
 								key={item.requestID}
 								selected={selected}
 								setSelected={setSelected}
+								pendingFiles={pendingFiles}
 								requestID={item.requestID}
 								title={item.title}
 								angelTokenPay={item.angelTokenPay}
