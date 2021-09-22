@@ -52,7 +52,7 @@ const Contacts = ({ isMobile }) => {
 					<Table>
 						<TableRow header>
 							<SettingTableCell flex="0 0 35%">
-								<TableCell>Name</TableCell>
+								<TableCell>Nick Name</TableCell>
 							</SettingTableCell>
 							<SettingTableCell flex="0 0 40%">
 								<TableCell>Public key</TableCell>

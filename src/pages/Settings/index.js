@@ -15,11 +15,11 @@ const LogInnerContainer = styled.div`
 	border-radius: 8px;
 `;
 
-const Setting = () => {
+const Settings = () => {
 	const { appState } = useContext(mainContext);
 	return (
 		<Tabs
-			route="setting"
+			route="settings"
 			isMobile={appState.isMobile}
 			data={[
 				{
@@ -51,4 +51,4 @@ const Setting = () => {
 	);
 };
 
-export default Setting;
+export default Settings;
