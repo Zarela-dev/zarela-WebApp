@@ -2,6 +2,7 @@ import { actionTypes } from './actionTypes';
 import * as lockr from 'lockr';
 import { normalizeAddress } from '../../utils';
 import { lockerKey } from './lockrKey';
+import axios from 'axios';
 
 export const setPendingFile =
 	({ dispatch }) =>
@@ -33,7 +34,7 @@ export const removePendingFile =
 		});
 
 		dispatch({
-			type: actionTypes.REMOVE_PENDING_FILE,
+			type: actionTypes.UPDATE_PENDING_FILE,
 			payload,
 		});
 	};
@@ -41,10 +42,26 @@ export const removePendingFile =
 export const initialize =
 	({ dispatch }) =>
 	async () => {
-		const pendingFilesLocal = lockr.get(lockerKey);
+		const { pending } = lockr.get(lockerKey);
+		let _pending = { ...pending };
+
+		for (const txHash of Object.keys(pending)) {
+			const response = await axios.get('https://api-ropsten.etherscan.io/api', {
+				params: {
+					module: 'transaction',
+					action: 'gettxreceiptstatus',
+					txhash: txHash,
+					apikey: process.env.REACT_APP_ETHEREUM_API_KEY,
+				},
+			});
+
+			if (response.data.result.status === '1') {
+				delete _pending[txHash];
+			}
+		}
 
 		dispatch({
 			type: actionTypes.INITIALIZE,
-			payload: pendingFilesLocal?.pending,
+			payload: _pending,
 		});
 	};

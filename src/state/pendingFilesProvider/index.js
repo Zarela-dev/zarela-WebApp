@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useReducer, useCallback, useContext } from 'react';
-import { convertToBiobit, toast } from '../../utils';
+import { toast } from '../../utils';
 import { actionTypes } from './actionTypes';
 import { setPendingFile, initialize, removePendingFile } from './actions';
 import { useDeepCompareEffect } from 'use-deep-compare';
-import { useWeb3React } from '@web3-react/core';
 import { lockerKey } from './lockrKey';
 import { mainContext } from '../../state';
 import * as lockr from 'lockr';
@@ -30,7 +29,6 @@ const initialState = {
 const pendingFilesContext = React.createContext(initialState);
 
 const PendingFilesProvider = ({ children }) => {
-	const { library, account, active, activate } = useWeb3React();
 	const { appState } = useContext(mainContext);
 	const [readyForUpdate, setReadyForUpdate] = useState(false);
 
@@ -46,7 +44,7 @@ const PendingFilesProvider = ({ children }) => {
 						...action.payload,
 					},
 				};
-			case actionTypes.REMOVE_PENDING_FILE:
+			case actionTypes.UPDATE_PENDING_FILE:
 				return {
 					...state,
 					pending: {

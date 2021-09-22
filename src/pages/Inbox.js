@@ -41,7 +41,6 @@ const Inbox = () => {
 	const [cleanSelected, setCleanSelected] = useState(null);
 
 	const handleConfirm = (requestID, originalIndexes) => {
-		console.log('releasing for',  originalIndexes)
 		appState.contract.methods
 			.confirmContributor(requestID, originalIndexes)
 			.send({ from: account }, (error, txHash) => {
