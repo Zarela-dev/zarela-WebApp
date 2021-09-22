@@ -1,10 +1,10 @@
 export const LogSteps = [
 	{
 		selector: '[data-tour="my-requests"]',
-		content: 'List of requests submitted by current public key',
+		content: 'List of requests submitted by you',
 	},
 	{
 		selector: '[data-tour="my-contributions"]',
-		content: 'List of contributed requests that angle submitted file.',
+		content: 'Detailed list of your contributions as a Hub or Angel.',
 	},
 ];
