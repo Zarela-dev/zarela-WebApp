@@ -147,7 +147,7 @@ const FileItemCol = styled.div`
 	color: ${(props) => props.theme.textPrimary};
 
 	&:nth-child(1) {
-		flex: 1 0 170px;
+		flex: 1 0 113px;
 	}
 	&:nth-child(2) {
 		position: relative;
