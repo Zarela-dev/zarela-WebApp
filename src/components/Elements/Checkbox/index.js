@@ -77,7 +77,7 @@ const Label = styled.label`
 const Checkbox = ({ children, checked, ...props }) => (
 	<Label className={props.className}>
 		<CheckboxContainer>
-			<HiddenCheckbox checked={checked} {...props} />
+			<HiddenCheckbox type="checkbox" checked={checked} {...props} />
 			<StyledCheckboxWrapper checked={checked}>
 				<StyledCheckbox checked={checked}>
 					<Icon src={tick} />
@@ -91,7 +91,7 @@ const Checkbox = ({ children, checked, ...props }) => (
 export const SmallCheckbox = ({ children, checked, disabled, className, ...props }) => (
 	<Label className={className} disabled={disabled}>
 		<CheckboxContainer small>
-			<HiddenCheckbox type='checkbox' checked={checked} disabled={disabled} {...props} />
+			<HiddenCheckbox type="checkbox" checked={checked} disabled={disabled} {...props} />
 			<StyledCheckboxWrapper small checked={checked} disabled={disabled}>
 				<StyledCheckbox small checked={checked} disabled={disabled}>
 					<Icon small src={tick} />
