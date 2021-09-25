@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Action, Icon } from './Elements';
+import { Action, Icon, HoverTooltip } from './Elements';
 import { removeContact } from '../../state/localStorageProvider/actions';
 import { localStorageContext } from '../../state/localStorageProvider/LocalStoragePriveder';
 import hideIcon from '../../assets/icons/actionIcons/delete.svg';
@@ -17,7 +17,9 @@ const DeleteContact = ({ publicKey }) => {
 				toast(`"${alias}" removed from contacts.`, 'success', true);
 			}}
 		>
-			<Icon src={hideIcon} />
+			<HoverTooltip title="delete contact">
+				<Icon src={hideIcon} />
+			</HoverTooltip>
 		</Action>
 	);
 };

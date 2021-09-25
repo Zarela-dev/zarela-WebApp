@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Action, Icon } from './Elements';
+import { Action, Icon, HoverTooltip } from './Elements';
 import { blockAddress, unBlockAddress } from '../../state/localStorageProvider/actions';
 import { localStorageContext } from '../../state/localStorageProvider/LocalStoragePriveder';
 import unblockIcon from '../../assets/icons/actionIcons/unBlockPink.svg';
@@ -22,7 +22,9 @@ const BlockAddress = ({ publicKey }) => {
 					);
 				}}
 			>
-				<Icon src={unblockIcon} />
+				<HoverTooltip title="show this contributor on all requests">
+					<Icon src={unblockIcon} />
+				</HoverTooltip>
 			</Action>
 		);
 	return (
@@ -32,7 +34,9 @@ const BlockAddress = ({ publicKey }) => {
 				toast(`"${contacts[normalizeAddress(publicKey)] || publicKey}" is now in Blacklist`, 'success', true);
 			}}
 		>
-			<Icon src={blockIcon} />
+			<HoverTooltip title="hide this contributor on all requests">
+				<Icon src={blockIcon} />
+			</HoverTooltip>
 		</Action>
 	);
 };

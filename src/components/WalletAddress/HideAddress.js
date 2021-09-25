@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Action, Icon } from './Elements';
+import { Action, Icon, HoverTooltip } from './Elements';
 import { hideAddress, unHideAddress } from '../../state/localStorageProvider/actions';
 import { localStorageContext } from '../../state/localStorageProvider/LocalStoragePriveder';
 import hideIcon from '../../assets/icons/actionIcons/hide.svg';
@@ -25,7 +25,9 @@ const HideAddress = ({ publicKey, requestID }) => {
 						);
 					}}
 				>
-					<Icon src={hideIcon} />
+					<HoverTooltip title="show this contributor on specified request">
+						<Icon src={hideIcon} />
+					</HoverTooltip>
 				</Action>
 			);
 	return (
@@ -39,7 +41,9 @@ const HideAddress = ({ publicKey, requestID }) => {
 				);
 			}}
 		>
-			<Icon src={unhideIcon} />
+			<HoverTooltip title="hide this contributor on this request">
+				<Icon src={unhideIcon} />
+			</HoverTooltip>
 		</Action>
 	);
 };

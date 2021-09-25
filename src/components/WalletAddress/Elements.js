@@ -21,6 +21,11 @@ export const Tooltip = styled((props) => {
 		width: 250px;
 	}
 `;
+
+export const HoverTooltip = styled((props) => {
+	return <MuiTooltip className={{ popper: props.className }} {...props} />;
+})``;
+
 export const AddToContactFrom = styled.form`
 	display: flex;
 	flex-wrap: nowrap;

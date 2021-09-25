@@ -6,7 +6,7 @@ import { localStorageContext } from '../../state/localStorageProvider/LocalStora
 import addToContactIcon from '../../assets/icons/actionIcons/add-to-contact.svg';
 import confirmAddToContactIcon from '../../assets/icons/actionIcons/confirm-add-to-contact.svg';
 import editContactIcon from '../../assets/icons/actionIcons/edit.svg';
-import { Icon, TextField, SubmitButton, AddToContactFrom, Tooltip, Action } from './Elements';
+import { Icon, TextField, SubmitButton, AddToContactFrom, Tooltip, Action, HoverTooltip } from './Elements';
 
 const AddContact = ({ publicKey, edit, disabled }) => {
 	const { dispatch, localState } = useContext(localStorageContext);
@@ -57,7 +57,15 @@ const AddContact = ({ publicKey, edit, disabled }) => {
 			}
 		>
 			<Action disabled={disabled} onClick={() => setTooltipOpen(true)}>
-				<Icon src={contacts[[normalizeAddress(publicKey)]] || edit ? editContactIcon : addToContactIcon} />
+				<HoverTooltip
+					title={
+						contacts[[normalizeAddress(publicKey)]] || edit
+							? 'edit contact'
+							: 'add this contributor to contacts'
+					}
+				>
+					<Icon src={contacts[[normalizeAddress(publicKey)]] || edit ? editContactIcon : addToContactIcon} />
+				</HoverTooltip>
 			</Action>
 		</Tooltip>
 	);
