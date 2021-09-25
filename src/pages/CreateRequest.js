@@ -101,7 +101,7 @@ const CreateRequest = () => {
 								try {
 									setUploading(true);
 									setDialogMessage(
-										'in request to secure the file, so only you can access it we require your public key to encrypt the file'
+										'to secure your files, you need to provide your encryption public key (using Metamask)'
 									);
 									const encryptionPublicKey = await window.ethereum.request({
 										method: 'eth_getEncryptionPublicKey',
@@ -142,7 +142,7 @@ const CreateRequest = () => {
 										let url = `${process.env.REACT_APP_IPFS_LINK + zpaper_CID}`;
 										console.log(`Zpaper --> ${url}`);
 
-										setDialogMessage('awaiting confirmation');
+										setDialogMessage('Approve it from your Wallet');
 
 										appState.contract.methods
 											.submitNewRequest(

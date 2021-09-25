@@ -127,7 +127,7 @@ const UploadFileCard = (props) => {
 									pin: true,
 								});
 
-								setDialogMessage('awaiting confirmation');
+								setDialogMessage('Approve it from your Wallet');
 								appState.contract.methods
 									.contribute(
 										request.requestID,
