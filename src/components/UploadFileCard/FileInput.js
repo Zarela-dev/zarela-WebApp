@@ -131,7 +131,7 @@ const LimitSizeMessage = styled.p`
 	font-size: 14px;
 	margin-top: 15px;
 	text-align: left;
-	color: #121213;
+	color: #C2C2C2;
 	font-weight: 600;
 
 	@media (max-width: 768px) {
