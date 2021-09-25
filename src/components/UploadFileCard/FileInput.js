@@ -128,10 +128,14 @@ const DownLoadLink = styled.a`
 `;
 
 const LimitSizeMessage = styled.p`
-	font-size: 16px;
+	font-size: 14px;
 	margin-top: 15px;
+	text-align: left;
+	color: #121213;
+	font-weight: 600;
+
 	@media (max-width: 768px) {
-		font-size: 14px;
+		font-size: 12px;
 	}
 `;
 
