@@ -3,6 +3,7 @@ import * as lockr from 'lockr';
 import { normalizeAddress } from '../../utils';
 import { lockerKey } from './lockrKey';
 import axios from 'axios';
+import { ETHERSCAN_BASE_URL } from '../../constants';
 
 export const setPendingFile =
 	({ dispatch }) =>
@@ -48,7 +49,7 @@ export const initialize =
 			let _pending = { ...pending };
 
 			for (const txHash of Object.keys(pending)) {
-				const response = await axios.get('https://api-ropsten.etherscan.io/api', {
+				const response = await axios.get(ETHERSCAN_BASE_URL, {
 					params: {
 						module: 'transaction',
 						action: 'gettxreceiptstatus',

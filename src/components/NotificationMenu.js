@@ -23,29 +23,7 @@ const ChainBadge = styled.div`
 `;
 
 const NotificationMenu = ({ isOpen, onClose }) => {
-	const menuItems = [
-		{
-			title: 'Home',
-			path: '/',
-			notifications: 0,
-		},
-		{
-			title: 'Inbox',
-			path: '/inbox',
-			notifications: 0,
-		},
-		{
-			title: 'Log',
-			path: '/log/my_requests',
-			notifications: 0,
-		},
-		{
-			title: 'Wallet',
-			path: '/wallet/account',
-			notifications: 0,
-			badge: <ChainBadge>Ropsten</ChainBadge>,
-		},
-	];
+	const menuItems = [];
 
 	return (
 		<SlideMenu

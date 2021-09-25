@@ -15,19 +15,16 @@ import { convertToBiobit, toast } from '../../utils';
 import MobileMenu from '../MobileMenu';
 import NotificationMenu from '../NotificationMenu';
 import { mainContext } from './../../state';
-import maxWidthWrapper from '../Elements/MaxWidth';
 import chainIdTag from '../../assets/icons/chainid-tag.svg';
 import help from './../../assets/icons/help.svg';
 import bell from './../../assets/icons/bell.svg';
 import { useLocation } from 'react-router';
 import { actionTypes } from '../../state/actionTypes';
 import { makeStyles } from '@material-ui/core';
-
 import { useScrollPosition } from '../../hooks/useScrollPosition';
 import { Box } from '@material-ui/core';
 import TitleBar from '../../components/TitleBar/TitleBar';
-
-import { Badge } from 'reactour';
+import { CURRENT_NETWORK_LABEL } from '../../constants';
 
 const NavItem = styled(Link)`
 	position: relative;
@@ -415,7 +412,7 @@ export default function Header({ isMobile }, props) {
 						<NavItem isMobile={appState.isMobile} to="/wallet/account">
 							<NavIcon src={wallet} />
 							<NavLink>Wallet</NavLink>
-							<ChainBadge onClick={(e) => e.preventDefault()}>Ropsten</ChainBadge>
+							<ChainBadge onClick={(e) => e.preventDefault()}>{CURRENT_NETWORK_LABEL}</ChainBadge>
 						</NavItem>
 					</RightMenu>
 					<LeftMenu>

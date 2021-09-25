@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import noMetamaskBackdrop from '../assets/no-meta-backdrop.png';
 import LogoImage from '../assets/icons/logo.png';
+import { CURRENT_NETWORK_LABEL } from '../constants';
 
 const Container = styled.div`
 	width: 100%;
@@ -109,7 +110,9 @@ const ChainErrorDialog = () => {
 					<Title>Welcome to Zarela ! :)</Title>
 				</Header>
 				<Content>
-					<Message>Zarela is currently on test network, switch your wallet network to Ropsten.</Message>
+					<Message>
+						Zarela is currently on test network, switch your wallet network to {CURRENT_NETWORK_LABEL}.
+					</Message>
 				</Content>
 			</Modal>
 		</Container>
