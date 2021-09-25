@@ -53,6 +53,7 @@ const BackIcon = styled.img`
 	margin-left: -10px;
 	margin-bottom: 10px;
 	cursor: pointer;
+	transform: rotate(180deg);
 `;
 const BackIconNotify = styled(BackIcon)`
 	z-index: 99999;
