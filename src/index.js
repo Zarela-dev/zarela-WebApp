@@ -7,14 +7,18 @@ import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 
 if (process.env.NODE_ENV === 'production') {
-	Sentry.init({
-		dsn: 'https://1a9cf4fa02f44ab1a7101ae73e29ccb4@o1005363.ingest.sentry.io/5966083',
-		integrations: [new Integrations.BrowserTracing()],
-
-		// We recommend adjusting this value in production, or using tracesSampler
-		// for finer control
-		tracesSampleRate: 1.0,
-	});
+	if (process.env.REACT_APP_IS_TEST_NET !== 'true')
+		Sentry.init({
+			dsn: 'https://1a9cf4fa02f44ab1a7101ae73e29ccb4@o1005363.ingest.sentry.io/5966083',
+			integrations: [new Integrations.BrowserTracing()],
+			tracesSampleRate: 1.0,
+		});
+	else
+		Sentry.init({
+			dsn: 'https://ef3977fe4a7e4bcdaeaf226df57cada4@o1005363.ingest.sentry.io/5978785',
+			integrations: [new Integrations.BrowserTracing()],
+			tracesSampleRate: 1.0,
+		});
 }
 
 if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_IS_TEST_NET !== 'true') {
