@@ -38,6 +38,5 @@ export const scientificToDecimal = function (num) {
 
 export const convertToBiobit = (value) => {
 	if (typeof value === undefined) return 'Invalid value';
-	console.log(scientificToDecimal(+value / Math.pow(10, 9)).toFixed(4));
 	return scientificToDecimal(+value / Math.pow(10, 9)).toFixed(4);
 };
