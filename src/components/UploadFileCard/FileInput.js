@@ -131,8 +131,8 @@ const LimitSizeMessage = styled.p`
 	font-size: 14px;
 	margin-top: 15px;
 	text-align: left;
-	color: #C2C2C2;
-	font-weight: 600;
+	color: ${(props) => props.theme.textPrimary};
+	font-weight: 400;
 
 	@media (max-width: 768px) {
 		font-size: 12px;

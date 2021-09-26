@@ -165,7 +165,7 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 					hasBorder
 					disableUpload={false}
 					label={'select your file here'}
-					fileSizeLimit="chosen file size must be limited to a maximum size of 95MB"
+					fileSizeLimit="*File size must be smaller than 95MB"
 					buttonLabel="select file"
 					name="file"
 					error={formik.errors.file}
