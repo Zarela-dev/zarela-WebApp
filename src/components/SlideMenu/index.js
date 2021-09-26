@@ -86,26 +86,6 @@ const MenuItem = styled(Link)`
 	color: #581d9f;
 	text-decoration: ${(props) => (props.active ? 'underline' : 'none')};
 	margin-bottom: ${(props) => props.theme.spacing(4)};
-	cursor: ${(props) => props.disabled && 'not-allowed'};
-	opacity: ${(props) => (props.disabled ? 0.4 : 1)};
-`;
-
-const MenuItemDisabled = styled.a.attrs((props) => {
-	return {
-		...props,
-		href: 'javascript:void(0)',
-	};
-})`
-	position: relative;
-	display: list-item;
-	font-weight: normal;
-	font-size: 18px;
-	line-height: 18px;
-	color: #581d9f;
-	text-decoration: none;
-	margin-bottom: ${(props) => props.theme.spacing(4)};
-	cursor: ${(props) => props.disabled && 'not-allowed'};
-	opacity: ${(props) => (props.disabled ? 0.4 : 1)};
 `;
 
 const NotificationSideBarBadge = styled.div`
@@ -156,7 +136,6 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 				<MenuList>
 					{listItems.map((item) => {
 						if (item.children?.length) {
-							console.log(item.disabled);
 							return (
 								<>
 									<MenuItem
@@ -191,20 +170,6 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 								</>
 							);
 						}
-						if (item.disabled)
-							return (
-								<MenuItemDisabled
-									key={item.title}
-									active={matchPath(pathname, { path: item.path, exact: true })}
-									to={item.path}
-									notification={item.notification}
-									replace={item.replace}
-									disabled={item.disabled}
-								>
-									{item.title}
-									{item.badge || null}
-								</MenuItemDisabled>
-							);
 						return (
 							<MenuItem
 								key={item.title}
@@ -212,8 +177,6 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 								active={matchPath(pathname, { path: item.path, exact: true })}
 								to={item.path}
 								notification={item.notification}
-								replace={item.replace}
-								disabled={item.disabled}
 							>
 								{item.title}
 								{item.badge || null}

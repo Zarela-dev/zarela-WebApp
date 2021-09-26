@@ -41,13 +41,6 @@ const MobileMenu = ({ isOpen, onClose, notifyOnClose, usage = 'toastify' }) => {
 			notifications: 0,
 		},
 		{
-			title: 'Explore',
-			path: '',
-			replace: '',
-			disabled: true,
-			notifications: 0,
-		},
-		{
 			title: 'Wallet',
 			path: '/wallet/account',
 			notifications: 0,
