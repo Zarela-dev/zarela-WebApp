@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Button } from './Elements/Button';
 import SlideMenu from './SlideMenu';
 import chainIdTag from '../assets/icons/chainid-tag.svg';
+import { CURRENT_NETWORK_LABEL } from '../constants';
 
 const ChainBadge = styled.div`
 	background-image: url(${chainIdTag});
@@ -43,7 +44,7 @@ const MobileMenu = ({ isOpen, onClose, notifyOnClose, usage = 'toastify' }) => {
 			title: 'Wallet',
 			path: '/wallet/account',
 			notifications: 0,
-			badge: <ChainBadge>Ropsten</ChainBadge>,
+			badge: <ChainBadge>{CURRENT_NETWORK_LABEL}</ChainBadge>,
 		},
 	];
 

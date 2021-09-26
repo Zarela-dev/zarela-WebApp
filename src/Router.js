@@ -26,16 +26,20 @@ const AppRouter = () => {
 	const { appState } = useContext(mainContext);
 	const { error, chainId } = useWeb3React();
 	const metamaskChainId = provider?.request({ method: 'eth_chainId' });
-	const [hasChainError, setChainError] = useState(
-		error instanceof UnsupportedChainIdError
-	);
+	const [hasChainError, setChainError] = useState(error instanceof UnsupportedChainIdError);
 
 	useEffect(() => {
 		if (provider) {
 			try {
 				metamaskChainId.then((currentChainId) => {
-					if (parseInt(currentChainId, 16) !== supportedChains.ROPSTEN) {
-						setChainError(true);
+					if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_IS_TEST_NET !== 'true') {
+						if (parseInt(currentChainId, 16) !== supportedChains.MAINNET) {
+							setChainError(true);
+						}
+					} else {
+						if (parseInt(currentChainId, 16) !== supportedChains.ROPSTEN) {
+							setChainError(true);
+						}
 					}
 				});
 				// watch for network changes
@@ -70,13 +74,13 @@ const AppRouter = () => {
 					<Header isMobile={appState.isMobile ?? false} />
 				)}
 				<Switch>
-					<Route exact path='/' component={RequestsList} />
-					<Route exact path='/request/create' component={CreateRequest} />
-					<Route exact path='/request/:id' component={RequestDetails} />
-					<Route exact path='/inbox' component={Inbox} />
-					<Route path='/wallet' component={Wallet} />
-					<Route path='/log' component={Log} />
-					<Route path='/settings' component={Settings} />
+					<Route exact path="/" component={RequestsList} />
+					<Route exact path="/request/create" component={CreateRequest} />
+					<Route exact path="/request/:id" component={RequestDetails} />
+					<Route exact path="/inbox" component={Inbox} />
+					<Route path="/wallet" component={Wallet} />
+					<Route path="/log" component={Log} />
+					<Route path="/settings" component={Settings} />
 				</Switch>
 			</AppWrapper>
 		</Router>

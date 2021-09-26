@@ -14,11 +14,11 @@ export const RequestDetailsDesktopSteps = [
 	{
 		selector: '[data-tour="request-list-four"]',
 		content:
-			'This number indicates the number of Biobit tokens that are to be paid by the mage to each angel who sends the	appropriate response.',
+			'This number indicates the number of Biobit tokens that are to be paid by the mage for each contribution with	appropriate response.',
 	},
 	{
 		selector: '[data-tour="request-list-five"]',
-		content: 'This number indicates the number of approved responses sent by angels.',
+		content: 'This number indicates the number of approved responses.',
 	},
 	{
 		selector: '[data-tour="request-list-six"]',
@@ -51,11 +51,11 @@ export const RequestDetailsMobileSteps = [
 	{
 		selector: '[data-tour="request-list-four"]',
 		content:
-			'This number indicates the number of Biobit tokens that are to be paid by the mage to each angel who sends the	appropriate response.',
+			'This number indicates the number of Biobit tokens that are to be paid by the mage for each contribution with	appropriate response.',
 	},
 	{
 		selector: '[data-tour="request-list-five"]',
-		content: 'This number indicates the number of approved responses sent by angels.',
+		content: 'This number indicates the number of approved responses.',
 	},
 	{
 		selector: '[data-tour="request-list-six"]',

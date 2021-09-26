@@ -127,6 +127,18 @@ const DownLoadLink = styled.a`
 	cursor: pointer;
 `;
 
+const LimitSizeMessage = styled.p`
+	font-size: 14px;
+	margin-top: 15px;
+	text-align: left;
+	color: ${(props) => props.theme.textPrimary};
+	font-weight: 400;
+
+	@media (max-width: 768px) {
+		font-size: 12px;
+	}
+`;
+
 // #refactor_candidate
 const FileInput = forwardRef(
 	(
@@ -142,6 +154,7 @@ const FileInput = forwardRef(
 			onClick,
 			error,
 			label,
+			fileSizeLimit,
 			...rest
 		},
 		ref
@@ -186,6 +199,7 @@ const FileInput = forwardRef(
 						</ErrorContainer>
 					) : null}
 				</FileInputWrapper>
+				{fileSizeLimit && <LimitSizeMessage>{fileSizeLimit}</LimitSizeMessage>}
 				{downLoadLink && (
 					<ContentRow>
 						<DownLoadText>
