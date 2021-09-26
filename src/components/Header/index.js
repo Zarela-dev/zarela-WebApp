@@ -427,20 +427,21 @@ export default function Header({ isMobile }, props) {
 						</NavItem>
 						{GUIDES.find(
 							(page) => location.pathname === page || (location.pathname.startsWith(page) && page !== '/')
-						) && (
-							<NavItem>
-								<NavIcon
-									src={help}
-									onClick={() => {
-										localStorage.removeItem('guide/' + location.pathname.split('/')[1]);
-										dispatch({
-											type: actionTypes.SET_GUIDE_IS_OPEN,
-											payload: true,
-										});
-									}}
-								/>
-							</NavItem>
-						)}
+						) &&
+							location.pathname !== '/request/create' && (
+								<NavItem>
+									<NavIcon
+										src={help}
+										onClick={() => {
+											localStorage.removeItem('guide/' + location.pathname.split('/')[1]);
+											dispatch({
+												type: actionTypes.SET_GUIDE_IS_OPEN,
+												payload: true,
+											});
+										}}
+									/>
+								</NavItem>
+							)}
 						<NavItem isMobile={appState.isMobile} to="/settings/contacts">
 							<NavIcon src={setting} />
 						</NavItem>
