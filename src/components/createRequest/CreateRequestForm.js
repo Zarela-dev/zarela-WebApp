@@ -238,6 +238,7 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 					label={'Upload your Zpaper here'}
 					ref={ref}
 					name={'zpaper'}
+					fileSizeLimit="*File size must be smaller than 95MB"
 					error={formik.errors?.zpaper}
 					value={formik.values.zpaper}
 					onChange={(e) => {
