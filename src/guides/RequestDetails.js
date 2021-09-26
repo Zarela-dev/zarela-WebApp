@@ -18,7 +18,7 @@ export const RequestDetailsDesktopSteps = [
 	},
 	{
 		selector: '[data-tour="request-list-five"]',
-		content: 'This number indicates the number of approved responses sent by angels.',
+		content: 'This number indicates the number of approved responses.',
 	},
 	{
 		selector: '[data-tour="request-list-six"]',
@@ -55,7 +55,7 @@ export const RequestDetailsMobileSteps = [
 	},
 	{
 		selector: '[data-tour="request-list-five"]',
-		content: 'This number indicates the number of approved responses sent by angels.',
+		content: 'This number indicates the number of approved responses.',
 	},
 	{
 		selector: '[data-tour="request-list-six"]',
