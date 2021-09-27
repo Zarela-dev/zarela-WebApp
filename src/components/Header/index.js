@@ -7,6 +7,7 @@ import setting from '../../assets/icons/setting.svg';
 import inbox from '../../assets/icons/inbox.svg';
 import user from '../../assets/icons/user.svg';
 import wallet from '../../assets/icons/wallet.svg';
+import explore from '../../assets/icons/explore.svg';
 import { Link } from 'react-router-dom';
 import { Typography } from '../Elements/Typography';
 import { Button } from '../Elements/Button';
@@ -38,6 +39,28 @@ const NavItem = styled(Link)`
 	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(0) : props.theme.spacing(2.5))};
 	margin-left: ${(props) => (props.isMobile ? props.theme.spacing(2) : props.theme.spacing(2.5))};
 	outline: none !important;
+	cursor: ${(props) => props.disabled && 'not-allowed'};
+	opacity: ${(props) => (props.disabled ? 0.4 : 1)};
+`;
+
+const NavItemDisabled = styled.a.attrs((props) => {
+	return {
+		...props,
+	};
+})`
+	position: relative;
+	height: 50px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	align-content: center;
+	justify-content: center;
+	text-decoration: none;
+	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(0) : props.theme.spacing(2.5))};
+	margin-left: ${(props) => (props.isMobile ? props.theme.spacing(2) : props.theme.spacing(2.5))};
+	outline: none !important;
+	cursor: ${(props) => props.disabled && 'not-allowed'};
+	opacity: ${(props) => (props.disabled ? 0.4 : 1)};
 `;
 
 const NavLink = styled(Typography)`
@@ -408,6 +431,14 @@ export default function Header({ isMobile }, props) {
 						<NavItem isMobile={appState.isMobile} to="/log/my_requests">
 							<NavIcon src={user} />
 							<NavLink>Log</NavLink>
+						</NavItem>
+						<NavItem
+							isMobile={appState.isMobile}
+							to={{ pathname: process.env.REACT_APP_EXPLORE_LINK }}
+							target="_blank"
+						>
+							<NavIcon src={explore} />
+							<NavLink>Explore</NavLink>
 						</NavItem>
 						<NavItem isMobile={appState.isMobile} to="/wallet/account">
 							<NavIcon src={wallet} />
