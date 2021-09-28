@@ -7,6 +7,7 @@ import setting from '../../assets/icons/setting.svg';
 import inbox from '../../assets/icons/inbox.svg';
 import user from '../../assets/icons/user.svg';
 import wallet from '../../assets/icons/wallet.svg';
+import explore from '../../assets/icons/explore.svg';
 import { Link } from 'react-router-dom';
 import { Typography } from '../Elements/Typography';
 import { Button } from '../Elements/Button';
@@ -15,19 +16,16 @@ import { convertToBiobit, toast } from '../../utils';
 import MobileMenu from '../MobileMenu';
 import NotificationMenu from '../NotificationMenu';
 import { mainContext } from './../../state';
-import maxWidthWrapper from '../Elements/MaxWidth';
 import chainIdTag from '../../assets/icons/chainid-tag.svg';
 import help from './../../assets/icons/help.svg';
 import bell from './../../assets/icons/bell.svg';
 import { useLocation } from 'react-router';
 import { actionTypes } from '../../state/actionTypes';
 import { makeStyles } from '@material-ui/core';
-
 import { useScrollPosition } from '../../hooks/useScrollPosition';
 import { Box } from '@material-ui/core';
 import TitleBar from '../../components/TitleBar/TitleBar';
-
-import { Badge } from 'reactour';
+import { CURRENT_NETWORK_LABEL } from '../../constants';
 
 const NavItem = styled(Link)`
 	position: relative;
@@ -41,6 +39,28 @@ const NavItem = styled(Link)`
 	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(0) : props.theme.spacing(2.5))};
 	margin-left: ${(props) => (props.isMobile ? props.theme.spacing(2) : props.theme.spacing(2.5))};
 	outline: none !important;
+	cursor: ${(props) => props.disabled && 'not-allowed'};
+	opacity: ${(props) => (props.disabled ? 0.4 : 1)};
+`;
+
+const NavItemDisabled = styled.a.attrs((props) => {
+	return {
+		...props,
+	};
+})`
+	position: relative;
+	height: 50px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	align-content: center;
+	justify-content: center;
+	text-decoration: none;
+	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(0) : props.theme.spacing(2.5))};
+	margin-left: ${(props) => (props.isMobile ? props.theme.spacing(2) : props.theme.spacing(2.5))};
+	outline: none !important;
+	cursor: ${(props) => props.disabled && 'not-allowed'};
+	opacity: ${(props) => (props.disabled ? 0.4 : 1)};
 `;
 
 const NavLink = styled(Typography)`
@@ -412,10 +432,18 @@ export default function Header({ isMobile }, props) {
 							<NavIcon src={user} />
 							<NavLink>Log</NavLink>
 						</NavItem>
+						<NavItem
+							isMobile={appState.isMobile}
+							to={{ pathname: process.env.REACT_APP_EXPLORE_LINK }}
+							target="_blank"
+						>
+							<NavIcon src={explore} />
+							<NavLink>Explore</NavLink>
+						</NavItem>
 						<NavItem isMobile={appState.isMobile} to="/wallet/account">
 							<NavIcon src={wallet} />
 							<NavLink>Wallet</NavLink>
-							<ChainBadge onClick={(e) => e.preventDefault()}>Ropsten</ChainBadge>
+							<ChainBadge onClick={(e) => e.preventDefault()}>{CURRENT_NETWORK_LABEL}</ChainBadge>
 						</NavItem>
 					</RightMenu>
 					<LeftMenu>
@@ -430,20 +458,21 @@ export default function Header({ isMobile }, props) {
 						</NavItem>
 						{GUIDES.find(
 							(page) => location.pathname === page || (location.pathname.startsWith(page) && page !== '/')
-						) && (
-							<NavItem>
-								<NavIcon
-									src={help}
-									onClick={() => {
-										localStorage.removeItem('guide/' + location.pathname.split('/')[1]);
-										dispatch({
-											type: actionTypes.SET_GUIDE_IS_OPEN,
-											payload: true,
-										});
-									}}
-								/>
-							</NavItem>
-						)}
+						) &&
+							location.pathname !== '/request/create' && (
+								<NavItem>
+									<NavIcon
+										src={help}
+										onClick={() => {
+											localStorage.removeItem('guide/' + location.pathname.split('/')[1]);
+											dispatch({
+												type: actionTypes.SET_GUIDE_IS_OPEN,
+												payload: true,
+											});
+										}}
+									/>
+								</NavItem>
+							)}
 						<NavItem isMobile={appState.isMobile} to="/settings/contacts">
 							<NavIcon src={setting} />
 						</NavItem>

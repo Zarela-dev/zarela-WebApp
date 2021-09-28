@@ -88,7 +88,7 @@ const RequestCard = (props) => {
 						<BadgeLabel>{props.totalContributedCount}</BadgeLabel>
 					</BadgeRow>
 					<BadgeRow>
-						<Hint>No. of people who contribute</Hint>
+						<Hint>No. of people contributed</Hint>
 					</BadgeRow>
 				</ContributorBadge>
 				<Spacer />

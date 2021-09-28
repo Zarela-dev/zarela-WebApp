@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { Buffer } from 'buffer';
 import { mainContext } from '../state';
 import { useHistory } from 'react-router-dom';
 import { create } from 'ipfs-http-client';
 import styled from 'styled-components';
-import TitleBar from '../components/TitleBar/TitleBar';
 import CreateRequestForm from '../components/createRequest/CreateRequestForm';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import ConnectDialog from '../components/Dialog/ConnectDialog';
@@ -15,7 +13,6 @@ import { getFileNameWithExt, toast } from '../utils';
 import Dialog from '../components/Dialog';
 import { useWeb3React } from '@web3-react/core';
 import NoMobileSupportMessage from '../components/NoMobileSupportMessage';
-import { hexToRgb } from '@material-ui/core';
 import { actionTypes } from '../state';
 
 const Wrapper = styled.div`
@@ -30,7 +27,7 @@ const CreateRequest = () => {
 	const history = useHistory();
 	const [isUploading, setUploading] = useState(false);
 	const [dialogMessage, setDialogMessage] = useState('');
-	const { account, library } = useWeb3React();
+	const { account } = useWeb3React();
 
 	const clearSubmitDialog = () => {
 		setUploading(false);
@@ -101,7 +98,7 @@ const CreateRequest = () => {
 								try {
 									setUploading(true);
 									setDialogMessage(
-										'in request to secure the file, so only you can access it we require your public key to encrypt the file'
+										'to secure your files, you need to provide your encryption public key (using Metamask)'
 									);
 									const encryptionPublicKey = await window.ethereum.request({
 										method: 'eth_getEncryptionPublicKey',
@@ -142,7 +139,7 @@ const CreateRequest = () => {
 										let url = `${process.env.REACT_APP_IPFS_LINK + zpaper_CID}`;
 										console.log(`Zpaper --> ${url}`);
 
-										setDialogMessage('awaiting confirmation');
+										setDialogMessage('Approve it from your Wallet');
 
 										appState.contract.methods
 											.submitNewRequest(

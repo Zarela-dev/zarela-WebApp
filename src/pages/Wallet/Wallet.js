@@ -4,6 +4,7 @@ import { mainContext } from '../../state';
 import { useWeb3React } from '@web3-react/core';
 import { WalletDesktop } from './WalletDesktop';
 import { WalletMobile } from './WalletMobile';
+import { ETHERSCAN_BASE_URL } from '../../constants';
 
 const Wallet = () => {
 	const { appState } = useContext(mainContext);
@@ -16,7 +17,7 @@ const Wallet = () => {
 		if (account) {
 			setLoading(true);
 			axios
-				.get('https://api-ropsten.etherscan.io/api', {
+				.get(ETHERSCAN_BASE_URL, {
 					params: {
 						module: 'account',
 						action: 'txlist',
@@ -28,7 +29,7 @@ const Wallet = () => {
 				.then((txListRes) => {
 					if (txListRes.data.message === 'OK') {
 						axios
-							.get('https://api-ropsten.etherscan.io/api', {
+							.get(ETHERSCAN_BASE_URL, {
 								params: {
 									module: 'account',
 									action: 'tokentx',
