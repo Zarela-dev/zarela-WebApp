@@ -129,6 +129,7 @@ const NavBarRow = styled.div`
 	background: #fff;
 	height: ${(props) => (props.isMobile ? '70px' : '100px')};
 	padding: ${(props) => (props.isMobile ? '10px 18px' : `25px calc((100vw - 1255px) / 2)`)};
+	box-shadow: 0px 4px 18px 0px rgb(81 197 234 / 10%);
 `;
 
 const LogoApp = styled(Logo)`
