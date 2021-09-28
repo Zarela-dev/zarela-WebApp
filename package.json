@@ -43,7 +43,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:testnet": "set \"REACT_APP_IS_TEST_NET=true\" && react-scripts build",
+    "build:testnet": "REACT_APP_IS_TEST_NET=true react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
