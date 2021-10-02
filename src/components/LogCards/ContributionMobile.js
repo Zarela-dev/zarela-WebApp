@@ -28,6 +28,7 @@ import angelIcon from '../../assets/icons/angel.png';
 import hubIcon from '../../assets/icons/hub.png';
 import { Spacer } from '../Elements/Spacer';
 import { timeSince } from '../../utils';
+import useBiobit from '../../hooks/useBiobit';
 
 const LogCardMobile = ({ data, account }) => {
 	const [isOpen, setOpen] = useState(false);
@@ -39,6 +40,7 @@ const LogCardMobile = ({ data, account }) => {
 		if (allApproved) return 'confirmed';
 		if (contributions.length !== totalConfirmed) return 'primary';
 	};
+	const getBBIT = useBiobit();
 
 	return (
 		<MobileCompactRequestCard variant={getVariant()}>
@@ -52,8 +54,8 @@ const LogCardMobile = ({ data, account }) => {
 					</MobileRow>
 					<MobileRow>
 						<MobileBiobitIcon src={biobitIcon} />
-						<MobileBiobitValue>{+angelTokenPay + +laboratoryTokenPay}</MobileBiobitValue>
-						<MobileBiobitValue>{`~ $${+angelTokenPay + +laboratoryTokenPay}`}</MobileBiobitValue>
+						<MobileBiobitValue>{getBBIT(angelTokenPay, laboratoryTokenPay)[0]}</MobileBiobitValue>
+						<MobileBiobitValue>{`~ $${getBBIT(angelTokenPay, laboratoryTokenPay)[1]}`}</MobileBiobitValue>
 					</MobileRow>
 					<MobileRow>
 						{allApproved ? (

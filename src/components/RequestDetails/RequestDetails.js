@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import DownloadFileCard from '../DownloadFileCard/DownloadFileCard';
 import UploadFileCard from '../UploadFileCard/UploadFileCard';
@@ -29,6 +29,7 @@ import contributorIcon from '../../assets/icons/user-blue.svg';
 import documentsIcon from '../../assets/icons/document-blue.svg';
 import publicKeyIcon from '../../assets/icons/public-key.svg';
 import { CopyableText, timeSince } from '../../utils';
+import useBiobit from '../../hooks/useBiobit';
 
 const PageWrapper = styled.div``;
 
@@ -143,6 +144,7 @@ const Timestamp = styled.p`
 const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 	const contributors = `${request.totalContributed}/${request.totalContributors}`;
 	const [signalFile, setSignalFile] = useState(null);
+	const getBBIT = useBiobit();
 
 	return (
 		<PageWrapper>
@@ -173,12 +175,14 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 						<Spacer />
 						<CustomBadgeRow>
 							<TokenIcon src={biobitIcon} />
-							<TokenValue>{+request.angelTokenPay + +request.laboratoryTokenPay} BBit</TokenValue>
+							<TokenValue>
+								{getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[0]} BBit
+							</TokenValue>
 							<ValueLabel>
 								({+request.angelTokenPay} Angel + {+request.laboratoryTokenPay} Hub)
 							</ValueLabel>
-							<BiobitToDollarValue noMargin>{`~ $ ${
-								+request.angelTokenPay + +request.laboratoryTokenPay
+							<BiobitToDollarValue noMargin>{`~ $${
+								getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[1]
 							}`}</BiobitToDollarValue>
 						</CustomBadgeRow>
 					</CustomFooter>

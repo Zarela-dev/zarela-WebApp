@@ -29,6 +29,7 @@ import publicKeyIcon from '../../assets/icons/public-key.svg';
 import { CopyableText, timeSince } from '../../utils';
 import DownloadFileCardMobile from '../DownloadFileCard/DownloadFileCardMobile';
 import MobileLayout from '../MobileLayout';
+import useBiobit from '../../hooks/useBiobit';
 
 const PageWrapper = styled.div``;
 
@@ -139,6 +140,7 @@ const Timestamp = styled.p`
 const RequestDetailsMobile = ({ setError, zpaperDownloadLink, error, request }) => {
 	const contributors = `${request.totalContributed}/${request.totalContributors}`;
 	const [signalFile, setSignalFile] = useState(null);
+	const getBBIT = useBiobit();
 
 	return (
 		<MobileLayout>
@@ -157,11 +159,11 @@ const RequestDetailsMobile = ({ setError, zpaperDownloadLink, error, request }) 
 							<CustomBadgeRow>
 								<TokenIcon src={biobitIcon} />
 								<TokenValue>
-									{+request.angelTokenPay + +request.laboratoryTokenPay} ({+request.angelTokenPay}{' '}
+									{getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[0]} ({+request.angelTokenPay}{' '}
 									Angel + {+request.laboratoryTokenPay} Hub)
 								</TokenValue>
-								<BiobitToDollarValue noMargin>{`= $ ${
-									+request.angelTokenPay + +request.laboratoryTokenPay
+								<BiobitToDollarValue noMargin>{`~ $${
+									getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[1]
 								}`}</BiobitToDollarValue>
 							</CustomBadgeRow>
 							<Spacer />

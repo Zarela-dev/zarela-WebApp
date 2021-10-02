@@ -13,6 +13,7 @@ import {
 } from './Elements';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import { timeSince } from '../../utils';
+import useBiobit from '../../hooks/useBiobit';
 
 const LogCardMobile = ({ data }) => {
 	const {
@@ -29,6 +30,7 @@ const LogCardMobile = ({ data }) => {
 		if (+totalContributedCount === 0) return 'primary';
 		if (+totalContributed === +totalContributors) return 'confirmed'; // fulfilled
 	};
+	const getBBIT = useBiobit();
 
 	return (
 		<MobileCompactRequestCard variant={getVariant()} noPaddingBottom>
@@ -45,8 +47,8 @@ const LogCardMobile = ({ data }) => {
 					</MobileRow>
 					<MobileRow>
 						<MobileBiobitIcon src={biobitIcon} />
-						<MobileBiobitValue>{+angelTokenPay + +laboratoryTokenPay}</MobileBiobitValue>
-						<MobileBiobitValue>{`~ $${+angelTokenPay + +laboratoryTokenPay}`}</MobileBiobitValue>
+						<MobileBiobitValue>{getBBIT(angelTokenPay, laboratoryTokenPay)[0]}</MobileBiobitValue>
+						<MobileBiobitValue>{`~ $${getBBIT(angelTokenPay, laboratoryTokenPay)[1]}`}</MobileBiobitValue>
 					</MobileRow>
 					{+totalContributedCount === 0 ? (
 						<MobileRow>
