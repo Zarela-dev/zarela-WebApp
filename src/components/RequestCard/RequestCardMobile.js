@@ -94,7 +94,7 @@ const RequestCardMobile = (props) => {
 						<TokenValue>{getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[0]}</TokenValue>
 					</BadgeRow>
 					<BadgeRow>
-						<BiobitToDollarValue>{`~ $ ${
+						<BiobitToDollarValue>{`~ $${
 							getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[1]
 						}`}</BiobitToDollarValue>
 					</BadgeRow>
