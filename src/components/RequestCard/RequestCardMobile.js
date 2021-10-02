@@ -26,6 +26,7 @@ import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/user-black.svg';
 import documentsIcon from '../../assets/icons/document-black.svg';
 import { mainContext } from '../../state';
+import useBiobit from '../../hooks/useBiobit';
 
 const BiobitToDollarValue = styled.div`
 	position: absolute;
@@ -55,6 +56,7 @@ const BiobitToDollarPair = styled.div`
 
 const RequestCardMobile = (props) => {
 	const { appState } = useContext(mainContext);
+	const getBBIT = useBiobit();
 
 	return (
 		<RequestCardWrapper data-tour="request-list-one">
@@ -89,11 +91,11 @@ const RequestCardMobile = (props) => {
 				<BiobitToDollarPair data-tour="request-list-four">
 					<BadgeRow>
 						<TokenIcon src={biobitIcon} />
-						<TokenValue>{+props.angelTokenPay + +props.laboratoryTokenPay}</TokenValue>
+						<TokenValue>{getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[0]}</TokenValue>
 					</BadgeRow>
 					<BadgeRow>
 						<BiobitToDollarValue>{`~ $ ${
-							+props.angelTokenPay + +props.laboratoryTokenPay
+							getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[1]
 						}`}</BiobitToDollarValue>
 					</BadgeRow>
 				</BiobitToDollarPair>
