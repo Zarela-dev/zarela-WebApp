@@ -1,4 +1,3 @@
-import { twofish } from 'twofish';
 import { Buffer } from 'buffer';
 import axios from 'axios';
 import chacha from 'chacha20';
@@ -6,8 +5,6 @@ import chacha from 'chacha20';
 export const initDecrypt = () => {
 	onmessage = async function (event) {
 		const { AES_KEY, AES_IV, fileHash } = event.data;
-		var twF = twofish(Object.values(AES_IV));
-
 		postMessage({ type: 'feedback', message: 'Downloading encrypted file from IPFS' });
 		/*
 		 in order to remove  the extra headers that IPFS sets on response payload, responseType: blob 
