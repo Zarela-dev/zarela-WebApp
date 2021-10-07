@@ -37,6 +37,7 @@ export const initDecrypt = () => {
 
 			postMessage({ type: 'feedback', message: 'saving file' });
 			postMessage({ type: 'decrypted', decrypted_file: decrypted });
+			postMessage({ type: 'terminate'});
 		};
 	};
 };

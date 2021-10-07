@@ -381,6 +381,9 @@ const RequestListItem = ({
 			});
 
 			workerInstance.addEventListener('message', async (event) => {
+				if (event.data.type === 'terminate') {
+					workerInstance.terminate();
+				}
 				if (event.data.type === 'feedback') {
 					setDialogMessage(event.data.message);
 				}

@@ -30,6 +30,7 @@ export const initEncrypt = () => {
 					},
 				});
 				postMessage({ type: 'encryption', ipfs_path: fileResponse.path });
+				postMessage({ type: 'terminate'});
 			} catch (uploadError) {
 				postMessage({ type: 'encryption:error', error: uploadError });
 			}

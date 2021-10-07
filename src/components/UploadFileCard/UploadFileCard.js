@@ -82,6 +82,9 @@ const UploadFileCard = (props) => {
 					});
 
 					workerInstance.addEventListener('message', async (event) => {
+						if (event.data.type === 'terminate') {
+							workerInstance.terminate();
+						}
 						if (event.data.type === 'encryption:error') {
 							clearSubmitDialog();
 							console.error(error);
