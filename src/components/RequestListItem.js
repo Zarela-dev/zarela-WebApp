@@ -357,7 +357,7 @@ const RequestListItem = ({
 	};
 	// files table selection methods END
 
-	const signalDownloadHandler = async (fileHash, fileStuffPath) => {
+	const signalDownloadHandler = async (fileHash, fileMetaCID) => {
 		setSubmitting(true);
 		setDialogMessage('Downloading encrypted AES secret key from IPFS');
 		const workerInstance = worker();
@@ -365,19 +365,21 @@ const RequestListItem = ({
 
 		try {
 			/* fetch signal file metadata from IPFS */
-			const fileStuffRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileStuffPath}`);
-			const { AES_KEY, AES_IV, FILE_NAME, FILE_EXT } = fileStuffRes.data;
+			const encryptedFileMetaRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileMetaCID}`);
+
+			const decryptedFileMeta = await window.ethereum.request({
+				method: 'eth_decrypt',
+				params: [encryptedFileMetaRes.data, account],
+			});
+
+			const { AES_KEY, AES_IV, FILE_NAME, FILE_EXT } = JSON.parse(decryptedFileMeta);
 			setDialogMessage('Decrypting AES Secret key');
 			/* decrypt secret key using metamask*/
-			const AesDecryptedKey = await window.ethereum.request({
-				method: 'eth_decrypt',
-				params: [AES_KEY, account],
-			});
 
 			workerInstance.postMessage({
 				fileHash,
-				AES_KEY: AesDecryptedKey.split(',').map((item) => Number(item)),
-				AES_IV: Object.values(AES_IV),
+				AES_KEY,
+				AES_IV,
 			});
 
 			workerInstance.addEventListener('message', async (event) => {
