@@ -29,8 +29,11 @@ import RequestCardWrapper, {
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/user-blue.svg';
 import documentsIcon from '../../assets/icons/document-blue.svg';
+import useBiobit from '../../hooks/useBiobit';
 
 const RequestCard = (props) => {
+	const getBBIT = useBiobit();
+
 	return (
 		<RequestCardWrapper data-tour="request-list-one">
 			<HeaderLayout>
@@ -62,12 +65,12 @@ const RequestCard = (props) => {
 				<BiobitToDollarPair data-tour="request-list-four">
 					<BadgeRow>
 						<TokenIcon src={biobitIcon} />
-						<TokenValue>{+props.angelTokenPay + +props.laboratoryTokenPay}</TokenValue>
+						<TokenValue>{getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[0]}</TokenValue>
 						<ValueLabel>BBit</ValueLabel>
 					</BadgeRow>
 					<BadgeRow>
-						<BiobitToDollarValue>{`~ $ ${
-							+props.angelTokenPay + +props.laboratoryTokenPay
+						<BiobitToDollarValue>{`~ $${
+							getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[1]
 						}`}</BiobitToDollarValue>
 					</BadgeRow>
 				</BiobitToDollarPair>

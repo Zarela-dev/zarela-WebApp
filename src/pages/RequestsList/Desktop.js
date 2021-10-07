@@ -109,7 +109,7 @@ const useStyles = makeStyles({
 	},
 });
 
-const Desktop = ({ requests, appState, web3React, PAGE_SIZE, isLoading, props }) => {
+const Desktop = ({ requests, appState, account, PAGE_SIZE, isLoading, props }) => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const classes = useStyles(props);
 
@@ -137,7 +137,7 @@ const Desktop = ({ requests, appState, web3React, PAGE_SIZE, isLoading, props })
 					<FixedWrapper>
 						<RequestListSidebarWrapper>
 							<ZarelaDayBox currentDay={appState.zarelaCurrentDay} />
-							<TokenInfoSidebar data={appState} account={web3React.account} />
+							<TokenInfoSidebar data={appState} account={account} />
 						</RequestListSidebarWrapper>
 					</FixedWrapper>
 				)}

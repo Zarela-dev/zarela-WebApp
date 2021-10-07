@@ -20,6 +20,7 @@ import {
 } from './Elements';
 import { Spacer } from '../Elements/Spacer';
 import { timeSince } from '../../utils';
+import useBiobit from '../../hooks/useBiobit';
 
 const LogCard = ({ data }) => {
 	const {
@@ -36,6 +37,7 @@ const LogCard = ({ data }) => {
 		if (+totalContributedCount === 0) return 'primary';
 		if (+totalContributed === +totalContributors) return 'confirmed'; // fulfilled
 	};
+	const getBBIT = useBiobit();
 
 	return (
 		<CompactRequestCard variant={getVariant()}>
@@ -60,8 +62,8 @@ const LogCard = ({ data }) => {
 				<Column displayFlex flex="0">
 					<Row>
 						<BiobitIcon src={biobitIcon} />
-						<BiobitValue>{+angelTokenPay + +laboratoryTokenPay}</BiobitValue>
-						<DollarValue>{`~ $${+angelTokenPay + +laboratoryTokenPay}`}</DollarValue>
+						<BiobitValue>{getBBIT(angelTokenPay, laboratoryTokenPay)[0]}</BiobitValue>
+						<DollarValue>{`~ $${getBBIT(angelTokenPay, laboratoryTokenPay)[1]}`}</DollarValue>
 					</Row>
 				</Column>
 				<VerticalDivider hide />

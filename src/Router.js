@@ -16,6 +16,7 @@ import Settings from './pages/Settings';
 import { mainContext } from './state';
 import { supportedChains } from './constants/index';
 import ChainError from './components/ChainError';
+import NotFound from './components/NotFoundPage';
 
 const AppWrapper = styled.div`
 	padding-bottom: ${(props) => props.theme.spacing(5)};
@@ -81,6 +82,7 @@ const AppRouter = () => {
 					<Route path="/wallet" component={Wallet} />
 					<Route path="/log" component={Log} />
 					<Route path="/settings" component={Settings} />
+					<Route component={NotFound} />
 				</Switch>
 			</AppWrapper>
 		</Router>

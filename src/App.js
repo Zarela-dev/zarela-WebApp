@@ -12,6 +12,8 @@ import { theme } from './theme';
 import getLibrary from './utils/getLibrary';
 import ErrorBoundary from './ErrorBoundary';
 import 'react-toastify/dist/ReactToastify.css';
+import { ApolloProvider } from '@apollo/client';
+import { client } from './apolloClient';
 
 function App() {
 	return (
@@ -19,17 +21,23 @@ function App() {
 			<ErrorBoundary>
 				<Web3ReactProvider getLibrary={getLibrary}>
 					<AppProvider>
-						<PendingFilesProvider>
-							<LocalStorageProvider>
-								<ThemeProvider theme={theme}>
-									<NotificationProvider>
-										<AppRouter />
-										<ToastifyContainer enableMultiContainer containerId={'toastify'} limit={3} />
-										<GlobalStyle />
-									</NotificationProvider>
-								</ThemeProvider>
-							</LocalStorageProvider>
-						</PendingFilesProvider>
+						<ApolloProvider client={client}>
+							<PendingFilesProvider>
+								<LocalStorageProvider>
+									<ThemeProvider theme={theme}>
+										<NotificationProvider>
+											<AppRouter />
+											<ToastifyContainer
+												enableMultiContainer
+												containerId={'toastify'}
+												limit={3}
+											/>
+											<GlobalStyle />
+										</NotificationProvider>
+									</ThemeProvider>
+								</LocalStorageProvider>
+							</PendingFilesProvider>
+						</ApolloProvider>
 					</AppProvider>
 				</Web3ReactProvider>
 			</ErrorBoundary>

@@ -111,7 +111,7 @@ const ChainErrorDialog = () => {
 				</Header>
 				<Content>
 					<Message>
-						Zarela is currently on test network, switch your wallet network to {CURRENT_NETWORK_LABEL}.
+						Please switch your wallet network to {CURRENT_NETWORK_LABEL}.
 					</Message>
 				</Content>
 			</Modal>
