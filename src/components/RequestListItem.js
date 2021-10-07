@@ -21,7 +21,7 @@ import biobitIcon from '../assets/icons/biobit-black.svg';
 import contributorIcon from '../assets/icons/user-blue.svg';
 import RequestFilesTable from './RequestFilesTable';
 import { mainContext } from '../state';
-import { arraySymmetricDiff, arrayIntersection } from '../utils';
+import { arraySymmetricDiff, arrayIntersection, toast } from '../utils';
 import Button from './Elements/Button';
 import { useWeb3React } from '@web3-react/core';
 import caretUpIcon from '../assets/icons/caret-up.svg';
@@ -359,52 +359,29 @@ const RequestListItem = ({
 
 	const signalDownloadHandler = async (fileHash, fileMetaCID) => {
 		setSubmitting(true);
-		setDialogMessage('Downloading encrypted AES secret key from IPFS');
+		setDialogMessage('Downloading file metadata from IPFS');
 		const workerInstance = worker();
 		workerInstance.initDecrypt();
 
 		try {
 			/* fetch signal file metadata from IPFS */
 			const encryptedFileMetaRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileMetaCID}`);
-			let FILE_NAME = '',
-				FILE_EXT = '';
 
-			if (typeof encryptedFileMetaRes.data === 'string' && encryptedFileMetaRes.data.startsWith('0x')) {
-				const decryptedFileMeta = await window.ethereum.request({
-					method: 'eth_decrypt',
-					params: [encryptedFileMetaRes.data, account],
-				});
+			const decryptedFileMeta = await window.ethereum.request({
+				method: 'eth_decrypt',
+				params: [encryptedFileMetaRes.data, account],
+			});
 
-				const { AES_KEY, AES_IV, FILE_NAME: _FILE_NAME, FILE_EXT: _FILE_EXT } = JSON.parse(decryptedFileMeta);
-				FILE_NAME = _FILE_NAME;
-				FILE_EXT = _FILE_EXT;
+			const { KEY, NONCE, FILE_NAME, FILE_EXT } = JSON.parse(decryptedFileMeta);
 
-				setDialogMessage('Decrypting AES Secret key');
-				/* decrypt secret key using metamask*/
+			setDialogMessage('Decrypting file metadata');
+			/* decrypt secret key using metamask*/
 
-				workerInstance.postMessage({
-					fileHash,
-					AES_KEY,
-					AES_IV,
-				});
-			} else if (typeof encryptedFileMetaRes.data === 'object') {
-				const { AES_KEY, AES_IV, FILE_NAME: _FILE_NAME, FILE_EXT: _FILE_EXT } = encryptedFileMetaRes.data;
-				FILE_NAME = _FILE_NAME;
-				FILE_EXT = _FILE_EXT;
-
-				setDialogMessage('Decrypting AES Secret key');
-				/* decrypt secret key using metamask*/
-				const AesDecryptedKey = await window.ethereum.request({
-					method: 'eth_decrypt',
-					params: [AES_KEY, account],
-				});
-
-				workerInstance.postMessage({
-					fileHash,
-					AES_KEY: AesDecryptedKey.split(',').map((item) => Number(item)),
-					AES_IV: Object.values(AES_IV),
-				});
-			}
+			workerInstance.postMessage({
+				fileHash,
+				KEY,
+				NONCE,
+			});
 
 			workerInstance.addEventListener('message', async (event) => {
 				if (event.data.type === 'terminate') {
@@ -420,6 +397,7 @@ const RequestListItem = ({
 			});
 		} catch (error) {
 			clearSubmitDialog();
+			toast('there was an error decrypting your file, please contact support for more information.', 'error');
 			console.error(error);
 		}
 	};

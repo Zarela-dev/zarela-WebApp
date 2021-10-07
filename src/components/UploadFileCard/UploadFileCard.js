@@ -71,13 +71,13 @@ const UploadFileCard = (props) => {
 					workerInstance.initEncrypt();
 
 					const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
-					// generate AES keys
-					const AES_IV = ZRNG();
-					const AES_KEY = ZRNG();
+					// generate KEY and NONCE for chacha20 encryption
+					const KEY = ZRNG();
+					const NONCE = ZRNG();
 
 					workerInstance.postMessage({
-						AES_IV,
-						AES_KEY,
+						KEY,
+						NONCE,
 						file: fileRef.current.files[0],
 					});
 
@@ -100,8 +100,8 @@ const UploadFileCard = (props) => {
 						if (event.data.type === 'encryption') {
 							try {
 								const fileMeta = {
-									AES_KEY,
-									AES_IV,
+									NONCE,
+									KEY,
 									FILE_EXT: getFileNameWithExt(fileRef)[1],
 									FILE_NAME: getFileNameWithExt(fileRef)[0],
 									FILE_MIMETYPE: getFileNameWithExt(fileRef)[2],
@@ -125,7 +125,7 @@ const UploadFileCard = (props) => {
 									hash on the blockchain using our SC contribute method.
 								*/
 								/* encrypted is an array */
-								const fileStuffResponse = await ipfs.add(encryptedFileMeta, {
+								const fileMetaResponse = await ipfs.add(encryptedFileMeta, {
 									pin: true,
 								});
 
@@ -138,7 +138,7 @@ const UploadFileCard = (props) => {
 										rewardGainer === 'angel' ? true : false, // true: angel receives reward. false: laboratory receives reward.
 										request.requesterAddress,
 										event.data.ipfs_path, // encrypted file CID
-										fileStuffResponse.path // file metadata CID
+										fileMetaResponse.path // file metadata CID
 									)
 									.send(
 										{

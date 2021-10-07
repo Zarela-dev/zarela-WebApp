@@ -4,7 +4,7 @@ import chacha from 'chacha20';
 
 export const initDecrypt = () => {
 	onmessage = async function (event) {
-		const { AES_KEY, AES_IV, fileHash } = event.data;
+		const { KEY, NONCE, fileHash } = event.data;
 		postMessage({ type: 'feedback', message: 'Downloading encrypted file from IPFS' });
 		/*
 		 in order to remove  the extra headers that IPFS sets on response payload, responseType: blob 
@@ -29,9 +29,8 @@ export const initDecrypt = () => {
 			postMessage({ type: 'feedback', message: 'decrypting file' });
 
 			fileReader.onloadend = () => {
-				var buffer = Buffer(fileReader.result);
-
-				const decrypted = chacha.decrypt(AES_IV, AES_KEY, buffer);
+				const buffer = Buffer(fileReader.result);
+				const decrypted = chacha.decrypt(KEY, NONCE, buffer);
 
 				postMessage({ type: 'feedback', message: 'saving file' });
 				postMessage({ type: 'decrypted', decrypted_file: decrypted });

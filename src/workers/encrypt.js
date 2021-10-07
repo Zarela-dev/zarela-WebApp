@@ -4,7 +4,7 @@ import chacha from 'chacha20';
 
 export const initEncrypt = () => {
 	onmessage = function (event) {
-		const { AES_IV, AES_KEY, file } = event.data;
+		const { KEY, NONCE, file } = event.data;
 		const fileSize = file.size;
 		const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
 
@@ -15,7 +15,7 @@ export const initEncrypt = () => {
 			reader.onloadend = async function () {
 				const buff = Buffer(reader.result); // Convert data into buffer
 
-				const encryptedFile = chacha.encrypt(AES_IV, AES_KEY, buff);
+				const encryptedFile = chacha.encrypt(KEY, NONCE, buff);
 				postMessage({ type: 'encryption:feedback', message: 'uploading file to IPFS' });
 				const fileResponse = await ipfs.add(encryptedFile, {
 					pin: true,
