@@ -357,7 +357,7 @@ const RequestListItem = ({
 	};
 	// files table selection methods END
 
-	const signalDownloadHandler = async (fileHash, fileStuffPath) => {
+	const signalDownloadHandler = async (fileHash, fileMetaCID) => {
 		setSubmitting(true);
 		setDialogMessage('Downloading encrypted AES secret key from IPFS');
 		const workerInstance = worker();
@@ -365,22 +365,51 @@ const RequestListItem = ({
 
 		try {
 			/* fetch signal file metadata from IPFS */
-			const fileStuffRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileStuffPath}`);
-			const { AES_KEY, AES_IV, FILE_NAME, FILE_EXT } = fileStuffRes.data;
-			setDialogMessage('Decrypting AES Secret key');
-			/* decrypt secret key using metamask*/
-			const AesDecryptedKey = await window.ethereum.request({
-				method: 'eth_decrypt',
-				params: [AES_KEY, account],
-			});
+			const encryptedFileMetaRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileMetaCID}`);
+			let FILE_NAME = '',
+				FILE_EXT = '';
 
-			workerInstance.postMessage({
-				fileHash,
-				AES_KEY: AesDecryptedKey.split(',').map((item) => Number(item)),
-				AES_IV: Object.values(AES_IV),
-			});
+			if (typeof encryptedFileMetaRes.data === 'string' && encryptedFileMetaRes.data.startsWith('0x')) {
+				const decryptedFileMeta = await window.ethereum.request({
+					method: 'eth_decrypt',
+					params: [encryptedFileMetaRes.data, account],
+				});
+
+				const { AES_KEY, AES_IV, FILE_NAME: _FILE_NAME, FILE_EXT: _FILE_EXT } = JSON.parse(decryptedFileMeta);
+				FILE_NAME = _FILE_NAME;
+				FILE_EXT = _FILE_EXT;
+
+				setDialogMessage('Decrypting AES Secret key');
+				/* decrypt secret key using metamask*/
+
+				workerInstance.postMessage({
+					fileHash,
+					AES_KEY,
+					AES_IV,
+				});
+			} else if (typeof encryptedFileMetaRes.data === 'object') {
+				const { AES_KEY, AES_IV, FILE_NAME: _FILE_NAME, FILE_EXT: _FILE_EXT } = encryptedFileMetaRes.data;
+				FILE_NAME = _FILE_NAME;
+				FILE_EXT = _FILE_EXT;
+
+				setDialogMessage('Decrypting AES Secret key');
+				/* decrypt secret key using metamask*/
+				const AesDecryptedKey = await window.ethereum.request({
+					method: 'eth_decrypt',
+					params: [AES_KEY, account],
+				});
+
+				workerInstance.postMessage({
+					fileHash,
+					AES_KEY: AesDecryptedKey.split(',').map((item) => Number(item)),
+					AES_IV: Object.values(AES_IV),
+				});
+			}
 
 			workerInstance.addEventListener('message', async (event) => {
+				if (event.data.type === 'terminate') {
+					workerInstance.terminate();
+				}
 				if (event.data.type === 'feedback') {
 					setDialogMessage(event.data.message);
 				}

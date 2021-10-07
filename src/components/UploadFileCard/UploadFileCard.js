@@ -82,6 +82,9 @@ const UploadFileCard = (props) => {
 					});
 
 					workerInstance.addEventListener('message', async (event) => {
+						if (event.data.type === 'terminate') {
+							workerInstance.terminate();
+						}
 						if (event.data.type === 'encryption:error') {
 							clearSubmitDialog();
 							console.error(error);
@@ -96,13 +99,20 @@ const UploadFileCard = (props) => {
 						}
 						if (event.data.type === 'encryption') {
 							try {
+								const fileMeta = {
+									AES_KEY,
+									AES_IV,
+									FILE_EXT: getFileNameWithExt(fileRef)[1],
+									FILE_NAME: getFileNameWithExt(fileRef)[0],
+									FILE_MIMETYPE: getFileNameWithExt(fileRef)[2],
+								};
 								// AES key encryption using Metamask
-								const encryptedAesKey = ethUtil.bufferToHex(
+								const encryptedFileMeta = ethUtil.bufferToHex(
 									Buffer.from(
 										JSON.stringify(
 											encrypt(
 												request.encryptionPublicKey,
-												{ data: AES_KEY.toString() },
+												{ data: JSON.stringify(fileMeta) },
 												'x25519-xsalsa20-poly1305'
 											)
 										),
@@ -114,16 +124,8 @@ const UploadFileCard = (props) => {
 									here we store these meta information in an object on IPFS then we store this IPFS
 									hash on the blockchain using our SC contribute method.
 								*/
-								const fileStuff = {
-									AES_KEY: encryptedAesKey,
-									AES_IV,
-									FILE_EXT: getFileNameWithExt(fileRef)[1],
-									FILE_NAME: getFileNameWithExt(fileRef)[0],
-									FILE_MIMETYPE: getFileNameWithExt(fileRef)[2],
-								};
-
 								/* encrypted is an array */
-								const fileStuffResponse = await ipfs.add(JSON.stringify(fileStuff), {
+								const fileStuffResponse = await ipfs.add(encryptedFileMeta, {
 									pin: true,
 								});
 

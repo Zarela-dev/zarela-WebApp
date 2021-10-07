@@ -8,17 +8,15 @@ export const initEncrypt = () => {
 		const fileSize = file.size;
 		const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
 
-		const reader = new FileReader();
+		try {
+			const reader = new FileReader();
+			reader.readAsArrayBuffer(file); // Read Provided File
+			
+			reader.onloadend = async function () {
+				const buff = Buffer(reader.result); // Convert data into buffer
 
-		reader.readAsArrayBuffer(file); // Read Provided File
-
-		reader.onloadend = async function () {
-			const buff = Buffer(reader.result); // Convert data into buffer
-
-			const encryptedFile = chacha.encrypt(AES_IV, AES_KEY, buff);
-
-			postMessage({ type: 'encryption:feedback', message: 'uploading file to IPFS' });
-			try {
+				const encryptedFile = chacha.encrypt(AES_IV, AES_KEY, buff);
+				postMessage({ type: 'encryption:feedback', message: 'uploading file to IPFS' });
 				const fileResponse = await ipfs.add(encryptedFile, {
 					pin: true,
 					progress: (uploaded) => {
@@ -30,9 +28,11 @@ export const initEncrypt = () => {
 					},
 				});
 				postMessage({ type: 'encryption', ipfs_path: fileResponse.path });
-			} catch (uploadError) {
-				postMessage({ type: 'encryption:error', error: uploadError });
-			}
-		};
+				postMessage({ type: 'terminate' });
+			};
+		} catch (uploadError) {
+			postMessage({ type: 'encryption:error', error: uploadError });
+			postMessage({ type: 'terminate' });
+		}
 	};
 };
