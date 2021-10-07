@@ -21,7 +21,7 @@ const Wrapper = styled.div`
 	@media only screen and (max-width: 768px) {
 		padding: 20px 40px 50px;
 		background-size: auto;
-    margin-top: -100px;
+		height: calc(100vh - 50px);
 	}
 
 	& * {
@@ -37,7 +37,7 @@ const Title = styled.h1`
 	color: #ffffff;
 	margin: 0;
 	margin-bottom: 10px;
-  white-space: nowrap;
+	white-space: nowrap;
 
 	@media only screen and (max-width: 768px) {
 		font-weight: bold;
@@ -91,7 +91,7 @@ const NotFound = () => {
 		<Wrapper>
 			<Header>
 				<Title>404 - Not Found </Title>
-				<Message>Don’t worry! we will catch you soon!</Message>
+				<Message>we can't find what you are looking for!</Message>
 			</Header>
 			<Body>
 				<Spacewalking />
