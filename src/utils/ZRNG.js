@@ -2,6 +2,6 @@
 // get an array of random numbers random numbers
 
 export function ZRNG() {
-	const array = new Uint8Array(64);
+	const array = new Uint8Array(16);
 	return window.crypto.getRandomValues(array);
 }
