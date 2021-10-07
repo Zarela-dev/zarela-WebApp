@@ -21,7 +21,7 @@ import biobitIcon from '../assets/icons/biobit-black.svg';
 import contributorIcon from '../assets/icons/user-blue.svg';
 import RequestFilesTable from './RequestFilesTable';
 import { mainContext } from '../state';
-import { arraySymmetricDiff, arrayIntersection } from '../utils';
+import { arraySymmetricDiff, arrayIntersection, toast } from '../utils';
 import Button from './Elements/Button';
 import { useWeb3React } from '@web3-react/core';
 import caretUpIcon from '../assets/icons/caret-up.svg';
@@ -357,30 +357,36 @@ const RequestListItem = ({
 	};
 	// files table selection methods END
 
-	const signalDownloadHandler = async (fileHash, fileStuffPath) => {
+	const signalDownloadHandler = async (fileHash, fileMetaCID) => {
 		setSubmitting(true);
-		setDialogMessage('Downloading encrypted AES secret key from IPFS');
+		setDialogMessage('Downloading file metadata from IPFS');
 		const workerInstance = worker();
 		workerInstance.initDecrypt();
 
 		try {
 			/* fetch signal file metadata from IPFS */
-			const fileStuffRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileStuffPath}`);
-			const { AES_KEY, AES_IV, FILE_NAME, FILE_EXT } = fileStuffRes.data;
-			setDialogMessage('Decrypting AES Secret key');
-			/* decrypt secret key using metamask*/
-			const AesDecryptedKey = await window.ethereum.request({
+			const encryptedFileMetaRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileMetaCID}`);
+
+			const decryptedFileMeta = await window.ethereum.request({
 				method: 'eth_decrypt',
-				params: [AES_KEY, account],
+				params: [encryptedFileMetaRes.data, account],
 			});
+
+			const { KEY, NONCE, FILE_NAME, FILE_EXT } = JSON.parse(decryptedFileMeta);
+
+			setDialogMessage('Decrypting file metadata');
+			/* decrypt secret key using metamask*/
 
 			workerInstance.postMessage({
 				fileHash,
-				AES_KEY: AesDecryptedKey.split(',').map((item) => Number(item)),
-				AES_IV: Object.values(AES_IV),
+				KEY,
+				NONCE,
 			});
 
 			workerInstance.addEventListener('message', async (event) => {
+				if (event.data.type === 'terminate') {
+					workerInstance.terminate();
+				}
 				if (event.data.type === 'feedback') {
 					setDialogMessage(event.data.message);
 				}
@@ -391,6 +397,7 @@ const RequestListItem = ({
 			});
 		} catch (error) {
 			clearSubmitDialog();
+			toast('there was an error decrypting your file, please contact support for more information.', 'error');
 			console.error(error);
 		}
 	};

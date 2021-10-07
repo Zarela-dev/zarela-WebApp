@@ -8,16 +8,20 @@ const Wrapper = styled.div`
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	width: 100vw;
-	height: 100vh;
+	width: 100%;
+	height: 86vh;
 	background-image: url(${bg});
 	background-repeat: no-repeat;
 	background-size: cover;
 	padding: 20px 0 50px;
+	margin-top: -130px;
+	margin-bottom: -50px;
+	overflow: hidden;
 
 	@media only screen and (max-width: 768px) {
 		padding: 20px 40px 50px;
 		background-size: auto;
+		height: calc(100vh - 50px);
 	}
 
 	& * {
@@ -33,6 +37,7 @@ const Title = styled.h1`
 	color: #ffffff;
 	margin: 0;
 	margin-bottom: 10px;
+	white-space: nowrap;
 
 	@media only screen and (max-width: 768px) {
 		font-weight: bold;
@@ -85,12 +90,12 @@ const Spacewalking = styled.div`
 	}
 `;
 
-const ErrorBoundary = () => {
+const NotFound = () => {
 	return (
 		<Wrapper>
 			<Header>
-				<Title>oops...</Title>
-				<Message>Don’t worry! we will catch you soon!</Message>
+				<Title>404 - Not Found </Title>
+				<Message>we can't find what you are looking for!</Message>
 			</Header>
 			<Body>
 				<Spacewalking />
@@ -99,4 +104,4 @@ const ErrorBoundary = () => {
 	);
 };
 
-export default ErrorBoundary;
+export default NotFound;
