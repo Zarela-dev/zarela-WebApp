@@ -81,9 +81,13 @@ const Body = styled.div`
 const Spacewalking = styled.div`
 	flex: 1 0 50%;
 	background-image: url(${spacewalking});
-	background-size: 50 %auto;
+	background-size: 100% auto;
 	background-position: center;
 	background-repeat: no-repeat;
+
+	@media only screen and (min-width: 768px) {
+		background-size: auto 100%;
+	}
 `;
 
 const NotFound = () => {
