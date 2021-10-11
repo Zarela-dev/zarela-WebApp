@@ -19,7 +19,7 @@ const fontSize = () => {
 			textH5: '18px',
 			textBody1: '18px',
 			textBody2: '16px',
-			textTimeStamp: '12px',
+			textHint: '12px',
 		};
 	} else if (isMobile) {
 		return {
@@ -30,7 +30,7 @@ const fontSize = () => {
 			textH5: '14px',
 			textBody1: '16px',
 			textBody2: '14px',
-			textTimeStamp: '12px',
+			textHint: '10px',
 		};
 	}
 };
@@ -50,6 +50,7 @@ const lineHeight = () => {
 			lineHeightBody1: '25.2px',
 			lineHeightBody2: '22.4px',
 			lineHeightTimeStamp: '16px',
+			lineHeightHint: '12px'
 		};
 	} else if (isMobile) {
 		return {
@@ -61,6 +62,7 @@ const lineHeight = () => {
 			lineHeightBody1: '20.8px',
 			lineHeightBody2: '18.2px',
 			lineHeightTimeStamp: '16px',
+			lineHeightHint: '10px'
 		};
 	}
 };
@@ -70,6 +72,7 @@ const colors = (darkMode) => {
 		// text
 		textPrimaryColor: darkMode ? '#212121' : '#212121',
 		textTimeStampColor: darkMode ? '#858585' : '#858585',
+		textTokenColor: '#3a68de',
 
 		//buttons
 		btnPrimary: darkMode
@@ -100,16 +103,25 @@ const colors = (darkMode) => {
 		navLinkDisabled: '#E3DDFA',
 		notificationColor: '#2EECA8',
 		textSecondary: '#6DA5BF',
-		textToken: '#3C87AA',
 		error: 'red',
 	};
 };
+
+const fontWeights = () => {
+	return {
+		bold: 700,
+		semiBold: 500,
+		regular: 400,
+		light: 300,
+	}
+}
 
 const theme = (darkMode) => {
 	return {
 		...colors(darkMode),
 		...fontSize(),
 		...lineHeight(),
+		...fontWeights(),
 		isMobile: () => {
 			return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
 				navigator.userAgent
@@ -134,10 +146,6 @@ const theme = (darkMode) => {
 		body: '14px',
 		bod2: '16px',
 		badge: '12px',
-		bold: 700,
-		semiBold: 500,
-		regular: 400,
-		light: 300,
 		// breakpoints
 		desktop_md_breakpoint: '1440px',
 		desktop_sm_breakpoint: '1170px',
@@ -185,6 +193,8 @@ const TextWrapper = styled(Text)`
 	font-size: ${({ fontSize, theme }) => theme[fontSize]};
 	line-height: ${({ lineHeight, theme }) => theme[lineHeight]};
 	text-align: 'left';
+	font-weight: ${({ fontWeight, theme }) =>
+	fontWeight ? theme[fontWeight] : theme['regular']};
 	margin-left: ${(props) =>
 		props.timestamp &&
 		(props.theme.isMobile()
@@ -192,6 +202,9 @@ const TextWrapper = styled(Text)`
 			: props.theme.spacing(12))} !important;
 	margin-bottom: ${(props) =>
 		props.timestamp && props.theme.spacing(1.5)} !important;
+	padding-right: ${props => props.pr ? props.theme.spacing(props.pr) : 0} !important;
+	padding-left: ${props => props.pl ? props.theme.spacing(props.pl) : 0} !important;
+	white-space: ${props => props.nowrap ? 'nowrap': 'wrap'} !important;
 `;
 
 export const TYPOGRAPHY = {
@@ -199,7 +212,7 @@ export const TYPOGRAPHY = {
 		return (
 			<TextWrapper
 				fontWeight={700}
-				fontSize={'textH1'}
+				fontSize='textH1'
 				lineHeight='lineHeightH1'
 				{...props}
 			/>
@@ -209,7 +222,7 @@ export const TYPOGRAPHY = {
 		return (
 			<TextWrapper
 				fontWeight={700}
-				fontSize={'textH2'}
+				fontSize='textH2'
 				lineHeight='lineHeightH2'
 				{...props}
 			/>
@@ -219,7 +232,7 @@ export const TYPOGRAPHY = {
 		return (
 			<TextWrapper
 				fontWeight={700}
-				fontSize={'textH3'}
+				fontSize='textH3'
 				lineHeight='lineHeightH3'
 				{...props}
 			/>
@@ -229,7 +242,7 @@ export const TYPOGRAPHY = {
 		return (
 			<TextWrapper
 				fontWeight={700}
-				fontSize={'textH4'}
+				fontSize='textH4'
 				lineHeight='lineHeightH4'
 				{...props}
 			/>
@@ -239,7 +252,7 @@ export const TYPOGRAPHY = {
 		return (
 			<TextWrapper
 				fontWeight={700}
-				fontSize={'textH5'}
+				fontSize='textH5'
 				lineHeight='lineHeightH5'
 				{...props}
 			/>
@@ -248,8 +261,8 @@ export const TYPOGRAPHY = {
 	body1(props) {
 		return (
 			<TextWrapper
-				fontWeight={400}
-				fontSize={'textBody1'}
+				fontWeight={props.bold ? 'bold' : 'regular'}
+				fontSize='textBody1'
 				lineHeight='lineHeightBody1'
 				{...props}
 			/>
@@ -258,8 +271,8 @@ export const TYPOGRAPHY = {
 	body2(props) {
 		return (
 			<TextWrapper
-				fontWeight={400}
-				fontSize={'textBody2'}
+				fontWeight={props.bold ? 'bold' : 'regular'}
+				fontSize='textBody2'
 				lineHeight='lineHeightBody2'
 				{...props}
 			/>
@@ -268,8 +281,8 @@ export const TYPOGRAPHY = {
 	timestamp(props) {
 		return (
 			<TextWrapper
-				fontWidth={400}
-				fontSize='textTimeStamp'
+				fontWeight={props.bold ? 'bold' : 'regular'}
+				fontSize='textHint'
 				lineHeight='lineHeightTimeStamp'
 				color='textTimeStampColor'
 				timestamp={true}
@@ -277,4 +290,16 @@ export const TYPOGRAPHY = {
 			/>
 		);
 	},
+	hint(props) {
+		return(
+			<TextWrapper
+			fontWeight={props.bold ? 'bold' : 'regular'}
+			fontSize='textHint'
+			lineHeight='lineHeightHint'
+			nowrap
+			color={props.active ? 'textTokenColor' : 'textPrimaryColor'}
+			{...props}
+		/>
+		)
+	}
 };

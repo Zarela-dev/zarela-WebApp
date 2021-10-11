@@ -70,35 +70,39 @@ const RequestCard = (props) => {
 				<BiobitToDollarPair data-tour='request-list-four'>
 					<BadgeRow>
 						<TokenIcon src={biobitIcon} />
-						<TokenValue>
+						<TYPOGRAPHY.body1 bold pr={0.5}>
 							{getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[0]}
-						</TokenValue>
-						<ValueLabel>BBit</ValueLabel>
+						</TYPOGRAPHY.body1>
+						<TYPOGRAPHY.body2 bold>BBit</TYPOGRAPHY.body2>
 					</BadgeRow>
 					<BadgeRow>
-						<BiobitToDollarValue>{`~ $${
+						<TYPOGRAPHY.hint pl={1.5} active>{`~ $${
 							getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[1]
-						}`}</BiobitToDollarValue>
+						}`}</TYPOGRAPHY.hint>
 					</BadgeRow>
 				</BiobitToDollarPair>
 				<Divider />
 				<ContributorBadge data-tour='request-list-five'>
 					<BadgeRow>
 						<ContributorsIcon src={documentsIcon} />
-						<BadgeLabel>{props.contributors}</BadgeLabel>
+						<TYPOGRAPHY.hint fontSize='textBody2' bold active>
+							{props.contributors}
+						</TYPOGRAPHY.hint>
 					</BadgeRow>
 					<BadgeRow>
-						<Hint>No. of accepted responses</Hint>
+						<TYPOGRAPHY.hint active>No. of accepted responses</TYPOGRAPHY.hint>
 					</BadgeRow>
 				</ContributorBadge>
 				<Divider />
 				<ContributorBadge data-tour='request-list-six'>
 					<BadgeRow>
 						<ContributorsIcon src={contributorIcon} />
-						<BadgeLabel>{props.totalContributedCount}</BadgeLabel>
+						<TYPOGRAPHY.hint fontSize='textBody2' bold active>
+							{props.totalContributedCount}
+						</TYPOGRAPHY.hint>
 					</BadgeRow>
 					<BadgeRow>
-						<Hint>No. of people contributed</Hint>
+						<TYPOGRAPHY.hint active>No. of people contributed</TYPOGRAPHY.hint>
 					</BadgeRow>
 				</ContributorBadge>
 				<Spacer />
