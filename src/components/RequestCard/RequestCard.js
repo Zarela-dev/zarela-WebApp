@@ -37,7 +37,7 @@ const RequestCard = (props) => {
 		<RequestCardWrapper data-tour='request-list-one'>
 			<HeaderLayout>
 				<RequestNumber data-tour='request-list-two'>
-					{props.requestID}
+					<TYPOGRAPHY.headLine4 label bold>{props.requestID}</TYPOGRAPHY.headLine4>
 				</RequestNumber>
 				<TYPOGRAPHY.headLine4 data-tour='request-list-three'>
 					{props.title.length < 85
@@ -57,7 +57,11 @@ const RequestCard = (props) => {
 				</TYPOGRAPHY.body2>
 				<TagsWrapper>
 					{props.categories.split(',').map((item) => {
-						return <TagItem key={item}><TYPOGRAPHY.tag>#{item}</TYPOGRAPHY.tag></TagItem>;
+						return (
+							<TagItem key={item}>
+								<TYPOGRAPHY.tag>#{item}</TYPOGRAPHY.tag>
+							</TagItem>
+						);
 					})}
 				</TagsWrapper>
 			</Description>

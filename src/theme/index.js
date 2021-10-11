@@ -53,7 +53,7 @@ const lineHeight = () => {
 			lineHeightBody2: '22.4px',
 			lineHeightTimeStamp: '16px',
 			lineHeightTag: '16.8px',
-			lineHeightHint: '12px'
+			lineHeightHint: '12px',
 		};
 	} else if (isMobile) {
 		return {
@@ -66,7 +66,7 @@ const lineHeight = () => {
 			lineHeightBody2: '18.2px',
 			lineHeightTimeStamp: '16px',
 			lineHeightTag: '19px',
-			lineHeightHint: '10px'
+			lineHeightHint: '10px',
 		};
 	}
 };
@@ -76,8 +76,9 @@ const colors = (darkMode) => {
 		// text
 		textPrimaryColor: darkMode ? '#212121' : '#212121',
 		textTimeStampColor: darkMode ? '#858585' : '#858585',
-		textTokenColor: '#3a68de',
-		textTagColor: '#A0AAC3',
+		textTokenColor: darkMode ? '#3a68de' : '#3a68de',
+		textTagColor: darkMode ? '#A0AAC3' : '#A0AAC3',
+		textLabelColor: darkMode ? '#000' : '#fff',
 
 		//buttons
 		btnPrimary: darkMode
@@ -118,8 +119,8 @@ const fontWeights = () => {
 		semiBold: 500,
 		regular: 400,
 		light: 300,
-	}
-}
+	};
+};
 
 const theme = (darkMode) => {
 	return {
@@ -199,7 +200,7 @@ const TextWrapper = styled(Text)`
 	line-height: ${({ lineHeight, theme }) => theme[lineHeight]};
 	text-align: 'left';
 	font-weight: ${({ fontWeight, theme }) =>
-	fontWeight ? theme[fontWeight] : theme['regular']};
+		fontWeight ? theme[fontWeight] : theme['regular']};
 	margin-left: ${(props) =>
 		props.timestamp &&
 		(props.theme.isMobile()
@@ -207,9 +208,11 @@ const TextWrapper = styled(Text)`
 			: props.theme.spacing(12))} !important;
 	margin-bottom: ${(props) =>
 		props.timestamp && props.theme.spacing(1.5)} !important;
-	padding-right: ${props => props.pr ? props.theme.spacing(props.pr) : 0} !important;
-	padding-left: ${props => props.pl ? props.theme.spacing(props.pl) : 0} !important;
-	white-space: ${props => props.nowrap ? 'nowrap': 'wrap'} !important;
+	padding-right: ${(props) =>
+		props.pr ? props.theme.spacing(props.pr) : 0} !important;
+	padding-left: ${(props) =>
+		props.pl ? props.theme.spacing(props.pl) : 0} !important;
+	white-space: ${(props) => (props.nowrap ? 'nowrap' : 'wrap')} !important;
 `;
 
 export const TYPOGRAPHY = {
@@ -249,6 +252,7 @@ export const TYPOGRAPHY = {
 				fontWeight={700}
 				fontSize='textH4'
 				lineHeight='lineHeightH4'
+				color={props.label && 'textLabelColor'}
 				{...props}
 			/>
 		);
@@ -296,27 +300,27 @@ export const TYPOGRAPHY = {
 		);
 	},
 	hint(props) {
-		return(
+		return (
 			<TextWrapper
-			fontWeight={props.bold ? 'bold' : 'regular'}
-			fontSize='textHint'
-			lineHeight='lineHeightHint'
-			nowrap
-			color={props.active ? 'textTokenColor' : 'textPrimaryColor'}
-			{...props}
-		/>
-		)
+				fontWeight={props.bold ? 'bold' : 'regular'}
+				fontSize='textHint'
+				lineHeight='lineHeightHint'
+				nowrap
+				color={props.active ? 'textTokenColor' : 'textPrimaryColor'}
+				{...props}
+			/>
+		);
 	},
 	tag(props) {
-		return(
+		return (
 			<TextWrapper
-			fontWeight={props.bold ? 'bold' : 'regular'}
-			fontSize='textTag'
-			lineHeight='lineHeightTag'
-			nowrap
-			color='textTagColor'
-			{...props}
-		/>
-		)
-	}
+				fontWeight={props.bold ? 'bold' : 'regular'}
+				fontSize='textTag'
+				lineHeight='lineHeightTag'
+				nowrap
+				color='textTagColor'
+				{...props}
+			/>
+		);
+	},
 };

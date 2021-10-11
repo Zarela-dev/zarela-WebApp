@@ -27,11 +27,7 @@ export const RequestNumber = styled.div`
 	border-radius: ${(props) => (props.isMobile ? '5px 5px 0px 5px' : '10px 10px 0px 10px')};
 	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(2)};
 	margin-right: ${(props) => props.theme.spacing(2)};
-	font-weight: bold;
 	background: linear-gradient(246.29deg, #3a68de 12.69%, #3a68de 100%);
-	font-size: ${(props) => (props.isMobile ? '15px' : '32px')};
-	line-height: ${(props) => (props.isMobile ? '11.4px' : '30px')};
-	color: #ffffff;
 	text-align: center;
 `;
 
