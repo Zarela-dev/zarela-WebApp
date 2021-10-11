@@ -79,7 +79,7 @@ const RequestCardMobile = (props) => {
 				</Typography>
 				<TagsWrapper>
 					{props.categories.split(',').map((item) => {
-						return <TagItem key={item}>#{item}</TagItem>;
+						return <TagItem key={item}><TYPOGRAPHY.tag>#{item}</TYPOGRAPHY.tag></TagItem>;
 					})}
 				</TagsWrapper>
 			</Description>

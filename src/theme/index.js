@@ -19,6 +19,7 @@ const fontSize = () => {
 			textH5: '18px',
 			textBody1: '18px',
 			textBody2: '16px',
+			textTag: '14px',
 			textHint: '12px',
 		};
 	} else if (isMobile) {
@@ -30,6 +31,7 @@ const fontSize = () => {
 			textH5: '14px',
 			textBody1: '16px',
 			textBody2: '14px',
+			textTag: '12px',
 			textHint: '10px',
 		};
 	}
@@ -50,6 +52,7 @@ const lineHeight = () => {
 			lineHeightBody1: '25.2px',
 			lineHeightBody2: '22.4px',
 			lineHeightTimeStamp: '16px',
+			lineHeightTag: '16.8px',
 			lineHeightHint: '12px'
 		};
 	} else if (isMobile) {
@@ -62,6 +65,7 @@ const lineHeight = () => {
 			lineHeightBody1: '20.8px',
 			lineHeightBody2: '18.2px',
 			lineHeightTimeStamp: '16px',
+			lineHeightTag: '19px',
 			lineHeightHint: '10px'
 		};
 	}
@@ -73,6 +77,7 @@ const colors = (darkMode) => {
 		textPrimaryColor: darkMode ? '#212121' : '#212121',
 		textTimeStampColor: darkMode ? '#858585' : '#858585',
 		textTokenColor: '#3a68de',
+		textTagColor: '#A0AAC3',
 
 		//buttons
 		btnPrimary: darkMode
@@ -298,6 +303,18 @@ export const TYPOGRAPHY = {
 			lineHeight='lineHeightHint'
 			nowrap
 			color={props.active ? 'textTokenColor' : 'textPrimaryColor'}
+			{...props}
+		/>
+		)
+	},
+	tag(props) {
+		return(
+			<TextWrapper
+			fontWeight={props.bold ? 'bold' : 'regular'}
+			fontSize='textTag'
+			lineHeight='lineHeightTag'
+			nowrap
+			color='textTagColor'
 			{...props}
 		/>
 		)

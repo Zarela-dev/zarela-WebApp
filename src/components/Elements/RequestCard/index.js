@@ -200,14 +200,10 @@ export const TagsWrapper = styled.div`
 export const TagItem = styled.div`
 	background: white;
 	padding: 8px 16px;
-	font-size: 14px;
-	line-height: 17px;
-	font-weight: 400;
 	border: 1px solid #e1e5f5;
 	border-radius: 4px;
 	margin-top: 5px;
 	margin-right: 5px;
-	color: #a0aac3;
 	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		padding: ${(props) => props.theme.spacing(0.5)};
 	}
