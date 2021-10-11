@@ -54,6 +54,14 @@ const Balance = styled.div`
 	color: ${(props) => props.theme.textPrimary};
 `;
 
+const EtherscanAttribution = styled.div`
+	font-size: 14px;
+`;
+const EtherscanAttributionLink = styled.a`
+	text-decoration: underline;
+	color: ${(props) => props.theme.textPrimary};
+`;
+
 export const WalletDesktop = ({ account, logs, isLoading, PAGE_SIZE }) => {
 	const { appState } = useContext(mainContext);
 
@@ -95,6 +103,13 @@ export const WalletDesktop = ({ account, logs, isLoading, PAGE_SIZE }) => {
 									data={logs}
 									PAGE_SIZE={PAGE_SIZE}
 								/>
+								<EtherscanAttribution>
+									Powered by{' '}
+									<EtherscanAttributionLink target="_blank" href="https://etherscan.io">
+										Etherscan.io
+									</EtherscanAttributionLink>{' '}
+									APIs{' '}
+								</EtherscanAttribution>
 							</WalletInnerContainer>
 						),
 					},
