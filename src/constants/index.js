@@ -25,5 +25,5 @@ export const CURRENT_NETWORK_LABEL =
 
 export const ETHERSCAN_BASE_URL =
 	process.env.NODE_ENV === 'production' && process.env.REACT_APP_IS_TEST_NET !== 'true'
-		? process.env.REACT_APP_ETHERSCAN_API_LINK
+		? process.env.REACT_APP_ETHERSCAN_MAINNET_API_LINK
 		: process.env.REACT_APP_ETHERSCAN_ROPSTEN_API_LINK;

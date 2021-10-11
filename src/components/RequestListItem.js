@@ -365,7 +365,7 @@ const RequestListItem = ({
 
 		try {
 			/* fetch signal file metadata from IPFS */
-			const encryptedFileMetaRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileMetaCID}`);
+			const encryptedFileMetaRes = await axios.get(`${process.env.REACT_APP_IPFS_GET_LINK + fileMetaCID}`);
 
 			const decryptedFileMeta = await window.ethereum.request({
 				method: 'eth_decrypt',

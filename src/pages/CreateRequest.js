@@ -136,7 +136,7 @@ const CreateRequest = () => {
 										const zpaper_CID = ipfsResponse.cid.toString();
 
 										formik.setFieldValue('zpaper', zpaper_CID);
-										let url = `${process.env.REACT_APP_IPFS_LINK + zpaper_CID}`;
+										let url = `${process.env.REACT_APP_IPFS_GET_LINK + zpaper_CID}`;
 										console.log(`Zpaper --> ${url}`);
 
 										setDialogMessage('Approve it from your Wallet');

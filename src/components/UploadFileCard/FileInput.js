@@ -207,7 +207,7 @@ const FileInput = forwardRef(
 						</DownLoadText>
 						<LinkWrapper>
 							<DownLoadLink
-								href={`${process.env.REACT_APP_IPFS_LINK + downLoadLink}?filename=Zpaper-sample.zip`}
+								href={`${process.env.REACT_APP_IPFS_GET_LINK + downLoadLink}?filename=Zpaper-sample.zip`}
 								target="_blank"
 							>
 								DownLoad

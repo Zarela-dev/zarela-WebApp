@@ -10,7 +10,7 @@ export const initDecrypt = () => {
 		 in order to remove  the extra headers that IPFS sets on response payload, responseType: blob 
 		*/
 		try {
-			const fileRes = await axios.get(`${process.env.REACT_APP_IPFS_LINK + fileHash}`, {
+			const fileRes = await axios.get(`${process.env.REACT_APP_IPFS_GET_LINK + fileHash}`, {
 				responseType: 'blob',
 				onDownloadProgress: (progressEvent) => {
 					const { loaded, total } = progressEvent;
