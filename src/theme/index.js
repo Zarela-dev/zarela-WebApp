@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { Text, TextProps as TextPropsOriginal, Button } from 'rebass';
 import styled, {
 	css,
@@ -19,6 +19,7 @@ const fontSize = () => {
 			textH5: '18px',
 			textBody1: '18px',
 			textBody2: '16px',
+			textTimeStamp: '12px',
 		};
 	} else if (isMobile) {
 		return {
@@ -29,6 +30,37 @@ const fontSize = () => {
 			textH5: '14px',
 			textBody1: '16px',
 			textBody2: '14px',
+			textTimeStamp: '12px',
+		};
+	}
+};
+
+const lineHeight = () => {
+	let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+		navigator.userAgent
+	);
+
+	if (!isMobile) {
+		return {
+			lineHeightH1: '61.6px',
+			lineHeightH2: '57.6px',
+			lineHeightH3: '38.4px',
+			lineHeightH4: '28.8px',
+			lineHeightH5: '21.6px',
+			lineHeightBody1: '25.2px',
+			lineHeightBody2: '22.4px',
+			lineHeightTimeStamp: '16px',
+		};
+	} else if (isMobile) {
+		return {
+			lineHeightH1: '28.8px',
+			lineHeightH2: '24px',
+			lineHeightH3: '21.6px',
+			lineHeightH4: '19.2px',
+			lineHeightH5: '16.8px',
+			lineHeightBody1: '20.8px',
+			lineHeightBody2: '18.2px',
+			lineHeightTimeStamp: '16px',
 		};
 	}
 };
@@ -36,7 +68,8 @@ const fontSize = () => {
 const colors = (darkMode) => {
 	return {
 		// text
-		textPrimary: darkMode ? '#212121' : '#212121',
+		textPrimaryColor: darkMode ? '#212121' : '#212121',
+		textTimeStampColor: darkMode ? '#858585' : '#858585',
 
 		//buttons
 		btnPrimary: darkMode
@@ -76,6 +109,12 @@ const theme = (darkMode) => {
 	return {
 		...colors(darkMode),
 		...fontSize(),
+		...lineHeight(),
+		isMobile: () => {
+			return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+				navigator.userAgent
+			);
+		},
 
 		grids: {
 			sm: 8,
@@ -141,50 +180,101 @@ export default function ({ children }) {
 }
 
 const TextWrapper = styled(Text)`
-	color: ${({ color, theme }) => theme['textPrimary']};
+	color: ${({ color, theme }) =>
+		color ? theme[color] : theme['textPrimaryColor']};
 	font-size: ${({ fontSize, theme }) => theme[fontSize]};
-
-	:hover {
-		opacity: 0.7;
-	}
-`;
-
-const ButtonWrapper = styled(Button)`
-	color: ${({ color, theme }) => theme[color]};
+	line-height: ${({ lineHeight, theme }) => theme[lineHeight]};
+	text-align: 'left';
+	margin-left: ${(props) =>
+		props.timestamp &&
+		(props.theme.isMobile()
+			? props.theme.spacing(5.5)
+			: props.theme.spacing(12))} !important;
+	margin-bottom: ${(props) =>
+		props.timestamp && props.theme.spacing(1.5)} !important;
 `;
 
 export const TYPOGRAPHY = {
 	headLine1(props) {
-		return <TextWrapper fontWeight={700} fontSize={'textH1'} {...props} />;
+		return (
+			<TextWrapper
+				fontWeight={700}
+				fontSize={'textH1'}
+				lineHeight='lineHeightH1'
+				{...props}
+			/>
+		);
 	},
 	headLine2(props) {
-		return <TextWrapper fontWeight={700} fontSize={'textH2'} {...props} />;
+		return (
+			<TextWrapper
+				fontWeight={700}
+				fontSize={'textH2'}
+				lineHeight='lineHeightH2'
+				{...props}
+			/>
+		);
 	},
 	headLine3(props) {
-		return <TextWrapper fontWeight={700} fontSize={'textH3'} {...props} />;
+		return (
+			<TextWrapper
+				fontWeight={700}
+				fontSize={'textH3'}
+				lineHeight='lineHeightH3'
+				{...props}
+			/>
+		);
 	},
 	headLine4(props) {
-		return <TextWrapper fontWeight={700} fontSize={'textH4'} {...props} />;
+		return (
+			<TextWrapper
+				fontWeight={700}
+				fontSize={'textH4'}
+				lineHeight='lineHeightH4'
+				{...props}
+			/>
+		);
 	},
 	headLine5(props) {
-		return <TextWrapper fontWeight={700} fontSize={'textH5'} {...props} />;
+		return (
+			<TextWrapper
+				fontWeight={700}
+				fontSize={'textH5'}
+				lineHeight='lineHeightH5'
+				{...props}
+			/>
+		);
 	},
 	body1(props) {
-		return <TextWrapper fontWeight={400} fontSize={'textBody1'} {...props} />;
+		return (
+			<TextWrapper
+				fontWeight={400}
+				fontSize={'textBody1'}
+				lineHeight='lineHeightBody1'
+				{...props}
+			/>
+		);
 	},
 	body2(props) {
-		return <TextWrapper fontWeight={400} fontSize={'textBody2'} {...props} />;
+		return (
+			<TextWrapper
+				fontWeight={400}
+				fontSize={'textBody2'}
+				lineHeight='lineHeightBody2'
+				{...props}
+			/>
+		);
 	},
-};
-
-export const BUTTON = {
-	primary(props) {
-		return <ButtonWrapper fontWeight={500} color={'text2'} {...props} />;
-	},
-	secondary(props) {
-		return <ButtonWrapper fontWeight={500} color={'primary1'} {...props} />;
-	},
-	link(props) {
-		return <ButtonWrapper fontWeight={600} color={'text1'} {...props} />;
+	timestamp(props) {
+		return (
+			<TextWrapper
+				fontWidth={400}
+				fontSize='textTimeStamp'
+				lineHeight='lineHeightTimeStamp'
+				color='textTimeStampColor'
+				timestamp={true}
+				{...props}
+			/>
+		);
 	},
 };

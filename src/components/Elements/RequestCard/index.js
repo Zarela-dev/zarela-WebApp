@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Typography } from '../Typography';
 import { GenericLinkButton } from '../Button';
+import {TYPOGRAPHY} from './../../../theme'
 
 export const RequestCardWrapper = styled.div`
 	display: flex;
@@ -58,14 +59,8 @@ export const Description = styled.div`
 	text-align: justify;
 	color: #121213;
 `;
-
-export const Timestamp = styled(Typography)`
-	text-align: left;
-	font-size: 10px;
-	line-height: 20px;
-	color: #858585;
-	margin-left: ${(props) => props.theme.spacing(12)};
-	margin-bottom: ${(props) => props.theme.spacing(1.5)};
+//theme done request list item timestamp
+export const Timestamp = styled(TYPOGRAPHY.timestamp)`
 `;
 
 export const ProgressTrackerWrapper = styled.div`
