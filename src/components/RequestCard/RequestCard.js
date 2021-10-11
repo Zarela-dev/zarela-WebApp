@@ -3,8 +3,6 @@ import RequestCardWrapper, {
 	Footer,
 	HeaderLayout,
 	RequestNumber,
-	Typography,
-	Title,
 	Spacer,
 	Divider,
 	Description,
@@ -30,29 +28,40 @@ import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/user-blue.svg';
 import documentsIcon from '../../assets/icons/document-blue.svg';
 import useBiobit from '../../hooks/useBiobit';
+import { TYPOGRAPHY } from './../../theme';
 
 const RequestCard = (props) => {
 	const getBBIT = useBiobit();
 
 	return (
-		<RequestCardWrapper data-tour="request-list-one">
+		<RequestCardWrapper data-tour='request-list-one'>
 			<HeaderLayout>
-				<RequestNumber data-tour="request-list-two">{props.requestID}</RequestNumber>
-				<Title data-tour="request-list-three">
-					{props.title.length < 85 ? props.title : props.title.substr(0, 85) + '...'}
-				</Title>
+				<RequestNumber data-tour='request-list-two'>
+					<TYPOGRAPHY.headLine4 label bold>{props.requestID}</TYPOGRAPHY.headLine4>
+				</RequestNumber>
+				<TYPOGRAPHY.headLine4 data-tour='request-list-three'>
+					{props.title.length < 85
+						? props.title
+						: props.title.substr(0, 85) + '...'}
+				</TYPOGRAPHY.headLine4>
 				<Spacer />
 			</HeaderLayout>
-			<Timestamp nowrap variant="caption">
+			<Timestamp nowrap variant='caption'>
 				{props.timestamp}
 			</Timestamp>
 			<Description>
-				<Typography variant="body">
-					{props.description.length < 320 ? props.description : props.description.substr(0, 320) + '...'}
-				</Typography>
+				<TYPOGRAPHY.body2 variant='body'>
+					{props.description.length < 320
+						? props.description
+						: props.description.substr(0, 320) + '...'}
+				</TYPOGRAPHY.body2>
 				<TagsWrapper>
 					{props.categories.split(',').map((item) => {
-						return <TagItem key={item}>#{item}</TagItem>;
+						return (
+							<TagItem key={item}>
+								<TYPOGRAPHY.tag>#{item}</TYPOGRAPHY.tag>
+							</TagItem>
+						);
 					})}
 				</TagsWrapper>
 			</Description>
@@ -62,40 +71,50 @@ const RequestCard = (props) => {
 				</ProgressTrackerTrack>
 			</ProgressTrackerWrapper>
 			<Footer>
-				<BiobitToDollarPair data-tour="request-list-four">
+				<BiobitToDollarPair data-tour='request-list-four'>
 					<BadgeRow>
 						<TokenIcon src={biobitIcon} />
-						<TokenValue>{getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[0]}</TokenValue>
-						<ValueLabel>BBit</ValueLabel>
+						<TYPOGRAPHY.body1 bold pr={0.5}>
+							{getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[0]}
+						</TYPOGRAPHY.body1>
+						<TYPOGRAPHY.body2 bold>BBit</TYPOGRAPHY.body2>
 					</BadgeRow>
 					<BadgeRow>
-						<BiobitToDollarValue>{`~ $${
+						<TYPOGRAPHY.hint pl={1.5} active>{`~ $${
 							getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[1]
-						}`}</BiobitToDollarValue>
+						}`}</TYPOGRAPHY.hint>
 					</BadgeRow>
 				</BiobitToDollarPair>
 				<Divider />
-				<ContributorBadge data-tour="request-list-five">
+				<ContributorBadge data-tour='request-list-five'>
 					<BadgeRow>
 						<ContributorsIcon src={documentsIcon} />
-						<BadgeLabel>{props.contributors}</BadgeLabel>
+						<TYPOGRAPHY.hint fontSize='textBody2' bold active>
+							{props.contributors}
+						</TYPOGRAPHY.hint>
 					</BadgeRow>
 					<BadgeRow>
-						<Hint>No. of accepted responses</Hint>
+						<TYPOGRAPHY.hint active>No. of accepted responses</TYPOGRAPHY.hint>
 					</BadgeRow>
 				</ContributorBadge>
 				<Divider />
-				<ContributorBadge data-tour="request-list-six">
+				<ContributorBadge data-tour='request-list-six'>
 					<BadgeRow>
 						<ContributorsIcon src={contributorIcon} />
-						<BadgeLabel>{props.totalContributedCount}</BadgeLabel>
+						<TYPOGRAPHY.hint fontSize='textBody2' bold active>
+							{props.totalContributedCount}
+						</TYPOGRAPHY.hint>
 					</BadgeRow>
 					<BadgeRow>
-						<Hint>No. of people contributed</Hint>
+						<TYPOGRAPHY.hint active>No. of people contributed</TYPOGRAPHY.hint>
 					</BadgeRow>
 				</ContributorBadge>
 				<Spacer />
-				<JoinButton data-tour="request-list-seven" variant="secondary" to={`/request/${props.requestID}`}>
+				<JoinButton
+					data-tour='request-list-seven'
+					variant='secondary'
+					to={`/request/${props.requestID}`}
+				>
 					Start
 				</JoinButton>
 			</Footer>

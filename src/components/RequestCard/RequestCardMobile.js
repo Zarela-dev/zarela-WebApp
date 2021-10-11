@@ -27,6 +27,7 @@ import contributorIcon from '../../assets/icons/user-black.svg';
 import documentsIcon from '../../assets/icons/document-black.svg';
 import { mainContext } from '../../state';
 import useBiobit from '../../hooks/useBiobit';
+import { TYPOGRAPHY } from './../../theme';
 
 const BiobitToDollarValue = styled.div`
 	position: absolute;
@@ -39,7 +40,8 @@ const BiobitToDollarValue = styled.div`
 	margin-right: 2px;
 	margin-left: 8px;
 	white-space: nowrap;
-	margin-left: ${(props) => (props.noMargin ? props.theme.spacing(1) : props.theme.spacing(0.8))};
+	margin-left: ${(props) =>
+		props.noMargin ? props.theme.spacing(1) : props.theme.spacing(0.8)};
 	white-space: nowrap;
 `;
 
@@ -59,26 +61,39 @@ const RequestCardMobile = (props) => {
 	const getBBIT = useBiobit();
 
 	return (
-		<RequestCardWrapper data-tour="request-list-one">
+		<RequestCardWrapper data-tour='request-list-one'>
 			<HeaderLayout>
-				<RequestNumber data-tour="request-list-two" isMobile={appState.isMobile}>
-					{props.requestID}
+				<RequestNumber
+					data-tour='request-list-two'
+					isMobile={appState.isMobile}
+				>
+					<TYPOGRAPHY.headLine4 label bold>
+						{props.requestID}
+					</TYPOGRAPHY.headLine4>
 				</RequestNumber>
-				<Title data-tour="request-list-three">
-					{props.title.length < 70 ? props.title : props.title.substr(0, 70) + '...'}
+				<Title data-tour='request-list-three'>
+					{props.title.length < 70
+						? props.title
+						: props.title.substr(0, 70) + '...'}
 				</Title>
 				<Spacer />
 			</HeaderLayout>
-			<Timestamp nowrap variant="caption">
+			<Timestamp nowrap variant='caption'>
 				{props.timestamp}
 			</Timestamp>
 			<Description>
-				<Typography variant="body">
-					{props.description.length < 120 ? props.description : props.description.substr(0, 120) + '...'}
+				<Typography variant='body'>
+					{props.description.length < 120
+						? props.description
+						: props.description.substr(0, 120) + '...'}
 				</Typography>
 				<TagsWrapper>
 					{props.categories.split(',').map((item) => {
-						return <TagItem key={item}>#{item}</TagItem>;
+						return (
+							<TagItem key={item}>
+								<TYPOGRAPHY.tag>#{item}</TYPOGRAPHY.tag>
+							</TagItem>
+						);
 					})}
 				</TagsWrapper>
 			</Description>
@@ -88,32 +103,40 @@ const RequestCardMobile = (props) => {
 				</ProgressTrackerTrack>
 			</ProgressTrackerWrapper>
 			<Footer>
-				<BiobitToDollarPair data-tour="request-list-four">
+				<BiobitToDollarPair data-tour='request-list-four'>
 					<BadgeRow>
 						<TokenIcon src={biobitIcon} />
-						<TokenValue>{getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[0]}</TokenValue>
+						<TYPOGRAPHY.hint bold pr={0.5}>
+							{getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[0]}
+						</TYPOGRAPHY.hint>
 					</BadgeRow>
 					<BadgeRow>
-						<BiobitToDollarValue>{`~ $${
+						<TYPOGRAPHY.hint bold pr={0.5} active>{`~ $${
 							getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[1]
-						}`}</BiobitToDollarValue>
+						}`}</TYPOGRAPHY.hint>
 					</BadgeRow>
 				</BiobitToDollarPair>
 				<Divider />
-				<ContributorBadge data-tour="request-list-five">
+				<ContributorBadge data-tour='request-list-five'>
 					<BadgeRow>
 						<ContributorsIcon src={documentsIcon} />
-						<BadgeLabel>{props.contributors}</BadgeLabel>
+						<TYPOGRAPHY.hint bold>{props.contributors}</TYPOGRAPHY.hint>
 					</BadgeRow>
 				</ContributorBadge>
 				<Divider />
-				<ContributorBadge data-tour="request-list-six">
+				<ContributorBadge data-tour='request-list-six'>
 					<BadgeRow>
 						<ContributorsIcon src={contributorIcon} />
-						<BadgeLabel>{props.totalContributedCount}</BadgeLabel>
+						<TYPOGRAPHY.hint bold>
+							{props.totalContributedCount}
+						</TYPOGRAPHY.hint>
 					</BadgeRow>
 				</ContributorBadge>
-				<JoinButton data-tour="request-list-seven" variant="secondary" to={`/request/${props.requestID}`}>
+				<JoinButton
+					data-tour='request-list-seven'
+					variant='secondary'
+					to={`/request/${props.requestID}`}
+				>
 					Start
 				</JoinButton>
 			</Footer>
