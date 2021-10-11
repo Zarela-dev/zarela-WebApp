@@ -54,6 +54,7 @@ const lineHeight = () => {
 			lineHeightTimeStamp: '16px',
 			lineHeightTag: '16.8px',
 			lineHeightHint: '12px',
+			lineHeightDay: '3.9',
 		};
 	} else if (isMobile) {
 		return {
@@ -67,6 +68,7 @@ const lineHeight = () => {
 			lineHeightTimeStamp: '16px',
 			lineHeightTag: '19px',
 			lineHeightHint: '10px',
+			lineHeightDay: '3',
 		};
 	}
 };
@@ -219,7 +221,7 @@ export const TYPOGRAPHY = {
 	headLine1(props) {
 		return (
 			<TextWrapper
-				fontWeight={700}
+				fontWeight='bold'
 				fontSize='textH1'
 				lineHeight='lineHeightH1'
 				{...props}
@@ -229,7 +231,7 @@ export const TYPOGRAPHY = {
 	headLine2(props) {
 		return (
 			<TextWrapper
-				fontWeight={700}
+				fontWeight='bold'
 				fontSize='textH2'
 				lineHeight='lineHeightH2'
 				{...props}
@@ -239,7 +241,7 @@ export const TYPOGRAPHY = {
 	headLine3(props) {
 		return (
 			<TextWrapper
-				fontWeight={700}
+				fontWeight='bold'
 				fontSize='textH3'
 				lineHeight='lineHeightH3'
 				{...props}
@@ -249,7 +251,7 @@ export const TYPOGRAPHY = {
 	headLine4(props) {
 		return (
 			<TextWrapper
-				fontWeight={700}
+				fontWeight='bold'
 				fontSize='textH4'
 				lineHeight='lineHeightH4'
 				color={props.label && 'textLabelColor'}
@@ -260,7 +262,7 @@ export const TYPOGRAPHY = {
 	headLine5(props) {
 		return (
 			<TextWrapper
-				fontWeight={700}
+				fontWeight='bold'
 				fontSize='textH5'
 				lineHeight='lineHeightH5'
 				{...props}
@@ -280,9 +282,16 @@ export const TYPOGRAPHY = {
 	body2(props) {
 		return (
 			<TextWrapper
-				fontWeight={props.bold ? 'bold' : 'regular'}
 				fontSize='textBody2'
-				lineHeight='lineHeightBody2'
+				lineHeight={props.zarelaDay ? 'lineHeightDay' : 'lineHeightBody2'}
+				color={
+					props.sidebarHighLight
+						? '#3d5c8a'
+						: props.zarelaDay
+						? 'white'
+						: props.color
+				}
+				fontWeight={props.zarelaDay ? 'bold' : props.fontWeight}
 				{...props}
 			/>
 		);
@@ -290,7 +299,6 @@ export const TYPOGRAPHY = {
 	timestamp(props) {
 		return (
 			<TextWrapper
-				fontWeight={props.bold ? 'bold' : 'regular'}
 				fontSize='textHint'
 				lineHeight='lineHeightTimeStamp'
 				color='textTimeStampColor'
@@ -302,7 +310,6 @@ export const TYPOGRAPHY = {
 	hint(props) {
 		return (
 			<TextWrapper
-				fontWeight={props.bold ? 'bold' : 'regular'}
 				fontSize='textHint'
 				lineHeight='lineHeightHint'
 				nowrap
@@ -314,7 +321,6 @@ export const TYPOGRAPHY = {
 	tag(props) {
 		return (
 			<TextWrapper
-				fontWeight={props.bold ? 'bold' : 'regular'}
 				fontSize='textTag'
 				lineHeight='lineHeightTag'
 				nowrap
