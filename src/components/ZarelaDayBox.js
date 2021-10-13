@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { TYPOGRAPHY } from './../theme';
+import { TYPOGRAPHY } from './Elements/Typography';
 
 const Container = styled.div`
 	display: flex;
@@ -65,14 +65,14 @@ const ZarelaDayBox = ({ currentDay = 0 }) => {
 	return (
 		<Container>
 			<Row>
-				<TYPOGRAPHY.headLine4 color='white' bold>
+				<TYPOGRAPHY.HeadLine4 color='white' bold>
 					Current Zarela Day
-				</TYPOGRAPHY.headLine4>
+				</TYPOGRAPHY.HeadLine4>
 			</Row>
 			<Row>
 				<ZarelaDay>{`${currentDay}th`}</ZarelaDay>
 				<ZarelaDaySubtitle>
-					<TYPOGRAPHY.body2 zarelaDay>Day</TYPOGRAPHY.body2>
+					<TYPOGRAPHY.Body2 zarelaDay>Day</TYPOGRAPHY.Body2>
 				</ZarelaDaySubtitle>
 			</Row>
 			<Divider />

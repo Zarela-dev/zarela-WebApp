@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import { Typography } from '../Typography';
+import { Typography , TYPOGRAPHY} from '../Typography';
 import { GenericLinkButton } from '../Button';
-import {TYPOGRAPHY} from './../../../theme'
 
 export const RequestCardWrapper = styled.div`
 	display: flex;
@@ -9,7 +8,8 @@ export const RequestCardWrapper = styled.div`
 	background: white;
 	border: 1px solid #c4c4c4;
 	border-radius: 8px;
-	padding: ${(props) => props.theme.spacing(4)} ${(props) => props.theme.spacing(2.7)}
+	padding: ${(props) => props.theme.spacing(4)}
+		${(props) => props.theme.spacing(2.7)}
 		${(props) => props.theme.spacing(1.8)};
 
 	margin-bottom: 25px;
@@ -24,8 +24,10 @@ export const HeaderLayout = styled.div`
 export const RequestNumber = styled.div`
 	flex: ${(props) => (props.isMobile ? '' : '0 0 100px')};
 	height: ${(props) => (props.isMobile ? '38px;' : '50px')};
-	border-radius: ${(props) => (props.isMobile ? '5px 5px 0px 5px' : '10px 10px 0px 10px')};
-	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(2)};
+	border-radius: ${(props) =>
+		props.isMobile ? '5px 5px 0px 5px' : '10px 10px 0px 10px'};
+	padding: ${(props) => props.theme.spacing(1)}
+		${(props) => props.theme.spacing(2)};
 	margin-right: ${(props) => props.theme.spacing(2)};
 	background: linear-gradient(246.29deg, #3a68de 12.69%, #3a68de 100%);
 	text-align: center;
@@ -56,8 +58,7 @@ export const Description = styled.div`
 	color: #121213;
 `;
 //theme done request list item timestamp
-export const Timestamp = styled(TYPOGRAPHY.timestamp)`
-`;
+export const Timestamp = styled(TYPOGRAPHY.Timestamp)``;
 
 export const ProgressTrackerWrapper = styled.div`
 	position: relative;
@@ -117,7 +118,8 @@ export const BiobitToDollarValue = styled.div`
 	line-height: 20px;
 	color: #3a68de;
 	margin-right: 3px;
-	margin-left: ${(props) => (props.noMargin ? props.theme.spacing(1) : props.theme.spacing(2.3))};
+	margin-left: ${(props) =>
+		props.noMargin ? props.theme.spacing(1) : props.theme.spacing(2.3)};
 	white-space: nowrap;
 `;
 
@@ -188,7 +190,8 @@ export const TagsWrapper = styled.div`
 	max-width: 860px;
 	flex-wrap: wrap;
 
-	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
+	@media only screen and (max-width: ${(props) =>
+			props.theme.tablet_sm_breakpoint}) {
 		margin-top: ${(props) => props.theme.spacing(1)};
 	}
 `;
@@ -200,7 +203,8 @@ export const TagItem = styled.div`
 	border-radius: 4px;
 	margin-top: 5px;
 	margin-right: 5px;
-	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
+	@media only screen and (max-width: ${(props) =>
+			props.theme.tablet_sm_breakpoint}) {
 		padding: ${(props) => props.theme.spacing(0.5)};
 	}
 `;

@@ -27,7 +27,7 @@ import contributorIcon from '../../assets/icons/user-black.svg';
 import documentsIcon from '../../assets/icons/document-black.svg';
 import { mainContext } from '../../state';
 import useBiobit from '../../hooks/useBiobit';
-import { TYPOGRAPHY } from './../../theme';
+import {TYPOGRAPHY} from './../Elements/Typography';
 
 const BiobitToDollarValue = styled.div`
 	position: absolute;
@@ -67,9 +67,9 @@ const RequestCardMobile = (props) => {
 					data-tour='request-list-two'
 					isMobile={appState.isMobile}
 				>
-					<TYPOGRAPHY.headLine4 label bold>
+					<TYPOGRAPHY.HeadLine4 label bold>
 						{props.requestID}
-					</TYPOGRAPHY.headLine4>
+					</TYPOGRAPHY.HeadLine4>
 				</RequestNumber>
 				<Title data-tour='request-list-three'>
 					{props.title.length < 70
@@ -91,7 +91,7 @@ const RequestCardMobile = (props) => {
 					{props.categories.split(',').map((item) => {
 						return (
 							<TagItem key={item}>
-								<TYPOGRAPHY.tag>#{item}</TYPOGRAPHY.tag>
+								<TYPOGRAPHY.Tag>#{item}</TYPOGRAPHY.Tag>
 							</TagItem>
 						);
 					})}
@@ -106,30 +106,30 @@ const RequestCardMobile = (props) => {
 				<BiobitToDollarPair data-tour='request-list-four'>
 					<BadgeRow>
 						<TokenIcon src={biobitIcon} />
-						<TYPOGRAPHY.hint bold pr={0.5}>
+						<TYPOGRAPHY.Hint bold pr={0.5}>
 							{getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[0]}
-						</TYPOGRAPHY.hint>
+						</TYPOGRAPHY.Hint>
 					</BadgeRow>
 					<BadgeRow>
-						<TYPOGRAPHY.hint bold pr={0.5} active>{`~ $${
+						<TYPOGRAPHY.Hint bold pr={0.5} active>{`~ $${
 							getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[1]
-						}`}</TYPOGRAPHY.hint>
+						}`}</TYPOGRAPHY.Hint>
 					</BadgeRow>
 				</BiobitToDollarPair>
 				<Divider />
 				<ContributorBadge data-tour='request-list-five'>
 					<BadgeRow>
 						<ContributorsIcon src={documentsIcon} />
-						<TYPOGRAPHY.hint bold>{props.contributors}</TYPOGRAPHY.hint>
+						<TYPOGRAPHY.Hint bold>{props.contributors}</TYPOGRAPHY.Hint>
 					</BadgeRow>
 				</ContributorBadge>
 				<Divider />
 				<ContributorBadge data-tour='request-list-six'>
 					<BadgeRow>
 						<ContributorsIcon src={contributorIcon} />
-						<TYPOGRAPHY.hint bold>
+						<TYPOGRAPHY.Hint bold>
 							{props.totalContributedCount}
-						</TYPOGRAPHY.hint>
+						</TYPOGRAPHY.Hint>
 					</BadgeRow>
 				</ContributorBadge>
 				<JoinButton

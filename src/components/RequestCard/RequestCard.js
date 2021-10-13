@@ -28,7 +28,7 @@ import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/user-blue.svg';
 import documentsIcon from '../../assets/icons/document-blue.svg';
 import useBiobit from '../../hooks/useBiobit';
-import { TYPOGRAPHY } from './../../theme';
+import {TYPOGRAPHY} from './../Elements/Typography';
 
 const RequestCard = (props) => {
 	const getBBIT = useBiobit();
@@ -37,29 +37,29 @@ const RequestCard = (props) => {
 		<RequestCardWrapper data-tour='request-list-one'>
 			<HeaderLayout>
 				<RequestNumber data-tour='request-list-two'>
-					<TYPOGRAPHY.headLine4 label bold>{props.requestID}</TYPOGRAPHY.headLine4>
+					<TYPOGRAPHY.HeadLine4 label bold>{props.requestID}</TYPOGRAPHY.HeadLine4>
 				</RequestNumber>
-				<TYPOGRAPHY.headLine4 data-tour='request-list-three'>
+				<TYPOGRAPHY.HeadLine4 data-tour='request-list-three'>
 					{props.title.length < 85
 						? props.title
 						: props.title.substr(0, 85) + '...'}
-				</TYPOGRAPHY.headLine4>
+				</TYPOGRAPHY.HeadLine4>
 				<Spacer />
 			</HeaderLayout>
 			<Timestamp nowrap variant='caption'>
 				{props.timestamp}
 			</Timestamp>
 			<Description>
-				<TYPOGRAPHY.body2 variant='body'>
+				<TYPOGRAPHY.Body2 variant='body'>
 					{props.description.length < 320
 						? props.description
 						: props.description.substr(0, 320) + '...'}
-				</TYPOGRAPHY.body2>
+				</TYPOGRAPHY.Body2>
 				<TagsWrapper>
 					{props.categories.split(',').map((item) => {
 						return (
 							<TagItem key={item}>
-								<TYPOGRAPHY.tag>#{item}</TYPOGRAPHY.tag>
+								<TYPOGRAPHY.Tag>#{item}</TYPOGRAPHY.Tag>
 							</TagItem>
 						);
 					})}
@@ -74,39 +74,39 @@ const RequestCard = (props) => {
 				<BiobitToDollarPair data-tour='request-list-four'>
 					<BadgeRow>
 						<TokenIcon src={biobitIcon} />
-						<TYPOGRAPHY.body1 bold pr={0.5}>
+						<TYPOGRAPHY.Body1 bold pr={0.5}>
 							{getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[0]}
-						</TYPOGRAPHY.body1>
-						<TYPOGRAPHY.body2 bold>BBit</TYPOGRAPHY.body2>
+						</TYPOGRAPHY.Body1>
+						<TYPOGRAPHY.Body2 bold>BBit</TYPOGRAPHY.Body2>
 					</BadgeRow>
 					<BadgeRow>
-						<TYPOGRAPHY.hint pl={1.5} active>{`~ $${
+						<TYPOGRAPHY.Hint pl={1.5} active>{`~ $${
 							getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[1]
-						}`}</TYPOGRAPHY.hint>
+						}`}</TYPOGRAPHY.Hint>
 					</BadgeRow>
 				</BiobitToDollarPair>
 				<Divider />
 				<ContributorBadge data-tour='request-list-five'>
 					<BadgeRow>
 						<ContributorsIcon src={documentsIcon} />
-						<TYPOGRAPHY.hint fontSize='textBody2' bold active>
+						<TYPOGRAPHY.Hint fontSize='textBody2' bold active>
 							{props.contributors}
-						</TYPOGRAPHY.hint>
+						</TYPOGRAPHY.Hint>
 					</BadgeRow>
 					<BadgeRow>
-						<TYPOGRAPHY.hint active>No. of accepted responses</TYPOGRAPHY.hint>
+						<TYPOGRAPHY.Hint active>No. of accepted responses</TYPOGRAPHY.Hint>
 					</BadgeRow>
 				</ContributorBadge>
 				<Divider />
 				<ContributorBadge data-tour='request-list-six'>
 					<BadgeRow>
 						<ContributorsIcon src={contributorIcon} />
-						<TYPOGRAPHY.hint fontSize='textBody2' bold active>
+						<TYPOGRAPHY.Hint fontSize='textBody2' bold active>
 							{props.totalContributedCount}
-						</TYPOGRAPHY.hint>
+						</TYPOGRAPHY.Hint>
 					</BadgeRow>
 					<BadgeRow>
-						<TYPOGRAPHY.hint active>No. of people contributed</TYPOGRAPHY.hint>
+						<TYPOGRAPHY.Hint active>No. of people contributed</TYPOGRAPHY.Hint>
 					</BadgeRow>
 				</ContributorBadge>
 				<Spacer />

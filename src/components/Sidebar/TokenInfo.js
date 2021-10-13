@@ -13,7 +13,7 @@ import {
 import { Spacer } from '../Elements/Spacer';
 import { injectedConnector } from '../../connectors';
 import { useWeb3React } from '@web3-react/core';
-import { TYPOGRAPHY } from '../../theme';
+import { TYPOGRAPHY } from '../Elements/Typography';
 
 const Sidebar = ({ data, account }) => {
 	const { activate } = useWeb3React();
@@ -22,59 +22,59 @@ const Sidebar = ({ data, account }) => {
 		<SidebarCard data-tour='request-list-nine'>
 			<Header>
 				<Icon src={biobitBlack} />
-				<TYPOGRAPHY.body1 bold>Token Info</TYPOGRAPHY.body1>
+				<TYPOGRAPHY.Body1 bold>Token Info</TYPOGRAPHY.Body1>
 			</Header>
 			<Row>
 				<Subtitle>
-					<TYPOGRAPHY.body2 sidebarHighLight semiBold>
+					<TYPOGRAPHY.Body2 sidebarHighLight semiBold>
 						Total Supply
-					</TYPOGRAPHY.body2>
+					</TYPOGRAPHY.Body2>
 				</Subtitle>
-				<TYPOGRAPHY.body1 ml={2}>20,000,000</TYPOGRAPHY.body1>
+				<TYPOGRAPHY.Body1 ml={2}>20,000,000</TYPOGRAPHY.Body1>
 			</Row>
 			<Row>
 				<Subtitle>
-					<TYPOGRAPHY.body2 sidebarHighLight bold>
+					<TYPOGRAPHY.Body2 sidebarHighLight bold>
 						Token Name
-					</TYPOGRAPHY.body2>
+					</TYPOGRAPHY.Body2>
 				</Subtitle>
-				<TYPOGRAPHY.body1 ml={2}>Biobit</TYPOGRAPHY.body1>
+				<TYPOGRAPHY.Body1 ml={2}>Biobit</TYPOGRAPHY.Body1>
 			</Row>
 			<Row>
 				<Subtitle>
-					<TYPOGRAPHY.body2 sidebarHighLight bold>
+					<TYPOGRAPHY.Body2 sidebarHighLight bold>
 						Symbol
-					</TYPOGRAPHY.body2>
+					</TYPOGRAPHY.Body2>
 				</Subtitle>
-				<TYPOGRAPHY.body1 ml={2}>BBit</TYPOGRAPHY.body1>
+				<TYPOGRAPHY.Body1 ml={2}>BBit</TYPOGRAPHY.Body1>
 			</Row>
 			<Divider />
 			<Header>
 				<Icon src={walletBlack} />
-				<TYPOGRAPHY.body1 bold>Wallet Info</TYPOGRAPHY.body1>
+				<TYPOGRAPHY.Body1 bold>Wallet Info</TYPOGRAPHY.Body1>
 				<Spacer />
 			</Header>
 			<Row hiddenInfo={account === undefined}>
 				<Subtitle>
-					<TYPOGRAPHY.body2 sidebarHighLight bold>
+					<TYPOGRAPHY.Body2 sidebarHighLight bold>
 						BBit Balance
-					</TYPOGRAPHY.body2>
+					</TYPOGRAPHY.Body2>
 				</Subtitle>
-				<TYPOGRAPHY.body1 ml={2}>{data.biobitBalance}</TYPOGRAPHY.body1>
+				<TYPOGRAPHY.Body1 ml={2}>{data.biobitBalance}</TYPOGRAPHY.Body1>
 			</Row>
 			<Row hiddenInfo={account === undefined}>
 				<Subtitle>
-					<TYPOGRAPHY.body2 sidebarHighLight bold>
+					<TYPOGRAPHY.Body2 sidebarHighLight bold>
 						Ether Balance
-					</TYPOGRAPHY.body2>
+					</TYPOGRAPHY.Body2>
 				</Subtitle>
-				<TYPOGRAPHY.body1 ml={2}>{data.etherBalance}</TYPOGRAPHY.body1>
+				<TYPOGRAPHY.Body1 ml={2}>{data.etherBalance}</TYPOGRAPHY.Body1>
 			</Row>
 			{account === undefined ? (
 				<>
-					<TYPOGRAPHY.hint mb={2} textAlign='center'>
+					<TYPOGRAPHY.Hint mb={2} textAlign='center'>
 						connect your wallet to see more data
-					</TYPOGRAPHY.hint>
+					</TYPOGRAPHY.Hint>
 					<ConnectButton
 						variant='primary'
 						onClick={() => activate(injectedConnector)}
