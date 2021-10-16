@@ -78,9 +78,9 @@ const RequestCardMobile = (props) => {
 				</Title>
 				<Spacer />
 			</HeaderLayout>
-			<Timestamp nowrap variant='caption'>
+			<TYPOGRAPHY.Timestamp ml={5.5} mb={0} nowrap variant='caption'>
 				{props.timestamp}
-			</Timestamp>
+			</TYPOGRAPHY.Timestamp>
 			<Description>
 				<Typography variant='body'>
 					{props.description.length < 120

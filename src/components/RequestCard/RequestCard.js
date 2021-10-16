@@ -46,9 +46,9 @@ const RequestCard = (props) => {
 				</TYPOGRAPHY.HeadLine4>
 				<Spacer />
 			</HeaderLayout>
-			<Timestamp nowrap variant='caption'>
+			<TYPOGRAPHY.Timestamp ml={12} mb={1.5} nowrap variant='caption'>
 				{props.timestamp}
-			</Timestamp>
+			</TYPOGRAPHY.Timestamp>
 			<Description>
 				<TYPOGRAPHY.Body2 variant='body'>
 					{props.description.length < 320

@@ -30,12 +30,10 @@ const TextWrapper = styled(Text)`
 	font-weight: ${({ fontWeight, theme }) =>
 		fontWeight ? theme[fontWeight] : theme['regular']};
 	margin-left: ${(props) =>
-		props.timestamp &&
-		(props.theme.isMobile()
-			? props.theme.spacing(5.5)
-			: props.theme.spacing(12))} !important;
+	props.ml ? props.theme.spacing(props.ml) : 0} !important;
+	margin-top: ${(props) => props.mt ? props.theme.spacing(props.mt) : 0} !important;
 	margin-bottom: ${(props) =>
-		props.timestamp && props.theme.spacing(1.5)} !important;
+		props.mb ? props.theme.spacing(props.mb) : 0} !important;
 	padding-right: ${(props) =>
 		props.pr ? props.theme.spacing(props.pr) : 0} !important;
 	padding-left: ${(props) =>
@@ -128,7 +126,6 @@ export const TYPOGRAPHY = {
 				fontSize='textHint'
 				lineHeight='lineHeightTimeStamp'
 				color='textTimeStampColor'
-				timestamp={true}
 				{...props}
 			/>
 		);

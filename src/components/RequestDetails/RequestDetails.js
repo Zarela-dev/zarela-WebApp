@@ -30,6 +30,7 @@ import documentsIcon from '../../assets/icons/document-blue.svg';
 import publicKeyIcon from '../../assets/icons/public-key.svg';
 import { CopyableText, timeSince } from '../../utils';
 import useBiobit from '../../hooks/useBiobit';
+import {TYPOGRAPHY} from './../Elements/Typography';
 
 const PageWrapper = styled.div``;
 
@@ -153,8 +154,8 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 					<HeaderLayout>
 						<RequestNumber>{request.requestID}</RequestNumber>
 						<Title>
-							<p>{request.title}</p>
-							<Timestamp>{timeSince(request.timestamp)}</Timestamp>
+							<TYPOGRAPHY.HeadLine4>{request.title}</TYPOGRAPHY.HeadLine4>
+							<TYPOGRAPHY.Timestamp ml={0}>{timeSince(request.timestamp)}</TYPOGRAPHY.Timestamp>
 						</Title>
 						<Spacer />
 					</HeaderLayout>
@@ -198,22 +199,22 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 			<DescriptionContainer>
 				<TagsWrapper>
 					{request.categories?.split(',').map((item) => {
-						return <TagItem key={item}>#{item}</TagItem>;
+						return <TagItem key={item}><TYPOGRAPHY.Tag>#{item}</TYPOGRAPHY.Tag></TagItem>;
 					})}
 				</TagsWrapper>
 				<PublicKeyBadge data-tour="request-details-one">
 					<PublicKeyIcon src={publicKeyIcon} />
 					<CopyableText textToCopy={request.requesterAddress}>
 						<PublicKeyTextContainer>
-							<PublicKey variant="body">Requester public key</PublicKey>
-							<PublicKey variant="body2" weight="semiBold">
+							<TYPOGRAPHY.Hint>Requester public key</TYPOGRAPHY.Hint>
+							<TYPOGRAPHY.Hint fontWeight="semiBold" mt={0.5}>
 								{request.requesterAddress}
-							</PublicKey>
+							</TYPOGRAPHY.Hint>
 						</PublicKeyTextContainer>
 					</CopyableText>
 				</PublicKeyBadge>
-				<DescriptionTitle>Description:</DescriptionTitle>
-				<Description>{request.description}</Description>
+				<TYPOGRAPHY.HeadLine5 mt={3} mb={2}>Description:</TYPOGRAPHY.HeadLine5>
+				<TYPOGRAPHY.Body2>{request.description}</TYPOGRAPHY.Body2>
 			</DescriptionContainer>
 			<FilesWrapper>
 				<DownloadFileCard

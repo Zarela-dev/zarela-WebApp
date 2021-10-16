@@ -70,6 +70,22 @@ const lineHeight = () => {
 			lineHeightDay: '3',
 		};
 	}
+
+
+	return {
+		lineHeightH1: '61.6px',
+		lineHeightH2: '57.6px',
+		lineHeightH3: '38.4px',
+		lineHeightH4: '28.8px',
+		lineHeightH5: '21.6px',
+		lineHeightBody1: '25.2px',
+		lineHeightBody2: '22.4px',
+		lineHeightTimeStamp: '16px',
+		lineHeightTag: '16.8px',
+		lineHeightHint: '12px',
+		lineHeightDay: '3.9',
+		
+	}
 };
 
 const colors = (darkMode) => {
@@ -123,12 +139,19 @@ const fontWeights = () => {
 	};
 };
 
+const breakPoints = () => {
+	return{
+		breakpoints: [ '40em', '52em', '64em' ]
+	}
+}
+
 const theme = (darkMode) => {
 	return {
 		...colors(darkMode),
 		...fontSize(),
 		...lineHeight(),
 		...fontWeights(),
+		...breakPoints(),
 		isMobile: () => {
 			return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
 				navigator.userAgent
