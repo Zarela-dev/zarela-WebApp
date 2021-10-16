@@ -37,7 +37,7 @@ const RequestCard = (props) => {
 		<RequestCardWrapper data-tour='request-list-one'>
 			<HeaderLayout>
 				<RequestNumber data-tour='request-list-two'>
-					<TYPOGRAPHY.HeadLine4 label bold>{props.requestID}</TYPOGRAPHY.HeadLine4>
+					<TYPOGRAPHY.HeadLine4 label fontweight='bold' color="white">{props.requestID}</TYPOGRAPHY.HeadLine4>
 				</RequestNumber>
 				<TYPOGRAPHY.HeadLine4 data-tour='request-list-three'>
 					{props.title.length < 85

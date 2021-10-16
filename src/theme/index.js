@@ -1,147 +1,143 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import styled, {
 	css,
 	ThemeProvider as StyledComponentsThemeProvider,
 } from 'styled-components/macro';
 
 const fontSize = () => {
-	let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-		navigator.userAgent
-	);
-
-	if (!isMobile) {
-		return {
-			textH1: '56px',
-			textH2: '48px',
-			textH3: '32px',
-			textH4: '24px',
-			textH5: '18px',
-			textBody1: '18px',
-			textBody2: '16px',
-			textTag: '14px',
-			textHint: '12px',
-		};
-	} else if (isMobile) {
-		return {
-			textH1: '24px',
-			textH2: '20px',
-			textH3: '18px',
-			textH4: '16px',
-			textH5: '14px',
-			textBody1: '16px',
-			textBody2: '14px',
-			textTag: '12px',
-			textHint: '10px',
-		};
-	}
+	return {
+		fontSizes: [10, 12, 14, 16, 18, 20, 24, 32, 48, 56],
+	};
 };
 
 const lineHeight = () => {
-	let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-		navigator.userAgent
-	);
-
-	if (!isMobile) {
-		return {
-			lineHeightH1: '61.6px',
-			lineHeightH2: '57.6px',
-			lineHeightH3: '38.4px',
-			lineHeightH4: '28.8px',
-			lineHeightH5: '21.6px',
-			lineHeightBody1: '25.2px',
-			lineHeightBody2: '22.4px',
-			lineHeightTimeStamp: '16px',
-			lineHeightTag: '16.8px',
-			lineHeightHint: '12px',
-			lineHeightDay: '3.9',
-		};
-	} else if (isMobile) {
-		return {
-			lineHeightH1: '28.8px',
-			lineHeightH2: '24px',
-			lineHeightH3: '21.6px',
-			lineHeightH4: '19.2px',
-			lineHeightH5: '16.8px',
-			lineHeightBody1: '20.8px',
-			lineHeightBody2: '18.2px',
-			lineHeightTimeStamp: '16px',
-			lineHeightTag: '19px',
-			lineHeightHint: '10px',
-			lineHeightDay: '3',
-		};
-	}
-
-
 	return {
-		lineHeightH1: '61.6px',
-		lineHeightH2: '57.6px',
-		lineHeightH3: '38.4px',
-		lineHeightH4: '28.8px',
-		lineHeightH5: '21.6px',
-		lineHeightBody1: '25.2px',
-		lineHeightBody2: '22.4px',
-		lineHeightTimeStamp: '16px',
-		lineHeightTag: '16.8px',
-		lineHeightHint: '12px',
-		lineHeightDay: '3.9',
-		
-	}
+		lineHeights: [
+			61.6,
+			57.6,
+			52.8,
+			38.4,
+			28.8,
+			25.2,
+			24,
+			22.4,
+			21.6,
+			20.8,
+			20,
+			19.2,
+			18.2,
+			16.8,
+			16,
+		],
+	};
 };
 
 const colors = (darkMode) => {
 	return {
-		// text
-		textPrimaryColor: darkMode ? '#212121' : '#212121',
-		textTimeStampColor: darkMode ? '#858585' : '#858585',
-		textTokenColor: darkMode ? '#3a68de' : '#3a68de',
-		textTagColor: darkMode ? '#A0AAC3' : '#A0AAC3',
-		textLabelColor: darkMode ? '#000' : '#fff',
+		colors: {
+			// text
+			textPrimary: darkMode ? '#212121' : '#212121',
+			textTimeStamp: darkMode ? '#858585' : '#858585',
+			textToken: darkMode ? '#3a68de' : '#3a68de',
+			textTag: darkMode ? '#A0AAC3' : '#A0AAC3',
+			textLabel: darkMode ? '#000' : '#fff',
 
-		//buttons
-		btnPrimary: darkMode
-			? 'linear-gradient(226.69deg, #85CEEE 10.5%, #A687FD 86.82%)'
-			: 'linear-gradient(226.69deg, #85CEEE 10.5%, #A687FD 86.82%)',
-		btnPrimaryHover: darkMode
-			? 'linear-gradient(224.79deg, #CCEDFC 16.25%, #DFD3FF 84.5%)'
-			: 'linear-gradient(224.79deg, #CCEDFC 16.25%, #DFD3FF 84.5%)',
-		btnPrimaryClick: darkMode
-			? 'linear-gradient(227.41deg, #52A1CE 10.18%, #6051C0 93.32%)'
-			: 'linear-gradient(227.41deg, #52A1CE 10.18%, #6051C0 93.32%)',
-		btnPrimaryDisabled: darkMode ? '#F4F3FE' : '#F4F3FE',
-		btnSecondary: darkMode ? '#fff' : '#fff',
-		btnSecondaryHover: darkMode ? '#F6F5FF' : '#F6F5FF',
-		btnSecondaryClick: darkMode ? '#F6F5FF' : '#F6F5FF',
-		btnSecondaryDisabled: darkMode ? '##F4F3FE' : '#F4F3FE',
-		btnTertiary: darkMode ? '#E5E5E5' : '#E5E5E5',
-		btnTertiaryHover: darkMode ? '#F6F5FF' : '#F6F5FF',
-		btnTertiaryClick: darkMode ? '#E2E1FF' : '#E2E1FF',
-		btnTertiaryDisabled: darkMode ? '#F4F3FE' : '#F4F3FE',
+			bgWhite: '#FFFFFF',
+			bgDisabled: '#F4F8FE',
 
-		// colors
-		primary: '#7246D0',
-		primaryFaded: '#7246d029',
-		secondary: 'rgba(126, 162, 253, 0.4)',
-		success: '#3ADEA3',
-		navLinkColor: '#8B72DE',
-		navLinkDisabled: '#E3DDFA',
-		notificationColor: '#2EECA8',
-		textSecondary: '#6DA5BF',
-		error: 'red',
+			//buttons
+			btnPrimary: darkMode
+				? 'linear-gradient(226.69deg, #85CEEE 10.5%, #A687FD 86.82%)'
+				: 'linear-gradient(226.69deg, #85CEEE 10.5%, #A687FD 86.82%)',
+
+			btnPrimaryHover: darkMode
+				? 'linear-gradient(224.79deg, #CCEDFC 16.25%, #DFD3FF 84.5%)'
+				: 'linear-gradient(224.79deg, #CCEDFC 16.25%, #DFD3FF 84.5%)',
+			btnPrimaryClick: darkMode
+				? 'linear-gradient(227.41deg, #52A1CE 10.18%, #6051C0 93.32%)'
+				: 'linear-gradient(227.41deg, #52A1CE 10.18%, #6051C0 93.32%)',
+			btnPrimaryDisabled: darkMode ? '#F4F3FE' : '#F4F3FE',
+			btnSecondary: darkMode ? '#fff' : '#fff',
+			btnSecondaryHover: darkMode ? '#F6F5FF' : '#F6F5FF',
+			btnSecondaryClick: darkMode ? '#F6F5FF' : '#F6F5FF',
+			btnSecondaryDisabled: darkMode ? '##F4F3FE' : '#F4F3FE',
+			btnTertiary: darkMode ? '#E5E5E5' : '#E5E5E5',
+			btnTertiaryHover: darkMode ? '#F6F5FF' : '#F6F5FF',
+			btnTertiaryClick: darkMode ? '#E2E1FF' : '#E2E1FF',
+			btnTertiaryDisabled: darkMode ? '#F4F3FE' : '#F4F3FE',
+
+			fieldForm: darkMode ? '#F7F7FD' : '#F7F7FD',
+			fieldTitle: darkMode ? '#9D99AC' : '#9D99AC',
+			fieldText: darkMode ? '#212121' : '#212121',
+			fieldDescription: darkMode ? '#AAAA' : '#AAAA',
+
+			// colors
+			primary: '#7246D0',
+			primaryFaded: '#7246d029',
+			secondary: 'rgba(126, 162, 253, 0.4)',
+			navLinkColor: '#8B72DE',
+			navLinkDisabled: '#E3DDFA',
+			notificationColor: '#2EECA8',
+			textSecondary: '#6DA5BF',
+
+			//status
+			validation: '#F1C93A',
+			error: '#F62D76',
+			success: '#3ADEA3',
+		},
 	};
 };
 
 const fontWeights = () => {
 	return {
-		bold: 700,
-		semiBold: 500,
-		regular: 400,
-		light: 300,
+		fontWeights: {
+			bold: 700,
+			semiBold: 500,
+			regular: 400,
+			light: 300,
+		},
+	};
+};
+
+const elevations = () => {
+	return {
+		elevations: {
+			e1: '0px -3px 14px rgba(81, 197, 234, 0.15)',
+			e2: '0px 0px 20px rgba(81, 197, 234, 0.16)',
+			e3: '0px 4px 20px rgba(81, 197, 234, 0.1)',
+			e4: '0px 6px 20px rgba(81, 197, 234, 0.15)',
+		},
+	};
+};
+
+const strokes = () => {
+	return {
+		strokes: {
+			error: '2px solid #F62D76',
+			gray: '2px solid #C4C4C4',
+		},
 	};
 };
 
 const breakPoints = () => {
+	return {
+		breakPoints: ['1255px', '1440px', '1170px', '768px', '450px', '320px'],
+	};
+};
+
+const spacing = () => {
+	/**
+	 * this will not have conflicts with spacing() cause they calling methods are diffrent => spacing(2) vs spacing: {[2,4]}
+	 * so we will clean spacing() after themming
+	 */
+	return {
+		spacing: [2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 80, 120],
+	};
+};
+
+const iconSizes = () => {
 	return{
-		breakpoints: [ '40em', '52em', '64em' ]
+		iconSizes: [16,24,32],
 	}
 }
 
@@ -152,11 +148,10 @@ const theme = (darkMode) => {
 		...lineHeight(),
 		...fontWeights(),
 		...breakPoints(),
-		isMobile: () => {
-			return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-				navigator.userAgent
-			);
-		},
+		...strokes(),
+		...spacing(),
+		...elevations(),
+		...iconSizes(),
 
 		grids: {
 			sm: 8,
@@ -216,4 +211,3 @@ export default function ({ children }) {
 		</StyledComponentsThemeProvider>
 	);
 }
-

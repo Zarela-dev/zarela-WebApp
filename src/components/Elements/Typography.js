@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Text, TextProps as TextPropsOriginal, Button } from 'rebass';
+import { Text, TextProps as TextPropsOriginal, Button, Box } from 'rebass';
 
 export const Typography = styled.div`
 	line-height: 1.3;
@@ -23,22 +23,23 @@ export const Typography = styled.div`
 
 const TextWrapper = styled(Text)`
 	color: ${({ color, theme }) =>
-		color ? theme[color] : theme['textPrimaryColor']};
+		color ? theme.colors[color] : theme.colors['textPrimaryC']};
 	font-size: ${({ fontSize, theme }) => theme[fontSize]};
-	line-height: ${({ lineHeight, theme }) => theme[lineHeight]};
+	line-height: ${({ lineHeight, theme }) => theme.lineHeights[lineHeight]};
 	text-align: 'left';
 	font-weight: ${({ fontWeight, theme }) =>
-		fontWeight ? theme[fontWeight] : theme['regular']};
+		fontWeight ? theme.fontWeights[fontWeight] : theme['regular']};
+	white-space: ${(props) => (props.nowrap ? 'nowrap' : 'wrap')} !important;
 	margin-left: ${(props) =>
-	props.ml ? props.theme.spacing(props.ml) : 0} !important;
-	margin-top: ${(props) => props.mt ? props.theme.spacing(props.mt) : 0} !important;
+		props.ml ? props.theme.spacing(props.ml) : 0} !important;
+	margin-top: ${(props) =>
+		props.mt ? props.theme.spacing(props.mt) : 0} !important;
 	margin-bottom: ${(props) =>
 		props.mb ? props.theme.spacing(props.mb) : 0} !important;
 	padding-right: ${(props) =>
 		props.pr ? props.theme.spacing(props.pr) : 0} !important;
 	padding-left: ${(props) =>
 		props.pl ? props.theme.spacing(props.pl) : 0} !important;
-	white-space: ${(props) => (props.nowrap ? 'nowrap' : 'wrap')} !important;
 `;
 
 export const TYPOGRAPHY = {
@@ -46,7 +47,7 @@ export const TYPOGRAPHY = {
 		return (
 			<TextWrapper
 				fontWeight='bold'
-				fontSize='textH1'
+				fontSize={[1,2]}
 				lineHeight='lineHeightH1'
 				{...props}
 			/>
@@ -56,7 +57,7 @@ export const TYPOGRAPHY = {
 		return (
 			<TextWrapper
 				fontWeight='bold'
-				fontSize='textH2'
+				fontSize={[1,2]}
 				lineHeight='lineHeightH2'
 				{...props}
 			/>
@@ -66,7 +67,7 @@ export const TYPOGRAPHY = {
 		return (
 			<TextWrapper
 				fontWeight='bold'
-				fontSize='textH3'
+				fontSize={[1,2]}
 				lineHeight='lineHeightH3'
 				{...props}
 			/>
@@ -76,7 +77,7 @@ export const TYPOGRAPHY = {
 		return (
 			<TextWrapper
 				fontWeight='bold'
-				fontSize='textH4'
+				fontSize={[3,4]}
 				lineHeight='lineHeightH4'
 				color={props.label && 'textLabelColor'}
 				{...props}
@@ -87,7 +88,7 @@ export const TYPOGRAPHY = {
 		return (
 			<TextWrapper
 				fontWeight='bold'
-				fontSize='textH5'
+				fontSize={[1,2]}
 				lineHeight='lineHeightH5'
 				{...props}
 			/>
@@ -97,7 +98,7 @@ export const TYPOGRAPHY = {
 		return (
 			<TextWrapper
 				fontWeight={props.bold ? 'bold' : 'regular'}
-				fontSize='textBody1'
+				fontSize={[2,3]}
 				lineHeight='lineHeightBody1'
 				{...props}
 			/>
@@ -106,7 +107,7 @@ export const TYPOGRAPHY = {
 	Body2(props) {
 		return (
 			<TextWrapper
-				fontSize='textBody2'
+				fontSize={[1,2]}
 				lineHeight={props.zarelaDay ? 'lineHeightDay' : 'lineHeightBody2'}
 				color={
 					props.sidebarHighLight
@@ -123,7 +124,7 @@ export const TYPOGRAPHY = {
 	Timestamp(props) {
 		return (
 			<TextWrapper
-				fontSize='textHint'
+				fontSize={[1,2]}
 				lineHeight='lineHeightTimeStamp'
 				color='textTimeStampColor'
 				{...props}
@@ -133,7 +134,7 @@ export const TYPOGRAPHY = {
 	Hint(props) {
 		return (
 			<TextWrapper
-				fontSize='textHint'
+				fontSize={[1,2]}
 				lineHeight='lineHeightHint'
 				nowrap
 				color={props.active ? 'textTokenColor' : 'textPrimaryColor'}
@@ -144,7 +145,7 @@ export const TYPOGRAPHY = {
 	Tag(props) {
 		return (
 			<TextWrapper
-				fontSize='textTag'
+				fontSize={[1,2]}
 				lineHeight='lineHeightTag'
 				nowrap
 				color='textTagColor'

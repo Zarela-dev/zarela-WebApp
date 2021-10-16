@@ -65,7 +65,7 @@ const ZarelaDayBox = ({ currentDay = 0 }) => {
 	return (
 		<Container>
 			<Row>
-				<TYPOGRAPHY.HeadLine4 color='white' bold>
+				<TYPOGRAPHY.HeadLine4 color='white' fontWeight="semiBold">
 					Current Zarela Day
 				</TYPOGRAPHY.HeadLine4>
 			</Row>
