@@ -1,5 +1,5 @@
 import { timeSince } from './timeSince';
-import { scientificToDecimal, convertToBiobit } from './valueConverter';
+import { convertToBiobit } from './valueConverter';
 import { CopyableText } from './CopyableText';
 import { toast } from './toast';
 import { log } from './toast';
@@ -12,7 +12,6 @@ import { arraySymmetricDiff, arrayIntersection } from './arrayOperations';
 export {
 	timeSince,
 	convertToBiobit,
-	scientificToDecimal,
 	normalizeAddress,
 	CopyableText,
 	getInput,

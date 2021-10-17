@@ -56,6 +56,9 @@ const CustomBadgeRow = styled(BadgeRow)`
 	flex: 1;
 	align-items: center;
 	justify-content: end;
+	& > * {
+		white-space: nowrap;
+	}
 `;
 
 const DescriptionContainer = styled.div`
@@ -146,6 +149,7 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 	const [signalFile, setSignalFile] = useState(null);
 	const getBBIT = useBiobit();
 
+	console.log(request.laboratoryTokenPay);
 	return (
 		<PageWrapper>
 			<HeaderContainer>
@@ -175,11 +179,9 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 						<Spacer />
 						<CustomBadgeRow>
 							<TokenIcon src={biobitIcon} />
-							<TokenValue>
-								{getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[0]} BBit
-							</TokenValue>
+							<TokenValue>{getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[0]} BBit</TokenValue>
 							<ValueLabel>
-								({+request.angelTokenPay} Angel + {+request.laboratoryTokenPay} Hub)
+								({request.angelTokenPay} Angel + {request.laboratoryTokenPay} Hub)
 							</ValueLabel>
 							<BiobitToDollarValue noMargin>{`~ $${
 								getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[1]
@@ -188,9 +190,7 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 					</CustomFooter>
 					<CustomProgressTrackerWrapper>
 						<ProgressTrackerTrack>
-							<ProgressTrackerProcess
-								progress={(+request.totalContributed / +request.totalContributors) * 100}
-							/>
+							<ProgressTrackerProcess progress={(+request.totalContributed / +request.totalContributors) * 100} />
 						</ProgressTrackerTrack>
 					</CustomProgressTrackerWrapper>
 				</HeaderInner>
