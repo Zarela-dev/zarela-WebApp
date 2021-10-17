@@ -59,7 +59,6 @@ export const Subtitle = styled.h6`
 	font-weight: 600;
 	font-size: 16px;
 	line-height: 20px;
-	color: #3d5c8a;
 	white-space: nowrap;
 `;
 export const Divider = styled.div`

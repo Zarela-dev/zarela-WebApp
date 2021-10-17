@@ -3,7 +3,7 @@ import biobitBlack from '../../assets/icons/biobit-black.svg';
 import walletBlack from '../../assets/icons/wallet-black.svg';
 import {
 	SidebarCard,
-	Header,
+	Header as HeaderWrapper,
 	Icon,
 	Row,
 	Subtitle,
@@ -13,68 +13,72 @@ import {
 import { Spacer } from '../Elements/Spacer';
 import { injectedConnector } from '../../connectors';
 import { useWeb3React } from '@web3-react/core';
-import { TYPOGRAPHY } from '../Elements/Typography';
+import { Header, BodyText } from './../Elements/Typography';
 
 const Sidebar = ({ data, account }) => {
 	const { activate } = useWeb3React();
 
 	return (
 		<SidebarCard data-tour='request-list-nine'>
-			<Header>
+			<HeaderWrapper>
 				<Icon src={biobitBlack} />
-				<TYPOGRAPHY.Body1 bold>Token Info</TYPOGRAPHY.Body1>
-			</Header>
+				<Header variant='heading5'>Token Info</Header>
+			</HeaderWrapper>
 			<Row>
 				<Subtitle>
-					<TYPOGRAPHY.Body2 sidebarHighLight semiBold>
+					<BodyText variant='small' color='textInfo' fontWeight='bold'>
 						Total Supply
-					</TYPOGRAPHY.Body2>
+					</BodyText>
 				</Subtitle>
-				<TYPOGRAPHY.Body1 ml={2}>20,000,000</TYPOGRAPHY.Body1>
+				<BodyText ml={2}>20,000,000</BodyText>
 			</Row>
 			<Row>
 				<Subtitle>
-					<TYPOGRAPHY.Body2 sidebarHighLight bold>
+					<BodyText variant='small' color='textInfo' fontWeight='bold'>
 						Token Name
-					</TYPOGRAPHY.Body2>
+					</BodyText>
 				</Subtitle>
-				<TYPOGRAPHY.Body1 ml={2}>Biobit</TYPOGRAPHY.Body1>
+				<BodyText ml={2}>Biobit</BodyText>
 			</Row>
 			<Row>
 				<Subtitle>
-					<TYPOGRAPHY.Body2 sidebarHighLight bold>
+					<BodyText variant='small' color='textInfo' fontWeight='bold'>
 						Symbol
-					</TYPOGRAPHY.Body2>
+					</BodyText>
 				</Subtitle>
-				<TYPOGRAPHY.Body1 ml={2}>BBit</TYPOGRAPHY.Body1>
+				<BodyText ml={2}>BBit</BodyText>
 			</Row>
 			<Divider />
-			<Header>
+			<HeaderWrapper>
 				<Icon src={walletBlack} />
-				<TYPOGRAPHY.Body1 bold>Wallet Info</TYPOGRAPHY.Body1>
+				<Header variant='heading5'>Wallet Info</Header>
 				<Spacer />
-			</Header>
+			</HeaderWrapper>
 			<Row hiddenInfo={account === undefined}>
 				<Subtitle>
-					<TYPOGRAPHY.Body2 sidebarHighLight bold>
+					<BodyText variant='small' color='textInfo' fontWeight='bold'>
 						BBit Balance
-					</TYPOGRAPHY.Body2>
+					</BodyText>
 				</Subtitle>
-				<TYPOGRAPHY.Body1 ml={2}>{data.biobitBalance}</TYPOGRAPHY.Body1>
+				<BodyText variant='small' color='textTimestamp' ml={2}>
+					{data.biobitBalance}
+				</BodyText>
 			</Row>
 			<Row hiddenInfo={account === undefined}>
 				<Subtitle>
-					<TYPOGRAPHY.Body2 sidebarHighLight bold>
+					<BodyText variant='small' color='textInfo' fontWeight='bold'>
 						Ether Balance
-					</TYPOGRAPHY.Body2>
+					</BodyText>
 				</Subtitle>
-				<TYPOGRAPHY.Body1 ml={2}>{data.etherBalance}</TYPOGRAPHY.Body1>
+				<BodyText variant='small' color='textTimestamp' ml={2}>
+					{data.etherBalance}
+				</BodyText>
 			</Row>
 			{account === undefined ? (
 				<>
-					<TYPOGRAPHY.Hint mb={2} textAlign='center'>
+					<BodyText variant='extraSmall' mb={2}>
 						connect your wallet to see more data
-					</TYPOGRAPHY.Hint>
+					</BodyText>
 					<ConnectButton
 						variant='primary'
 						onClick={() => activate(injectedConnector)}

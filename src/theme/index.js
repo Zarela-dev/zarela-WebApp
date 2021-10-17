@@ -1,46 +1,18 @@
 import React, { useMemo } from 'react';
-import styled, {
-	css,
-	ThemeProvider as StyledComponentsThemeProvider,
-} from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
+import { ThemeProvider } from 'styled-components';
 
-const fontSize = () => {
-	return {
-		fontSizes: [10, 12, 14, 16, 18, 20, 24, 32, 48, 56],
-	};
-};
-
-const lineHeight = () => {
-	return {
-		lineHeights: [
-			61.6,
-			57.6,
-			52.8,
-			38.4,
-			28.8,
-			25.2,
-			24,
-			22.4,
-			21.6,
-			20.8,
-			20,
-			19.2,
-			18.2,
-			16.8,
-			16,
-		],
-	};
-};
-
-const colors = (darkMode) => {
+const theme = (darkMode) => {
 	return {
 		colors: {
 			// text
 			textPrimary: darkMode ? '#212121' : '#212121',
-			textTimeStamp: darkMode ? '#858585' : '#858585',
+			textTimestamp: darkMode ? '#858585' : '#858585',
 			textToken: darkMode ? '#3a68de' : '#3a68de',
 			textTag: darkMode ? '#A0AAC3' : '#A0AAC3',
 			textLabel: darkMode ? '#000' : '#fff',
+			textInfo: darkMode ? '#3d5c8a' : '#3d5c8a',
+			textGray: darkMode ? '#121213' : '#121213',
 
 			bgWhite: '#FFFFFF',
 			bgDisabled: '#F4F8FE',
@@ -85,80 +57,62 @@ const colors = (darkMode) => {
 			error: '#F62D76',
 			success: '#3ADEA3',
 		},
-	};
-};
-
-const fontWeights = () => {
-	return {
+		fontSizes: [56, 48, 32, 24, 20, 18, 16, 14, 12, 10],
+		lineHeights: [
+			'61.6px', //0
+			'57.6px', //1
+			'52.8px', //2
+			'38.4px', //3
+			'28.8px', //4
+			'25.2px', //5
+			'24px', //6
+			'22.4px', //7
+			'21.6px', //8
+			'20.8px', //9
+			'20px', //10
+			'19.2px', //11
+			'18.2px', //12
+			'16.8px', //13
+			'16px', //14
+		],
 		fontWeights: {
 			bold: 700,
 			semiBold: 500,
 			regular: 400,
 			light: 300,
 		},
-	};
-};
-
-const elevations = () => {
-	return {
+		breakPoints: ['1255px', '1440px', '1170px', '768px', '450px', '320px'],
+		strokes: {
+			error: '2px solid #F62D76',
+			gray: '2px solid #C4C4C4',
+		},
+		space: [2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 80, 120],
 		elevations: {
 			e1: '0px -3px 14px rgba(81, 197, 234, 0.15)',
 			e2: '0px 0px 20px rgba(81, 197, 234, 0.16)',
 			e3: '0px 4px 20px rgba(81, 197, 234, 0.1)',
 			e4: '0px 6px 20px rgba(81, 197, 234, 0.15)',
 		},
-	};
-};
-
-const strokes = () => {
-	return {
-		strokes: {
-			error: '2px solid #F62D76',
-			gray: '2px solid #C4C4C4',
-		},
-	};
-};
-
-const breakPoints = () => {
-	return {
-		breakPoints: ['1255px', '1440px', '1170px', '768px', '450px', '320px'],
-	};
-};
-
-const spacing = () => {
-	/**
-	 * this will not have conflicts with spacing() cause they calling methods are diffrent => spacing(2) vs spacing: {[2,4]}
-	 * so we will clean spacing() after themming
-	 */
-	return {
-		spacing: [2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 80, 120],
-	};
-};
-
-const iconSizes = () => {
-	return{
-		iconSizes: [16,24,32],
-	}
-}
-
-const theme = (darkMode) => {
-	return {
-		...colors(darkMode),
-		...fontSize(),
-		...lineHeight(),
-		...fontWeights(),
-		...breakPoints(),
-		...strokes(),
-		...spacing(),
-		...elevations(),
-		...iconSizes(),
+		iconSizes: [16, 24, 32],
 
 		grids: {
 			sm: 8,
 			md: 12,
 			lg: 24,
 		},
-
+		variants: {
+			card: {
+				p: 2,
+				fontSize: '52px',
+			},
+			badge: {
+				display: 'inline-block',
+				p: 1,
+				color: 'white',
+				bg: 'primary',
+				borderRadius: 2,
+			},
+		},
 		maxWidth: '1255px',
 
 		// spacing
@@ -205,9 +159,5 @@ export default function ({ children }) {
 
 	const themeObject = useMemo(() => theme(darkMode), [darkMode]);
 
-	return (
-		<StyledComponentsThemeProvider theme={themeObject}>
-			{children}
-		</StyledComponentsThemeProvider>
-	);
+	return <ThemeProvider theme={themeObject}>{children}</ThemeProvider>;
 }

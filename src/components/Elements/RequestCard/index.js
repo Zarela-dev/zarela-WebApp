@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Typography , TYPOGRAPHY} from '../Typography';
+import { Typography } from '../Typography';
 import { GenericLinkButton } from '../Button';
 
 export const RequestCardWrapper = styled.div`
@@ -58,7 +58,7 @@ export const Description = styled.div`
 	color: #121213;
 `;
 //theme done request list item timestamp
-export const Timestamp = styled(TYPOGRAPHY.Timestamp)``;
+export const Timestamp = styled.p``;
 
 export const ProgressTrackerWrapper = styled.div`
 	position: relative;

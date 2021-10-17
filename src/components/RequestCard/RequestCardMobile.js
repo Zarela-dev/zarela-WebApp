@@ -27,7 +27,7 @@ import contributorIcon from '../../assets/icons/user-black.svg';
 import documentsIcon from '../../assets/icons/document-black.svg';
 import { mainContext } from '../../state';
 import useBiobit from '../../hooks/useBiobit';
-import {TYPOGRAPHY} from './../Elements/Typography';
+import { Header, BodyText } from './../Elements/Typography';
 
 const BiobitToDollarValue = styled.div`
 	position: absolute;
@@ -67,20 +67,20 @@ const RequestCardMobile = (props) => {
 					data-tour='request-list-two'
 					isMobile={appState.isMobile}
 				>
-					<TYPOGRAPHY.HeadLine4 label bold>
+					<Header variant='heading3' as='h3' color='white'>
 						{props.requestID}
-					</TYPOGRAPHY.HeadLine4>
+					</Header>
 				</RequestNumber>
-				<Title data-tour='request-list-three'>
+				<Header variant='heading3' as='h3' data-tour='request-list-three'>
 					{props.title.length < 70
 						? props.title
 						: props.title.substr(0, 70) + '...'}
-				</Title>
+				</Header>
 				<Spacer />
 			</HeaderLayout>
-			<TYPOGRAPHY.Timestamp ml={5.5} mb={0} nowrap variant='caption'>
+			<BodyText variant='timestamp' as='span' ml={53} mb={0}>
 				{props.timestamp}
-			</TYPOGRAPHY.Timestamp>
+			</BodyText>
 			<Description>
 				<Typography variant='body'>
 					{props.description.length < 120
@@ -91,7 +91,7 @@ const RequestCardMobile = (props) => {
 					{props.categories.split(',').map((item) => {
 						return (
 							<TagItem key={item}>
-								<TYPOGRAPHY.Tag>#{item}</TYPOGRAPHY.Tag>
+								<BodyText variant='tag'>#{item}</BodyText>
 							</TagItem>
 						);
 					})}
@@ -106,30 +106,32 @@ const RequestCardMobile = (props) => {
 				<BiobitToDollarPair data-tour='request-list-four'>
 					<BadgeRow>
 						<TokenIcon src={biobitIcon} />
-						<TYPOGRAPHY.Hint bold pr={0.5}>
+						<BodyText variant='hint' fontWeight='bold' pr={0.5}>
 							{getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[0]}
-						</TYPOGRAPHY.Hint>
+						</BodyText>
 					</BadgeRow>
 					<BadgeRow>
-						<TYPOGRAPHY.Hint bold pr={0.5} active>{`~ $${
+						<BodyText variant='hint' color='textToken' pr={0.5} active>{`~ $${
 							getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[1]
-						}`}</TYPOGRAPHY.Hint>
+						}`}</BodyText>
 					</BadgeRow>
 				</BiobitToDollarPair>
 				<Divider />
 				<ContributorBadge data-tour='request-list-five'>
 					<BadgeRow>
 						<ContributorsIcon src={documentsIcon} />
-						<TYPOGRAPHY.Hint bold>{props.contributors}</TYPOGRAPHY.Hint>
+						<BodyText variant='hint' fontWeight='bold'>
+							{props.contributors}
+						</BodyText>
 					</BadgeRow>
 				</ContributorBadge>
 				<Divider />
 				<ContributorBadge data-tour='request-list-six'>
 					<BadgeRow>
 						<ContributorsIcon src={contributorIcon} />
-						<TYPOGRAPHY.Hint bold>
+						<BodyText variant='hint' fontWeight='bold'>
 							{props.totalContributedCount}
-						</TYPOGRAPHY.Hint>
+						</BodyText>
 					</BadgeRow>
 				</ContributorBadge>
 				<JoinButton

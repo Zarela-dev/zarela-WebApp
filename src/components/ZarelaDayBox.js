@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { TYPOGRAPHY } from './Elements/Typography';
+import { Header , BodyText} from './Elements/Typography';
+
 
 const Container = styled.div`
 	display: flex;
@@ -15,6 +16,7 @@ const Container = styled.div`
 		padding: ${(props) =>
 			`${props.theme.spacing(3)} ${props.theme.spacing(7)}`};
 		margin-bottom: 0;
+		justify-content: 'space-evenly';
 		max-height: 108px;
 	}
 `;
@@ -47,7 +49,7 @@ const ZarelaDay = styled.p`
 `;
 
 const ZarelaDaySubtitle = styled.p`
-	text-align: justify;
+	BodyText-align: justify;
 	margin-left: 5px;
 `;
 
@@ -65,14 +67,14 @@ const ZarelaDayBox = ({ currentDay = 0 }) => {
 	return (
 		<Container>
 			<Row>
-				<TYPOGRAPHY.HeadLine4 color='white' fontWeight="semiBold">
+				<Header variant='heading4' as="h1" color='white' fontWeight="semiBold">
 					Current Zarela Day
-				</TYPOGRAPHY.HeadLine4>
+				</Header>
 			</Row>
 			<Row>
-				<ZarelaDay>{`${currentDay}th`}</ZarelaDay>
+				<Header variant='heading1' color='white' fontWeight="bold">{`${currentDay}th`}</Header>
 				<ZarelaDaySubtitle>
-					<TYPOGRAPHY.Body2 zarelaDay>Day</TYPOGRAPHY.Body2>
+					<BodyText variant='small' mt={['10px', '30px']} color='white' fontWeight='semiBold'>Day</BodyText>
 				</ZarelaDaySubtitle>
 			</Row>
 			<Divider />

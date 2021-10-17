@@ -35,7 +35,8 @@ const PageWrapper = styled.div``;
 
 const HeaderContainer = styled.header`
 	background: #f4f8fe;
-	padding: ${(props) => props.theme.spacing(3)} ${(props) => props.theme.spacing(2)} 0;
+	padding: ${(props) => props.theme.spacing(3)}
+		${(props) => props.theme.spacing(2)} 0;
 	width: 100%;
 `;
 
@@ -137,7 +138,12 @@ const Timestamp = styled.p`
 	margin-top: ${(props) => props.theme.spacing(1)};
 `;
 
-const RequestDetailsMobile = ({ setError, zpaperDownloadLink, error, request }) => {
+const RequestDetailsMobile = ({
+	setError,
+	zpaperDownloadLink,
+	error,
+	request,
+}) => {
 	const contributors = `${request.totalContributed}/${request.totalContributors}`;
 	const [signalFile, setSignalFile] = useState(null);
 	const getBBIT = useBiobit();
@@ -159,8 +165,14 @@ const RequestDetailsMobile = ({ setError, zpaperDownloadLink, error, request }) 
 							<CustomBadgeRow>
 								<TokenIcon src={biobitIcon} />
 								<TokenValue>
-									{getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[0]} ({+request.angelTokenPay}{' '}
-									Angel + {+request.laboratoryTokenPay} Hub)
+									{
+										getBBIT(
+											request.angelTokenPay,
+											request.laboratoryTokenPay
+										)[0]
+									}{' '}
+									({+request.angelTokenPay} Angel +{' '}
+									{+request.laboratoryTokenPay} Hub)
 								</TokenValue>
 								<BiobitToDollarValue noMargin>{`~ $${
 									getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[1]
@@ -184,7 +196,10 @@ const RequestDetailsMobile = ({ setError, zpaperDownloadLink, error, request }) 
 						<CustomProgressTrackerWrapper>
 							<ProgressTrackerTrack>
 								<ProgressTrackerProcess
-									progress={(+request.totalContributed / +request.totalContributors) * 100}
+									progress={
+										(+request.totalContributed / +request.totalContributors) *
+										100
+									}
 								/>
 							</ProgressTrackerTrack>
 						</CustomProgressTrackerWrapper>
@@ -195,7 +210,7 @@ const RequestDetailsMobile = ({ setError, zpaperDownloadLink, error, request }) 
 						isMobile
 						showSelected
 						disableUpload
-						buttonLabel="Contribute"
+						buttonLabel='Contribute'
 						label={'Already Have a File?'}
 						name={'signal file'}
 						value={signalFile}
@@ -215,12 +230,12 @@ const RequestDetailsMobile = ({ setError, zpaperDownloadLink, error, request }) 
 					<TitleContent>Description</TitleContent>
 					<Description>{request.description}</Description>
 				</DescriptionContainer>
-				<PublicKeyBadge data-tour="request-details-one">
+				<PublicKeyBadge data-tour='request-details-one'>
 					<PublicKeyIcon src={publicKeyIcon} />
 					<CopyableText textToCopy={request.requesterAddress}>
 						<PublicKeyTextContainer>
-							<PublicKey variant="body">Requester public key</PublicKey>
-							<PublicKey variant="body2" weight="semiBold">
+							<PublicKey variant='body'>Requester public key</PublicKey>
+							<PublicKey variant='body2' weight='semiBold'>
 								{request.requesterAddress}
 							</PublicKey>
 						</PublicKeyTextContainer>

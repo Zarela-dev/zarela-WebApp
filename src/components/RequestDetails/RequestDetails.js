@@ -30,7 +30,7 @@ import documentsIcon from '../../assets/icons/document-blue.svg';
 import publicKeyIcon from '../../assets/icons/public-key.svg';
 import { CopyableText, timeSince } from '../../utils';
 import useBiobit from '../../hooks/useBiobit';
-import {TYPOGRAPHY} from './../Elements/Typography';
+import {Header, BodyText} from './../Elements/Typography';
 
 const PageWrapper = styled.div``;
 
@@ -152,10 +152,14 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 			<HeaderContainer>
 				<HeaderInner>
 					<HeaderLayout>
-						<RequestNumber>{request.requestID}</RequestNumber>
+						<RequestNumber>
+						<Header variant='heading3' as='h3' color='white'>
+						{request.requestID}
+						</Header>
+						</RequestNumber>
 						<Title>
-							<TYPOGRAPHY.HeadLine4>{request.title}</TYPOGRAPHY.HeadLine4>
-							<TYPOGRAPHY.Timestamp ml={0}>{timeSince(request.timestamp)}</TYPOGRAPHY.Timestamp>
+							<Header variant='heading4'>{request.title}</Header>
+							<BodyText variant='timestamp' ml={0}>{timeSince(request.timestamp)}</BodyText>
 						</Title>
 						<Spacer />
 					</HeaderLayout>
@@ -163,28 +167,28 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 						<CustomContributeBadge>
 							<BadgeRow>
 								<ContributorsIcon src={documentsIcon} />
-								<BadgeLabel>{contributors}</BadgeLabel>
+								<BodyText variant='small' fontWeight='bold' color='textToken'>{contributors}</BodyText>
 							</BadgeRow>
 						</CustomContributeBadge>
 						<CustomDivider />
 						<CustomContributeBadge>
 							<BadgeRow>
 								<ContributorsIcon src={contributorIcon} />
-								<BadgeLabel>{request.totalContributedCount}</BadgeLabel>
+								<BodyText variant='small' fontWeight='bold' color='textToken'>{request.totalContributedCount}</BodyText>
 							</BadgeRow>
 						</CustomContributeBadge>
 						<Spacer />
 						<CustomBadgeRow>
 							<TokenIcon src={biobitIcon} />
-							<TokenValue>
+							<BodyText variant='small' fontWeight='bold'>
 								{getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[0]} BBit
-							</TokenValue>
-							<ValueLabel>
+							</BodyText>
+							<BodyText variant='extraSmall' fontWeight='semiBold'>
 								({+request.angelTokenPay} Angel + {+request.laboratoryTokenPay} Hub)
-							</ValueLabel>
-							<BiobitToDollarValue noMargin>{`~ $${
+							</BodyText>
+							<BodyText variant='small' color='textToken' fontWeight='bold'>{`~ $${
 								getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[1]
-							}`}</BiobitToDollarValue>
+							}`}</BodyText>
 						</CustomBadgeRow>
 					</CustomFooter>
 					<CustomProgressTrackerWrapper>
@@ -199,22 +203,22 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 			<DescriptionContainer>
 				<TagsWrapper>
 					{request.categories?.split(',').map((item) => {
-						return <TagItem key={item}><TYPOGRAPHY.Tag>#{item}</TYPOGRAPHY.Tag></TagItem>;
+						return <TagItem key={item}><BodyText variant='tag'>#{item}</BodyText></TagItem>;
 					})}
 				</TagsWrapper>
 				<PublicKeyBadge data-tour="request-details-one">
 					<PublicKeyIcon src={publicKeyIcon} />
 					<CopyableText textToCopy={request.requesterAddress}>
 						<PublicKeyTextContainer>
-							<TYPOGRAPHY.Hint>Requester public key</TYPOGRAPHY.Hint>
-							<TYPOGRAPHY.Hint fontWeight="semiBold" mt={0.5}>
+							<BodyText variant='small'>Requester public key</BodyText>
+							<BodyText variant='extraSmall' fontWeight="semiBold" mt={0.5}>
 								{request.requesterAddress}
-							</TYPOGRAPHY.Hint>
+							</BodyText>
 						</PublicKeyTextContainer>
 					</CopyableText>
 				</PublicKeyBadge>
-				<TYPOGRAPHY.HeadLine5 mt={3} mb={2}>Description:</TYPOGRAPHY.HeadLine5>
-				<TYPOGRAPHY.Body2>{request.description}</TYPOGRAPHY.Body2>
+				<Header variant='heading4' mt={3} mb={2}>Description:</Header>
+				<BodyText variant='small'>{request.description}</BodyText>
 			</DescriptionContainer>
 			<FilesWrapper>
 				<DownloadFileCard

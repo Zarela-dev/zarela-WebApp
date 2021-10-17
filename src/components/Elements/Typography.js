@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-import { Text, TextProps as TextPropsOriginal, Button, Box } from 'rebass';
+import { Text, Heading } from 'rebass/styled-components';
+import { space, layout, color, compose, fontWeight } from 'styled-system';
+import { variant } from 'styled-system';
 
 export const Typography = styled.div`
 	line-height: 1.3;
@@ -21,136 +23,91 @@ export const Typography = styled.div`
 	}};
 `;
 
-const TextWrapper = styled(Text)`
-	color: ${({ color, theme }) =>
-		color ? theme.colors[color] : theme.colors['textPrimaryC']};
-	font-size: ${({ fontSize, theme }) => theme[fontSize]};
-	line-height: ${({ lineHeight, theme }) => theme.lineHeights[lineHeight]};
-	text-align: 'left';
-	font-weight: ${({ fontWeight, theme }) =>
-		fontWeight ? theme.fontWeights[fontWeight] : theme['regular']};
-	white-space: ${(props) => (props.nowrap ? 'nowrap' : 'wrap')} !important;
-	margin-left: ${(props) =>
-		props.ml ? props.theme.spacing(props.ml) : 0} !important;
-	margin-top: ${(props) =>
-		props.mt ? props.theme.spacing(props.mt) : 0} !important;
-	margin-bottom: ${(props) =>
-		props.mb ? props.theme.spacing(props.mb) : 0} !important;
-	padding-right: ${(props) =>
-		props.pr ? props.theme.spacing(props.pr) : 0} !important;
-	padding-left: ${(props) =>
-		props.pl ? props.theme.spacing(props.pl) : 0} !important;
-`;
+const HeadingComponent = styled(Heading)(
+	compose(space, layout, color, fontWeight),
+	{
+		boxSizing: 'border-box',
+		fontFamily: 'Krub'
+	},
+	variant({
+		prop: 'variant',
+		variants: {
+			heading1: {
+				fontSize: [3, 1, 0],
+				lineHeight: [4, 2, 0],
+				fontFamily: 'LeagueGothic',
+				letterSpacing: '2px'
+			},
+			heading2: {
+				fontSize: [4, 2, 1],
+				lineHeight: [6, 3, 1],
+			},
+			heading3: {
+				fontSize: [5, 3, 2],
+				lineHeight: [8, 4, 3],
+			},
+			heading4: {
+				fontSize: [6, 5, 3],
+				lineHeight: [11, 8, 4],
+			},
+			heading5: {
+				fontSize: [7, 6, 5],
+				lineHeight: [13, 11, 8],
+			},
+			label: {
+				fontSize: 2,
+				lineHeight: 'heading',
+			},
+		},
+	})
+);
 
-export const TYPOGRAPHY = {
-	HeadLine1(props) {
-		return (
-			<TextWrapper
-				fontWeight='bold'
-				fontSize={[1,2]}
-				lineHeight='lineHeightH1'
-				{...props}
-			/>
-		);
+const TextComponent = styled(Text)(
+	compose(space, layout, color),
+	{
+		fontFamily: 'Krub'
 	},
-	HeadLine2(props) {
-		return (
-			<TextWrapper
-				fontWeight='bold'
-				fontSize={[1,2]}
-				lineHeight='lineHeightH2'
-				{...props}
-			/>
-		);
-	},
-	HeadLine3(props) {
-		return (
-			<TextWrapper
-				fontWeight='bold'
-				fontSize={[1,2]}
-				lineHeight='lineHeightH3'
-				{...props}
-			/>
-		);
-	},
-	HeadLine4(props) {
-		return (
-			<TextWrapper
-				fontWeight='bold'
-				fontSize={[3,4]}
-				lineHeight='lineHeightH4'
-				color={props.label && 'textLabelColor'}
-				{...props}
-			/>
-		);
-	},
-	HeadLine5(props) {
-		return (
-			<TextWrapper
-				fontWeight='bold'
-				fontSize={[1,2]}
-				lineHeight='lineHeightH5'
-				{...props}
-			/>
-		);
-	},
-	Body1(props) {
-		return (
-			<TextWrapper
-				fontWeight={props.bold ? 'bold' : 'regular'}
-				fontSize={[2,3]}
-				lineHeight='lineHeightBody1'
-				{...props}
-			/>
-		);
-	},
-	Body2(props) {
-		return (
-			<TextWrapper
-				fontSize={[1,2]}
-				lineHeight={props.zarelaDay ? 'lineHeightDay' : 'lineHeightBody2'}
-				color={
-					props.sidebarHighLight
-						? '#3d5c8a'
-						: props.zarelaDay
-						? 'white'
-						: props.color
-				}
-				fontWeight={props.zarelaDay ? 'bold' : props.fontWeight}
-				{...props}
-			/>
-		);
-	},
-	Timestamp(props) {
-		return (
-			<TextWrapper
-				fontSize={[1,2]}
-				lineHeight='lineHeightTimeStamp'
-				color='textTimeStampColor'
-				{...props}
-			/>
-		);
-	},
-	Hint(props) {
-		return (
-			<TextWrapper
-				fontSize={[1,2]}
-				lineHeight='lineHeightHint'
-				nowrap
-				color={props.active ? 'textTokenColor' : 'textPrimaryColor'}
-				{...props}
-			/>
-		);
-	},
-	Tag(props) {
-		return (
-			<TextWrapper
-				fontSize={[1,2]}
-				lineHeight='lineHeightTag'
-				nowrap
-				color='textTagColor'
-				{...props}
-			/>
-		);
-	},
+	variant({
+		prop: 'variant',
+		variants: {
+			big: {
+				fontSize: [6, 6, 5],
+				lineHeight: [9, 9, 5],
+			},
+			small: {
+				fontSize: [7, 7, 6],
+				lineHeight: [12, 12, 7],
+			},
+			extraSmall: {
+				fontSize: [8],
+				lineHeight: [9],
+			},
+			timestamp: {
+				fontSize: [7, 7, 6],
+				lineHeight: [12, 12, 7],
+				color: 'textTimestamp',
+				whiteSpace: 'nowrap',
+			},
+			tag: {
+				fontSize: [7, 7, 6],
+				lineHeight: [13, 13, 7],
+				color: 'textTag',
+				whiteSpace: 'nowrap',
+			},
+			hint: {
+				fontSize: [7,6,5],
+				lineHeight: [9],
+				whiteSpace: 'nowrap',
+				textAlign: 'center',
+			},
+		},
+	})
+);
+
+export const Header = (props) => {
+	return <HeadingComponent fontWeight='bold' {...props}></HeadingComponent>;
+};
+
+export const BodyText = (props) => {
+	return <TextComponent fontWeight='Regular' {...props}></TextComponent>;
 };
