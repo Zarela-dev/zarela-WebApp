@@ -238,11 +238,7 @@ const RequestListItem = ({
 		});
 		if (
 			_.isEqual(
-				[
-					...selectedIndexes,
-					...indexesAlreadyConfirmed,
-					...arrayIntersection(pendingIndexes, originalIndexes),
-				].sort(),
+				[...selectedIndexes, ...indexesAlreadyConfirmed, ...arrayIntersection(pendingIndexes, originalIndexes)].sort(),
 				originalIndexes.sort()
 			)
 		) {
@@ -312,11 +308,7 @@ const RequestListItem = ({
 
 		if (
 			_.isEqual(
-				[
-					...selectedIndexes,
-					...indexesAlreadyConfirmed,
-					...arrayIntersection(pendingIndexes, originalIndexes),
-				].sort(),
+				[...selectedIndexes, ...indexesAlreadyConfirmed, ...arrayIntersection(pendingIndexes, originalIndexes)].sort(),
 				originalIndexes.sort()
 			)
 		) {
@@ -415,66 +407,67 @@ const RequestListItem = ({
 		if (appState.contract !== null) {
 			appState.contract.methods.getOrderData(requestID).call((orderInfoError, orderInfo) => {
 				if (!orderInfoError) {
-					appState.contract.methods
-						.ownerSpecificData(requestID)
-						.call({ from: account }, (fileError, files) => {
-							if (!fileError) {
-								let addresses = orderInfo[0];
-								let timestamp = orderInfo[2];
-								let status = orderInfo[4];
-								// let laboratories = orderInfo[1];
-								// let whoGainedReward = orderInfo[3];
-								// let zarelaDay = orderInfo[5];
+					appState.contract.methods.ownerSpecificData(requestID).call({ from: account }, (fileError, files) => {
+						if (!fileError) {
+							let angels = orderInfo[0]; // angels
+							let timestamp = orderInfo[2];
+							let status = orderInfo[4];
+							let hubs = orderInfo[1];
+							// let whoGainedReward = orderInfo[3];
+							// let zarelaDay = orderInfo[5];
 
-								let formatted = {};
-								let uniqueAddresses = [...new Set(addresses)];
-								let pairs = [];
+							let formatted = {};
+							let uniqueHubAddresses = [...new Set(hubs)];
+							let pairs = [];
 
-								// count all the unapproved files
-								setUnapprovedCount(status.filter((item) => Boolean(item) === false).length);
+							// count all the unapproved files
+							setUnapprovedCount(status.filter((item) => Boolean(item) === false).length);
 
-								addresses.forEach((address, fileIndex) => {
-									pairs.push({
-										file: files[0][fileIndex],
-										AesEncryptedKey: files[1][fileIndex],
-										address: address,
-										timestamp: timestamp[fileIndex],
-										originalIndex: fileIndex,
-										status: status[fileIndex],
-									});
+							hubs.forEach((address, originalIndex) => {
+								pairs.push({
+									file: files[0][originalIndex],
+									angel: angels[originalIndex],
+									AesEncryptedKey: files[1][originalIndex],
+									address: address,
+									timestamp: timestamp[originalIndex],
+									originalIndex: originalIndex,
+									status: status[originalIndex],
 								});
+							});
 
-								uniqueAddresses.forEach((uAddress, uIndex) => {
-									pairs.forEach((tempItem, tempIndex) => {
-										if (tempItem.address === uAddress) {
-											if (Object(formatted).hasOwnProperty(uAddress)) {
-												formatted[uAddress].push({
+							uniqueHubAddresses.forEach((hubAddress, uIndex) => {
+								pairs.forEach((tempItem, tempIndex) => {
+									if (tempItem.address === hubAddress) {
+										if (Object(formatted).hasOwnProperty(hubAddress)) {
+											formatted[hubAddress].push({
+												ipfsHash: tempItem.file,
+												angel: tempItem.angel,
+												timestamp: tempItem.timestamp,
+												AesEncryptedKey: tempItem.AesEncryptedKey,
+												originalIndex: tempItem.originalIndex,
+												status: tempItem.status,
+											});
+										} else {
+											formatted[hubAddress] = [
+												{
 													ipfsHash: tempItem.file,
+													angel: tempItem.angel,
 													timestamp: tempItem.timestamp,
 													AesEncryptedKey: tempItem.AesEncryptedKey,
 													originalIndex: tempItem.originalIndex,
 													status: tempItem.status,
-												});
-											} else {
-												formatted[uAddress] = [
-													{
-														ipfsHash: tempItem.file,
-														timestamp: tempItem.timestamp,
-														AesEncryptedKey: tempItem.AesEncryptedKey,
-														originalIndex: tempItem.originalIndex,
-														status: tempItem.status,
-													},
-												];
-											}
+												},
+											];
 										}
-									});
+									}
 								});
+							});
 
-								setFormattedData(formatted);
-							} else {
-								console.error(fileError);
-							}
-						});
+							setFormattedData(formatted);
+						} else {
+							console.error(fileError);
+						}
+					});
 				} else {
 					console.error(orderInfoError.message);
 				}
@@ -512,9 +505,7 @@ const RequestListItem = ({
 							<TokenValue>{+angelTokenPay + +laboratoryTokenPay}</TokenValue>
 							<ValueLabel>BBit</ValueLabel>
 							{/* for this version, we combine both numbers, later both will be shown separately */}
-							<BiobitToDollarValue noMargin>{`~ $${
-								+angelTokenPay + +laboratoryTokenPay
-							}`}</BiobitToDollarValue>
+							<BiobitToDollarValue noMargin>{`~ $${+angelTokenPay + +laboratoryTokenPay}`}</BiobitToDollarValue>
 						</BadgeRow>
 					</BiobitToDollarPair>
 					<Divider />
