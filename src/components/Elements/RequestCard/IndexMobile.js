@@ -26,7 +26,10 @@ export const RequestNumber = styled.div`
 	margin-right: ${(props) => props.theme.spacing(1.5)};
 	padding: 5px 10px;
 	border-radius: 5px 5px 0 5px;
+	font-weight: bold;
 	background: linear-gradient(246.29deg, #3a68de 12.69%, #3a68de 100%);
+	font-size: 15px;
+	color: #ffffff;
 	text-align: center;
 `;
 export const Title = styled.div`

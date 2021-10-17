@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { Typography } from '../Typography';
 import { GenericLinkButton } from '../Button';
-import {TYPOGRAPHY} from './../../../theme'
 
 export const RequestCardWrapper = styled.div`
 	display: flex;
@@ -27,7 +26,11 @@ export const RequestNumber = styled.div`
 	border-radius: ${(props) => (props.isMobile ? '5px 5px 0px 5px' : '10px 10px 0px 10px')};
 	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(2)};
 	margin-right: ${(props) => props.theme.spacing(2)};
+	font-weight: bold;
 	background: linear-gradient(246.29deg, #3a68de 12.69%, #3a68de 100%);
+	font-size: ${(props) => (props.isMobile ? '15px' : '32px')};
+	line-height: ${(props) => (props.isMobile ? '11.4px' : '30px')};
+	color: #ffffff;
 	text-align: center;
 `;
 
@@ -55,8 +58,14 @@ export const Description = styled.div`
 	text-align: justify;
 	color: #121213;
 `;
-//theme done request list item timestamp
-export const Timestamp = styled(TYPOGRAPHY.timestamp)`
+
+export const Timestamp = styled(Typography)`
+	text-align: left;
+	font-size: 10px;
+	line-height: 20px;
+	color: #858585;
+	margin-left: ${(props) => props.theme.spacing(12)};
+	margin-bottom: ${(props) => props.theme.spacing(1.5)};
 `;
 
 export const ProgressTrackerWrapper = styled.div`
@@ -196,10 +205,14 @@ export const TagsWrapper = styled.div`
 export const TagItem = styled.div`
 	background: white;
 	padding: 8px 16px;
+	font-size: 14px;
+	line-height: 17px;
+	font-weight: 400;
 	border: 1px solid #e1e5f5;
 	border-radius: 4px;
 	margin-top: 5px;
 	margin-right: 5px;
+	color: #a0aac3;
 	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		padding: ${(props) => props.theme.spacing(0.5)};
 	}
