@@ -6,8 +6,8 @@ import Checkbox from './../Elements/Checkbox';
 import Button from './../Elements/Button';
 import TextField, { Error } from './../Elements/TextField';
 import ReactSelect from './../ReactSelect';
-import FeeEstimation from './FeeEstimation';
 import { actionTypes } from '../../state';
+import BigNumber from 'bignumber.js';
 
 const FormWrapper = styled.div`
 	width: 100%;
@@ -68,12 +68,10 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 				setPrevDataFetched(true);
 				FormPrevData.title !== '' && (await formik.setFieldValue('title', FormPrevData.title));
 				FormPrevData.desc !== '' && (await formik.setFieldValue('desc', FormPrevData.desc));
-				FormPrevData.angelTokenPay !== '' &&
-					(await formik.setFieldValue('angelTokenPay', FormPrevData.angelTokenPay));
+				FormPrevData.angelTokenPay !== '' && (await formik.setFieldValue('angelTokenPay', FormPrevData.angelTokenPay));
 				FormPrevData.laboratoryTokenPay !== '' &&
 					(await formik.setFieldValue('laboratoryTokenPay', FormPrevData.laboratoryTokenPay));
-				FormPrevData.instanceCount !== '' &&
-					(await formik.setFieldValue('instanceCount', FormPrevData.instanceCount));
+				FormPrevData.instanceCount !== '' && (await formik.setFieldValue('instanceCount', FormPrevData.instanceCount));
 				FormPrevData.category &&
 					FormPrevData.category.length > 0 &&
 					(await formik.setFieldValue('category', FormPrevData.category));
@@ -140,7 +138,7 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 		return Number(ethFee);
 		// setEstimateEthFee(Number(ethFee));
 	};
-
+	
 	return (
 		<FormWrapper>
 			<Form onSubmit={formik.handleSubmit}>
@@ -220,10 +218,7 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 					onKeyDown={(e) => {
 						if (e.key === 'Enter') {
 							setSelectedOption([...selectedOption, { value: e.target.value, label: e.target.value }]);
-							formik.setFieldValue('category', [
-								...selectedOption,
-								{ value: e.target.value, label: e.target.value },
-							]);
+							formik.setFieldValue('category', [...selectedOption, { value: e.target.value, label: e.target.value }]);
 						}
 					}}
 					isMulti

@@ -14,6 +14,7 @@ import Dialog from '../components/Dialog';
 import { useWeb3React } from '@web3-react/core';
 import NoMobileSupportMessage from '../components/NoMobileSupportMessage';
 import { actionTypes } from '../state';
+import BigNumber from 'bignumber.js';
 
 const Wrapper = styled.div`
 	${maxWidthWrapper}
@@ -36,12 +37,14 @@ const CreateRequest = () => {
 
 		if (fileRef.current !== null) fileRef.current.value = null;
 	};
+
 	const validationErrors = {
 		required: (name) => `${name} is required to create your request.`,
 		notEnoughTokens: 'you do not have enough tokens to create this request.',
 		terms: 'you must agree to the term before submitting your request',
 		number: (name) => `${name} must be a number`,
 		string: (name) => `${name} must be a string`,
+		biobit: 'Max allowed decimals is 9',
 	};
 
 	const formik = useFormik({
@@ -60,13 +63,25 @@ const CreateRequest = () => {
 			title: yup.string(validationErrors.string('title')).required(validationErrors.required('title')),
 			desc: yup.string(validationErrors.string('description')).required(validationErrors.required('description')),
 			angelTokenPay: yup
-				.number()
-				.typeError(validationErrors.number('Angel Allocated Biobits'))
+				.string()
+				.matches(new RegExp(/^[0-9]{1,9}(\.[0-9]{0,9})*$/, 'g'), validationErrors.biobit)
+				.test('angelTokenPay', 'Max allowed amount is 20,000,000 BBIT', (value) => {
+					if (new BigNumber(value).isGreaterThan(20000000)) {
+						return false;
+					}
+					return true;
+				})
 				.required(validationErrors.required('Angel Allocated Biobit')),
 			laboratoryTokenPay: yup
-				.number()
-				.typeError(validationErrors.number('Lab Allocated Biobits'))
-				.required(validationErrors.required('Lab Allocated Biobit')),
+				.string()
+				.matches(new RegExp(/^[0-9]{1,9}(\.[0-9]{0,9})*$/, 'g'), validationErrors.biobit)
+				.test('laboratoryTokenPay', 'Max allowed amount is 20,000,000 BBIT', (value) => {
+					if (new BigNumber(value).isGreaterThan(20000000)) {
+						return false;
+					}
+					return true;
+				})
+				.required(validationErrors.required('Laboratory Allocated Biobit')),
 			instanceCount: yup
 				.number()
 				.typeError(validationErrors.number('Contributors'))
@@ -77,10 +92,17 @@ const CreateRequest = () => {
 		}),
 		onSubmit: async (values) => {
 			if (formik.isValid) {
+				const safeAngelTokenPay = new BigNumber(values.angelTokenPay),
+					safeLaboratoryTokenPay = new BigNumber(values.laboratoryTokenPay);
+
 				/* to prevent the Mage from submitting the request with insufficient assets */
+				console.log(safeAngelTokenPay.plus(safeLaboratoryTokenPay).times(+values.instanceCount).toString());
+				debugger;
 				if (
-					(+values.angelTokenPay + +values.laboratoryTokenPay) * +values.instanceCount >
-					+appState.biobitBalance
+					safeAngelTokenPay
+						.plus(safeLaboratoryTokenPay)
+						.times(+values.instanceCount)
+						.gt(appState.biobitBalance)
 				) {
 					formik.setFieldError('angelTokenPay', validationErrors.notEnoughTokens);
 					formik.setSubmitting(false);
@@ -92,8 +114,7 @@ const CreateRequest = () => {
 						if (account) {
 							setDialog(false);
 							if (fileRef.current.value !== null && fileRef.current.value !== '') {
-								const { title, desc, angelTokenPay, laboratoryTokenPay, instanceCount, category } =
-									values;
+								const { title, desc, instanceCount, category } = values;
 
 								try {
 									setUploading(true);
@@ -122,16 +143,14 @@ const CreateRequest = () => {
 												pin: true,
 												wrapWithDirectory: true,
 												progress: (uploaded) => {
-													const uploadedPercent = Math.ceil(
-														(uploaded / fileRef.current.files[0].size) * 100
-													);
+													const uploadedPercent = Math.ceil((uploaded / fileRef.current.files[0].size) * 100);
 
 													setDialogMessage(`uploading to ipfs - ${uploadedPercent}%`);
 												},
 											}
 											/*
-											we use wrapWithDirectory option to be able to download the file with proper file name and extension later.
-											*/
+												we use wrapWithDirectory option to be able to download the file with proper file name and extension later.
+												*/
 										);
 										const zpaper_CID = ipfsResponse.cid.toString();
 
@@ -146,8 +165,8 @@ const CreateRequest = () => {
 												title,
 												desc,
 												zpaper_CID,
-												+angelTokenPay * Math.pow(10, 9), // angel
-												+laboratoryTokenPay * Math.pow(10, 9), // laboratory
+												safeAngelTokenPay.times(1000000000).toString(), // angel
+												safeLaboratoryTokenPay.times(1000000000).toString(), // laboratory
 												instanceCount,
 												category.map((item) => item.value).join(','),
 												process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY,
