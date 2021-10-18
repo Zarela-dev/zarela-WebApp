@@ -17,18 +17,7 @@ const theme = (darkMode) => {
 			bgWhite: '#FFFFFF',
 			bgDisabled: '#F4F8FE',
 
-			//buttons
-			btnPrimary: darkMode
-				? 'linear-gradient(226.69deg, #85CEEE 10.5%, #A687FD 86.82%)'
-				: 'linear-gradient(226.69deg, #85CEEE 10.5%, #A687FD 86.82%)',
 
-			btnPrimaryHover: darkMode
-				? 'linear-gradient(224.79deg, #CCEDFC 16.25%, #DFD3FF 84.5%)'
-				: 'linear-gradient(224.79deg, #CCEDFC 16.25%, #DFD3FF 84.5%)',
-			btnPrimaryClick: darkMode
-				? 'linear-gradient(227.41deg, #52A1CE 10.18%, #6051C0 93.32%)'
-				: 'linear-gradient(227.41deg, #52A1CE 10.18%, #6051C0 93.32%)',
-			btnPrimaryDisabled: darkMode ? '#F4F3FE' : '#F4F3FE',
 			btnSecondary: darkMode ? '#fff' : '#fff',
 			btnSecondaryHover: darkMode ? '#F6F5FF' : '#F6F5FF',
 			btnSecondaryClick: darkMode ? '#F6F5FF' : '#F6F5FF',

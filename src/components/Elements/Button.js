@@ -1,5 +1,12 @@
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
+import { space, layout, color, background, compose } from 'styled-system';
+import { variant } from 'styled-system';
+import {
+	Button as RebassButton,
+	Box,
+	Link as RebassLink,
+} from 'rebass/styled-components';
 // import { Button } from 'rebass';
 
 function getBackground(props) {
@@ -150,6 +157,125 @@ export const GenericLinkButton = ({ children, variant, to, type, ...rest }) => (
 );
 
 export default GenericButton;
+
+const ButtonWrapper = styled(Box)(
+	compose(space, layout, color),
+	{
+		borderRadius: '4px',
+	},
+	variant({
+		prop: 'variant',
+		variants: {
+			primary: {
+				background: 'unset',
+			},
+			secondary: {
+				background: 'linear-gradient(226.69deg, #85CEEE 10.5%, #A687FD 86.82%)',
+				padding: '2px',
+				'&:hover': {
+					background: 'linear-gradient(180deg, #4787F3 0%, #7246D0 100%)',
+				},
+				'&:active': {
+					background: '#F6F5FF',
+					boxShadow: '0px 6px 20px 0px #51C5EA26',
+				},
+			},
+			disabled: {
+				background: '#F4F3FE',
+			},
+		},
+	})
+);
+
+const CustomizedButton = styled(RebassButton)(
+	compose(space, layout, color),
+	variant({
+		prop: 'size',
+		variants: {
+			large: {
+				width: '190px',
+				height: '50px',
+			},
+			normal: {
+				width: '150px',
+				height: '40px',
+			},
+			medium: {
+				width: '125px',
+				height: '34px',
+			},
+			small: {
+				maxWidth: '101px',
+				maxHeight: '32px',
+			},
+			extraSmall: {
+				maxWidth: '78px',
+				maxHeight: '24px',
+			},
+		},
+	}),
+	variant({
+		prop: 'variant',
+		variants: {
+			primary: {
+				background: 'linear-gradient(226.69deg, #85CEEE 10.5%, #A687FD 86.82%)',
+				color: 'textPrimary',
+				fontWeight: 'semiBold',
+				'&:hover': {
+					background:
+						'linear-gradient(224.79deg, #CCEDFC 16.25%, #DFD3FF 84.5%)',
+				},
+				'&:active': {
+					background:
+						'linear-gradient(227.41deg, #52A1CE 10.18%, #6051C0 93.32%)',
+				},
+				'&:disabled': {
+					background: '#F4F3FE',
+					color: '#C5C0DB',
+				},
+			},
+			secondary: {
+				background: '#fff',
+				color: 'primary',
+				fontWeight: 'semiBold',
+				'&:hover': {
+					backgroundColor: 'btnSecondaryHover',
+				},
+				'&:active': {
+					background: '#F6F5FF',
+					color: '#605DEC',
+				},
+				'&:disabled': {
+					background: '#F4F3FE',
+					color: '#C5C0DB',
+				},
+			},
+		},
+	})
+);
+
+export const ThemeButton = (props) => {
+	return (
+		<ButtonWrapper variant={props.disabled ? 'disabled' : props.variant}>
+			{props.to ? (
+				<Link to={props.to}>
+					<CustomizedButton
+						p={1}
+						variant={props.variant}
+						{...props}
+					></CustomizedButton>
+				</Link>
+			) : (
+				<CustomizedButton
+					p={1}
+					variant={props.variant}
+					onClick={props.onClick}
+					{...props}
+				></CustomizedButton>
+			)}
+		</ButtonWrapper>
+	);
+};
 
 export const Button = css`
 	background: linear-gradient(

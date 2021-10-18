@@ -29,6 +29,7 @@ import contributorIcon from '../../assets/icons/user-blue.svg';
 import documentsIcon from '../../assets/icons/document-blue.svg';
 import useBiobit from '../../hooks/useBiobit';
 import { Header, BodyText } from './../Elements/Typography';
+import { ThemeButton } from './../Elements/Button';
 
 const RequestCard = (props) => {
 	const getBBIT = useBiobit();
@@ -116,13 +117,16 @@ const RequestCard = (props) => {
 					</BadgeRow>
 				</ContributorBadge>
 				<Spacer />
-				<JoinButton
+				<ThemeButton
 					data-tour='request-list-seven'
 					variant='secondary'
-					to={`/request/${props.requestID}`}
+					size='normal'
+					onClick={() => console.log('onClicked')}
+					// to={`/request/${props.requestID}`}
+					disabled
 				>
 					Start
-				</JoinButton>
+				</ThemeButton>
 			</Footer>
 		</RequestCardWrapper>
 	);
