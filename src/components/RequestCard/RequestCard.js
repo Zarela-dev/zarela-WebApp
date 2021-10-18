@@ -31,6 +31,7 @@ import useBiobit from '../../hooks/useBiobit';
 import { Header, BodyText } from './../Elements/Typography';
 import { ThemeButton } from './../Elements/Button';
 import { ThemeDivider } from './../Elements/Divider';
+import { IdLabel } from '../Elements/IdLabel';
 
 const RequestCard = (props) => {
 	const getBBIT = useBiobit();
@@ -38,11 +39,7 @@ const RequestCard = (props) => {
 	return (
 		<RequestCardWrapper data-tour='request-list-one'>
 			<HeaderLayout>
-				<RequestNumber data-tour='request-list-two'>
-					<Header variant='heading3' az='h3' color='white'>
-						{props.requestID}
-					</Header>
-				</RequestNumber>
+				<IdLabel data-tour='request-list-two'>{props.requestID}</IdLabel>
 				<Header variant='heading4' as='h4' data-tour='request-list-three'>
 					{props.title.length < 85
 						? props.title
@@ -50,7 +47,7 @@ const RequestCard = (props) => {
 				</Header>
 				<Spacer />
 			</HeaderLayout>
-			<BodyText variant='timestamp' as='span' ml={120} mb={15}>
+			<BodyText variant='timestamp' as='span' ml={90} mb={15}>
 				{props.timestamp}
 			</BodyText>
 			<Description>

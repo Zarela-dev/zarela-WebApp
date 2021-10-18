@@ -27,7 +27,7 @@ const HeadingComponent = styled(Heading)(
 	compose(space, layout, color, fontWeight),
 	{
 		boxSizing: 'border-box',
-		fontFamily: 'Krub'
+		fontFamily: 'Krub',
 	},
 	variant({
 		prop: 'variant',
@@ -36,7 +36,7 @@ const HeadingComponent = styled(Heading)(
 				fontSize: [3, 1, 0],
 				lineHeight: [4, 2, 0],
 				fontFamily: 'LeagueGothic',
-				letterSpacing: '2px'
+				letterSpacing: '2px',
 			},
 			heading2: {
 				fontSize: [4, 2, 1],
@@ -65,7 +65,7 @@ const HeadingComponent = styled(Heading)(
 const TextComponent = styled(Text)(
 	compose(space, layout, color),
 	{
-		fontFamily: 'Krub'
+		fontFamily: 'Krub',
 	},
 	variant({
 		prop: 'variant',
@@ -95,7 +95,7 @@ const TextComponent = styled(Text)(
 				whiteSpace: 'nowrap',
 			},
 			hint: {
-				fontSize: [7,6,5],
+				fontSize: [9, 8, 7],
 				lineHeight: [9],
 				whiteSpace: 'nowrap',
 				textAlign: 'center',
