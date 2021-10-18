@@ -30,6 +30,7 @@ import documentsIcon from '../../assets/icons/document-blue.svg';
 import useBiobit from '../../hooks/useBiobit';
 import { Header, BodyText } from './../Elements/Typography';
 import { ThemeButton } from './../Elements/Button';
+import { ThemeDivider } from './../Elements/Divider';
 
 const RequestCard = (props) => {
 	const getBBIT = useBiobit();
@@ -102,7 +103,7 @@ const RequestCard = (props) => {
 						</BodyText>
 					</BadgeRow>
 				</ContributorBadge>
-				<Divider />
+				<ThemeDivider variant='vertical' />
 				<ContributorBadge data-tour='request-list-six'>
 					<BadgeRow>
 						<ContributorsIcon src={contributorIcon} />
@@ -121,9 +122,9 @@ const RequestCard = (props) => {
 					data-tour='request-list-seven'
 					variant='secondary'
 					size='normal'
-					onClick={() => console.log('onClicked')}
-					// to={`/request/${props.requestID}`}
-					disabled
+					// onClick={() => console.log('onClicked')}
+					to={`/request/${props.requestID}`}
+					// disabled
 				>
 					Start
 				</ThemeButton>

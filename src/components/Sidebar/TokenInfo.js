@@ -7,13 +7,13 @@ import {
 	Icon,
 	Row,
 	Subtitle,
-	Divider,
 	ConnectButton,
 } from './Elements';
 import { Spacer } from '../Elements/Spacer';
 import { injectedConnector } from '../../connectors';
 import { useWeb3React } from '@web3-react/core';
 import { Header, BodyText } from './../Elements/Typography';
+import { ThemeDivider } from './../Elements/Divider';
 
 const Sidebar = ({ data, account }) => {
 	const { activate } = useWeb3React();
@@ -48,7 +48,7 @@ const Sidebar = ({ data, account }) => {
 				</Subtitle>
 				<BodyText ml={2}>BBit</BodyText>
 			</Row>
-			<Divider />
+			<ThemeDivider variant='horizontal' />
 			<HeaderWrapper>
 				<Icon src={walletBlack} />
 				<Header variant='heading5'>Wallet Info</Header>
