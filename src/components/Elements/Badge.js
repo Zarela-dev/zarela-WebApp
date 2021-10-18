@@ -41,6 +41,7 @@ export const Badge = (props) => {
 				variant='small'
 				fontWeight='semiBold'
 				color='white'
+				whiteSpace='nowrap'
 				fontSize={[7, 5]}
 				lineHeight={[15, 12]}
 			>
