@@ -16,7 +16,7 @@ const theme = (darkMode) => {
 
 			bgWhite: '#FFFFFF',
 			bgDisabled: '#F4F8FE',
-
+			bgBadge: '#D13ADE',
 
 			btnSecondary: darkMode ? '#fff' : '#fff',
 			btnSecondaryHover: darkMode ? '#F6F5FF' : '#F6F5FF',
@@ -63,6 +63,7 @@ const theme = (darkMode) => {
 			'18.2px', //12
 			'16.8px', //13
 			'16px', //14
+			'11.61px', //15
 		],
 		fontWeights: {
 			bold: 700,

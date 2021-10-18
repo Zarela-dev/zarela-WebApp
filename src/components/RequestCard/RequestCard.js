@@ -30,6 +30,7 @@ import documentsIcon from '../../assets/icons/document-blue.svg';
 import useBiobit from '../../hooks/useBiobit';
 import { Header, BodyText } from './../Elements/Typography';
 import { ThemeButton } from './../Elements/Button';
+import { Badge } from '../Elements/Badge';
 
 const RequestCard = (props) => {
 	const getBBIT = useBiobit();
