@@ -32,6 +32,7 @@ import { Header, BodyText } from './../Elements/Typography';
 import { ThemeButton } from './../Elements/Button';
 import { ThemeDivider } from './../Elements/Divider';
 import { IdLabel } from '../Elements/IdLabel';
+import { ThemeTag } from '../Elements/Tag';
 
 const RequestCard = (props) => {
 	const getBBIT = useBiobit();
@@ -59,9 +60,7 @@ const RequestCard = (props) => {
 				<TagsWrapper>
 					{props.categories.split(',').map((item) => {
 						return (
-							<TagItem key={item}>
-								<BodyText variant='tag'>#{item}</BodyText>
-							</TagItem>
+							<ThemeTag variant='display' item={item} />
 						);
 					})}
 				</TagsWrapper>
