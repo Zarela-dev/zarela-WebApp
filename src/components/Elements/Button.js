@@ -1,13 +1,8 @@
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { space, layout, color, background, compose } from 'styled-system';
+import { space, layout, color, compose } from 'styled-system';
 import { variant } from 'styled-system';
-import {
-	Button as RebassButton,
-	Box,
-	Link as RebassLink,
-} from 'rebass/styled-components';
-// import { Button } from 'rebass';
+import { Button as RebassButton, Box } from 'rebass/styled-components';
 
 function getBackground(props) {
 	if (props.disabled)

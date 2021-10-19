@@ -46,6 +46,13 @@ const theme = (darkMode) => {
 			error: '#F62D76',
 			success: '#3ADEA3',
 		},
+		forms: {
+			largeInput: {
+				fontSize: 3,
+				px: 3,
+				py: 2,
+			}
+		},
 		fontSizes: [56, 48, 32, 24, 20, 18, 16, 14, 12, 10],
 		lineHeights: [
 			'61.6px', //0

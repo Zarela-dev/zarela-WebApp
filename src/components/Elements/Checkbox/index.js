@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import tick from '../../../assets/icons/tick.svg';
+import tick from '../../../assets/icons/tick.svg'
 
 const CheckboxContainer = styled.div`
 	margin-right: ${(props) => (!props.small ? props.theme.spacing(1.5) : props.theme.spacing(1))};
 	margin-bottom: ${(props) => (!props.small ? props.theme.spacing(2.5) : 0)};
 	cursor: pointer;
 `;
+
 
 const Icon = styled.img`
 	margin: 0 auto;

@@ -2,27 +2,18 @@ import React from 'react';
 import RequestCardWrapper, {
 	Footer,
 	HeaderLayout,
-	RequestNumber,
 	Spacer,
 	Divider,
 	Description,
-	Timestamp,
 	ContributorBadge,
 	ContributorsIcon,
 	BiobitToDollarPair,
 	BadgeRow,
 	TokenIcon,
 	TagsWrapper,
-	TagItem,
-	TokenValue,
-	JoinButton,
-	BiobitToDollarValue,
 	ProgressTrackerWrapper,
 	ProgressTrackerTrack,
 	ProgressTrackerProcess,
-	ValueLabel,
-	BadgeLabel,
-	Hint,
 } from './../Elements/RequestCard';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/user-blue.svg';
@@ -59,9 +50,7 @@ const RequestCard = (props) => {
 				</BodyText>
 				<TagsWrapper>
 					{props.categories.split(',').map((item) => {
-						return (
-							<ThemeTag variant='display' item={item} />
-						);
+						return <ThemeTag variant='display' item={item} />;
 					})}
 				</TagsWrapper>
 			</Description>
@@ -116,7 +105,7 @@ const RequestCard = (props) => {
 				<Spacer />
 				<ThemeButton
 					data-tour='request-list-seven'
-					variant='secondary'
+					variant='primary'
 					size='normal'
 					// onClick={() => console.log('onClicked')}
 					to={`/request/${props.requestID}`}
