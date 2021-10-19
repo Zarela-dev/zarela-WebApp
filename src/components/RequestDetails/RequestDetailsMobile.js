@@ -159,8 +159,8 @@ const RequestDetailsMobile = ({ setError, zpaperDownloadLink, error, request }) 
 							<CustomBadgeRow>
 								<TokenIcon src={biobitIcon} />
 								<TokenValue>
-									{getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[0]} ({+request.angelTokenPay}{' '}
-									Angel + {+request.laboratoryTokenPay} Hub)
+									{getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[0]} ({request.angelTokenPay} Angel +{' '}
+									{request.laboratoryTokenPay} Hub)
 								</TokenValue>
 								<BiobitToDollarValue noMargin>{`~ $${
 									getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[1]
@@ -183,9 +183,7 @@ const RequestDetailsMobile = ({ setError, zpaperDownloadLink, error, request }) 
 						</CustomFooter>
 						<CustomProgressTrackerWrapper>
 							<ProgressTrackerTrack>
-								<ProgressTrackerProcess
-									progress={(+request.totalContributed / +request.totalContributors) * 100}
-								/>
+								<ProgressTrackerProcess progress={(+request.totalContributed / +request.totalContributors) * 100} />
 							</ProgressTrackerTrack>
 						</CustomProgressTrackerWrapper>
 					</HeaderInner>

@@ -30,6 +30,7 @@ if (process.env.NODE_ENV === 'production') {
 	}
 }
 
+console.log(process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS)
 ReactDOM.render(
 	<React.StrictMode>
 		<App />

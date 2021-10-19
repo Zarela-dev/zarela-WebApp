@@ -92,7 +92,7 @@ const RequestDetailsPage = () => {
 						error,
 						setError,
 						zpaperDownloadLink: zpaperDownloadLink
-							? process.env.REACT_APP_IPFS_LINK + zpaperDownloadLink
+							? process.env.REACT_APP_IPFS_GET_LINK + zpaperDownloadLink
 							: null,
 					}}
 				/>
@@ -103,7 +103,7 @@ const RequestDetailsPage = () => {
 						error,
 						setError,
 						zpaperDownloadLink: zpaperDownloadLink
-							? process.env.REACT_APP_IPFS_LINK + zpaperDownloadLink
+							? process.env.REACT_APP_IPFS_GET_LINK + zpaperDownloadLink
 							: null,
 					}}
 				/>

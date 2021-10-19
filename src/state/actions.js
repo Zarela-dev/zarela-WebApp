@@ -1,6 +1,7 @@
 import getWeb3 from '../getFallbackWeb3';
 import { actionTypes } from './actionTypes';
 import axios from 'axios';
+import ZarelaContractABI from '../abi/ZarelaSmartContract.json';
 
 export const getZarelaCurrentDay = (dispatch, contract) => {
 	contract.methods.zarelaDayCounter().call((error, data) => {
@@ -18,7 +19,7 @@ export const getZarelaCurrentDay = (dispatch, contract) => {
 export const configureWeb3 = async (dispatch, web3Library) => {
 	try {
 		const ZarelaContract = new web3Library.eth.Contract(
-			JSON.parse(process.env.REACT_APP_ZARELA_CONTRACT_ABI),
+			ZarelaContractABI,
 			process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS
 		);
 
@@ -40,10 +41,7 @@ export const configureFallbackWeb3 = async (dispatch) => {
 	try {
 		const web3 = await getWeb3();
 
-		const ZarelaContract = new web3.eth.Contract(
-			JSON.parse(process.env.REACT_APP_ZARELA_CONTRACT_ABI),
-			process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS
-		);
+		const ZarelaContract = new web3.eth.Contract(ZarelaContractABI, process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS);
 
 		dispatch({
 			type: actionTypes.SET_FALLBACK_WEB3,

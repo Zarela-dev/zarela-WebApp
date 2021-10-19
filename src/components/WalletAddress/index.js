@@ -7,14 +7,14 @@ import BlockAddress from './BlockAddress';
 import HideAddress from './HideAddress';
 import { Wrapper, AddressWrapper, PublicKeyIcon, Address, ActionsWrapper } from './Elements';
 
-const WalletAddress = ({ className, publicKey, showIcons = true, requestID }) => {
+const WalletAddress = ({ className, publicKey, showIcons = true, icons = ['contact', 'hide', 'block'], requestID, iconImage }) => {
 	const { localState } = useContext(localStorageContext);
 	const { contacts } = localState;
 
 	return (
 		<Wrapper className={className}>
 			<AddressWrapper>
-				<PublicKeyIcon src={publicKeyIcon} />
+				<PublicKeyIcon src={iconImage || publicKeyIcon} />
 				<CopyableText textToCopy={publicKey}>
 					<Address>
 						{contacts[normalizeAddress(publicKey)]
@@ -25,9 +25,9 @@ const WalletAddress = ({ className, publicKey, showIcons = true, requestID }) =>
 			</AddressWrapper>
 			{showIcons && (
 				<ActionsWrapper>
-					<AddContact publicKey={publicKey} />
-					<BlockAddress publicKey={publicKey} />
-					<HideAddress publicKey={publicKey} requestID={requestID} />
+					{icons.includes('contact') && <AddContact publicKey={publicKey} />}
+					{icons.includes('hide') && <BlockAddress publicKey={publicKey} />}
+					{icons.includes('block') && <HideAddress publicKey={publicKey} requestID={requestID} />}
 				</ActionsWrapper>
 			)}
 		</Wrapper>
