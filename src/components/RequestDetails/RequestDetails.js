@@ -149,7 +149,6 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 	const [signalFile, setSignalFile] = useState(null);
 	const getBBIT = useBiobit();
 
-	console.log(request.laboratoryTokenPay);
 	return (
 		<PageWrapper>
 			<HeaderContainer>

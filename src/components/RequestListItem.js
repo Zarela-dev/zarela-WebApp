@@ -31,6 +31,7 @@ import Dialog from './Dialog';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import worker from 'workerize-loader!../workers/decrypt.js';
 import { saveAs } from 'file-saver';
+import useBiobit from '../hooks/useBiobit';
 
 const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
@@ -176,6 +177,7 @@ const RequestListItem = ({
 	const { account } = useWeb3React();
 	const [isSubmitting, setSubmitting] = useState(false);
 	const [dialogMessage, setDialogMessage] = useState('');
+	const getBBIT = useBiobit();
 
 	const getPendingIndexes = useCallback(
 		(requestID) => {
@@ -502,10 +504,12 @@ const RequestListItem = ({
 					<BiobitToDollarPair>
 						<BadgeRow>
 							<TokenIcon src={biobitIcon} />
-							<TokenValue>{+angelTokenPay + +laboratoryTokenPay}</TokenValue>
+							<TokenValue>{getBBIT(angelTokenPay, laboratoryTokenPay)[0]}</TokenValue>
 							<ValueLabel>BBit</ValueLabel>
 							{/* for this version, we combine both numbers, later both will be shown separately */}
-							<BiobitToDollarValue noMargin>{`~ $${+angelTokenPay + +laboratoryTokenPay}`}</BiobitToDollarValue>
+							<BiobitToDollarValue noMargin>{`~ $${
+								getBBIT(angelTokenPay, laboratoryTokenPay)[1]
+							}`}</BiobitToDollarValue>
 						</BadgeRow>
 					</BiobitToDollarPair>
 					<Divider />

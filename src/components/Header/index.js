@@ -385,7 +385,7 @@ export default function Header({ isMobile }, props) {
 							) : routeGroup === 'wallet' ? (
 								<WalletTitlebar isMobile={appState.isMobile}>
 									<Title>Wallet</Title>
-									<Balance>{`Balance: ${+appState.biobitBalance} BBit`}</Balance>
+									<Balance>{`Balance: ${appState.biobitBalance} BBit`}</Balance>
 								</WalletTitlebar>
 							) : routeGroup === 'log' ? (
 								<WalletTitlebar isMobile={appState.isMobile}>
@@ -503,7 +503,7 @@ export default function Header({ isMobile }, props) {
 						{routeGroup === 'wallet' ? (
 							<WalletTitlebar>
 								<Title>Wallet</Title>
-								<Balance>{`Balance: ${+appState.biobitBalance} BBit`}</Balance>
+								<Balance>{`Balance: ${appState.biobitBalance} BBit`}</Balance>
 							</WalletTitlebar>
 						) : routeGroup === 'log' ? (
 							<WalletTitlebar isMobile={appState.isMobile}>
