@@ -111,3 +111,8 @@ export const Header = (props) => {
 export const BodyText = (props) => {
 	return <TextComponent fontWeight='Regular' {...props}></TextComponent>;
 };
+
+
+// export const test = () => {
+// 	return <Text mt='2px' color='textColor' >test </Text>
+// }

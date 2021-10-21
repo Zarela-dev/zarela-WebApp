@@ -18,14 +18,15 @@ const TagWrapper = styled(Box)(
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
-		margin: '0 5px',
+		marginRight: '5px',
+		marginTop: '10px',
 		padding: '2px 5px',
 	},
 	variant({
 		prop: 'variant',
 		variants: {
 			selected: {
-        background: '',
+				background: '',
 			},
 			selectList: {
 				background: '',

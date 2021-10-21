@@ -24,6 +24,7 @@ import { ThemeButton } from './../Elements/Button';
 import { ThemeDivider } from './../Elements/Divider';
 import { IdLabel } from '../Elements/IdLabel';
 import { ThemeTag } from '../Elements/Tag';
+import { ThemeIcon } from '../Elements/Icon';
 
 const RequestCard = (props) => {
 	const getBBIT = useBiobit();
@@ -43,7 +44,7 @@ const RequestCard = (props) => {
 				{props.timestamp}
 			</BodyText>
 			<Description>
-				<BodyText variant='big'>
+				<BodyText variant='small'>
 					{props.description.length < 320
 						? props.description
 						: props.description.substr(0, 320) + '...'}
@@ -62,7 +63,7 @@ const RequestCard = (props) => {
 			<Footer>
 				<BiobitToDollarPair data-tour='request-list-four'>
 					<BadgeRow>
-						<TokenIcon src={biobitIcon} />
+						<ThemeIcon variant='normal' src={biobitIcon} />
 						<BodyText variant='hint' fontWeight='bold' pr={1}>
 							{getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[0]}
 						</BodyText>
@@ -77,7 +78,7 @@ const RequestCard = (props) => {
 				<Divider />
 				<ContributorBadge data-tour='request-list-five'>
 					<BadgeRow>
-						<ContributorsIcon src={documentsIcon} />
+						<ThemeIcon variant='normal' src={documentsIcon} />
 						<BodyText variant='hint' color='textToken' fontWeight='bold'>
 							{props.contributors}
 						</BodyText>
@@ -91,7 +92,7 @@ const RequestCard = (props) => {
 				<ThemeDivider variant='vertical' />
 				<ContributorBadge data-tour='request-list-six'>
 					<BadgeRow>
-						<ContributorsIcon src={contributorIcon} />
+						<ThemeIcon variant='normal' src={contributorIcon} />
 						<BodyText variant='hint' color='textToken' fontWeight='bold'>
 							{props.totalContributedCount}
 						</BodyText>
@@ -107,9 +108,7 @@ const RequestCard = (props) => {
 					data-tour='request-list-seven'
 					variant='primary'
 					size='normal'
-					// onClick={() => console.log('onClicked')}
 					to={`/request/${props.requestID}`}
-					// disabled
 				>
 					Start
 				</ThemeButton>

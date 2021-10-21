@@ -1,76 +1,34 @@
-import React, { useContext } from 'react';
-import styled from 'styled-components';
+import React from 'react';
 import RequestCardWrapper, {
-	Footer,
 	HeaderLayout,
-	RequestNumber,
-	Typography,
-	Title,
 	Spacer,
-	Divider,
 	Description,
-	Timestamp,
-	ContributorBadge,
-	ContributorsIcon,
-	BadgeRow,
-	TokenIcon,
-	TokenValue,
-	JoinButton,
 	ProgressTrackerWrapper,
 	ProgressTrackerTrack,
 	ProgressTrackerProcess,
-	BadgeLabel,
 } from '../Elements/RequestCard/IndexMobile';
 import { TagsWrapper, TagItem } from '../Elements/RequestCard';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/user-black.svg';
 import documentsIcon from '../../assets/icons/document-black.svg';
-import { mainContext } from '../../state';
 import useBiobit from '../../hooks/useBiobit';
 import { Header, BodyText } from './../Elements/Typography';
-
-const BiobitToDollarValue = styled.div`
-	position: absolute;
-	bottom: -5px;
-	left: 1px;
-	font-weight: 600;
-	font-size: 9.5px;
-	line-height: 0px;
-	color: #3a68de;
-	margin-right: 2px;
-	margin-left: 8px;
-	white-space: nowrap;
-	margin-left: ${(props) =>
-		props.noMargin ? props.theme.spacing(1) : props.theme.spacing(0.8)};
-	white-space: nowrap;
-`;
-
-const BiobitToDollarPair = styled.div`
-	position: relative;
-	bottom: 0;
-	padding-right: 9px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	align-self: self-start;
-	width: fit-content;
-`;
+import { IdLabel } from './../Elements/IdLabel';
+import { ThemeIcon } from './../Elements/Icon';
+import { ThemeTag } from './../Elements/Tag';
+import { ThemeButton } from './../Elements/Button';
+import { Flex } from 'reflexbox';
+import { ThemeDivider } from './../Elements/Divider';
 
 const RequestCardMobile = (props) => {
-	const { appState } = useContext(mainContext);
 	const getBBIT = useBiobit();
 
 	return (
 		<RequestCardWrapper data-tour='request-list-one'>
 			<HeaderLayout>
-				<RequestNumber
-					data-tour='request-list-two'
-					isMobile={appState.isMobile}
-				>
-					<Header variant='heading3' as='h3' color='white'>
-						{props.requestID}
-					</Header>
-				</RequestNumber>
+				<IdLabel variant='big' data-tour='request-list-two'>
+					{props.requestID}
+				</IdLabel>
 				<Header variant='heading3' as='h3' data-tour='request-list-three'>
 					{props.title.length < 70
 						? props.title
@@ -82,18 +40,14 @@ const RequestCardMobile = (props) => {
 				{props.timestamp}
 			</BodyText>
 			<Description>
-				<Typography variant='body'>
+				<BodyText variant='small'>
 					{props.description.length < 120
 						? props.description
 						: props.description.substr(0, 120) + '...'}
-				</Typography>
+				</BodyText>
 				<TagsWrapper>
 					{props.categories.split(',').map((item) => {
-						return (
-							<TagItem key={item}>
-								<BodyText variant='tag'>#{item}</BodyText>
-							</TagItem>
-						);
+						return <ThemeTag variant='display' item={item} />;
 					})}
 				</TagsWrapper>
 			</Description>
@@ -102,46 +56,66 @@ const RequestCardMobile = (props) => {
 					<ProgressTrackerProcess progress={props.progress} />
 				</ProgressTrackerTrack>
 			</ProgressTrackerWrapper>
-			<Footer>
-				<BiobitToDollarPair data-tour='request-list-four'>
-					<BadgeRow>
-						<TokenIcon src={biobitIcon} />
-						<BodyText variant='hint' fontWeight='bold' pr={0.5}>
-							{getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[0]}
-						</BodyText>
-					</BadgeRow>
-					<BadgeRow>
-						<BodyText variant='hint' color='textToken' pr={0.5} active>{`~ $${
-							getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[1]
-						}`}</BodyText>
-					</BadgeRow>
-				</BiobitToDollarPair>
-				<Divider />
-				<ContributorBadge data-tour='request-list-five'>
-					<BadgeRow>
-						<ContributorsIcon src={documentsIcon} />
+			<Flex
+				width='100%'
+				mt={2}
+				flexDirection='row'
+				justifyContent='space-between'
+				alignItems='center'
+			>
+				<Flex>
+					<Flex
+						flexWrap='wrap'
+						flexDirection='column'
+						justifyContent='center'
+						data-tour='request-list-four'
+					>
+						<Flex alignItems='center'>
+							<ThemeIcon variant='small' src={biobitIcon} />
+							<BodyText variant='hint' fontWeight='bold' pr={0.5}>
+								{getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[0]}
+							</BodyText>
+						</Flex>
+						<Flex alignItems='center'>
+							<BodyText variant='hint' color='textToken' pr={0.5} active>{`~ $${
+								getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[1]
+							}`}</BodyText>
+						</Flex>
+					</Flex>
+
+					<ThemeDivider variant='vertical' />
+
+					<Flex
+						alignSelf='center'
+						width='fit-content'
+						data-tour='request-list-five'
+					>
+						<ThemeIcon variant='small' src={documentsIcon} />
 						<BodyText variant='hint' fontWeight='bold'>
 							{props.contributors}
 						</BodyText>
-					</BadgeRow>
-				</ContributorBadge>
-				<Divider />
-				<ContributorBadge data-tour='request-list-six'>
-					<BadgeRow>
-						<ContributorsIcon src={contributorIcon} />
+					</Flex>
+					<ThemeDivider variant='vertical' />
+					<Flex
+						alignSelf='center'
+						width='fit-content'
+						data-tour='request-list-six'
+					>
+						<ThemeIcon variant='small' src={contributorIcon} />
 						<BodyText variant='hint' fontWeight='bold'>
 							{props.totalContributedCount}
 						</BodyText>
-					</BadgeRow>
-				</ContributorBadge>
-				<JoinButton
+					</Flex>
+				</Flex>
+				<ThemeButton
 					data-tour='request-list-seven'
 					variant='secondary'
+					size='small'
 					to={`/request/${props.requestID}`}
 				>
 					Start
-				</JoinButton>
-			</Footer>
+				</ThemeButton>
+			</Flex>
 		</RequestCardWrapper>
 	);
 };

@@ -8,7 +8,6 @@ import TextField, { Error } from './../Elements/TextField';
 import ReactSelect from './../ReactSelect';
 import FeeEstimation from './FeeEstimation';
 import { actionTypes } from '../../state';
-import FormInput from './../Elements/FormInput';
 
 const FormWrapper = styled.div`
 	width: 100%;
@@ -166,21 +165,6 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 	return (
 		<FormWrapper>
 			<Form onSubmit={formik.handleSubmit}>
-				{/* <FormInput
-				variant='largeInput'
-					placeholder={'write main topics in your study'}
-					label='Title *'
-					type='text'
-					name={'title'}
-					error={formik.errors?.title}
-					value={formik.values.title}
-					onChange={(e) => {
-						formik.setFieldValue('title', e.target.value);
-						setEstimateEthFee(
-							estimateFeeHandler(e.target.value, formik.values)
-						);
-					}}
-				/> */}
 				{children}
 				<TextField
 					placeholder={'write main topics in your study'}

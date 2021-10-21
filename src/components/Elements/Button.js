@@ -166,7 +166,7 @@ const ButtonWrapper = styled(Box)(
 			},
 			secondary: {
 				background: 'linear-gradient(226.69deg, #85CEEE 10.5%, #A687FD 86.82%)',
-				padding: '2px',
+				padding: '1px',
 				'&:hover': {
 					background: 'linear-gradient(180deg, #4787F3 0%, #7246D0 100%)',
 				},
@@ -213,7 +213,7 @@ const CustomizedButton = styled(RebassButton)(
 		prop: 'variant',
 		variants: {
 			primary: {
-				background: 'linear-gradient(226.69deg, #85CEEE 10.5%, #A687FD 86.82%)',
+				background: 'testColor',
 				color: 'textPrimary',
 				fontWeight: 'semiBold',
 				'&:hover': {

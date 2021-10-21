@@ -23,14 +23,15 @@ const IdLabelWrapper = styled(Box)(
 	{
 		'@media screen and (max-width: 64em)': {
 			height: 'fit-content',
-			borderRadius: '10px 10px 0px 10px',
+			borderRadius: '5px 5px 0px 5px',
+			padding: '5px 10px',
 		},
 	}
 );
 
 export const IdLabel = (props) => {
 	return (
-		<Box pr={[4]}>
+		<Box pr={[3, 4]}>
 			<IdLabelWrapper {...props}>
 				<Header
 					variant='heading4'

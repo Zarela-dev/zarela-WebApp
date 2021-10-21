@@ -16,17 +16,21 @@ const IconWrapper = styled(Image)(
 		prop: 'variant',
 		variants: {
 			big: {
-				maxWidth: ['24px', '33px'],
-				maxHeight: ['24px', '33px'],
+				height: ['32px', '24px'],
+				width: ['32px', '24px'],
+			},
+			normal: {
+				height: ['24px', '16px'],
+				width: ['24px', '16px'],
 			},
 			small: {
-				maxWidth: ['16px', '21px'],
-				maxHeight: ['17px', '22px'],
+				height: ['16px', '16px'],
+				width: ['16px', '16px'],
 			},
 		},
 	})
 );
 
 export const ThemeIcon = (props) => {
-	return <IconWrapper ml={[0, 1, 2]} mr={[0, 1, 2]} {...props} />;
+	return <IconWrapper mr={[0, 1, 2]} {...props} />;
 };
