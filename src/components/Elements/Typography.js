@@ -63,9 +63,10 @@ const HeadingComponent = styled(Heading)(
 );
 
 const TextComponent = styled(Text)(
-	compose(space, layout, color),
+	compose(space, layout, color, fontWeight),
 	{
 		fontFamily: 'Krub',
+		textOverflow: (props) => props.textOverflow,
 	},
 	variant({
 		prop: 'variant',
@@ -83,7 +84,7 @@ const TextComponent = styled(Text)(
 				lineHeight: [9],
 			},
 			timestamp: {
-				fontSize: [7, 7, 6],
+				fontSize: [9, 8, 7],
 				lineHeight: [12, 12, 7],
 				color: 'textTimestamp',
 				whiteSpace: 'nowrap',
@@ -109,10 +110,5 @@ export const Header = (props) => {
 };
 
 export const BodyText = (props) => {
-	return <TextComponent fontWeight='Regular' {...props}></TextComponent>;
+	return <TextComponent fontWeight='regular' as='p' {...props}></TextComponent>;
 };
-
-
-// export const test = () => {
-// 	return <Text mt='2px' color='textColor' >test </Text>
-// }

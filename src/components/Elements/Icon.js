@@ -15,6 +15,10 @@ const IconWrapper = styled(Image)(
 	variant({
 		prop: 'variant',
 		variants: {
+			bigger: {
+				height: ['36px'],
+				width: ['36px'],
+			},
 			big: {
 				height: ['32px', '24px'],
 				width: ['32px', '24px'],

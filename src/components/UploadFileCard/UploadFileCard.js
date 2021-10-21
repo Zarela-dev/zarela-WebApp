@@ -13,8 +13,10 @@ import Dialog from '../Dialog';
 import worker from 'workerize-loader!../../workers/encrypt.js';
 import ContributionForm from './ContributionForm';
 import styled from 'styled-components';
+import { ThemeButton } from './../Elements/Button';
+import { BodyText } from './../Elements/Typography';
 
-const StickyButton = styled(Button)`
+const StickyButton = styled(ThemeButton)`
 	position: fixed;
 	bottom: 70px;
 	left: 50%;
@@ -30,7 +32,16 @@ const StickyButton = styled(Button)`
 const fileInputRef = React.createRef();
 
 const UploadFileCard = (props) => {
-	const { buttonLabel, label, helperText, error, setError, disableUpload, request, isMobile } = props;
+	const {
+		buttonLabel,
+		label,
+		helperText,
+		error,
+		setError,
+		disableUpload,
+		request,
+		isMobile,
+	} = props;
 	const [isContributing, setIsContributing] = useState(false);
 	const [isSubmittingFile, setSubmittingFile] = useState(false);
 	const [hasSpinner, setSpinner] = useState(false);
@@ -51,7 +62,11 @@ const UploadFileCard = (props) => {
 	useEffect(() => {
 		if (isSubmittingFile === false)
 			setDialogMessage(
-				<ContributionForm ref={fileInputRef} submitSignal={submitSignal} fileInputProps={props} />
+				<ContributionForm
+					ref={fileInputRef}
+					submitSignal={submitSignal}
+					fileInputProps={props}
+				/>
 			);
 	}, [fileInputRef.current?.files]);
 
@@ -150,7 +165,8 @@ const UploadFileCard = (props) => {
 												toast(`TX Hash: ${result}`, 'success', true, result, {
 													toastId: result,
 												});
-												if (fileInputRef.current !== null) fileInputRef.current.value = null;
+												if (fileInputRef.current !== null)
+													fileInputRef.current.value = null;
 											} else {
 												clearSubmitDialog();
 												toast(error.message, 'error');
@@ -178,14 +194,19 @@ const UploadFileCard = (props) => {
 					content={dialogMessage}
 					onClose={isClosable ? () => clearSubmitDialog() : false}
 					hasSpinner={hasSpinner}
-					type="success"
+					type='success'
 				/>
 				<StickyButton
-					variant="primary"
+					variant='primary'
+					size='small'
 					onClick={() => {
 						setIsContributing(true);
 						setDialogMessage(
-							<ContributionForm ref={fileInputRef} submitSignal={submitSignal} fileInputProps={props} />
+							<ContributionForm
+								ref={fileInputRef}
+								submitSignal={submitSignal}
+								fileInputProps={props}
+							/>
 						);
 					}}
 				>
@@ -194,13 +215,13 @@ const UploadFileCard = (props) => {
 			</>
 		);
 	return (
-		<Card data-tour="request-details-three">
+		<Card data-tour='request-details-three'>
 			<Dialog
 				isOpen={isContributing}
 				content={dialogMessage}
 				onClose={isClosable ? () => clearSubmitDialog() : false}
 				hasSpinner={hasSpinner}
-				type="success"
+				type='success'
 			/>
 			<CustomFileInput
 				hasBorder
@@ -210,12 +231,18 @@ const UploadFileCard = (props) => {
 				onClick={() => {
 					setIsContributing(true);
 					setDialogMessage(
-						<ContributionForm ref={fileInputRef} submitSignal={submitSignal} fileInputProps={props} />
+						<ContributionForm
+							ref={fileInputRef}
+							submitSignal={submitSignal}
+							fileInputProps={props}
+						/>
 					);
 				}}
 			/>
-			<HelperText>{helperText}</HelperText>
-			{error ? <ErrorText>{error}</ErrorText> : null}
+			<BodyText variant='timestamp' mt={5}>
+				{helperText}
+			</BodyText>
+			{error ? <BodyText variant='timestamp' color='error' mt={5}>{error}</BodyText> : null}
 		</Card>
 	);
 };

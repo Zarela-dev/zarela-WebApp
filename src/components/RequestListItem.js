@@ -31,6 +31,13 @@ import Dialog from './Dialog';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import worker from 'workerize-loader!../workers/decrypt.js';
 import { saveAs } from 'file-saver';
+import { Header, BodyText } from './../components/Elements/Typography';
+import { ThemeDivider } from './../components/Elements/Divider';
+import { IdLabel } from './../components/Elements/IdLabel';
+import { ThemeTag } from './../components/Elements/Tag';
+import { ThemeIcon } from './../components/Elements/Icon';
+import { Row, Col } from './../components/Elements/Flex';
+
 
 const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
@@ -40,7 +47,7 @@ const Wrapper = styled.div`
 	margin-bottom: ${(props) => props.theme.spacing(2)};
 `;
 
-const Header = styled.header`
+const Test = styled.header`
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -491,33 +498,43 @@ const RequestListItem = ({
 	return (
 		<Wrapper>
 			<Dialog isOpen={isSubmitting} content={dialogMessage} hasSpinner type="success" />
-			<Header
+			<Row
 				onClick={() => {
 					setOpen(!isOpen);
 					setAnyOpenBox && setAnyOpenBox(true);
 				}}
+				flexWrap='wrap'
 			>
-				<TitleColumn>
-					<RequestNumberWithPointer>{requestID}</RequestNumberWithPointer>
-					<Title variant="title" weight="semiBold">
-						{title.length < 160 ? title : title.substr(0, 160) + '...'}
-					</Title>
-					<Spacer />
-				</TitleColumn>
 
-				<DetailsColumn>
-					<BiobitToDollarPair>
-						<BadgeRow>
-							<TokenIcon src={biobitIcon} />
-							<TokenValue>{+angelTokenPay + +laboratoryTokenPay}</TokenValue>
-							<ValueLabel>BBit</ValueLabel>
+
+
+				<Col width={2/3}>
+				<Row>
+					<IdLabel>{requestID}</IdLabel>
+					<Header variant="heading4" as='h4' weight="semiBold">
+						{title.length < 160 ? title : title.substr(0, 160) + '...'}
+					</Header>
+					<Spacer />
+					</Row>
+				</Col>
+
+
+
+
+				<Col width={1/3}>
+				<Row justifyContent='flex-end'>
+					<Col>
+						<Row>
+							<ThemeIcon variant='big' src={biobitIcon} />
+							<BodyText variant='small' as='span' fontWeight='bold' mr={1} >{+angelTokenPay + +laboratoryTokenPay}</BodyText>
+							<BodyText variant='small' as='span' mr={2}>BBit</BodyText>
 							{/* for this version, we combine both numbers, later both will be shown separately */}
-							<BiobitToDollarValue noMargin>{`~ $${
+							<BodyText variant='small' as='span' noMargin>{`~ $${
 								+angelTokenPay + +laboratoryTokenPay
-							}`}</BiobitToDollarValue>
-						</BadgeRow>
-					</BiobitToDollarPair>
-					<Divider />
+							}`}</BodyText>
+						</Row>
+					</Col>
+					<ThemeDivider variant='vertical'/>
 					<CustomContributeBadge>
 						<BadgeRow>
 							<ContributorsIcon src={contributorIcon} />
@@ -528,8 +545,25 @@ const RequestListItem = ({
 					<Divider />
 					{fulfilled ? <ApprovedBadge src={fulfilledIcon} /> : <TotalBadge>{unapprovedCount}</TotalBadge>}
 					<ExpandToggle src={!isOpen ? caretDownIcon : caretUpIcon} />
-				</DetailsColumn>
-			</Header>
+					</Row>
+				</Col>
+
+
+
+
+
+
+			</Row>
+
+
+
+
+
+
+
+
+
+
 			{isOpen ? (
 				Object.keys(formattedData).length > 0 ? (
 					<>

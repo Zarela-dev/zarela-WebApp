@@ -72,6 +72,7 @@ const theme = (darkMode) => {
 			'16px', //14
 			'11.61px', //15
 		],
+		radii: [8,4],
 		fontWeights: {
 			bold: 700,
 			semiBold: 500,

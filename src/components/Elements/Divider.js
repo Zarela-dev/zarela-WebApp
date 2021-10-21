@@ -10,7 +10,7 @@ const Divider = styled(Box)(
 			vertical: {
 				background: '#3c87aa',
 				width: '1px',
-				height: '18px',
+				height: ['18px', '35px'],
 				ml: [2, 3, 4],
 				mr: [2, 3, 4],
 				mt: 'auto',

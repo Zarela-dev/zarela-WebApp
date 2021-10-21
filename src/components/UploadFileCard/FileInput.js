@@ -3,13 +3,16 @@ import styled, { css } from 'styled-components';
 import fileDownloadIcon from '../../assets/icons/file-download.svg';
 import fileUploadIcon from '../../assets/icons/file-upload.svg';
 import { Error } from '../Elements/TextField';
+import { ThemeButton } from '../Elements/Button';
+import { BodyText } from './../Elements/Typography';
 
 export const FileInputWithBorder = css`
 	background: #ffffff;
 	border: 1px dashed rgb(58 222 163 / 50%);
 	box-shadow: 0px 4px 18px rgba(223, 236, 255, 0.3);
 	border-radius: 5px;
-	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(1)};
+	padding: ${(props) => props.theme.spacing(1)}
+		${(props) => props.theme.spacing(1)};
 `;
 
 export const FileInputWrapper = styled.div`
@@ -29,7 +32,8 @@ export const FileInputTitle = styled.div`
 	color: ${(props) => props.theme.textPrimary};
 	overflow: hidden;
 
-	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
+	@media only screen and (max-width: ${(props) =>
+			props.theme.tablet_sm_breakpoint}) {
 		font-size: 12px;
 		margin-bottom: ${(props) => props.theme.spacing(1)};
 	}
@@ -55,7 +59,8 @@ export const FileInputLink = styled.a`
 	border-radius: 5.46667px;
 	border: 1px solid #bbbee6;
 	text-decoration: none;
-	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(4)};
+	padding: ${(props) => props.theme.spacing(1)}
+		${(props) => props.theme.spacing(4)};
 	color: #7246d0;
 `;
 
@@ -92,7 +97,8 @@ export const formatLabel = (label) => {
 export const getFileName = (inputRef, fallbackLabel) => {
 	if (inputRef && inputRef.current)
 		if (inputRef.current.files.length)
-			if (inputRef.current.files[0]) return formatLabel(inputRef.current.files[0].name);
+			if (inputRef.current.files[0])
+				return formatLabel(inputRef.current.files[0].name);
 	return formatLabel(fallbackLabel);
 };
 
@@ -169,14 +175,19 @@ const FileInput = forwardRef(
 							<FileInputLabel>
 								{buttonLabel}
 								{!disableUpload ? (
-									<input ref={ref} type="file" style={{ display: 'none' }} {...rest} />
+									<input
+										ref={ref}
+										type='file'
+										style={{ display: 'none' }}
+										{...rest}
+									/>
 								) : null}
 							</FileInputLabel>
 						)}
 						{showSelected ? (
 							<FileInputTitle>
 								{icon === 'download' ? (
-									<FileInputIcon src={fileDownloadIcon} />
+									<FileInputIcon src={fileDownloadIcon} /> 
 								) : (
 									<FileInputIcon src={fileUploadIcon} />
 								)}
@@ -203,12 +214,15 @@ const FileInput = forwardRef(
 				{downLoadLink && (
 					<ContentRow>
 						<DownLoadText>
-							Don’t know how to make your Z-paper? <DownLoadText bold>download the sample</DownLoadText>
+							Don’t know how to make your Z-paper?{' '}
+							<DownLoadText bold>download the sample</DownLoadText>
 						</DownLoadText>
 						<LinkWrapper>
 							<DownLoadLink
-								href={`${process.env.REACT_APP_IPFS_GET_LINK + downLoadLink}?filename=Zpaper-sample.zip`}
-								target="_blank"
+								href={`${
+									process.env.REACT_APP_IPFS_GET_LINK + downLoadLink
+								}?filename=Zpaper-sample.zip`}
+								target='_blank'
 							>
 								DownLoad
 							</DownLoadLink>

@@ -190,22 +190,32 @@ const CustomizedButton = styled(RebassButton)(
 			large: {
 				width: '190px',
 				height: '50px',
+				fontSize: [4],
+				lineHeight: [6],
 			},
 			normal: {
 				width: '150px',
 				height: '40px',
+				fontSize: [4],
+				lineHeight: [6],
 			},
 			medium: {
 				width: '125px',
 				height: '34px',
+				fontSize: [6],
+				lineHeight: [10],
 			},
 			small: {
 				maxWidth: '101px',
 				maxHeight: '32px',
+				fontSize: [7],
+				lineHeight: [14],
 			},
 			extraSmall: {
 				maxWidth: '78px',
 				maxHeight: '24px',
+				fontSize: [8],
+				lineHeight: [14],
 			},
 		},
 	}),
@@ -213,7 +223,7 @@ const CustomizedButton = styled(RebassButton)(
 		prop: 'variant',
 		variants: {
 			primary: {
-				background: 'testColor',
+				background: 'linear-gradient(226.69deg, #85CEEE 10.5%, #A687FD 86.82%)',
 				color: 'textPrimary',
 				fontWeight: 'semiBold',
 				'&:hover': {
