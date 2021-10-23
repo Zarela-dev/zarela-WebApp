@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Tab, Tabs as RaTabs, TabList, TabPanel } from 'react-tabs';
 import maxWidthWRapper from '../Elements/MaxWidth';
 import { Route, useHistory } from 'react-router-dom';
+import { Header } from './../Elements/Typography'
 
 const TabsWrapper = styled(RaTabs)`
 	${maxWidthWRapper};
@@ -89,7 +90,7 @@ export const Tabs = ({ data, isMobile, route }) => {
 						tabIndex={tab.label}
 						key={tab.label}
 					>
-						{tab.label}
+						<Header variant='heading5' fontWeight='semiBold'>{tab.label}</Header>
 					</TabsHeaderItem>
 				))}
 			</TabsHeader>

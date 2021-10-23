@@ -86,7 +86,7 @@ const theme = (darkMode) => {
 		},
 		space: [2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 80, 120],
 		elevations: {
-			e1: '0px -3px 14px rgba(81, 197, 234, 0.15)',
+			e1: '0px -3px 14px red',
 			e2: '0px 0px 20px rgba(81, 197, 234, 0.16)',
 			e3: '0px 4px 20px rgba(81, 197, 234, 0.1)',
 			e4: '0px 6px 20px rgba(81, 197, 234, 0.15)',

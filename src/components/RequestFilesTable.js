@@ -13,6 +13,13 @@ import caretUpIcon from '../assets/icons/caret-up.svg';
 import pendingFileSpinner from '../assets/loader/pending-file-spinner.svg';
 import WalletAddress from './WalletAddress';
 import { localStorageContext } from '../state/localStorageProvider/LocalStoragePriveder';
+import { Header, BodyText } from './../components/Elements/Typography';
+import { ThemeDivider } from './../components/Elements/Divider';
+import { IdLabel } from './../components/Elements/IdLabel';
+import { ThemeIcon } from './../components/Elements/Icon';
+import { Row, Col } from './../components/Elements/Flex';
+import { ApproveBadge } from './../components/Elements/ApproveBadge';
+import { ThemeButton } from './../components/Elements/Button';
 
 const Table = styled.div`
 	display: flex;
@@ -39,34 +46,12 @@ const CellWrapper = styled.div`
 	}
 `;
 
-const EmptyRowMessage = styled.div`
-	flex: 1;
-	padding: ${(props) => props.theme.spacing(2)};
-	background: white;
-`;
-
-const Row = styled.section`
-	display: flex;
-	margin-bottom: 4px;
-
-	${CellWrapper}:first-of-type {
-		flex: 0 0 62px;
-	}
-
-	${CellWrapper}:nth-of-type(2) {
-		flex: 0 0 500px;
-	}
-
-	${CellWrapper}:nth-of-type(3) {
-		flex: 1 0 auto;
-	}
-`;
-
 const CellStyles = css`
 	display: flex;
 	align-items: center;
 	min-height: 48px;
-	padding: ${(props) => props.theme.spacing(0.6)} ${(props) => props.theme.spacing(1)};
+	padding: ${(props) => props.theme.spacing(0.6)}
+		${(props) => props.theme.spacing(1)};
 	font-size: 12px;
 	height: 40px;
 	width: 100%;
@@ -84,12 +69,6 @@ const Cell = styled.div`
 
 const Address = styled(WalletAddress)`
 	${CellStyles};
-`;
-
-const PublicKeyIcon = styled.img`
-	flex: 0 0 40px;
-	height: 40px;
-	margin-right: ${(props) => props.theme.spacing(1)};
 `;
 
 const CustomCheckbox = styled(SmallCheckbox)`
@@ -257,7 +236,10 @@ const RequestFilesTable = ({
 
 			for (let i = 0; i < Object.values(pendingFiles.pending).length; i++) {
 				const item = Object.values(pendingFiles.pending)[i];
-				if (item.requestID === requestID && item.originalIndexes.includes(originalIndex)) {
+				if (
+					item.requestID === requestID &&
+					item.originalIndexes.includes(originalIndex)
+				) {
 					status = 'pending';
 					break;
 				}
@@ -272,31 +254,33 @@ const RequestFilesTable = ({
 
 	// filter blocked
 	Object.keys(data).forEach((address) => {
-		if (blockList.find((item) => item.toLowerCase() === address.toLowerCase())) delete renderableData[address];
+		if (blockList.find((item) => item.toLowerCase() === address.toLowerCase()))
+			delete renderableData[address];
 	});
 
 	//filter hidden
 	Object.keys(data).forEach((address) => {
-		if (hideList[address.toLowerCase()]?.includes(requestID.toString())) delete renderableData[address];
+		if (hideList[address.toLowerCase()]?.includes(requestID.toString()))
+			delete renderableData[address];
 	});
 
 	if (Object.keys(renderableData).length === 0)
 		return (
-			<Table>
-				<Row>
-					<EmptyRowMessage>You do not have any visible requests here.</EmptyRowMessage>
-				</Row>
-			</Table>
+			<Row mt={4} bg='white'>
+				<BodyText variant='small' p={4}>
+					You do not have any visible requests here.
+				</BodyText>
+			</Row>
 		);
 	return (
 		<Table>
-			<Row>
-				<CellWrapper>
-					<Cell data-tour="inbox-three">
+			<Row width='100%'>
+				<CellWrapper flex={'0 0 5%'}>
+					<Cell data-tour='inbox-three'>
 						{isAllApproved() === 'approved' ? (
-							<ConfirmedIcon src={confirmIcon} noMargin />
+							<ThemeIcon variant='big' src={confirmIcon} />
 						) : isAllApproved() === 'pending' ? (
-							<PendingFileIcon src={pendingFileSpinner} noMargin />
+							<ThemeIcon variant='big' src={pendingFileSpinner} />
 						) : (
 							<CustomCheckbox
 								disabled={fulfilled}
@@ -312,21 +296,30 @@ const RequestFilesTable = ({
 						)}
 					</Cell>
 				</CellWrapper>
-				<CellWrapper>
-					<Cell>Contributor's public key</Cell>
+				<CellWrapper flex={'0 0 45%'}>
+					<Cell>
+						<BodyText variant='extraSmall'>Contributor's public key</BodyText>
+					</Cell>
 				</CellWrapper>
-				<CellWrapper>
-					<Cell>Uploaded files</Cell>
+				<CellWrapper flex={1}>
+					<Cell>
+						<BodyText variant='extraSmall'>Uploaded files</BodyText>
+					</Cell>
 				</CellWrapper>
 			</Row>
 			{Object.keys(renderableData).map((contributorAddress, index) => (
-				<Row key={contributorAddress}>
-					<CellWrapper>
+				<Row
+					key={contributorAddress}
+					alignItems='flex-start'
+					height='100%'
+					bg='white'
+				>
+					<CellWrapper flex={'0 0 5%'}>
 						<Cell>
 							{isBulkApproved(contributorAddress) === 'approved' ? (
-								<ConfirmedIcon src={confirmIcon} noMargin />
+								<ThemeIcon variant='big' src={confirmIcon} />
 							) : isBulkApproved(contributorAddress) === 'pending' ? (
-								<PendingFileIcon src={pendingFileSpinner} noMargin />
+								<ThemeIcon variant='big' src={pendingFileSpinner} />
 							) : (
 								<CustomCheckbox
 									disabled={fulfilled}
@@ -342,35 +335,56 @@ const RequestFilesTable = ({
 							)}
 						</Cell>
 					</CellWrapper>
-					<CellWrapper data-tour="inbox-two">
-						<Address publicKey={contributorAddress} requestID={requestID} pointer></Address>
+					<CellWrapper flex={'0 0 45%'} data-tour='inbox-two'>
+						<Address
+							publicKey={contributorAddress}
+							requestID={requestID}
+							pointer
+						></Address>
 					</CellWrapper>
 					<CellWrapper flex={1}>
-						{(isExpanded === null && index === 0) || isExpanded === contributorAddress ? (
+						{(isExpanded === null && index === 0) ||
+						isExpanded === contributorAddress ? (
 							<FilesListWrapper>
 								<FilesTableHeader onClick={() => setExpanded(false)}>
-									<FilesTableHeaderCol flex={3}>
-										<FilesTableHeaderTitle>{`There are ${renderableData[contributorAddress].length} files available`}</FilesTableHeaderTitle>
-									</FilesTableHeaderCol>
+									<Col flex={3}>
+										<BodyText
+											variant='extraSmall'
+											pb={[3]}
+										>{`There are ${renderableData[contributorAddress].length} files available`}</BodyText>
+									</Col>
 									<Spacer />
-									<FilesTableHeaderCol flex={'1 0 62px'}>
-										<FilesTableHeaderTitle>Date</FilesTableHeaderTitle>
-									</FilesTableHeaderCol>
+									<Col flex={'1 0 62px'}>
+										<BodyText variant='extraSmall' pb={[3]}>
+											Date
+										</BodyText>
+									</Col>
 									<CollapseIcon src={caretUpIcon} />
 								</FilesTableHeader>
 								<FilesList>
 									{renderableData[contributorAddress].map(
 										(
-											{ ipfsHash, status, originalIndex, AesEncryptedKey, timestamp },
+											{
+												ipfsHash,
+												status,
+												originalIndex,
+												AesEncryptedKey,
+												timestamp,
+											},
 											fileIndex
 										) => {
 											return (
-												<FileItemRow key={originalIndex}>
+												<Row key={originalIndex}>
 													<FileItemCol>
-														{getFileStatus(originalIndex, status) === 'approved' ? (
-															<ConfirmedIcon src={confirmIcon} />
-														) : getFileStatus(originalIndex, status) === 'pending' ? (
-															<PendingFileIcon src={pendingFileSpinner} />
+														{getFileStatus(originalIndex, status) ===
+														'approved' ? (
+															<ThemeIcon variant='big' src={confirmIcon} />
+														) : getFileStatus(originalIndex, status) ===
+														  'pending' ? (
+															<ThemeIcon
+																variant='big'
+																src={pendingFileSpinner}
+															/>
 														) : (
 															<FileCheckbox
 																disabled={fulfilled}
@@ -403,17 +417,20 @@ const RequestFilesTable = ({
 													<FileItemCol>
 														<Timestamp>{`${timeSince(timestamp)}`}</Timestamp>
 													</FileItemCol>
-												</FileItemRow>
+												</Row>
 											);
 										}
 									)}
 								</FilesList>
 							</FilesListWrapper>
 						) : (
-							<CollapsedFilesListWrapper onClick={() => setExpanded(contributorAddress)}>
-								<CollapsedLabel>
-									there are {renderableData[contributorAddress].length} files available
-								</CollapsedLabel>
+							<CollapsedFilesListWrapper
+								onClick={() => setExpanded(contributorAddress)}
+							>
+								<BodyText variant='extraSmall'>
+									there are {renderableData[contributorAddress].length} files
+									available
+								</BodyText>
 								<CollapseIcon src={caretDownIcon} />
 							</CollapsedFilesListWrapper>
 						)}

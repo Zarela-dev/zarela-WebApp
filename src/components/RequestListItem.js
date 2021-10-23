@@ -3,30 +3,14 @@ import styled from 'styled-components';
 import axios from 'axios';
 import _ from 'lodash';
 import { Spacer } from './Elements/Spacer';
-import { WithPointerCursor } from './Elements/WithPointerCursor';
-import {
-	ContributorsIcon,
-	ContributorBadge,
-	TokenIcon,
-	RequestNumber,
-	BiobitToDollarPair,
-	BadgeRow,
-	BadgeLabel,
-	TokenValue,
-	ValueLabel,
-	BiobitToDollarValue,
-} from './Elements/RequestCard';
-import { Typography } from './Elements/Typography';
 import biobitIcon from '../assets/icons/biobit-black.svg';
 import contributorIcon from '../assets/icons/user-blue.svg';
 import RequestFilesTable from './RequestFilesTable';
 import { mainContext } from '../state';
 import { arraySymmetricDiff, arrayIntersection, toast } from '../utils';
-import Button from './Elements/Button';
 import { useWeb3React } from '@web3-react/core';
 import caretUpIcon from '../assets/icons/caret-up.svg';
 import caretDownIcon from '../assets/icons/caret-down.svg';
-import fulfilledIcon from '../assets/icons/check-green.svg';
 import Dialog from './Dialog';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import worker from 'workerize-loader!../workers/decrypt.js';
@@ -34,126 +18,21 @@ import { saveAs } from 'file-saver';
 import { Header, BodyText } from './../components/Elements/Typography';
 import { ThemeDivider } from './../components/Elements/Divider';
 import { IdLabel } from './../components/Elements/IdLabel';
-import { ThemeTag } from './../components/Elements/Tag';
 import { ThemeIcon } from './../components/Elements/Icon';
 import { Row, Col } from './../components/Elements/Flex';
-
+import { ApproveBadge } from './../components/Elements/ApproveBadge';
+import { ThemeButton } from './../components/Elements/Button';
 
 const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
 	opacity: 0.8;
 	border-radius: 8px;
-	padding: ${(props) => props.theme.spacing(3)} ${(props) => props.theme.spacing(3.5)};
+	padding: ${(props) => props.theme.spacing(3)}
+		${(props) => props.theme.spacing(3.5)};
 	margin-bottom: ${(props) => props.theme.spacing(2)};
 `;
 
-const Test = styled.header`
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-`;
-
-const TitleColumn = styled.div`
-	display: flex;
-	flex: 8;
-`;
-
-const DetailsColumn = styled.div`
-	display: flex;
-	flex: 4;
-	justify-content: flex-end;
-	height: 35px;
-	align-items: center;
-
-	@media (max-width: 768px) {
-		align-items: center;
-		margin-top: 21px;
-		justify-content: center;
-	}
-`;
-
-const RequestNumberWithPointer = styled(RequestNumber)`
-	${WithPointerCursor};
-	@media (max-width: 768px) {
-		flex: 0 0 44px;
-		height: 27px;
-		border-radius: 10px 10px 0px 10px;
-		padding: 0px 0px;
-		margin-right: 8px;
-		font-weight: bold;
-		background: linear-gradient(246.29deg, #3a68de 12.69%, #3a68de 100%);
-		font-size: 16px;
-		line-height: 30px;
-		color: #ffffff;
-		text-align: center;
-	}
-`;
-
-const Title = styled(Typography)`
-	${WithPointerCursor};
-	font-size: 16px;
-	font-weight: 500;
-
-	@media (max-width: 768px) {
-		font-size: 12px;
-	}
-`;
-
-const TotalBadge = styled.div`
-	border: 2px solid ${(props) => props.theme.primary};
-	background: transparent;
-	min-width: 32px;
-	height: 32px;
-	padding: ${(props) => props.theme.spacing(0.5)} ${(props) => props.theme.spacing(0.6)};
-	border-radius: 5px;
-
-	text-align: center;
-	font-weight: bold;
-	font-size: 15px;
-	line-height: 18px;
-	color: ${(props) => props.theme.primary};
-`;
-
-const ApprovedBadge = styled.img`
-	width: 36px;
-`;
-
-const Divider = styled.div`
-	width: 1px;
-	background: #3c87aa;
-	height: 100%;
-	margin: 0 ${(props) => props.theme.spacing(1)};
-`;
-
 const Body = styled.section``;
-
-const NoContributionMessage = styled.div`
-	margin-top: ${(props) => props.theme.spacing(2)};
-	margin-left: ${(props) => props.theme.spacing(12)};
-`;
-
-const Footer = styled.footer`
-	display: flex;
-	justify-content: flex-end;
-	width: 100%;
-`;
-
-const SubmitButton = styled(Button)`
-	margin-right: 0;
-	margin-top: ${(props) => props.theme.spacing(3)};
-	font-weight: 500;
-	font-size: 16px;
-	white-space: nowrap;
-	line-height: 18px;
-
-	& > button {
-		padding-top: 0;
-		padding-bottom: 0;
-	}
-`;
-const CustomContributeBadge = styled(ContributorBadge)`
-	flex: 0 0 auto;
-`;
 
 const ExpandToggle = styled.img`
 	width: 24px;
@@ -215,7 +94,10 @@ const RequestListItem = ({
 	const changeAll = (type) => {
 		const originalIndexes = [];
 		const indexesAlreadyConfirmed = [];
-		const all = Object.values(formattedData).reduce((acc, curr) => acc.concat(curr), []);
+		const all = Object.values(formattedData).reduce(
+			(acc, curr) => acc.concat(curr),
+			[]
+		);
 
 		all.forEach(({ status, originalIndex }) => {
 			originalIndexes.push(originalIndex);
@@ -224,7 +106,9 @@ const RequestListItem = ({
 			}
 		});
 
-		const selectableIndexes = originalIndexes.filter((index) => !indexesAlreadyConfirmed.includes(index));
+		const selectableIndexes = originalIndexes.filter(
+			(index) => !indexesAlreadyConfirmed.includes(index)
+		);
 
 		if (type === 'check') {
 			setSelected(selectableIndexes);
@@ -237,7 +121,10 @@ const RequestListItem = ({
 		const indexesAlreadyConfirmed = [];
 		const pendingIndexes = getPendingIndexes(requestID);
 		const selectedIndexes = [...selected];
-		const all = Object.values(formattedData).reduce((acc, curr) => acc.concat(curr), []);
+		const all = Object.values(formattedData).reduce(
+			(acc, curr) => acc.concat(curr),
+			[]
+		);
 
 		all.forEach(({ status, originalIndex }) => {
 			originalIndexes.push(originalIndex);
@@ -262,15 +149,24 @@ const RequestListItem = ({
 		const originalIndexes = [];
 		const indexesAlreadyConfirmed = [];
 		const pendingIndexes = getPendingIndexes(requestID);
-		const all = Object.values(formattedData).reduce((acc, curr) => acc.concat(curr), []);
+		const all = Object.values(formattedData).reduce(
+			(acc, curr) => acc.concat(curr),
+			[]
+		);
 
 		all.forEach(({ status, originalIndex }) => {
 			originalIndexes.push(originalIndex);
 			if (Boolean(status) === true) indexesAlreadyConfirmed.push(originalIndex);
 		});
 
-		if (_.isEqual(originalIndexes.sort(), indexesAlreadyConfirmed.sort())) return 'approved';
-		if (_.isEqual(arraySymmetricDiff(indexesAlreadyConfirmed, pendingIndexes).sort(), originalIndexes.sort()))
+		if (_.isEqual(originalIndexes.sort(), indexesAlreadyConfirmed.sort()))
+			return 'approved';
+		if (
+			_.isEqual(
+				arraySymmetricDiff(indexesAlreadyConfirmed, pendingIndexes).sort(),
+				originalIndexes.sort()
+			)
+		)
 			return 'pending';
 		return 'available';
 	};
@@ -292,7 +188,10 @@ const RequestListItem = ({
 		}
 		if (
 			_.isEqual(
-				arraySymmetricDiff(indexesAlreadyConfirmed, arrayIntersection(originalIndexes, pendingIndexes)).sort(),
+				arraySymmetricDiff(
+					indexesAlreadyConfirmed,
+					arrayIntersection(originalIndexes, pendingIndexes)
+				).sort(),
 				originalIndexes.sort()
 			)
 		) {
@@ -345,7 +244,8 @@ const RequestListItem = ({
 		});
 
 		const selectableIndexes = originalIndexes.filter(
-			(index) => ![...indexesAlreadyConfirmed, ...pendingIndexes].includes(index)
+			(index) =>
+				![...indexesAlreadyConfirmed, ...pendingIndexes].includes(index)
 		);
 
 		if (type === 'check') {
@@ -355,12 +255,17 @@ const RequestListItem = ({
 			});
 		}
 		if (type === 'uncheck')
-			setSelected((values) => values.filter((selectedItem) => !originalIndexes.includes(selectedItem)));
+			setSelected((values) =>
+				values.filter((selectedItem) => !originalIndexes.includes(selectedItem))
+			);
 	};
 
 	const onChange = (type, originalIndex) => {
 		if (type === 'check') setSelected((values) => [...values, originalIndex]);
-		if (type === 'uncheck') setSelected((values) => values.filter((item) => +item !== +originalIndex));
+		if (type === 'uncheck')
+			setSelected((values) =>
+				values.filter((item) => +item !== +originalIndex)
+			);
 	};
 	// files table selection methods END
 
@@ -372,7 +277,9 @@ const RequestListItem = ({
 
 		try {
 			/* fetch signal file metadata from IPFS */
-			const encryptedFileMetaRes = await axios.get(`${process.env.REACT_APP_IPFS_GET_LINK + fileMetaCID}`);
+			const encryptedFileMetaRes = await axios.get(
+				`${process.env.REACT_APP_IPFS_GET_LINK + fileMetaCID}`
+			);
 
 			const decryptedFileMeta = await window.ethereum.request({
 				method: 'eth_decrypt',
@@ -398,13 +305,19 @@ const RequestListItem = ({
 					setDialogMessage(event.data.message);
 				}
 				if (event.data.type === 'decrypted') {
-					saveAs(new Blob([event.data.decrypted_file]), `${FILE_NAME}.${FILE_EXT}`);
+					saveAs(
+						new Blob([event.data.decrypted_file]),
+						`${FILE_NAME}.${FILE_EXT}`
+					);
 					clearSubmitDialog();
 				}
 			});
 		} catch (error) {
 			clearSubmitDialog();
-			toast('there was an error decrypting your file, please contact support for more information.', 'error');
+			toast(
+				'there was an error decrypting your file, please contact support for more information.',
+				'error'
+			);
 			console.error(error);
 		}
 	};
@@ -420,72 +333,76 @@ const RequestListItem = ({
 
 	useEffect(() => {
 		if (appState.contract !== null) {
-			appState.contract.methods.getOrderData(requestID).call((orderInfoError, orderInfo) => {
-				if (!orderInfoError) {
-					appState.contract.methods
-						.ownerSpecificData(requestID)
-						.call({ from: account }, (fileError, files) => {
-							if (!fileError) {
-								let addresses = orderInfo[0];
-								let timestamp = orderInfo[2];
-								let status = orderInfo[4];
-								// let laboratories = orderInfo[1];
-								// let whoGainedReward = orderInfo[3];
-								// let zarelaDay = orderInfo[5];
+			appState.contract.methods
+				.getOrderData(requestID)
+				.call((orderInfoError, orderInfo) => {
+					if (!orderInfoError) {
+						appState.contract.methods
+							.ownerSpecificData(requestID)
+							.call({ from: account }, (fileError, files) => {
+								if (!fileError) {
+									let addresses = orderInfo[0];
+									let timestamp = orderInfo[2];
+									let status = orderInfo[4];
+									// let laboratories = orderInfo[1];
+									// let whoGainedReward = orderInfo[3];
+									// let zarelaDay = orderInfo[5];
 
-								let formatted = {};
-								let uniqueAddresses = [...new Set(addresses)];
-								let pairs = [];
+									let formatted = {};
+									let uniqueAddresses = [...new Set(addresses)];
+									let pairs = [];
 
-								// count all the unapproved files
-								setUnapprovedCount(status.filter((item) => Boolean(item) === false).length);
+									// count all the unapproved files
+									setUnapprovedCount(
+										status.filter((item) => Boolean(item) === false).length
+									);
 
-								addresses.forEach((address, fileIndex) => {
-									pairs.push({
-										file: files[0][fileIndex],
-										AesEncryptedKey: files[1][fileIndex],
-										address: address,
-										timestamp: timestamp[fileIndex],
-										originalIndex: fileIndex,
-										status: status[fileIndex],
+									addresses.forEach((address, fileIndex) => {
+										pairs.push({
+											file: files[0][fileIndex],
+											AesEncryptedKey: files[1][fileIndex],
+											address: address,
+											timestamp: timestamp[fileIndex],
+											originalIndex: fileIndex,
+											status: status[fileIndex],
+										});
 									});
-								});
 
-								uniqueAddresses.forEach((uAddress, uIndex) => {
-									pairs.forEach((tempItem, tempIndex) => {
-										if (tempItem.address === uAddress) {
-											if (Object(formatted).hasOwnProperty(uAddress)) {
-												formatted[uAddress].push({
-													ipfsHash: tempItem.file,
-													timestamp: tempItem.timestamp,
-													AesEncryptedKey: tempItem.AesEncryptedKey,
-													originalIndex: tempItem.originalIndex,
-													status: tempItem.status,
-												});
-											} else {
-												formatted[uAddress] = [
-													{
+									uniqueAddresses.forEach((uAddress, uIndex) => {
+										pairs.forEach((tempItem, tempIndex) => {
+											if (tempItem.address === uAddress) {
+												if (Object(formatted).hasOwnProperty(uAddress)) {
+													formatted[uAddress].push({
 														ipfsHash: tempItem.file,
 														timestamp: tempItem.timestamp,
 														AesEncryptedKey: tempItem.AesEncryptedKey,
 														originalIndex: tempItem.originalIndex,
 														status: tempItem.status,
-													},
-												];
+													});
+												} else {
+													formatted[uAddress] = [
+														{
+															ipfsHash: tempItem.file,
+															timestamp: tempItem.timestamp,
+															AesEncryptedKey: tempItem.AesEncryptedKey,
+															originalIndex: tempItem.originalIndex,
+															status: tempItem.status,
+														},
+													];
+												}
 											}
-										}
+										});
 									});
-								});
 
-								setFormattedData(formatted);
-							} else {
-								console.error(fileError);
-							}
-						});
-				} else {
-					console.error(orderInfoError.message);
-				}
-			});
+									setFormattedData(formatted);
+								} else {
+									console.error(fileError);
+								}
+							});
+					} else {
+						console.error(orderInfoError.message);
+					}
+				});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [appState.contract, shouldRefresh]);
@@ -497,7 +414,12 @@ const RequestListItem = ({
 
 	return (
 		<Wrapper>
-			<Dialog isOpen={isSubmitting} content={dialogMessage} hasSpinner type="success" />
+			<Dialog
+				isOpen={isSubmitting}
+				content={dialogMessage}
+				hasSpinner
+				type='success'
+			/>
 			<Row
 				onClick={() => {
 					setOpen(!isOpen);
@@ -505,69 +427,61 @@ const RequestListItem = ({
 				}}
 				flexWrap='wrap'
 			>
-
-
-
-				<Col width={2/3}>
-				<Row>
-					<IdLabel>{requestID}</IdLabel>
-					<Header variant="heading4" as='h4' weight="semiBold">
-						{title.length < 160 ? title : title.substr(0, 160) + '...'}
-					</Header>
-					<Spacer />
+				<Col width={2 / 3}>
+					<Row>
+						<IdLabel>{requestID}</IdLabel>
+						<Header variant='heading4' as='h4' weight='semiBold'>
+							{title.length < 160 ? title : title.substr(0, 160) + '...'}
+						</Header>
+						<Spacer />
 					</Row>
 				</Col>
 
+				<Col width={1 / 3}>
+					<Row justifyContent='flex-end'>
+						<Col>
+							<Row>
+								<ThemeIcon variant='big' src={biobitIcon} />
+								<BodyText variant='small' as='span' fontWeight='bold' mr={1}>
+									{+angelTokenPay + +laboratoryTokenPay}
+								</BodyText>
+								<BodyText variant='small' as='span' mr={2}>
+									BBit
+								</BodyText>
+								{/* for this version, we combine both numbers, later both will be shown separately */}
+								<BodyText variant='small' as='span' noMargin>{`~ $${
+									+angelTokenPay + +laboratoryTokenPay
+								}`}</BodyText>
+							</Row>
+						</Col>
+						<ThemeDivider variant='vertical' />
 
+						<Col>
+							<Row>
+								<ThemeIcon variant='normal' src={contributorIcon} />
+								<BodyText
+									variant='small'
+									color='textToken'
+									fontWeight='semiBold'
+								>
+									{contributors}
+								</BodyText>
+							</Row>
+						</Col>
 
+						<ThemeDivider variant='vertical' />
 
-				<Col width={1/3}>
-				<Row justifyContent='flex-end'>
-					<Col>
-						<Row>
-							<ThemeIcon variant='big' src={biobitIcon} />
-							<BodyText variant='small' as='span' fontWeight='bold' mr={1} >{+angelTokenPay + +laboratoryTokenPay}</BodyText>
-							<BodyText variant='small' as='span' mr={2}>BBit</BodyText>
-							{/* for this version, we combine both numbers, later both will be shown separately */}
-							<BodyText variant='small' as='span' noMargin>{`~ $${
-								+angelTokenPay + +laboratoryTokenPay
-							}`}</BodyText>
-						</Row>
-					</Col>
-					<ThemeDivider variant='vertical'/>
-					<CustomContributeBadge>
-						<BadgeRow>
-							<ContributorsIcon src={contributorIcon} />
-							<BadgeLabel>{contributors}</BadgeLabel>
-						</BadgeRow>
-					</CustomContributeBadge>
+						<ApproveBadge fulfilled={fulfilled} value={unapprovedCount} />
 
-					<Divider />
-					{fulfilled ? <ApprovedBadge src={fulfilledIcon} /> : <TotalBadge>{unapprovedCount}</TotalBadge>}
-					<ExpandToggle src={!isOpen ? caretDownIcon : caretUpIcon} />
+						<ExpandToggle src={!isOpen ? caretDownIcon : caretUpIcon} />
 					</Row>
 				</Col>
-
-
-
-
-
-
 			</Row>
-
-
-
-
-
-
-
-
-
 
 			{isOpen ? (
 				Object.keys(formattedData).length > 0 ? (
 					<>
-						<Body data-tour="inbox-one">
+						<Body data-tour='inbox-one'>
 							<RequestFilesTable
 								signalDownloadHandler={signalDownloadHandler}
 								data={formattedData}
@@ -583,22 +497,25 @@ const RequestListItem = ({
 								requestID={requestID}
 							/>
 						</Body>
-						<Footer>
-							<SubmitButton
-								variant="primary"
+						<Row justifyContent='flex-end' mt={3}>
+							<ThemeButton
+								variant='primary'
+								size='large'
 								disabled={selected.length === 0}
 								onClick={() => {
 									handleConfirm(requestID, selected);
 								}}
 							>
 								Send Tokens
-							</SubmitButton>
-						</Footer>
+							</ThemeButton>
+						</Row>
 					</>
 				) : (
-					<Body>
-						<NoContributionMessage>There are no contributions for now</NoContributionMessage>
-					</Body>
+					<Row>
+						<BodyText variant='small' ml='90px'>
+							There are no contributions for now
+						</BodyText>
+					</Row>
 				)
 			) : null}
 		</Wrapper>

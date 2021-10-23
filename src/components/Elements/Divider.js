@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { Box } from 'rebass/styled-components';
-import { variant, space, layout, color, compose } from 'styled-system';
+import { variant, space, layout, color, compose, height } from 'styled-system';
 
 const Divider = styled(Box)(
-	compose(space, layout, color),
+	compose(space, layout, color, height),
 	variant({
 		prop: 'variant',
 		variants: {
@@ -11,8 +11,8 @@ const Divider = styled(Box)(
 				background: '#3c87aa',
 				width: '1px',
 				height: ['18px', '35px'],
-				ml: [2, 3, 4],
-				mr: [2, 3, 4],
+				ml: [1, 2, 3],
+				mr: [1, 2, 3],
 				mt: 'auto',
 				mb: 'auto',
 			},
@@ -29,5 +29,5 @@ const Divider = styled(Box)(
 );
 
 export const ThemeDivider = (props) => {
-	return <Divider {...props} />;
+	return <Divider height={props.height ?? null} {...props} />;
 };

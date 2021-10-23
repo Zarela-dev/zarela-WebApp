@@ -110,5 +110,5 @@ export const Header = (props) => {
 };
 
 export const BodyText = (props) => {
-	return <TextComponent fontWeight='regular' as='p' {...props}></TextComponent>;
+	return <TextComponent whiteSpace='nowrap' fontWeight='regular' as='p' {...props}></TextComponent>;
 };
