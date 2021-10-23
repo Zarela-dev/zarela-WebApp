@@ -20,34 +20,32 @@ const RequestCard = (props) => {
 	const getBBIT = useBiobit();
 
 	return (
-		<RequestCardWrapper data-tour='request-list-one'>
-			<Row>
-				<IdLabel data-tour='request-list-two'>{props.requestID}</IdLabel>
-				<Col>
-					<Header variant='heading4' as='h4' data-tour='request-list-three'>
-						{props.title.length < 85
-							? props.title
-							: props.title.substr(0, 85) + '...'}
+		<RequestCardWrapper data-tour="request-list-one">
+			<Row width="100%" alignItems="flex-start">
+				<Col flex={'0 0 70px'} mr={[3]}>
+					<IdLabel variant="big" data-tour="request-list-two">{props.requestID}</IdLabel>
+				</Col>
+				<Col flex={1}>
+					<Header variant="heading4" as="h4" data-tour="request-list-three">
+						{props.title.length < 85 ? props.title : props.title.substr(0, 85) + '...'}
 					</Header>
-					<BodyText variant='timestamp' as='span' mb={15}>
+				</Col>
+			</Row>
+			<Row width="100%">
+				<Col flex={'0 0 70px'} mr={[3]}></Col>
+				<Col>
+					<BodyText variant="timestamp" as="span" mb={15}>
 						{props.timestamp}
 					</BodyText>
 				</Col>
 			</Row>
-			<Col
-				width='100%'
-				backgroundColor='#eaf1fa'
-				borderRadius='5px 5px 0 0'
-				p={3}
-			>
-				<BodyText variant='small'>
-					{props.description.length < 320
-						? props.description
-						: props.description.substr(0, 320) + '...'}
+			<Col width="100%" backgroundColor="#eaf1fa" sx={{ borderRadius: '5px 5px 0 0' }} p={3}>
+				<BodyText fontWeight="light" variant="small">
+					{props.description.length < 320 ? props.description : props.description.substr(0, 320) + '...'}
 				</BodyText>
 				<Row>
 					{props.categories.split(',').map((item) => {
-						return <ThemeTag variant='display' item={item} />;
+						return <ThemeTag variant="display" item={item} />;
 					})}
 				</Row>
 			</Col>
@@ -56,74 +54,58 @@ const RequestCard = (props) => {
 					<ProgressTrackerProcess progress={props.progress} />
 				</ProgressTrackerTrack>
 			</ProgressTrackerWrapper>
-			<Row
-				width='100%'
-				mt={3}
-				flexDirection='row'
-				justifyContent='space-between'
-			>
+			<Row width="100%" mt={3} flexDirection="row" justifyContent="space-between">
 				<Row>
-					<Col
-						flexWrap='wrap'
-						justifyContent='center'
-						data-tour='request-list-four'
-					>
+					<Col flexWrap="wrap" justifyContent="center" data-tour="request-list-four">
 						<Row>
-							<ThemeIcon variant='normal' src={biobitIcon} />
-							<BodyText variant='hint' fontWeight='bold' pr={1}>
+							<ThemeIcon variant="normal" src={biobitIcon} />
+							<BodyText variant="big" fontWeight="medium" pr={1}>
 								{getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[0]}
 							</BodyText>
-							<BodyText bold>BBit</BodyText>
+							<BodyText variant="big" fontWeight="medium">
+								BBit
+							</BodyText>
 						</Row>
-
 						<Row>
-							<BodyText variant='hint' color='textToken' pl={1.5} active>{`~ $${
+							<BodyText variant="big" fontWeight="medium" color="textToken" pl={1.5} active>{`~ $${
 								getBBIT(props.angelTokenPay, props.laboratoryTokenPay)[1]
 							}`}</BodyText>
 						</Row>
 					</Col>
 
-					<ThemeDivider variant='vertical' />
-					<Col
-						flexWrap='wrap'
-						justifyContent='center'
-						data-tour='request-list-five'
-					>
+					<ThemeDivider variant="vertical" />
+					<Col flexWrap="wrap" justifyContent="center" data-tour="request-list-five">
 						<Row>
-							<ThemeIcon variant='normal' src={documentsIcon} />
-							<BodyText variant='hint' color='textToken' fontWeight='bold'>
+							<ThemeIcon variant="brief" src={documentsIcon} />
+							<BodyText variant="hint" color="textToken" fontWeight="bold">
 								{props.contributors}
 							</BodyText>
 						</Row>
 						<Row>
-							<BodyText variant='hint' color='textToken'>
+							<BodyText fontWeight="light" variant="hint" color="textToken">
 								No. of accepted responses
 							</BodyText>
 						</Row>
 					</Col>
-					<ThemeDivider variant='vertical' />
-					<Col
-						flexWrap='wrap'
-						justifyContent='center'
-						data-tour='request-list-six'
-					>
+					<ThemeDivider variant="vertical" />
+					<Col flexWrap="wrap" justifyContent="center" data-tour="request-list-six">
 						<Row>
-							<ThemeIcon variant='normal' src={contributorIcon} />
-							<BodyText variant='hint' color='textToken' fontWeight='bold'>
+							<ThemeIcon variant="brief" src={contributorIcon} />
+							<BodyText variant="hint" color="textToken" fontWeight="bold">
 								{props.totalContributedCount}
 							</BodyText>
 						</Row>
 						<Row>
-							<BodyText variant='hint' color='textToken'>
+							<BodyText fontWeight="light" variant="hint" color="textToken">
 								No. of people contributed
 							</BodyText>
 						</Row>
 					</Col>
 				</Row>
 				<ThemeButton
-					data-tour='request-list-seven'
-					variant='primary'
-					size='normal'
+					data-tour="request-list-seven"
+					variant="secondary"
+					size="normal"
 					to={`/request/${props.requestID}`}
 				>
 					Start

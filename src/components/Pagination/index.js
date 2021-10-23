@@ -25,6 +25,10 @@ const Wrapper = styled.div`
 	justify-content: center;
 	align-items: center;
 	margin: ${(props) => props.theme.spacing(3)};
+
+	@media only screen and (max-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
+		width: 90%;
+	}
 `;
 
 const Button = styled.button`

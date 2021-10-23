@@ -1,13 +1,6 @@
 import styled from 'styled-components';
 import { Box } from 'rebass/styled-components';
-import {
-	space,
-	layout,
-	color,
-	compose,
-	fontWeight,
-	padding,
-} from 'styled-system';
+import { space, layout, color, compose, fontWeight, padding } from 'styled-system';
 import { Header } from './Typography';
 
 const IdLabelWrapper = styled(Box)(
@@ -19,6 +12,7 @@ const IdLabelWrapper = styled(Box)(
 		alignItems: 'center',
 		justifyContent: 'center',
 		padding: '10px 20px',
+		minWidth: '100%',
 	},
 	{
 		'@media screen and (max-width: 64em)': {
@@ -31,15 +25,9 @@ const IdLabelWrapper = styled(Box)(
 
 export const IdLabel = (props) => {
 	return (
-		<Box pr={[3, 4]}>
+		<Box>
 			<IdLabelWrapper {...props}>
-				<Header
-					variant='heading4'
-					as='h4'
-					fontWeight='semiBold'
-					color='white'
-					whiteSpace='nowrap'
-				>
+				<Header variant="heading3" as="h4" fontWeight="bold" color="white" whiteSpace="nowrap">
 					{props.children}
 				</Header>
 			</IdLabelWrapper>

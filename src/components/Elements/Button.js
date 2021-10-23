@@ -165,7 +165,7 @@ const ButtonWrapper = styled(Box)(
 				background: 'unset',
 			},
 			secondary: {
-				background: 'linear-gradient(226.69deg, #85CEEE 10.5%, #A687FD 86.82%)',
+				background: 'linear-gradient(180deg, #85CEEE 10.5%, #A687FD 86.82%)',
 				padding: '1px',
 				'&:hover': {
 					background: 'linear-gradient(180deg, #4787F3 0%, #7246D0 100%)',
@@ -187,6 +187,13 @@ const CustomizedButton = styled(RebassButton)(
 	variant({
 		prop: 'size',
 		variants: {
+			extraLarge: {
+				width: '190px',
+				height: '64px',
+				fontSize: [4],
+				fontWeight: 'normal !important',
+				lineHeight: [6],
+			},
 			large: {
 				width: '190px',
 				height: '50px',
@@ -208,6 +215,7 @@ const CustomizedButton = styled(RebassButton)(
 			small: {
 				maxWidth: '101px',
 				maxHeight: '32px',
+				minWidth: '77px',
 				fontSize: [7],
 				lineHeight: [14],
 			},
@@ -223,7 +231,7 @@ const CustomizedButton = styled(RebassButton)(
 		prop: 'variant',
 		variants: {
 			primary: {
-				background: 'linear-gradient(226.69deg, #85CEEE 10.5%, #A687FD 86.82%)',
+				background: 'linear-gradient(180deg, #85CEEE 10.5%, #A687FD 86.82%)',
 				color: 'textPrimary',
 				fontWeight: 'semiBold',
 				'&:hover': {
@@ -248,7 +256,6 @@ const CustomizedButton = styled(RebassButton)(
 				},
 				'&:active': {
 					background: '#F6F5FF',
-					color: '#605DEC',
 				},
 				'&:disabled': {
 					background: '#F4F3FE',

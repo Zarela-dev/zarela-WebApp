@@ -49,6 +49,7 @@ const HeadingComponent = styled(Heading)(
 			heading4: {
 				fontSize: [6, 5, 3],
 				lineHeight: [11, 8, 4],
+				fontWeight: 'semiBold',
 			},
 			heading5: {
 				fontSize: [7, 6, 5],
@@ -84,13 +85,13 @@ const TextComponent = styled(Text)(
 				lineHeight: [9],
 			},
 			timestamp: {
-				fontSize: [9, 8, 7],
+				fontSize: [9, 8, 8],
 				lineHeight: [12, 12, 7],
 				color: 'textTimestamp',
 				whiteSpace: 'nowrap',
 			},
 			tag: {
-				fontSize: [7, 7, 6],
+				fontSize: [8, 7],
 				lineHeight: [13, 13, 7],
 				color: 'textTag',
 				whiteSpace: 'nowrap',
@@ -110,9 +111,9 @@ const TextComponent = styled(Text)(
 );
 
 export const Header = (props) => {
-	return <HeadingComponent fontWeight='bold' {...props}></HeadingComponent>;
+	return <HeadingComponent fontWeight="bold" {...props}></HeadingComponent>;
 };
 
 export const BodyText = (props) => {
-	return <TextComponent whiteSpace='nowrap' fontWeight='regular' as='p' {...props}></TextComponent>;
+	return <TextComponent whiteSpace="nowrap" fontWeight="regular" as="p" {...props}></TextComponent>;
 };

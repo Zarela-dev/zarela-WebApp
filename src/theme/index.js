@@ -35,7 +35,7 @@ const theme = (darkMode) => {
 			// colors
 			primary: '#7246D0',
 			primaryFaded: '#7246d029',
-			secondary: 'rgba(126, 162, 253, 0.4)',
+			secondary: '#D13ADE',
 			navLinkColor: '#8B72DE',
 			navLinkDisabled: '#E3DDFA',
 			notificationColor: '#2EECA8',
@@ -75,6 +75,7 @@ const theme = (darkMode) => {
 		radii: [8,4],
 		fontWeights: {
 			bold: 700,
+			medium: 600, // #todo medium and semibold values must be replaced later
 			semiBold: 500,
 			regular: 400,
 			light: 300,

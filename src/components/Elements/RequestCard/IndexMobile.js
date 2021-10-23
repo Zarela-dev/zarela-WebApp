@@ -8,10 +8,8 @@ export const RequestCardWrapper = styled.div`
 	background: white;
 	border: 1px solid #c4c4c4;
 	border-radius: 8px;
-	padding: ${(props) => props.theme.spacing(1.7)} ${(props) => props.theme.spacing(1.4)}
-		${(props) => props.theme.spacing(1.4)};
-
-	margin-bottom: 25px;
+	padding: ${({ theme }) => theme.space[3]}px;
+	margin-bottom: ${({theme}) => theme.space[3]}px;
 `;
 
 export const HeaderLayout = styled.div`
@@ -78,8 +76,8 @@ export const ProgressTrackerProcess = styled.div`
 	top: -1px;
 	height: 5px;
 	width: ${(props) => props.progress + '%' || '0%'};
-	background: #3a68de;
-	border-radius: 7px;
+	background: ${({ theme }) => theme.colors.secondary};
+	border-radius: 10px;
 `;
 
 export const Footer = styled.div`

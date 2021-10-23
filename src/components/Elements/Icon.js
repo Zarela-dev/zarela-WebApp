@@ -24,8 +24,12 @@ const IconWrapper = styled(Image)(
 				width: ['32px', '24px'],
 			},
 			normal: {
-				height: ['24px', '16px'],
+				height: ['auto', 'auto'],
 				width: ['24px', '16px'],
+			},
+			brief: {
+				height: ['16px', '20px'],
+				width: ['16px', '20px'],
 			},
 			small: {
 				height: ['16px', '16px'],

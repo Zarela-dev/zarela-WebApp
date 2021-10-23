@@ -18,9 +18,7 @@ const TagWrapper = styled(Box)(
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginRight: '5px',
 		marginTop: '10px',
-		padding: '2px 5px',
 	},
 	variant({
 		prop: 'variant',
@@ -41,7 +39,7 @@ const TagWrapper = styled(Box)(
 
 export const ThemeTag = (props) => {
 	return (
-		<TagWrapper key={props.item} {...props}>
+		<TagWrapper py={[1,2]} px={[1,3]} mr={[2]} key={props.item} {...props}>
 			<BodyText variant='tag'>#{props.item}</BodyText>
 		</TagWrapper>
 	);
