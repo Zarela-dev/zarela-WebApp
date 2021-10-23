@@ -3,19 +3,19 @@ import { localStorageContext } from '../../state/localStorageProvider/LocalStora
 import { CopyableText, normalizeAddress } from '../../utils';
 import styled from 'styled-components';
 import BlockAddress from '../WalletAddress/BlockAddress';
-
 import {
 	CompactRequestCard,
 	Body,
 	Table,
 	TableCellWrapper,
 	TableCell,
-	EmptyMessage,
 	TableRow,
 	TableBulkRow,
-	CopyIcon,
 } from '../LogCards/Elements';
 import MobileCard from './MobileCard';
+import { BodyText } from './../../components/Elements/Typography';
+import { ThemeIcon } from './../../components/Elements/Icon';
+import copyIcon from '../../assets/icons/copy.svg';
 
 const SettingTableCell = styled(TableCellWrapper)`
 	flex: ${(props) => props.flex} !important;
@@ -28,8 +28,8 @@ const Blocked = ({ isMobile }) => {
 	if (isMobile) {
 		return (
 			<>
-				<MobileCard type="contact" />
-				<MobileCard type="block" />
+				<MobileCard type='contact' />
+				<MobileCard type='block' />
 			</>
 		);
 	} else {
@@ -38,31 +38,47 @@ const Blocked = ({ isMobile }) => {
 				<Body>
 					<Table>
 						<TableRow header>
-							<SettingTableCell flex="1 0 auto">
-								<TableCell>public key</TableCell>
+							<SettingTableCell flex='1 0 auto'>
+								<TableCell>
+									<BodyText variant='extraSmall'>public key</BodyText>
+								</TableCell>
 							</SettingTableCell>
-							<SettingTableCell flex="0 0 20%">
-								<TableCell>Nick Name</TableCell>
+							<SettingTableCell flex='0 0 20%'>
+								<TableCell>
+									<BodyText variant='extraSmall'>Nick Name</BodyText>
+								</TableCell>
 							</SettingTableCell>
-							<SettingTableCell flex="0 0 10%">
-								<TableCell>Unblock</TableCell>
+							<SettingTableCell flex='0 0 10%'>
+								<TableCell>
+									<BodyText variant='extraSmall'>Unblock</BodyText>
+								</TableCell>
 							</SettingTableCell>
 						</TableRow>
 						<TableBulkRow>
 							{blockList.length ? (
 								blockList.map((blockedAddress) => (
 									<TableRow key={blockedAddress}>
-										<SettingTableCell flex="1 0 auto">
+										<SettingTableCell flex='1 0 auto'>
 											<CopyableText textToCopy={blockedAddress}>
 												<TableCell>
-													{blockedAddress} <CopyIcon />
+													<BodyText variant='extraSmall'>
+														{blockedAddress}
+													</BodyText>{' '}
+													<ThemeIcon variant='big' ml={2} src={copyIcon} />
 												</TableCell>
 											</CopyableText>
 										</SettingTableCell>
-										<SettingTableCell flex="0 0 20%">
-											<TableCell> {contacts[normalizeAddress(blockedAddress)] || '-'}</TableCell>
+										<SettingTableCell flex='0 0 20%'>
+											<TableCell>
+												{' '}
+
+												<BodyText variant='extraSmall'>
+
+												{contacts[normalizeAddress(blockedAddress)] || '-'}
+												</BodyText>
+											</TableCell>
 										</SettingTableCell>
-										<SettingTableCell flex="0 0 10%">
+										<SettingTableCell flex='0 0 10%'>
 											<TableCell>
 												<BlockAddress publicKey={blockedAddress} />
 											</TableCell>
@@ -70,7 +86,7 @@ const Blocked = ({ isMobile }) => {
 									</TableRow>
 								))
 							) : (
-								<EmptyMessage>You have no blocked addresses</EmptyMessage>
+								<BodyText variant='small'>You have no blocked addresses</BodyText>
 							)}
 						</TableBulkRow>
 					</Table>

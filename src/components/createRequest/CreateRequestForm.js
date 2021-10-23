@@ -3,7 +3,7 @@ import { mainContext } from '../../state';
 import styled from 'styled-components';
 import FileInput from './../UploadFileCard/FileInput';
 import Checkbox from './../Elements/Checkbox';
-import Button from './../Elements/Button';
+import Button, { ThemeButton } from './../Elements/Button';
 import TextField, { Error } from './../Elements/TextField';
 import ReactSelect from './../ReactSelect';
 import FeeEstimation from './FeeEstimation';
@@ -301,13 +301,14 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 				</CustomCheckbox>
 				{formik.errors?.terms ? <Error>{formik.errors?.terms}</Error> : null}
 				<Divider />
-				<SubmitButton
+				<ThemeButton
+					size='normal'
 					variant='primary'
 					disabled={!formik.dirty || formik.isSubmitting}
 					type='submit'
 				>
 					Submit
-				</SubmitButton>
+				</ThemeButton>
 			</Form>
 			{/* <FeeEstimation gas={gas} fee={estimateEthFee} /> */}
 		</FormWrapper>

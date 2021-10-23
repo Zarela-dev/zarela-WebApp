@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { Box } from 'rebass/styled-components';
-import { variant, space, layout, color, compose, height } from 'styled-system';
+import { variant, space, layout, color, compose, height ,width} from 'styled-system';
 
 const Divider = styled(Box)(
-	compose(space, layout, color, height),
+	compose(space, layout, color, height, width),
 	variant({
 		prop: 'variant',
 		variants: {

@@ -1,6 +1,7 @@
 import React, { forwardRef } from 'react';
 import styled from 'styled-components';
 import { css } from 'styled-components';
+import { BodyText } from './../../components/Elements/Typography';
 
 const InputStyles = css`
 	font-family: Krub;
@@ -118,19 +119,35 @@ const TextField = forwardRef(
 		ref
 	) => {
 		return (
-			<Wrapper className={className} hasTopMargin={hasTopMargin}>
+			<Wrapper className={className} hasTopMargin={true}>
 				<Label>
-					<LabelText>{label}</LabelText>
+					<BodyText variant='extraSmall' color='timestamp' mb={-2}>
+						{label}
+					</BodyText>
 					{hint ? <Hint>{hint}</Hint> : null}
 				</Label>
 				<InputWrapper>
 					{multiline ? (
-						<TextArea hasAdornment={!!adornment} error={error} ref={ref} row={5} {...rest} />
+						<TextArea
+							hasAdornment={!!adornment}
+							error={error}
+							ref={ref}
+							row={5}
+							{...rest}
+						/>
 					) : (
-						<Input hasAdornment={!!adornment} error={error} ref={ref} {...rest} />
+						<Input
+							hasAdornment={!!adornment}
+							error={error}
+							ref={ref}
+							{...rest}
+						/>
 					)}
 				</InputWrapper>
-				<ActionsContainer shrink={!label ? true : false} isActionTypeIcon={isActionTypeIcon}>
+				<ActionsContainer
+					shrink={!label ? true : false}
+					isActionTypeIcon={isActionTypeIcon}
+				>
 					{adornment ? (
 						<Adornment colored={coloredAdornment} onClick={adornmentOnClick}>
 							{adornment}
@@ -147,7 +164,11 @@ const TextField = forwardRef(
 						: null}
 				</ActionsContainer>
 				{helperText ? <HelperText>{helperText}</HelperText> : null}
-				{error ? <Error>{error}</Error> : null}
+				{error ? (
+					<BodyText variant='extraSmall' color='error'>
+						{error}
+					</BodyText>
+				) : null}
 			</Wrapper>
 		);
 	}

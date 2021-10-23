@@ -5,35 +5,19 @@ import * as yup from 'yup';
 import { useHistory } from 'react-router';
 import { useWeb3React } from '@web3-react/core';
 import { mainContext } from '../../state';
-import { Title, TokenList, TokenIcon, TokenName, Token } from './WalletAccount/AccountChoices';
+import { TokenList, Token } from './WalletAccount/AccountChoices';
 import { Content, Column } from './WalletAccount/Layout';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import etherIcon from '../../assets/icons/ether-black.png';
 import Textfield from './../../components/Elements/TextField';
-import Button from './../../components/Elements/Button';
 import { toast } from '../../utils';
+import { BodyText } from './../../components/Elements/Typography';
+import { ThemeButton } from './../../components/Elements/Button';
+import { ThemeIcon } from './../../components/Elements/Icon';
 
 const WalletInput = styled(Textfield)`
 	min-width: ${(props) => (props.isMobile === true ? '100%' : '510px')};
 	margin-bottom: ${(props) => props.theme.spacing(4)};
-`;
-
-const SendButton = styled(Button)`
-	align-self: center;
-	margin: 0;
-`;
-
-const SendButtonMobile = styled(Button)`
-	margin: auto;
-	height: 35px;
-	width: 105px;
-	border-radius: 3px;
-
-	button {
-		padding: 0;
-		font-weight: 400;
-		font-size: 14px;
-	}
 `;
 
 const Wrapper = styled.form`
@@ -77,7 +61,10 @@ const WalletSendAssets = (mobile) => {
 					.sendTransaction({
 						to: values.address,
 						from: account,
-						value: appState.fallbackWeb3Instance.utils.toWei(values.amount, 'ether'),
+						value: appState.fallbackWeb3Instance.utils.toWei(
+							values.amount,
+							'ether'
+						),
 					})
 					.then(({ transactionHash }) => {
 						console.log(transactionHash);
@@ -90,49 +77,65 @@ const WalletSendAssets = (mobile) => {
 	});
 
 	const getBalanceHint = () => {
-		return `Available: ${formik.values.token === 'Biobit' ? +appState.biobitBalance : +appState.etherBalance} ${
-			formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'
-		}`;
+		return `Available: ${
+			formik.values.token === 'Biobit'
+				? +appState.biobitBalance
+				: +appState.etherBalance
+		} ${formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'}`;
 	};
 
 	const getClipboard = async () => {
 		var pasteTarget = document.getElementsByName('address')[0];
 		pasteTarget.focus();
 		if (navigator.clipboard && navigator.clipboard?.readText)
-			document.execCommand('insertText', false, await navigator.clipboard.readText());
+			document.execCommand(
+				'insertText',
+				false,
+				await navigator.clipboard.readText()
+			);
 	};
 
 	return (
 		<Wrapper onSubmit={formik.handleSubmit} isMobile={appState.isMobile}>
 			<Content>
 				<Column>
-					<Title>Choose Token</Title>
+					<BodyText variant='small' mb={3}>
+						Choose Token
+					</BodyText>
 					<TokenList>
 						<Token
 							active={formik.values.token === 'Biobit'}
 							onClick={() => formik.setFieldValue('token', 'Biobit')}
 						>
-							<TokenIcon src={biobitIcon} />
-							<TokenName>BBit</TokenName>
+							<ThemeIcon variant={['small', 'big']} src={biobitIcon} />
+							<BodyText variant='small' fontWeight='semiBold'>
+								BBit
+							</BodyText>
 						</Token>
 						<Token
 							active={formik.values.token === 'Ethereum'}
 							onClick={() => formik.setFieldValue('token', 'Ethereum')}
 						>
-							<TokenIcon src={etherIcon} />
-							<TokenName>Ethereum</TokenName>
+							<ThemeIcon variant={['small', 'big']} src={etherIcon} />
+							<BodyText variant='small' fontWeight='semiBold'>
+								Ethereum
+							</BodyText>
 						</Token>
 					</TokenList>
 					<WalletInput
 						isMobile={appState.isMobile}
 						label={"Recipient's Address"}
 						placeholder={"Please enter the Recipient's address"}
-						adornment={navigator.clipboard && navigator.clipboard?.readText ? 'Paste' : null} // #todo
+						adornment={
+							navigator.clipboard && navigator.clipboard?.readText
+								? 'Paste'
+								: null
+						} // #todo
 						adornmentOnClick={() => {
 							getClipboard();
 						}}
 						onChange={(e) => formik.setFieldValue('address', e.target.value)}
-						name="address"
+						name='address'
 						value={formik.values.address}
 						error={formik.errors?.address}
 					/>
@@ -155,26 +158,33 @@ const WalletSendAssets = (mobile) => {
 						]}
 						coloredAdornment
 						onChange={(e) => formik.setFieldValue('amount', e.target.value)}
-						name="amount"
+						name='amount'
 						value={formik.values.amount}
 						error={formik.errors?.amount}
 					/>
 					{appState.isMobile ? (
-						<SendButtonMobile
-							variant="primary"
-							type="submit"
-							disabled={!formik.isValid && !formik.isSubmitting && !formik.pristine}
+						<ThemeButton
+							variant='primary'
+							size='normal'
+							type='submit'
+							m='auto'
+							disabled={
+								!formik.isValid && !formik.isSubmitting && !formik.pristine
+							}
 						>
 							Send
-						</SendButtonMobile>
+						</ThemeButton>
 					) : (
-						<SendButton
-							variant="primary"
-							type="submit"
-							disabled={!formik.isValid && !formik.isSubmitting && !formik.pristine}
+						<ThemeButton
+							variant='primary'
+							size='normal'
+							type='submit'
+							disabled={
+								!formik.isValid && !formik.isSubmitting && !formik.pristine
+							}
 						>
 							Send
-						</SendButton>
+						</ThemeButton>
 					)}
 				</Column>
 			</Content>

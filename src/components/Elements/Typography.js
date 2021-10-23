@@ -101,6 +101,10 @@ const TextComponent = styled(Text)(
 				whiteSpace: 'nowrap',
 				textAlign: 'center',
 			},
+			hash: {
+				fontSize: [8],
+				lineHeight: [15],
+			}
 		},
 	})
 );
