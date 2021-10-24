@@ -71,9 +71,7 @@ const Blocked = ({ isMobile }) => {
 										<SettingTableCell flex='0 0 20%'>
 											<TableCell>
 												{' '}
-
 												<BodyText variant='extraSmall'>
-
 												{contacts[normalizeAddress(blockedAddress)] || '-'}
 												</BodyText>
 											</TableCell>

@@ -21,7 +21,7 @@ const RequestCard = (props) => {
 
 	return (
 		<RequestCardWrapper data-tour='request-list-one'>
-			<Row>
+			<Row alignItems='flex-start'>
 				<IdLabel data-tour='request-list-two'>{props.requestID}</IdLabel>
 				<Col>
 					<Header variant='heading4' as='h4' data-tour='request-list-three'>
