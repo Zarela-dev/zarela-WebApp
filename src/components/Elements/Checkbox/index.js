@@ -8,12 +8,11 @@ const CheckboxContainer = styled.div`
 	cursor: pointer;
 `;
 
-
 const Icon = styled.img`
 	margin: 0 auto;
-	width: ${(props) => (props.small ? '10px' : '18px')};
+	width: ${(props) => (props.small ? '10px' : '14px')};
 	position: relative;
-	top: ${(props) => (props.small ? '0px' : '5px')};
+	top: ${(props) => (props.small ? '0px' : '3px')};
 `;
 // Hide checkbox visually but remain accessible to screen readers.
 // Source: https://polished.js.org/docs/#hidevisually
@@ -33,15 +32,15 @@ const HiddenCheckbox = styled.input`
 const StyledCheckboxWrapper = styled.div`
 	display: inline-block;
 	position: relative;
-	width: ${(props) => (props.small ? '20px' : '40px')};
-	height: ${(props) => (props.small ? '20px' : '40px')};
+	width: ${(props) => (props.small ? '20px' : '32px')};
+	height: ${(props) => (props.small ? '20px' : '32px')};
 	background: white;
 	box-sizing: border-box;
 	border-radius: 4px;
 	transition: all 150ms;
 	text-align: center;
 
-	border: ${(props) => (props.disabled ? '3px solid transparent' : `3px solid ${props.theme.primaryFaded}`)};
+	border: ${(props) => (props.disabled ? '1px solid transparent' : `1px solid ${props.theme.colors.primaryFaded}`)};
 
 	${Icon} {
 		visibility: ${(props) => (props.checked ? 'visible' : 'hidden')};
@@ -52,15 +51,15 @@ const StyledCheckbox = styled.div`
 	display: inline-block;
 	position: absolute;
 	z-index: 1;
-	top: ${(props) => (props.small ? '-3px' : '2px')};
-	left: ${(props) => (props.small ? '-3px' : '2px')};
-	width: ${(props) => (props.small ? '20px' : '30px')};
-	height: ${(props) => (props.small ? '20px' : '30px')};
+	top: ${(props) => (props.small ? '-1px' : '2px')};
+	left: ${(props) => (props.small ? '-1px' : '2px')};
+	width: ${(props) => (props.small ? '20px' : '26px')};
+	height: ${(props) => (props.small ? '20px' : '26px')};
 	background: white;
 	box-sizing: border-box;
-	border-radius: 4px;
+	border-radius: 2px;
 	transition: all 150ms;
-	background: ${(props) => (props.disabled ? '#F4F8FE' : props.checked ? '#2EECA8' : 'transparent')};
+	background: ${(props) => (props.disabled ? '#F4F8FE' : props.checked ? props.theme.colors.secondary : 'transparent')};
 	text-align: center;
 	/* opacity: ${(props) => (props.disabled ? 0.5 : 1)}; */
 	cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
@@ -72,7 +71,7 @@ const Label = styled.label`
 	line-height: 20px;
 	max-width: 620px;
 	font-weight: normal;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 `;
 
 const Checkbox = ({ children, checked, ...props }) => (
