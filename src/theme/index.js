@@ -116,7 +116,7 @@ const theme = (darkMode) => {
 
 		// spacing
 		spacing: (val) => {
-			const BASE = 10;
+			const BASE = 8;
 			return BASE * val + 'px';
 		},
 		// typography
