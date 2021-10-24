@@ -2,23 +2,27 @@ import { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import logo from '../../assets/icons/logo.png';
-import home from '../../assets/icons/home.svg';
-import setting from '../../assets/icons/setting.svg';
-import inbox from '../../assets/icons/inbox.svg';
-import user from '../../assets/icons/user.svg';
-import wallet from '../../assets/icons/wallet.svg';
-import explore from '../../assets/icons/explore.svg';
+import home from '../../assets/icons/nav/home.svg';
+import inbox from '../../assets/icons/nav/inbox.svg';
+import user from '../../assets/icons/nav/profile.svg';
+import wallet from '../../assets/icons/nav/wallet.svg';
+import homeActive from '../../assets/icons/nav/home-active.svg';
+import inboxActive from '../../assets/icons/nav/inbox-active.svg';
+import userActive from '../../assets/icons/nav/profile-active.svg';
+import walletActive from '../../assets/icons/nav/wallet-active.svg';
+import setting from '../../assets/icons/nav/settings.svg';
+import explore from '../../assets/icons/nav/explore.svg';
+import menu from '../../assets/icons/menu.svg';
+import chainIdTag from '../../assets/icons/chainid-tag.svg';
+import help from './../../assets/icons/nav/question-mark.svg';
+import bell from './../../assets/icons/nav/notification-bell.svg';
 import { Link } from 'react-router-dom';
 import { Typography } from '../Elements/Typography';
 import { Button } from '../Elements/Button';
-import menu from '../../assets/icons/menu.svg';
 import { convertToBiobit, toast } from '../../utils';
 import MobileMenu from '../MobileMenu';
 import NotificationMenu from '../NotificationMenu';
 import { mainContext } from './../../state';
-import chainIdTag from '../../assets/icons/chainid-tag.svg';
-import help from './../../assets/icons/help.svg';
-import bell from './../../assets/icons/bell.svg';
 import { useLocation } from 'react-router';
 import { actionTypes } from '../../state/actionTypes';
 import { makeStyles } from '@material-ui/core';
@@ -41,10 +45,8 @@ const NavItem = styled(Link)`
 	align-content: center;
 	justify-content: center;
 	text-decoration: none;
-	margin-right: ${(props) =>
-		props.isMobile ? props.theme.spacing(0) : props.theme.spacing(2.5)};
-	margin-left: ${(props) =>
-		props.isMobile ? props.theme.spacing(2) : props.theme.spacing(2.5)};
+	margin-right: ${(props) => (props.isMobile ? props.theme.space[2] : props.theme.space[3])}px;
+	margin-left: ${(props) => (props.isMobile ? props.theme.space[2] : props.theme.space[3])}px;
 	outline: none !important;
 	cursor: ${(props) => props.disabled && 'not-allowed'};
 	opacity: ${(props) => (props.disabled ? 0.4 : 1)};
@@ -63,10 +65,8 @@ const NavItemDisabled = styled.a.attrs((props) => {
 	align-content: center;
 	justify-content: center;
 	text-decoration: none;
-	margin-right: ${(props) =>
-		props.isMobile ? props.theme.spacing(0) : props.theme.spacing(2.5)};
-	margin-left: ${(props) =>
-		props.isMobile ? props.theme.spacing(2) : props.theme.spacing(2.5)};
+	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(0) : props.theme.spacing(2.5))};
+	margin-left: ${(props) => (props.isMobile ? props.theme.spacing(2) : props.theme.spacing(2.5))};
 	outline: none !important;
 	cursor: ${(props) => props.disabled && 'not-allowed'};
 	opacity: ${(props) => (props.disabled ? 0.4 : 1)};
@@ -98,8 +98,7 @@ const NavIcon = styled.img`
 const Logo = styled.img`
 	height: 65px;
 	margin-left: 20px;
-	margin-right: ${(props) =>
-		props.isMobile ? props.theme.spacing(1) : props.theme.spacing(4)};
+	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(1) : props.theme.spacing(4))};
 `;
 
 const SubmitRequestButton = styled(Link)`
@@ -116,8 +115,7 @@ const HeaderWrapper = styled.header`
 	justify-content: space-between;
 	align-items: flex-end;
 	background: white;
-	margin-bottom: ${(props) =>
-		props.routeGroup === '' ? 0 : props.routeGroup === 'request' ? 0 : '130px'};
+	margin-bottom: ${(props) => (props.routeGroup === '' ? 0 : props.routeGroup === 'request' ? 0 : '130px')};
 `;
 
 const HeaderWrapperApp = styled(HeaderWrapper)`
@@ -127,12 +125,7 @@ const HeaderWrapperApp = styled(HeaderWrapper)`
 	padding: 0;
 	display: flex;
 	flex-direction: column;
-	margin-bottom: ${(props) =>
-		props.routeGroup === ''
-			? '70px'
-			: props.routeGroup === 'request'
-			? 0
-			: '100px'};
+	margin-bottom: ${(props) => (props.routeGroup === '' ? '70px' : props.routeGroup === 'request' ? 0 : '100px')};
 `;
 
 const NavBarRow = styled.div`
@@ -145,8 +138,7 @@ const NavBarRow = styled.div`
 	height: 100%;
 	background: #fff;
 	height: ${(props) => (props.isMobile ? '70px' : '100px')};
-	padding: ${(props) =>
-		props.isMobile ? '10px 18px' : `25px calc((100vw - 1255px) / 2)`};
+	padding: ${(props) => (props.isMobile ? '10px 18px' : `25px calc((100vw - 1255px) / 2)`)};
 	box-shadow: 0px 4px 18px 0px rgb(81 197 234 / 10%);
 `;
 
@@ -326,7 +318,7 @@ export default function Header({ isMobile }, props) {
 				<HeaderWrapperApp routeGroup={routeGroup} isMobile={appState.isMobile}>
 					<NavBarRow isMobile={appState.isMobile}>
 						<RightMenu>
-							<Link to='/'>
+							<Link to="/">
 								<LogoApp src={logo} />
 							</Link>
 						</RightMenu>
@@ -340,12 +332,10 @@ export default function Header({ isMobile }, props) {
 									!location.pathname.startsWith('/inbox') &&
 									!location.pathname.startsWith('/request/create') && (
 										<NavIcon
-											height='20px'
+											height="20px"
 											src={help}
 											onClick={() => {
-												localStorage.removeItem(
-													'guide/' + location.pathname.split('/')[1]
-												);
+												localStorage.removeItem('guide/' + location.pathname.split('/')[1]);
 												dispatch({
 													type: actionTypes.SET_GUIDE_IS_OPEN,
 													payload: true,
@@ -355,11 +345,7 @@ export default function Header({ isMobile }, props) {
 									)}
 							</NavItem>
 							<NavItem isMobile={appState.isMobile}>
-								<NavIcon
-									src={bell}
-									height='20px'
-									onClick={() => setIsNotificationMenuOpen(true)}
-								/>
+								<NavIcon src={bell} height="20px" onClick={() => setIsNotificationMenuOpen(true)} />
 								{appState.notificationCount !== 0 && (
 									<NotificationBadge isMobile={appState.isMobile}>
 										{appState.notificationCount}
@@ -388,8 +374,8 @@ export default function Header({ isMobile }, props) {
 					<BoxWrapper>
 						<Box
 							className={classes.root}
-							as='header'
-							mt='-1em'
+							as="header"
+							mt="-1em"
 							sx={{
 								position: 'sticky',
 								transform: sticky ? 'translateY(83px)' : 'translateY(0)',
@@ -400,62 +386,54 @@ export default function Header({ isMobile }, props) {
 						>
 							{routeGroup === '' ? (
 								<TitleSection>
-									<Heading as='h4' variant='heading4'>
+									<Heading as="h4" variant="heading4">
 										Recent requests
 									</Heading>
-									<ThemeButton
-										variant='primary'
-										size='medium'
-										to='/request/create'
-									>
+									<ThemeButton variant="primary" size="medium" to="/request/create">
 										New Request
 									</ThemeButton>
 								</TitleSection>
 							) : routeGroup === 'wallet' ? (
 								<WalletTitlebar isMobile={appState.isMobile}>
-									<Heading as='h4' variant='heading4'>
+									<Heading as="h4" variant="heading4">
 										Wallet
 									</Heading>
 									<Heading
-										as='h4'
-										variant='heading4'
+										as="h4"
+										variant="heading4"
 									>{`Balance: ${+appState.biobitBalance} BBit`}</Heading>
 								</WalletTitlebar>
 							) : routeGroup === 'log' ? (
 								<WalletTitlebar isMobile={appState.isMobile}>
-									<Heading as='h4' variant='heading4'>
+									<Heading as="h4" variant="heading4">
 										Log
 									</Heading>
 									<RewardWrapper>
 										<RewardItem>
-											<BodyText variant='extraSmall'>
-												My reward from Zarela
-											</BodyText>
+											<BodyText variant="extraSmall">My reward from Zarela</BodyText>
 											<BodyText
-												variant='extraSmall'
-												fontWeight='bold'
+												variant="extraSmall"
+												fontWeight="bold"
 												ml={3}
 											>{`${totalRevenueFromZarela} BBit`}</BodyText>
 										</RewardItem>
 										<RewardItem>
-											<BodyText variant='extraSmall'>
-												My wage from mage
-											</BodyText>
+											<BodyText variant="extraSmall">My wage from mage</BodyText>
 											<BodyText
-												variant='extraSmall'
-												fontWeight='bold'
+												variant="extraSmall"
+												fontWeight="bold"
 												ml={3}
 											>{`${totalRevenueFromRequester} BBit`}</BodyText>
 										</RewardItem>
 									</RewardWrapper>
 								</WalletTitlebar>
 							) : routeGroup === 'inbox' ? (
-								<Heading as='h4' variant='heading4' p={4} bg='bgDisabled'>
+								<Heading as="h4" variant="heading4" p={4} bg="bgDisabled">
 									Inbox
 								</Heading>
 							) : routeGroup === 'settings' ? (
 								<TitleBar>
-									<BodyText variant='extraSmall'>Settings</BodyText>
+									<BodyText variant="extraSmall">Settings</BodyText>
 								</TitleBar>
 							) : null}
 						</Box>
@@ -468,35 +446,35 @@ export default function Header({ isMobile }, props) {
 			<HeaderWrapper routeGroup={routeGroup} isMobile={appState.isMobile}>
 				<NavBarRow isMobile={appState.isMobile}>
 					<Row>
-						<Link to='/'>
+						<Link to="/">
 							<Logo isMobile={appState.isMobile} src={logo} />
 						</Link>
-						<NavItem isMobile={appState.isMobile} to='/'>
-							<ThemeIcon variant='layout' src={home} m='0 8px' />
+						<NavItem isMobile={appState.isMobile} to="/">
+							<ThemeIcon variant="layout" src={routeGroup === '' ? homeActive : home} mr={'0px'} />
 							<BodyText
-								variant='small'
-								fontWeight={routeGroup === '' ? 'bold' : 'semiBold'}
-								color='primary'
+								variant="small"
+								fontWeight={routeGroup === '' ? 'semiBold' : 'normal'}
+								color="primary"
 							>
 								Home
 							</BodyText>
 						</NavItem>
-						<NavItem isMobile={appState.isMobile} to='/inbox'>
-							<ThemeIcon variant='layout' m='0 8px' src={inbox} />
+						<NavItem isMobile={appState.isMobile} to="/inbox">
+							<ThemeIcon variant="layout" mr={'0px'} src={routeGroup === 'inbox' ? inboxActive : inbox} />
 							<BodyText
-								variant='small'
-								fontWeight={routeGroup === 'inbox' ? 'bold' : 'semiBold'}
-								color='primary'
+								variant="small"
+								fontWeight={routeGroup === 'inbox' ? 'semiBold' : 'normal'}
+								color="primary"
 							>
 								Inbox
 							</BodyText>
 						</NavItem>
-						<NavItem isMobile={appState.isMobile} to='/log/my_requests'>
-							<ThemeIcon variant='layout' m='0 8px' src={user} />
+						<NavItem isMobile={appState.isMobile} to="/log/my_requests">
+							<ThemeIcon variant="layout" mr={'0px'} src={routeGroup === 'log' ? userActive : user} />
 							<BodyText
-								variant='small'
-								fontWeight={routeGroup === 'log' ? 'bold' : 'semiBold'}
-								color='primary'
+								variant="small"
+								fontWeight={routeGroup === 'log' ? 'semiBold' : 'normal'}
+								color="primary"
 							>
 								Log
 							</BodyText>
@@ -504,37 +482,35 @@ export default function Header({ isMobile }, props) {
 						<NavItem
 							isMobile={appState.isMobile}
 							to={{ pathname: process.env.REACT_APP_EXPLORE_LINK }}
-							target='_blank'
+							target="_blank"
 						>
-							<ThemeIcon variant='layout' m='0 8px' src={explore} />
-							<BodyText variant='small' fontWeight='semiBold' color='primary'>
+							<ThemeIcon variant="layout" mr={'0px'} src={explore} />
+							<BodyText variant="small" fontWeight="semiBold" color="primary">
 								Explore
 							</BodyText>
 						</NavItem>
-						<NavItem isMobile={appState.isMobile} to='/wallet/account'>
-							<ThemeIcon variant='layout' m='0 8px' src={wallet} />
+						<NavItem isMobile={appState.isMobile} to="/wallet/account">
+							<ThemeIcon
+								variant="layout"
+								m="0 8px"
+								src={routeGroup === 'wallet' ? walletActive : wallet}
+							/>
 							<BodyText
-								variant='small'
-								fontWeight={routeGroup === 'wallet' ? 'bold' : 'semiBold'}
-								color='primary'
+								variant="small"
+								fontWeight={routeGroup === 'wallet' ? 'semiBold' : 'normal'}
+								color="primary"
 							>
 								Wallet
 							</BodyText>
-							<ChainBadge onClick={(e) => e.preventDefault()}>
-								{CURRENT_NETWORK_LABEL}
-							</ChainBadge>
+							<ChainBadge onClick={(e) => e.preventDefault()}>{CURRENT_NETWORK_LABEL}</ChainBadge>
 						</NavItem>
 					</Row>
-					<Row justifyContent='flex-end'>
-						<ThemeButton variant='primary' size='normal' to='/request/create'>
+					<Row justifyContent="flex-end">
+						<ThemeButton variant="primary" size="large" to="/request/create">
 							New Request
 						</ThemeButton>
 						<NavItem>
-							<ThemeIcon
-								variant='layout'
-								src={bell}
-								onClick={() => setIsNotificationMenuOpen(true)}
-							/>
+							<ThemeIcon variant="layout" src={bell} onClick={() => setIsNotificationMenuOpen(true)} />
 							{appState.notificationCount !== 0 && (
 								<NotificationBadge isMobile={appState.isMobile}>
 									{appState.notificationCount}
@@ -542,19 +518,15 @@ export default function Header({ isMobile }, props) {
 							)}
 						</NavItem>
 						{GUIDES.find(
-							(page) =>
-								location.pathname === page ||
-								(location.pathname.startsWith(page) && page !== '/')
+							(page) => location.pathname === page || (location.pathname.startsWith(page) && page !== '/')
 						) &&
 							location.pathname !== '/request/create' && (
 								<NavItem>
 									<ThemeIcon
-										variant='layout'
+										variant="layout"
 										src={help}
 										onClick={() => {
-											localStorage.removeItem(
-												'guide/' + location.pathname.split('/')[1]
-											);
+											localStorage.removeItem('guide/' + location.pathname.split('/')[1]);
 											dispatch({
 												type: actionTypes.SET_GUIDE_IS_OPEN,
 												payload: true,
@@ -563,8 +535,8 @@ export default function Header({ isMobile }, props) {
 									/>
 								</NavItem>
 							)}
-						<NavItem isMobile={appState.isMobile} to='/settings/contacts'>
-							<ThemeIcon variant='layout' src={setting} />
+						<NavItem isMobile={appState.isMobile} to="/settings/contacts">
+							<ThemeIcon variant="layout" src={setting} />
 						</NavItem>
 						<NotificationMenu
 							appState={appState}
@@ -579,8 +551,8 @@ export default function Header({ isMobile }, props) {
 				<BoxWrapper>
 					<Box
 						className={classes.root}
-						as='header'
-						mt='-1em'
+						as="header"
+						mt="-1em"
 						sx={{
 							position: 'sticky',
 							transform: sticky ? 'translateY(110px)' : 'translateY(0)',

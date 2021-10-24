@@ -15,7 +15,7 @@ const Nav = styled.nav`
 	transform: ${({ isOpen }) =>
 		isOpen ? 'translateX(0%)' : 'translateX(100%)'};
 	min-width: 276px;
-	border: 1.5px solid ${(props) => props.theme.success};
+	border: 1.5px solid ${(props) => props.theme.colors.success};
 	border-radius: 8px 0px 0px 0px;
 	padding: ${(props) => props.theme.spacing(2)}
 		${(props) => props.theme.spacing(3)};
