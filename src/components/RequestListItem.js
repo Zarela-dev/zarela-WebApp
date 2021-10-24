@@ -27,8 +27,7 @@ const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
 	opacity: 0.8;
 	border-radius: 8px;
-	padding: ${(props) => props.theme.spacing(3)}
-		${(props) => props.theme.spacing(3.5)};
+	padding: ${(props) => props.theme.spacing(3)} ${(props) => props.theme.spacing(3.5)};
 	margin-bottom: ${(props) => props.theme.spacing(2)};
 `;
 
@@ -94,10 +93,7 @@ const RequestListItem = ({
 	const changeAll = (type) => {
 		const originalIndexes = [];
 		const indexesAlreadyConfirmed = [];
-		const all = Object.values(formattedData).reduce(
-			(acc, curr) => acc.concat(curr),
-			[]
-		);
+		const all = Object.values(formattedData).reduce((acc, curr) => acc.concat(curr), []);
 
 		all.forEach(({ status, originalIndex }) => {
 			originalIndexes.push(originalIndex);
@@ -106,9 +102,7 @@ const RequestListItem = ({
 			}
 		});
 
-		const selectableIndexes = originalIndexes.filter(
-			(index) => !indexesAlreadyConfirmed.includes(index)
-		);
+		const selectableIndexes = originalIndexes.filter((index) => !indexesAlreadyConfirmed.includes(index));
 
 		if (type === 'check') {
 			setSelected(selectableIndexes);
@@ -121,10 +115,7 @@ const RequestListItem = ({
 		const indexesAlreadyConfirmed = [];
 		const pendingIndexes = getPendingIndexes(requestID);
 		const selectedIndexes = [...selected];
-		const all = Object.values(formattedData).reduce(
-			(acc, curr) => acc.concat(curr),
-			[]
-		);
+		const all = Object.values(formattedData).reduce((acc, curr) => acc.concat(curr), []);
 
 		all.forEach(({ status, originalIndex }) => {
 			originalIndexes.push(originalIndex);
@@ -149,24 +140,15 @@ const RequestListItem = ({
 		const originalIndexes = [];
 		const indexesAlreadyConfirmed = [];
 		const pendingIndexes = getPendingIndexes(requestID);
-		const all = Object.values(formattedData).reduce(
-			(acc, curr) => acc.concat(curr),
-			[]
-		);
+		const all = Object.values(formattedData).reduce((acc, curr) => acc.concat(curr), []);
 
 		all.forEach(({ status, originalIndex }) => {
 			originalIndexes.push(originalIndex);
 			if (Boolean(status) === true) indexesAlreadyConfirmed.push(originalIndex);
 		});
 
-		if (_.isEqual(originalIndexes.sort(), indexesAlreadyConfirmed.sort()))
-			return 'approved';
-		if (
-			_.isEqual(
-				arraySymmetricDiff(indexesAlreadyConfirmed, pendingIndexes).sort(),
-				originalIndexes.sort()
-			)
-		)
+		if (_.isEqual(originalIndexes.sort(), indexesAlreadyConfirmed.sort())) return 'approved';
+		if (_.isEqual(arraySymmetricDiff(indexesAlreadyConfirmed, pendingIndexes).sort(), originalIndexes.sort()))
 			return 'pending';
 		return 'available';
 	};
@@ -188,10 +170,7 @@ const RequestListItem = ({
 		}
 		if (
 			_.isEqual(
-				arraySymmetricDiff(
-					indexesAlreadyConfirmed,
-					arrayIntersection(originalIndexes, pendingIndexes)
-				).sort(),
+				arraySymmetricDiff(indexesAlreadyConfirmed, arrayIntersection(originalIndexes, pendingIndexes)).sort(),
 				originalIndexes.sort()
 			)
 		) {
@@ -244,8 +223,7 @@ const RequestListItem = ({
 		});
 
 		const selectableIndexes = originalIndexes.filter(
-			(index) =>
-				![...indexesAlreadyConfirmed, ...pendingIndexes].includes(index)
+			(index) => ![...indexesAlreadyConfirmed, ...pendingIndexes].includes(index)
 		);
 
 		if (type === 'check') {
@@ -255,17 +233,12 @@ const RequestListItem = ({
 			});
 		}
 		if (type === 'uncheck')
-			setSelected((values) =>
-				values.filter((selectedItem) => !originalIndexes.includes(selectedItem))
-			);
+			setSelected((values) => values.filter((selectedItem) => !originalIndexes.includes(selectedItem)));
 	};
 
 	const onChange = (type, originalIndex) => {
 		if (type === 'check') setSelected((values) => [...values, originalIndex]);
-		if (type === 'uncheck')
-			setSelected((values) =>
-				values.filter((item) => +item !== +originalIndex)
-			);
+		if (type === 'uncheck') setSelected((values) => values.filter((item) => +item !== +originalIndex));
 	};
 	// files table selection methods END
 
@@ -277,9 +250,7 @@ const RequestListItem = ({
 
 		try {
 			/* fetch signal file metadata from IPFS */
-			const encryptedFileMetaRes = await axios.get(
-				`${process.env.REACT_APP_IPFS_GET_LINK + fileMetaCID}`
-			);
+			const encryptedFileMetaRes = await axios.get(`${process.env.REACT_APP_IPFS_GET_LINK + fileMetaCID}`);
 
 			const decryptedFileMeta = await window.ethereum.request({
 				method: 'eth_decrypt',
@@ -305,19 +276,13 @@ const RequestListItem = ({
 					setDialogMessage(event.data.message);
 				}
 				if (event.data.type === 'decrypted') {
-					saveAs(
-						new Blob([event.data.decrypted_file]),
-						`${FILE_NAME}.${FILE_EXT}`
-					);
+					saveAs(new Blob([event.data.decrypted_file]), `${FILE_NAME}.${FILE_EXT}`);
 					clearSubmitDialog();
 				}
 			});
 		} catch (error) {
 			clearSubmitDialog();
-			toast(
-				'there was an error decrypting your file, please contact support for more information.',
-				'error'
-			);
+			toast('there was an error decrypting your file, please contact support for more information.', 'error');
 			console.error(error);
 		}
 	};
@@ -333,76 +298,72 @@ const RequestListItem = ({
 
 	useEffect(() => {
 		if (appState.contract !== null) {
-			appState.contract.methods
-				.getOrderData(requestID)
-				.call((orderInfoError, orderInfo) => {
-					if (!orderInfoError) {
-						appState.contract.methods
-							.ownerSpecificData(requestID)
-							.call({ from: account }, (fileError, files) => {
-								if (!fileError) {
-									let addresses = orderInfo[0];
-									let timestamp = orderInfo[2];
-									let status = orderInfo[4];
-									// let laboratories = orderInfo[1];
-									// let whoGainedReward = orderInfo[3];
-									// let zarelaDay = orderInfo[5];
+			appState.contract.methods.getOrderData(requestID).call((orderInfoError, orderInfo) => {
+				if (!orderInfoError) {
+					appState.contract.methods
+						.ownerSpecificData(requestID)
+						.call({ from: account }, (fileError, files) => {
+							if (!fileError) {
+								let addresses = orderInfo[0];
+								let timestamp = orderInfo[2];
+								let status = orderInfo[4];
+								// let laboratories = orderInfo[1];
+								// let whoGainedReward = orderInfo[3];
+								// let zarelaDay = orderInfo[5];
 
-									let formatted = {};
-									let uniqueAddresses = [...new Set(addresses)];
-									let pairs = [];
+								let formatted = {};
+								let uniqueAddresses = [...new Set(addresses)];
+								let pairs = [];
 
-									// count all the unapproved files
-									setUnapprovedCount(
-										status.filter((item) => Boolean(item) === false).length
-									);
+								// count all the unapproved files
+								setUnapprovedCount(status.filter((item) => Boolean(item) === false).length);
 
-									addresses.forEach((address, fileIndex) => {
-										pairs.push({
-											file: files[0][fileIndex],
-											AesEncryptedKey: files[1][fileIndex],
-											address: address,
-											timestamp: timestamp[fileIndex],
-											originalIndex: fileIndex,
-											status: status[fileIndex],
-										});
+								addresses.forEach((address, fileIndex) => {
+									pairs.push({
+										file: files[0][fileIndex],
+										AesEncryptedKey: files[1][fileIndex],
+										address: address,
+										timestamp: timestamp[fileIndex],
+										originalIndex: fileIndex,
+										status: status[fileIndex],
 									});
+								});
 
-									uniqueAddresses.forEach((uAddress, uIndex) => {
-										pairs.forEach((tempItem, tempIndex) => {
-											if (tempItem.address === uAddress) {
-												if (Object(formatted).hasOwnProperty(uAddress)) {
-													formatted[uAddress].push({
+								uniqueAddresses.forEach((uAddress, uIndex) => {
+									pairs.forEach((tempItem, tempIndex) => {
+										if (tempItem.address === uAddress) {
+											if (Object(formatted).hasOwnProperty(uAddress)) {
+												formatted[uAddress].push({
+													ipfsHash: tempItem.file,
+													timestamp: tempItem.timestamp,
+													AesEncryptedKey: tempItem.AesEncryptedKey,
+													originalIndex: tempItem.originalIndex,
+													status: tempItem.status,
+												});
+											} else {
+												formatted[uAddress] = [
+													{
 														ipfsHash: tempItem.file,
 														timestamp: tempItem.timestamp,
 														AesEncryptedKey: tempItem.AesEncryptedKey,
 														originalIndex: tempItem.originalIndex,
 														status: tempItem.status,
-													});
-												} else {
-													formatted[uAddress] = [
-														{
-															ipfsHash: tempItem.file,
-															timestamp: tempItem.timestamp,
-															AesEncryptedKey: tempItem.AesEncryptedKey,
-															originalIndex: tempItem.originalIndex,
-															status: tempItem.status,
-														},
-													];
-												}
+													},
+												];
 											}
-										});
+										}
 									});
+								});
 
-									setFormattedData(formatted);
-								} else {
-									console.error(fileError);
-								}
-							});
-					} else {
-						console.error(orderInfoError.message);
-					}
-				});
+								setFormattedData(formatted);
+							} else {
+								console.error(fileError);
+							}
+						});
+				} else {
+					console.error(orderInfoError.message);
+				}
+			});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [appState.contract, shouldRefresh]);
@@ -414,62 +375,57 @@ const RequestListItem = ({
 
 	return (
 		<Wrapper>
-			<Dialog
-				isOpen={isSubmitting}
-				content={dialogMessage}
-				hasSpinner
-				type='success'
-			/>
+			<Dialog isOpen={isSubmitting} content={dialogMessage} hasSpinner type="success" />
 			<Row
 				onClick={() => {
 					setOpen(!isOpen);
 					setAnyOpenBox && setAnyOpenBox(true);
 				}}
-				flexWrap='wrap'
+				flexWrap="wrap"
 			>
 				<Col width={2 / 3}>
 					<Row>
-						<IdLabel>{requestID}</IdLabel>
-						<Header variant='heading5' as='h5' weight='semiBold'>
-							{title.length < 160 ? title : title.substr(0, 160) + '...'}
-						</Header>
-						<Spacer />
+						<Col mr={3}>
+							<IdLabel>{requestID}</IdLabel>
+						</Col>
+						<Col>
+							<Header variant="heading5" as="h5" weight="semiBold">
+								{title.length < 160 ? title : title.substr(0, 160) + '...'}
+							</Header>
+							<Spacer />
+						</Col>
 					</Row>
 				</Col>
 
 				<Col width={1 / 3}>
-					<Row justifyContent='flex-end'>
+					<Row justifyContent="flex-end">
 						<Col>
-							<Row>
-								<ThemeIcon variant='big' src={biobitIcon} />
-								<BodyText variant='small' as='span' fontWeight='bold' mr={1}>
+							<Row sx={{ whiteSpace: 'nowrap' }}>
+								<ThemeIcon variant="big" src={biobitIcon} />
+								<BodyText variant="small" as="span" fontWeight="semiBold" mr={1}>
 									{+angelTokenPay + +laboratoryTokenPay}
 								</BodyText>
-								<BodyText variant='small' as='span' mr={2}>
+								<BodyText variant="small" fontWeight="semiBold" as="span" mr={2}>
 									BBit
 								</BodyText>
 								{/* for this version, we combine both numbers, later both will be shown separately */}
-								<BodyText variant='small' as='span' noMargin>{`~ $${
+								<BodyText variant="small" as="span" fontWeight="semiBold" noMargin>{`~ $${
 									+angelTokenPay + +laboratoryTokenPay
 								}`}</BodyText>
 							</Row>
 						</Col>
-						<ThemeDivider variant='vertical' />
+						<ThemeDivider variant="vertical" />
 
 						<Col>
 							<Row>
-								<ThemeIcon variant='normal' src={contributorIcon} />
-								<BodyText
-									variant='small'
-									color='textToken'
-									fontWeight='semiBold'
-								>
+								<ThemeIcon variant="normal" src={contributorIcon} />
+								<BodyText variant="small" color="textToken" fontWeight="semiBold">
 									{contributors}
 								</BodyText>
 							</Row>
 						</Col>
 
-						<ThemeDivider variant='vertical' />
+						<ThemeDivider variant="vertical" />
 
 						<ApproveBadge fulfilled={fulfilled} value={unapprovedCount} />
 
@@ -481,7 +437,7 @@ const RequestListItem = ({
 			{isOpen ? (
 				Object.keys(formattedData).length > 0 ? (
 					<>
-						<Body data-tour='inbox-one'>
+						<Body data-tour="inbox-one">
 							<RequestFilesTable
 								signalDownloadHandler={signalDownloadHandler}
 								data={formattedData}
@@ -497,10 +453,10 @@ const RequestListItem = ({
 								requestID={requestID}
 							/>
 						</Body>
-						<Row justifyContent='flex-end' mt={3}>
+						<Row justifyContent="flex-end" mt={3}>
 							<ThemeButton
-								variant='primary'
-								size='large'
+								variant="primary"
+								size="large"
 								disabled={selected.length === 0}
 								onClick={() => {
 									handleConfirm(requestID, selected);
@@ -512,7 +468,7 @@ const RequestListItem = ({
 					</>
 				) : (
 					<Row>
-						<BodyText variant='small' ml='90px'>
+						<BodyText variant="small" ml="90px">
 							There are no contributions for now
 						</BodyText>
 					</Row>
