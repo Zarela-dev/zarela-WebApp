@@ -17,7 +17,7 @@ export const TokenButton = styled.button`
 	background: #ffffff;
 	box-sizing: border-box;
 	border-radius: 3px;
-	color: #581d9f;
+	color: ${(props) => (props.theme.colors.primary)};
 	font-weight: 500;
 	font-size: 14px;
 	line-height: 20px;
@@ -42,11 +42,11 @@ export const Token = styled.div`
 	${(props) => props.active};
 
 	& ${TokenName} {
-		color: ${(props) => (!props.active ? props.theme.textPrimary : '#581D9F')};
+		color: ${(props) => (!props.active ? props.theme.colors.textPrimary : props.theme.colors.primary)};
 	}
 
 	& ${TokenButton} {
-		color: ${(props) => (!props.active ? '#858585' : '#581D9F')};
-		border: ${(props) => (!props.active ? '1px solid #858585' : '1px solid #A981FE')};
+		color: ${(props) => (!props.active ? props.theme.colors.textTimestamp : props.theme.colors.primary)};
+		border: ${(props) => (!props.active ? `1px solid ${props.theme.colors.primary}` : `1px solid ${props.theme.colors.primary}`)};
 	}
 `;

@@ -8,6 +8,7 @@ import TextField, { Error } from './../Elements/TextField';
 import ReactSelect from './../ReactSelect';
 import FeeEstimation from './FeeEstimation';
 import { actionTypes } from '../../state';
+import { Box } from 'rebass';
 
 const FormWrapper = styled.div`
 	width: 100%;
@@ -22,7 +23,7 @@ const SubmitButton = styled(Button)`
 `;
 
 const Form = styled.form`
-	max-width: 510px;
+	max-width: 530px;
 	padding-left: ${(props) => props.theme.spacing(2)};
 `;
 
@@ -31,8 +32,7 @@ const Divider = styled.div`
 	background: rgba(144, 144, 144, 0.3);
 	border-radius: 24px;
 	height: 3px;
-	margin: ${(props) => props.theme.spacing(5)} 0
-		${(props) => props.theme.spacing(6)};
+	margin: ${(props) => props.theme.spacing(5)} 0 ${(props) => props.theme.spacing(6)};
 `;
 
 const CustomCheckbox = styled(Checkbox)`
@@ -67,32 +67,19 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 			});
 			if (nonEmptyValues.length) {
 				setPrevDataFetched(true);
-				FormPrevData.title !== '' &&
-					(await formik.setFieldValue('title', FormPrevData.title));
-				FormPrevData.desc !== '' &&
-					(await formik.setFieldValue('desc', FormPrevData.desc));
+				FormPrevData.title !== '' && (await formik.setFieldValue('title', FormPrevData.title));
+				FormPrevData.desc !== '' && (await formik.setFieldValue('desc', FormPrevData.desc));
 				FormPrevData.angelTokenPay !== '' &&
-					(await formik.setFieldValue(
-						'angelTokenPay',
-						FormPrevData.angelTokenPay
-					));
+					(await formik.setFieldValue('angelTokenPay', FormPrevData.angelTokenPay));
 				FormPrevData.laboratoryTokenPay !== '' &&
-					(await formik.setFieldValue(
-						'laboratoryTokenPay',
-						FormPrevData.laboratoryTokenPay
-					));
+					(await formik.setFieldValue('laboratoryTokenPay', FormPrevData.laboratoryTokenPay));
 				FormPrevData.instanceCount !== '' &&
-					(await formik.setFieldValue(
-						'instanceCount',
-						FormPrevData.instanceCount
-					));
+					(await formik.setFieldValue('instanceCount', FormPrevData.instanceCount));
 				FormPrevData.category &&
 					FormPrevData.category.length > 0 &&
 					(await formik.setFieldValue('category', FormPrevData.category));
-				FormPrevData.category &&
-					setSelectedOption(FormPrevData.category.map((item) => item));
-				FormPrevData.terms &&
-					(await formik.setFieldValue('terms', FormPrevData.terms));
+				FormPrevData.category && setSelectedOption(FormPrevData.category.map((item) => item));
+				FormPrevData.terms && (await formik.setFieldValue('terms', FormPrevData.terms));
 				formik.validateForm();
 			}
 		}
@@ -118,14 +105,7 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 	const estimateFeeHandler = (target, values) => {
 		let gas = +appState.gas.average / 10; //Gwei
 		setGas(gas);
-		const {
-			title,
-			desc,
-			angelTokenPay,
-			laboratoryTokenPay,
-			instanceCount,
-			category,
-		} = values;
+		const { title, desc, angelTokenPay, laboratoryTokenPay, instanceCount, category } = values;
 		let SeedString = [
 			title,
 			desc,
@@ -168,79 +148,69 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 				{children}
 				<TextField
 					placeholder={'write main topics in your study'}
-					label='Title *'
-					type='text'
+					label="Title *"
+					type="text"
 					name={'title'}
 					error={formik.errors?.title}
 					value={formik.values.title}
 					onChange={(e) => {
 						formik.setFieldValue('title', e.target.value);
-						setEstimateEthFee(
-							estimateFeeHandler(e.target.value, formik.values)
-						);
+						setEstimateEthFee(estimateFeeHandler(e.target.value, formik.values));
 					}}
 				/>
 				<TextField
 					placeholder={'What’s your study about?'}
 					multiline
-					label='Description *'
-					type='text'
+					label="Description *"
+					type="text"
 					name={'desc'}
 					error={formik.errors?.desc}
 					value={formik.values.desc}
 					onChange={(e) => {
 						formik.setFieldValue('desc', e.target.value);
-						setEstimateEthFee(
-							estimateFeeHandler(e.target.value, formik.values)
-						);
+						setEstimateEthFee(estimateFeeHandler(e.target.value, formik.values));
 					}}
 				/>
 				<TextField
 					placeholder={'How many BBits will you pay for each contributor?'}
-					label='Allocated BBits For Angels*'
-					type='text'
+					label="Allocated BBits For Angels*"
+					type="text"
 					name={'angelTokenPay'}
 					error={formik.errors?.angelTokenPay}
 					value={formik.values.angelTokenPay}
 					onChange={(e) => {
 						formik.setFieldValue('angelTokenPay', e.target.value);
-						setEstimateEthFee(
-							estimateFeeHandler(e.target.value, formik.values)
-						);
+						setEstimateEthFee(estimateFeeHandler(e.target.value, formik.values));
 					}}
 				/>
 				<TextField
 					placeholder={'How many BBits will you pay for each laboratory?'}
-					label='Allocated BBits For laboratories*'
-					type='text'
+					label="Allocated BBits For laboratories*"
+					type="text"
 					name={'laboratoryTokenPay'}
 					error={formik.errors?.laboratoryTokenPay}
 					value={formik.values.laboratoryTokenPay}
 					onChange={(e) => {
 						formik.setFieldValue('laboratoryTokenPay', e.target.value);
-						setEstimateEthFee(
-							estimateFeeHandler(e.target.value, formik.values)
-						);
+						setEstimateEthFee(estimateFeeHandler(e.target.value, formik.values));
 					}}
 				/>
 				<TextField
 					placeholder={'How many people do you need to done the study?'}
-					label='Contributors *'
-					type='text'
+					label="Contributors *"
+					type="text"
 					name={'instanceCount'}
 					error={formik.errors?.instanceCount}
 					value={formik.values.instanceCount}
 					onChange={(e) => {
 						formik.setFieldValue('instanceCount', e.target.value);
-						setEstimateEthFee(
-							estimateFeeHandler(e.target.value, formik.values)
-						);
+						setEstimateEthFee(estimateFeeHandler(e.target.value, formik.values));
 					}}
 				/>
 				<ReactSelect
-					classNamePrefix='Select'
-					placeholder='Choose the category of your project from the box'
-					label='Category'
+					classNamePrefix="Select"
+					placeholder="Choose the category of your project from the box"
+					label="Category"
 					options={options}
 					onChange={(e) => {
 						formik.setFieldValue('category', e);
@@ -250,10 +220,7 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 					error={formik.errors?.category}
 					onKeyDown={(e) => {
 						if (e.key === 'Enter') {
-							setSelectedOption([
-								...selectedOption,
-								{ value: e.target.value, label: e.target.value },
-							]);
+							setSelectedOption([...selectedOption, { value: e.target.value, label: e.target.value }]);
 							formik.setFieldValue('category', [
 								...selectedOption,
 								{ value: e.target.value, label: e.target.value },
@@ -267,12 +234,12 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 				<FileInput
 					hasBorder={false}
 					showSelected
-					buttonLabel='Select Files'
-					downLoadLink='QmemgKnzsG7xqwQoPMoZnofSwTrtxkNc4kcFicDAzctCvA'
+					buttonLabel="Select Files"
+					downLoadLink="QmemgKnzsG7xqwQoPMoZnofSwTrtxkNc4kcFicDAzctCvA"
 					label={'Upload your Zpaper here'}
 					ref={ref}
 					name={'zpaper'}
-					fileSizeLimit='*File size must be smaller than 95MB'
+					fileSizeLimit="*File size must be smaller than 95MB"
 					error={formik.errors?.zpaper}
 					value={formik.values.zpaper}
 					onChange={(e) => {
@@ -280,35 +247,32 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 						if (e.target.value !== '' && e.target.value !== null) {
 							formik.setFieldError('zpaper', null);
 							formik.setSubmitting(false);
-							setEstimateEthFee(
-								estimateFeeHandler(e.target.value, formik.values)
-							);
+							setEstimateEthFee(estimateFeeHandler(e.target.value, formik.values));
 						}
 					}}
 				/>
 				<CustomCheckbox
 					checked={formik.values.terms}
-					name='terms'
+					name="terms"
 					onChange={(e) => {
 						formik.setFieldValue('terms', e.target.checked);
-						setEstimateEthFee(
-							estimateFeeHandler(e.target.checked, formik.values)
-						);
+						setEstimateEthFee(estimateFeeHandler(e.target.checked, formik.values));
 					}}
 				>
-					Your request won’t be able to be edited, make sure every data you
-					added is correct and final.
+					Your request won’t be able to be edited, make sure every data you added is correct and final.
 				</CustomCheckbox>
 				{formik.errors?.terms ? <Error>{formik.errors?.terms}</Error> : null}
 				<Divider />
-				<ThemeButton
-					size='normal'
-					variant='primary'
-					disabled={!formik.dirty || formik.isSubmitting}
-					type='submit'
-				>
-					Submit
-				</ThemeButton>
+				<Box>
+					<ThemeButton
+						size="normal"
+						variant="primary"
+						disabled={!formik.dirty || formik.isSubmitting}
+						type="submit"
+					>
+						Submit
+					</ThemeButton>
+				</Box>
 			</Form>
 			{/* <FeeEstimation gas={gas} fee={estimateEthFee} /> */}
 		</FormWrapper>

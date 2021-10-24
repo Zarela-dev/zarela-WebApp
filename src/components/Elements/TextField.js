@@ -63,14 +63,14 @@ export const Error = styled.label`
 	font-weight: 500;
 	font-size: 10px;
 	line-height: 20px;
-	color: #f62d76;
+	color: ${({theme}) => theme.colors.error};
 `;
 
 const Adornment = styled.div`
 	font-weight: 600;
-	font-size: ${({ colored }) => (colored ? '12px' : '14px')};
+	font-size: 12px;
 	line-height: 23px;
-	color: ${({ colored, theme }) => (colored ? '#581D9F' : theme.textPrimary)};
+	color: ${({ colored, theme }) => (colored ? theme.colors.primary : theme.colors.textPrimary)};
 `;
 
 const ActionsContainer = styled.div`
@@ -93,8 +93,10 @@ const HelperText = styled.div`
 
 const InputAction = styled.button.attrs({ type: 'button' })`
 	border: none;
-	background: none;
+	color: ${({ colored, theme }) => (colored ? theme.colors.primary : theme.colors.textPrimary)};
 	background: transparent;
+	font-weight: 600;
+	font-size: 12px;
 	width: 24px;
 	margin-left: ${(props) => props.theme.spacing(1)};
 `;
@@ -121,7 +123,7 @@ const TextField = forwardRef(
 		return (
 			<Wrapper className={className} hasTopMargin={true}>
 				<Label>
-					<BodyText variant='extraSmall' color='timestamp' mb={-2}>
+					<BodyText variant='extraSmall' color='timestamp'>
 						{label}
 					</BodyText>
 					{hint ? <Hint>{hint}</Hint> : null}
@@ -156,7 +158,7 @@ const TextField = forwardRef(
 					{actions
 						? actions.map((action, index) => {
 								return (
-									<InputAction key={index} onClick={action.onClick}>
+									<InputAction key={index} colored={coloredAdornment} onClick={action.onClick}>
 										{action.content}
 									</InputAction>
 								);

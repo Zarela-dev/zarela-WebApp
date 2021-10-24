@@ -84,7 +84,7 @@ const Blocked = ({ isMobile }) => {
 									</TableRow>
 								))
 							) : (
-								<BodyText variant='small'>You have no blocked addresses</BodyText>
+								<BodyText variant='small' pl={3}>You have no blocked addresses</BodyText>
 							)}
 						</TableBulkRow>
 					</Table>

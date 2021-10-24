@@ -133,6 +133,7 @@ const ButtonWrapper = styled(Box)(
 	compose(space, layout, color),
 	{
 		borderRadius: '4px',
+		width: 'fit-content',
 		height: 'fit-content',
 		'& *': {
 			textDecoration: 'none',

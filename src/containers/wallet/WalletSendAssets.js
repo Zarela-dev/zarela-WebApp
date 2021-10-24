@@ -61,10 +61,7 @@ const WalletSendAssets = (mobile) => {
 					.sendTransaction({
 						to: values.address,
 						from: account,
-						value: appState.fallbackWeb3Instance.utils.toWei(
-							values.amount,
-							'ether'
-						),
+						value: appState.fallbackWeb3Instance.utils.toWei(values.amount, 'ether'),
 					})
 					.then(({ transactionHash }) => {
 						console.log(transactionHash);
@@ -77,47 +74,43 @@ const WalletSendAssets = (mobile) => {
 	});
 
 	const getBalanceHint = () => {
-		return `Available: ${
-			formik.values.token === 'Biobit'
-				? +appState.biobitBalance
-				: +appState.etherBalance
-		} ${formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'}`;
+		return `Available: ${formik.values.token === 'Biobit' ? +appState.biobitBalance : +appState.etherBalance} ${
+			formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'
+		}`;
 	};
 
 	const getClipboard = async () => {
 		var pasteTarget = document.getElementsByName('address')[0];
 		pasteTarget.focus();
 		if (navigator.clipboard && navigator.clipboard?.readText)
-			document.execCommand(
-				'insertText',
-				false,
-				await navigator.clipboard.readText()
-			);
+			document.execCommand('insertText', false, await navigator.clipboard.readText());
 	};
 
 	return (
 		<Wrapper onSubmit={formik.handleSubmit} isMobile={appState.isMobile}>
 			<Content>
 				<Column>
-					<BodyText variant='small' mb={3}>
+					<BodyText variant="small" mb={3}>
 						Choose Token
 					</BodyText>
 					<TokenList>
-						<Token
-							active={formik.values.token === 'Biobit'}
-							onClick={() => formik.setFieldValue('token', 'Biobit')}
-						>
+						<Token onClick={() => formik.setFieldValue('token', 'Biobit')}>
 							<ThemeIcon variant={['small', 'big']} src={biobitIcon} />
-							<BodyText variant='small' fontWeight='semiBold'>
+							<BodyText
+								color={formik.values.token === 'Biobit' ? 'primary' : 'textPrimary'}
+								variant="small"
+								fontWeight="semiBold"
+							>
 								BBit
 							</BodyText>
 						</Token>
-						<Token
-							active={formik.values.token === 'Ethereum'}
-							onClick={() => formik.setFieldValue('token', 'Ethereum')}
-						>
+						<Token onClick={() => formik.setFieldValue('token', 'Ethereum')}>
 							<ThemeIcon variant={['small', 'big']} src={etherIcon} />
-							<BodyText variant='small' fontWeight='semiBold'>
+							<BodyText
+								color={formik.values.token === 'Ethereum' ? 'primary' : 'textPrimary'}
+								variant="small"
+								fontWeight="semiBold"
+							>
 								Ethereum
 							</BodyText>
 						</Token>
@@ -126,16 +119,13 @@ const WalletSendAssets = (mobile) => {
 						isMobile={appState.isMobile}
 						label={"Recipient's Address"}
 						placeholder={"Please enter the Recipient's address"}
-						adornment={
-							navigator.clipboard && navigator.clipboard?.readText
-								? 'Paste'
-								: null
-						} // #todo
+						adornment={navigator.clipboard && navigator.clipboard?.readText ? 'Paste' : null} // #todo
 						adornmentOnClick={() => {
 							getClipboard();
 						}}
+						coloredAdornment
 						onChange={(e) => formik.setFieldValue('address', e.target.value)}
-						name='address'
+						name="address"
 						value={formik.values.address}
 						error={formik.errors?.address}
 					/>
@@ -144,6 +134,7 @@ const WalletSendAssets = (mobile) => {
 						label={'Amount'}
 						placeholder={'Enter amount'}
 						hint={getBalanceHint()} // will change based on token chosen
+						coloredAdornment
 						actions={[
 							{
 								content: 'Max',
@@ -156,32 +147,27 @@ const WalletSendAssets = (mobile) => {
 								},
 							},
 						]}
-						coloredAdornment
 						onChange={(e) => formik.setFieldValue('amount', e.target.value)}
-						name='amount'
+						name="amount"
 						value={formik.values.amount}
 						error={formik.errors?.amount}
 					/>
 					{appState.isMobile ? (
 						<ThemeButton
-							variant='primary'
-							size='normal'
-							type='submit'
-							m='auto'
-							disabled={
-								!formik.isValid && !formik.isSubmitting && !formik.pristine
-							}
+							variant="primary"
+							size="normal"
+							type="submit"
+							m="auto"
+							disabled={!formik.isValid && !formik.isSubmitting && !formik.pristine}
 						>
 							Send
 						</ThemeButton>
 					) : (
 						<ThemeButton
-							variant='primary'
-							size='normal'
-							type='submit'
-							disabled={
-								!formik.isValid && !formik.isSubmitting && !formik.pristine
-							}
+							variant="primary"
+							size="normal"
+							type="submit"
+							disabled={!formik.isValid && !formik.isSubmitting && !formik.pristine}
 						>
 							Send
 						</ThemeButton>
