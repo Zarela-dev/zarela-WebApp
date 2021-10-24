@@ -119,7 +119,7 @@ function WalletsList({ view = 'grid' }) {
 							target='_blank'
 							active={active}
 						>
-							<ThemeIcon variant='big' src={icon} />
+							<ThemeIcon mb={3} variant='big' src={icon} />
 							<BodyText variant='small'>{name}</BodyText>
 						</GridItemLink>
 					) : (
@@ -128,7 +128,7 @@ function WalletsList({ view = 'grid' }) {
 							disabled={window.ethereum?.isMetaMask && !active}
 							active={active}
 						>
-							<ThemeIcon variant='big' src={icon} />
+							<ThemeIcon mb={3} variant='big' src={icon} />
 							<BodyText variant='small'>{name}</BodyText>
 						</GridItemButton>
 					)
