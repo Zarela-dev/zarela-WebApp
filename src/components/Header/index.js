@@ -485,7 +485,7 @@ export default function Header({ isMobile }, props) {
 							target="_blank"
 						>
 							<ThemeIcon variant="layout" mr={'0px'} src={explore} />
-							<BodyText variant="small" fontWeight="semiBold" color="primary">
+							<BodyText variant="small" fontWeight="normal" color="primary">
 								Explore
 							</BodyText>
 						</NavItem>
