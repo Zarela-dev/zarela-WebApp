@@ -10,6 +10,8 @@ import closeImageRed from '../assets/icons/close-red.svg';
 import { Spacer } from '../components/Elements/Spacer';
 import { CopyableText } from './CopyableText';
 import { actionTypes, mainContext } from '../state';
+import { ThemeIcon } from './../components/Elements/Icon';
+import { BodyText } from './../components/Elements/Typography';
 
 const Container = styled.div`
 	display: flex;
@@ -69,30 +71,33 @@ const Message = ({
 	return (
 		<Container usage={usage}>
 			{usage === 'notify' ? (
-				toastProps.type === 'success' ? (
-					null
+				toastProps.type === 'success' ? null : (
 					// <NotifySuccess>3</NotifySuccess>
-				) : (
-					<Icon src={alertImage} />
+					<ThemeIcon variant='normal' src={alertImage} />
 				)
 			) : (
-				<Icon
+				<ThemeIcon
+					variant='normal'
 					src={toastProps.type === 'success' ? checkedBoxImage : alertImage}
 				/>
 			)}
 			<ToastMessage isHash={copyable} usage={usage}>
-				{text}
+				<BodyText variant='small' color='textPrimary'>
+					{text}
+				</BodyText>
 			</ToastMessage>
 			<Spacer />
 			{copyable ? (
 				<CopyableText textToCopy={textToCopy}>
-					<Icon
+					<ThemeIcon
+						variant='big'
 						src={toastProps.type === 'success' ? copyImageGreen : copyImageRed}
 					/>
 				</CopyableText>
 			) : null}
 			{usage === 'notify' ? null : (
-				<Icon
+				<ThemeIcon
+					variant='bigger'
 					onClick={closeToast}
 					src={toastProps.type === 'success' ? closeImageGreen : closeImageRed}
 				/>

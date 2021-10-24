@@ -4,6 +4,7 @@ import backIcon from '../../assets/icons/left-arrow.svg';
 import { matchPath, useLocation, Link } from 'react-router-dom';
 import CustomContainer from './../../components/ToastifyContainer';
 import { mainContext } from '../../state';
+import { Header as Heading, BodyText } from './../Elements/Typography';
 
 const Nav = styled.nav`
 	position: fixed;
@@ -11,11 +12,13 @@ const Nav = styled.nav`
 	top: 0;
 	height: 100vh;
 	background: white;
-	transform: ${({ isOpen }) => (isOpen ? 'translateX(0%)' : 'translateX(100%)')};
+	transform: ${({ isOpen }) =>
+		isOpen ? 'translateX(0%)' : 'translateX(100%)'};
 	min-width: 276px;
 	border: 1.5px solid ${(props) => props.theme.success};
 	border-radius: 8px 0px 0px 0px;
-	padding: ${(props) => props.theme.spacing(2)} ${(props) => props.theme.spacing(3)};
+	padding: ${(props) => props.theme.spacing(2)}
+		${(props) => props.theme.spacing(3)};
 	padding-right: ${(props) => (props.usage === 'notify' ? '0 !important' : '')};
 	overflow: auto;
 	overflow-x: hidden !important;
@@ -64,7 +67,8 @@ const Divider = styled.div`
 	height: 1px;
 	background: #4fcfa1;
 	border-radius: 12px;
-	margin: ${(props) => props.theme.spacing(2)} 0 ${(props) => props.theme.spacing(4)};
+	margin: ${(props) => props.theme.spacing(2)} 0
+		${(props) => props.theme.spacing(4)};
 `;
 
 const CTAWrapper = styled.div``;
@@ -108,24 +112,6 @@ const MenuItemDisabled = styled.a.attrs((props) => {
 	opacity: ${(props) => (props.disabled ? 0.4 : 1)};
 `;
 
-const NotificationSideBarBadge = styled.div`
-	position: relative;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-color: #d13ade;
-	color: #fff;
-	padding: 6px;
-	align-self: flex-end;
-	min-width: ${(props) => (props.isMobile ? '20px' : '25px')};
-	max-height: ${(props) => (props.isMobile ? '20px' : '25px')};
-	min-height: ${(props) => (props.isMobile ? '20px' : '25px')};
-	border-radius: ${(props) => (props.isMobile ? '10px' : '12.5px')};
-	font-size: ${(props) => (props.isMobile ? '12px' : '18px')};
-	line-height: ${(props) => (props.isMobile ? '12px' : '18px')};
-	font-weight: 700;
-`;
-
 const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 	const { pathname } = useLocation();
 	const { appState } = useContext(mainContext);
@@ -137,25 +123,23 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 					<BackIcon src={backIcon} onClick={onClose} />
 				</HeaderRow>
 				<HeaderRow>
-					<>
-						<Title>{title}</Title>
-						{/* {appState.notificationCount !== 0 ? (
-							<NotificationSideBarBadge isMobile={appState.isMobile}>
-								{appState.notificationCount}
-							</NotificationSideBarBadge>
-						) : null} */}
-					</>
+					<Heading as='h5' variant='heading5' color='success'>
+						{title}
+					</Heading>
 					<CTAWrapper>{cta}</CTAWrapper>
 				</HeaderRow>
 			</Header>
 			<Divider />
 
 			{usage === 'notify' ? (
-				<CustomContainer enableMultiContainer containerId={'notify'} isMobile={appState.isMobile} />
+				<CustomContainer
+					enableMultiContainer
+					containerId={'notify'}
+					isMobile={appState.isMobile}
+				/>
 			) : (
 				<MenuList>
 					{listItems.map((item) => {
-						console.log('f', item.path || { pathname: item.link });
 						if (item.children?.length) {
 							return (
 								<>

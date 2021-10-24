@@ -12,6 +12,7 @@ import profileIcon_active from '../assets/icons/nav/profile-active.svg';
 import walletIcon_active from '../assets/icons/nav/wallet-active.svg';
 import homeIcon_active from '../assets/icons/nav/home-active.svg';
 import navBackground from '../assets/images/navbar.png';
+import { ThemeIcon } from '../components/Elements/Icon';
 
 const Nav = styled.nav`
 	position: fixed;
@@ -159,9 +160,9 @@ const BottomNavigation = () => {
 									<NavBadge>{notifications}</NavBadge>
 								) : null}
 								{isActive ? (
-									<NavIcon src={activeIcon} />
+									<ThemeIcon variant='layout' m={0} src={activeIcon} />
 								) : (
-									<NavIcon src={icon} />
+									<ThemeIcon variant='layout' src={icon} />
 								)}
 							</NavItem>
 						);
@@ -169,7 +170,7 @@ const BottomNavigation = () => {
 						return (
 							<CreateRequestNavItem key={index}>
 								<CreateRequestButton to={path}>
-									<CreateRequestIcon src={icon} />
+									<ThemeIcon variant='small'  src={icon} />
 								</CreateRequestButton>
 							</CreateRequestNavItem>
 						);

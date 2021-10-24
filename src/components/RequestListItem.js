@@ -430,7 +430,7 @@ const RequestListItem = ({
 				<Col width={2 / 3}>
 					<Row>
 						<IdLabel>{requestID}</IdLabel>
-						<Header variant='heading4' as='h4' weight='semiBold'>
+						<Header variant='heading5' as='h5' weight='semiBold'>
 							{title.length < 160 ? title : title.substr(0, 160) + '...'}
 						</Header>
 						<Spacer />

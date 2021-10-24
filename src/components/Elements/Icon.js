@@ -19,6 +19,10 @@ const IconWrapper = styled(Image)(
 				height: ['36px'],
 				width: ['36px'],
 			},
+			layout: {
+				height: '30px',
+				width: '30px'
+			},
 			big: {
 				height: ['32px', '24px'],
 				width: ['32px', '24px'],
