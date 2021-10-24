@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SmallCheckbox } from '../Elements/Checkbox';
 import TextField from '../Elements/TextField';
-import Button from '../Elements/Button';
+import Button, { ThemeButton } from '../Elements/Button';
 import ConnectDialog from '../Dialog/ConnectDialog';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -51,7 +51,7 @@ const RewardGainerItem = styled.div`
 	flex: 0 0 120px;
 `;
 
-const ContinueButton = styled(Button)`
+const ContinueButton = styled(ThemeButton)`
 	margin: 0;
 `;
 
@@ -246,7 +246,7 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 				</RewardGainerWrapper>
 			</Box>
 			<ButtonWrapper>
-				<ContinueButton type="submit" variant="secondary">
+				<ContinueButton size='medium' type="submit" variant="secondary">
 					Continue
 				</ContinueButton>
 			</ButtonWrapper>

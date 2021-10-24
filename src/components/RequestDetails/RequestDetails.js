@@ -55,6 +55,7 @@ const FilesWrapper = styled.div`
 	${maxWidthWrapper};
 	display: flex;
 	justify-content: space-between;
+	padding: ${({theme}) => theme.space[4]}px;
 `;
 
 const FileCardSpacer = styled.div`
@@ -77,60 +78,61 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 		<PageWrapper>
 			<HeaderContainer>
 				<HeaderInner>
-					<Row>
-						{request.requestID && <IdLabel>{request.requestID}</IdLabel>}
-						<Col>
-							<Header variant='heading4'>{request.title}</Header>
-							<BodyText variant='timestamp' ml={0}>
-								{timeSince(request.timestamp)}
-							</BodyText>
+					<Row width="100%" alignItems="flex-start">
+						<Col flex={'0 0 70px'} mr={[3]}>
+							{request.requestID && <IdLabel>{request.requestID}</IdLabel>}
 						</Col>
-					</Row>
-					<Row pl={6} mt={4} flexWrap='nowrap' justifyContent='space-between'>
-						<Row>
-							<Col>
-								<Row>
-									<ThemeIcon variant='big' src={documentsIcon} />
-									<BodyText variant='small' fontWeight='bold' color='textToken'>
-										{contributors}
-									</BodyText>
-								</Row>
-							</Col>
-							<ThemeDivider variant='vertical' height='18px' />
-							<Col>
-								<Row>
-									<ThemeIcon variant='big' src={contributorIcon} />
-									<BodyText variant='small' fontWeight='bold' color='textToken'>
-										{request.totalContributedCount}
-									</BodyText>
-								</Row>
-							</Col>
-						</Row>
-						<Row>
-							<ThemeIcon variant='big' src={biobitIcon} />
-							<BodyText variant='small' fontWeight='bold' mr={2}>
-								{getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[0]}{' '}
-								BBit
-							</BodyText>
-							<BodyText variant='extraSmall' fontWeight='semiBold'>
-								({+request.angelTokenPay} Angel + {+request.laboratoryTokenPay}{' '}
-								Hub)
-							</BodyText>
-							<BodyText
-								variant='small'
-								color='textToken'
-								fontWeight='bold'
-							>{`~ $${
-								getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[1]
-							}`}</BodyText>
-						</Row>
+						<Col flex={1}>
+							<Row>
+								<Header variant="heading4" fontWeight="bold !important">
+									{request.title}
+								</Header>
+							</Row>
+							<Row mb={[4]}>
+								<BodyText variant="timestamp" ml={0}>
+									{timeSince(request.timestamp)}
+								</BodyText>
+							</Row>
+							<Row width="100%">
+								<Col>
+									<Row>
+										<ThemeIcon variant="big" src={documentsIcon} />
+										<BodyText variant="small" fontWeight="bold" color="textToken">
+											{contributors}
+										</BodyText>
+									</Row>
+								</Col>
+								<ThemeDivider variant="vertical" height={'24px !important'} />
+								<Col>
+									<Row>
+										<ThemeIcon variant="big" src={contributorIcon} />
+										<BodyText variant="small" fontWeight="bold" color="textToken">
+											{request.totalContributedCount}
+										</BodyText>
+									</Row>
+								</Col>
+								<Col flex={1}></Col>
+								<Col>
+									<Row>
+										<ThemeIcon variant="big" src={biobitIcon} />
+										<BodyText variant="small" fontWeight="bold" mr={2}>
+											{getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[0]} BBit
+										</BodyText>
+										<BodyText variant="extraSmall" fontWeight="semiBold">
+											({+request.angelTokenPay} Angel + {+request.laboratoryTokenPay} Hub)
+										</BodyText>
+										<BodyText variant="small" color="textToken" fontWeight="bold">{`~ $${
+											getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[1]
+										}`}</BodyText>
+									</Row>
+								</Col>
+							</Row>
+						</Col>
 					</Row>
 					<CustomProgressTrackerWrapper>
 						<ProgressTrackerTrack>
 							<ProgressTrackerProcess
-								progress={
-									(+request.totalContributed / +request.totalContributors) * 100
-								}
+								progress={(+request.totalContributed / +request.totalContributors) * 100}
 							/>
 						</ProgressTrackerTrack>
 					</CustomProgressTrackerWrapper>
@@ -139,26 +141,26 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 			<DescriptionContainer>
 				<Row>
 					{request.categories?.split(',').map((item) => {
-						return <ThemeTag variant='display' item={item} />;
+						return <ThemeTag variant="display" item={item} />;
 					})}
 				</Row>
 
-				<PublicKeyBadge data-tour='request-details-one'>
-					<ThemeIcon variant='bigger' alignSelf='center' src={publicKeyIcon} />
+				<PublicKeyBadge data-tour="request-details-one">
+					<ThemeIcon variant="bigger" alignSelf="center" src={publicKeyIcon} />
 					<CopyableText textToCopy={request.requesterAddress}>
-						<Col p='10px 0'>
-							<BodyText variant='small'>Requester public key</BodyText>
-							<BodyText variant='extraSmall' fontWeight='semiBold' mt={0.5}>
+						<Col p="10px 0">
+							<BodyText variant="small">Requester public key</BodyText>
+							<BodyText variant="extraSmall" fontWeight="semiBold" mt={0.5}>
 								{request.requesterAddress}
 							</BodyText>
 						</Col>
 					</CopyableText>
 				</PublicKeyBadge>
 
-				<Header variant='heading4' mt={3} mb={2}>
+				<Header variant="heading6" mt={3} mb={2}>
 					Description:
 				</Header>
-				<BodyText variant='small'>{request.description}</BodyText>
+				<BodyText variant="big">{request.description}</BodyText>
 			</DescriptionContainer>
 			<FilesWrapper>
 				<DownloadFileCard
@@ -173,7 +175,7 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 				<UploadFileCard
 					showSelected
 					disableUpload
-					buttonLabel='Contribute'
+					buttonLabel="Contribute"
 					label={'Already Have a File?'}
 					name={'signal file'}
 					value={signalFile}

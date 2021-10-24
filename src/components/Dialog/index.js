@@ -44,7 +44,7 @@ const Content = styled.div`
 	font-size: 18px;
 	line-height: 20px;
 	text-align: center;
-	color: #4fcfa1;
+	color: ${({ theme }) => theme.colors.textPrimary};
 	width: 100%;
 
 	@media only screen and (min-width: ${({ theme }) => theme.tablet_sm_breakpoint}) {

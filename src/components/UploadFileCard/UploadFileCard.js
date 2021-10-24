@@ -198,7 +198,7 @@ const UploadFileCard = (props) => {
 				/>
 				<StickyButton
 					variant='primary'
-					size='small'
+					size='medium'
 					onClick={() => {
 						setIsContributing(true);
 						setDialogMessage(

@@ -55,6 +55,11 @@ const HeadingComponent = styled(Heading)(
 				fontSize: [7, 6, 5],
 				lineHeight: [13, 11, 8],
 			},
+			heading6: {
+				fontSize: [6, 5, 4],
+				lineHeight: [11, 8, 4],
+				fontWeight: 'semiBold',
+			},
 			label: {
 				fontSize: 2,
 				lineHeight: 'heading',
@@ -97,7 +102,7 @@ const TextComponent = styled(Text)(
 				whiteSpace: 'nowrap',
 			},
 			hint: {
-				fontSize: [9, 8, 7],
+				fontSize: [8, 8, 7],
 				lineHeight: [9],
 				whiteSpace: 'nowrap',
 				textAlign: 'center',
@@ -105,7 +110,7 @@ const TextComponent = styled(Text)(
 			hash: {
 				fontSize: [8],
 				lineHeight: [15],
-			}
+			},
 		},
 	})
 );

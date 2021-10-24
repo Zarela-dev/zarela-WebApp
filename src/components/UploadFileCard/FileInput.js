@@ -25,7 +25,7 @@ export const FileInputWrapper = styled.div`
 	font-weight: 400;
 `;
 
-export const FileInputTitle = styled.div`
+export const FileInputTitle = styled(BodyText)`
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: center;
@@ -66,9 +66,14 @@ export const FileInputLink = styled.a`
 
 const FileContainer = styled.div`
 	display: flex;
-	flex-direction: row-reverse;
+	flex-direction: column-reverse;
+	align-items: center;
 	justify-content: space-between;
 	width: 100%;
+	
+	@media only screen and (min-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
+		flex-direction: row-reverse;
+	}
 `;
 
 const ErrorContainer = styled.div`
@@ -82,7 +87,7 @@ export const FileInputIcon = styled.img`
 	margin-right: ${(props) => props.theme.spacing(1)};
 `;
 
-export const FileName = styled.div`
+export const FileName = styled(BodyText)`
 	overflow: hidden;
 	text-align: left;
 	text-overflow: ellipsis;
@@ -170,9 +175,9 @@ const FileInput = forwardRef(
 				<FileInputWrapper hasBorder={hasBorder} className={className}>
 					<FileContainer>
 						{typeof onClick === 'function' ? (
-							<FileInputLabel onClick={onClick}>{buttonLabel}</FileInputLabel>
+							<ThemeButton variant="primary" size='normal' onClick={onClick}>{buttonLabel}</ThemeButton>
 						) : (
-							<FileInputLabel>
+							<ThemeButton as="label" variant="primary" size='normal'>
 								{buttonLabel}
 								{!disableUpload ? (
 									<input
@@ -182,7 +187,7 @@ const FileInput = forwardRef(
 										{...rest}
 									/>
 								) : null}
-							</FileInputLabel>
+							</ThemeButton>
 						)}
 						{showSelected ? (
 							<FileInputTitle>
@@ -191,7 +196,7 @@ const FileInput = forwardRef(
 								) : (
 									<FileInputIcon src={fileUploadIcon} />
 								)}
-								<FileName>{getFileName(ref, formatLabel(label))}</FileName>
+								<FileName variant='big' fontWeight='semiBold'>{getFileName(ref, formatLabel(label))}</FileName>
 							</FileInputTitle>
 						) : (
 							<FileInputTitle>
@@ -200,7 +205,7 @@ const FileInput = forwardRef(
 								) : (
 									<FileInputIcon src={fileUploadIcon} />
 								)}
-								<FileName>{formatLabel(label)}</FileName>
+								<FileName variant='big' fontWeight='semiBold'>{formatLabel(label)}</FileName>
 							</FileInputTitle>
 						)}
 					</FileContainer>

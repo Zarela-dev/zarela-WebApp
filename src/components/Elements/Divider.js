@@ -29,5 +29,5 @@ const Divider = styled(Box)(
 );
 
 export const ThemeDivider = (props) => {
-	return <Divider height={props.height ?? null} {...props} />;
+	return <Divider height={props.height || null} {...props} />;
 };

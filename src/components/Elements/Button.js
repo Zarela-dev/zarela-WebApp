@@ -11,20 +11,11 @@ function getBackground(props) {
 		`;
 	if (props.variant === 'primary')
 		return css`
-			background: linear-gradient(
-				256.48deg,
-				#a2f0ea -37.74%,
-				#75f0e7 -37.73%,
-				#a981fe 103.72%
-			);
+			background: linear-gradient(256.48deg, #a2f0ea -37.74%, #75f0e7 -37.73%, #a981fe 103.72%);
 		`;
 	if (props.variant === 'secondary')
 		return css`
-			background: linear-gradient(
-				256.48deg,
-				rgb(72 194 185 / 50%),
-				rgb(138 100 212 / 50%)
-			);
+			background: linear-gradient(256.48deg, rgb(72 194 185 / 50%), rgb(138 100 212 / 50%));
 		`;
 }
 function getColor(props) {
@@ -63,8 +54,7 @@ const Container = styled.div`
 const TheButton = styled.button`
 	${(props) => getColor(props)};
 	${(props) => props.disabled && getDisabledStyles()};
-	padding: ${(props) =>
-			props.fontSize ? props.theme.spacing(0.9) : props.theme.spacing(1.5)}
+	padding: ${(props) => (props.fontSize ? props.theme.spacing(0.9) : props.theme.spacing(1.5))}
 		${(props) => props.theme.spacing(3)};
 	text-decoration: none;
 	font-weight: 500;
@@ -81,8 +71,7 @@ const TheButton = styled.button`
 const LinkButtonAnchor = styled.a`
 	${(props) => getColor(props)};
 	display: block;
-	padding: ${(props) => props.theme.spacing(1.5)}
-		${(props) => props.theme.spacing(3)};
+	padding: ${(props) => props.theme.spacing(1.5)} ${(props) => props.theme.spacing(3)};
 	text-decoration: none;
 	font-weight: 500;
 	font-size: 20px;
@@ -100,8 +89,7 @@ const LinkButtonAnchor = styled.a`
 const TheLinkButton = styled(Link)`
 	${(props) => getColor(props)};
 	display: block;
-	padding: ${(props) => props.theme.spacing(1.5)}
-		${(props) => props.theme.spacing(3)};
+	padding: ${(props) => props.theme.spacing(1.5)} ${(props) => props.theme.spacing(3)};
 	text-decoration: none;
 	font-weight: 500;
 	font-size: 20px;
@@ -115,21 +103,9 @@ const TheLinkButton = styled(Link)`
 	line-height: 1;
 `;
 
-const GenericButton = ({
-	children,
-	variant,
-	type,
-	disabled,
-	fontSize,
-	...rest
-}) => (
+const GenericButton = ({ children, variant, type, disabled, fontSize, ...rest }) => (
 	<Container disabled={disabled} variant={variant} {...rest}>
-		<TheButton
-			variant={variant}
-			type={type}
-			disabled={disabled}
-			fontSize={fontSize}
-		>
+		<TheButton variant={variant} type={type} disabled={disabled} fontSize={fontSize}>
 			{children}
 		</TheButton>
 	</Container>
@@ -157,6 +133,10 @@ const ButtonWrapper = styled(Box)(
 	compose(space, layout, color),
 	{
 		borderRadius: '4px',
+		height: 'fit-content',
+		'& *': {
+			textDecoration: 'none',
+		},
 	},
 	variant({
 		prop: 'variant',
@@ -166,7 +146,7 @@ const ButtonWrapper = styled(Box)(
 			},
 			secondary: {
 				background: 'linear-gradient(180deg, #85CEEE 10.5%, #A687FD 86.82%)',
-				padding: '1px',
+				padding: '2px',
 				'&:hover': {
 					background: 'linear-gradient(180deg, #4787F3 0%, #7246D0 100%)',
 				},
@@ -184,6 +164,13 @@ const ButtonWrapper = styled(Box)(
 
 const CustomizedButton = styled(RebassButton)(
 	compose(space, layout, color),
+	{
+		borderRadius: '2.5px',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		fontWeight: 'normal',
+	},
 	variant({
 		prop: 'size',
 		variants: {
@@ -233,14 +220,11 @@ const CustomizedButton = styled(RebassButton)(
 			primary: {
 				background: 'linear-gradient(180deg, #85CEEE 10.5%, #A687FD 86.82%)',
 				color: 'textPrimary',
-				fontWeight: 'semiBold',
 				'&:hover': {
-					background:
-						'linear-gradient(224.79deg, #CCEDFC 16.25%, #DFD3FF 84.5%)',
+					background: 'linear-gradient(224.79deg, #CCEDFC 16.25%, #DFD3FF 84.5%)',
 				},
 				'&:active': {
-					background:
-						'linear-gradient(227.41deg, #52A1CE 10.18%, #6051C0 93.32%)',
+					background: 'linear-gradient(227.41deg, #52A1CE 10.18%, #6051C0 93.32%)',
 				},
 				'&:disabled': {
 					background: '#F4F3FE',
@@ -250,7 +234,6 @@ const CustomizedButton = styled(RebassButton)(
 			secondary: {
 				background: '#fff',
 				color: 'primary',
-				fontWeight: 'semiBold',
 				'&:hover': {
 					backgroundColor: 'btnSecondaryHover',
 				},
@@ -270,32 +253,18 @@ export const ThemeButton = (props) => {
 	return (
 		<ButtonWrapper variant={props.disabled ? 'disabled' : props.variant}>
 			{props.to ? (
-				<Link to={props.to}>
-					<CustomizedButton
-						p={1}
-						variant={props.variant}
-						{...props}
-					></CustomizedButton>
+				<Link to={{ pathname: props.to }} target={props.target}>
+					<CustomizedButton p={1} variant={props.variant} {...{ ...props, to: undefined, target: undefined }}></CustomizedButton>
 				</Link>
 			) : (
-				<CustomizedButton
-					p={1}
-					variant={props.variant}
-					onClick={props.onClick}
-					{...props}
-				></CustomizedButton>
+				<CustomizedButton p={1} variant={props.variant} onClick={props.onClick} {...props}></CustomizedButton>
 			)}
 		</ButtonWrapper>
 	);
 };
 
 export const Button = css`
-	background: linear-gradient(
-		256.48deg,
-		#a2f0ea -37.74%,
-		#75f0e7 -37.73%,
-		#a981fe 103.72%
-	);
+	background: linear-gradient(256.48deg, #a2f0ea -37.74%, #75f0e7 -37.73%, #a981fe 103.72%);
 	box-shadow: 0px 4px 18px #dfecff;
 	border-radius: 4px;
 	text-align: center;
@@ -303,8 +272,7 @@ export const Button = css`
 	font-size: 20px;
 	border: none;
 	height: 50px;
-	padding: ${(props) => props.theme.spacing(1.5)}
-		${(props) => props.theme.spacing(3)};
+	padding: ${(props) => props.theme.spacing(1.5)} ${(props) => props.theme.spacing(3)};
 	text-decoration: none;
 	color: ${(props) => props.theme.textPrimary};
 	margin-right: ${(props) => props.theme.spacing(3)};
