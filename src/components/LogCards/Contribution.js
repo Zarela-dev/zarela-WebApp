@@ -59,7 +59,7 @@ const LogCard = ({ data, account }) => {
 				alignItems='center'
 				width='100%'
 			>
-				<Col flex='0 0 80px' alignSelf='flex-start'>
+				<Col flex='0 0 80px' mr={3} alignSelf='flex-start'>
 					<IdLabel>{requestID}</IdLabel>
 				</Col>
 				<Col flex='1 1 530px'>

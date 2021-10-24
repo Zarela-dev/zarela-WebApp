@@ -31,7 +31,7 @@ const LogCard = ({ data }) => {
 	return (
 		<CompactRequestCard variant={getVariant()}>
 			<Row justifyContent='space-evenly' width='100%'>
-				<Col flex='0 0 80px' alignSelf='center'>
+				<Col flex='0 0 80px' mr={3} alignSelf='center'>
 					<IdLabel>{requestID}</IdLabel>
 				</Col>
 				<Col flex='1 1 530px'>

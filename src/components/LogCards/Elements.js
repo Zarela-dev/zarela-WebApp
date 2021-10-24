@@ -46,7 +46,7 @@ export const CompactRequestCard = styled.div`
 	border-width: 1px;
 	border-style: solid;
 	${(props) => getBorderVariant(props)};
-	margin-bottom: ${(props) => props.theme.spacing(1)};
+	margin-bottom: ${(props) => props.theme.spacing(2)};
 	padding: ${(props) => `${props.theme.spacing(1.3)} ${props.theme.spacing(2)}`};
 `;
 

@@ -15,17 +15,9 @@ import { ThemeDivider } from './../Elements/Divider';
 
 const LogCardMobile = ({ data, account }) => {
 	const [isOpen, setOpen] = useState(false);
-	const {
-		requestID,
-		title,
-		angelTokenPay,
-		laboratoryTokenPay,
-		contributions,
-	} = data;
-	const totalPending = contributions.filter((item) => item.status === false)
-		.length;
-	const totalConfirmed = contributions.filter((item) => item.status === true)
-		.length;
+	const { requestID, title, angelTokenPay, laboratoryTokenPay, contributions } = data;
+	const totalPending = contributions.filter((item) => item.status === false).length;
+	const totalConfirmed = contributions.filter((item) => item.status === true).length;
 	const allApproved = contributions.length === totalConfirmed;
 	const getVariant = () => {
 		if (allApproved) return 'confirmed';
@@ -35,44 +27,42 @@ const LogCardMobile = ({ data, account }) => {
 
 	return (
 		<MobileCompactRequestCard variant={getVariant()}>
-			<Row
-				onClick={() => setOpen((value) => !value)}
-				width='100%'
-				alignItems='start'
-			>
-				<Col>
+			<Row onClick={() => setOpen((value) => !value)} width="100%" alignItems="start">
+				<Col mr={2}>
 					<IdLabel>{requestID}</IdLabel>
 				</Col>
 				<Col flex={'1 1'}>
 					<Row>
-						<BodyText variant='small' fontWeight='semiBold'>
+						<BodyText variant="small" fontWeight="semiBold">
 							{title.length < 70 ? title : title.substr(0, 70) + '...'}
 						</BodyText>
 					</Row>
 					<Row mt={[2]} mb={[2]}>
-						<ThemeIcon variant='small' src={biobitIcon} />
-						<BodyText variant='small'>
+						<ThemeIcon variant="small" src={biobitIcon} />
+						<BodyText variant="hint" fontWeight="medium">
 							{getBBIT(angelTokenPay, laboratoryTokenPay)[0]}
 						</BodyText>
-						<BodyText variant='small'>{`~ $${
+						<BodyText variant="hint" fontWeight="medium">{`~ $${
 							getBBIT(angelTokenPay, laboratoryTokenPay)[1]
 						}`}</BodyText>
 					</Row>
 					<Row>
 						{allApproved ? (
 							<BodyText
-								variant='extraSmall'
-								color='success'
+								variant="hint"
+								fontWeight="medium"
+								color="success"
 							>{`all ${contributions.length} are confirmed. >>`}</BodyText>
 						) : (
 							<Col>
-								<BodyText variant='extraSmall' color='bgBadge'>{`${
+								<BodyText variant="extraSmall" color="bgBadge">{`${
 									totalPending + totalConfirmed
 								} files: `}</BodyText>
 								<BodyText
-									variant='extraSmall'
-									color='bgBadge'
-									whiteSpace='nowrap'
+									variant="hint"
+									fontWeight="medium"
+									color="bgBadge"
+									whiteSpace="nowrap"
 								>{` ${totalConfirmed} approved, ${totalPending} pending >> `}</BodyText>
 							</Col>
 						)}
@@ -80,65 +70,54 @@ const LogCardMobile = ({ data, account }) => {
 				</Col>
 				<Col flex={'0 0 35px'} />
 				{allApproved ? (
-					<ThemeIcon variant='big' src={checkedGreen} />
+					<ThemeIcon variant="big" src={checkedGreen} />
 				) : (
-					<ThemeIcon variant='small' src={pendingIcon} />
+					<ThemeIcon variant="small" src={pendingIcon} />
 				)}
 			</Row>
 			{isOpen ? (
 				<MobileBody>
 					<MobileTable>
 						{contributions.map(
-							(
-								{
-									originalIndex,
-									timestamp,
-									zarelaDay,
-									angel,
-									hub,
-									rewardGainer,
-									status,
-								},
-								rowIndex
-							) => (
+							({ originalIndex, timestamp, zarelaDay, angel, hub, rewardGainer, status }, rowIndex) => (
 								<Row key={originalIndex}>
 									<Col flexGrow={1}>
-										<BodyText variant='small' color='textTimestamp'>{`${
+										<BodyText variant="small" color="textTimestamp">{`${
 											rowIndex + 1
 										}. File #${originalIndex}`}</BodyText>
-										<BodyText variant='extraSmall' color='textTimestamp' ml={3}>
+										<BodyText variant="extraSmall" color="textTimestamp" ml={3}>
 											{timeSince(timestamp)}
 										</BodyText>
 										<BodyText
-											variant='extraSmall'
-											color='textTimestamp'
+											variant="extraSmall"
+											color="textTimestamp"
 											ml={3}
 										>{`Zarela Day: ${zarelaDay} th`}</BodyText>
-										<Row ml='15px' type='role'>
-											<BodyText variant='extraSmall' color='textTimestamp'>
+										<Row ml="15px" type="role">
+											<BodyText variant="extraSmall" color="textTimestamp">
 												Role :{' '}
 											</BodyText>
 											{angel.toLowerCase() === account.toLowerCase() && (
-												<ThemeIcon variant='small' src={angelIcon} />
+												<ThemeIcon variant="small" src={angelIcon} />
 											)}
 											{hub.toLowerCase() === account.toLowerCase() && (
-												<ThemeIcon variant='small' src={hubIcon} />
+												<ThemeIcon variant="small" src={hubIcon} />
 											)}
-											<ThemeDivider variant='vertical' />
-											<BodyText variant='extraSmall' color='textTimestamp'>
+											<ThemeDivider variant="vertical" />
+											<BodyText variant="extraSmall" color="textTimestamp">
 												Gainer :{' '}
 											</BodyText>
 											<ThemeIcon
-												variant='small'
+												variant="small"
 												src={rewardGainer === true ? angelIcon : hubIcon}
 											/>
 										</Row>
 									</Col>
 									<Col>
 										{status ? (
-											<ThemeIcon variant='small' src={checkedGreen} />
+											<ThemeIcon variant="small" src={checkedGreen} />
 										) : (
-											<ThemeIcon variant='small' src={pendingIcon} />
+											<ThemeIcon variant="small" src={pendingIcon} />
 										)}
 									</Col>
 								</Row>
