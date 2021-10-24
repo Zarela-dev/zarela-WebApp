@@ -39,7 +39,7 @@ const Nav = styled.nav`
 
 const NavItem = styled(Link)`
 	position: relative;
-	padding: ${(props) => props.theme.spacing(1.1)};
+	padding: ${(props) => props.theme.space[2]}px;
 	background: transparent;
 	flex: 1;
 	display: flex;
