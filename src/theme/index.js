@@ -51,7 +51,7 @@ const theme = (darkMode) => {
 				fontSize: 3,
 				px: 3,
 				py: 2,
-			}
+			},
 		},
 		fontSizes: [56, 48, 32, 24, 20, 18, 16, 14, 12, 10],
 		lineHeights: [
@@ -72,7 +72,7 @@ const theme = (darkMode) => {
 			'16px', //14
 			'11.61px', //15
 		],
-		radii: [8,4],
+		radii: [8, 4],
 		fontWeights: {
 			bold: 700,
 			medium: 600, // #todo medium and semibold values must be replaced later
@@ -153,10 +153,12 @@ const theme = (darkMode) => {
 	};
 };
 
-export default function ({ children }) {
+const Theme = ({ children }) => {
 	const darkMode = false;
 
 	const themeObject = useMemo(() => theme(darkMode), [darkMode]);
 
 	return <ThemeProvider theme={themeObject}>{children}</ThemeProvider>;
-}
+};
+
+export default Theme;

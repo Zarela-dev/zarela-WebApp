@@ -40,8 +40,8 @@ const Body = styled.section`
 `;
 
 const Content = styled.div`
-	font-weight: bold;
-	font-size: 18px;
+	font-weight: 600;
+	font-size: 16px;
 	line-height: 20px;
 	text-align: center;
 	color: ${({ theme }) => theme.colors.textPrimary};
@@ -80,7 +80,7 @@ const Backdrop = styled.div`
 
 const Card = styled.div`
 	position: relative;
-	background: ${(props) => props.theme.colors.bgDisabled};
+	background: ${(props) => props.theme.colors.bgWhite};
 	${(props) => getBorder(props.type)};
 	box-sizing: border-box;
 	box-shadow: 0px 10px 18px rgba(81, 197, 234, 0.06);
