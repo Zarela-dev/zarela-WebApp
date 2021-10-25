@@ -9,7 +9,7 @@ export const RequestCardWrapper = styled.div`
 	border: 1px solid #c4c4c4;
 	border-radius: 8px;
 	padding: ${({ theme }) => theme.space[3]}px;
-	margin-bottom: ${({theme}) => theme.space[3]}px;
+	margin-bottom: ${({ theme }) => theme.space[3]}px;
 `;
 
 export const HeaderLayout = styled.div`
@@ -24,7 +24,8 @@ export const RequestNumber = styled.div`
 	margin-right: ${(props) => props.theme.spacing(1.5)};
 	padding: 5px 10px;
 	border-radius: 5px 5px 0 5px;
-	background: linear-gradient(246.29deg, #3a68de 12.69%, #3a68de 100%);
+	background: ${(props) =>
+		`linear-gradient(246.29deg, ${props.theme.colors.textToken} 12.69%, ${props.theme.colors.textToken} 100%)`};
 	text-align: center;
 `;
 export const Title = styled.div`
@@ -45,14 +46,14 @@ export const Description = styled.div`
 	font-size: 12px;
 	line-height: 20px;
 	text-align: justify;
-	color: #121213;
+	color: ${(props) => props.theme.colors.textPrimary};
 	min-height: 150px;
 `;
 
 export const Timestamp = styled(Typography)`
 	text-align: left;
 	font-size: 9px;
-	color: #858585;
+	color: ${(props) => props.theme.colors.textTimestamp};
 	margin-left: ${(props) => props.theme.spacing(5)};
 	margin-top: ${(props) => props.theme.spacing(0.5)};
 `;
@@ -107,14 +108,14 @@ export const BadgeLabel = styled.div`
 	font-size: 10px;
 	font-weight: 700;
 	white-space: normal;
-	color: #121213;
+	color: ${(props) => props.theme.colors.textPrimary};
 `;
 
 export const BiobitToDollarValue = styled.div`
 	font-weight: 600;
 	font-size: 10px;
 	line-height: 0px;
-	color: #3a68de;
+	color: ${(props) => props.theme.colors.textToken};
 	margin-right: 2px;
 	white-space: nowrap;
 	margin-left: ${(props) => (props.noMargin ? 0 : props.theme.spacing(0.8))};
@@ -125,7 +126,7 @@ export const Hint = styled.div`
 	font-weight: 300;
 	font-size: 12px;
 	line-height: 20px;
-	color: #3a68de;
+	color: ${(props) => props.theme.colors.textToken};
 	white-space: nowrap;
 `;
 
@@ -135,7 +136,7 @@ export const ValueLabel = styled.div`
 	font-weight: 700;
 	white-space: normal;
 	padding-bottom: 2px;
-	color: ${(props) => (props.colored ? '#3A68DE' : props.theme.textPrimary)};
+	color: ${(props) => (props.colored ? props.theme.colors.textToken : props.theme.textPrimary)};
 `;
 
 export const TokenValue = styled.div`
@@ -190,7 +191,7 @@ export const JoinButton = styled(GenericLinkButton)`
 	right: 33px;
 
 	& > * {
-		color: #7246d0;
+		color: ${(props) => props.theme.colors.primary};
 		font-size: 10px;
 		padding: 7px 17px;
 		margin-bottom: 2px;

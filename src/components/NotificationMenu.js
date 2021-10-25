@@ -19,7 +19,7 @@ const ChainBadge = styled.div`
 	white-space: nowrap;
 	padding: 9px 16px;
 	line-height: 8px;
-	color: #8c2595;
+	color: ${(props) => props.theme.colors.textPrimary};
 	font-weight: normal;
 `;
 

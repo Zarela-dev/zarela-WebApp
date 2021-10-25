@@ -32,7 +32,7 @@ const Title = styled.h2`
 	font-weight: 500;
 	font-size: 24px;
 	line-height: 150.5%;
-	color: #ffffff;
+	color: ${props => props.theme.colors.textLabel};
 	word-wrap: break-word;
 	align-self: flex-start;
 
@@ -50,7 +50,7 @@ const ZarelaDay = styled.p`
 	font-weight: normal;
 	font-size: 64px;
 	line-height: 43px;
-	color: #ffffff;
+	color: ${props => props.theme.colors.textLabel};
 	letter-spacing: 1px;
 
 	@media only screen and (max-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
@@ -63,11 +63,11 @@ const ZarelaDay = styled.p`
 const ZarelaDaySubtitle = styled.p`
 	text-align: justify;
 	margin-left: 5px;
-	color: white;
+	color: ${props => props.theme.colors.textLabel};
 `;
 
 const Divider = styled.div`
-	border-bottom: 1px solid #fefefe;
+	border-bottom: 1px solid ${props => props.theme.colors.bgDisabled};
 	width: 90%;
 
 	@media only screen and (max-width: ${(props) => props.theme.desktop_sm_breakpoint}) {

@@ -4,12 +4,7 @@ import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 import { isValidInput } from '../../utils/helpers';
 import { getStatusColor } from '../../utils/transactionInput';
-import {
-	timeSince,
-	convertToBiobit,
-	CopyableText,
-	getInput,
-} from '../../utils';
+import { timeSince, convertToBiobit, CopyableText, getInput } from '../../utils';
 import Pagination from '../../components/Pagination';
 import { BodyText } from './../../components/Elements/Typography';
 
@@ -37,7 +32,7 @@ const CellWrapper = styled.div`
 const getStatus = (props) => {
 	if (props.isError && props.isError !== '0')
 		return css`
-			color: #f62d76 !important;
+			color: ${props.theme.colors.error} !important;
 		`;
 	else if (props.status !== null)
 		return css`
@@ -83,8 +78,7 @@ const Cell = styled.div`
 	display: flex;
 	align-items: center;
 	min-height: 48px;
-	padding: ${(props) => props.theme.spacing(0.6)}
-		${(props) => props.theme.spacing(1)};
+	padding: ${(props) => props.theme.spacing(0.6)} ${(props) => props.theme.spacing(1)};
 	font-size: 12px;
 	height: 40px;
 	width: 100%;
@@ -101,10 +95,9 @@ const Cell = styled.div`
 
 const NoTransactions = styled.div`
 	width: 100%;
-	background: white;
+	background: ${props => props.theme.colors.bgWhite};
 	border-radius: 8px;
-	padding: ${(props) => props.theme.spacing(2)}
-		${(props) => props.theme.spacing(1)};
+	padding: ${(props) => props.theme.spacing(2)} ${(props) => props.theme.spacing(1)};
 `;
 
 const Header = styled.div`
@@ -152,7 +145,7 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 							<Cell>
 								{isLoading ? (
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={55}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -166,7 +159,7 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 							<Cell>
 								{isLoading ? (
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={45}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -180,7 +173,7 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 							<Cell>
 								{isLoading ? (
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={45}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -194,7 +187,7 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 							<Cell>
 								{isLoading ? (
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={30}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -208,7 +201,7 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 							<Cell>
 								{isLoading ? (
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={45}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -222,7 +215,7 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 							<Cell>
 								{isLoading ? (
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={45}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -236,7 +229,7 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 							<Cell>
 								{isLoading ? (
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={45}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -256,13 +249,13 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 									<Cell copyable>
 										<SkeletonCol>
 											<Skeleton
-												variant='rect'
+												variant="rect"
 												width={'100%'}
 												height={skeletonLineHeight}
 												className={classes.root}
 											/>
 											<Skeleton
-												variant='rect'
+												variant="rect"
 												width={'95%'}
 												height={skeletonLineHeight}
 												className={classes.root}
@@ -274,7 +267,7 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 							<CellWrapper>
 								<Cell>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'55%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -286,13 +279,13 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 									<Cell copyable>
 										<SkeletonCol>
 											<Skeleton
-												variant='rect'
+												variant="rect"
 												width={'100%'}
 												height={skeletonLineHeight}
 												className={classes.root}
 											/>
 											<Skeleton
-												variant='rect'
+												variant="rect"
 												width={'70%'}
 												height={skeletonLineHeight}
 												className={classes.root}
@@ -306,13 +299,13 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 									<Cell copyable>
 										<SkeletonCol>
 											<Skeleton
-												variant='rect'
+												variant="rect"
 												width={'100%'}
 												height={skeletonLineHeight}
 												className={classes.root}
 											/>
 											<Skeleton
-												variant='rect'
+												variant="rect"
 												width={'75%'}
 												height={skeletonLineHeight}
 												className={classes.root}
@@ -324,7 +317,7 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 							<CellWrapper>
 								<Cell>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'100%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -334,7 +327,7 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 							<CellWrapper>
 								<Cell bold>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'25%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -344,7 +337,7 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 							<CellWrapper>
 								<Cell>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'70%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -361,28 +354,26 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 								<CellWrapper>
 									<CopyableText textToCopy={transaction.hash}>
 										<Cell copyable>
-											<BodyText variant='hash'>{transaction.hash}</BodyText>
+											<BodyText variant="hash">{transaction.hash}</BodyText>
 										</Cell>
 									</CopyableText>
 								</CellWrapper>
 								<CellWrapper>
 									<Cell>
-										<BodyText variant='extraSmall'>
-											{timeSince(transaction.timeStamp)}
-										</BodyText>
+										<BodyText variant="extraSmall">{timeSince(transaction.timeStamp)}</BodyText>
 									</Cell>
 								</CellWrapper>
 								<CellWrapper>
 									<CopyableText textToCopy={transaction.from}>
 										<Cell copyable>
-											<BodyText variant='hash'>{transaction.from}</BodyText>
+											<BodyText variant="hash">{transaction.from}</BodyText>
 										</Cell>
 									</CopyableText>
 								</CellWrapper>
 								<CellWrapper>
 									<CopyableText textToCopy={transaction.to}>
 										<Cell copyable>
-											<BodyText variant='hash'>{transaction.to}</BodyText>
+											<BodyText variant="hash">{transaction.to}</BodyText>
 										</Cell>
 									</CopyableText>
 								</CellWrapper>
@@ -390,22 +381,17 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 									isError={transaction.isError}
 									status={getStatusColor(getInput(transaction.input))}
 								>
-									{isValidInput(transaction.input) ||
-									transaction.input === 'BBit transfer' ? (
+									{isValidInput(transaction.input) || transaction.input === 'BBit transfer' ? (
 										<Cell>
 											{`${getInput(transaction.input)} ${
-												transaction.isError && transaction.isError !== '0'
-													? '(failed)'
-													: ''
+												transaction.isError && transaction.isError !== '0' ? '(failed)' : ''
 											}`}
 										</Cell>
 									) : (
 										<CopyableText textToCopy={transaction.input}>
 											<Cell copyable>
 												{`${transaction.input.substr(0, 10)} ${
-													transaction.isError && transaction.isError !== '0'
-														? '(failed)'
-														: ''
+													transaction.isError && transaction.isError !== '0' ? '(failed)' : ''
 												}`}
 											</Cell>
 										</CopyableText>
@@ -413,7 +399,7 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 								</InputCellWrapper>
 								<CellWrapper>
 									<Cell bold>
-										<BodyText variant='extraSmall' fontWeight='bold'>
+										<BodyText variant="extraSmall" fontWeight="bold">
 											{transaction.input !== '0x'
 												? convertToBiobit(transaction.value)
 												: +transaction.value / Math.pow(10, 18)}
@@ -422,9 +408,8 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 								</CellWrapper>
 								<CellWrapper>
 									<Cell>
-										<BodyText variant='extraSmall'>
-											{(+transaction.gasUsed * +transaction.gasPrice) /
-												Math.pow(10, 18)}
+										<BodyText variant="extraSmall">
+											{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}
 										</BodyText>
 									</Cell>
 								</CellWrapper>
@@ -432,8 +417,8 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 						);
 					})
 				) : (
-					<Row width='100%' >
-						<BodyText variant='small' width='100%' bg='white' p={3}>
+					<Row width="100%">
+						<BodyText variant="small" width="100%" bg="white" p={3}>
 							You don't have any transactions on this account in Zarela.
 						</BodyText>
 					</Row>

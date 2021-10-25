@@ -15,7 +15,7 @@ const BadgeWrapper = styled(Box)(
 	{
 		boxSizing: 'border-box',
 		fontFamily: 'Krub',
-		backgroundColor: '#D13ADE',
+		backgroundColor: 'secondary',
 		minWidth: '25px',
 		maxHeight: '25px',
 		minHeight: '25px',

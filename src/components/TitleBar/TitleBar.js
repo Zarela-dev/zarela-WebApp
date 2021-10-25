@@ -21,7 +21,7 @@ const Inner = styled.div`
 	font-weight: 700;
 	font-size: 24px;
 	line-height: 22px;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 
 	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		font-size: 18px;

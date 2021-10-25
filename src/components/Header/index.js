@@ -73,7 +73,7 @@ const NavItemDisabled = styled.a.attrs((props) => {
 `;
 
 const NavLink = styled(Typography)`
-	color: ${(props) => props.theme.navLinkColor};
+	color: ${(props) => props.theme.color.navLinkColor};
 	font-weight: 500;
 	font-size: ${(props) => props.theme.body};
 	white-space: nowrap;
@@ -114,7 +114,7 @@ const HeaderWrapper = styled.header`
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: flex-end;
-	background: white;
+	background: ${(props) => props.theme.colors.bgWhite};
 	margin-bottom: ${(props) => (props.routeGroup === '' ? 0 : props.routeGroup === 'request' ? 0 : '130px')};
 `;
 
@@ -136,7 +136,7 @@ const NavBarRow = styled.div`
 	z-index: 2;
 	width: 100%;
 	height: 100%;
-	background: #fff;
+	background: ${(props) => props.theme.colors.bgWhite};
 	height: ${(props) => (props.isMobile ? '70px' : '100px')};
 	padding: ${(props) => (props.isMobile ? '10px 18px' : `25px calc((100vw - 1255px) / 2)`)};
 	box-shadow: 0px 4px 18px 0px rgb(81 197 234 / 10%);
@@ -164,7 +164,7 @@ const ChainBadge = styled.div`
 	padding: 10px 20px;
 	padding-right: 10px;
 	line-height: 22px;
-	color: #8c2595;
+	color: ${props => props.theme.colors.primary};
 `;
 const TitleSection = styled.div`
 	display: flex;
@@ -173,11 +173,11 @@ const TitleSection = styled.div`
 	padding: 0 18px;
 	justify-content: space-between;
 	align-items: center;
-	background-color: #f4f8fe;
+	background-color: ${props => props.theme.colors.bgDisabled};
 	flex-wrap: wrap;
 `;
 const Title = styled.h1`
-	color: #000;
+	color: ${props => props.theme.colors.textPrimary};
 	font-size: 18px;
 	font-weight: 700;
 	white-space: nowrap;
@@ -252,12 +252,12 @@ const NotificationBadge = styled.div`
 	min-width: ${(props) => (props.isMobile ? '20px' : '25px')};
 	min-height: ${(props) => (props.isMobile ? '20px' : '25px')};
 	font-size: ${(props) => (props.isMobile ? '12px' : '16px')};
-	background-color: #d13ade;
+	background-color: ${props => props.theme.colors.secondary};
 	border-radius: ${(props) => (props.isMobile ? '10px' : '16px')};
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	color: #fff;
+	color: ${props => props.theme.colors.textLabel};
 	position: absolute;
 	top: ${(props) => (props.isMobile ? '-3px' : '-10px')};
 `;

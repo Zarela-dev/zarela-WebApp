@@ -1,12 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import copyImage from '../../assets/icons/copy.svg';
-import {
-	timeSince,
-	convertToBiobit,
-	getInput,
-	CopyableText,
-} from '../../utils';
+import { timeSince, convertToBiobit, getInput, CopyableText } from '../../utils';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '../../components/Pagination';
@@ -63,13 +58,13 @@ const HashCol = styled.div`
 	flex-grow: 1;
 	font-size: 12px;
 	line-height: 14px;
-	color: #3a68de;
+	color: ${(props) => props.theme.colors.textToken};
 	overflow-wrap: anywhere;
 	padding: 0 5px;
 	max-width: 73%;
 `;
 const TextCol = styled(HashCol)`
-	color: #121213;
+	color: ${(props) => props.theme.colors.textPrimary};
 	height: ${(props) => (props.title ? '100%' : 'unset')};
 	overflow: ${(props) => (props.title ? 'hidden' : 'unset')};
 	font-size: ${(props) => (props.title ? '16px' : '')};
@@ -81,7 +76,7 @@ const ValueCol = styled(HashCol)`
 	font-weight: 600;
 	font-size: 18px;
 	line-height: 20px;
-	color: #121213;
+	color: ${(props) => props.theme.colors.textPrimary};
 `;
 
 const IconCol = styled.img`
@@ -105,13 +100,7 @@ const useStyles = makeStyles({
 	},
 });
 
-const WalletTransactionsMobile = ({
-	isLoading,
-	account,
-	data,
-	props,
-	PAGE_SIZE,
-}) => {
+const WalletTransactionsMobile = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 	const [currentPage, setCurrentPage] = useState(1);
 
 	const currentTableData = useMemo(() => {
@@ -135,13 +124,13 @@ const WalletTransactionsMobile = ({
 								<TitleCol>
 									<SkeletonCol>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'80%'}
 											height={skeletonLineHeight}
 											className={classes.root}
 										/>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'60%'}
 											height={skeletonLineHeight}
 											className={classes.root}
@@ -151,19 +140,19 @@ const WalletTransactionsMobile = ({
 								<HashCol>
 									<SkeletonCol>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'100%'}
 											height={skeletonLineHeight}
 											className={classes.root}
 										/>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'100%'}
 											height={skeletonLineHeight}
 											className={classes.root}
 										/>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'80%'}
 											height={skeletonLineHeight}
 											className={classes.root}
@@ -173,7 +162,7 @@ const WalletTransactionsMobile = ({
 
 								<CopyableText>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={24}
 										height={skeletonLineHeight + 12}
 										className={classes.root}
@@ -184,7 +173,7 @@ const WalletTransactionsMobile = ({
 							<TransactionRow>
 								<TitleCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'65%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -192,7 +181,7 @@ const WalletTransactionsMobile = ({
 								</TitleCol>
 								<TextCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'45%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -202,7 +191,7 @@ const WalletTransactionsMobile = ({
 							<TransactionRow>
 								<TitleCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'70%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -211,13 +200,13 @@ const WalletTransactionsMobile = ({
 								<HashCol>
 									<SkeletonCol>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'100%'}
 											height={skeletonLineHeight}
 											className={classes.root}
 										/>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'75%'}
 											height={skeletonLineHeight}
 											className={classes.root}
@@ -226,7 +215,7 @@ const WalletTransactionsMobile = ({
 								</HashCol>
 								<CopyableText>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={24}
 										height={skeletonLineHeight + 12}
 										className={classes.root}
@@ -236,7 +225,7 @@ const WalletTransactionsMobile = ({
 							<TransactionRow>
 								<TitleCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'70%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -244,7 +233,7 @@ const WalletTransactionsMobile = ({
 								</TitleCol>
 								<TextCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'75%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -254,7 +243,7 @@ const WalletTransactionsMobile = ({
 							<TransactionRow>
 								<TitleCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'40%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -263,13 +252,13 @@ const WalletTransactionsMobile = ({
 								<HashCol>
 									<SkeletonCol>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'100%'}
 											height={skeletonLineHeight}
 											className={classes.root}
 										/>
 										<Skeleton
-											variant='rect'
+											variant="rect"
 											width={'75%'}
 											height={skeletonLineHeight}
 											className={classes.root}
@@ -278,7 +267,7 @@ const WalletTransactionsMobile = ({
 								</HashCol>
 								<CopyableText>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={24}
 										height={skeletonLineHeight + 12}
 										className={classes.root}
@@ -288,7 +277,7 @@ const WalletTransactionsMobile = ({
 							<TransactionRow>
 								<TitleCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'70%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -296,7 +285,7 @@ const WalletTransactionsMobile = ({
 								</TitleCol>
 								<ValueCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'100%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -306,7 +295,7 @@ const WalletTransactionsMobile = ({
 							<TransactionRow>
 								<TitleCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'70%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -314,7 +303,7 @@ const WalletTransactionsMobile = ({
 								</TitleCol>
 								<ValueCol>
 									<Skeleton
-										variant='rect'
+										variant="rect"
 										width={'20%'}
 										height={skeletonLineHeight}
 										className={classes.root}
@@ -336,22 +325,18 @@ const WalletTransactionsMobile = ({
 							<TitleCol></TitleCol>
 							{isValidInput(transaction.input) ? (
 								<TextCol title>
-									<BodyText variant='small' fontWeight='semiBold'>
+									<BodyText variant="small" fontWeight="semiBold">
 										{`${getInput(transaction.input)} ${
-											transaction.isError && transaction.isError !== '0'
-												? '(failed)'
-												: ''
+											transaction.isError && transaction.isError !== '0' ? '(failed)' : ''
 										}`}
 									</BodyText>
 								</TextCol>
 							) : (
 								<CopyableText textToCopy={transaction.input}>
 									<TextCol title>
-										<BodyText variant='small' fontWeight='semiBold'>
+										<BodyText variant="small" fontWeight="semiBold">
 											{`${transaction.input.substr(0, 10)} ${
-												transaction.isError && transaction.isError !== '0'
-													? '(failed)'
-													: ''
+												transaction.isError && transaction.isError !== '0' ? '(failed)' : ''
 											}`}
 										</BodyText>
 									</TextCol>
@@ -360,58 +345,55 @@ const WalletTransactionsMobile = ({
 						</TransactionRow>
 						<TransactionRow>
 							<TitleCol>
-								<BodyText variant='hash'>TXN Hash</BodyText>
+								<BodyText variant="hash">TXN Hash</BodyText>
 							</TitleCol>
 							<HashCol>{transaction.blockHash}</HashCol>
 							<CopyableText textToCopy={transaction.blockHash}>
-								<ThemeIcon variant='normal' src={copyImage} />
+								<ThemeIcon variant="normal" src={copyImage} />
 							</CopyableText>
 						</TransactionRow>
 						<TransactionRow>
 							<TitleCol>
-								<BodyText variant='hash'>Date</BodyText>
+								<BodyText variant="hash">Date</BodyText>
 							</TitleCol>
 							<TextCol>
-								<BodyText variant='timestamp'>
-									{timeSince(transaction.timeStamp)}
-								</BodyText>
+								<BodyText variant="timestamp">{timeSince(transaction.timeStamp)}</BodyText>
 							</TextCol>
 						</TransactionRow>
 						<TransactionRow>
 							<TitleCol>
-								<BodyText variant='hash'>From</BodyText>
+								<BodyText variant="hash">From</BodyText>
 							</TitleCol>
 							<HashCol>{transaction.from}</HashCol>
 							<CopyableText textToCopy={transaction.from}>
-								<ThemeIcon variant='normal' src={copyImage} />
+								<ThemeIcon variant="normal" src={copyImage} />
 							</CopyableText>
 						</TransactionRow>
 						<TransactionRow>
 							<TitleCol>
-								<BodyText variant='extraSmall'>TXN fee</BodyText>
+								<BodyText variant="extraSmall">TXN fee</BodyText>
 							</TitleCol>
 							<TextCol>
-								<BodyText variant='extraSmall'>
-									{(+transaction.gasUsed * +transaction.gasPrice) /
-										Math.pow(10, 18)}
+								<BodyText variant="extraSmall">
+									{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}
 								</BodyText>
 							</TextCol>
 						</TransactionRow>
 						<TransactionRow>
 							<TitleCol>
-								<BodyText variant='extraSmall'>To</BodyText>
+								<BodyText variant="extraSmall">To</BodyText>
 							</TitleCol>
 							<HashCol>{transaction.to}</HashCol>
 							<CopyableText textToCopy={transaction.to}>
-								<ThemeIcon variant='normal' src={copyImage} />
+								<ThemeIcon variant="normal" src={copyImage} />
 							</CopyableText>
 						</TransactionRow>
 						<TransactionRow>
 							<TitleCol>
-								<BodyText variant='extraSmall'>Value</BodyText>
+								<BodyText variant="extraSmall">Value</BodyText>
 							</TitleCol>
 							<ValueCol>
-								<BodyText variant='small' fontWeight='bold'>
+								<BodyText variant="small" fontWeight="bold">
 									{' '}
 									{transaction.input !== '0x'
 										? convertToBiobit(transaction.value)

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Title = styled.div`
 	font-size: 14px;
 	line-height: 20px;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 	margin-bottom: ${(props) => props.theme.spacing(1.5)};
 `;
 
@@ -14,10 +14,10 @@ export const TokenList = styled.div`
 `;
 
 export const TokenButton = styled.button`
-	background: #ffffff;
+	background: ${(props) => props.theme.colors.bgWhite};
 	box-sizing: border-box;
 	border-radius: 3px;
-	color: ${(props) => (props.theme.colors.primary)};
+	color: ${(props) => props.theme.colors.primary};
 	font-weight: 500;
 	font-size: 14px;
 	line-height: 20px;
@@ -47,6 +47,7 @@ export const Token = styled.div`
 
 	& ${TokenButton} {
 		color: ${(props) => (!props.active ? props.theme.colors.textTimestamp : props.theme.colors.primary)};
-		border: ${(props) => (!props.active ? `1px solid ${props.theme.colors.primary}` : `1px solid ${props.theme.colors.primary}`)};
+		border: ${(props) =>
+			!props.active ? `1px solid ${props.theme.colors.primary}` : `1px solid ${props.theme.colors.primary}`};
 	}
 `;

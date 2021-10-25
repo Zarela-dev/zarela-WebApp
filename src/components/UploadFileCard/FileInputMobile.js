@@ -36,7 +36,7 @@ export const FileInputLabel = styled.label`
 	background: #ffffff;
 	box-shadow: 0px 5.46667px 18px rgba(223, 236, 255, 0.5);
 	border-radius: 5.46667px;
-	color: #7246d0;
+	color: ${(props) => props.theme.colors.secondary};
 	cursor: pointer;
 `;
 
@@ -47,7 +47,7 @@ export const FileInputLink = styled.a`
 	border: 1px solid #bbbee6;
 	text-decoration: none;
 	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(4)};
-	color: #7246d0;
+	color: ${(props) => props.theme.colors.secondary};
 `;
 
 const FileContainer = styled.div`

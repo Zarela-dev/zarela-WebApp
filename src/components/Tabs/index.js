@@ -52,7 +52,7 @@ const TabsHeaderItem = styled(Tab)`
 		bottom: 0;
 		left: 0;
 		height: 1px;
-		background: #7246d0;
+		background: ${(props) => props.theme.colors.primary};
 		border-radius: 3px;
 		width: 100%;
 	}
@@ -90,7 +90,7 @@ export const Tabs = ({ data, isMobile, route }) => {
 						tabIndex={tab.label}
 						key={tab.label}
 					>
-						<Header variant='heading5' fontWeight='semiBold'>{tab.label}</Header>
+						<Header sx={{lineHeight: '2 !important'}} variant='heading5' fontWeight='semiBold'>{tab.label}</Header>
 					</TabsHeaderItem>
 				))}
 			</TabsHeader>

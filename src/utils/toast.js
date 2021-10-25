@@ -17,20 +17,16 @@ const Container = styled.div`
 	display: flex;
 	align-items: center;
 	height: 100%;
-	padding: ${(props) =>
-		props.usage === 'notify'
-			? props.theme.spacing(0.5)
-			: props.theme.spacing(2)};
+	padding: ${(props) => (props.usage === 'notify' ? props.theme.spacing(0.5) : props.theme.spacing(2))};
 `;
 
 const ToastMessage = styled.div`
 	font-weight: 500;
 	font-size: 16px;
 	line-height: 18px;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 	margin: 0 ${(props) => props.theme.spacing(1)};
-	margin-right: ${(props) =>
-		props.usage === 'notify' ? '0 !important' : 'unset'};
+	margin-right: ${(props) => (props.usage === 'notify' ? '0 !important' : 'unset')};
 	white-space: ${(props) => (props.isHash ? 'nowrap' : 'normal')};
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -44,20 +40,13 @@ const NotifySuccess = styled.div`
 	min-width: 20px;
 	min-height: 20px;
 	display: flex;
-	background-color: rgba(58, 222, 163, 1);
+	background-color: ${(props) => props.theme.colors.success};
 	border-radius: 10px;
 	justify-content: center;
 	align-items: center;
 `;
 
-const Message = ({
-	text,
-	copyable,
-	textToCopy,
-	closeToast,
-	toastProps,
-	usage = 'toastify',
-}) => {
+const Message = ({ text, copyable, textToCopy, closeToast, toastProps, usage = 'toastify' }) => {
 	const { appState, dispatch } = useContext(mainContext);
 
 	useEffect(() => {
@@ -73,31 +62,25 @@ const Message = ({
 			{usage === 'notify' ? (
 				toastProps.type === 'success' ? null : (
 					// <NotifySuccess>3</NotifySuccess>
-					<ThemeIcon variant='normal' src={alertImage} />
+					<ThemeIcon variant="normal" src={alertImage} />
 				)
 			) : (
-				<ThemeIcon
-					variant='normal'
-					src={toastProps.type === 'success' ? checkedBoxImage : alertImage}
-				/>
+				<ThemeIcon variant="normal" src={toastProps.type === 'success' ? checkedBoxImage : alertImage} />
 			)}
 			<ToastMessage isHash={copyable} usage={usage}>
-				<BodyText variant='small' color='textPrimary'>
+				<BodyText variant="small" color="textPrimary">
 					{text}
 				</BodyText>
 			</ToastMessage>
 			<Spacer />
 			{copyable ? (
 				<CopyableText textToCopy={textToCopy}>
-					<ThemeIcon
-						variant='big'
-						src={toastProps.type === 'success' ? copyImageGreen : copyImageRed}
-					/>
+					<ThemeIcon variant="big" src={toastProps.type === 'success' ? copyImageGreen : copyImageRed} />
 				</CopyableText>
 			) : null}
 			{usage === 'notify' ? null : (
 				<ThemeIcon
-					variant='bigger'
+					variant="bigger"
 					onClick={closeToast}
 					src={toastProps.type === 'success' ? closeImageGreen : closeImageRed}
 				/>
@@ -106,57 +89,34 @@ const Message = ({
 	);
 };
 
-export const toast = (
-	message,
-	variant = 'info',
-	copyable,
-	textToCopy /*  = message */,
-	toastOptions = {}
-) => {
-	return originalToast(
-		<Message text={message} copyable={copyable} textToCopy={textToCopy} />,
-		{
-			position: originalToast.POSITION.BOTTOM_CENTER,
-			containerId: 'toastify',
-			pauseOnHover: true,
-			pauseOnFocusLoss: true,
-			closeOnClick: false,
-			draggable: true,
-			closeButton: false,
-			autoClose: 5 * 1000,
-			draggablePercent: 20,
-			type: variant,
-			...toastOptions,
-		}
-	);
+export const toast = (message, variant = 'info', copyable, textToCopy /*  = message */, toastOptions = {}) => {
+	return originalToast(<Message text={message} copyable={copyable} textToCopy={textToCopy} />, {
+		position: originalToast.POSITION.BOTTOM_CENTER,
+		containerId: 'toastify',
+		pauseOnHover: true,
+		pauseOnFocusLoss: true,
+		closeOnClick: false,
+		draggable: true,
+		closeButton: false,
+		autoClose: 5 * 1000,
+		draggablePercent: 20,
+		type: variant,
+		...toastOptions,
+	});
 };
 
-export const log = (
-	message,
-	variant = 'info',
-	copyable,
-	textToCopy /*  = message */,
-	toastOptions = {}
-) => {
-	return originalToast(
-		<Message
-			text={message}
-			copyable={copyable}
-			textToCopy={textToCopy}
-			usage='notify'
-		/>,
-		{
-			position: originalToast.POSITION.TOP_RIGHT,
-			containerId: 'notify',
-			pauseOnHover: true,
-			pauseOnFocusLoss: true,
-			closeOnClick: false,
-			draggable: false,
-			closeButton: false,
-			autoClose: false,
-			draggablePercent: 20,
-			type: variant,
-			...toastOptions,
-		}
-	);
+export const log = (message, variant = 'info', copyable, textToCopy /*  = message */, toastOptions = {}) => {
+	return originalToast(<Message text={message} copyable={copyable} textToCopy={textToCopy} usage="notify" />, {
+		position: originalToast.POSITION.TOP_RIGHT,
+		containerId: 'notify',
+		pauseOnHover: true,
+		pauseOnFocusLoss: true,
+		closeOnClick: false,
+		draggable: false,
+		closeButton: false,
+		autoClose: false,
+		draggablePercent: 20,
+		type: variant,
+		...toastOptions,
+	});
 };

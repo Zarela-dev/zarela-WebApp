@@ -27,15 +27,15 @@ function getColor(props) {
 	}
 	if (props.variant === 'secondary') {
 		return css`
-			background: white;
-			color: #7246d0;
+			background: ${props => props.theme.colors.bgWhite};
+			color: ${props => props.theme.colors.primary};
 		`;
 	}
 }
 
 function getDisabledStyles() {
 	return css`
-		background: #d4d4d4;
+		background: ${props => props.theme.colors.bgDisabled};
 		cursor: not-allowed !important;
 	`;
 }

@@ -60,7 +60,7 @@ const NavBadge = styled.div`
 	font-weight: bold;
 	font-size: 15px;
 	line-height: 19px;
-	color: white;
+	color: ${(props) => props.theme.colors.textLabel};
 	text-align: center;
 	background: ${(props) => props.theme.success};
 	padding: 0 7px;
@@ -147,7 +147,7 @@ const bottomNavItems = [
 
 const BottomNavigation = () => {
 	const { pathname } = useLocation();
-
+	
 	return (
 		<Nav>
 			{bottomNavItems.map(
@@ -170,7 +170,7 @@ const BottomNavigation = () => {
 						return (
 							<CreateRequestNavItem key={index}>
 								<CreateRequestButton to={path}>
-									<ThemeIcon variant='small'  src={icon} />
+									<ThemeIcon variant='large'  src={icon} />
 								</CreateRequestButton>
 							</CreateRequestNavItem>
 						);

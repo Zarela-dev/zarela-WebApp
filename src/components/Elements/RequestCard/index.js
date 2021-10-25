@@ -8,8 +8,8 @@ export const RequestCardWrapper = styled.div`
 	background: white;
 	border: 1px solid #c4c4c4;
 	border-radius: 8px;
-	padding: ${({theme}) => theme.space[5]}px;
-	margin-bottom: ${({theme}) => theme.space[4]}px;
+	padding: ${({ theme }) => theme.space[5]}px;
+	margin-bottom: ${({ theme }) => theme.space[4]}px;
 `;
 
 export const HeaderLayout = styled.div`
@@ -21,12 +21,14 @@ export const HeaderLayout = styled.div`
 export const RequestNumber = styled.div`
 	flex: ${(props) => (props.isMobile ? '' : '0 0 100px')};
 	height: ${(props) => (props.isMobile ? '38px;' : '50px')};
-	border-radius: ${(props) =>
-		props.isMobile ? '5px 5px 0px 5px' : '10px 10px 0px 10px'};
-	padding: ${(props) => props.theme.spacing(1)}
-		${(props) => props.theme.spacing(2)};
+	border-radius: ${(props) => (props.isMobile ? '5px 5px 0px 5px' : '10px 10px 0px 10px')};
+	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(2)};
 	margin-right: ${(props) => props.theme.spacing(2)};
-	background: linear-gradient(246.29deg, #3a68de 12.69%, #3a68de 100%);
+	background: linear-gradient(
+		246.29deg,
+		${(props) => props.theme.colors.textToken} 12.69%,
+		${(props) => props.theme.colors.textToken} 100%
+	);
 	text-align: center;
 `;
 
@@ -34,7 +36,7 @@ export const Title = styled.div`
 	font-weight: 500;
 	font-size: 24px;
 	line-height: 30px;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) =>props.theme.colors.textPrimary};
 `;
 
 export const Bookmark = styled.img`
@@ -45,14 +47,14 @@ export const Bookmark = styled.img`
 
 export const Description = styled.div`
 	flex: 1 0 100%;
-	background: #eaf1fa;
+	background: #f4f8fe;
 	border-radius: 5px 5px 0 0;
 	padding: ${(props) => props.theme.spacing(2)};
 	font-weight: 300;
 	font-size: 14px;
 	line-height: 20px;
 	text-align: justify;
-	color: #121213;
+	color: ${(props) => props.theme.colors.textPrimary};
 `;
 //theme done request list item timestamp
 export const Timestamp = styled.p``;
@@ -76,7 +78,7 @@ export const ProgressTrackerProcess = styled.div`
 	top: -1px;
 	height: 5px;
 	width: ${(props) => props.progress + '%' || '0%'};
-	background: ${({theme}) => theme.colors.secondary};
+	background: ${({ theme }) => theme.colors.secondary};
 	border-radius: 10px;
 `;
 
@@ -106,17 +108,16 @@ export const BadgeLabel = styled.div`
 	font-size: 14px;
 	font-weight: 700;
 	white-space: normal;
-	color: #3a68de;
+	color: ${(props) => props.theme.colors.textToken};
 `;
 
 export const BiobitToDollarValue = styled.div`
 	font-weight: 600;
 	font-size: 15px;
 	line-height: 20px;
-	color: #3a68de;
+	color: ${(props) => props.theme.colors.textToken};
 	margin-right: 3px;
-	margin-left: ${(props) =>
-		props.noMargin ? props.theme.spacing(1) : props.theme.spacing(2.3)};
+	margin-left: ${(props) => (props.noMargin ? props.theme.spacing(1) : props.theme.spacing(2.3))};
 	white-space: nowrap;
 `;
 
@@ -124,7 +125,7 @@ export const Hint = styled.div`
 	font-weight: 300;
 	font-size: 12px;
 	line-height: 20px;
-	color: #3a68de;
+	color: ${(props) => props.theme.colors.textToken};
 	white-space: nowrap;
 `;
 
@@ -134,14 +135,14 @@ export const ValueLabel = styled.div`
 	font-weight: 700;
 	white-space: normal;
 	padding-bottom: 2px;
-	color: ${(props) => (props.colored ? '#3A68DE' : props.theme.textPrimary)};
+	color: ${(props) => (props.colored ? props.theme.colors.textToken :props.theme.colors.textPrimary)};
 `;
 
 export const TokenValue = styled.div`
 	font-weight: 600;
 	font-size: 18px;
 	line-height: 20px;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) =>props.theme.colors.textPrimary};
 	margin-right: 3px;
 `;
 
@@ -175,7 +176,7 @@ export const JoinButton = styled(GenericLinkButton)`
 	margin: 0;
 
 	& > * {
-		color: #7246d0;
+		color: ${(props) => props.theme.colors.primary};
 	}
 `;
 
@@ -187,21 +188,19 @@ export const TagsWrapper = styled.div`
 	max-width: 860px;
 	flex-wrap: wrap;
 
-	@media only screen and (max-width: ${(props) =>
-			props.theme.tablet_sm_breakpoint}) {
+	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		margin-top: ${(props) => props.theme.spacing(1)};
 	}
 `;
 
 export const TagItem = styled.div`
-	background: white;
+	background: ${props => props.theme.colors.bgWhite};
 	padding: 8px 16px;
 	border: 1px solid #e1e5f5;
 	border-radius: 4px;
 	margin-top: 5px;
 	margin-right: 5px;
-	@media only screen and (max-width: ${(props) =>
-			props.theme.tablet_sm_breakpoint}) {
+	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		padding: ${(props) => props.theme.spacing(0.5)};
 	}
 `;

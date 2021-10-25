@@ -77,7 +77,7 @@ const Title = styled.h1`
 	font-weight: bold;
 	font-size: 0px;
 	text-align: center;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 
 	@media only screen and (min-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
 		font-weight: bold;

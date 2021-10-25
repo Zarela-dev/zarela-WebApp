@@ -123,7 +123,7 @@ const FileItemCol = styled.div`
 	align-items: center;
 	font-size: 12px;
 	line-height: 20px;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 
 	&:nth-child(1) {
 		flex: 1 0 113px;
@@ -186,7 +186,7 @@ const FilesTableHeaderTitle = styled.div`
 	font-size: 14px;
 	line-height: 20px;
 	margin-bottom: ${(props) => props.theme.spacing(1)};
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 `;
 
 const FileName = styled.div`

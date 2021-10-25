@@ -11,8 +11,7 @@ export const FileInputWithBorder = css`
 	border: 1px dashed rgb(58 222 163 / 50%);
 	box-shadow: 0px 4px 18px rgba(223, 236, 255, 0.3);
 	border-radius: 5px;
-	padding: ${(props) => props.theme.spacing(1)}
-		${(props) => props.theme.spacing(1)};
+	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(1)};
 `;
 
 export const FileInputWrapper = styled.div`
@@ -29,11 +28,10 @@ export const FileInputTitle = styled(BodyText)`
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: center;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 	overflow: hidden;
 
-	@media only screen and (max-width: ${(props) =>
-			props.theme.tablet_sm_breakpoint}) {
+	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		font-size: 12px;
 		margin-bottom: ${(props) => props.theme.spacing(1)};
 	}
@@ -45,7 +43,7 @@ export const FileInputLabel = styled.label`
 	box-shadow: 0px 6px 20px rgba(81, 197, 234, 0.15);
 	border-radius: 4px;
 	padding: ${(props) => props.theme.spacing(1.2)};
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 	cursor: pointer;
 	text-align: center;
 	height: 40px;
@@ -54,14 +52,13 @@ export const FileInputLabel = styled.label`
 `;
 
 export const FileInputLink = styled.a`
-	background: #ffffff;
+	background: ${(props) => props.theme.colors.bgWhite};
 	box-shadow: 0px 5.46667px 18px rgba(223, 236, 255, 0.5);
 	border-radius: 5.46667px;
 	border: 1px solid #bbbee6;
 	text-decoration: none;
-	padding: ${(props) => props.theme.spacing(1)}
-		${(props) => props.theme.spacing(4)};
-	color: #7246d0;
+	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(4)};
+	color: ${(props) => props.theme.colors.secondary};
 `;
 
 const FileContainer = styled.div`
@@ -70,7 +67,7 @@ const FileContainer = styled.div`
 	align-items: center;
 	justify-content: space-between;
 	width: 100%;
-	
+
 	@media only screen and (min-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
 		flex-direction: row-reverse;
 	}
@@ -102,8 +99,7 @@ export const formatLabel = (label) => {
 export const getFileName = (inputRef, fallbackLabel) => {
 	if (inputRef && inputRef.current)
 		if (inputRef.current.files.length)
-			if (inputRef.current.files[0])
-				return formatLabel(inputRef.current.files[0].name);
+			if (inputRef.current.files[0]) return formatLabel(inputRef.current.files[0].name);
 	return formatLabel(fallbackLabel);
 };
 
@@ -119,7 +115,7 @@ const ContentRow = styled.div`
 const DownLoadText = styled.span`
 	font-size: 12px;
 	line-height: 10px;
-	color: #121213;
+	color: ${props => props.theme.colors.textPrimary};
 	font-weight: ${(props) => (props.bold ? 'bold' : '')};
 `;
 
@@ -130,7 +126,7 @@ const LinkWrapper = styled.div`
 `;
 
 const DownLoadLink = styled.a`
-	color: #7246d0;
+	color: ${props => props.theme.colors.secondary};
 	font-size: 12px;
 	line-height: 10px;
 	font-weight: bold;
@@ -142,7 +138,7 @@ const LimitSizeMessage = styled.p`
 	font-size: 14px;
 	margin-top: 15px;
 	text-align: left;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 	font-weight: 400;
 
 	@media (max-width: 768px) {
@@ -175,28 +171,27 @@ const FileInput = forwardRef(
 				<FileInputWrapper hasBorder={hasBorder} className={className}>
 					<FileContainer>
 						{typeof onClick === 'function' ? (
-							<ThemeButton variant="primary" size='normal' onClick={onClick}>{buttonLabel}</ThemeButton>
+							<ThemeButton variant="primary" size="normal" onClick={onClick}>
+								{buttonLabel}
+							</ThemeButton>
 						) : (
-							<ThemeButton as="label" variant="primary" size='normal'>
+							<ThemeButton as="label" variant="primary" size="normal">
 								{buttonLabel}
 								{!disableUpload ? (
-									<input
-										ref={ref}
-										type='file'
-										style={{ display: 'none' }}
-										{...rest}
-									/>
+									<input ref={ref} type="file" style={{ display: 'none' }} {...rest} />
 								) : null}
 							</ThemeButton>
 						)}
 						{showSelected ? (
 							<FileInputTitle>
 								{icon === 'download' ? (
-									<FileInputIcon src={fileDownloadIcon} /> 
+									<FileInputIcon src={fileDownloadIcon} />
 								) : (
 									<FileInputIcon src={fileUploadIcon} />
 								)}
-								<FileName variant='big' fontWeight='semiBold'>{getFileName(ref, formatLabel(label))}</FileName>
+								<FileName variant="big" fontWeight="semiBold">
+									{getFileName(ref, formatLabel(label))}
+								</FileName>
 							</FileInputTitle>
 						) : (
 							<FileInputTitle>
@@ -205,7 +200,9 @@ const FileInput = forwardRef(
 								) : (
 									<FileInputIcon src={fileUploadIcon} />
 								)}
-								<FileName variant='big' fontWeight='semiBold'>{formatLabel(label)}</FileName>
+								<FileName variant="big" fontWeight="semiBold">
+									{formatLabel(label)}
+								</FileName>
 							</FileInputTitle>
 						)}
 					</FileContainer>
@@ -219,15 +216,14 @@ const FileInput = forwardRef(
 				{downLoadLink && (
 					<ContentRow>
 						<DownLoadText>
-							Don’t know how to make your Z-paper?{' '}
-							<DownLoadText bold>download the sample</DownLoadText>
+							Don’t know how to make your Z-paper? <DownLoadText bold>download the sample</DownLoadText>
 						</DownLoadText>
 						<LinkWrapper>
 							<DownLoadLink
 								href={`${
 									process.env.REACT_APP_IPFS_GET_LINK + downLoadLink
 								}?filename=Zpaper-sample.zip`}
-								target='_blank'
+								target="_blank"
 							>
 								DownLoad
 							</DownLoadLink>

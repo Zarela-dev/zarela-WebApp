@@ -45,7 +45,7 @@ const Title = styled.h2`
 	font-size: 18px;
 	line-height: 20px;
 	text-align: center;
-	color: #4fcfa1;
+	color: ${props => props.theme.colors.success};
 	margin-top: 10px;
 `;
 
@@ -87,7 +87,7 @@ const MenuItem = styled(Link)`
 	font-weight: ${(props) => (props.active ? 'bold' : 'normal')};
 	font-size: 18px;
 	line-height: 18px;
-	color: #581d9f;
+	color: ${props => props.theme.colors.primary};
 	text-decoration: ${(props) => (props.active ? 'underline' : 'none')};
 	margin-bottom: ${(props) => props.theme.spacing(4)};
 	cursor: ${(props) => props.disabled && 'not-allowed'};
@@ -105,7 +105,7 @@ const MenuItemDisabled = styled.a.attrs((props) => {
 	font-weight: normal;
 	font-size: 18px;
 	line-height: 18px;
-	color: #581d9f;
+	color: ${props => props.theme.colors.primary};
 	text-decoration: none;
 	margin-bottom: ${(props) => props.theme.spacing(4)};
 	cursor: ${(props) => props.disabled && 'not-allowed'};
