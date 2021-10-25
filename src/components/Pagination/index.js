@@ -9,13 +9,15 @@ const Icon = styled.img`
 `;
 
 const ArrowButtonNext = styled.button`
-	margin-left: ${(props) => (props.isMobile ? props.theme.spacing(0.8) : props.theme.spacing(5))};
+	margin-left: ${(props) =>
+		props.isMobile ? props.theme.spacing(0.8) : props.theme.spacing(5)};
 	background: transparent;
 	border: none;
 `;
 
 const ArrowButtonPrev = styled.button`
-	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(2) : props.theme.spacing(6))};
+	margin-right: ${(props) =>
+		props.isMobile ? props.theme.spacing(0.8) : props.theme.spacing(5)};
 	background: transparent;
 	border: none;
 `;
@@ -24,11 +26,7 @@ const Wrapper = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin: ${(props) => props.theme.spacing(3)};
-
-	@media only screen and (max-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
-		width: 90%;
-	}
+	margin-bottom: 50px;
 `;
 
 const Button = styled.button`
@@ -44,12 +42,12 @@ const Button = styled.button`
 		props.isMobile
 			? `${props.theme.spacing(1)} ${props.theme.spacing(1.1)}`
 			: `${props.theme.spacing(1)} ${props.theme.spacing(1.5)}`};
-	color: ${props => props.theme.colors.primary};
+	color: ${(props) => props.theme.colors.primary};
 	font-weight: bold;
 	font-size: ${(props) => (props.isMobile ? '14px' : '18px')};
 	line-height: ${(props) => (props.isMobile ? '10px' : '18px')};
 	border: none;
-	margin-right: ${(props) => props.theme.spacing(1.2)};
+	margin: auto 4px;
 `;
 
 const scrollToTop = () => {
@@ -61,7 +59,13 @@ const scrollToTop = () => {
 };
 
 const Pagination = (props) => {
-	const { onPageChange, totalCount, siblingCount = 1, currentPage, pageSize } = props;
+	const {
+		onPageChange,
+		totalCount,
+		siblingCount = 0,
+		currentPage,
+		pageSize,
+	} = props;
 
 	const paginationRange = usePagination({
 		currentPage,
@@ -97,7 +101,7 @@ const Pagination = (props) => {
 			</ArrowButtonPrev>
 			{paginationRange.map((pageNumber, index) => {
 				if (pageNumber === DOTS) {
-					return <Button>&#8230;</Button>;
+					return <Button isMobile={props.isMobile}>&#8230;</Button>;
 				}
 				return (
 					<Button
