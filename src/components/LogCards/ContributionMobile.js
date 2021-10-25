@@ -1,34 +1,17 @@
 import React, { useState } from 'react';
-import {
-	QuickReport,
-	QuickReportTitle,
-	MobileHeader,
-	MobileCompactRequestCard,
-	MobileColumn,
-	MobileStatus,
-	MobileRequestNumber,
-	MobileTitle,
-	MobileBiobitIcon,
-	MobileBiobitValue,
-	MobileRow,
-	MobileBody,
-	MobileTable,
-	MobileTableRow,
-	MobileTableColumn,
-	MobileTableData,
-	MobileTableTitle,
-	MobileContributorIcon,
-	MobileRoleText,
-	MobileVerticalDivider,
-} from './Elements';
+import { MobileCompactRequestCard, MobileBody, MobileTable } from './Elements';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import checkedGreen from '../../assets/icons/check-green.svg';
 import pendingIcon from '../../assets/icons/pending.svg';
 import angelIcon from '../../assets/icons/angel.png';
 import hubIcon from '../../assets/icons/hub.png';
-import { Spacer } from '../Elements/Spacer';
 import { timeSince } from '../../utils';
 import useBiobit from '../../hooks/useBiobit';
+import { IdLabel } from './../Elements/IdLabel';
+import { BodyText } from './../Elements/Typography';
+import { Row, Col } from './../Elements/Flex';
+import { ThemeIcon } from './../Elements/Icon';
+import { ThemeDivider } from './../Elements/Divider';
 
 const LogCardMobile = ({ data, account }) => {
 	const [isOpen, setOpen] = useState(false);
@@ -44,77 +27,100 @@ const LogCardMobile = ({ data, account }) => {
 
 	return (
 		<MobileCompactRequestCard variant={getVariant()}>
-			<MobileHeader onClick={() => setOpen((value) => !value)}>
-				<MobileColumn flex={'0 1'}>
-					<MobileRequestNumber>{requestID}</MobileRequestNumber>
-				</MobileColumn>
-				<MobileColumn flex={'1 1'}>
-					<MobileRow>
-						<MobileTitle>{title.length < 70 ? title : title.substr(0, 70) + '...'}</MobileTitle>
-					</MobileRow>
-					<MobileRow>
-						<MobileBiobitIcon src={biobitIcon} />
-						<MobileBiobitValue>{getBBIT(angelTokenPay, laboratoryTokenPay)[0]}</MobileBiobitValue>
-						<MobileBiobitValue>{`~ $${getBBIT(angelTokenPay, laboratoryTokenPay)[1]}`}</MobileBiobitValue>
-					</MobileRow>
-					<MobileRow>
+			<Row onClick={() => setOpen((value) => !value)} width="100%" alignItems="start">
+				<Col mr={2}>
+					<IdLabel>{requestID}</IdLabel>
+				</Col>
+				<Col flex={'1 1'}>
+					<Row>
+						<BodyText variant="small" fontWeight="semiBold">
+							{title.length < 70 ? title : title.substr(0, 70) + '...'}
+						</BodyText>
+					</Row>
+					<Row mt={[2]} mb={[2]}>
+						<ThemeIcon variant="small" src={biobitIcon} />
+						<BodyText variant="hint" fontWeight="medium">
+							{getBBIT(angelTokenPay, laboratoryTokenPay)[0]}
+						</BodyText>
+						<BodyText variant="hint" fontWeight="medium">{`~ $${
+							getBBIT(angelTokenPay, laboratoryTokenPay)[1]
+						}`}</BodyText>
+					</Row>
+					<Row>
 						{allApproved ? (
-							<QuickReport variant="confirmed">{`all ${contributions.length} are confirmed. >>`}</QuickReport>
+							<BodyText
+								variant="hint"
+								fontWeight="medium"
+								color="success"
+							>{`all ${contributions.length} are confirmed. >>`}</BodyText>
 						) : (
-							<>
-								<QuickReportTitle variant="primary">{`${
+							<Col>
+								<BodyText variant="extraSmall" color="bgBadge">{`${
 									totalPending + totalConfirmed
-								} files: `}</QuickReportTitle>
-								<QuickReport variant="primary">{` ${totalConfirmed} approved, ${totalPending} pending >> `}</QuickReport>
-							</>
+								} files: `}</BodyText>
+								<BodyText
+									variant="hint"
+									fontWeight="medium"
+									color="bgBadge"
+									whiteSpace="nowrap"
+								>{` ${totalConfirmed} approved, ${totalPending} pending >> `}</BodyText>
+							</Col>
 						)}
-					</MobileRow>
-				</MobileColumn>
-				<MobileColumn flex={'0 0 35px'} />
+					</Row>
+				</Col>
+				<Col flex={'0 0 35px'} />
 				{allApproved ? (
-					<>
-						<MobileStatus src={checkedGreen} />
-					</>
+					<ThemeIcon variant="big" src={checkedGreen} />
 				) : (
-					<>
-						<MobileStatus src={pendingIcon} />
-					</>
+					<ThemeIcon variant="small" src={pendingIcon} />
 				)}
-			</MobileHeader>
+			</Row>
 			{isOpen ? (
 				<MobileBody>
 					<MobileTable>
 						{contributions.map(
 							({ originalIndex, timestamp, zarelaDay, angel, hub, rewardGainer, status }, rowIndex) => (
-								<MobileTableRow key={originalIndex}>
-									<MobileTableColumn flex={'6'}>
-										<MobileTableTitle>{`${rowIndex + 1}. File #${originalIndex}`}</MobileTableTitle>
-										<MobileTableData>{timeSince(timestamp)}</MobileTableData>
-										<MobileTableData>{`Zarela Day: ${zarelaDay} th`}</MobileTableData>
-										<MobileRow ml="15px" type="role">
-											<MobileRoleText>Role : </MobileRoleText>
+								<Row key={originalIndex}>
+									<Col flexGrow={1}>
+										<BodyText variant="small" color="textTimestamp">{`${
+											rowIndex + 1
+										}. File #${originalIndex}`}</BodyText>
+										<BodyText variant="extraSmall" color="textTimestamp" ml={3}>
+											{timeSince(timestamp)}
+										</BodyText>
+										<BodyText
+											variant="extraSmall"
+											color="textTimestamp"
+											ml={3}
+										>{`Zarela Day: ${zarelaDay} th`}</BodyText>
+										<Row ml="15px" type="role">
+											<BodyText variant="extraSmall" color="textTimestamp">
+												Role :{' '}
+											</BodyText>
 											{angel.toLowerCase() === account.toLowerCase() && (
-												<MobileContributorIcon src={angelIcon} />
+												<ThemeIcon variant="small" src={angelIcon} />
 											)}
 											{hub.toLowerCase() === account.toLowerCase() && (
-												<MobileContributorIcon src={hubIcon} />
+												<ThemeIcon variant="small" src={hubIcon} />
 											)}
-											<MobileVerticalDivider />
-											<MobileRoleText>Gainer : </MobileRoleText>
-											<MobileContributorIcon
+											<ThemeDivider variant="vertical" />
+											<BodyText variant="extraSmall" color="textTimestamp">
+												Gainer :{' '}
+											</BodyText>
+											<ThemeIcon
+												variant="small"
 												src={rewardGainer === true ? angelIcon : hubIcon}
 											/>
-										</MobileRow>
-									</MobileTableColumn>
-									<Spacer />
-									<MobileTableColumn flex="0">
+										</Row>
+									</Col>
+									<Col>
 										{status ? (
-											<MobileStatus static src={checkedGreen} />
+											<ThemeIcon variant="small" src={checkedGreen} />
 										) : (
-											<MobileStatus static src={pendingIcon} />
+											<ThemeIcon variant="small" src={pendingIcon} />
 										)}
-									</MobileTableColumn>
-								</MobileTableRow>
+									</Col>
+								</Row>
 							)
 						)}
 					</MobileTable>

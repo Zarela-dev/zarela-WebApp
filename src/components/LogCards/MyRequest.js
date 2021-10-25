@@ -1,24 +1,13 @@
 import React from 'react';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/contributor-new.svg';
+import { IdLabel } from './../Elements/IdLabel';
+import { Header, BodyText } from './../Elements/Typography';
+import { Row, Col } from './../Elements/Flex';
+import { ThemeDivider } from './../Elements/Divider';
+import { ThemeIcon } from './../Elements/Icon';
 
-import {
-	CompactRequestCard,
-	Row,
-	Header,
-	Column,
-	BiobitIcon,
-	DollarValue,
-	BiobitValue,
-	VerticalDivider,
-	Title,
-	QuickReport,
-	RequestNumber,
-	Timestamp,
-	ContributorIcon,
-	ContributorCount,
-} from './Elements';
-import { Spacer } from '../Elements/Spacer';
+import { CompactRequestCard, QuickReport } from './Elements';
 import { timeSince } from '../../utils';
 import useBiobit from '../../hooks/useBiobit';
 
@@ -41,39 +30,49 @@ const LogCard = ({ data }) => {
 
 	return (
 		<CompactRequestCard variant={getVariant()}>
-			<Header>
-				<Column flex="0 0 80px" alignSelf="flex-start">
-					<RequestNumber>{requestID}</RequestNumber>
-				</Column>
-				<Column flex="1 1 530px">
+			<Row justifyContent="space-evenly" width="100%">
+				<Col flex="0 0 80px" mr={3} alignSelf="center">
+					<IdLabel>{requestID}</IdLabel>
+				</Col>
+				<Col flex="1 1 530px">
 					<Row>
-						<Title>{title.length < 120 ? title : title.substr(0, 120) + '...'}</Title>
+						<Header variant="heading5" fontWeight="semiBold">
+							{title.length < 120 ? title : title.substr(0, 120) + '...'}
+						</Header>
 					</Row>
 					{+totalContributedCount === 0 ? (
 						<Row>
 							<QuickReport variant="primary">{`No one has contributed yet!`}</QuickReport>
 						</Row>
 					) : null}
-				</Column>
-				<Spacer />
-				<VerticalDivider />
-				<Timestamp>{timeSince(timestamp)}</Timestamp>
-				<VerticalDivider />
-				<Column displayFlex flex="0">
+				</Col>
+
+				<Col>
 					<Row>
-						<BiobitIcon src={biobitIcon} />
-						<BiobitValue>{getBBIT(angelTokenPay, laboratoryTokenPay)[0]}</BiobitValue>
-						<DollarValue>{`~ $${getBBIT(angelTokenPay, laboratoryTokenPay)[1]}`}</DollarValue>
+						<ThemeDivider variant="vertical" />
+						<BodyText variant="timestamp" minWidth="195px">
+							{timeSince(timestamp)}
+						</BodyText>
+						<ThemeDivider variant="vertical" />
+						<Col flex="1" sx={{ whiteSpace: 'nowrap' }}>
+							<Row>
+								<ThemeIcon variant="big" src={biobitIcon} />
+								<BodyText variant="small">{getBBIT(angelTokenPay, laboratoryTokenPay)[0]}</BodyText>
+								<BodyText variant="small">{`~ $${
+									getBBIT(angelTokenPay, laboratoryTokenPay)[1]
+								}`}</BodyText>
+							</Row>
+						</Col>
+						<ThemeDivider variant="vertical" />
+						<Col>
+							<Row>
+								<ThemeIcon variant="big" src={contributorIcon} />
+								<BodyText variant="small">{totalContributors}</BodyText>
+							</Row>
+						</Col>
 					</Row>
-				</Column>
-				<VerticalDivider hide />
-				<Column displayFlex flex="0">
-					<Row>
-						<ContributorIcon src={contributorIcon} />
-						<ContributorCount>{totalContributors}</ContributorCount>
-					</Row>
-				</Column>
-			</Header>
+				</Col>
+			</Row>
 		</CompactRequestCard>
 	);
 };

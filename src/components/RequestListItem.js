@@ -3,35 +3,26 @@ import styled from 'styled-components';
 import axios from 'axios';
 import _ from 'lodash';
 import { Spacer } from './Elements/Spacer';
-import { WithPointerCursor } from './Elements/WithPointerCursor';
-import {
-	ContributorsIcon,
-	ContributorBadge,
-	TokenIcon,
-	RequestNumber,
-	BiobitToDollarPair,
-	BadgeRow,
-	BadgeLabel,
-	TokenValue,
-	ValueLabel,
-	BiobitToDollarValue,
-} from './Elements/RequestCard';
-import { Typography } from './Elements/Typography';
 import biobitIcon from '../assets/icons/biobit-black.svg';
 import contributorIcon from '../assets/icons/user-blue.svg';
 import RequestFilesTable from './RequestFilesTable';
 import { mainContext } from '../state';
 import { arraySymmetricDiff, arrayIntersection, toast } from '../utils';
-import Button from './Elements/Button';
 import { useWeb3React } from '@web3-react/core';
 import caretUpIcon from '../assets/icons/caret-up.svg';
 import caretDownIcon from '../assets/icons/caret-down.svg';
-import fulfilledIcon from '../assets/icons/check-green.svg';
 import Dialog from './Dialog';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import worker from 'workerize-loader!../workers/decrypt.js';
 import { saveAs } from 'file-saver';
 import useBiobit from '../hooks/useBiobit';
+import { Header, BodyText } from './../components/Elements/Typography';
+import { ThemeDivider } from './../components/Elements/Divider';
+import { IdLabel } from './../components/Elements/IdLabel';
+import { ThemeIcon } from './../components/Elements/Icon';
+import { Row, Col } from './../components/Elements/Flex';
+import { ApproveBadge } from './../components/Elements/ApproveBadge';
+import { ThemeButton } from './../components/Elements/Button';
 
 const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
@@ -41,113 +32,7 @@ const Wrapper = styled.div`
 	margin-bottom: ${(props) => props.theme.spacing(2)};
 `;
 
-const Header = styled.header`
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-`;
-
-const TitleColumn = styled.div`
-	display: flex;
-	flex: 8;
-`;
-
-const DetailsColumn = styled.div`
-	display: flex;
-	flex: 4;
-	justify-content: flex-end;
-	height: 35px;
-	align-items: center;
-
-	@media (max-width: 768px) {
-		align-items: center;
-		margin-top: 21px;
-		justify-content: center;
-	}
-`;
-
-const RequestNumberWithPointer = styled(RequestNumber)`
-	${WithPointerCursor};
-	@media (max-width: 768px) {
-		flex: 0 0 44px;
-		height: 27px;
-		border-radius: 10px 10px 0px 10px;
-		padding: 0px 0px;
-		margin-right: 8px;
-		font-weight: bold;
-		background: linear-gradient(246.29deg, #3a68de 12.69%, #3a68de 100%);
-		font-size: 16px;
-		line-height: 30px;
-		color: #ffffff;
-		text-align: center;
-	}
-`;
-
-const Title = styled(Typography)`
-	${WithPointerCursor};
-	font-size: 16px;
-	font-weight: 500;
-
-	@media (max-width: 768px) {
-		font-size: 12px;
-	}
-`;
-
-const TotalBadge = styled.div`
-	border: 2px solid ${(props) => props.theme.primary};
-	background: transparent;
-	min-width: 32px;
-	height: 32px;
-	padding: ${(props) => props.theme.spacing(0.5)} ${(props) => props.theme.spacing(0.6)};
-	border-radius: 5px;
-
-	text-align: center;
-	font-weight: bold;
-	font-size: 15px;
-	line-height: 18px;
-	color: ${(props) => props.theme.primary};
-`;
-
-const ApprovedBadge = styled.img`
-	width: 36px;
-`;
-
-const Divider = styled.div`
-	width: 1px;
-	background: #3c87aa;
-	height: 100%;
-	margin: 0 ${(props) => props.theme.spacing(1)};
-`;
-
 const Body = styled.section``;
-
-const NoContributionMessage = styled.div`
-	margin-top: ${(props) => props.theme.spacing(2)};
-	margin-left: ${(props) => props.theme.spacing(12)};
-`;
-
-const Footer = styled.footer`
-	display: flex;
-	justify-content: flex-end;
-	width: 100%;
-`;
-
-const SubmitButton = styled(Button)`
-	margin-right: 0;
-	margin-top: ${(props) => props.theme.spacing(3)};
-	font-weight: 500;
-	font-size: 16px;
-	white-space: nowrap;
-	line-height: 18px;
-
-	& > button {
-		padding-top: 0;
-		padding-bottom: 0;
-	}
-`;
-const CustomContributeBadge = styled(ContributorBadge)`
-	flex: 0 0 auto;
-`;
 
 const ExpandToggle = styled.img`
 	width: 24px;
@@ -486,45 +371,64 @@ const RequestListItem = ({
 	return (
 		<Wrapper>
 			<Dialog isOpen={isSubmitting} content={dialogMessage} hasSpinner type="success" />
-			<Header
+			<Row
 				onClick={() => {
 					setOpen(!isOpen);
 					setAnyOpenBox && setAnyOpenBox(true);
 				}}
+				flexWrap="wrap"
 			>
-				<TitleColumn>
-					<RequestNumberWithPointer>{requestID}</RequestNumberWithPointer>
-					<Title variant="title" weight="semiBold">
-						{title.length < 160 ? title : title.substr(0, 160) + '...'}
-					</Title>
-					<Spacer />
-				</TitleColumn>
+				<Col width={2 / 3}>
+					<Row>
+						<Col mr={3}>
+							<IdLabel>{requestID}</IdLabel>
+						</Col>
+						<Col>
+							<Header variant="heading5" as="h5" weight="semiBold">
+								{title.length < 160 ? title : title.substr(0, 160) + '...'}
+							</Header>
+							<Spacer />
+						</Col>
+					</Row>
+				</Col>
 
-				<DetailsColumn>
-					<BiobitToDollarPair>
-						<BadgeRow>
-							<TokenIcon src={biobitIcon} />
-							<TokenValue>{getBBIT(angelTokenPay, laboratoryTokenPay)[0]}</TokenValue>
-							<ValueLabel>BBit</ValueLabel>
-							{/* for this version, we combine both numbers, later both will be shown separately */}
-							<BiobitToDollarValue noMargin>{`~ $${
-								getBBIT(angelTokenPay, laboratoryTokenPay)[1]
-							}`}</BiobitToDollarValue>
-						</BadgeRow>
-					</BiobitToDollarPair>
-					<Divider />
-					<CustomContributeBadge>
-						<BadgeRow>
-							<ContributorsIcon src={contributorIcon} />
-							<BadgeLabel>{contributors}</BadgeLabel>
-						</BadgeRow>
-					</CustomContributeBadge>
+				<Col width={1 / 3}>
+					<Row justifyContent="flex-end">
+						<Col>
+							<Row sx={{ whiteSpace: 'nowrap' }}>
+								<ThemeIcon variant="big" src={biobitIcon} />
+								<BodyText variant="small" as="span" fontWeight="semiBold" mr={1}>
+									{getBBIT(angelTokenPay, laboratoryTokenPay)[0]}
+								</BodyText>
+								<BodyText variant="small" fontWeight="semiBold" as="span" mr={2}>
+									BBit
+								</BodyText>
+								{/* for this version, we combine both numbers, later both will be shown separately */}
+								<BodyText variant="small" as="span" fontWeight="semiBold" noMargin>{`~ $${
+									getBBIT(angelTokenPay, laboratoryTokenPay)[1]
+								}`}</BodyText>
+							</Row>
+						</Col>
+						<ThemeDivider variant="vertical" />
 
-					<Divider />
-					{fulfilled ? <ApprovedBadge src={fulfilledIcon} /> : <TotalBadge>{unapprovedCount}</TotalBadge>}
-					<ExpandToggle src={!isOpen ? caretDownIcon : caretUpIcon} />
-				</DetailsColumn>
-			</Header>
+						<Col>
+							<Row>
+								<ThemeIcon variant="normal" src={contributorIcon} />
+								<BodyText variant="small" color="textToken" fontWeight="semiBold">
+									{contributors}
+								</BodyText>
+							</Row>
+						</Col>
+
+						<ThemeDivider variant="vertical" />
+
+						<ApproveBadge fulfilled={fulfilled} value={unapprovedCount} />
+
+						<ExpandToggle src={!isOpen ? caretDownIcon : caretUpIcon} />
+					</Row>
+				</Col>
+			</Row>
+
 			{isOpen ? (
 				Object.keys(formattedData).length > 0 ? (
 					<>
@@ -544,22 +448,25 @@ const RequestListItem = ({
 								requestID={requestID}
 							/>
 						</Body>
-						<Footer>
-							<SubmitButton
+						<Row justifyContent="flex-end" mt={3}>
+							<ThemeButton
 								variant="primary"
+								size="large"
 								disabled={selected.length === 0}
 								onClick={() => {
 									handleConfirm(requestID, selected);
 								}}
 							>
 								Send Tokens
-							</SubmitButton>
-						</Footer>
+							</ThemeButton>
+						</Row>
 					</>
 				) : (
-					<Body>
-						<NoContributionMessage>There are no contributions for now</NoContributionMessage>
-					</Body>
+					<Row>
+						<BodyText variant="small" ml="90px">
+							There are no contributions for now
+						</BodyText>
+					</Row>
 				)
 			) : null}
 		</Wrapper>

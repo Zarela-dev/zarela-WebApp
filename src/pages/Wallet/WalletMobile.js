@@ -15,8 +15,10 @@ const WalletInnerContainer = styled.div`
 	padding: 0;
 	margin: 0;
 	background: ${(props) => (props.elevated ? '#FFFFFF' : '#F4F8FE')};
-	border: ${(props) => (props.elevated ? '0.5px solid rgba(133, 206, 238, 0.5)' : 'none')};
-	box-shadow: ${(props) => (props.elevated ? '0px 4px 18px rgba(223, 236, 255, 0.3)' : 'none')};
+	border: ${(props) =>
+		props.elevated ? '0.5px solid rgba(133, 206, 238, 0.5)' : 'none'};
+	box-shadow: ${(props) =>
+		props.elevated ? '0px 4px 18px rgba(223, 236, 255, 0.3)' : 'none'};
 	border-radius: 8px;
 `;
 
@@ -31,48 +33,28 @@ const WalletTitlebar = styled(TitleBar)`
 	align-items: center;
 `;
 
-const Title = styled.div`
-	font-weight: 700;
-	font-size: 24px;
-	line-height: 28px;
-	color: ${(props) => props.theme.textPrimary};
-	padding: 0;
-
-	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
-		font-size: 18px;
-	}
-`;
-
-const Balance = styled.div`
-	font-style: normal;
-	font-weight: 500;
-	font-size: 14px;
-	line-height: 18px;
-	color: ${(props) => props.theme.textPrimary};
-`;
-
 export const WalletMobile = ({ data, account, logs, isLoading, PAGE_SIZE }) => {
 	const { appState } = useContext(mainContext);
 
 	return !account ? (
 		<Wrapper>
-			<WalletTitlebar isMobile={appState.isMobile}>
-				<Title>Wallet</Title>
-			</WalletTitlebar>
+			<WalletTitlebar isMobile={appState.isMobile}></WalletTitlebar>
 			{!account ? <ConnectDialog isOpen={true} /> : null}
 		</Wrapper>
 	) : (
 		<Wrapper>
 			<MobileLayout>
 				<Tabs
-					route="wallet"
+					route='wallet'
 					isMobile={appState.isMobile}
 					data={[
 						{
 							label: 'Account',
 							component: (
 								<WalletInnerContainer elevated>
-									<WalletAccountMobile address={account ? account : 'please connect to Metamask'} />
+									<WalletAccountMobile
+										address={account ? account : 'please connect to Metamask'}
+									/>
 								</WalletInnerContainer>
 							),
 						},

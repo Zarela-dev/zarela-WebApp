@@ -65,13 +65,18 @@ const ButtonIcon = styled.img`
 const ButtonContent = styled.span`
 	font-size: 12px;
 	line-height: 10px;
-	color: ${(props) => (props.active ? '#7246D0' : props.color === 'secondary' ? '#D13ADE' : '#fff')};
+	color: ${(props) =>
+		props.active
+			? props.theme.colors.primary
+			: props.color === 'secondary'
+			? props.theme.colors.secondary
+			: props.theme.colors.bgWhite};
 `;
 
 const UnBlockButton = styled(ButtonItem)`
 	width: 100%;
 	border: none;
-	background: #f0f0f0;
+	background: ${props => props.theme.colors.bgWhite};
 `;
 
 const MobileCard = ({ type }) => {

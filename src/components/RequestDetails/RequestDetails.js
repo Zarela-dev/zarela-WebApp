@@ -3,26 +3,11 @@ import styled from 'styled-components';
 import DownloadFileCard from '../DownloadFileCard/DownloadFileCard';
 import UploadFileCard from '../UploadFileCard/UploadFileCard';
 import {
-	RequestNumber,
 	HeaderLayout,
-	Footer,
-	Spacer,
-	TokenIcon,
-	Typography,
-	ContributorBadge,
-	ContributorsIcon,
 	ProgressTrackerTrack,
 	ProgressTrackerWrapper,
 	ProgressTrackerProcess,
-	TokenValue,
-	Divider,
-	BadgeRow,
-	Title,
-	ValueLabel,
-	BiobitToDollarValue,
-	BadgeLabel,
 } from './../Elements/RequestCard';
-import { TagsWrapper, TagItem } from '../Elements/RequestCard';
 import maxWidthWrapper from './../Elements/MaxWidth';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import contributorIcon from '../../assets/icons/user-blue.svg';
@@ -30,6 +15,12 @@ import documentsIcon from '../../assets/icons/document-blue.svg';
 import publicKeyIcon from '../../assets/icons/public-key.svg';
 import { CopyableText, timeSince } from '../../utils';
 import useBiobit from '../../hooks/useBiobit';
+import { Header, BodyText } from './../Elements/Typography';
+import { ThemeDivider } from './../Elements/Divider';
+import { IdLabel } from '../Elements/IdLabel';
+import { ThemeTag } from '../Elements/Tag';
+import { ThemeIcon } from '../Elements/Icon';
+import { Row, Col } from '../Elements/Flex';
 
 const PageWrapper = styled.div``;
 
@@ -46,39 +37,10 @@ const HeaderInner = styled(HeaderLayout)`
 	padding: 0 ${(props) => props.theme.spacing(2)};
 `;
 
-const CustomFooter = styled(Footer)`
-	margin-top: ${(props) => props.theme.spacing(3)};
-	padding-left: ${(props) => props.theme.spacing(12)};
-	flex-wrap: nowrap;
-`;
-
-const CustomBadgeRow = styled(BadgeRow)`
-	flex: 1;
-	align-items: center;
-	justify-content: end;
-	& > * {
-		white-space: nowrap;
-	}
-`;
-
 const DescriptionContainer = styled.div`
 	position: relative;
 	${maxWidthWrapper};
 	padding: ${(props) => `${props.theme.spacing(4)} ${props.theme.spacing(2)}`};
-`;
-
-const DescriptionTitle = styled.h4`
-	margin-top: ${(props) => props.theme.spacing(3)};
-	margin-bottom: ${(props) => props.theme.spacing(2)};
-	font-size: 18px;
-	font-weight: 600;
-`;
-
-const Description = styled.p`
-	font-size: 14px;
-	line-height: 25px;
-	text-align: justify;
-	margin-bottom: ${(props) => props.theme.spacing(5)};
 `;
 
 const PublicKeyBadge = styled.div`
@@ -89,44 +51,15 @@ const PublicKeyBadge = styled.div`
 	max-width: 400px;
 `;
 
-const PublicKeyTextContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	padding: ${(props) => props.theme.spacing(1)} 0;
-`;
-
-const PublicKey = styled(Typography)`
-	font-weight: 500;
-	font-size: 12px;
-	line-height: 20px;
-
-	&:not(:last-child) {
-		margin-bottom: ${(props) => props.theme.spacing(0)};
-	}
-`;
-
-const PublicKeyIcon = styled.img`
-	flex: 0 0 36px;
-	width: 36px;
-	margin-right: ${(props) => props.theme.spacing(1)};
-`;
-
-const CustomContributeBadge = styled(ContributorBadge)`
-	flex: 0 0 auto;
-`;
-
 const FilesWrapper = styled.div`
 	${maxWidthWrapper};
 	display: flex;
 	justify-content: space-between;
+	padding: ${({theme}) => theme.space[4]}px;
 `;
 
 const FileCardSpacer = styled.div`
 	flex: 0 1 50px;
-`;
-
-const CustomDivider = styled(Divider)`
-	height: 26px;
 `;
 
 const CustomProgressTrackerWrapper = styled(ProgressTrackerWrapper)`
@@ -134,14 +67,6 @@ const CustomProgressTrackerWrapper = styled(ProgressTrackerWrapper)`
 	top: 2px;
 	margin-top: ${(props) => props.theme.spacing(1)};
 	margin-bottom: ${(props) => props.theme.spacing(0)};
-`;
-
-const Timestamp = styled.p`
-	font-weight: normal;
-	font-size: 14px;
-	line-height: 130%;
-	color: #6c6c6c;
-	margin-top: ${(props) => props.theme.spacing(1)};
 `;
 
 const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
@@ -153,40 +78,57 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 		<PageWrapper>
 			<HeaderContainer>
 				<HeaderInner>
-					<HeaderLayout>
-						<RequestNumber>{request.requestID}</RequestNumber>
-						<Title>
-							<p>{request.title}</p>
-							<Timestamp>{timeSince(request.timestamp)}</Timestamp>
-						</Title>
-						<Spacer />
-					</HeaderLayout>
-					<CustomFooter>
-						<CustomContributeBadge>
-							<BadgeRow>
-								<ContributorsIcon src={documentsIcon} />
-								<BadgeLabel>{contributors}</BadgeLabel>
-							</BadgeRow>
-						</CustomContributeBadge>
-						<CustomDivider />
-						<CustomContributeBadge>
-							<BadgeRow>
-								<ContributorsIcon src={contributorIcon} />
-								<BadgeLabel>{request.totalContributedCount}</BadgeLabel>
-							</BadgeRow>
-						</CustomContributeBadge>
-						<Spacer />
-						<CustomBadgeRow>
-							<TokenIcon src={biobitIcon} />
-							<TokenValue>{getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[0]} BBit</TokenValue>
-							<ValueLabel>
-								({request.angelTokenPay} Angel + {request.laboratoryTokenPay} Hub)
-							</ValueLabel>
-							<BiobitToDollarValue noMargin>{`~ $${
-								getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[1]
-							}`}</BiobitToDollarValue>
-						</CustomBadgeRow>
-					</CustomFooter>
+					<Row width="100%" alignItems="flex-start">
+						<Col flex={'0 0 70px'} mr={[3]}>
+							{request.requestID && <IdLabel>{request.requestID}</IdLabel>}
+						</Col>
+						<Col flex={1}>
+							<Row>
+								<Header variant="heading4" fontWeight="bold !important">
+									{request.title}
+								</Header>
+							</Row>
+							<Row mb={[4]}>
+								<BodyText variant="timestamp" ml={0}>
+									{timeSince(request.timestamp)}
+								</BodyText>
+							</Row>
+							<Row width="100%">
+								<Col>
+									<Row>
+										<ThemeIcon variant="big" src={documentsIcon} />
+										<BodyText variant="small" fontWeight="bold" color="textToken">
+											{contributors}
+										</BodyText>
+									</Row>
+								</Col>
+								<ThemeDivider variant="vertical" height={'24px !important'} />
+								<Col>
+									<Row>
+										<ThemeIcon variant="big" src={contributorIcon} />
+										<BodyText variant="small" fontWeight="bold" color="textToken">
+											{request.totalContributedCount}
+										</BodyText>
+									</Row>
+								</Col>
+								<Col flex={1}></Col>
+								<Col>
+									<Row>
+										<ThemeIcon variant="big" src={biobitIcon} />
+										<BodyText variant="small" fontWeight="bold" mr={2}>
+											{getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[0]} BBit
+										</BodyText>
+										<BodyText variant="extraSmall" fontWeight="semiBold">
+											({request.angelTokenPay} Angel + {request.laboratoryTokenPay} Hub)
+										</BodyText>
+										<BodyText variant="small" color="textToken" fontWeight="bold">{`~ $${
+											getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[1]
+										}`}</BodyText>
+									</Row>
+								</Col>
+							</Row>
+						</Col>
+					</Row>
 					<CustomProgressTrackerWrapper>
 						<ProgressTrackerTrack>
 							<ProgressTrackerProcess progress={(+request.totalContributed / +request.totalContributors) * 100} />
@@ -195,24 +137,28 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 				</HeaderInner>
 			</HeaderContainer>
 			<DescriptionContainer>
-				<TagsWrapper>
+				<Row>
 					{request.categories?.split(',').map((item) => {
-						return <TagItem key={item}>#{item}</TagItem>;
+						return <ThemeTag variant="display" item={item} />;
 					})}
-				</TagsWrapper>
+				</Row>
+
 				<PublicKeyBadge data-tour="request-details-one">
-					<PublicKeyIcon src={publicKeyIcon} />
+					<ThemeIcon variant="bigger" alignSelf="center" src={publicKeyIcon} />
 					<CopyableText textToCopy={request.requesterAddress}>
-						<PublicKeyTextContainer>
-							<PublicKey variant="body">Requester public key</PublicKey>
-							<PublicKey variant="body2" weight="semiBold">
+						<Col p="10px 0">
+							<BodyText variant="small">Requester public key</BodyText>
+							<BodyText variant="extraSmall" fontWeight="semiBold" mt={0.5}>
 								{request.requesterAddress}
-							</PublicKey>
-						</PublicKeyTextContainer>
+							</BodyText>
+						</Col>
 					</CopyableText>
 				</PublicKeyBadge>
-				<DescriptionTitle>Description:</DescriptionTitle>
-				<Description>{request.description}</Description>
+
+				<Header variant="heading6" mt={3} mb={2}>
+					Description:
+				</Header>
+				<BodyText variant="big">{request.description}</BodyText>
 			</DescriptionContainer>
 			<FilesWrapper>
 				<DownloadFileCard

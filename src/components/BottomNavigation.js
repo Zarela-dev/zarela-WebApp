@@ -12,6 +12,7 @@ import profileIcon_active from '../assets/icons/nav/profile-active.svg';
 import walletIcon_active from '../assets/icons/nav/wallet-active.svg';
 import homeIcon_active from '../assets/icons/nav/home-active.svg';
 import navBackground from '../assets/images/navbar.png';
+import { ThemeIcon } from '../components/Elements/Icon';
 
 const Nav = styled.nav`
 	position: fixed;
@@ -38,7 +39,7 @@ const Nav = styled.nav`
 
 const NavItem = styled(Link)`
 	position: relative;
-	padding: ${(props) => props.theme.spacing(1.1)};
+	padding: ${(props) => props.theme.space[2]}px;
 	background: transparent;
 	flex: 1;
 	display: flex;
@@ -59,7 +60,7 @@ const NavBadge = styled.div`
 	font-weight: bold;
 	font-size: 15px;
 	line-height: 19px;
-	color: white;
+	color: ${(props) => props.theme.colors.textLabel};
 	text-align: center;
 	background: ${(props) => props.theme.success};
 	padding: 0 7px;
@@ -146,7 +147,7 @@ const bottomNavItems = [
 
 const BottomNavigation = () => {
 	const { pathname } = useLocation();
-
+	
 	return (
 		<Nav>
 			{bottomNavItems.map(
@@ -159,9 +160,9 @@ const BottomNavigation = () => {
 									<NavBadge>{notifications}</NavBadge>
 								) : null}
 								{isActive ? (
-									<NavIcon src={activeIcon} />
+									<ThemeIcon variant='layout' m={0} src={activeIcon} />
 								) : (
-									<NavIcon src={icon} />
+									<ThemeIcon variant='layout' src={icon} />
 								)}
 							</NavItem>
 						);
@@ -169,7 +170,7 @@ const BottomNavigation = () => {
 						return (
 							<CreateRequestNavItem key={index}>
 								<CreateRequestButton to={path}>
-									<CreateRequestIcon src={icon} />
+									<ThemeIcon variant='large'  src={icon} />
 								</CreateRequestButton>
 							</CreateRequestNavItem>
 						);

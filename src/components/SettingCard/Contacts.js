@@ -8,15 +8,17 @@ import {
 	TableCellWrapper,
 	TableCell,
 	TableRow,
-	EmptyMessage,
 	TableBulkRow,
-	CopyIcon,
 } from '../LogCards/Elements';
 import { CopyableText, normalizeAddress } from '../../utils';
 import MobileCard from './MobileCard';
 import AddContact from '../WalletAddress/AddContact';
 import BlockAddress from '../WalletAddress/BlockAddress';
 import DeleteContact from '../WalletAddress/DeleteContact';
+import { BodyText } from './../../components/Elements/Typography';
+import { Row } from './../../components/Elements/Flex';
+import { ThemeIcon } from './../../components/Elements/Icon';
+import copyIcon from '../../assets/icons/copy.svg';
 
 const SettingTableCell = styled(TableCellWrapper)`
 	flex: ${(props) => props.flex} !important;
@@ -41,8 +43,8 @@ const Contacts = ({ isMobile }) => {
 	if (isMobile) {
 		return (
 			<>
-				<MobileCard type="contact" />
-				<MobileCard type="block" />
+				<MobileCard type='contact' />
+				<MobileCard type='block' />
 			</>
 		);
 	} else {
@@ -51,50 +53,72 @@ const Contacts = ({ isMobile }) => {
 				<Body>
 					<Table>
 						<TableRow header>
-							<SettingTableCell flex="0 0 35%">
-								<TableCell>Nick Name</TableCell>
-							</SettingTableCell>
-							<SettingTableCell flex="0 0 40%">
-								<TableCell>Public key</TableCell>
-							</SettingTableCell>
-							<SettingTableCell flex="0 0 25%">
+							<SettingTableCell flex='0 0 35%'>
 								<TableCell>
-									<ActionTitle>Blocked</ActionTitle>
-									<ActionTitle>Delete</ActionTitle>
-									<ActionTitle>Edit</ActionTitle>
+									<BodyText variant='extraSmall'>Nick Name</BodyText>
+								</TableCell>
+							</SettingTableCell>
+							<SettingTableCell flex='0 0 40%'>
+								<TableCell>
+									<BodyText variant='extraSmall'>Public key</BodyText>
+								</TableCell>
+							</SettingTableCell>
+							<SettingTableCell flex='0 0 25%'>
+								<TableCell>
+									<ActionTitle>
+										<BodyText variant='extraSmall'>Blocked</BodyText>
+									</ActionTitle>
+									<ActionTitle>
+										<BodyText variant='extraSmall'>Delete</BodyText>
+									</ActionTitle>
+									<ActionTitle>
+										<BodyText variant='extraSmall'>Edit</BodyText>
+									</ActionTitle>
 								</TableCell>
 							</SettingTableCell>
 						</TableRow>
 						<TableBulkRow>
 							{Object.keys(contacts).length ? (
 								Object.keys(contacts).map((address) => {
-									const isBlocked = blockList.includes(normalizeAddress(address));
+									const isBlocked = blockList.includes(
+										normalizeAddress(address)
+									);
 									return (
-										<TableRow key={address}>
-											<SettingTableCell flex="0 0 35%">
-												<TableCell isBlocked={isBlocked}> {contacts[address]} </TableCell>
+										<Row key={address}>
+											<SettingTableCell flex='0 0 35%'>
+												<TableCell isBlocked={isBlocked}>
+													{' '}
+													<BodyText variant='extraSmall'>
+														{contacts[address]}
+													</BodyText>{' '}
+												</TableCell>
 											</SettingTableCell>
-											<SettingTableCell flex="0 0 40%">
+											<SettingTableCell flex='0 0 40%'>
 												<CopyableText textToCopy={address}>
 													<TableCell isBlocked={isBlocked}>
-														{address} <CopyIcon />
+														<BodyText variant='extraSmall'>{address}</BodyText>{' '}
+														<ThemeIcon variant='big' ml={2} src={copyIcon} />
 													</TableCell>
 												</CopyableText>
 											</SettingTableCell>
-											<SettingTableCell flex="0 0 25%">
+											<SettingTableCell flex='0 0 25%'>
 												<TableCell>
 													<Actions>
 														<BlockAddress publicKey={address} />
 														<DeleteContact publicKey={address} />
-														<AddContact publicKey={address} edit disabled={isBlocked} />
+														<AddContact
+															publicKey={address}
+															edit
+															disabled={isBlocked}
+														/>
 													</Actions>
 												</TableCell>
 											</SettingTableCell>
-										</TableRow>
+										</Row>
 									);
 								})
 							) : (
-								<EmptyMessage>You have no contacts</EmptyMessage>
+								<BodyText variant='small'>You have no contacts</BodyText>
 							)}
 						</TableBulkRow>
 					</Table>

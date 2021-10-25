@@ -6,6 +6,7 @@ import { isValidInput } from '../../utils/helpers';
 import { getStatusColor } from '../../utils/transactionInput';
 import { timeSince, convertToBiobit, CopyableText, getInput } from '../../utils';
 import Pagination from '../../components/Pagination';
+import { BodyText } from './../../components/Elements/Typography';
 
 const Table = styled.div`
 	display: flex;
@@ -31,7 +32,7 @@ const CellWrapper = styled.div`
 const getStatus = (props) => {
 	if (props.isError && props.isError !== '0')
 		return css`
-			color: #f62d76 !important;
+			color: ${props.theme.colors.error} !important;
 		`;
 	else if (props.status !== null)
 		return css`
@@ -94,7 +95,7 @@ const Cell = styled.div`
 
 const NoTransactions = styled.div`
 	width: 100%;
-	background: white;
+	background: ${props => props.theme.colors.bgWhite};
 	border-radius: 8px;
 	padding: ${(props) => props.theme.spacing(2)} ${(props) => props.theme.spacing(1)};
 `;
@@ -352,20 +353,28 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 							<Row key={index}>
 								<CellWrapper>
 									<CopyableText textToCopy={transaction.hash}>
-										<Cell copyable>{transaction.hash}</Cell>
+										<Cell copyable>
+											<BodyText variant="hash">{transaction.hash}</BodyText>
+										</Cell>
 									</CopyableText>
 								</CellWrapper>
 								<CellWrapper>
-									<Cell>{timeSince(transaction.timeStamp)}</Cell>
+									<Cell>
+										<BodyText variant="extraSmall">{timeSince(transaction.timeStamp)}</BodyText>
+									</Cell>
 								</CellWrapper>
 								<CellWrapper>
 									<CopyableText textToCopy={transaction.from}>
-										<Cell copyable>{transaction.from}</Cell>
+										<Cell copyable>
+											<BodyText variant="hash">{transaction.from}</BodyText>
+										</Cell>
 									</CopyableText>
 								</CellWrapper>
 								<CellWrapper>
 									<CopyableText textToCopy={transaction.to}>
-										<Cell copyable>{transaction.to}</Cell>
+										<Cell copyable>
+											<BodyText variant="hash">{transaction.to}</BodyText>
+										</Cell>
 									</CopyableText>
 								</CellWrapper>
 								<InputCellWrapper
@@ -390,20 +399,28 @@ const WalletTransactions = ({ isLoading, account, data, props, PAGE_SIZE }) => {
 								</InputCellWrapper>
 								<CellWrapper>
 									<Cell bold>
-										{transaction.input !== '0x'
-											? convertToBiobit(transaction.value)
-											: +transaction.value / Math.pow(10, 18)}
+										<BodyText variant="extraSmall" fontWeight="bold">
+											{transaction.input !== '0x'
+												? convertToBiobit(transaction.value)
+												: +transaction.value / Math.pow(10, 18)}
+										</BodyText>
 									</Cell>
 								</CellWrapper>
 								<CellWrapper>
-									<Cell>{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}</Cell>
+									<Cell>
+										<BodyText variant="extraSmall">
+											{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}
+										</BodyText>
+									</Cell>
 								</CellWrapper>
 							</Row>
 						);
 					})
 				) : (
-					<Row>
-						<NoTransactions>You don't have any transactions on this account in Zarela.</NoTransactions>
+					<Row width="100%">
+						<BodyText variant="small" width="100%" bg="white" p={3}>
+							You don't have any transactions on this account in Zarela.
+						</BodyText>
 					</Row>
 				)}
 			</Table>

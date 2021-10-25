@@ -7,26 +7,26 @@ import copyIcon from '../../assets/icons/copy.svg';
 const getFontColorVariant = ({ variant, theme }) => {
 	if (variant === 'primary') {
 		return css`
-			color: #d13ade;
+			color: ${props => props.theme.colors.secondary}:
 		`;
 	} else if (variant === 'confirmed') {
 		return css`
-			color: #3adea3;
+			color: ${props => props.theme.colors.success};
 		`;
 	} else {
 		return css`
-			color: ${theme.textPrimary};
+			color: ${theme.colors.textPrimary};
 		`;
 	}
 };
 const getBorderVariant = ({ variant }) => {
 	if (variant === 'primary') {
 		return css`
-			border-color: #d13ade;
+			border-color: ${props => props.theme.colors.secondary};
 		`;
 	} else if (variant === 'confirmed') {
 		return css`
-			border-color: #3adea3;
+			border-color: ${props => props.theme.colors.success};
 		`;
 	} else {
 		return css`
@@ -41,12 +41,12 @@ export const CompactRequestCard = styled.div`
 	align-items: center;
 	width: 100%;
 	min-height: 75px;
-	background: #f4f8fe;
+	background: ${props => props.theme.colors.bgDisabled};
 	border-radius: 8px;
 	border-width: 1px;
 	border-style: solid;
 	${(props) => getBorderVariant(props)};
-	margin-bottom: ${(props) => props.theme.spacing(1)};
+	margin-bottom: ${(props) => props.theme.spacing(2)};
 	padding: ${(props) => `${props.theme.spacing(1.3)} ${props.theme.spacing(2)}`};
 `;
 
@@ -97,7 +97,7 @@ export const StatusLabel = styled.p`
 	font-weight: bold;
 	font-size: 16px;
 	line-height: 20px;
-	color: ${(props) => (props.approved ? '#1bcc8d' : '#858585')};
+	color: ${(props) => (props.approved ? props.theme.colors.success : props.theme.colors.textTimestamp)};
 `;
 
 export const BiobitValue = styled.p`
@@ -121,7 +121,7 @@ export const Title = styled.h4`
 	font-weight: 700;
 	font-size: 16px;
 	line-height: 1.8;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 	margin-right: ${(props) => props.theme.spacing(1.5)};
 	margin-bottom: ${(props) => props.theme.spacing(0.8)};
 `;
@@ -133,7 +133,7 @@ export const Timestamp = styled.p`
 	font-size: 14px;
 	line-height: 130%;
 	min-width: 200px;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 `;
 
 export const QuickReport = styled.p`
@@ -158,7 +158,7 @@ export const RequestNumber = styled.div`
 	background: linear-gradient(246.29deg, #3a68de 12.69%, #3a68de 100%);
 	font-size: 32px;
 	line-height: 60px;
-	color: #ffffff;
+	color: ${props => props.theme.colors.bgWhite};
 	text-align: center;
 	user-select: text;
 `;
@@ -173,7 +173,7 @@ export const Table = styled.div`
 
 export const TableCellWrapper = styled.div`
 	flex: ${(props) => props.flex || 1};
-	background: white;
+	background: ${props => props.theme.colors.bgWhite};
 
 	&:first-child {
 		border-radius: 8px 0 0 8px;
@@ -185,7 +185,7 @@ export const TableCellWrapper = styled.div`
 
 export const TableBulkRow = styled.div`
 	border-radius: 8px;
-	background: white;
+	background: ${props => props.theme.colors.bgWhite};
 	padding: ${(props) => props.theme.spacing(2)} 0;
 `;
 
@@ -225,7 +225,7 @@ export const TableCell = styled.div`
 	width: 100%;
 	font-weight: normal;
 	cursor: ${(props) => (props.pointer ? 'pointer' : 'normal')};
-	color: ${(props) => (props.isBlocked ? '#D13ADE' : props.theme.textPrimary)};
+	color: ${(props) => (props.isBlocked ? '${props => props.theme.colors.secondary};' : props.theme.colors.textPrimary)};
 
 	${TableCellWrapper}:not(:last-child) & {
 		border-right: 1px solid rgba(60, 135, 170, 0.6);
@@ -269,7 +269,7 @@ export const MobileRequestNumber = styled(RequestNumber)`
 	background: linear-gradient(246.29deg, #3a68de 12.69%, #3a68de 100%);
 	font-size: 15px;
 	line-height: 11.4px;
-	color: #ffffff;
+	color: ${props => props.theme.colors.bgWhite};
 	text-align: center;
 `;
 
@@ -277,7 +277,7 @@ export const MobileTitle = styled(Title)`
 	font-weight: normal;
 	font-size: 12px;
 	line-height: 16px;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 	margin-right: ${(props) => props.noMargin && 0};
 `;
 
@@ -332,7 +332,7 @@ export const MobileTableColumn = styled.div`
 export const MobileTableData = styled.p`
 	font-size: 12px;
 	line-height: 16px;
-	color: #858585;
+	color: ${props => props.theme.colors.textTimestamp};
 	margin-left: ${(props) => props.theme.spacing(1.5)};
 	margin-bottom: ${(props) => props.theme.spacing(0.5)};
 	white-space: nowrap;
@@ -340,14 +340,14 @@ export const MobileTableData = styled.p`
 
 export const MobileTableTitle = styled(MobileTableData)`
 	margin-left: 0;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 `;
 
 export const TimestampMobile = styled(Timestamp)`
 	font-weight: normal;
 	font-size: 12px;
 	line-height: 16px;
-	color: #858585;
+	color: ${props => props.theme.colors.textTimestamp};
 `;
 
 const RoleIcon = styled.img`
@@ -407,7 +407,7 @@ export const EmptyMessage = styled.div`
 `;
 
 export const MobileRoleText = styled.span`
-	color: #121213;
+	color: ${props => props.theme.colors.textPrimary};
 	font-size: 12px;
 	line-height: 16px;
 	white-space: nowrap;
