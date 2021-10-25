@@ -30,46 +30,44 @@ const LogCard = ({ data }) => {
 
 	return (
 		<CompactRequestCard variant={getVariant()}>
-			<Row justifyContent='space-evenly' width='100%'>
-				<Col flex='0 0 80px' mr={3} alignSelf='center'>
+			<Row justifyContent="space-evenly" width="100%">
+				<Col flex="0 0 80px" mr={3} alignSelf="center">
 					<IdLabel>{requestID}</IdLabel>
 				</Col>
-				<Col flex='1 1 530px'>
+				<Col flex="1 1 530px">
 					<Row>
-						<Header variant='heading5' fontWeight='semiBold'>
+						<Header variant="heading5" fontWeight="semiBold">
 							{title.length < 120 ? title : title.substr(0, 120) + '...'}
 						</Header>
 					</Row>
 					{+totalContributedCount === 0 ? (
 						<Row>
-							<QuickReport variant='primary'>{`No one has contributed yet!`}</QuickReport>
+							<QuickReport variant="primary">{`No one has contributed yet!`}</QuickReport>
 						</Row>
 					) : null}
 				</Col>
 
 				<Col>
 					<Row>
-						<ThemeDivider variant='vertical' />
-						<BodyText variant='timestamp' minWidth='195px'>
+						<ThemeDivider variant="vertical" />
+						<BodyText variant="timestamp" minWidth="195px">
 							{timeSince(timestamp)}
 						</BodyText>
-						<ThemeDivider variant='vertical' />
-						<Col flex='1'>
+						<ThemeDivider variant="vertical" />
+						<Col flex="1" sx={{ whiteSpace: 'nowrap' }}>
 							<Row>
-								<ThemeIcon variant='big' src={biobitIcon} />
-								<BodyText variant='small'>
-									{getBBIT(angelTokenPay, laboratoryTokenPay)[0]}
-								</BodyText>
-								<BodyText variant='small'>{`~ $${
+								<ThemeIcon variant="big" src={biobitIcon} />
+								<BodyText variant="small">{getBBIT(angelTokenPay, laboratoryTokenPay)[0]}</BodyText>
+								<BodyText variant="small">{`~ $${
 									getBBIT(angelTokenPay, laboratoryTokenPay)[1]
 								}`}</BodyText>
 							</Row>
 						</Col>
-						<ThemeDivider variant='vertical' />
+						<ThemeDivider variant="vertical" />
 						<Col>
 							<Row>
-								<ThemeIcon variant='big' src={contributorIcon} />
-								<BodyText variant='small'>{totalContributors}</BodyText>
+								<ThemeIcon variant="big" src={contributorIcon} />
+								<BodyText variant="small">{totalContributors}</BodyText>
 							</Row>
 						</Col>
 					</Row>
