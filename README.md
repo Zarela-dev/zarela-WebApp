@@ -1,5 +1,10 @@
 #Zarela web application
 
+### #Biobit Smart Contract Address: 0xf67192a8b9f269f23802d9ab94c7875a0abb7aea
+
+[BioBit Token on Etherscan.io](https://etherscan.io/token/0xf67192a8b9f269f23802d9ab94c7875a0abb7aea) 
+---
+
 An open source web application developed by Zarela team to facilitate the Zarela smart contract to create the Zarela Biosignals marketplace platform.
 
 
