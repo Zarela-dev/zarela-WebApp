@@ -28,13 +28,13 @@ export const CustomFileInputMobile = styled(FileInputMobile)`
 export const HelperText = styled.div`
 	font-size: 12px;
 	line-height: 20px;
-	color: #858585;
+	color: ${(props) => props.theme.colors.textTimestamp};
 	margin-top: ${(props) => props.theme.spacing(3)};
 `;
 
 export const ErrorText = styled.div`
 	font-size: 12px;
 	line-height: 20px;
-	color: #f62d76;
+	color: ${(props) => props.theme.colors.error};
 	margin-top: ${(props) => props.theme.spacing(3)};
 `;

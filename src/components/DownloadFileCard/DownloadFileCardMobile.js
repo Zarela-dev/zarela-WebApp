@@ -4,6 +4,7 @@ import { Card, HelperText } from '../UploadFileCard/FileCard';
 import styled from 'styled-components';
 import loaderImage from '../../assets/loader/rolling.svg';
 import fileDownloadIcon from '../../assets/icons/file-download.svg';
+import { ThemeButton } from '../Elements/Button';
 
 const CustomFileInputWrapper = styled(FileInputWrapper)`
 	margin: 0;
@@ -32,9 +33,9 @@ const DownloadFileCardMobile = ({ isLoading, fileName, buttonLabel, label, helpe
 	return (
 		<Card data-tour="request-details-two">
 			<CustomFileInputWrapper hasBorder>
-				<FileInputLink href={fileLink} target="_blank">
+				<ThemeButton size="medium" variant="secondary" to={fileLink} target="_blank">
 					{buttonLabel}
-				</FileInputLink>
+				</ThemeButton>
 				<FileInputTitle>
 					<FileInputIcon src={fileDownloadIcon} />
 					{fileName}

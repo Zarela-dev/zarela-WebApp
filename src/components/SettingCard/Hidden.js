@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { localStorageContext } from '../../state/localStorageProvider/LocalStoragePriveder';
 import { CopyableText, normalizeAddress } from '../../utils';
 import styled from 'styled-components';
-import hide from '../../assets/icons/actionIcons/hide.svg';
 import HideAddress from '../WalletAddress/HideAddress';
 import {
 	CompactRequestCard,
@@ -10,12 +9,13 @@ import {
 	Table,
 	TableCellWrapper,
 	TableCell,
-	EmptyMessage,
 	TableRow,
-	CopyIcon,
 	TableBulkRow,
 } from '../LogCards/Elements';
 import MobileCard from './MobileCard';
+import { BodyText } from './../../components/Elements/Typography';
+import { ThemeIcon } from './../../components/Elements/Icon';
+import copyIcon from '../../assets/icons/copy.svg';
 
 const SettingTableCell = styled(TableCellWrapper)`
 	flex: ${(props) => props.flex} !important;
@@ -28,8 +28,8 @@ const Hidden = ({ isMobile }) => {
 	if (isMobile) {
 		return (
 			<>
-				<MobileCard type="contact" />
-				<MobileCard type="block" />
+				<MobileCard type='contact' />
+				<MobileCard type='block' />
 			</>
 		);
 	} else {
@@ -38,17 +38,25 @@ const Hidden = ({ isMobile }) => {
 				<Body>
 					<Table>
 						<TableRow header>
-							<SettingTableCell flex="0 0 15%">
-								<TableCell>Request No.</TableCell>
+							<SettingTableCell flex='0 0 15%'>
+								<TableCell>
+									<BodyText variant='extraSmall'>Request No.</BodyText>
+								</TableCell>
 							</SettingTableCell>
-							<SettingTableCell flex="0 0 15%">
-								<TableCell>Nick Name</TableCell>
+							<SettingTableCell flex='0 0 15%'>
+								<TableCell>
+									<BodyText variant='extraSmall'>Nick Name</BodyText>
+								</TableCell>
 							</SettingTableCell>
-							<SettingTableCell flex="1 0 auto">
-								<TableCell>public key</TableCell>
+							<SettingTableCell flex='1 0 auto'>
+								<TableCell>
+									<BodyText variant='extraSmall'>public key</BodyText>
+								</TableCell>
 							</SettingTableCell>
-							<SettingTableCell flex="0 0 10%">
-								<TableCell>Unhide</TableCell>
+							<SettingTableCell flex='0 0 10%'>
+								<TableCell>
+									<BodyText variant='extraSmall'>Unhide</BodyText>
+								</TableCell>
 							</SettingTableCell>
 						</TableRow>
 						<TableBulkRow>
@@ -56,22 +64,32 @@ const Hidden = ({ isMobile }) => {
 								Object.keys(hideList).map((hiddenAddress) => {
 									return hideList[hiddenAddress].map((hiddenRequest) => (
 										<TableRow key={hiddenAddress + hiddenRequest}>
-											<SettingTableCell flex="0 0 15%">
-												<TableCell> {hiddenRequest} </TableCell>
-											</SettingTableCell>
-											<SettingTableCell flex="0 0 15%">
+											<SettingTableCell flex='0 0 15%'>
 												<TableCell>
-													{contacts[normalizeAddress(hiddenAddress)] || '-'}
+													{' '}
+													<BodyText variant='extraSmall'>
+														{hiddenRequest}
+													</BodyText>{' '}
 												</TableCell>
 											</SettingTableCell>
-											<SettingTableCell flex="1 0 auto">
+											<SettingTableCell flex='0 0 15%'>
+												<TableCell>
+													<BodyText variant='extraSmall'>
+														{contacts[normalizeAddress(hiddenAddress)] || '-'}
+													</BodyText>
+												</TableCell>
+											</SettingTableCell>
+											<SettingTableCell flex='1 0 auto'>
 												<CopyableText textToCopy={hiddenAddress}>
 													<TableCell>
-														{hiddenAddress} <CopyIcon />
+														<BodyText variant='extraSmall'>
+															{hiddenAddress}
+														</BodyText>{' '}
+														<ThemeIcon variant='big' ml={2} src={copyIcon} />
 													</TableCell>
 												</CopyableText>
 											</SettingTableCell>
-											<SettingTableCell flex="0 0 10%">
+											<SettingTableCell flex='0 0 10%'>
 												<TableCell>
 													<HideAddress
 														publicKey={hiddenAddress}
@@ -83,7 +101,9 @@ const Hidden = ({ isMobile }) => {
 									));
 								})
 							) : (
-								<EmptyMessage>You have no hidden addresses</EmptyMessage>
+								<BodyText variant='small'>
+									You have no hidden addresses
+								</BodyText>
 							)}
 						</TableBulkRow>
 					</Table>

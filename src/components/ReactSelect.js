@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 import styled from 'styled-components';
+import { BodyText } from './Elements/Typography';
 
 const Wrapper = styled.div`
 	margin-bottom: 50px;
@@ -27,9 +28,8 @@ const StyledSelect = styled(Select)`
 		display: none;
 	}
 	.Select__dropdown-indicator {
-		color: #7246d0;
-		transform: ${(props) =>
-			props.isMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)'};
+		color: ${(props) => props.theme.colors.primary};
+		transform: ${(props) => (props.isMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
 		transition: all 0.3s;
 	}
 
@@ -64,26 +64,26 @@ const StyledSelect = styled(Select)`
 	}
 
 	.Select__multi-value__remove {
-		color: #7246d0;
+		color: ${(props) => props.theme.colors.primary};
 		& svg {
 			width: 24px !important;
 			height: 24px !important;
 		}
 		&:hover {
-			color: #7246d0;
+			color: ${(props) => props.theme.colors.primary};
 			background-color: transparent;
 		}
 	}
 
 	.Select__menu {
-		color: #3c3d3e;
+		color: ${(props) => props.theme.colors.textPrimary};
 		display: flex;
 		flex-direction: flex-row;
 		flex-wrap: wrap;
 		z-index: 2;
 		border: none !important;
 		box-shadow: none;
-		background-color: #fff;
+		background-color: ${(props) => props.theme.colors.bgWhite};
 		margin: 0;
 		overflow-y: hidden;
 		position: relative;
@@ -100,13 +100,13 @@ const StyledSelect = styled(Select)`
 		width: fit-content;
 		margin-bottom: 5px;
 		margin-right: 5px;
-		background: #f4f8fe;
+		background: ${(props) => props.theme.colors.bgDisabled};
 		border-radius: 4px;
 		padding: 7.5px 16px;
 		font-size: 14px;
 		line-height: 15.5px;
 		font-weight: 500;
-		color: #333333;
+		color: ${(props) => props.theme.colors.textPrimary};
 		display: flex;
 		align-items: center;
 	}
@@ -114,11 +114,11 @@ const StyledSelect = styled(Select)`
 		font-size: 12px;
 		font-weight: 500;
 		line-height: 18px;
-		color: #c4c4c4;
+		color: ${(props) => props.theme.colors.textTimestamp};
 	}
 
 	.Select__multi-value {
-		background: #f4f8fe;
+		background: ${(props) => props.theme.colors.bgDisabled};
 		padding: 5px;
 		border-radius: 4px;
 	}
@@ -126,7 +126,7 @@ const StyledSelect = styled(Select)`
 		font-size: 14px;
 		font-weight: 400;
 		line-height: 16.8px;
-		color: #212121;
+		color: ${(props) => props.theme.colors.textPrimary};
 	}
 	#react-select-3-input {
 		width: 100%;
@@ -174,7 +174,7 @@ export const Error = styled.label`
 	font-weight: 500;
 	font-size: 10px;
 	line-height: 20px;
-	color: #f62d76;
+	color: ${(props) => props.theme.colors.textPrimary.error};
 `;
 
 const Label = styled.label`
@@ -188,7 +188,7 @@ const LabelText = styled.div`
 	font-weight: 500;
 	font-size: 14px;
 	line-height: 20px;
-	color: #6c6c6c;
+	color: ${(props) => props.theme.colors.textTimestamp};
 `;
 
 const Hint = styled.div`
@@ -197,32 +197,21 @@ const Hint = styled.div`
 	line-height: 16px;
 `;
 
-const ReactSelect = (
-	{
-		options,
-		onChange,
-		isMulti,
-		value,
-		onKeyDown,
-		error,
-		label,
-		hint,
-		placeholder,
-	},
-	props
-) => {
+const ReactSelect = ({ options, onChange, isMulti, value, onKeyDown, error, label, hint, placeholder }, props) => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [input, setInput] = useState('');
 
 	return (
 		<Wrapper isMenuOpen={isMenuOpen}>
 			<Label>
-				<LabelText>{label}</LabelText>
+				<BodyText variant="extraSmall" color="timestamp">
+					{label}
+				</BodyText>
 				{hint ? <Hint>{hint}</Hint> : null}
 			</Label>
 			<StyledSelect
 				{...{ props }}
-				classNamePrefix='Select'
+				classNamePrefix="Select"
 				options={options}
 				onChange={(e) => {
 					setIsMenuOpen(true);

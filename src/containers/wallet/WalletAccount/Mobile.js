@@ -5,8 +5,14 @@ import nextStepIcon from '../../../assets/icons/next-step-arrow-down.svg';
 import { CopyableText } from '../../../utils';
 import { Wrapper, Content, MobileColumn } from './Layout';
 import { Title } from './AccountChoices';
-import { AddressTitleMobile, AddressMobile, CopyAddressButton } from './WalletInfo';
+import {
+	AddressTitleMobile,
+	AddressMobile,
+	CopyAddressButton,
+} from './WalletInfo';
 import WalletsList from '../../../components/IntroModal/WalletsList';
+import { Header, BodyText } from './../../../components/Elements/Typography';
+import { ThemeButton } from './../../../components/Elements/Button';
 
 const WrapperMobile = styled(Wrapper)`
 	padding: 19px;
@@ -49,7 +55,9 @@ const WalletAccountMobile = ({ address }) => {
 		<WrapperMobile>
 			<ContentMobile>
 				<MobileColumn fixed>
-					<Title>Choose the wallet you want to connect with</Title>
+					<BodyText variant='extraSmall'>
+						Choose the wallet you want to connect with
+					</BodyText>
 					<WalletsList />
 				</MobileColumn>
 				<NextStepArrow>
@@ -60,14 +68,17 @@ const WalletAccountMobile = ({ address }) => {
 						<AddressTitleMobile>BBit account address</AddressTitleMobile>
 						<AddressMobile>{address}</AddressMobile>
 						<CopyableText textToCopy={address}>
-							<CopyAddressButton variant="secondary">Copy address</CopyAddressButton>
+							<ThemeButton variant='secondary' size='normal'>
+								Copy address
+							</ThemeButton>
 						</CopyableText>
 					</MobileColumn>
 				</MobileColumn>
 			</ContentMobile>
 			<Note title={'Advice'}>
-				By copying your account address and sending it to others, you can easily have financial transactions,
-				including Biobit, Ethereum, etc. Also, You must never give your private keys to anyone.
+				By copying your account address and sending it to others, you can easily
+				have financial transactions, including Biobit, Ethereum, etc. Also, You
+				must never give your private keys to anyone.
 			</Note>
 		</WrapperMobile>
 	);

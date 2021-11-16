@@ -85,11 +85,11 @@ const TitleSection = styled.div`
 	padding: 0 18px;
 	justify-content: space-between;
 	align-items: center;
-	background-color: #f4f8fe;
+	background-color: ${props => props.theme.colors.bgDisabled};
 	flex-wrap: wrap;
 `;
 const Title = styled.h1`
-	color: #000;
+	color: ${props => props.theme.colors.textGrey};
 	font-size: 18px;
 	font-weight: 700;
 	white-space: nowrap;

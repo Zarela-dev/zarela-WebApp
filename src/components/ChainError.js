@@ -10,11 +10,11 @@ const Container = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: flex-start;
-	padding: ${(props) => props.theme.spacing(1.5)};
+	padding: ${(props) => props.theme.space[3]}px;
 	z-index: ${(props) => props.theme.z_modal};
 
 	@media only screen and (min-width: ${({ theme }) => theme.tablet_sm_breakpoint}) {
-		padding: ${(props) => props.theme.spacing(6)};
+		padding: ${(props) => props.theme.space[9]}px;
 	}
 
 	&::before {
@@ -40,14 +40,14 @@ const Modal = styled.div`
 	background: rgba(255, 255, 255, 0.9);
 	box-shadow: 0px 14.6965px 26.4537px rgba(81, 197, 234, 0.06);
 	border-radius: 30px 30px 10px 30px;
-	padding: ${(props) => props.theme.spacing(1.5)};
+	padding: ${(props) => props.theme.space[3]}px;
 	overflow: auto;
 
-	margin-bottom: ${(props) => props.theme.spacing(1.5)};
+	margin-bottom: ${(props) => props.theme.space[3]}px;
 
 	@media only screen and (min-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
-		margin-bottom: ${(props) => props.theme.spacing(6)};
-		padding: ${(props) => props.theme.spacing(4)} 10%;
+		margin-bottom: ${(props) => props.theme.space[9]}px;
+		padding: ${(props) => props.theme.space[6]}px 10%;
 	}
 `;
 
@@ -64,7 +64,7 @@ const Header = styled.div`
 
 const Logo = styled.img`
 	width: 120px;
-	margin-bottom: ${(props) => props.theme.spacing(2)};
+	margin-bottom: ${(props) => props.theme.space[4]}px;
 
 	@media only screen and (min-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
 		position: absolute;
@@ -77,7 +77,7 @@ const Title = styled.h1`
 	font-weight: bold;
 	font-size: 0px;
 	text-align: center;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 
 	@media only screen and (min-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
 		font-weight: bold;
@@ -91,7 +91,7 @@ const Content = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	padding-top: ${(props) => props.theme.spacing(4)};
+	padding-top: ${(props) => props.theme.space[6]}px;
 `;
 
 const Message = styled.p`

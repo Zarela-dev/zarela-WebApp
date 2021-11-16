@@ -14,17 +14,17 @@ import ConnectDialog from '../Dialog/ConnectDialog';
 
 const Wrapper = styled.div``;
 const NavButton = styled.div`
-	color: #581d9f;
+	color: ${props => props.theme.colors.primary};
 	font-weight: bolder;
 	font-size: 16px;
 `;
 
 const ArrowIcon = styled.img`
-	fill: #581d9f;
+	fill: ${props => props.theme.colors.primary};
 `;
 
 const Overlay = styled.div`
-	color: red;
+	color: ${props => props.theme.colors.error};
 	width: ${(props) => (props.isMobile ? '32px' : '55px')};
 	height: ${(props) => (props.isMobile ? '32px' : '55px')};
 	z-index: 999999;
@@ -46,14 +46,14 @@ const Close = styled.div`
 	width: ${(props) => (props.isMobile ? '27px' : '48px')};
 	height: ${(props) => (props.isMobile ? '27px' : '48px')};
 	border-radius: ${(props) => (props.isMobile ? '15px' : '25px')};
-	background-color: #fff;
+	background-color: ${props => props.theme.colors.bgWhite};
 	display: flex;
 	justify-content: center;
 	align-items: center;
 `;
 
 const CloseIcon = styled.img`
-	color: #581d9f;
+	color: ${props => props.theme.colors.primary};
 `;
 
 const SubmitRequestButton = styled.a`

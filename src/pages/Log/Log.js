@@ -41,7 +41,7 @@ const Log = () => {
 					<ConnectDialog isOpen={true} />
 				) : (
 					<Tabs
-						route="log"
+						route='log'
 						data-tour={'requests'}
 						isMobile={appState.isMobile}
 						data={[

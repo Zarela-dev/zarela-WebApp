@@ -29,7 +29,7 @@ export const Title = styled.h3`
 	font-weight: 700;
 	font-size: 18px;
 	line-height: 25px;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 `;
 
 export const Row = styled.div`
@@ -38,7 +38,7 @@ export const Row = styled.div`
 	margin-bottom: ${(props) => props.theme.spacing(1)};
 
 	& > * {
-		color: ${(props) => (props.hiddenInfo ? '#858585' : props.theme.textPrimary)};
+		color: ${(props) => (props.hiddenInfo ? props.theme.colors.textTimestamp : props.theme.colors.textPrimary)};
 	}
 `;
 
@@ -59,7 +59,6 @@ export const Subtitle = styled.h6`
 	font-weight: 600;
 	font-size: 16px;
 	line-height: 20px;
-	color: #3d5c8a;
 	white-space: nowrap;
 `;
 export const Divider = styled.div`

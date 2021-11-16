@@ -6,7 +6,14 @@ import { localStorageContext } from '../../state/localStorageProvider/LocalStora
 import addToContactIcon from '../../assets/icons/actionIcons/add-to-contact.svg';
 import confirmAddToContactIcon from '../../assets/icons/actionIcons/confirm-add-to-contact.svg';
 import editContactIcon from '../../assets/icons/actionIcons/edit.svg';
-import { Icon, TextField, SubmitButton, AddToContactFrom, Tooltip, Action } from './Elements';
+import {
+	TextField,
+	SubmitButton,
+	AddToContactFrom,
+	Tooltip,
+	Action,
+} from './Elements';
+import { ThemeIcon } from './../../components/Elements/Icon';
 
 const AddContact = ({ publicKey, edit, disabled }) => {
 	const { dispatch, localState } = useContext(localStorageContext);
@@ -15,7 +22,8 @@ const AddContact = ({ publicKey, edit, disabled }) => {
 	const [alias, setAlias] = useState('');
 
 	useEffect(() => {
-		contacts[normalizeAddress(publicKey)] && setAlias(contacts[normalizeAddress(publicKey)]);
+		contacts[normalizeAddress(publicKey)] &&
+			setAlias(contacts[normalizeAddress(publicKey)]);
 	}, [contacts[normalizeAddress(publicKey)]]);
 
 	return (
@@ -43,21 +51,28 @@ const AddContact = ({ publicKey, edit, disabled }) => {
 						}}
 					>
 						<TextField
-							placeholder="Add your contact nick name"
-							name="alias"
+							placeholder='Add your contact nick name'
+							name='alias'
 							value={alias}
 							autoFocus
 							onChange={(e) => setAlias(e.target.value)}
 						/>
-						<SubmitButton type="submit">
-							<Icon src={confirmAddToContactIcon} />
+						<SubmitButton type='submit'>
+							<ThemeIcon variant='big' src={confirmAddToContactIcon} />
 						</SubmitButton>
 					</AddToContactFrom>
 				</ClickAwayListener>
 			}
 		>
 			<Action disabled={disabled} onClick={() => setTooltipOpen(true)}>
-				<Icon src={contacts[[normalizeAddress(publicKey)]] || edit ? editContactIcon : addToContactIcon} />
+				<ThemeIcon
+					variant='big'
+					src={
+						contacts[[normalizeAddress(publicKey)]] || edit
+							? editContactIcon
+							: addToContactIcon
+					}
+				/>
 			</Action>
 		</Tooltip>
 	);

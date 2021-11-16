@@ -10,7 +10,7 @@ const Text = styled.p`
 	font-weight: normal;
 	font-size: 14px;
 	line-height: 18px;
-	color: #121213;
+	color: ${(props) => props.theme.colors.textPrimary};
 	margin-bottom: ${(props) => props.theme.spacing(3)};
 `;
 
@@ -59,7 +59,7 @@ const ConnectButton = styled(Button)`
 		height: auto;
 		margin: 0;
 		width: 100%;
-		
+
 		& > button {
 			font-size: 18px;
 			white-space: nowrap;

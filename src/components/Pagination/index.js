@@ -25,6 +25,10 @@ const Wrapper = styled.div`
 	justify-content: center;
 	align-items: center;
 	margin: ${(props) => props.theme.spacing(3)};
+
+	@media only screen and (max-width: ${(props) => props.theme.desktop_sm_breakpoint}) {
+		width: 90%;
+	}
 `;
 
 const Button = styled.button`
@@ -40,7 +44,7 @@ const Button = styled.button`
 		props.isMobile
 			? `${props.theme.spacing(1)} ${props.theme.spacing(1.1)}`
 			: `${props.theme.spacing(1)} ${props.theme.spacing(1.5)}`};
-	color: #7246d0;
+	color: ${props => props.theme.colors.primary};
 	font-weight: bold;
 	font-size: ${(props) => (props.isMobile ? '14px' : '18px')};
 	line-height: ${(props) => (props.isMobile ? '10px' : '18px')};

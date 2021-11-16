@@ -3,9 +3,10 @@ import Note from './../../../components/Note';
 import styled from 'styled-components';
 import nextStepIcon from './../../../assets/icons/next-step-arrow.svg';
 import { CopyableText } from './../../../utils';
-import { Wrapper, Content, Row, Column } from './Layout';
-import { AddressTitle, Address, CopyAddressButton } from './WalletInfo';
+import { Content, Row, Column } from './Layout';
 import WalletsList from '../../../components/IntroModal/WalletsList';
+import { Header, BodyText } from './../../../components/Elements/Typography';
+import { ThemeButton } from './../../../components/Elements/Button';
 
 const NextStepArrow = styled.div`
 	height: 100%;
@@ -42,10 +43,10 @@ const Notice = styled(Note)`
 
 const WalletAccount = ({ address }) => {
 	return (
-		<Wrapper>
+		<Row>
 			<Content>
 				<Column fixed>
-					<WalletsList view="list" />
+					<WalletsList view='list' />
 				</Column>
 				<NextStepArrow>
 					<NextStepIcon src={nextStepIcon} />
@@ -53,23 +54,29 @@ const WalletAccount = ({ address }) => {
 				<Column>
 					<Row>
 						<Column center>
-							<AddressTitle>BBit account address</AddressTitle>
-							<Address>{address}</Address>
+							<Header variant='heading5' as='h5' fontWeight='semiBold'>
+								BBit account address
+							</Header>
+							<BodyText variant='small' mb={5}>
+								{address}
+							</BodyText>
 							<CopyableText textToCopy={address}>
-								<CopyAddressButton variant="secondary">Copy address</CopyAddressButton>
+								<ThemeButton variant='secondary' size='normal'>
+									Copy address
+								</ThemeButton>
 							</CopyableText>
 						</Column>
 					</Row>
 					<Row>
 						<Notice title={'Advice'}>
-							By copying your account address and sending it to others, you can easily have financial
-							transactions, including Biobit, Ethereum, etc. Also, You must never give your private keys
-							to anyone.
+							By copying your account address and sending it to others, you can
+							easily have financial transactions, including Biobit, Ethereum,
+							etc. Also, You must never give your private keys to anyone.
 						</Notice>
 					</Row>
 				</Column>
 			</Content>
-		</Wrapper>
+		</Row>
 	);
 };
 

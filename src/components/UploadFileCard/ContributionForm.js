@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SmallCheckbox } from '../Elements/Checkbox';
 import TextField from '../Elements/TextField';
-import Button from '../Elements/Button';
+import Button, { ThemeButton } from '../Elements/Button';
 import ConnectDialog from '../Dialog/ConnectDialog';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -43,7 +43,7 @@ const RewardGainerLabel = styled.p`
 	font-weight: bold;
 	font-size: 16px;
 	font-weight: ${(props) => (props.active ? 700 : 400)};
-	color: ${(props) => (props.active ? '#D13ADE' : props.theme.textPrimary)};
+	color: ${(props) => (props.active ? props.theme.colors.secondary : props.theme.colors.textPrimary)};
 	margin-top: ${(props) => props.theme.spacing(2)};
 `;
 
@@ -51,7 +51,7 @@ const RewardGainerItem = styled.div`
 	flex: 0 0 120px;
 `;
 
-const ContinueButton = styled(Button)`
+const ContinueButton = styled(ThemeButton)`
 	margin: 0;
 `;
 
@@ -61,7 +61,7 @@ const Box = styled.div`
 const Form = styled.form``;
 
 const RewardGainerDescription = styled.p`
-	color: #212121;
+	color: ${(props) => props.theme.colors.textPrimary};
 	margin: 4px auto 19px auto;
 	font-size: 18px;
 	font-weight: bold;
@@ -246,7 +246,7 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 				</RewardGainerWrapper>
 			</Box>
 			<ButtonWrapper>
-				<ContinueButton type="submit" variant="secondary">
+				<ContinueButton size="medium" type="submit" variant="secondary">
 					Continue
 				</ContinueButton>
 			</ButtonWrapper>

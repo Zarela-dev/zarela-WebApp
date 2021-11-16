@@ -5,35 +5,19 @@ import * as yup from 'yup';
 import { useHistory } from 'react-router';
 import { useWeb3React } from '@web3-react/core';
 import { mainContext } from '../../state';
-import { Title, TokenList, TokenIcon, TokenName, Token } from './WalletAccount/AccountChoices';
+import { TokenList, Token } from './WalletAccount/AccountChoices';
 import { Content, Column } from './WalletAccount/Layout';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import etherIcon from '../../assets/icons/ether-black.png';
 import Textfield from './../../components/Elements/TextField';
-import Button from './../../components/Elements/Button';
 import { toast } from '../../utils';
+import { BodyText } from './../../components/Elements/Typography';
+import { ThemeButton } from './../../components/Elements/Button';
+import { ThemeIcon } from './../../components/Elements/Icon';
 
 const WalletInput = styled(Textfield)`
 	min-width: ${(props) => (props.isMobile === true ? '100%' : '510px')};
 	margin-bottom: ${(props) => props.theme.spacing(4)};
-`;
-
-const SendButton = styled(Button)`
-	align-self: center;
-	margin: 0;
-`;
-
-const SendButtonMobile = styled(Button)`
-	margin: auto;
-	height: 35px;
-	width: 105px;
-	border-radius: 3px;
-
-	button {
-		padding: 0;
-		font-weight: 400;
-		font-size: 14px;
-	}
 `;
 
 const Wrapper = styled.form`
@@ -106,21 +90,29 @@ const WalletSendAssets = (mobile) => {
 		<Wrapper onSubmit={formik.handleSubmit} isMobile={appState.isMobile}>
 			<Content>
 				<Column>
-					<Title>Choose Token</Title>
+					<BodyText variant="small" mb={3}>
+						Choose Token
+					</BodyText>
 					<TokenList>
-						<Token
-							active={formik.values.token === 'Biobit'}
-							onClick={() => formik.setFieldValue('token', 'Biobit')}
-						>
-							<TokenIcon src={biobitIcon} />
-							<TokenName>BBit</TokenName>
+						<Token onClick={() => formik.setFieldValue('token', 'Biobit')}>
+							<ThemeIcon variant={['small', 'big']} src={biobitIcon} />
+							<BodyText
+								color={formik.values.token === 'Biobit' ? 'primary' : 'textPrimary'}
+								variant="small"
+								fontWeight="semiBold"
+							>
+								BBit
+							</BodyText>
 						</Token>
-						<Token
-							active={formik.values.token === 'Ethereum'}
-							onClick={() => formik.setFieldValue('token', 'Ethereum')}
-						>
-							<TokenIcon src={etherIcon} />
-							<TokenName>Ethereum</TokenName>
+						<Token onClick={() => formik.setFieldValue('token', 'Ethereum')}>
+							<ThemeIcon variant={['small', 'big']} src={etherIcon} />
+							<BodyText
+								color={formik.values.token === 'Ethereum' ? 'primary' : 'textPrimary'}
+								variant="small"
+								fontWeight="semiBold"
+							>
+								Ethereum
+							</BodyText>
 						</Token>
 					</TokenList>
 					<WalletInput
@@ -131,6 +123,7 @@ const WalletSendAssets = (mobile) => {
 						adornmentOnClick={() => {
 							getClipboard();
 						}}
+						coloredAdornment
 						onChange={(e) => formik.setFieldValue('address', e.target.value)}
 						name="address"
 						value={formik.values.address}
@@ -141,6 +134,7 @@ const WalletSendAssets = (mobile) => {
 						label={'Amount'}
 						placeholder={'Enter amount'}
 						hint={getBalanceHint()} // will change based on token chosen
+						coloredAdornment
 						actions={[
 							{
 								content: 'Max',
@@ -153,28 +147,30 @@ const WalletSendAssets = (mobile) => {
 								},
 							},
 						]}
-						coloredAdornment
 						onChange={(e) => formik.setFieldValue('amount', e.target.value)}
 						name="amount"
 						value={formik.values.amount}
 						error={formik.errors?.amount}
 					/>
 					{appState.isMobile ? (
-						<SendButtonMobile
+						<ThemeButton
 							variant="primary"
+							size="normal"
 							type="submit"
+							m="auto"
 							disabled={!formik.isValid && !formik.isSubmitting && !formik.pristine}
 						>
 							Send
-						</SendButtonMobile>
+						</ThemeButton>
 					) : (
-						<SendButton
+						<ThemeButton
 							variant="primary"
+							size="normal"
 							type="submit"
 							disabled={!formik.isValid && !formik.isSubmitting && !formik.pristine}
 						>
 							Send
-						</SendButton>
+						</ThemeButton>
 					)}
 				</Column>
 			</Content>
