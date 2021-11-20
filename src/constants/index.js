@@ -6,6 +6,7 @@ export const supportedChains = {
 	KOVAN: 42,
 	ARBITRUM_KOVAN: 144545313136048,
 	ARBITRUM_ONE: 42161,
+	POLYGON_TESTNET: 80001,
 };
 
 export const NETWORK_LABELS = {
@@ -16,14 +17,9 @@ export const NETWORK_LABELS = {
 	[supportedChains.KOVAN]: 'Kovan',
 	[supportedChains.ARBITRUM_KOVAN]: 'kArbitrum',
 	[supportedChains.ARBITRUM_ONE]: 'Arbitrum One',
+	[supportedChains.POLYGON_TESTNET]: 'Polygon Testnet',
 };
 
-export const CURRENT_NETWORK_LABEL =
-	process.env.NODE_ENV === 'production' && process.env.REACT_APP_IS_TEST_NET !== 'true'
-		? NETWORK_LABELS[supportedChains.MAINNET]
-		: NETWORK_LABELS[supportedChains.ROPSTEN];
+export const CURRENT_NETWORK_LABEL = NETWORK_LABELS[supportedChains.POLYGON_TESTNET];
 
-export const ETHERSCAN_BASE_URL =
-	process.env.NODE_ENV === 'production' && process.env.REACT_APP_IS_TEST_NET !== 'true'
-		? process.env.REACT_APP_ETHERSCAN_MAINNET_API_LINK
-		: process.env.REACT_APP_ETHERSCAN_ROPSTEN_API_LINK;
+export const ETHERSCAN_BASE_URL = process.env.REACT_APP_ETHERSCAN_ROPSTEN_API_LINK;
