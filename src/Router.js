@@ -33,14 +33,14 @@ const AppRouter = () => {
 		if (provider) {
 			try {
 				metamaskChainId.then((currentChainId) => {
-					if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_IS_TEST_NET !== 'true') {
-						if (parseInt(currentChainId, 16) !== supportedChains.MAINNET) {
+					// if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_IS_TEST_NET !== 'true') {
+					// 	if (parseInt(currentChainId, 16) !== supportedChains.POLYGON_TESTNET) {
+					// 		setChainError(true);
+					// 	}
+					// } else {
+						if (parseInt(currentChainId, 16) !== supportedChains.POLYGON_TESTNET) {
 							setChainError(true);
-						}
-					} else {
-						if (parseInt(currentChainId, 16) !== supportedChains.ROPSTEN) {
-							setChainError(true);
-						}
+						// }
 					}
 				});
 				// watch for network changes

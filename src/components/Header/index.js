@@ -157,7 +157,7 @@ const ChainBadge = styled.div`
 	background-size: 100%;
 	position: absolute;
 	background-position: center;
-	right: -106px;
+	right: -156px;
 	top: 14px;
 	height: 42px;
 	white-space: nowrap;
