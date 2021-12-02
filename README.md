@@ -27,6 +27,6 @@ this web application project is the dApp developed to create the interface for o
 
 
 
-### Contributions
+### Contributors
 if you are a developer and would like to contribute on this project take a look at our CONTRIBUTING guide.
 

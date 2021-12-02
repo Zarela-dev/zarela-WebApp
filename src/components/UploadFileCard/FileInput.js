@@ -3,6 +3,8 @@ import styled, { css } from 'styled-components';
 import fileDownloadIcon from '../../assets/icons/file-download.svg';
 import fileUploadIcon from '../../assets/icons/file-upload.svg';
 import { Error } from '../Elements/TextField';
+import { ThemeButton } from '../Elements/Button';
+import { BodyText } from './../Elements/Typography';
 
 export const FileInputWithBorder = css`
 	background: #ffffff;
@@ -22,11 +24,11 @@ export const FileInputWrapper = styled.div`
 	font-weight: 400;
 `;
 
-export const FileInputTitle = styled.div`
+export const FileInputTitle = styled(BodyText)`
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: center;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 	overflow: hidden;
 
 	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
@@ -41,7 +43,7 @@ export const FileInputLabel = styled.label`
 	box-shadow: 0px 6px 20px rgba(81, 197, 234, 0.15);
 	border-radius: 4px;
 	padding: ${(props) => props.theme.spacing(1.2)};
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 	cursor: pointer;
 	text-align: center;
 	height: 40px;
@@ -50,20 +52,25 @@ export const FileInputLabel = styled.label`
 `;
 
 export const FileInputLink = styled.a`
-	background: #ffffff;
+	background: ${(props) => props.theme.colors.bgWhite};
 	box-shadow: 0px 5.46667px 18px rgba(223, 236, 255, 0.5);
 	border-radius: 5.46667px;
 	border: 1px solid #bbbee6;
 	text-decoration: none;
 	padding: ${(props) => props.theme.spacing(1)} ${(props) => props.theme.spacing(4)};
-	color: #7246d0;
+	color: ${(props) => props.theme.colors.secondary};
 `;
 
 const FileContainer = styled.div`
 	display: flex;
-	flex-direction: row-reverse;
+	flex-direction: column-reverse;
+	align-items: center;
 	justify-content: space-between;
 	width: 100%;
+
+	@media only screen and (min-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
+		flex-direction: row-reverse;
+	}
 `;
 
 const ErrorContainer = styled.div`
@@ -77,7 +84,7 @@ export const FileInputIcon = styled.img`
 	margin-right: ${(props) => props.theme.spacing(1)};
 `;
 
-export const FileName = styled.div`
+export const FileName = styled(BodyText)`
 	overflow: hidden;
 	text-align: left;
 	text-overflow: ellipsis;
@@ -108,7 +115,7 @@ const ContentRow = styled.div`
 const DownLoadText = styled.span`
 	font-size: 12px;
 	line-height: 10px;
-	color: #121213;
+	color: ${props => props.theme.colors.textPrimary};
 	font-weight: ${(props) => (props.bold ? 'bold' : '')};
 `;
 
@@ -119,7 +126,7 @@ const LinkWrapper = styled.div`
 `;
 
 const DownLoadLink = styled.a`
-	color: #7246d0;
+	color: ${props => props.theme.colors.secondary};
 	font-size: 12px;
 	line-height: 10px;
 	font-weight: bold;
@@ -131,7 +138,7 @@ const LimitSizeMessage = styled.p`
 	font-size: 14px;
 	margin-top: 15px;
 	text-align: left;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 	font-weight: 400;
 
 	@media (max-width: 768px) {
@@ -164,14 +171,16 @@ const FileInput = forwardRef(
 				<FileInputWrapper hasBorder={hasBorder} className={className}>
 					<FileContainer>
 						{typeof onClick === 'function' ? (
-							<FileInputLabel onClick={onClick}>{buttonLabel}</FileInputLabel>
+							<ThemeButton variant="primary" size="normal" onClick={onClick}>
+								{buttonLabel}
+							</ThemeButton>
 						) : (
-							<FileInputLabel>
+							<ThemeButton as="label" variant="primary" size="normal">
 								{buttonLabel}
 								{!disableUpload ? (
 									<input ref={ref} type="file" style={{ display: 'none' }} {...rest} />
 								) : null}
-							</FileInputLabel>
+							</ThemeButton>
 						)}
 						{showSelected ? (
 							<FileInputTitle>
@@ -180,7 +189,9 @@ const FileInput = forwardRef(
 								) : (
 									<FileInputIcon src={fileUploadIcon} />
 								)}
-								<FileName>{getFileName(ref, formatLabel(label))}</FileName>
+								<FileName variant="big" fontWeight="semiBold">
+									{getFileName(ref, formatLabel(label))}
+								</FileName>
 							</FileInputTitle>
 						) : (
 							<FileInputTitle>
@@ -189,7 +200,9 @@ const FileInput = forwardRef(
 								) : (
 									<FileInputIcon src={fileUploadIcon} />
 								)}
-								<FileName>{formatLabel(label)}</FileName>
+								<FileName variant="big" fontWeight="semiBold">
+									{formatLabel(label)}
+								</FileName>
 							</FileInputTitle>
 						)}
 					</FileContainer>
@@ -207,7 +220,9 @@ const FileInput = forwardRef(
 						</DownLoadText>
 						<LinkWrapper>
 							<DownLoadLink
-								href={`${process.env.REACT_APP_IPFS_GET_LINK + downLoadLink}?filename=Zpaper-sample.zip`}
+								href={`${
+									process.env.REACT_APP_IPFS_GET_LINK + downLoadLink
+								}?filename=Zpaper-sample.zip`}
 								target="_blank"
 							>
 								DownLoad

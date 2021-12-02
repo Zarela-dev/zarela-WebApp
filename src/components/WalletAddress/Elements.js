@@ -28,7 +28,7 @@ export const AddToContactFrom = styled.form`
 
 export const TextField = styled.input`
 	flex: 1 0 auto;
-	color: #7246d0;
+	color: ${(props) => props.theme.colors.secondary};
 	font-size: 12px;
 	border: none;
 	background: none;

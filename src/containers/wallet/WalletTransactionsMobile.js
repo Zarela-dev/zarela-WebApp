@@ -7,6 +7,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '../../components/Pagination';
 import { getStatusColor } from '../../utils/transactionInput';
 import { isValidInput } from '../../utils/helpers';
+import { BodyText } from './../../components/Elements/Typography';
+import { ThemeIcon } from './../../components/Elements/Icon';
 
 const Wrapper = styled.div`
 	width: 100%;
@@ -56,12 +58,13 @@ const HashCol = styled.div`
 	flex-grow: 1;
 	font-size: 12px;
 	line-height: 14px;
-	color: #3a68de;
+	color: ${(props) => props.theme.colors.textToken};
 	overflow-wrap: anywhere;
-	padding: 0 15px;
+	padding: 0 5px;
+	max-width: 73%;
 `;
 const TextCol = styled(HashCol)`
-	color: #121213;
+	color: ${(props) => props.theme.colors.textPrimary};
 	height: ${(props) => (props.title ? '100%' : 'unset')};
 	overflow: ${(props) => (props.title ? 'hidden' : 'unset')};
 	font-size: ${(props) => (props.title ? '16px' : '')};
@@ -73,7 +76,7 @@ const ValueCol = styled(HashCol)`
 	font-weight: 600;
 	font-size: 18px;
 	line-height: 20px;
-	color: #121213;
+	color: ${(props) => props.theme.colors.textPrimary};
 `;
 
 const IconCol = styled.img`
@@ -322,55 +325,80 @@ const WalletTransactionsMobile = ({ isLoading, account, data, props, PAGE_SIZE }
 							<TitleCol></TitleCol>
 							{isValidInput(transaction.input) ? (
 								<TextCol title>
-									{`${getInput(transaction.input)} ${
-										transaction.isError && transaction.isError !== '0' ? '(failed)' : ''
-									}`}
+									<BodyText variant="small" fontWeight="semiBold">
+										{`${getInput(transaction.input)} ${
+											transaction.isError && transaction.isError !== '0' ? '(failed)' : ''
+										}`}
+									</BodyText>
 								</TextCol>
 							) : (
 								<CopyableText textToCopy={transaction.input}>
 									<TextCol title>
-										{`${transaction.input.substr(0, 10)} ${
-											transaction.isError && transaction.isError !== '0' ? '(failed)' : ''
-										}`}
+										<BodyText variant="small" fontWeight="semiBold">
+											{`${transaction.input.substr(0, 10)} ${
+												transaction.isError && transaction.isError !== '0' ? '(failed)' : ''
+											}`}
+										</BodyText>
 									</TextCol>
 								</CopyableText>
 							)}
 						</TransactionRow>
 						<TransactionRow>
-							<TitleCol>TXN Hash</TitleCol>
+							<TitleCol>
+								<BodyText variant="hash">TXN Hash</BodyText>
+							</TitleCol>
 							<HashCol>{transaction.blockHash}</HashCol>
 							<CopyableText textToCopy={transaction.blockHash}>
-								<IconCol src={copyImage} />
+								<ThemeIcon variant="normal" src={copyImage} />
 							</CopyableText>
 						</TransactionRow>
 						<TransactionRow>
-							<TitleCol>Date</TitleCol>
-							<TextCol>{timeSince(transaction.timeStamp)}</TextCol>
+							<TitleCol>
+								<BodyText variant="hash">Date</BodyText>
+							</TitleCol>
+							<TextCol>
+								<BodyText variant="timestamp">{timeSince(transaction.timeStamp)}</BodyText>
+							</TextCol>
 						</TransactionRow>
 						<TransactionRow>
-							<TitleCol>From</TitleCol>
+							<TitleCol>
+								<BodyText variant="hash">From</BodyText>
+							</TitleCol>
 							<HashCol>{transaction.from}</HashCol>
 							<CopyableText textToCopy={transaction.from}>
-								<IconCol src={copyImage} />
+								<ThemeIcon variant="normal" src={copyImage} />
 							</CopyableText>
 						</TransactionRow>
 						<TransactionRow>
-							<TitleCol>TXN fee</TitleCol>
-							<TextCol>{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}</TextCol>
+							<TitleCol>
+								<BodyText variant="extraSmall">TXN fee</BodyText>
+							</TitleCol>
+							<TextCol>
+								<BodyText variant="extraSmall">
+									{(+transaction.gasUsed * +transaction.gasPrice) / Math.pow(10, 18)}
+								</BodyText>
+							</TextCol>
 						</TransactionRow>
 						<TransactionRow>
-							<TitleCol>To</TitleCol>
+							<TitleCol>
+								<BodyText variant="extraSmall">To</BodyText>
+							</TitleCol>
 							<HashCol>{transaction.to}</HashCol>
 							<CopyableText textToCopy={transaction.to}>
-								<IconCol src={copyImage} />
+								<ThemeIcon variant="normal" src={copyImage} />
 							</CopyableText>
 						</TransactionRow>
 						<TransactionRow>
-							<TitleCol>Value</TitleCol>
+							<TitleCol>
+								<BodyText variant="extraSmall">Value</BodyText>
+							</TitleCol>
 							<ValueCol>
-								{transaction.input !== '0x'
-									? convertToBiobit(transaction.value)
-									: +transaction.value / Math.pow(10, 18)}
+								<BodyText variant="small" fontWeight="bold">
+									{' '}
+									{transaction.input !== '0x'
+										? convertToBiobit(transaction.value)
+										: +transaction.value / Math.pow(10, 18)}
+								</BodyText>
 							</ValueCol>
 						</TransactionRow>
 					</TransactionCard>

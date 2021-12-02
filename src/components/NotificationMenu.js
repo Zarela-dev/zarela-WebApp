@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Button } from './Elements/Button';
 import chainIdTag from '../assets/icons/chainid-tag.svg';
 import SlideMenu from './SlideMenu';
+import { ThemeButton } from './Elements/Button';
 
 const ChainBadge = styled.div`
 	background-image: url(${chainIdTag});
@@ -18,7 +19,7 @@ const ChainBadge = styled.div`
 	white-space: nowrap;
 	padding: 9px 16px;
 	line-height: 8px;
-	color: #8c2595;
+	color: ${(props) => props.theme.colors.textPrimary};
 	font-weight: normal;
 `;
 
@@ -31,7 +32,7 @@ const NotificationMenu = ({ isOpen, onClose }) => {
 			isOpen={isOpen}
 			onClose={onClose}
 			title={'Transactions on Zarela'}
-			cta={() => <Button variant="primary">New Request</Button>}
+			cta={() => <ThemeButton variant="primary">New Request</ThemeButton>}
 			listItems={menuItems}
 		></SlideMenu>
 	);

@@ -2,23 +2,27 @@ import { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import logo from '../../assets/icons/logo.png';
-import home from '../../assets/icons/home.svg';
-import setting from '../../assets/icons/setting.svg';
-import inbox from '../../assets/icons/inbox.svg';
-import user from '../../assets/icons/user.svg';
-import wallet from '../../assets/icons/wallet.svg';
-import explore from '../../assets/icons/explore.svg';
+import home from '../../assets/icons/nav/home.svg';
+import inbox from '../../assets/icons/nav/inbox.svg';
+import user from '../../assets/icons/nav/profile.svg';
+import wallet from '../../assets/icons/nav/wallet.svg';
+import homeActive from '../../assets/icons/nav/home-active.svg';
+import inboxActive from '../../assets/icons/nav/inbox-active.svg';
+import userActive from '../../assets/icons/nav/profile-active.svg';
+import walletActive from '../../assets/icons/nav/wallet-active.svg';
+import setting from '../../assets/icons/nav/settings.svg';
+import explore from '../../assets/icons/nav/explore.svg';
+import menu from '../../assets/icons/menu.svg';
+import chainIdTag from '../../assets/icons/chainid-tag.svg';
+import help from './../../assets/icons/nav/question-mark.svg';
+import bell from './../../assets/icons/nav/notification-bell.svg';
 import { Link } from 'react-router-dom';
 import { Typography } from '../Elements/Typography';
 import { Button } from '../Elements/Button';
-import menu from '../../assets/icons/menu.svg';
 import { convertToBiobit, toast } from '../../utils';
 import MobileMenu from '../MobileMenu';
 import NotificationMenu from '../NotificationMenu';
 import { mainContext } from './../../state';
-import chainIdTag from '../../assets/icons/chainid-tag.svg';
-import help from './../../assets/icons/help.svg';
-import bell from './../../assets/icons/bell.svg';
 import { useLocation } from 'react-router';
 import { actionTypes } from '../../state/actionTypes';
 import { makeStyles } from '@material-ui/core';
@@ -26,6 +30,11 @@ import { useScrollPosition } from '../../hooks/useScrollPosition';
 import { Box } from '@material-ui/core';
 import TitleBar from '../../components/TitleBar/TitleBar';
 import { CURRENT_NETWORK_LABEL } from '../../constants';
+import { ThemeButton } from './../Elements/Button';
+import { Header as Heading, BodyText } from './../Elements/Typography';
+import { Row, Col } from './../Elements/Flex';
+import { ThemeIcon } from './../Elements/Icon';
+import Badge from './../Elements/Badge';
 
 const NavItem = styled(Link)`
 	position: relative;
@@ -36,8 +45,8 @@ const NavItem = styled(Link)`
 	align-content: center;
 	justify-content: center;
 	text-decoration: none;
-	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(0) : props.theme.spacing(2.5))};
-	margin-left: ${(props) => (props.isMobile ? props.theme.spacing(2) : props.theme.spacing(2.5))};
+	margin-right: ${(props) => (props.isMobile ? props.theme.space[2] : props.theme.space[3])}px;
+	margin-left: ${(props) => (props.isMobile ? props.theme.space[2] : props.theme.space[3])}px;
 	outline: none !important;
 	cursor: ${(props) => props.disabled && 'not-allowed'};
 	opacity: ${(props) => (props.disabled ? 0.4 : 1)};
@@ -64,7 +73,7 @@ const NavItemDisabled = styled.a.attrs((props) => {
 `;
 
 const NavLink = styled(Typography)`
-	color: ${(props) => props.theme.navLinkColor};
+	color: ${(props) => props.theme.color.navLinkColor};
 	font-weight: 500;
 	font-size: ${(props) => props.theme.body};
 	white-space: nowrap;
@@ -105,7 +114,7 @@ const HeaderWrapper = styled.header`
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: flex-end;
-	background: white;
+	background: ${(props) => props.theme.colors.bgWhite};
 	margin-bottom: ${(props) => (props.routeGroup === '' ? 0 : props.routeGroup === 'request' ? 0 : '130px')};
 `;
 
@@ -123,10 +132,11 @@ const NavBarRow = styled.div`
 	max-width: 100vw;
 	display: flex;
 	flex-direction: row;
+	justify-content: space-between;
 	z-index: 2;
 	width: 100%;
 	height: 100%;
-	background: #fff;
+	background: ${(props) => props.theme.colors.bgWhite};
 	height: ${(props) => (props.isMobile ? '70px' : '100px')};
 	padding: ${(props) => (props.isMobile ? '10px 18px' : `25px calc((100vw - 1255px) / 2)`)};
 	box-shadow: 0px 4px 18px 0px rgb(81 197 234 / 10%);
@@ -154,7 +164,7 @@ const ChainBadge = styled.div`
 	padding: 10px 20px;
 	padding-right: 10px;
 	line-height: 22px;
-	color: #8c2595;
+	color: ${props => props.theme.colors.primary};
 `;
 const TitleSection = styled.div`
 	display: flex;
@@ -163,11 +173,11 @@ const TitleSection = styled.div`
 	padding: 0 18px;
 	justify-content: space-between;
 	align-items: center;
-	background-color: #f4f8fe;
+	background-color: ${props => props.theme.colors.bgDisabled};
 	flex-wrap: wrap;
 `;
 const Title = styled.h1`
-	color: #000;
+	color: ${props => props.theme.colors.textPrimary};
 	font-size: 18px;
 	font-weight: 700;
 	white-space: nowrap;
@@ -242,12 +252,12 @@ const NotificationBadge = styled.div`
 	min-width: ${(props) => (props.isMobile ? '20px' : '25px')};
 	min-height: ${(props) => (props.isMobile ? '20px' : '25px')};
 	font-size: ${(props) => (props.isMobile ? '12px' : '16px')};
-	background-color: #d13ade;
+	background-color: ${props => props.theme.colors.secondary};
 	border-radius: ${(props) => (props.isMobile ? '10px' : '16px')};
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	color: #fff;
+	color: ${props => props.theme.colors.textLabel};
 	position: absolute;
 	top: ${(props) => (props.isMobile ? '-3px' : '-10px')};
 `;
@@ -361,7 +371,6 @@ export default function Header({ isMobile }, props) {
 							}}
 						/>
 					</NavBarRow>
-
 					<BoxWrapper>
 						<Box
 							className={classes.root}
@@ -377,35 +386,54 @@ export default function Header({ isMobile }, props) {
 						>
 							{routeGroup === '' ? (
 								<TitleSection>
-									<Title>Recent requests</Title>
-									<SubmitRequestButtonSubHeader to="/request/create">
+									<Heading as="h4" variant="heading4">
+										Recent requests
+									</Heading>
+									<ThemeButton variant="primary" size="medium" to="/request/create">
 										New Request
-									</SubmitRequestButtonSubHeader>
+									</ThemeButton>
 								</TitleSection>
 							) : routeGroup === 'wallet' ? (
 								<WalletTitlebar isMobile={appState.isMobile}>
-									<Title>Wallet</Title>
-									<Balance>{`Balance: ${appState.biobitBalance} BBit`}</Balance>
+									<Heading as="h4" variant="heading4">
+										Wallet
+									</Heading>
+									<Heading
+										as="h4"
+										variant="heading4"
+									>{`Balance: ${appState.biobitBalance} BBit`}</Heading>
 								</WalletTitlebar>
 							) : routeGroup === 'log' ? (
 								<WalletTitlebar isMobile={appState.isMobile}>
-									<Title>Log</Title>
+									<Heading as="h4" variant="heading4">
+										Log
+									</Heading>
 									<RewardWrapper>
 										<RewardItem>
-											<RewardLabel>My reward from Zarela</RewardLabel>
-											<RewardValue>{`${totalRevenueFromZarela} BBit`}</RewardValue>
+											<BodyText variant="extraSmall">My reward from Zarela</BodyText>
+											<BodyText
+												variant="extraSmall"
+												fontWeight="bold"
+												ml={3}
+											>{`${totalRevenueFromZarela} BBit`}</BodyText>
 										</RewardItem>
 										<RewardItem>
-											<RewardLabel>My wage from mage</RewardLabel>
-											<RewardValue>{`${totalRevenueFromRequester} BBit`}</RewardValue>
+											<BodyText variant="extraSmall">My wage from mage</BodyText>
+											<BodyText
+												variant="extraSmall"
+												fontWeight="bold"
+												ml={3}
+											>{`${totalRevenueFromRequester} BBit`}</BodyText>
 										</RewardItem>
 									</RewardWrapper>
 								</WalletTitlebar>
 							) : routeGroup === 'inbox' ? (
-								<TitleBar>Inbox</TitleBar>
+								<Heading as="h4" variant="heading4" p={4} bg="bgDisabled">
+									Inbox
+								</Heading>
 							) : routeGroup === 'settings' ? (
 								<TitleBar>
-									<Title>Settings</Title>
+									<BodyText variant="extraSmall">Settings</BodyText>
 								</TitleBar>
 							) : null}
 						</Box>
@@ -417,40 +445,72 @@ export default function Header({ isMobile }, props) {
 		return (
 			<HeaderWrapper routeGroup={routeGroup} isMobile={appState.isMobile}>
 				<NavBarRow isMobile={appState.isMobile}>
-					<RightMenu>
+					<Row>
 						<Link to="/">
 							<Logo isMobile={appState.isMobile} src={logo} />
 						</Link>
 						<NavItem isMobile={appState.isMobile} to="/">
-							<NavIcon src={home} />
-							<NavLink>Home</NavLink>
+							<ThemeIcon variant="layout" src={routeGroup === '' ? homeActive : home} mr={'0px'} />
+							<BodyText
+								variant="small"
+								fontWeight={routeGroup === '' ? 'semiBold' : 'normal'}
+								color="primary"
+							>
+								Home
+							</BodyText>
 						</NavItem>
 						<NavItem isMobile={appState.isMobile} to="/inbox">
-							<NavIcon src={inbox} />
-							<NavLink>Inbox</NavLink>
+							<ThemeIcon variant="layout" mr={'0px'} src={routeGroup === 'inbox' ? inboxActive : inbox} />
+							<BodyText
+								variant="small"
+								fontWeight={routeGroup === 'inbox' ? 'semiBold' : 'normal'}
+								color="primary"
+							>
+								Inbox
+							</BodyText>
 						</NavItem>
 						<NavItem isMobile={appState.isMobile} to="/log/my_requests">
-							<NavIcon src={user} />
-							<NavLink>Log</NavLink>
+							<ThemeIcon variant="layout" mr={'0px'} src={routeGroup === 'log' ? userActive : user} />
+							<BodyText
+								variant="small"
+								fontWeight={routeGroup === 'log' ? 'semiBold' : 'normal'}
+								color="primary"
+							>
+								Log
+							</BodyText>
 						</NavItem>
 						<NavItem
 							isMobile={appState.isMobile}
 							to={{ pathname: process.env.REACT_APP_EXPLORE_LINK }}
 							target="_blank"
 						>
-							<NavIcon src={explore} />
-							<NavLink>Explore</NavLink>
+							<ThemeIcon variant="layout" mr={'0px'} src={explore} />
+							<BodyText variant="small" fontWeight="normal" color="primary">
+								Explore
+							</BodyText>
 						</NavItem>
 						<NavItem isMobile={appState.isMobile} to="/wallet/account">
-							<NavIcon src={wallet} />
-							<NavLink>Wallet</NavLink>
+							<ThemeIcon
+								variant="layout"
+								m="0 8px"
+								src={routeGroup === 'wallet' ? walletActive : wallet}
+							/>
+							<BodyText
+								variant="small"
+								fontWeight={routeGroup === 'wallet' ? 'semiBold' : 'normal'}
+								color="primary"
+							>
+								Wallet
+							</BodyText>
 							<ChainBadge onClick={(e) => e.preventDefault()}>{CURRENT_NETWORK_LABEL}</ChainBadge>
 						</NavItem>
-					</RightMenu>
-					<LeftMenu>
-						<SubmitRequestButton to="/request/create">New Request</SubmitRequestButton>
+					</Row>
+					<Row justifyContent="flex-end">
+						<ThemeButton variant="primary" size="large" to="/request/create">
+							New Request
+						</ThemeButton>
 						<NavItem>
-							<NavIcon src={bell} onClick={() => setIsNotificationMenuOpen(true)} />
+							<ThemeIcon variant="layout" src={bell} onClick={() => setIsNotificationMenuOpen(true)} />
 							{appState.notificationCount !== 0 && (
 								<NotificationBadge isMobile={appState.isMobile}>
 									{appState.notificationCount}
@@ -462,7 +522,8 @@ export default function Header({ isMobile }, props) {
 						) &&
 							location.pathname !== '/request/create' && (
 								<NavItem>
-									<NavIcon
+									<ThemeIcon
+										variant="layout"
 										src={help}
 										onClick={() => {
 											localStorage.removeItem('guide/' + location.pathname.split('/')[1]);
@@ -475,7 +536,7 @@ export default function Header({ isMobile }, props) {
 								</NavItem>
 							)}
 						<NavItem isMobile={appState.isMobile} to="/settings/contacts">
-							<NavIcon src={setting} />
+							<ThemeIcon variant="layout" src={setting} />
 						</NavItem>
 						<NotificationMenu
 							appState={appState}
@@ -484,7 +545,7 @@ export default function Header({ isMobile }, props) {
 								setIsNotificationMenuOpen(false);
 							}}
 						/>
-					</LeftMenu>
+					</Row>
 				</NavBarRow>
 
 				<BoxWrapper>

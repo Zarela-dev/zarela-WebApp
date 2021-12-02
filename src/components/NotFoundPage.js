@@ -34,7 +34,7 @@ const Title = styled.h1`
 	font-weight: bold;
 	font-size: 72px;
 	line-height: 94px;
-	color: #ffffff;
+	color: ${props => props.theme.colors.textLabel};
 	margin: 0;
 	margin-bottom: 10px;
 	white-space: nowrap;
@@ -43,7 +43,7 @@ const Title = styled.h1`
 		font-weight: bold;
 		font-size: 32px;
 		line-height: 42px;
-		color: #ffffff;
+		color: ${props => props.theme.colors.textLabel};
 	}
 `;
 
@@ -53,7 +53,7 @@ const Message = styled.h6`
 	font-size: 36px;
 	line-height: 47px;
 	margin: 0;
-	color: #ffffff;
+	color: ${props => props.theme.colors.textLabel};
 
 	@media only screen and (max-width: 768px) {
 		font-size: 18px;

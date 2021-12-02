@@ -1,10 +1,14 @@
 import React, { useContext } from 'react';
-import { Action, Icon } from './Elements';
-import { hideAddress, unHideAddress } from '../../state/localStorageProvider/actions';
+import { Action } from './Elements';
+import {
+	hideAddress,
+	unHideAddress,
+} from '../../state/localStorageProvider/actions';
 import { localStorageContext } from '../../state/localStorageProvider/LocalStoragePriveder';
 import hideIcon from '../../assets/icons/actionIcons/hide.svg';
 import unhideIcon from '../../assets/icons/actionIcons/unHide.svg';
 import { normalizeAddress, toast } from '../../utils';
+import { ThemeIcon } from './../../components/Elements/Icon';
 
 const HideAddress = ({ publicKey, requestID }) => {
 	const { dispatch, localState } = useContext(localStorageContext);
@@ -25,7 +29,7 @@ const HideAddress = ({ publicKey, requestID }) => {
 						);
 					}}
 				>
-					<Icon src={hideIcon} />
+					<ThemeIcon variant='big' src={hideIcon} />
 				</Action>
 			);
 	return (
@@ -33,13 +37,15 @@ const HideAddress = ({ publicKey, requestID }) => {
 			onClick={() => {
 				hideAddress(dispatch, publicKey, requestID);
 				toast(
-					`"${contacts[normalizeAddress(publicKey)] || publicKey}" is now hidden on request #${requestID}`,
+					`"${
+						contacts[normalizeAddress(publicKey)] || publicKey
+					}" is now hidden on request #${requestID}`,
 					'success',
 					true
 				);
 			}}
 		>
-			<Icon src={unhideIcon} />
+			<ThemeIcon variant='big' src={unhideIcon} />
 		</Action>
 	);
 };

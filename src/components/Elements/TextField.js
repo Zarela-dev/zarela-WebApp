@@ -1,10 +1,11 @@
 import React, { forwardRef } from 'react';
 import styled from 'styled-components';
 import { css } from 'styled-components';
+import { BodyText } from './../../components/Elements/Typography';
 
 const InputStyles = css`
 	font-family: Krub;
-	background: #ffffff;
+	background: ${(props) => props.theme.colors.bgWhite};
 	border: 1px solid rgba(144, 144, 144, 0.3);
 	border-radius: 4px;
 	padding: ${(props) => props.theme.spacing(1)};
@@ -12,7 +13,7 @@ const InputStyles = css`
 	box-sizing: border-box;
 	font-weight: 500;
 	font-size: 12px;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 	width: 100%;
 `;
 const InputWrapper = styled.div`
@@ -21,12 +22,12 @@ const InputWrapper = styled.div`
 
 const Input = styled.input`
 	${InputStyles}
-	${(props) => (props.error ? 'border-bottom: 2px solid #F62D76;' : null)};
+	${(props) => (props.error ? `border-bottom: 2px solid ${props.theme.colors.error};` : null)};
 `;
 
 const TextArea = styled.textarea`
 	${InputStyles}
-	${(props) => (props.error ? 'border-bottom: 2px solid #F62D76;' : null)};
+	${(props) => (props.error ? `border-bottom: 2px solid ${props.theme.colors.error};` : null)};
 `;
 
 const Wrapper = styled.div`
@@ -45,13 +46,6 @@ const Label = styled.label`
 	margin-bottom: ${(props) => props.theme.spacing(0.5)};
 `;
 
-const LabelText = styled.div`
-	font-weight: 500;
-	font-size: 14px;
-	line-height: 20px;
-	color: #6c6c6c;
-`;
-
 const Hint = styled.div`
 	font-weight: normal;
 	font-size: 13px;
@@ -62,14 +56,14 @@ export const Error = styled.label`
 	font-weight: 500;
 	font-size: 10px;
 	line-height: 20px;
-	color: #f62d76;
+	color: ${({ theme }) => theme.colors.error};
 `;
 
 const Adornment = styled.div`
 	font-weight: 600;
-	font-size: ${({ colored }) => (colored ? '12px' : '14px')};
+	font-size: 12px;
 	line-height: 23px;
-	color: ${({ colored, theme }) => (colored ? '#581D9F' : theme.textPrimary)};
+	color: ${({ colored, theme }) => (colored ? theme.colors.primary : theme.colors.textPrimary)};
 `;
 
 const ActionsContainer = styled.div`
@@ -86,14 +80,16 @@ const HelperText = styled.div`
 	font-weight: normal;
 	font-size: 10px;
 	line-height: 13px;
-	color: #212b36;
+	color: ${(props) => props.theme.colors.textPrimary};
 	margin-top: ${(props) => props.theme.spacing(0.7)};
 `;
 
 const InputAction = styled.button.attrs({ type: 'button' })`
 	border: none;
-	background: none;
+	color: ${({ colored, theme }) => (colored ? theme.colors.primary : theme.colors.textPrimary)};
 	background: transparent;
+	font-weight: 600;
+	font-size: 12px;
 	width: 24px;
 	margin-left: ${(props) => props.theme.spacing(1)};
 `;
@@ -118,9 +114,11 @@ const TextField = forwardRef(
 		ref
 	) => {
 		return (
-			<Wrapper className={className} hasTopMargin={hasTopMargin}>
+			<Wrapper className={className} hasTopMargin={true}>
 				<Label>
-					<LabelText>{label}</LabelText>
+					<BodyText variant="extraSmall" color="timestamp">
+						{label}
+					</BodyText>
 					{hint ? <Hint>{hint}</Hint> : null}
 				</Label>
 				<InputWrapper>
@@ -139,7 +137,7 @@ const TextField = forwardRef(
 					{actions
 						? actions.map((action, index) => {
 								return (
-									<InputAction key={index} onClick={action.onClick}>
+									<InputAction key={index} colored={coloredAdornment} onClick={action.onClick}>
 										{action.content}
 									</InputAction>
 								);
@@ -147,7 +145,11 @@ const TextField = forwardRef(
 						: null}
 				</ActionsContainer>
 				{helperText ? <HelperText>{helperText}</HelperText> : null}
-				{error ? <Error>{error}</Error> : null}
+				{error ? (
+					<BodyText variant="extraSmall" color="error">
+						{error}
+					</BodyText>
+				) : null}
 			</Wrapper>
 		);
 	}

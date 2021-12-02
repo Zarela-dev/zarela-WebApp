@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components';
-import TitleBar from '../../components/TitleBar/TitleBar';
 import { Tabs } from '../../components/Tabs';
-import { mainContext } from '../../state';
 import WalletTransactions from './../../containers/wallet/WalletTransactions';
 import WalletAccount from './../../containers/wallet/WalletAccount';
 import WalletSendAssets from './../../containers/wallet/WalletSendAssets';
 import ConnectDialog from '../../components/Dialog/ConnectDialog';
+import { Row } from '../../components/Elements/Flex';
 
 const Wrapper = styled.div``;
 
@@ -22,36 +21,10 @@ function getInnerPadding(props) {
 
 const WalletInnerContainer = styled.div`
 	${(props) => getInnerPadding(props)};
-	background: ${(props) => (props.elevated ? '#FFFFFF' : '#F4F8FE')};
+	background: ${(props) => (props.elevated ? props.theme.colors.bgWhite : props.theme.colors.bgDisabled)};
 	border: ${(props) => (props.elevated ? '0.5px solid rgba(133, 206, 238, 0.5)' : 'none')};
 	box-shadow: ${(props) => (props.elevated ? '0px 4px 18px rgba(223, 236, 255, 0.3)' : 'none')};
 	border-radius: 8px;
-`;
-
-const WalletTitlebar = styled(TitleBar)`
-	display: flex;
-	flex-wrap: nowrap;
-	justify-content: space-between;
-`;
-
-const Title = styled.div`
-	font-weight: 700;
-	font-size: 24px;
-	line-height: 28px;
-	color: ${(props) => props.theme.textPrimary};
-	padding: 0;
-
-	@media only screen and (max-width: ${(props) => props.theme.tablet_sm_breakpoint}) {
-		font-size: 18px;
-	}
-`;
-
-const Balance = styled.div`
-	font-style: normal;
-	font-weight: 500;
-	font-size: 22px;
-	line-height: 29px;
-	color: ${(props) => props.theme.textPrimary};
 `;
 
 const EtherscanAttribution = styled.div`
@@ -59,19 +32,12 @@ const EtherscanAttribution = styled.div`
 `;
 const EtherscanAttributionLink = styled.a`
 	text-decoration: underline;
-	color: ${(props) => props.theme.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 `;
 
 export const WalletDesktop = ({ account, logs, isLoading, PAGE_SIZE }) => {
-	const { appState } = useContext(mainContext);
-
 	return !account ? (
-		<Wrapper>
-			<WalletTitlebar>
-				<Title>Wallet</Title>
-			</WalletTitlebar>
-			{!account ? <ConnectDialog isOpen={true} /> : null}
-		</Wrapper>
+		<Row>{!account ? <ConnectDialog isOpen={true} /> : null}</Row>
 	) : (
 		<Wrapper>
 			<Tabs

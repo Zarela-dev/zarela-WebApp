@@ -1,10 +1,14 @@
 import React, { useContext } from 'react';
-import { Action, Icon } from './Elements';
-import { blockAddress, unBlockAddress } from '../../state/localStorageProvider/actions';
+import { Action } from './Elements';
+import {
+	blockAddress,
+	unBlockAddress,
+} from '../../state/localStorageProvider/actions';
 import { localStorageContext } from '../../state/localStorageProvider/LocalStoragePriveder';
 import unblockIcon from '../../assets/icons/actionIcons/unBlockPink.svg';
 import blockIcon from '../../assets/icons/actionIcons/block.svg';
 import { toast, normalizeAddress } from '../../utils';
+import { ThemeIcon } from './../../components/Elements/Icon';
 
 const BlockAddress = ({ publicKey }) => {
 	const { dispatch, localState } = useContext(localStorageContext);
@@ -16,23 +20,31 @@ const BlockAddress = ({ publicKey }) => {
 				onClick={() => {
 					unBlockAddress(dispatch, publicKey);
 					toast(
-						`"${contacts[normalizeAddress(publicKey)] || publicKey}" removed from blacklist`,
+						`"${
+							contacts[normalizeAddress(publicKey)] || publicKey
+						}" removed from blacklist`,
 						'success',
 						true
 					);
 				}}
 			>
-				<Icon src={unblockIcon} />
+				<ThemeIcon variant='big' src={unblockIcon} />
 			</Action>
 		);
 	return (
 		<Action
 			onClick={() => {
 				blockAddress(dispatch, publicKey);
-				toast(`"${contacts[normalizeAddress(publicKey)] || publicKey}" is now in Blacklist`, 'success', true);
+				toast(
+					`"${
+						contacts[normalizeAddress(publicKey)] || publicKey
+					}" is now in Blacklist`,
+					'success',
+					true
+				);
 			}}
 		>
-			<Icon src={blockIcon} />
+			<ThemeIcon variant='big' src={blockIcon} />
 		</Action>
 	);
 };

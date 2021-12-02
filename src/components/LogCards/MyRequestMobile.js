@@ -1,19 +1,12 @@
 import React from 'react';
-import {
-	QuickReport,
-	MobileHeader,
-	MobileCompactRequestCard,
-	MobileColumn,
-	MobileRequestNumber,
-	MobileTitle,
-	MobileBiobitIcon,
-	MobileBiobitValue,
-	MobileRow,
-	TimestampMobile,
-} from './Elements';
+import { MobileCompactRequestCard } from './Elements';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import { timeSince } from '../../utils';
 import useBiobit from '../../hooks/useBiobit';
+import { IdLabel } from './../Elements/IdLabel';
+import { BodyText } from './../Elements/Typography';
+import { Row, Col } from './../Elements/Flex';
+import { ThemeIcon } from './../Elements/Icon';
 
 const LogCardMobile = ({ data }) => {
 	const {
@@ -34,29 +27,39 @@ const LogCardMobile = ({ data }) => {
 
 	return (
 		<MobileCompactRequestCard variant={getVariant()} noPaddingBottom>
-			<MobileHeader>
-				<MobileColumn flex={'0 1'}>
-					<MobileRequestNumber>{requestID}</MobileRequestNumber>
-				</MobileColumn>
-				<MobileColumn flex={'1 1'}>
-					<MobileRow>
-						<MobileTitle noMargin>{title.length < 60 ? title : title.substr(0, 60) + '...'}</MobileTitle>
-					</MobileRow>
-					<MobileRow>
-						<TimestampMobile>{timeSince(timestamp)}</TimestampMobile>
-					</MobileRow>
-					<MobileRow>
-						<MobileBiobitIcon src={biobitIcon} />
-						<MobileBiobitValue>{getBBIT(angelTokenPay, laboratoryTokenPay)[0]}</MobileBiobitValue>
-						<MobileBiobitValue>{`~ $${getBBIT(angelTokenPay, laboratoryTokenPay)[1]}`}</MobileBiobitValue>
-					</MobileRow>
+			<Row alignItems="start" width="100%">
+				<Col mr={2}>
+					<IdLabel>{requestID}</IdLabel>
+				</Col>
+				<Col flex={'1 1'}>
+					<Row>
+						<BodyText variant="extraSmall" fontWeight="semiBold">
+							{title.length < 60 ? title : title.substr(0, 60) + '...'}
+						</BodyText>
+					</Row>
+					<Row>
+						<BodyText variant="timestamp">{timeSince(timestamp)}</BodyText>
+					</Row>
+					<Row alignItems="center" mt={[1]} mb={3}>
+						<ThemeIcon variant="small" src={biobitIcon} />
+						<BodyText variant="hint" fontWeight="medium">
+							{getBBIT(angelTokenPay, laboratoryTokenPay)[0]}
+						</BodyText>
+						<BodyText variant="hint" fontWeight="medium">{`~ $${
+							getBBIT(angelTokenPay, laboratoryTokenPay)[1]
+						}`}</BodyText>
+					</Row>
 					{+totalContributedCount === 0 ? (
-						<MobileRow>
-							<QuickReport variant="primary">{`No one has contributed yet!`}</QuickReport>
-						</MobileRow>
+						<Row alignItems="center" mb={3}>
+							<BodyText
+								variant="hint"
+								fontWeight="medium"
+								color="bgBadge"
+							>{`No one has contributed yet!`}</BodyText>
+						</Row>
 					) : null}
-				</MobileColumn>
-			</MobileHeader>
+				</Col>
+			</Row>
 		</MobileCompactRequestCard>
 	);
 };

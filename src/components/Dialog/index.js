@@ -40,11 +40,11 @@ const Body = styled.section`
 `;
 
 const Content = styled.div`
-	font-weight: bold;
-	font-size: 18px;
+	font-weight: 600;
+	font-size: 16px;
 	line-height: 20px;
 	text-align: center;
-	color: #4fcfa1;
+	color: ${({ theme }) => theme.colors.textPrimary};
 	width: 100%;
 
 	@media only screen and (min-width: ${({ theme }) => theme.tablet_sm_breakpoint}) {
@@ -57,7 +57,7 @@ const Footer = styled.footer`
 	font-size: 18px;
 	line-height: 20px;
 	text-align: center;
-	color: #4fcfa1;
+	color: ${(props) => props.theme.colors.success};
 `;
 
 const Backdrop = styled.div`
@@ -80,7 +80,7 @@ const Backdrop = styled.div`
 
 const Card = styled.div`
 	position: relative;
-	background: #fff;
+	background: ${(props) => props.theme.colors.bgWhite};
 	${(props) => getBorder(props.type)};
 	box-sizing: border-box;
 	box-shadow: 0px 10px 18px rgba(81, 197, 234, 0.06);
@@ -98,7 +98,7 @@ const TitleWrapper = styled.div`
 	font-size: 18px;
 	line-height: 20px;
 	text-align: center;
-	color: #4fcfa1;
+	color: ${(props) => props.theme.colors.success};
 `;
 
 const CloseIconWrapper = styled.div`

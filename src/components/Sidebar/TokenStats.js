@@ -25,7 +25,7 @@ const Title = styled.div`
 const Value = styled.div`
 	font-weight: 400;
 	font-size: 14px;
-	color: white;
+	color: ${props => props.theme.colors.textLabel};
 `;
 
 const LastUpdate = styled(Value)``;
@@ -36,7 +36,7 @@ const TotalContributorsLabel = styled.div`
 	font-size: 16px;
 	word-break: break-word;
 	max-width: 110px;
-	color: white;
+	color: ${props => props.theme.colors.textLabel};
 `;
 
 const TotalContributorsIcon = styled.img`
@@ -47,7 +47,7 @@ const TotalContributorsIcon = styled.img`
 
 const TotalContributors = styled.div`
 	${TextShadow};
-	color: white;
+	color: ${props => props.theme.colors.textLabel};
 	font-weight: bold;
 	font-size: 24px;
 `;

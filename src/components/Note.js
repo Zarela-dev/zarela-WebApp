@@ -1,42 +1,20 @@
 import React from 'react';
-import styled from 'styled-components';
 import infoIcon from '../assets/icons/info.svg';
-
-const NoteWrapper = styled.div``;
-
-const NoteHeader = styled.div`
-	display: flex;
-	margin-bottom: ${(props) => props.theme.spacing(1)};
-`;
-
-const NoteIcon = styled.img`
-	width: 23px;
-	margin-right: ${(props) => props.theme.spacing(0.7)};
-`;
-
-const NoteTitle = styled.div`
-	font-weight: bold;
-	font-size: 14px;
-	line-height: 20px;
-	color: ${(props) => props.theme.textPrimary};
-`;
-
-const NoteContent = styled.div`
-	line-height: 1.4;
-	font-size: 12px;
-	text-align: justify;
-	word-break: break-word;
-`;
+import { ThemeIcon } from './../components/Elements/Icon';
+import { BodyText } from './../components/Elements/Typography';
+import { Row, Col } from './../components/Elements/Flex';
 
 const Note = ({ icon, children, title, ...rest }) => {
 	return (
-		<NoteWrapper {...rest}>
-			<NoteHeader>
-				<NoteIcon src={icon || infoIcon} />
-				<NoteTitle>{title}</NoteTitle>
-			</NoteHeader>
-			<NoteContent>{children}</NoteContent>
-		</NoteWrapper>
+		<Col {...rest}>
+			<Row>
+				<ThemeIcon variant='normal' src={icon || infoIcon} />
+				<BodyText variant='small' fontWeight='bold'>
+					{title}
+				</BodyText>
+			</Row>
+			<BodyText variant='extraSmall'>{children}</BodyText>
+		</Col>
 	);
 };
 

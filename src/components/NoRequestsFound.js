@@ -26,7 +26,7 @@ const Message = styled.div`
 	font-size: 24px;
 	line-height: 32px;
 	text-align: center;
-	color: #3adea3;
+	color: ${(props) => props.theme.colors.textPrimary};
 	max-width: 312px;
 	word-break: break-word;
 `;

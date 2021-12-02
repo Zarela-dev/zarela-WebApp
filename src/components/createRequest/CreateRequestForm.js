@@ -3,11 +3,12 @@ import { mainContext } from '../../state';
 import styled from 'styled-components';
 import FileInput from './../UploadFileCard/FileInput';
 import Checkbox from './../Elements/Checkbox';
-import Button from './../Elements/Button';
+import Button, { ThemeButton } from './../Elements/Button';
 import TextField, { Error } from './../Elements/TextField';
 import ReactSelect from './../ReactSelect';
 import { actionTypes } from '../../state';
 import BigNumber from 'bignumber.js';
+import { Box } from 'rebass';
 
 const FormWrapper = styled.div`
 	width: 100%;
@@ -22,7 +23,7 @@ const SubmitButton = styled(Button)`
 `;
 
 const Form = styled.form`
-	max-width: 510px;
+	max-width: 530px;
 	padding-left: ${(props) => props.theme.spacing(2)};
 `;
 
@@ -257,9 +258,16 @@ const CreateRequestForm = React.forwardRef(({ children, formik }, ref) => {
 				</CustomCheckbox>
 				{formik.errors?.terms ? <Error>{formik.errors?.terms}</Error> : null}
 				<Divider />
-				<SubmitButton variant="primary" disabled={!formik.dirty || formik.isSubmitting} type="submit">
-					Submit
-				</SubmitButton>
+				<Box>
+					<ThemeButton
+						size="normal"
+						variant="primary"
+						disabled={!formik.dirty || formik.isSubmitting}
+						type="submit"
+					>
+						Submit
+					</ThemeButton>
+				</Box>
 			</Form>
 			{/* <FeeEstimation gas={gas} fee={estimateEthFee} /> */}
 		</FormWrapper>

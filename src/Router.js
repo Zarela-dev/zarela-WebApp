@@ -19,7 +19,7 @@ import ChainError from './components/ChainError';
 import NotFound from './components/NotFoundPage';
 
 const AppWrapper = styled.div`
-	padding-bottom: ${(props) => props.theme.spacing(5)};
+	padding-bottom: ${(props) => props.theme.space[4]}px;
 `;
 
 const AppRouter = () => {
