@@ -32,7 +32,7 @@ import {
 import { timeSince } from '../../utils';
 import useBiobit from '../../hooks/useBiobit';
 
-const LogCard = ({ data, account }) => {
+const LogCard = ({ data, account, paymentDay }) => {
 	const { requestID, title, angelTokenPay, laboratoryTokenPay, contributions } = data;
 	const [isOpen, setOpen] = useState(false);
 	const totalPending = contributions.filter((item) => item.status === false).length;
@@ -50,30 +50,37 @@ const LogCard = ({ data, account }) => {
 				<Col flex="0 0 80px" mr={3} alignSelf="flex-start">
 					<IdLabel>{requestID}</IdLabel>
 				</Col>
-				<Col flex="1 1 530px">
+				<Col flex="0 1 50%" width="50%">
 					<Row>
-						<BodyText variant="small" fontWeight="semiBold">
-							{title.length < 120 ? title : title.substr(0, 120) + '...'}
+						<BodyText
+							variant="small"
+							fontWeight="semiBold"
+							as={undefined}
+							sx={{
+								display: 'inline-block',
+								width: '80%',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden !important',
+								textOverflow: 'ellipsis',
+							}}
+						>
+							{title + title}
 						</BodyText>
 					</Row>
 					<Row>
 						<Col sx={{ whiteSpace: 'nowrap' }}>
 							{allApproved ? (
-								<BodyText
-									variant="extraSmall"
-									color="success"
-								>{`all ${contributions.length} are confirmed.`}</BodyText>
+								<BodyText variant="extraSmall" color="success">{`all ${contributions.length} are confirmed.`}</BodyText>
 							) : (
 								<>
-									<BodyText variant="extraSmall" color="bgBadge">{`${
-										totalPending + totalConfirmed
-									} files: `}</BodyText>
+									<BodyText variant="extraSmall" color="bgBadge">{`${totalPending + totalConfirmed} files: `}</BodyText>
 									<QuickReport variant="primary">{` ${totalConfirmed} approved, ${totalPending} pending `}</QuickReport>
 								</>
 							)}
 						</Col>
 					</Row>
 				</Col>
+				<Col flex={1} />
 				<Col>
 					<Row>
 						<ThemeIcon variant="big" src={biobitIcon} />
@@ -82,7 +89,7 @@ const LogCard = ({ data, account }) => {
 					</Row>
 				</Col>
 				<ThemeDivider variant="vertical" />
-				<Col>
+				<Col pr={4}>
 					<Row>
 						{allApproved ? (
 							<>
@@ -101,17 +108,12 @@ const LogCard = ({ data, account }) => {
 						)}
 					</Row>
 				</Col>
-				<Column flex="0">{true ? <CaretIcon src={caretDownIcon} /> : <CaretIcon src={caretUpIcon} />}</Column>
+				<Col flex="0">{true ? <CaretIcon src={caretDownIcon} /> : <CaretIcon src={caretUpIcon} />}</Col>
 			</Row>
 			{isOpen ? (
 				<Body>
 					<Table>
 						<TableRow header>
-							<TableCellWrapper>
-								<TableCell>
-									<BodyText variant="extraSmall">Contribution Role</BodyText>
-								</TableCell>
-							</TableCellWrapper>
 							<TableCellWrapper>
 								<TableCell>
 									<BodyText variant="extraSmall">File Names</BodyText>
@@ -124,36 +126,21 @@ const LogCard = ({ data, account }) => {
 							</TableCellWrapper>
 							<TableCellWrapper>
 								<TableCell>
-									<BodyText variant="extraSmall">Zarela Day</BodyText>
+									<BodyText variant="extraSmall">Reward</BodyText>
 								</TableCell>
 							</TableCellWrapper>
 							<TableCellWrapper>
 								<TableCell>
-									<BodyText variant="extraSmall">Reward Gainer</BodyText>
-								</TableCell>
-							</TableCellWrapper>
-							<TableCellWrapper>
-								<TableCell>
-									<BodyText variant="extraSmall">Wage Status</BodyText>
+									<BodyText variant="extraSmall">Wage</BodyText>
 								</TableCell>
 							</TableCellWrapper>
 						</TableRow>
 						<TableBulkRow>
 							{contributions.map(
-								(
-									{ originalIndex, timestamp, zarelaDay, status, angel, hub, rewardGainer },
-									rowIndex
-								) => {
+								({ originalIndex, timestamp, zarelaDay, status, angel, hub, rewardGainer, ...rest }, rowIndex) => {
+									console.log('res', data);
 									return (
 										<TableRow key={originalIndex}>
-											<TableCellWrapper>
-												<TableCell>
-													<IconListWrapper>
-														{angel.toLowerCase() === account.toLowerCase() && <AngelIcon />}
-														{hub.toLowerCase() === account.toLowerCase() && <HubIcon />}
-													</IconListWrapper>
-												</TableCell>
-											</TableCellWrapper>
 											<TableCellWrapper>
 												<TableCell>{`${rowIndex + 1}. File #${originalIndex}`}</TableCell>
 											</TableCellWrapper>
@@ -161,52 +148,62 @@ const LogCard = ({ data, account }) => {
 												<TableCell>{timeSince(timestamp)}</TableCell>
 											</TableCellWrapper>
 											<TableCellWrapper>
-												<TableCell>{zarelaDay}</TableCell>
-											</TableCellWrapper>
-											<TableCellWrapper>
 												<TableCell>
-													<IconListWrapper>
-														{rewardGainer === true ? (
-															<>
-																<ThemeIcon variant="big" src={angelIcon} />
-																<BodyText variant="small">Angel</BodyText>
-															</>
-														) : (
-															<>
-																<ThemeIcon variant="big" src={hubIcon} />
-																<BodyText variant="small">Hub</BodyText>
-															</>
-														)}
-													</IconListWrapper>
+													<Row>
+														<Col>
+															{rewardGainer === true ? (
+																<Row mb={1}>
+																	<ThemeIcon height="auto !important" variant="big" src={angelIcon} />
+																	<BodyText variant="small">{'Angel 50 BBIT'}</BodyText>
+																	<BodyText
+																		ml={2}
+																		variant="small"
+																		color={+paymentDay > zarelaDay ? 'success' : 'orange'}
+																	>
+																		{+paymentDay > zarelaDay ? 'Received' : 'Pending'}
+																	</BodyText>
+																</Row>
+															) : (
+																<Row>
+																	<ThemeIcon height="auto !important" variant="big" src={hubIcon} />
+																	<BodyText variant="small">{'Hub 50 BBIT'}</BodyText>
+																	<BodyText
+																		ml={2}
+																		variant="small"
+																		color={+paymentDay > zarelaDay ? 'success' : 'orange'}
+																	>
+																		{+paymentDay > zarelaDay ? 'Received' : 'Pending'}
+																	</BodyText>
+																</Row>
+															)}
+														</Col>
+													</Row>
 												</TableCell>
 											</TableCellWrapper>
 											<TableCellWrapper>
 												<TableCell>
-													{status ? (
-														<>
-															<ThemeIcon variant="big" src={approvedIcon} />
-															<BodyText
-																variant="small"
-																color="success"
-																fontWeight="bold"
-																approved
-															>
-																Confirmed
-															</BodyText>
-														</>
-													) : (
-														<>
-															<ThemeIcon variant="big" src={unapprovedIcon} />
-															<BodyText
-																variant="small"
-																color="error"
-																fontWeight="bold"
-																color="textTimestamp"
-															>
-																Pending
-															</BodyText>
-														</>
-													)}
+													<Row>
+														<Col>
+															{angel.toLowerCase() === account.toLowerCase() && (
+																<Row mb={1}>
+																	<ThemeIcon height="auto !important" variant="big" src={angelIcon} />
+																	<BodyText variant="small">{`Angel ${data.angelTokenPay} BBIT`}</BodyText>
+																	<BodyText ml={2} variant="small" color={status ? 'success' : 'orange'}>
+																		{status ? 'Received' : 'Pending'}
+																	</BodyText>
+																</Row>
+															)}
+															{hub.toLowerCase() === account.toLowerCase() && (
+																<Row>
+																	<ThemeIcon height="auto !important" variant="big" src={hubIcon} />
+																	<BodyText variant="small">{`Hub ${data.laboratoryTokenPay} BBIT`}</BodyText>
+																	<BodyText ml={2} variant="small" color={status ? 'success' : 'orange'}>
+																		{status ? 'Received' : 'Pending'}
+																	</BodyText>
+																</Row>
+															)}
+														</Col>
+													</Row>
 												</TableCell>
 											</TableCellWrapper>
 										</TableRow>

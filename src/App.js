@@ -17,25 +17,25 @@ import { client } from './apolloClient';
 function App() {
 	return (
 		<div className="App">
-			<ErrorBoundary>
-				<Web3ReactProvider getLibrary={getLibrary}>
-					<AppProvider>
-						<ApolloProvider client={client}>
-							<PendingFilesProvider>
-								<LocalStorageProvider>
-									<ThemeProvider>
+			<ThemeProvider>
+				<ErrorBoundary>
+					<Web3ReactProvider getLibrary={getLibrary}>
+						<AppProvider>
+							<ApolloProvider client={client}>
+								<PendingFilesProvider>
+									<LocalStorageProvider>
 										<NotificationProvider>
 											<AppRouter />
 											<ToastifyContainer enableMultiContainer containerId={'toastify'} limit={3} />
 											<GlobalStyle />
 										</NotificationProvider>
-									</ThemeProvider>
-								</LocalStorageProvider>
-							</PendingFilesProvider>
-						</ApolloProvider>
-					</AppProvider>
-				</Web3ReactProvider>
-			</ErrorBoundary>
+									</LocalStorageProvider>
+								</PendingFilesProvider>
+							</ApolloProvider>
+						</AppProvider>
+					</Web3ReactProvider>
+				</ErrorBoundary>
+			</ThemeProvider>
 		</div>
 	);
 }
