@@ -11,9 +11,8 @@ import { IdLabel } from './../Elements/IdLabel';
 import { BodyText } from './../Elements/Typography';
 import { Row, Col } from './../Elements/Flex';
 import { ThemeIcon } from './../Elements/Icon';
-import { ThemeDivider } from './../Elements/Divider';
 
-const LogCardMobile = ({ data, account }) => {
+const LogCardMobile = ({ data, account, paymentDay }) => {
 	const [isOpen, setOpen] = useState(false);
 	const { requestID, title, angelTokenPay, laboratoryTokenPay, contributions } = data;
 	const totalPending = contributions.filter((item) => item.status === false).length;
@@ -55,9 +54,7 @@ const LogCardMobile = ({ data, account }) => {
 							>{`all ${contributions.length} are confirmed. >>`}</BodyText>
 						) : (
 							<Col>
-								<BodyText variant="extraSmall" color="bgBadge">{`${
-									totalPending + totalConfirmed
-								} files: `}</BodyText>
+								<BodyText variant="extraSmall" color="bgBadge">{`${totalPending + totalConfirmed} files: `}</BodyText>
 								<BodyText
 									variant="hint"
 									fontWeight="medium"
@@ -69,56 +66,86 @@ const LogCardMobile = ({ data, account }) => {
 					</Row>
 				</Col>
 				<Col flex={'0 0 35px'} />
-				{allApproved ? (
-					<ThemeIcon variant="big" src={checkedGreen} />
-				) : (
-					<ThemeIcon variant="small" src={pendingIcon} />
-				)}
+				{allApproved ? <ThemeIcon variant="big" src={checkedGreen} /> : <ThemeIcon variant="small" src={pendingIcon} />}
 			</Row>
 			{isOpen ? (
 				<MobileBody>
 					<MobileTable>
 						{contributions.map(
 							({ originalIndex, timestamp, zarelaDay, angel, hub, rewardGainer, status }, rowIndex) => (
-								<Row key={originalIndex}>
+								<Row key={originalIndex} pt={2}>
 									<Col flexGrow={1}>
-										<BodyText variant="small" color="textTimestamp">{`${
-											rowIndex + 1
-										}. File #${originalIndex}`}</BodyText>
-										<BodyText variant="extraSmall" color="textTimestamp" ml={3}>
-											{timeSince(timestamp)}
-										</BodyText>
-										<BodyText
-											variant="extraSmall"
-											color="textTimestamp"
-											ml={3}
-										>{`Zarela Day: ${zarelaDay} th`}</BodyText>
-										<Row ml="15px" type="role">
-											<BodyText variant="extraSmall" color="textTimestamp">
-												Role :{' '}
-											</BodyText>
-											{angel.toLowerCase() === account.toLowerCase() && (
-												<ThemeIcon variant="small" src={angelIcon} />
-											)}
-											{hub.toLowerCase() === account.toLowerCase() && (
-												<ThemeIcon variant="small" src={hubIcon} />
-											)}
-											<ThemeDivider variant="vertical" />
-											<BodyText variant="extraSmall" color="textTimestamp">
-												Gainer :{' '}
-											</BodyText>
-											<ThemeIcon
-												variant="small"
-												src={rewardGainer === true ? angelIcon : hubIcon}
-											/>
+										<Row>
+											<BodyText variant="small" fontWeight="bold" color="textTimestamp" mb={2}>{`${
+												rowIndex + 1
+											}. File #${originalIndex}`}</BodyText>
 										</Row>
-									</Col>
-									<Col>
-										{status ? (
-											<ThemeIcon variant="small" src={checkedGreen} />
-										) : (
-											<ThemeIcon variant="small" src={pendingIcon} />
-										)}
+										<Row>
+											<BodyText variant="extraSmall" color="textTimestamp">
+												{timeSince(timestamp)}
+											</BodyText>
+										</Row>
+										<Row my={2}>
+											<Col flex={'0 0 60px'}>
+												<BodyText variant="extraSmall" color="textTimestamp">
+													Reward :{' '}
+												</BodyText>
+											</Col>
+											<Col>
+												{rewardGainer === true ? (
+													<Row mb={1} type="role">
+														<ThemeIcon mr={2} height="auto !important" variant="small" src={angelIcon} />
+														<BodyText variant="extraSmall">{'Angel 50 BBIT'}</BodyText>
+														<BodyText
+															ml={2}
+															variant="extraSmall"
+															color={+paymentDay > zarelaDay ? 'success' : 'orange'}
+														>
+															{+paymentDay > zarelaDay ? 'Received' : 'Pending'}
+														</BodyText>
+													</Row>
+												) : (
+													<Row mb={1} type="role">
+														<ThemeIcon mr={2} height="auto !important" variant="small" src={hubIcon} />
+														<BodyText variant="extraSmall">{'Hub 50 BBIT'}</BodyText>
+														<BodyText
+															ml={2}
+															variant="extraSmall"
+															color={+paymentDay > zarelaDay ? 'success' : 'orange'}
+														>
+															{+paymentDay > zarelaDay ? 'Received' : 'Pending'}
+														</BodyText>
+													</Row>
+												)}
+											</Col>
+										</Row>
+										<Row my={2}>
+											<Col flex={'0 0 60px'}>
+												<BodyText variant="extraSmall" color="textTimestamp">
+													Wage :{' '}
+												</BodyText>
+											</Col>
+											<Col>
+												{angel.toLowerCase() === account.toLowerCase() && (
+													<Row mb={1}>
+														<ThemeIcon mr={2} height="auto !important" variant="small" src={angelIcon} />
+														<BodyText variant="extraSmall">{`Angel ${data.angelTokenPay} BBIT`}</BodyText>
+														<BodyText ml={2} variant="extraSmall" color={status ? 'success' : 'orange'}>
+															{status ? 'Received' : 'Pending'}
+														</BodyText>
+													</Row>
+												)}
+												{hub.toLowerCase() === account.toLowerCase() && (
+													<Row>
+														<ThemeIcon mr={2} height="auto !important" variant="small" src={hubIcon} />
+														<BodyText variant="extraSmall">{`Hub ${data.laboratoryTokenPay} BBIT`}</BodyText>
+														<BodyText ml={2} variant="extraSmall" color={status ? 'success' : 'orange'}>
+															{status ? 'Received' : 'Pending'}
+														</BodyText>
+													</Row>
+												)}
+											</Col>
+										</Row>
 									</Col>
 								</Row>
 							)

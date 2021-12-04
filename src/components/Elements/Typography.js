@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { Text, Heading } from 'rebass/styled-components';
+import { Text, Heading, Link as RebassLink } from 'rebass/styled-components';
 import { space, layout, color, compose, fontWeight } from 'styled-system';
 import { variant } from 'styled-system';
-
+import { Link as RouterLink } from 'react-router-dom';
 export const Typography = styled.div`
 	line-height: 1.3;
 	font-size: ${(props) => {
@@ -121,4 +121,8 @@ export const Header = (props) => {
 
 export const BodyText = (props) => {
 	return <TextComponent whiteSpace="nowrap" fontWeight="regular" as="p" {...props}></TextComponent>;
+};
+
+export const LinkText = (props) => {
+	return <RebassLink as={RouterLink} {...props}></RebassLink>;
 };

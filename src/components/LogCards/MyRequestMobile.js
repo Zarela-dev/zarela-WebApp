@@ -4,7 +4,7 @@ import biobitIcon from '../../assets/icons/biobit-black.svg';
 import { timeSince } from '../../utils';
 import useBiobit from '../../hooks/useBiobit';
 import { IdLabel } from './../Elements/IdLabel';
-import { BodyText } from './../Elements/Typography';
+import { BodyText, LinkText } from './../Elements/Typography';
 import { Row, Col } from './../Elements/Flex';
 import { ThemeIcon } from './../Elements/Icon';
 
@@ -33,9 +33,9 @@ const LogCardMobile = ({ data }) => {
 				</Col>
 				<Col flex={'1 1'}>
 					<Row>
-						<BodyText variant="extraSmall" fontWeight="semiBold">
+						<LinkText to={`/request/${requestID}`} sx={{color: 'textPrimary', textDecoration: 'none', lineHeight: '20px' }} variant="extraSmall" fontWeight="semiBold">
 							{title.length < 60 ? title : title.substr(0, 60) + '...'}
-						</BodyText>
+						</LinkText>
 					</Row>
 					<Row>
 						<BodyText variant="timestamp">{timeSince(timestamp)}</BodyText>
