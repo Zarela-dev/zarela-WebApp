@@ -37,6 +37,7 @@ const Contributes = (props) => {
 	const { appState } = useContext(mainContext);
 	const [requests, setRequests] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [paymentDay, setPaymentDay] = useState(null);
 	const { account } = useWeb3React();
 	const classes = useStyles(props);
 
@@ -76,10 +77,7 @@ const Contributes = (props) => {
 								let userContributionIndexes = [];
 								Object.keys(formatted).forEach((originalIndex) => {
 									const { angel, hub } = formatted[originalIndex];
-									if (
-										angel.toLowerCase() === account.toLowerCase() ||
-										hub.toLowerCase() === account.toLowerCase()
-									) {
+									if (angel.toLowerCase() === account.toLowerCase() || hub.toLowerCase() === account.toLowerCase()) {
 										userContributionIndexes.push(originalIndex);
 									}
 								});
@@ -130,13 +128,60 @@ const Contributes = (props) => {
 					.catch((error) => {
 						console.error(error.message);
 					});
+				appState.contract.methods
+					.paymentDay()
+					.call()
+					.then((response) => {
+						setPaymentDay(response);
+					})
+					.catch((err) => {
+						console.error(err);
+					});
+				appState.contract.methods
+					.lastRewardableIndex()
+					.call()
+					.then((response) => {
+						console.log('lastRewardableIndex', response);
+					})
+					.catch((err) => {
+						console.error(err);
+					});
+
+				appState.contract.methods
+					.indexOfAddressPendingReward()
+					.call()
+					.then((indexOfAddress) => {
+						appState.contract.methods
+							.paymentQueue(+indexOfAddress + 1)
+							.call()
+							.then((response) => {
+								console.log('paymentQueue', response);
+							})
+							.catch((err) => {
+								console.error(err);
+							});
+						console.log('indexOfAddressPendingReward', indexOfAddress);
+					})
+					.catch((err) => {
+						console.error(err);
+					});
+
+				appState.contract.methods
+					.dailyRewardPerContributor(15)
+					.call()
+					.then((response) => {
+						console.log('dailyRewardPerContributor', response / 1000000000);
+					})
+					.catch((err) => {
+						console.error(err);
+					});
 			}
 		}
 	}, [account, appState.contract]);
 
 	const message = 'you have not contributed on any requests yet.';
 	if (appState.isMobile)
-		return isLoading ? (
+		return isLoading || paymentDay === null ? (
 			[1, 2, 3].map((index) => {
 				return (
 					<Card key={index} isMobile={appState.isMobile}>
@@ -144,13 +189,7 @@ const Contributes = (props) => {
 							<Skeleton variant="circle" width={41.72} height={41.72} className={classes.root} />
 						</CircleSection>
 						<SquareSection>
-							<Skeleton
-								variant="rect"
-								width={'100%'}
-								height={19}
-								animation="wave"
-								className={classes.root}
-							/>
+							<Skeleton variant="rect" width={'100%'} height={19} animation="wave" className={classes.root} />
 							<Skeleton variant="rect" width={'80%'} height={19.1} className={classes.root} />
 						</SquareSection>
 					</Card>
@@ -159,9 +198,11 @@ const Contributes = (props) => {
 		) : requests.length === 0 ? (
 			<NoRequestsFound message={message} />
 		) : (
-			requests.map((request) => <LogCardMobile key={request.requestID} account={account} data={request} />)
+			requests.map((request) => (
+				<LogCardMobile paymentDay={paymentDay} key={request.requestID} account={account} data={request} />
+			))
 		);
-	return isLoading ? (
+	return isLoading || paymentDay === null ? (
 		[1, 2, 3].map((index) => {
 			return (
 				<Card key={index} isMobile={appState.isMobile}>
@@ -178,7 +219,9 @@ const Contributes = (props) => {
 	) : requests.length === 0 ? (
 		<NoRequestsFound message={message} />
 	) : (
-		requests.map((request) => <LogCard key={request.requestID} account={account} data={request} />)
+		requests.map((request) => (
+			<LogCard key={request.requestID} account={account} data={request} paymentDay={paymentDay} />
+		))
 	);
 };
 
