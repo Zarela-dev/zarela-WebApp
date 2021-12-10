@@ -143,57 +143,38 @@ const Desktop = ({ requests, appState, account, PAGE_SIZE, isLoading, props }) =
 					</FixedWrapper>
 				)}
 				<RequestsListContentWrapper>
-
 					<SearchBox />
-
-
 					{isLoading
 						? [1, 2, 3].map((index) => {
-							return (
-								<Card key={index}>
-									<CircleSection>
-										<Skeleton
-											variant="circle"
-											width={72}
-											height={72}
-											className={classes.root}
-										/>
-									</CircleSection>
-									<SquareSection>
-										<Skeleton
-											variant="rect"
-											width={'100%'}
-											height={33}
-											animation="wave"
-											className={classes.root}
-										/>
-										<Skeleton
-											variant="rect"
-											width={'33%'}
-											height={'33px'}
-											className={classes.root}
-										/>
-									</SquareSection>
-								</Card>
-							);
-						})
+								return (
+									<Card key={index}>
+										<CircleSection>
+											<Skeleton variant="circle" width={72} height={72} className={classes.root} />
+										</CircleSection>
+										<SquareSection>
+											<Skeleton variant="rect" width={'100%'} height={33} animation="wave" className={classes.root} />
+											<Skeleton variant="rect" width={'33%'} height={'33px'} className={classes.root} />
+										</SquareSection>
+									</Card>
+								);
+						  })
 						: currentTableData.map((item) => {
-							return (
-								<RequestCard
-									key={item.requestID}
-									requestID={item.requestID}
-									categories={item.categories}
-									title={item.title}
-									description={item.description}
-									angelTokenPay={item.angelTokenPay}
-									laboratoryTokenPay={item.laboratoryTokenPay}
-									timestamp={timeSince(item.timestamp)}
-									progress={(+item.totalContributed / +item.totalContributors) * 100}
-									contributors={`${item.totalContributed}/${item.totalContributors}`}
-									totalContributedCount={item.totalContributedCount}
-								/>
-							);
-						})}
+								return (
+									<RequestCard
+										key={item.requestID}
+										requestID={item.requestID}
+										categories={item.categories}
+										title={item.title}
+										description={item.description}
+										angelTokenPay={item.angelTokenPay}
+										laboratoryTokenPay={item.laboratoryTokenPay}
+										timestamp={timeSince(item.timestamp)}
+										progress={(+item.totalContributed / +item.totalContributors) * 100}
+										contributors={`${item.totalContributed}/${item.totalContributors}`}
+										totalContributedCount={item.totalContributedCount}
+									/>
+								);
+						  })}
 				</RequestsListContentWrapper>
 			</RequestsListLayout>
 			<Pagination

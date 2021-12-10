@@ -17,7 +17,7 @@ const SearchBox = () => {
         type="text"
         value={search}
         onChange={(e) => {
-          console.log('hello')
+          setSearch(e.target.value)
         }}
       />
     </RequestCardWrapper>
