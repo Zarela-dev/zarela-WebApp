@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import RequestCardWrapper from './../Elements/RequestCard';
 
-import SearchInput from './../Elements/SearchInput'
+import SearchInput from '../Elements/Search/SearchInput'
 
 const SearchBox = () => {
   const [search, setSearch] = useState()
