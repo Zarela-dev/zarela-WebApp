@@ -5,6 +5,7 @@ import { Header as Heading, BodyText } from '../Typography';
 import { ThemeIcon } from '../../Elements/Icon';
 import searchIcon from './../../../assets/icons/search.svg';
 import searchClose from './../../../assets/icons/search-clear-icon.svg';
+import filterClose from './../../../assets/icons/filter-close.svg';
 import close from './../../../assets/icons/close-purple.svg';
 import { Box } from 'rebass/styled-components';
 import { space, layout, color, compose, fontWeight } from 'styled-system';
@@ -12,7 +13,6 @@ import filterIcon from './../../../assets/icons/filter.svg';
 import { Modal, ModalHeader, ModalBody, Row, FormGroup } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './modalStyle.css';
-import TextField from '../TextField';
 import Select from 'react-select';
 import Slider from '@material-ui/core/Slider';
 
@@ -99,6 +99,10 @@ const FilterButton = styled(Box)(compose(space, layout, color, fontWeight), {
 	fontWeight: '500',
 });
 
+const FilterElement = styled(FilterButton)`
+	width: fit-content;
+`;
+
 const HeaderInner = styled.div`
 	display: flex;
 	width: 300px;
@@ -116,8 +120,8 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 	const [modalShow, setModalShow] = useState(false);
 	const [selectedTotalBiobitOption, setSelectedTotalBiobitOption] = useState({ value: 'All', label: 'All' });
 	const [selectedNearFinishOption, setSelectedNearFinishOption] = useState({ value: 'All', label: 'All' });
-	const [selectedFullFilledOption, setSelectedFullFilledOption] = useState({ value: 'All', label: 'All' });
-	const [range, setRange] = useState([10, 30]);
+	const [selectedFulfilledOption, setSelectedFulfilledOption] = useState({ value: 'All', label: 'All' });
+	const [range, setRange] = useState([0, 0]);
 
 	const totalBiobitSelectOptions = [
 		{ value: 'All', label: 'All' },
@@ -131,10 +135,10 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 		{ value: 'HighToLow', label: 'High to Low' },
 	];
 
-	const fullFilledOptions = [
+	const fulfilledOptions = [
 		{ value: 'All', label: 'All' },
-		{ value: 'LowToHigh', label: 'Low to High' },
-		{ value: 'HighToLow', label: 'High to Low' },
+		{ value: 'Not Fulfiled', label: 'Not Fulfilled' },
+		{ value: 'Fulfiled', label: 'Fulfiled' },
 	];
 
 	const handleChangeRange = (event, newValue) => {
@@ -161,7 +165,29 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 					<ThemeIcon variant="big" src={filterIcon} />
 					Filters and Sort
 				</FilterButton>
+
+				{selectedTotalBiobitOption.value !== 'All' && (
+					<FilterElement as="div" color="filterText" mt={3} ml={2} onClick={() => setModalShow(!modalShow)}>
+						BBIT {selectedTotalBiobitOption.label}
+						<ThemeIcon variant="big" mr={0} ml={2} src={filterClose} />
+					</FilterElement>
+				)}
+
+				{(range[0] !== 0 || range[1] !== 0) && (
+					<FilterElement as="div" color="filterText" mt={3} ml={2} onClick={() => setModalShow(!modalShow)}>
+						BBIT {range[0]} - {range[1]}
+						<ThemeIcon variant="big" mr={0} ml={2} src={filterClose} />
+					</FilterElement>
+				)}
+
+				{selectedFulfilledOption.value !== 'All' && (
+					<FilterElement as="div" color="filterText" mt={3} ml={2} onClick={() => setModalShow(!modalShow)}>
+						{selectedFulfilledOption.value}
+						<ThemeIcon variant="big" mr={0} ml={2} src={filterClose} />
+					</FilterElement>
+				)}
 			</FilterWrapper>
+
 			<Modal isOpen={modalShow} toggle={() => setModalShow(false)} backdropClassName="custom-backdrop">
 				<ModalHeader
 					close={
@@ -208,13 +234,6 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 							onChange={handleChangeRange}
 							valueLabelDisplay="auto"
 							aria-labelledby="continuous-slider"
-							sx={{
-								width: 300,
-								color: 'success.main',
-								'& .MuiSlider-thumb': {
-									borderRadius: '1px',
-								},
-							}}
 						/>
 					</FormGroup>
 
@@ -239,20 +258,20 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 
 					<FormGroup>
 						<BodyText variant="small" fontWeight="semiBold" m={0}>
-							Full Filled
+							Fulfilled
 						</BodyText>
 						<Select
 							classNamePrefix="select"
-							options={fullFilledOptions}
+							options={fulfilledOptions}
 							onChange={(e) => {
-								setSelectedFullFilledOption(e);
+								setSelectedFulfilledOption(e);
 							}}
 							onKeyDown={(e) => {
 								if (e.key === 'Enter') {
-									setSelectedFullFilledOption({ value: e.target.value, label: e.target.value });
+									setSelectedFulfilledOption({ value: e.target.value, label: e.target.value });
 								}
 							}}
-							value={selectedFullFilledOption}
+							value={selectedFulfilledOption}
 						/>
 					</FormGroup>
 				</ModalBody>
