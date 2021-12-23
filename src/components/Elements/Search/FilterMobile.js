@@ -1,16 +1,11 @@
 import React, { forwardRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { css } from 'styled-components';
-import { Header as Heading, BodyText } from '../Typography';
+import { BodyText } from '../Typography';
 import { ThemeIcon } from '../../Elements/Icon';
 import { ThemeButton } from '../../Elements/Button';
-import searchIcon from './../../../assets/icons/search.svg';
-import searchClose from './../../../assets/icons/search-clear-icon.svg';
-import filterClose from './../../../assets/icons/filter-close.svg';
 import close from './../../../assets/icons/close-purple.svg';
-import { Box } from 'rebass/styled-components';
-import { space, layout, color, compose, fontWeight } from 'styled-system';
-import filterIcon from './../../../assets/icons/filter.svg';
+import filterIcon from './../../../assets/icons/filter-white.svg';
 import { Modal, ModalHeader, ModalBody, FormGroup, Row, Col } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './modalStyle.css';
@@ -21,27 +16,19 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import DatePickerField from './DatePickerField';
 
-const InputStyles = css`
-	font-family: Krub;
-	background: ${(props) => props.theme.colors.bgWhite};
-	border: 1px solid #e8e8e8;
-	border-radius: 4px;
-	padding: ${(props) => props.theme.spacing(1)};
-	${(props) => props.hasAdornment && 'padding-right: 80px'};
-	box-sizing: border-box;
-	font-weight: 500;
-	font-size: 12px;
-	color: ${(props) => props.theme.colors.textPrimary};
-	width: 100%;
-`;
-const InputWrapper = styled.div`
-	width: 100%;
-`;
-
-const Input = styled.input`
-	${InputStyles}
-	width: 100%;
-	border: none;
+const MobileSearchAndFilterWrapper = styled.div`
+	position: fixed;
+	width: 48px;
+	height: 48px;
+	background: #422468;
+	right: 18px;
+	bottom: 65px;
+	border-radius: 24px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 99
+	cursor: pointer;
 `;
 
 const Wrapper = styled.div`
@@ -52,65 +39,16 @@ const Wrapper = styled.div`
 	width: 100%;
 `;
 
-const Label = styled.label`
-	display: flex;
-	width: 100%;
-	justify-content: space-between;
-	margin-bottom: ${(props) => props.theme.spacing(1.5)};
-`;
-
-const SearchIcon = styled(ThemeIcon)`
-	position: absolute;
-	top: 10px;
-	left: 8px;
-	cursor: pointer;
-`;
-
-const SearchClear = styled(ThemeIcon)`
-	position: absolute;
-	top: 10px;
-	right: 8px;
-	cursor: pointer;
-`;
-
-const SearchSection = styled(Box)`
-	position: relative;
-	padding: 2px 35px;
-	width: 100%;
-	border: 1px solid #e8e8e8;
-	border-radius: 4px;
-	min-height: 48px;
-	display: flex;
-	align-items: center;
-`;
-
-const FilterWrapper = styled.div`
-	width: 100%;
-	display: flex;
-`;
-
-const FilterButton = styled(Box)(compose(space, layout, color, fontWeight), {
-	border: '1px solid #838383',
-	borderRadius: '25px',
-	width: '162px',
-	height: '40px',
-	display: 'flex',
-	justifyContent: 'start',
-	alignItems: 'center',
-	padding: '0 10px',
-	cursor: 'pointer',
-	fontSize: '14px',
-	lineHeight: '19.5px',
-	fontWeight: '500',
-});
-
-const FilterElement = styled(FilterButton)`
+const FilterIcon = styled(ThemeIcon)`
 	width: fit-content;
+	display: flex;
+	align-self: center;
+  margin: 0;
 `;
 
 const HeaderInner = styled.div`
 	display: flex;
-	width: 300px;
+	width: 200px;
 	justify-content: space-between;
 	align-items: center;
 `;
@@ -135,7 +73,7 @@ const CalendarModal = styled(Modal)`
 	width: fit-content;
 `;
 
-const SearchInput = forwardRef(({ label, ...rest }, ref) => {
+const FilterMobile = forwardRef(({ label, ...rest }, ref) => {
 	const [searchValue, setSearchValue] = useState('');
 	const [modalShow, setModalShow] = useState(false);
 	const [datePickerModalShow, setDatePickerModalShow] = useState(false);
@@ -185,93 +123,11 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 		setDatePickerModalShow(!datePickerModalShow);
 	};
 
-	
 	return (
 		<Wrapper hasTopMargin={true}>
-			<Label>
-				<Heading as="h4" variant="heading4">
-					{label}
-				</Heading>
-			</Label>
-			<SearchSection>
-				<InputWrapper>
-					<SearchIcon variant="big" src={searchIcon} />
-					<Input
-						ref={ref}
-						{...rest}
-						placeholder="Start typing ..."
-						value={searchValue}
-						onChange={(e) => {
-							setSearchValue(e.target.value);
-
-							// const typeDelay = setTimeout(async () => {
-							// 	console.log(searchValue);
-							// 	await fetchMore({
-							// 		variables: {
-							// 			title: 'memory',
-							// 		},
-							// 	});
-							// }, 1000);
-
-							// return () => clearTimeout(typeDelay);
-						}}
-					/>
-					{searchValue !== '' && <SearchClear variant="big" src={searchClose} onClick={() => setSearchValue('')} />}
-				</InputWrapper>
-			</SearchSection>
-
-			<FilterWrapper>
-				<FilterButton as="div" color="filterText" mt={3} onClick={() => setModalShow(!modalShow)}>
-					<ThemeIcon variant="big" src={filterIcon} />
-					Filters and Sort
-				</FilterButton>
-
-				{selectedTotalBiobitOption.value !== 'All' && (
-					<FilterElement as="div" color="filterText" mt={3} ml={2}>
-						BBIT {selectedTotalBiobitOption.label}
-						<ThemeIcon
-							variant="big"
-							mr={0}
-							ml={2}
-							src={filterClose}
-							onClick={() => setSelectedTotalBiobitOption({ value: 'All', label: 'All' })}
-						/>
-					</FilterElement>
-				)}
-
-				{(range[0] !== 0 || range[1] !== 0) && (
-					<FilterElement as="div" color="filterText" mt={3} ml={2}>
-						BBIT {range[0]} - {range[1]}
-						<ThemeIcon variant="big" mr={0} ml={2} src={filterClose} onClick={() => setRange([0, 0])} />
-					</FilterElement>
-				)}
-
-				{selectedFulfilledOption.value !== 'All' && (
-					<FilterElement as="div" color="filterText" mt={3} ml={2}>
-						{selectedFulfilledOption.value}
-						<ThemeIcon
-							variant="big"
-							mr={0}
-							ml={2}
-							src={filterClose}
-							onClick={() => setSelectedFulfilledOption({ value: 'All', label: 'All' })}
-						/>
-					</FilterElement>
-				)}
-
-				{selectedTrustableOption.value !== 'All' && (
-					<FilterElement as="div" color="filterText" mt={3} ml={2}>
-						{selectedTrustableOption.value}
-						<ThemeIcon
-							variant="big"
-							mr={0}
-							ml={2}
-							src={filterClose}
-							onClick={() => setSelectedTrustableOption({ value: 'All', label: 'All' })}
-						/>
-					</FilterElement>
-				)}
-			</FilterWrapper>
+      <MobileSearchAndFilterWrapper onClick={() => setModalShow(true)}>
+			<FilterIcon variant="normal" src={filterIcon} />
+      </MobileSearchAndFilterWrapper>
 
 			<Modal isOpen={modalShow} toggle={() => setModalShow(false)} backdropClassName="custom-backdrop">
 				<ModalHeader
@@ -461,4 +317,4 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 	);
 });
 
-export default SearchInput;
+export default FilterMobile;

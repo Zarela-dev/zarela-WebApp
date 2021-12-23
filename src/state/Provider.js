@@ -23,6 +23,7 @@ const appInitialState = {
 	fallbackWeb3Instance: null,
 	contract: null,
 	isMobile: null,
+	isMobileSearchModalShow: null,
 	guideIsOpen: null,
 	notificationCount: null,
 
@@ -78,6 +79,11 @@ const AppProvider = ({ children }) => {
 					...state,
 					isMobile: action.payload,
 				};
+			case actionTypes.SET_MOBILE_SEARCH_MODAL_SHOW:
+				return {
+					...state,
+					isMobileSearchModalShow: action.payload,
+				}
 			case actionTypes.SET_GUIDE_IS_OPEN:
 				return {
 					...state,
@@ -114,6 +120,10 @@ const AppProvider = ({ children }) => {
 				? true
 				: false,
 		});
+		dispatch({
+			type: actionTypes.SET_MOBILE_SEARCH_MODAL_SHOW,
+			payload: false
+		})
 		// to trigger guide to open from header in each page
 		dispatch({
 			type: actionTypes.SET_GUIDE_IS_OPEN,

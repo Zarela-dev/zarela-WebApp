@@ -1,16 +1,15 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 import RequestCardMobile from '../../components/RequestCard/RequestCardMobile';
 import maxWidthWrapper from '../../components/Elements/MaxWidth';
 import { timeSince } from '../../utils';
 import homepageBg from '../../assets/home-bg.jpg';
-import { Button } from '../../components/Elements/Button';
 import MobileLayout from '../../components/MobileLayout';
 import ZarelaDayBox from '../../components/ZarelaDayBox';
-import Pagination from '../../components/Pagination';
+import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import SearchBox from '../../components/searchAndFilter/SearchBox';
 
 const RequestsListWrapper = styled.div`
 	position: relative;
@@ -78,33 +77,6 @@ const RequestsListContentWrapper = styled.section`
 	padding: 0 ${(props) => props.theme.spacing(1.8)};
 `;
 
-const TitleSection = styled.div`
-	display: flex;
-	height: 83px;
-	width: 100%;
-	padding: 0 18px;
-	justify-content: space-between;
-	align-items: center;
-	background-color: ${props => props.theme.colors.bgDisabled};
-	flex-wrap: wrap;
-`;
-const Title = styled.h1`
-	color: ${props => props.theme.colors.textGrey};
-	font-size: 18px;
-	font-weight: 700;
-	white-space: nowrap;
-	margin-left: 0px;
-`;
-
-const SubmitRequestButton = styled(Link)`
-	${Button};
-	white-space: nowrap;
-	margin-right: 0;
-	height: 35px;
-	font-size: 14px;
-	padding: 10px 24px;
-`;
-
 const Card = styled.div`
 	width: 100%;
 	margin-right: 30px;
@@ -129,17 +101,8 @@ const useStyles = makeStyles({
 	},
 });
 
-const App = ({ requests, isLoading, appState, props, PAGE_SIZE }) => {
-	const [currentPage, setCurrentPage] = useState(1);
+const App = ({ appState, requests, fetchMore, currentPage, setCurrentPage, PER_PAGE, isLoading, props }) => {
 	const classes = useStyles(props);
-
-	const currentTableData = useMemo(() => {
-		const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
-		const lastPageIndex = firstPageIndex + PAGE_SIZE;
-		return Object.values(requests)
-			.sort((a, b) => +b.requestID - +a.requestID)
-			.slice(firstPageIndex, lastPageIndex);
-	}, [currentPage, PAGE_SIZE, requests]);
 
 	return (
 		<>
@@ -149,17 +112,13 @@ const App = ({ requests, isLoading, appState, props, PAGE_SIZE }) => {
 					{!isLoading && <Background />}
 					<RequestsListLayout>
 						<RequestsListContentWrapper>
+							<SearchBox />
 							{isLoading
 								? [1, 2, 3].map((index) => {
 										return (
 											<Card key={index}>
 												<CircleSection>
-													<Skeleton
-														variant="circle"
-														width={41.72}
-														height={41.72}
-														className={classes.root}
-													/>
+													<Skeleton variant="circle" width={41.72} height={41.72} className={classes.root} />
 												</CircleSection>
 												<SquareSection>
 													<Skeleton
@@ -169,44 +128,69 @@ const App = ({ requests, isLoading, appState, props, PAGE_SIZE }) => {
 														animation="wave"
 														className={classes.root}
 													/>
-													<Skeleton
-														variant="rect"
-														width={'80%'}
-														height={19.1}
-														className={classes.root}
-													/>
+													<Skeleton variant="rect" width={'80%'} height={19.1} className={classes.root} />
 												</SquareSection>
 											</Card>
 										);
 								  })
-								: Object.values(currentTableData)
-										.sort((a, b) => +b.requestID - +a.requestID)
-										.map((item) => {
-											return (
-												<RequestCardMobile
-													key={item.requestID}
-													requestID={item.requestID}
-													title={item.title}
-													description={item.description}
-													angelTokenPay={item.angelTokenPay}
-													laboratoryTokenPay={item.laboratoryTokenPay}
-													categories={item.categories}
-													timestamp={timeSince(item.timestamp)}
-													progress={(+item.totalContributed / +item.totalContributors) * 100}
-													contributors={`${item.totalContributed}/${item.totalContributors}`}
-													totalContributedCount={item.totalContributedCount}
-												/>
-											);
-										})}
+								: Object.values(requests).map((item) => {
+										return (
+											<RequestCardMobile
+												key={item.requestID}
+												requestID={item.requestID}
+												title={item.title}
+												description={item.description}
+												angelTokenPay={item.angelTokenPay}
+												laboratoryTokenPay={item.laboratoryTokenPay}
+												categories={item.categories}
+												timestamp={timeSince(item.timestamp)}
+												progress={(+item.totalContributed / +item.totalContributors) * 100}
+												contributors={`${item.totalContributed}/${item.totalContributors}`}
+												totalContributedCount={item.totalContributedCount}
+											/>
+										);
+								  })}
 						</RequestsListContentWrapper>
 					</RequestsListLayout>
-					<Pagination
-						currentPage={currentPage}
-						totalCount={Object.values(requests).length}
-						pageSize={PAGE_SIZE}
-						onPageChange={(page) => setCurrentPage(page)}
-						isMobile={true}
-					/>
+
+					<nav aria-label="...">
+						<Pagination>
+							<PaginationItem disabled={currentPage === 0}>
+								<PaginationLink
+									tabIndex="-1"
+									onClick={() => {
+										fetchMore({
+											variables: {
+												skip: (currentPage - 1) * PER_PAGE,
+											},
+										});
+										setCurrentPage(currentPage - 1);
+									}}
+								>
+									Previous
+								</PaginationLink>
+							</PaginationItem>
+							<PaginationItem active>
+								<PaginationLink href="#">
+									{currentPage + 1} <span className="sr-only">(currentPage)</span>
+								</PaginationLink>
+							</PaginationItem>
+							<PaginationItem>
+								<PaginationLink
+									onClick={() => {
+										fetchMore({
+											variables: {
+												skip: (currentPage + 1) * PER_PAGE,
+											},
+										});
+										setCurrentPage(currentPage + 1);
+									}}
+								>
+									Next
+								</PaginationLink>
+							</PaginationItem>
+						</Pagination>
+					</nav>
 				</RequestsListWrapper>
 			</MobileLayout>
 		</>

@@ -63,8 +63,6 @@ const CalendarIcon = styled(ThemeIcon)`
 
 const DatePickerField = ({
 	toggleModals,
-	selectedDateRange,
-	setSelectedDateRange,
 }) => {
 	return (
 		<DatePickerWrapper>

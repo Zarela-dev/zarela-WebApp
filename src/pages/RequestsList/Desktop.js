@@ -1,15 +1,15 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 import RequestCard from '../../components/RequestCard/RequestCard';
 import TokenInfoSidebar from '../../components/Sidebar/TokenInfo';
-import Pagination from '../../components/Pagination';
 import maxWidthWrapper from '../../components/Elements/MaxWidth';
 import { timeSince } from '../../utils';
 import homepageBg from '../../assets/home-bg.jpg';
 import ZarelaDayBox from '../../components/ZarelaDayBox';
 import SearchBox from '../../components/searchAndFilter/SearchBox';
+import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
 const RequestsListWrapper = styled.div`
 	position: relative;
@@ -110,18 +110,8 @@ const useStyles = makeStyles({
 	},
 });
 
-const Desktop = ({ requests, appState, account, PAGE_SIZE, isLoading, props }) => {
-	const [currentPage, setCurrentPage] = useState(1);
+const Desktop = ({ appState, requests, fetchMore, currentPage, setCurrentPage,PER_PAGE, isLoading, account, props }) => {
 	const classes = useStyles(props);
-
-	const currentTableData = useMemo(() => {
-		const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
-		const lastPageIndex = firstPageIndex + PAGE_SIZE;
-		return Object.values(requests)
-			.sort((a, b) => +b.requestID - +a.requestID)
-			.slice(firstPageIndex, lastPageIndex);
-	}, [currentPage, PAGE_SIZE, requests]);
-
 	return (
 		<RequestsListWrapper isLoading={isLoading}>
 			{!isLoading && <Background />}
@@ -158,7 +148,7 @@ const Desktop = ({ requests, appState, account, PAGE_SIZE, isLoading, props }) =
 									</Card>
 								);
 						  })
-						: currentTableData.map((item) => {
+						: Object.values(requests).map((item) => {
 								return (
 									<RequestCard
 										key={item.requestID}
@@ -177,12 +167,44 @@ const Desktop = ({ requests, appState, account, PAGE_SIZE, isLoading, props }) =
 						  })}
 				</RequestsListContentWrapper>
 			</RequestsListLayout>
-			<Pagination
-				currentPage={currentPage}
-				totalCount={Object.values(requests).length}
-				pageSize={PAGE_SIZE}
-				onPageChange={(page) => setCurrentPage(page)}
-			/>
+			<nav aria-label="...">
+				<Pagination>
+					<PaginationItem disabled={currentPage === 0}>
+						<PaginationLink
+							tabIndex="-1"
+							onClick={() => {
+								fetchMore({
+									variables: {
+										skip: (currentPage - 1) * PER_PAGE,
+									},
+								});
+								setCurrentPage(currentPage - 1);
+							}}
+						>
+							Previous
+						</PaginationLink>
+					</PaginationItem>
+					<PaginationItem active>
+						<PaginationLink href="#">
+							{currentPage + 1} <span className="sr-only">(currentPage)</span>
+						</PaginationLink>
+					</PaginationItem>
+					<PaginationItem>
+						<PaginationLink
+							onClick={() => {
+								fetchMore({
+									variables: {
+										skip: (currentPage + 1) * PER_PAGE,
+									},
+								});
+								setCurrentPage(currentPage + 1);
+							}}
+						>
+							Next
+						</PaginationLink>
+					</PaginationItem>
+				</Pagination>
+			</nav>
 		</RequestsListWrapper>
 	);
 };
