@@ -138,7 +138,6 @@ const LogCard = ({ data, account, paymentDay }) => {
 						<TableBulkRow>
 							{contributions.map(
 								({ originalIndex, timestamp, zarelaDay, status, angel, hub, rewardGainer, ...rest }, rowIndex) => {
-									console.log('res', data);
 									return (
 										<TableRow key={originalIndex}>
 											<TableCellWrapper>

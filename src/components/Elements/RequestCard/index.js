@@ -36,7 +36,7 @@ export const Title = styled.div`
 	font-weight: 500;
 	font-size: 24px;
 	line-height: 30px;
-	color: ${(props) =>props.theme.colors.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 `;
 
 export const Bookmark = styled.img`
@@ -135,14 +135,14 @@ export const ValueLabel = styled.div`
 	font-weight: 700;
 	white-space: normal;
 	padding-bottom: 2px;
-	color: ${(props) => (props.colored ? props.theme.colors.textToken :props.theme.colors.textPrimary)};
+	color: ${(props) => (props.colored ? props.theme.colors.textToken : props.theme.colors.textPrimary)};
 `;
 
 export const TokenValue = styled.div`
 	font-weight: 600;
 	font-size: 18px;
 	line-height: 20px;
-	color: ${(props) =>props.theme.colors.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 	margin-right: 3px;
 `;
 
@@ -194,7 +194,7 @@ export const TagsWrapper = styled.div`
 `;
 
 export const TagItem = styled.div`
-	background: ${props => props.theme.colors.bgWhite};
+	background: ${(props) => props.theme.colors.bgWhite};
 	padding: 8px 16px;
 	font-size: 14px;
 	line-height: 17px;

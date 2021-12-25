@@ -184,13 +184,6 @@ const Label = styled.label`
 	margin-bottom: ${(props) => props.theme.spacing(0.5)};
 `;
 
-const LabelText = styled.div`
-	font-weight: 500;
-	font-size: 14px;
-	line-height: 20px;
-	color: ${(props) => props.theme.colors.textTimestamp};
-`;
-
 const Hint = styled.div`
 	font-weight: normal;
 	font-size: 13px;

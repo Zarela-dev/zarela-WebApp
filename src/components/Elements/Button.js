@@ -27,15 +27,15 @@ function getColor(props) {
 	}
 	if (props.variant === 'secondary') {
 		return css`
-			background: ${props => props.theme.colors.bgWhite};
-			color: ${props => props.theme.colors.primary};
+			background: ${(props) => props.theme.colors.bgWhite};
+			color: ${(props) => props.theme.colors.primary};
 		`;
 	}
 }
 
 function getDisabledStyles() {
 	return css`
-		background: ${props => props.theme.colors.bgDisabled};
+		background: ${(props) => props.theme.colors.bgDisabled};
 		cursor: not-allowed !important;
 	`;
 }
@@ -145,6 +145,9 @@ const ButtonWrapper = styled(Box)(
 			primary: {
 				background: 'unset',
 			},
+			block: {
+				width: '100%',
+			},
 			secondary: {
 				background: 'linear-gradient(180deg, #85CEEE 10.5%, #A687FD 86.82%)',
 				padding: '2px',
@@ -175,6 +178,12 @@ const CustomizedButton = styled(RebassButton)(
 	variant({
 		prop: 'size',
 		variants: {
+			block: {
+				width: '100%',
+				height: '50px',
+				fontSize: [4],
+				lineHeight: [6],
+			},
 			extraLarge: {
 				width: '190px',
 				height: '64px',
@@ -232,6 +241,20 @@ const CustomizedButton = styled(RebassButton)(
 					color: '#C5C0DB',
 				},
 			},
+			block: {
+				background: 'linear-gradient(180deg, #85CEEE 10.5%, #A687FD 86.82%)',
+				color: 'textPrimary',
+				'&:hover': {
+					background: 'linear-gradient(224.79deg, #CCEDFC 16.25%, #DFD3FF 84.5%)',
+				},
+				'&:active': {
+					background: 'linear-gradient(227.41deg, #52A1CE 10.18%, #6051C0 93.32%)',
+				},
+				'&:disabled': {
+					background: '#F4F3FE',
+					color: '#C5C0DB',
+				},
+			},
 			secondary: {
 				background: '#fff',
 				color: 'primary',
@@ -255,7 +278,11 @@ export const ThemeButton = (props) => {
 		<ButtonWrapper variant={props.disabled ? 'disabled' : props.variant}>
 			{props.to ? (
 				<Link to={{ pathname: props.to }} target={props.target}>
-					<CustomizedButton p={1} variant={props.variant} {...{ ...props, to: undefined, target: undefined }}></CustomizedButton>
+					<CustomizedButton
+						p={1}
+						variant={props.variant}
+						{...{ ...props, to: undefined, target: undefined }}
+					></CustomizedButton>
 				</Link>
 			) : (
 				<CustomizedButton p={1} variant={props.variant} onClick={props.onClick} {...props}></CustomizedButton>

@@ -4,11 +4,13 @@ import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 import RequestCard from '../../components/RequestCard/RequestCard';
 import TokenInfoSidebar from '../../components/Sidebar/TokenInfo';
-import Pagination from '../../components/Pagination';
 import maxWidthWrapper from '../../components/Elements/MaxWidth';
 import { timeSince } from '../../utils';
 import homepageBg from '../../assets/home-bg.jpg';
 import ZarelaDayBox from '../../components/ZarelaDayBox';
+import SearchBox from '../../components/searchAndFilter/SearchBox';
+// import GraphPagination from '../../components/Pagination/GraphPagination';
+import Pagination from '../../components/Pagination';
 
 const RequestsListWrapper = styled.div`
 	position: relative;
@@ -109,18 +111,24 @@ const useStyles = makeStyles({
 	},
 });
 
-const Desktop = ({ requests, appState, account, PAGE_SIZE, isLoading, props }) => {
-	const [currentPage, setCurrentPage] = useState(1);
+const Desktop = ({
+	requests,
+	appState,
+	account,
+	PAGE_SIZE,
+	currentPage,
+	setCurrentPage,
+	isLoading,
+	props,
+	searchBox,
+}) => {
 	const classes = useStyles(props);
 
 	const currentTableData = useMemo(() => {
 		const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
 		const lastPageIndex = firstPageIndex + PAGE_SIZE;
-		return Object.values(requests)
-			.sort((a, b) => +b.requestID - +a.requestID)
-			.slice(firstPageIndex, lastPageIndex);
+		return Object.values(requests).slice(firstPageIndex, lastPageIndex);
 	}, [currentPage, PAGE_SIZE, requests]);
-
 	return (
 		<RequestsListWrapper isLoading={isLoading}>
 			{!isLoading && <Background />}
@@ -142,32 +150,17 @@ const Desktop = ({ requests, appState, account, PAGE_SIZE, isLoading, props }) =
 					</FixedWrapper>
 				)}
 				<RequestsListContentWrapper>
+					{searchBox}
 					{isLoading
 						? [1, 2, 3].map((index) => {
 								return (
 									<Card key={index}>
 										<CircleSection>
-											<Skeleton
-												variant="circle"
-												width={72}
-												height={72}
-												className={classes.root}
-											/>
+											<Skeleton variant="circle" width={72} height={72} className={classes.root} />
 										</CircleSection>
 										<SquareSection>
-											<Skeleton
-												variant="rect"
-												width={'100%'}
-												height={33}
-												animation="wave"
-												className={classes.root}
-											/>
-											<Skeleton
-												variant="rect"
-												width={'33%'}
-												height={'33px'}
-												className={classes.root}
-											/>
+											<Skeleton variant="rect" width={'100%'} height={33} animation="wave" className={classes.root} />
+											<Skeleton variant="rect" width={'33%'} height={'33px'} className={classes.root} />
 										</SquareSection>
 									</Card>
 								);

@@ -1,0 +1,53 @@
+.custom-backdrop {
+	background: #3e38a9 !important;
+}
+
+.select__indicator-separator {
+	display: none;
+}
+.text-underline {
+	text-decoration: underline;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.customDatePickerWidth,
+.customDatePickerWidth > div.react-datepicker-wrapper,
+.customDatePickerWidth
+	> div
+	> div.react-datepicker__input-container
+	.customDatePickerWidth
+	> div
+	> div.react-datepicker__input-container
+	input {
+	width: 100%;
+}
+
+.rdrCalendarWrapper,
+.rdrMonth {
+	width: 100% !important;
+}
+
+iframe {
+	display: none !important;
+}
+
+.search-modal .modal-content {
+	height: 100vh;
+}
+
+.custom-calendar .rdrStartEdge,
+.rdrInRange,
+.rdrEndEdge,
+.rdrStartEdge {
+	color: #422468 !important;
+}
+
+.custom-calendar .rdrDayToday .rdrDayNumber > span::after {
+	background-color: #422468 !important;
+}
+.search-modal-mobile {
+	margin: 0;
+}
