@@ -271,6 +271,17 @@ const FilterMobile = forwardRef(({ requests, applySearch, searchResults }, ref) 
 		setDatePickerModalShow(!datePickerModalShow);
 	};
 
+	const handleCalendarClear = () => {
+		setSelectedDateRange([
+			{
+				startDate: null,
+				endDate: null,
+				key: 'selection',
+			},
+		]);
+		applySearch.dateFilter([]);
+	};
+
 	return (
 		<Wrapper hasTopMargin={true}>
 			<MobileSearchAndFilterWrapper onClick={() => setModalShow(true)}>
@@ -438,7 +449,23 @@ const FilterMobile = forwardRef(({ requests, applySearch, searchResults }, ref) 
 					}
 				>
 					<HeaderInner>
-						<BodyText variant="extraSmall" m={0} className="cursor-pointer">
+						<BodyText
+							variant="extraSmall"
+							m={0}
+							className="cursor-pointer"
+							onClick={() => {
+								setSelectedTotalBiobitOption({ value: 'Default', label: 'Default' });
+								applySearch.clear();
+								setRange([0, maxPrice]);
+								setSelectedDateRange([
+									{
+										startDate: null,
+										endDate: null,
+										key: 'selection',
+									},
+								]);
+							}}
+						>
 							Clear All
 						</BodyText>
 						<BodyText variant="normal" fontWeight="semiBold" m={0}>
@@ -583,18 +610,12 @@ const FilterMobile = forwardRef(({ requests, applySearch, searchResults }, ref) 
 
 					<Row class="d-flex align-items-center justify-content-center">
 						<Col className="pl-2 d-flex align-items-center">
-							<BodyText variant="small" className="text-underline cursor-pointer">
+							<BodyText variant="small" className="text-underline cursor-pointer" onClick={handleCalendarClear}>
 								Clear
 							</BodyText>
 						</Col>
 						<Col className="d-flex justify-content-end">
-							<ThemeButton
-								variant="primary"
-								size="normal"
-								onClick={() => {
-									setModalShow(!modalShow);
-								}}
-							>
+							<ThemeButton variant="primary" size="normal" onClick={toggleModals}>
 								submit
 							</ThemeButton>
 						</Col>
