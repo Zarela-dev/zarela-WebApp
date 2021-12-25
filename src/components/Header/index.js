@@ -16,6 +16,7 @@ import menu from '../../assets/icons/menu.svg';
 import chainIdTag from '../../assets/icons/chainid-tag.svg';
 import help from './../../assets/icons/nav/question-mark.svg';
 import bell from './../../assets/icons/nav/notification-bell.svg';
+import search from './../../assets/icons/nav/search.svg';
 import { Link } from 'react-router-dom';
 import { Typography } from '../Elements/Typography';
 import { Button } from '../Elements/Button';
@@ -272,6 +273,7 @@ export default function Header({ isMobile }, props) {
 	const { account } = useWeb3React();
 	const [isMenuOpen, setMenuOpen] = useState(false);
 	const [isNotificationMenuOpen, setIsNotificationMenuOpen] = useState(false);
+
 	const { appState, dispatch } = useContext(mainContext);
 	const location = useLocation();
 	const [sticky, setSticky] = useState(true);
@@ -351,6 +353,12 @@ export default function Header({ isMobile }, props) {
 										{appState.notificationCount}
 									</NotificationBadge>
 								)}
+							</NavItem>
+							<NavItem isMobile={appState.isMobile}>
+								<NavIcon src={search} height="20px" onClick={() => 	dispatch({
+													type: actionTypes.SET_MOBILE_SEARCH_MODAL_SHOW,
+													payload: true,
+												})} />
 							</NavItem>
 							<NavItem isMobile={appState.isMobile}>
 								<NavIconApp src={menu} onClick={() => setMenuOpen(true)} />

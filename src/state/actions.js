@@ -94,15 +94,15 @@ export const getEthPrice = (dispatch) => {
 	 */
 	const request = require('request');
 
-	axios
-		.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD')
-		.then((response) => {
-			dispatch({
-				type: actionTypes.SET_ETH_PRICE,
-				payload: response.data.USD,
-			});
-		})
-		.catch((error) => {
-			console.log('error', error);
-		});
+	// axios
+	// 	.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD')
+	// 	.then((response) => {
+	// 		dispatch({
+	// 			type: actionTypes.SET_ETH_PRICE,
+	// 			payload: response.data.USD,
+	// 		});
+	// 	})
+	// 	.catch((error) => {
+	// 		console.log('error', error);
+	// 	});
 };

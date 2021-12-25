@@ -45,6 +45,9 @@ const theme = (darkMode) => {
 			validation: '#F1C93A',
 			error: '#F62D76',
 			success: '#3ADEA3',
+
+			filterText: '#575757',
+			filterBorder: '#838383',
 		},
 		forms: {
 			largeInput: {
