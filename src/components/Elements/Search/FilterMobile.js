@@ -251,7 +251,6 @@ const FilterMobile = forwardRef(({ requests, applySearch, searchResults }, ref) 
 		if (selectedDateRange[0].endDate) {
 			const startDate = Date.parse(selectedDateRange[0].startDate) / 1000;
 			const endDate = Date.parse(selectedDateRange[0].endDate) / 1000;
-			console.log('selectedDateRange', startDate, endDate);
 			applySearch.dateFilter([startDate, endDate]);
 		}
 	}, [selectedDateRange]);
@@ -593,7 +592,7 @@ const FilterMobile = forwardRef(({ requests, applySearch, searchResults }, ref) 
 								variant="primary"
 								size="normal"
 								onClick={() => {
-									console.log('submit');
+									setModalShow(!modalShow);
 								}}
 							>
 								submit

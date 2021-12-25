@@ -114,10 +114,6 @@ const RequestsList = () => {
 			}));
 		},
 	};
-
-	// remove before moving to production
-	window.applySearch = applySearch;
-
 	useDeepCompareEffect(() => {
 		try {
 			const { q, orderBy, orderDirection, bbitFilter, dateFilter, nearFinish, fulfilled, mostConfirmed } =
@@ -149,7 +145,6 @@ const RequestsList = () => {
 			if (dateFilter.length === 2) {
 				if (dateFilter[0] === dateFilter[1]) {
 					results = results.filter((request) => {
-						console.log(request.timestamp >= dateFilter[0] && +request.timestamp <= dateFilter[0] + 86400);
 						return +request.timestamp >= dateFilter[0] && +request.timestamp <= dateFilter[0] + 86400;
 					});
 				} else if (dateFilter[0] >= 0 && dateFilter[1] >= 0) {
