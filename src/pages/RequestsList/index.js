@@ -176,7 +176,6 @@ const RequestsList = () => {
 					return Math.floor((+request.totalContributed / +request.totalContributedCount) * 100) >= 70;
 				});
 			}
-
 			if (orderBy) {
 				results = results.sort((a, b) => {
 					if (orderBy === 'bbit') {
