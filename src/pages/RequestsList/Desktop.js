@@ -150,7 +150,6 @@ const Desktop = ({
 					</FixedWrapper>
 				)}
 				<RequestsListContentWrapper>
-					{/* <SearchBox /> */}
 					{searchBox}
 					{isLoading
 						? [1, 2, 3].map((index) => {

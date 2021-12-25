@@ -102,8 +102,9 @@ const useStyles = makeStyles({
 	},
 });
 
-const App = ({ requests, isLoading, appState, currentPage, setCurrentPage, props, PAGE_SIZE }) => {
+const Mobile = ({ requests, isLoading, appState, currentPage, setCurrentPage, props, PAGE_SIZE, searchBox }) => {
 	const classes = useStyles(props);
+	
 	const currentTableData = useMemo(() => {
 		const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
 		const lastPageIndex = firstPageIndex + PAGE_SIZE;
@@ -118,7 +119,7 @@ const App = ({ requests, isLoading, appState, currentPage, setCurrentPage, props
 					{!isLoading && <Background />}
 					<RequestsListLayout>
 						<RequestsListContentWrapper>
-							<SearchBox />
+							{searchBox}
 							{isLoading
 								? [1, 2, 3].map((index) => {
 										return (
@@ -173,4 +174,4 @@ const App = ({ requests, isLoading, appState, currentPage, setCurrentPage, props
 	);
 };
 
-export default App;
+export default Mobile;

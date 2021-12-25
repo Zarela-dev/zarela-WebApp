@@ -145,8 +145,14 @@ const RequestsList = () => {
 					throw Error('Invalid BBIT filter');
 				}
 			}
+
 			if (dateFilter.length === 2) {
-				if (dateFilter[0] >= 0 && dateFilter[1] >= 0) {
+				if (dateFilter[0] === dateFilter[1]) {
+					results = results.filter((request) => {
+						console.log(request.timestamp >= dateFilter[0] && +request.timestamp <= dateFilter[0] + 86400);
+						return +request.timestamp >= dateFilter[0] && +request.timestamp <= dateFilter[0] + 86400;
+					});
+				} else if (dateFilter[0] >= 0 && dateFilter[1] >= 0) {
 					results = results.filter((request) => {
 						return +request.timestamp >= dateFilter[0] && +request.timestamp <= dateFilter[1];
 					});
@@ -154,6 +160,7 @@ const RequestsList = () => {
 					throw Error('Invalid date filter');
 				}
 			}
+
 			if (nearFinish) {
 				results = results.filter((request) => {
 					return Math.floor((+request.totalContributed / +request.totalContributors) * 100) >= 50;
@@ -269,9 +276,9 @@ const RequestsList = () => {
 			{appState.isMobile ? (
 				<Mobile
 					{...{
-						requests,
-						isLoading,
+						requests: searchResults.data,
 						appState,
+						isLoading,
 						PAGE_SIZE,
 						currentPage,
 						setCurrentPage,

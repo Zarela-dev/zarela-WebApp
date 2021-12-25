@@ -66,7 +66,7 @@ const CalendarMobileIcon = styled(ThemeIcon)`
 	cursor: pointer;
 `;
 
-const DatePickerField = ({ toggleModals, setSelectedDateRange, isMobile }) => {
+const DatePickerField = ({ toggleModals, setSelectedDateRange, isMobile , value}) => {
 	return (
 		<DatePickerWrapper>
 			<BodyText variant="small" fontWeight="semiBold" m={0}>
@@ -74,7 +74,7 @@ const DatePickerField = ({ toggleModals, setSelectedDateRange, isMobile }) => {
 			</BodyText>
 			<DateSection>
 				<InputWrapper>
-					<Input placeholder="All" onFocus={toggleModals} />
+					<Input placeholder="All" value={value} onFocus={toggleModals} />
 					{isMobile ? (
 						<CalendarMobileIcon variant="normal" src={calendarIcon} />
 					) : (

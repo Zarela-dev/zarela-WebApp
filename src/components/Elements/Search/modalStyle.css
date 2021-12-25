@@ -35,7 +35,7 @@ iframe {
 }
 
 .search-modal .modal-content {
-	height: 95vh;
+	height: 100vh;
 }
 
 .custom-calendar .rdrStartEdge,
@@ -47,4 +47,7 @@ iframe {
 
 .custom-calendar .rdrDayToday .rdrDayNumber > span::after {
 	background-color: #422468 !important;
+}
+.search-modal-mobile {
+	margin: 0;
 }

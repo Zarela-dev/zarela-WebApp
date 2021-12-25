@@ -192,16 +192,15 @@ const CustomSwitch = styled(Switch)({
 	},
 });
 
-function timeConverter(UNIX_timestamp){
-  var a = new Date(UNIX_timestamp);
-  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var year = a.getFullYear();
-  var month = months[a.getMonth()];
-  var date = a.getDate();
-  var time = date + ' ' + month + ' ' + year ;
-  return time;
+function timeConverter(UNIX_timestamp) {
+	var a = new Date(UNIX_timestamp);
+	var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	var year = a.getFullYear();
+	var month = months[a.getMonth()];
+	var date = a.getDate();
+	var time = date + ' ' + month + ' ' + year;
+	return time;
 }
-console.log(timeConverter(0));
 
 const SearchInput = forwardRef(({ requests, applySearch, searchResults }, ref) => {
 	const [modalShow, setModalShow] = useState(false);
@@ -245,6 +244,7 @@ const SearchInput = forwardRef(({ requests, applySearch, searchResults }, ref) =
 		{ value: 'HighToLow', label: 'High to Low' },
 	];
 
+
 	const handleChangeRange = (event, newValue) => {
 		setRange(newValue);
 		applySearch.bbitFilter(range);
@@ -270,9 +270,7 @@ const SearchInput = forwardRef(({ requests, applySearch, searchResults }, ref) =
 						type="text"
 						placeholder="Start typing ..."
 						value={searchResults.params.q}
-						onChange={(e) => {
-							applySearch.q(e.target.value);
-						}}
+						onChange={(e) => applySearch.q(e.target.value)}
 					/>
 					{searchResults.params.q !== '' && (
 						<SearchClear variant="big" src={searchClose} onClick={() => applySearch.q('')} />
@@ -320,7 +318,11 @@ const SearchInput = forwardRef(({ requests, applySearch, searchResults }, ref) =
 
 				{!isNaN(Date.parse(selectedDateRange[0].endDate)) && (
 					<FilterElement as="div" color="filterText" mt={3} mr={2}>
-						{timeConverter(Date.parse(selectedDateRange[0].startDate))} - {timeConverter(Date.parse(selectedDateRange[0].endDate))}
+						{Date.parse(selectedDateRange[0].endDate) === Date.parse(selectedDateRange[0].startDate)
+							? timeConverter(Date.parse(selectedDateRange[0].startDate))
+							: `${timeConverter(Date.parse(selectedDateRange[0].startDate))}
+                            -
+                            ${timeConverter(Date.parse(selectedDateRange[0].endDate))}`}
 						<ThemeIcon
 							variant="big"
 							mr={0}
@@ -443,7 +445,15 @@ const SearchInput = forwardRef(({ requests, applySearch, searchResults }, ref) =
 						{...{
 							toggleModals,
 							setSelectedDateRange,
+							isMobile: true,
 						}}
+						value={
+							Date.parse(selectedDateRange[0].endDate) === Date.parse(selectedDateRange[0].startDate)
+								? timeConverter(Date.parse(selectedDateRange[0].startDate))
+								: `${timeConverter(Date.parse(selectedDateRange[0].startDate))} - ${timeConverter(
+										Date.parse(selectedDateRange[0].endDate)
+								  )}`
+						}
 					/>
 
 					<FormGroup className="d-flex flex-row w-100 justify-content-between align-items-center">
@@ -476,13 +486,7 @@ const SearchInput = forwardRef(({ requests, applySearch, searchResults }, ref) =
 						/>
 					</FormGroup>
 
-					<ThemeButton
-						variant="block"
-						size="block"
-						onClick={() => {
-							console.log('submit');
-						}}
-					>
+					<ThemeButton variant="block" size="block" onClick={() => setModalShow(false)}>
 						Submit
 					</ThemeButton>
 				</ModalBody>
@@ -524,7 +528,7 @@ const SearchInput = forwardRef(({ requests, applySearch, searchResults }, ref) =
 								variant="primary"
 								size="normal"
 								onClick={() => {
-									console.log('submit');
+									setModalShow(!modalShow);
 								}}
 							>
 								submit

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import RequestCardWrapper from './../Elements/RequestCard';
 import { mainContext } from '../../state';
 import FilterMobile from '../Elements/Search/FilterMobile';
@@ -9,7 +9,7 @@ const SearchBox = ({ requests, applySearch, searchResults }) => {
 	const { appState, dispatch } = useContext(mainContext);
 
 	if (appState.isMobile) {
-		return <FilterMobile label="Search" type="text" />;
+		return <FilterMobile {...{ requests, applySearch, searchResults }} />;
 	} else {
 		return (
 			<RequestCardWrapper>
