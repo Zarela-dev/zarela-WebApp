@@ -20,6 +20,8 @@ import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import DatePickerField from './DatePickerField';
+import Switch from '@mui/material/Switch';
+import BigNumber from 'bignumber.js';
 
 const InputStyles = css`
 	font-family: Krub;
@@ -36,6 +38,10 @@ const InputStyles = css`
 `;
 const InputWrapper = styled.div`
 	width: 100%;
+`;
+
+const CustomModalHeader = styled(ModalHeader)`
+	flex-direction: row-reverse;
 `;
 
 const Input = styled.input`
@@ -87,6 +93,7 @@ const SearchSection = styled(Box)`
 const FilterWrapper = styled.div`
 	width: 100%;
 	display: flex;
+	flex-wrap: wrap;
 `;
 
 const FilterButton = styled(Box)(compose(space, layout, color, fontWeight), {
@@ -117,7 +124,7 @@ const HeaderInner = styled.div`
 
 const DateHeader = styled.div`
 	display: flex;
-	width: 200px;
+	width: 177px;
 	justify-content: space-between;
 	align-items: center;
 `;
@@ -135,15 +142,86 @@ const CalendarModal = styled(Modal)`
 	width: fit-content;
 `;
 
-const SearchInput = forwardRef(({ label, ...rest }, ref) => {
-	const [searchValue, setSearchValue] = useState('');
+const CustomSlider = styled(Slider)({
+	width: 300,
+	color: '#422468',
+	'& .MuiSlider-track': {
+		color: '#422468',
+		height: 8,
+	},
+	'& .MuiSlider-rail': {
+		height: 8,
+		color: '#E9E9E9',
+		opacity: 1,
+	},
+	'& .MuiSlider-valueLabel': {
+		color: '#422468',
+		left: 'calc(-50% - -4px)',
+	},
+	'& .MuiSlider-thumb': {
+		color: '#fff',
+		width: 24,
+		height: 24,
+		marginTop: '-8px',
+		border: '1px solid #C4C4C4',
+		[`&:hover, &.Mui-focusVisible`]: {
+			boxShadow: '0px 0px 0px 8px var(--box-shadow)',
+		},
+		[`&.Mui-active`]: {
+			boxShadow: '0px 0px 0px 14px var(--box-shadow)',
+			color: 'red',
+			backgroundColor: 'blue',
+		},
+	},
+});
+
+const CustomSwitch = styled(Switch)({
+	'& .MuiSwitch-switchBase': {
+		color: '#fff',
+	},
+	'& .Mui-checked': {
+		'& .MuiSwitch-thumb': {
+			backgroundColor: '#6200EE',
+		},
+	},
+	'& .Mui-checked + .MuiSwitch-track': {
+		backgroundColor: '#BB86FC !important',
+	},
+	'& .MuiSwitch-track': {
+		background: '#212121',
+	},
+});
+
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var time = date + ' ' + month + ' ' + year ;
+  return time;
+}
+console.log(timeConverter(0));
+
+const SearchInput = forwardRef(({ requests, applySearch, searchResults }, ref) => {
 	const [modalShow, setModalShow] = useState(false);
 	const [datePickerModalShow, setDatePickerModalShow] = useState(false);
-	const [selectedTotalBiobitOption, setSelectedTotalBiobitOption] = useState({ value: 'All', label: 'All' });
-	const [selectedNearFinishOption, setSelectedNearFinishOption] = useState({ value: 'All', label: 'All' });
-	const [selectedFulfilledOption, setSelectedFulfilledOption] = useState({ value: 'All', label: 'All' });
-	const [selectedTrustableOption, setSelectedTrustableOption] = useState({ value: 'All', label: 'All' });
-	const [range, setRange] = useState([0, 0]);
+	const [selectedTotalBiobitOption, setSelectedTotalBiobitOption] = useState({ value: 'Default', label: 'Default' });
+
+	const maxPrice = Object.values(requests).sort((a, b) => {
+		const aPrice = new BigNumber(a.totalTokenPay);
+		const bPrice = new BigNumber(b.totalTokenPay);
+		return bPrice.comparedTo(aPrice);
+	})[0]?.totalTokenPay;
+
+	const [range, setRange] = useState([0, 100]);
+
+	useEffect(() => {
+		if (maxPrice) {
+			setRange([0, maxPrice]);
+		}
+	}, [maxPrice]);
+
 	const [selectedDateRange, setSelectedDateRange] = useState([
 		{
 			startDate: new Date(),
@@ -152,32 +230,24 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 		},
 	]);
 
+	useEffect(() => {
+		if (selectedDateRange[0].endDate) {
+			const startDate = Date.parse(selectedDateRange[0].startDate) / 1000;
+			const endDate = Date.parse(selectedDateRange[0].endDate) / 1000;
+			console.log('selectedDateRange', startDate, endDate);
+			applySearch.dateFilter([startDate, endDate]);
+		}
+	}, [selectedDateRange]);
+
 	const totalBiobitSelectOptions = [
-		{ value: 'All', label: 'All' },
+		{ value: 'Default', label: 'Default' },
 		{ value: 'LowToHigh', label: 'Low to High' },
 		{ value: 'HighToLow', label: 'High to Low' },
-	];
-
-	const nearFinishOptions = [
-		{ value: 'All', label: 'All' },
-		{ value: 'LowToHigh', label: 'Low to High' },
-		{ value: 'HighToLow', label: 'High to Low' },
-	];
-
-	const fulfilledOptions = [
-		{ value: 'All', label: 'All' },
-		{ value: 'Not Fulfiled', label: 'Not Fulfilled' },
-		{ value: 'Fulfiled', label: 'Fulfiled' },
-	];
-
-	const trustableOptions = [
-		{ value: 'All', label: 'All' },
-		{ value: 'Not Fulfiled', label: 'Not Fulfilled' },
-		{ value: 'Fulfiled', label: 'Fulfiled' },
 	];
 
 	const handleChangeRange = (event, newValue) => {
 		setRange(newValue);
+		applySearch.bbitFilter(range);
 	};
 
 	const toggleModals = () => {
@@ -185,12 +255,11 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 		setDatePickerModalShow(!datePickerModalShow);
 	};
 
-	
 	return (
 		<Wrapper hasTopMargin={true}>
 			<Label>
 				<Heading as="h4" variant="heading4">
-					{label}
+					Search
 				</Heading>
 			</Label>
 			<SearchSection>
@@ -198,83 +267,108 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 					<SearchIcon variant="big" src={searchIcon} />
 					<Input
 						ref={ref}
-						{...rest}
+						type="text"
 						placeholder="Start typing ..."
-						value={searchValue}
+						value={searchResults.params.q}
 						onChange={(e) => {
-							setSearchValue(e.target.value);
-
-							// const typeDelay = setTimeout(async () => {
-							// 	console.log(searchValue);
-							// 	await fetchMore({
-							// 		variables: {
-							// 			title: 'memory',
-							// 		},
-							// 	});
-							// }, 1000);
-
-							// return () => clearTimeout(typeDelay);
+							applySearch.q(e.target.value);
 						}}
 					/>
-					{searchValue !== '' && <SearchClear variant="big" src={searchClose} onClick={() => setSearchValue('')} />}
+					{searchResults.params.q !== '' && (
+						<SearchClear variant="big" src={searchClose} onClick={() => applySearch.q('')} />
+					)}
 				</InputWrapper>
 			</SearchSection>
 
 			<FilterWrapper>
-				<FilterButton as="div" color="filterText" mt={3} onClick={() => setModalShow(!modalShow)}>
+				<FilterButton as="div" color="filterText" mt={3} mr={2} onClick={() => setModalShow(!modalShow)}>
 					<ThemeIcon variant="big" src={filterIcon} />
 					Filters and Sort
 				</FilterButton>
 
-				{selectedTotalBiobitOption.value !== 'All' && (
-					<FilterElement as="div" color="filterText" mt={3} ml={2}>
+				{selectedTotalBiobitOption.value !== 'Default' && (
+					<FilterElement as="div" color="filterText" mt={3} mr={2}>
 						BBIT {selectedTotalBiobitOption.label}
 						<ThemeIcon
 							variant="big"
 							mr={0}
 							ml={2}
 							src={filterClose}
-							onClick={() => setSelectedTotalBiobitOption({ value: 'All', label: 'All' })}
+							onClick={() => {
+								setSelectedTotalBiobitOption({ value: 'Default', label: 'Default' });
+								applySearch.order('requestID', 'desc');
+							}}
 						/>
 					</FilterElement>
 				)}
 
-				{(range[0] !== 0 || range[1] !== 0) && (
-					<FilterElement as="div" color="filterText" mt={3} ml={2}>
+				{(range[0] !== 0 || range[1] !== maxPrice) && (
+					<FilterElement as="div" color="filterText" mt={3} mr={2}>
 						BBIT {range[0]} - {range[1]}
-						<ThemeIcon variant="big" mr={0} ml={2} src={filterClose} onClick={() => setRange([0, 0])} />
-					</FilterElement>
-				)}
-
-				{selectedFulfilledOption.value !== 'All' && (
-					<FilterElement as="div" color="filterText" mt={3} ml={2}>
-						{selectedFulfilledOption.value}
 						<ThemeIcon
 							variant="big"
 							mr={0}
 							ml={2}
 							src={filterClose}
-							onClick={() => setSelectedFulfilledOption({ value: 'All', label: 'All' })}
+							onClick={() => {
+								setRange([0, maxPrice]);
+								applySearch.bbitFilter([0, maxPrice]);
+							}}
 						/>
 					</FilterElement>
 				)}
 
-				{selectedTrustableOption.value !== 'All' && (
-					<FilterElement as="div" color="filterText" mt={3} ml={2}>
-						{selectedTrustableOption.value}
+				{!isNaN(Date.parse(selectedDateRange[0].endDate)) && (
+					<FilterElement as="div" color="filterText" mt={3} mr={2}>
+						{timeConverter(Date.parse(selectedDateRange[0].startDate))} - {timeConverter(Date.parse(selectedDateRange[0].endDate))}
 						<ThemeIcon
 							variant="big"
 							mr={0}
 							ml={2}
 							src={filterClose}
-							onClick={() => setSelectedTrustableOption({ value: 'All', label: 'All' })}
+							onClick={() => {
+								setSelectedDateRange([
+									{
+										startDate: new Date(),
+										endDate: null,
+										key: 'selection',
+									},
+								]);
+								applySearch.dateFilter([]);
+							}}
 						/>
+					</FilterElement>
+				)}
+
+				{searchResults.params.mostConfirmed && (
+					<FilterElement as="div" color="filterText" mt={3} mr={2}>
+						Most Confirmed
+						<ThemeIcon
+							variant="big"
+							mr={0}
+							ml={2}
+							src={filterClose}
+							onClick={(e) => applySearch.mostConfirmed(false)}
+						/>
+					</FilterElement>
+				)}
+				{searchResults.params.nearFinish && (
+					<FilterElement as="div" color="filterText" mt={3} mr={2}>
+						Near Finish
+						<ThemeIcon variant="big" mr={0} ml={2} src={filterClose} onClick={() => applySearch.nearFinish(false)} />
+					</FilterElement>
+				)}
+
+				{searchResults.params.fulfilled && (
+					<FilterElement as="div" color="filterText" mt={3} ml={2}>
+						Fulfiled
+						<ThemeIcon variant="big" mr={0} ml={2} src={filterClose} onClick={(e) => applySearch.fulfilled(false)} />
 					</FilterElement>
 				)}
 			</FilterWrapper>
 
 			<Modal isOpen={modalShow} toggle={() => setModalShow(false)} backdropClassName="custom-backdrop">
-				<ModalHeader
+				<CustomModalHeader
 					close={
 						<CloseIconWrapper>
 							<ThemeIcon src={close} variant="normal" mr={0} onClick={() => setModalShow(false)} />
@@ -282,14 +376,14 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 					}
 				>
 					<HeaderInner>
-						<BodyText variant="extraSmall" m={0} className="cursor-pointer">
-							Clear All
-						</BodyText>
 						<BodyText variant="big" fontWeight="semiBold" m={0}>
 							Filters and Sort
 						</BodyText>
+						<BodyText variant="extraSmall" m={0} className="cursor-pointer">
+							Clear All
+						</BodyText>
 					</HeaderInner>
-				</ModalHeader>
+				</CustomModalHeader>
 				<ModalBody>
 					<FormGroup>
 						<BodyText variant="small" fontWeight="semiBold" m={0}>
@@ -299,6 +393,13 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 							classNamePrefix="select"
 							options={totalBiobitSelectOptions}
 							onChange={(e) => {
+								if (e.value === 'HighToLow') {
+									applySearch.order('bbit', 'desc');
+								} else if (e.value === 'LowToHigh') {
+									applySearch.order('bbit', 'asc');
+								} else if (e.value === 'Default') {
+									applySearch.order('requestID', 'desc');
+								}
 								setSelectedTotalBiobitOption(e);
 							}}
 							onKeyDown={(e) => {
@@ -315,11 +416,13 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 							Total BBIT Range
 						</BodyText>
 						<SliderWrapper>
-							<Slider
+							<CustomSlider
 								value={range}
 								onChange={handleChangeRange}
 								valueLabelDisplay="auto"
 								aria-labelledby="continuous-slider"
+								min={0}
+								max={maxPrice}
 							/>
 							<Row>
 								<Col className="p-1">
@@ -329,49 +432,11 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 								</Col>
 								<Col className="pt-1">
 									<BodyText variant="extraSmall" className="d-flex justify-content-end">
-										To 1000
+										To {maxPrice}
 									</BodyText>
 								</Col>
 							</Row>
 						</SliderWrapper>
-					</FormGroup>
-
-					<FormGroup>
-						<BodyText variant="small" fontWeight="semiBold" m={0}>
-							Near finish
-						</BodyText>
-						<Select
-							classNamePrefix="select"
-							options={nearFinishOptions}
-							onChange={(e) => {
-								setSelectedNearFinishOption(e);
-							}}
-							onKeyDown={(e) => {
-								if (e.key === 'Enter') {
-									setSelectedNearFinishOption({ value: e.target.value, label: e.target.value });
-								}
-							}}
-							value={selectedNearFinishOption}
-						/>
-					</FormGroup>
-
-					<FormGroup>
-						<BodyText variant="small" fontWeight="semiBold" m={0}>
-							Fulfilled
-						</BodyText>
-						<Select
-							classNamePrefix="select"
-							options={fulfilledOptions}
-							onChange={(e) => {
-								setSelectedFulfilledOption(e);
-							}}
-							onKeyDown={(e) => {
-								if (e.key === 'Enter') {
-									setSelectedFulfilledOption({ value: e.target.value, label: e.target.value });
-								}
-							}}
-							value={selectedFulfilledOption}
-						/>
 					</FormGroup>
 
 					<DatePickerField
@@ -381,22 +446,33 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 						}}
 					/>
 
-					<FormGroup>
+					<FormGroup className="d-flex flex-row w-100 justify-content-between align-items-center">
 						<BodyText variant="small" fontWeight="semiBold" m={0}>
-							Trustable
+							Near finish
 						</BodyText>
-						<Select
-							classNamePrefix="select"
-							options={trustableOptions}
-							onChange={(e) => {
-								setSelectedTrustableOption(e);
-							}}
-							onKeyDown={(e) => {
-								if (e.key === 'Enter') {
-									setSelectedTrustableOption({ value: e.target.value, label: e.target.value });
-								}
-							}}
-							value={selectedTrustableOption}
+						<CustomSwitch
+							checked={searchResults.params.nearFinish}
+							onChange={(e) => applySearch.nearFinish(e.target.checked)}
+						/>
+					</FormGroup>
+
+					<FormGroup className="d-flex flex-row w-100 justify-content-between align-items-center">
+						<BodyText variant="small" fontWeight="semiBold" m={0}>
+							Most Confirmed
+						</BodyText>
+						<CustomSwitch
+							checked={searchResults.params.mostConfirmed}
+							onChange={(e) => applySearch.mostConfirmed(e.target.checked)}
+						/>
+					</FormGroup>
+
+					<FormGroup className="d-flex flex-row w-100 justify-content-between align-items-center">
+						<BodyText variant="small" fontWeight="semiBold" m={0}>
+							Fulfiled
+						</BodyText>
+						<CustomSwitch
+							checked={searchResults.params.fulfilled}
+							onChange={(e) => applySearch.fulfilled(e.target.checked)}
 						/>
 					</FormGroup>
 
@@ -413,7 +489,7 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 			</Modal>
 
 			<CalendarModal isOpen={datePickerModalShow} toggle={toggleModals} backdropClassName="custom-backdrop">
-				<ModalHeader
+				<CustomModalHeader
 					close={
 						<CloseIconWrapper>
 							<ThemeIcon src={close} variant="normal" mr={0} onClick={toggleModals} />
@@ -421,12 +497,11 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 					}
 				>
 					<DateHeader>
-						<BodyText variant="extraSmall" m={0}></BodyText>
 						<BodyText variant="big" fontWeight="semiBold" m={0}>
 							Calendar
 						</BodyText>
 					</DateHeader>
-				</ModalHeader>
+				</CustomModalHeader>
 
 				<ModalBody>
 					<DateRange
@@ -435,6 +510,7 @@ const SearchInput = forwardRef(({ label, ...rest }, ref) => {
 						moveRangeOnFirstSelection={false}
 						ranges={selectedDateRange}
 						width={100}
+						className="custom-calendar"
 					/>
 
 					<Row class="d-flex align-items-center justify-content-center">

@@ -102,15 +102,12 @@ const useStyles = makeStyles({
 	},
 });
 
-const App = ({ requests, isLoading, appState, props, PAGE_SIZE }) => {
+const App = ({ requests, isLoading, appState, currentPage, setCurrentPage, props, PAGE_SIZE }) => {
 	const classes = useStyles(props);
-	const [currentPage, setCurrentPage] = useState(1);
 	const currentTableData = useMemo(() => {
 		const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
 		const lastPageIndex = firstPageIndex + PAGE_SIZE;
-		return Object.values(requests)
-			.sort((a, b) => +b.requestID - +a.requestID)
-			.slice(firstPageIndex, lastPageIndex);
+		return Object.values(requests).slice(firstPageIndex, lastPageIndex);
 	}, [currentPage, PAGE_SIZE, requests]);
 
 	return (

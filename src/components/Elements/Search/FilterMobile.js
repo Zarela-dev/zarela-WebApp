@@ -8,6 +8,7 @@ import filterIcon from './../../../assets/icons/filter-white.svg';
 import { Modal, ModalHeader, ModalBody, FormGroup, Row, Col } from 'reactstrap';
 import searchIcon from './../../../assets/icons/search.svg';
 import searchClose from './../../../assets/icons/search-clear-icon.svg';
+import backIcon from './../../../assets/icons/back.svg';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Box } from 'rebass/styled-components';
 import './modalStyle.css';
@@ -19,6 +20,7 @@ import 'react-date-range/dist/theme/default.css';
 import DatePickerField from './DatePickerField';
 import { mainContext } from '../../../state';
 import { actionTypes } from '../../../state';
+import Switch from '@mui/material/Switch';
 
 const MobileSearchAndFilterWrapper = styled.div`
 	position: fixed;
@@ -98,6 +100,7 @@ const SearchSection = styled(Box)`
 
 const HeaderInner = styled.div`
 	display: flex;
+	flex-direction: row-reverse;
 	width: 200px;
 	justify-content: space-between;
 	align-items: center;
@@ -105,7 +108,7 @@ const HeaderInner = styled.div`
 
 const DateHeader = styled.div`
 	display: flex;
-	width: 50vw;
+	width: 52vw;
 	justify-content: space-between;
 	align-items: center;
 `;
@@ -124,15 +127,66 @@ const CalendarModal = styled(Modal)`
 	width: 95%;
 `;
 
+const CustomModalHeader = styled(ModalHeader)`
+	flex-direction: row-reverse;
+`;
+
+const CustomSlider = styled(Slider)({
+	width: 300,
+	color: '#422468',
+	'& .MuiSlider-track': {
+		color: '#422468',
+		height: 8,
+	},
+	'& .MuiSlider-rail': {
+		height: 8,
+		color: '#E9E9E9',
+		opacity: 1,
+	},
+	'& .MuiSlider-valueLabel': {
+		color: '#422468',
+		left: 'calc(-50% - -4px)',
+	},
+	'& .MuiSlider-thumb': {
+		color: '#fff',
+		width: 24,
+		height: 24,
+		marginTop: '-8px',
+		border: '1px solid #C4C4C4',
+		[`&:hover, &.Mui-focusVisible`]: {
+			boxShadow: '0px 0px 0px 8px var(--box-shadow)',
+		},
+		[`&.Mui-active`]: {
+			boxShadow: '0px 0px 0px 14px var(--box-shadow)',
+			color: 'red',
+			backgroundColor: 'blue',
+		},
+	},
+});
+
+const CustomSwitch = styled(Switch)({
+	'& .MuiSwitch-switchBase': {
+		color: '#fff',
+	},
+	'& .Mui-checked': {
+		'& .MuiSwitch-thumb': {
+			backgroundColor: '#6200EE',
+		},
+	},
+	'& .Mui-checked + .MuiSwitch-track': {
+		backgroundColor: '#BB86FC !important',
+	},
+	'& .MuiSwitch-track': {
+		background: '#212121',
+	},
+});
+
 const FilterMobile = forwardRef(({ label, ...rest }, ref) => {
 	const { appState, dispatch } = useContext(mainContext);
 	const [searchValue, setSearchValue] = useState('');
 	const [modalShow, setModalShow] = useState(false);
 	const [datePickerModalShow, setDatePickerModalShow] = useState(false);
 	const [selectedTotalBiobitOption, setSelectedTotalBiobitOption] = useState({ value: 'All', label: 'All' });
-	const [selectedNearFinishOption, setSelectedNearFinishOption] = useState({ value: 'All', label: 'All' });
-	const [selectedFulfilledOption, setSelectedFulfilledOption] = useState({ value: 'All', label: 'All' });
-	const [selectedTrustableOption, setSelectedTrustableOption] = useState({ value: 'All', label: 'All' });
 	const [range, setRange] = useState([0, 0]);
 	const [selectedDateRange, setSelectedDateRange] = useState([
 		{
@@ -142,28 +196,14 @@ const FilterMobile = forwardRef(({ label, ...rest }, ref) => {
 		},
 	]);
 
+	const [isNearFinish, setIsNearFinish] = useState(true);
+	const [isMostConfirmed, setIsMostConfirmed] = useState(false);
+	const [isFulfiled, setIsFulfiled] = useState(true);
+
 	const totalBiobitSelectOptions = [
 		{ value: 'All', label: 'All' },
 		{ value: 'LowToHigh', label: 'Low to High' },
 		{ value: 'HighToLow', label: 'High to Low' },
-	];
-
-	const nearFinishOptions = [
-		{ value: 'All', label: 'All' },
-		{ value: 'LowToHigh', label: 'Low to High' },
-		{ value: 'HighToLow', label: 'High to Low' },
-	];
-
-	const fulfilledOptions = [
-		{ value: 'All', label: 'All' },
-		{ value: 'Not Fulfiled', label: 'Not Fulfilled' },
-		{ value: 'Fulfiled', label: 'Fulfiled' },
-	];
-
-	const trustableOptions = [
-		{ value: 'All', label: 'All' },
-		{ value: 'Not Fulfiled', label: 'Not Fulfilled' },
-		{ value: 'Fulfiled', label: 'Fulfiled' },
 	];
 
 	const handleChangeRange = (event, newValue) => {
@@ -182,7 +222,7 @@ const FilterMobile = forwardRef(({ label, ...rest }, ref) => {
 			</MobileSearchAndFilterWrapper>
 
 			<Modal isOpen={appState.isMobileSearchModalShow} backdropClassName="custom-backdrop" className="search-modal">
-				<ModalHeader
+				<CustomModalHeader
 					close={
 						<CloseIconWrapper>
 							<ThemeIcon
@@ -205,7 +245,7 @@ const FilterMobile = forwardRef(({ label, ...rest }, ref) => {
 							Search
 						</BodyText>
 					</DateHeader>
-				</ModalHeader>
+				</CustomModalHeader>
 				<ModalBody>
 					<SearchSection>
 						<InputWrapper>
@@ -237,7 +277,7 @@ const FilterMobile = forwardRef(({ label, ...rest }, ref) => {
 			</Modal>
 
 			<Modal isOpen={modalShow} toggle={() => setModalShow(false)} backdropClassName="custom-backdrop">
-				<ModalHeader
+				<CustomModalHeader
 					close={
 						<CloseIconWrapper>
 							<ThemeIcon src={close} variant="normal" mr={0} onClick={() => setModalShow(false)} />
@@ -252,7 +292,7 @@ const FilterMobile = forwardRef(({ label, ...rest }, ref) => {
 							Filters and Sort
 						</BodyText>
 					</HeaderInner>
-				</ModalHeader>
+				</CustomModalHeader>
 				<ModalBody>
 					<FormGroup>
 						<BodyText variant="small" fontWeight="semiBold" m={0}>
@@ -278,11 +318,13 @@ const FilterMobile = forwardRef(({ label, ...rest }, ref) => {
 							Total BBIT Range
 						</BodyText>
 						<SliderWrapper>
-							<Slider
+							<CustomSlider
 								value={range}
 								onChange={handleChangeRange}
 								valueLabelDisplay="auto"
 								aria-labelledby="continuous-slider"
+								min={0}
+								max={1000}
 							/>
 							<Row>
 								<Col className="p-1">
@@ -299,44 +341,6 @@ const FilterMobile = forwardRef(({ label, ...rest }, ref) => {
 						</SliderWrapper>
 					</FormGroup>
 
-					<FormGroup>
-						<BodyText variant="small" fontWeight="semiBold" m={0}>
-							Near finish
-						</BodyText>
-						<Select
-							classNamePrefix="select"
-							options={nearFinishOptions}
-							onChange={(e) => {
-								setSelectedNearFinishOption(e);
-							}}
-							onKeyDown={(e) => {
-								if (e.key === 'Enter') {
-									setSelectedNearFinishOption({ value: e.target.value, label: e.target.value });
-								}
-							}}
-							value={selectedNearFinishOption}
-						/>
-					</FormGroup>
-
-					<FormGroup>
-						<BodyText variant="small" fontWeight="semiBold" m={0}>
-							Fulfilled
-						</BodyText>
-						<Select
-							classNamePrefix="select"
-							options={fulfilledOptions}
-							onChange={(e) => {
-								setSelectedFulfilledOption(e);
-							}}
-							onKeyDown={(e) => {
-								if (e.key === 'Enter') {
-									setSelectedFulfilledOption({ value: e.target.value, label: e.target.value });
-								}
-							}}
-							value={selectedFulfilledOption}
-						/>
-					</FormGroup>
-
 					<DatePickerField
 						{...{
 							toggleModals,
@@ -345,23 +349,25 @@ const FilterMobile = forwardRef(({ label, ...rest }, ref) => {
 						}}
 					/>
 
-					<FormGroup>
+					<FormGroup className="d-flex flex-row w-100 justify-content-between align-items-center">
 						<BodyText variant="small" fontWeight="semiBold" m={0}>
-							Trustable
+							Near finish
 						</BodyText>
-						<Select
-							classNamePrefix="select"
-							options={trustableOptions}
-							onChange={(e) => {
-								setSelectedTrustableOption(e);
-							}}
-							onKeyDown={(e) => {
-								if (e.key === 'Enter') {
-									setSelectedTrustableOption({ value: e.target.value, label: e.target.value });
-								}
-							}}
-							value={selectedTrustableOption}
-						/>
+						<CustomSwitch checked={isNearFinish} onChange={() => setIsNearFinish(!isNearFinish)} />
+					</FormGroup>
+
+					<FormGroup className="d-flex flex-row w-100 justify-content-between align-items-center">
+						<BodyText variant="small" fontWeight="semiBold" m={0}>
+							Most Confirmed
+						</BodyText>
+						<CustomSwitch checked={isMostConfirmed} onChange={() => setIsMostConfirmed(!isMostConfirmed)} />
+					</FormGroup>
+
+					<FormGroup className="d-flex flex-row w-100 justify-content-between align-items-center">
+						<BodyText variant="small" fontWeight="semiBold" m={0}>
+							Fulfiled
+						</BodyText>
+						<CustomSwitch checked={isFulfiled} onChange={() => setIsFulfiled(!isFulfiled)} />
 					</FormGroup>
 
 					<ThemeButton
@@ -377,20 +383,19 @@ const FilterMobile = forwardRef(({ label, ...rest }, ref) => {
 			</Modal>
 
 			<CalendarModal isOpen={datePickerModalShow} toggle={toggleModals} backdropClassName="custom-backdrop">
-				<ModalHeader
+				<CustomModalHeader
 					close={
 						<CloseIconWrapper>
-							<ThemeIcon src={close} variant="normal" mr={0} onClick={toggleModals} />
+							<ThemeIcon src={backIcon} variant="normal" mr={0} onClick={toggleModals} />
 						</CloseIconWrapper>
 					}
 				>
 					<DateHeader>
-						<BodyText variant="extraSmall" m={0}></BodyText>
 						<BodyText variant="big" fontWeight="semiBold" m={0}>
 							Calendar
 						</BodyText>
 					</DateHeader>
-				</ModalHeader>
+				</CustomModalHeader>
 
 				<ModalBody>
 					<div className="customDatePickerWidth">

@@ -37,3 +37,14 @@ iframe {
 .search-modal .modal-content {
 	height: 95vh;
 }
+
+.custom-calendar .rdrStartEdge,
+.rdrInRange,
+.rdrEndEdge,
+.rdrStartEdge {
+	color: #422468 !important;
+}
+
+.custom-calendar .rdrDayToday .rdrDayNumber > span::after {
+	background-color: #422468 !important;
+}

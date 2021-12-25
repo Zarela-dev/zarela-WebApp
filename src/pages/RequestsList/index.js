@@ -1,25 +1,206 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useDeepCompareEffect } from 'use-deep-compare';
 import { useWeb3React } from '@web3-react/core';
 import { mainContext } from '../../state';
+import { convertToBiobit } from '../../utils';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
 import Guide from './../../components/Guide/Guide';
 import { RequestDetailsDesktopSteps, RequestDetailsMobileSteps } from '../../guides';
-import { convertToBiobit } from '../../utils';
-// import { useQuery, gql } from '@apollo/client';
-// import { searchClient } from '../../apolloClient';
+import BigNumber from 'bignumber.js';
+import SearchBox from '../../components/searchAndFilter/SearchBox';
 
 const RequestsList = () => {
 	const { appState } = useContext(mainContext);
 	const { account } = useWeb3React();
-	const [dailyContributors, setDailyContributors] = useState(0);
-
 	const PAGE_SIZE = 5;
 	const [requests, setRequests] = useState({});
 	const [requestsCount, setRequestsCount] = useState(0);
+	const [dailyContributors, setDailyContributors] = useState(0);
 	const [isLoading, setLoading] = useState(true);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [searchResults, setSearchResults] = useState({
+		params: {
+			q: '',
+			orderBy: 'requestID',
+			orderDirection: 'desc',
+			bbitFilter: [],
+			dateFilter: [],
+			nearFinish: false,
+			fulfilled: false,
+			mostConfirmed: false,
+		},
+		data: [],
+	});
 
-	// const [currentPage, setCurrentPage] = useState(0);
+	const applySearch = {
+		order: function (orderBy, orderDirection) {
+			setSearchResults((config) => ({
+				...config,
+				params: {
+					...config.params,
+					orderBy,
+					orderDirection,
+				},
+			}));
+		},
+		bbitFilter: function (bbitFilter) {
+			setSearchResults((config) => ({
+				...config,
+				params: {
+					...config.params,
+					bbitFilter,
+				},
+			}));
+		},
+		dateFilter: function (dateFilter) {
+			setSearchResults((config) => ({
+				...config,
+				params: {
+					...config.params,
+					dateFilter,
+				},
+			}));
+		},
+		nearFinish: function (nearFinish) {
+			setSearchResults((config) => ({
+				...config,
+				params: {
+					...config.params,
+					nearFinish,
+				},
+			}));
+		},
+		fulfilled: function (fulfilled) {
+			setSearchResults((config) => ({
+				...config,
+				params: {
+					...config.params,
+					fulfilled,
+				},
+			}));
+		},
+		mostConfirmed: function (mostConfirmed) {
+			setSearchResults((config) => ({
+				...config,
+				params: {
+					...config.params,
+					mostConfirmed,
+				},
+			}));
+		},
+		q: function (q) {
+			setSearchResults((config) => ({
+				...config,
+				params: {
+					...config.params,
+					q,
+				},
+			}));
+		},
+		clear: function () {
+			setSearchResults(() => ({
+				params: {
+					q: '',
+					orderBy: 'requestID',
+					orderDirection: 'desc',
+					bbitFilter: [],
+					dateFilter: [],
+					nearFinish: false,
+					fulfilled: false,
+					mostConfirmed: false,
+				},
+				data: [],
+			}));
+		},
+	};
+
+	// remove before moving to production
+	window.applySearch = applySearch;
+
+	useDeepCompareEffect(() => {
+		try {
+			const { q, orderBy, orderDirection, bbitFilter, dateFilter, nearFinish, fulfilled, mostConfirmed } =
+				searchResults.params;
+			let results = Object.values(requests);
+
+			if (q) {
+				if (q !== '' && q.length >= 3) {
+					results = results.filter((request) => {
+						return request.title.toLowerCase().includes(q.toLowerCase());
+					});
+				} else {
+					throw Error('Search query must be at least 3 characters long');
+				}
+			}
+			if (bbitFilter.length === 2) {
+				if (bbitFilter[0] >= 0 && bbitFilter[1] >= 0) {
+					results = results.filter((request) => {
+						return (
+							new BigNumber(request.totalTokenPay).gte(bbitFilter[0]) &&
+							new BigNumber(request.totalTokenPay).lte(bbitFilter[1])
+						);
+					});
+				} else {
+					throw Error('Invalid BBIT filter');
+				}
+			}
+			if (dateFilter.length === 2) {
+				if (dateFilter[0] >= 0 && dateFilter[1] >= 0) {
+					results = results.filter((request) => {
+						return +request.timestamp >= dateFilter[0] && +request.timestamp <= dateFilter[1];
+					});
+				} else {
+					throw Error('Invalid date filter');
+				}
+			}
+			if (nearFinish) {
+				results = results.filter((request) => {
+					return Math.floor((+request.totalContributed / +request.totalContributors) * 100) >= 50;
+				});
+			}
+			if (fulfilled) {
+				results = results.filter((request) => {
+					if (+request.totalContributors === 0) return false;
+					return +request.totalContributorsRemaining === 0;
+				});
+			}
+			if (mostConfirmed) {
+				results = results.filter((request) => {
+					return Math.floor((+request.totalContributed / +request.totalContributedCount) * 100) >= 70;
+				});
+			}
+			if (orderBy) {
+				results = results.sort((a, b) => {
+					if (orderBy === 'bbit') {
+						if (orderDirection === 'asc') {
+							return a.totalTokenPay - b.totalTokenPay;
+						} else {
+							return b.totalTokenPay - a.totalTokenPay;
+						}
+					} else if (orderBy === 'requestID') {
+						if (orderDirection === 'asc') {
+							return a.requestID - b.requestID;
+						} else {
+							return b.requestID - a.requestID;
+						}
+					} else {
+						return 0;
+					}
+				});
+			}
+			setSearchResults((config) => {
+				return {
+					...config,
+					data: results,
+				};
+			});
+
+			setCurrentPage(1);
+		} catch (error) {
+			console.error(error);
+		}
+	}, [searchResults, isLoading]);
 
 	useEffect(() => {
 		if (appState.contract !== null) {
@@ -48,12 +229,14 @@ const RequestsList = () => {
 										requesterAddress: result[2],
 										angelTokenPay: convertToBiobit(result[3]),
 										laboratoryTokenPay: convertToBiobit(result[4]),
+										totalTokenPay: convertToBiobit(new BigNumber(result[3]).plus(result[4])),
 										totalContributors: result[5], // total contributors required
 										totalContributed: +result[5] - +result[8],
+										totalContributorsRemaining: result[8], // total contributors remaining (able to contribute)
 										whitePaper: result[6],
 										timestamp: result[10],
 										categories,
-										totalContributedCount: result[9],
+										totalContributedCount: result[9], // no of received signals
 									};
 									setRequests((requests) => ({
 										...requests,
@@ -72,167 +255,6 @@ const RequestsList = () => {
 		}
 	}, [appState.contract, requestsCount]);
 
-	// const { error, isLoading, data, fetchMore } = useQuery(
-	// 	gql`
-	// 		query ($skip: Int, $first: Int) {
-	// 			requests(first: $first, skip: $skip) {
-	// 				id
-	// 				contributions {
-	// 					id
-	// 				}
-	// 				confirmations {
-	// 					id
-	// 				}
-	// 				details {
-	// 					id
-	// 					requestID
-	// 					title
-	// 					description
-	// 					requesterAddress
-	// 					angelTokenPay
-	// 					laboratoryTokenPay
-	// 					totalContributors
-	// 					totalContributed
-	// 					zpaper
-	// 					timestamp
-	// 					categories
-	// 					totalContributedCount
-	// 				}
-	// 			}
-	// 		}
-	// 	`,
-	// 	{
-	// 		pollInterval: INTERVAL,
-	// 		client: searchClient,
-	// 		variables: {
-	// 			first: PER_PAGE,
-	// 			skip: currentPage,
-	// 		},
-	// 	}
-	// );
-
-	// useEffect(() => {
-	// 	if (error) {
-	// 		console.log('error', error);
-	// 	}
-	// 	if (data !== undefined) {
-	// 		const response = data.requests;
-	// 		console.log('response', response);
-	// 		let template = {};
-
-	// 		try {
-	// 			response.forEach((item) => {
-	// 				template[item.id] = {
-	// 					requestID: item.id,
-	// 					title: item.details.title,
-	// 					description: item.details.description,
-	// 					requesterAddress: item.details.requesterAddress,
-	// 					angelTokenPay: convertToBiobit(item.details.angelTokenPay),
-	// 					laboratoryTokenPay: convertToBiobit(item.details.laboratoryTokenPay),
-	// 					totalContributors: item.details.totalContributors,
-	// 					totalContributed: item.confirmations.length,
-	// 					whitePaper: item.details.zpaper,
-	// 					timestamp: item.details.timestamp,
-	// 					categories: item.details.categories,
-	// 					totalContributedCount: item.contributions.length,
-	// 				};
-	// 			});
-
-	// 			console.log('template', template);
-	// 			setRequests(template);
-	// 		} catch (err) {
-	// 			console.log('err', err);
-	// 		}
-	// 	}
-	// }, [data]);
-
-	// const { error, isLoading, data, fetchMore } = useQuery(
-	// 	gql`
-	// 		query ($skip: Int, $first: Int) {
-	// 			requestDetails(first: $first, skip: $skip, where: { title: "test" }) {
-	// 				requestID {
-	// 					id
-	// 				}
-	// 			}
-	// 		}
-	// 	`,
-	// 	{
-	// 		pollInterval: INTERVAL,
-	// 		client: searchClient,
-	// 		variables: {
-	// 			first: PER_PAGE,
-	// 			skip: currentPage,
-	// 		},
-	// 	}
-	// );
-
-	// const { RequestsError, requestsIsLoading, requestsData, requestsFetchMore } = useQuery(
-	// 	gql`
-	// 		query ($skip: Int, $first: Int, $id: Int) {
-	// 			search(text: $id) {
-	// 				id
-	// 			}
-	// 		}
-	// 	`,
-	// 	{
-	// 		pollInterval: INTERVAL,
-	// 		client: searchClient,
-	// 		variables: {
-	// 			first: PER_PAGE,
-	// 			skip: currentPage,
-	// 		},
-	// 	}
-	// );
-
-	// useEffect(() => {
-	// 	if (error) {
-	// 		console.log('error', error);
-	// 	}
-	// 	if (data !== undefined) {
-	// 		const response = data.requestDetails;
-	// 		console.log('response', response);
-	// 		let template = {};
-
-	// 		const selectedIds = response.map((item) => item.requestID.id).join(' | ');
-
-	// 		console.log('selectedIds', typeof(selectedIds) , selectedIds, `"${selectedIds}"`);
-
-	// 		requestsFetchMore({
-	// 			variables: {
-	// 				id: `"${selectedIds}"`,
-	// 			},
-	// 		});
-
-	// 		try {
-	// 			if (requestsData !== undefined) {
-	// 				console.log('requests data ', requestsData);
-	// 			}
-	// 		} catch (err) {
-	// 			console.log('err', err);
-	// 		}
-
-	// try {
-	// 	response.forEach((item) => {
-	// 		console.log('item', item.requestID.id);
-	// 		requestsFetchMore({
-	// 			variables: {
-	// 				id: item.requestID.id,
-	// 			},
-	// 		});
-	// 	});
-	// 	// setRequests(template);
-
-	// 	console.log('request item', requestsData);
-	// } catch (err) {
-	// 	console.log('err', err);
-	// }
-	// 	}
-	// }, [data, requestsData]);
-
-	// useEffect(() => {
-	// 	console.log('templates', template);
-	// }, [template]);
-
 	useEffect(() => {
 		if (appState.contract) {
 			appState.contract.methods.todayContributionsCount().call((error, result) => {
@@ -245,16 +267,29 @@ const RequestsList = () => {
 	return (
 		<Guide steps={appState.isMobile ? RequestDetailsMobileSteps : RequestDetailsDesktopSteps} isLoading={isLoading}>
 			{appState.isMobile ? (
-				<Mobile {...{ requests, isLoading, appState, PAGE_SIZE }} />
+				<Mobile
+					{...{
+						requests,
+						isLoading,
+						appState,
+						PAGE_SIZE,
+						currentPage,
+						setCurrentPage,
+						searchBox: <SearchBox {...{ requests, applySearch, searchResults }} />,
+					}}
+				/>
 			) : (
 				<Desktop
 					{...{
-						requests,
+						requests: searchResults.data,
 						appState,
 						account,
 						dailyContributors,
 						PAGE_SIZE,
 						isLoading,
+						currentPage,
+						setCurrentPage,
+						searchBox: <SearchBox {...{ requests, applySearch, searchResults }} />,
 					}}
 				/>
 			)}

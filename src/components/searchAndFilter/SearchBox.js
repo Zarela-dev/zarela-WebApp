@@ -5,32 +5,15 @@ import FilterMobile from '../Elements/Search/FilterMobile';
 
 import SearchInput from '../Elements/Search/SearchInput';
 
-const SearchBox = () => {
-	const [search, setSearch] = useState();
+const SearchBox = ({ requests, applySearch, searchResults }) => {
 	const { appState, dispatch } = useContext(mainContext);
 
 	if (appState.isMobile) {
-		return (
-			<FilterMobile
-				label="Search"
-				type="text"
-				value={search}
-				onChange={(e) => {
-					setSearch(e.target.value);
-				}}
-			/>
-		);
+		return <FilterMobile label="Search" type="text" />;
 	} else {
 		return (
 			<RequestCardWrapper>
-				<SearchInput
-					label="Search"
-					type="text"
-					value={search}
-					onChange={(e) => {
-						setSearch(e.target.value);
-					}}
-				/>
+				<SearchInput {...{ requests, applySearch, searchResults }} />
 			</RequestCardWrapper>
 		);
 	}
