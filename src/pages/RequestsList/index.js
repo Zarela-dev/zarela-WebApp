@@ -163,7 +163,8 @@ const RequestsList = () => {
 
 			if (nearFinish) {
 				results = results.filter((request) => {
-					return Math.floor((+request.totalContributed / +request.totalContributors) * 100) >= 50;
+					if (+request.totalContributorsRemaining === 0) return false;
+					return Math.floor((+request.totalContributed / +request.totalContributors) * 100) >= 70;
 				});
 			}
 			if (fulfilled) {

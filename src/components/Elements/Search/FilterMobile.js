@@ -241,7 +241,7 @@ const FilterMobile = forwardRef(({ requests, applySearch, searchResults }, ref) 
 
 	const [selectedDateRange, setSelectedDateRange] = useState([
 		{
-			startDate: new Date(),
+			startDate: null,
 			endDate: null,
 			key: 'selection',
 		},
@@ -509,11 +509,13 @@ const FilterMobile = forwardRef(({ requests, applySearch, searchResults }, ref) 
 							isMobile: true,
 						}}
 						value={
-							Date.parse(selectedDateRange[0].endDate) === Date.parse(selectedDateRange[0].startDate)
-								? timeConverter(Date.parse(selectedDateRange[0].startDate))
-								: `${timeConverter(Date.parse(selectedDateRange[0].startDate))} - ${timeConverter(
-										Date.parse(selectedDateRange[0].endDate)
-								  )}`
+							selectedDateRange[0].startDate !== null && selectedDateRange[0].endDate !== null
+								? Date.parse(selectedDateRange[0].endDate) === Date.parse(selectedDateRange[0].startDate)
+									? timeConverter(Date.parse(selectedDateRange[0].startDate))
+									: `${timeConverter(Date.parse(selectedDateRange[0].startDate))} - ${timeConverter(
+											Date.parse(selectedDateRange[0].endDate)
+									  )}`
+								: ''
 						}
 					/>
 
