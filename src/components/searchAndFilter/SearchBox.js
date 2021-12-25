@@ -11,15 +11,14 @@ const SearchBox = () => {
 
 	if (appState.isMobile) {
 		return (
-			
-				<FilterMobile
-					label="Search"
-					type="text"
-					value={search}
-					onChange={(e) => {
-						setSearch(e.target.value);
-					}}
-				/>
+			<FilterMobile
+				label="Search"
+				type="text"
+				value={search}
+				onChange={(e) => {
+					setSearch(e.target.value);
+				}}
+			/>
 		);
 	} else {
 		return (

@@ -1,5 +1,5 @@
 .custom-backdrop {
-	background: #3E38A9 !important;
+	background: #3e38a9 !important;
 }
 
 .select__indicator-separator {
@@ -9,6 +9,31 @@
 	text-decoration: underline;
 }
 
-.cursor-pointer{
+.cursor-pointer {
 	cursor: pointer;
+}
+
+.customDatePickerWidth,
+.customDatePickerWidth > div.react-datepicker-wrapper,
+.customDatePickerWidth
+	> div
+	> div.react-datepicker__input-container
+	.customDatePickerWidth
+	> div
+	> div.react-datepicker__input-container
+	input {
+	width: 100%;
+}
+
+.rdrCalendarWrapper,
+.rdrMonth {
+	width: 100% !important;
+}
+
+iframe {
+	display: none !important;
+}
+
+.search-modal .modal-content {
+	height: 95vh;
 }

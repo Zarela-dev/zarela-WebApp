@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,8 +8,9 @@ import { timeSince } from '../../utils';
 import homepageBg from '../../assets/home-bg.jpg';
 import MobileLayout from '../../components/MobileLayout';
 import ZarelaDayBox from '../../components/ZarelaDayBox';
-import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import SearchBox from '../../components/searchAndFilter/SearchBox';
+// import GraphPagination from '../../components/Pagination/GraphPagination';
+import Pagination from '../../components/Pagination';
 
 const RequestsListWrapper = styled.div`
 	position: relative;
@@ -101,8 +102,16 @@ const useStyles = makeStyles({
 	},
 });
 
-const App = ({ appState, requests, fetchMore, currentPage, setCurrentPage, PER_PAGE, isLoading, props }) => {
+const App = ({ requests, isLoading, appState, props, PAGE_SIZE }) => {
 	const classes = useStyles(props);
+	const [currentPage, setCurrentPage] = useState(1);
+	const currentTableData = useMemo(() => {
+		const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
+		const lastPageIndex = firstPageIndex + PAGE_SIZE;
+		return Object.values(requests)
+			.sort((a, b) => +b.requestID - +a.requestID)
+			.slice(firstPageIndex, lastPageIndex);
+	}, [currentPage, PAGE_SIZE, requests]);
 
 	return (
 		<>
@@ -133,64 +142,34 @@ const App = ({ appState, requests, fetchMore, currentPage, setCurrentPage, PER_P
 											</Card>
 										);
 								  })
-								: Object.values(requests).map((item) => {
-										return (
-											<RequestCardMobile
-												key={item.requestID}
-												requestID={item.requestID}
-												title={item.title}
-												description={item.description}
-												angelTokenPay={item.angelTokenPay}
-												laboratoryTokenPay={item.laboratoryTokenPay}
-												categories={item.categories}
-												timestamp={timeSince(item.timestamp)}
-												progress={(+item.totalContributed / +item.totalContributors) * 100}
-												contributors={`${item.totalContributed}/${item.totalContributors}`}
-												totalContributedCount={item.totalContributedCount}
-											/>
-										);
-								  })}
+								: Object.values(currentTableData)
+										.sort((a, b) => +b.requestID - +a.requestID)
+										.map((item) => {
+											return (
+												<RequestCardMobile
+													key={item.requestID}
+													requestID={item.requestID}
+													title={item.title}
+													description={item.description}
+													angelTokenPay={item.angelTokenPay}
+													laboratoryTokenPay={item.laboratoryTokenPay}
+													categories={item.categories}
+													timestamp={timeSince(item.timestamp)}
+													progress={(+item.totalContributed / +item.totalContributors) * 100}
+													contributors={`${item.totalContributed}/${item.totalContributors}`}
+													totalContributedCount={item.totalContributedCount}
+												/>
+											);
+										})}
 						</RequestsListContentWrapper>
 					</RequestsListLayout>
-
-					<nav aria-label="...">
-						<Pagination>
-							<PaginationItem disabled={currentPage === 0}>
-								<PaginationLink
-									tabIndex="-1"
-									onClick={() => {
-										fetchMore({
-											variables: {
-												skip: (currentPage - 1) * PER_PAGE,
-											},
-										});
-										setCurrentPage(currentPage - 1);
-									}}
-								>
-									Previous
-								</PaginationLink>
-							</PaginationItem>
-							<PaginationItem active>
-								<PaginationLink href="#">
-									{currentPage + 1} <span className="sr-only">(currentPage)</span>
-								</PaginationLink>
-							</PaginationItem>
-							<PaginationItem>
-								<PaginationLink
-									onClick={() => {
-										fetchMore({
-											variables: {
-												skip: (currentPage + 1) * PER_PAGE,
-											},
-										});
-										setCurrentPage(currentPage + 1);
-									}}
-								>
-									Next
-								</PaginationLink>
-							</PaginationItem>
-						</Pagination>
-					</nav>
+					<Pagination
+						currentPage={currentPage}
+						totalCount={Object.values(requests).length}
+						pageSize={PAGE_SIZE}
+						onPageChange={(page) => setCurrentPage(page)}
+						isMobile={true}
+					/>
 				</RequestsListWrapper>
 			</MobileLayout>
 		</>

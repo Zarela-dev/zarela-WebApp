@@ -1,10 +1,9 @@
-import React  from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components';
 import { Box } from 'rebass/styled-components';
 import { ThemeIcon } from './../Icon';
 import { BodyText } from '../Typography';
 import calendarIcon from './../../../assets/icons/calendar.svg';
-import { Modal, ModalHeader, ModalBody, FormGroup, Row, Col } from 'reactstrap';
 
 const DatePickerWrapper = styled.div`
 	margin-bottom: 1rem;
@@ -56,14 +55,18 @@ const InputWrapper = styled.div`
 
 const CalendarIcon = styled(ThemeIcon)`
 	position: absolute;
-	top: 5px;
+	top: 9px;
+	right: 0;
+	cursor: pointer;
+`;
+const CalendarMobileIcon = styled(ThemeIcon)`
+	position: absolute;
+	top: 7px;
 	right: 0;
 	cursor: pointer;
 `;
 
-const DatePickerField = ({
-	toggleModals,
-}) => {
+const DatePickerField = ({ toggleModals, setSelectedDateRange, isMobile }) => {
 	return (
 		<DatePickerWrapper>
 			<BodyText variant="small" fontWeight="semiBold" m={0}>
@@ -72,7 +75,11 @@ const DatePickerField = ({
 			<DateSection>
 				<InputWrapper>
 					<Input placeholder="All" onFocus={toggleModals} />
-					<CalendarIcon variant="big" src={calendarIcon} />
+					{isMobile ? (
+						<CalendarMobileIcon variant="normal" src={calendarIcon} />
+					) : (
+						<CalendarIcon variant="big" src={calendarIcon} />
+					)}
 				</InputWrapper>
 			</DateSection>
 		</DatePickerWrapper>

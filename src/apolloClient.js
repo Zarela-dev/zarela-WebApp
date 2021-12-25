@@ -7,7 +7,7 @@ export const client = new ApolloClient({
 });
 
 export const searchClient = new ApolloClient({
-	uri: 'https://api.thegraph.com/subgraphs/name/nightmareinc/zarela-requests',
+	uri: 'https://api.thegraph.com/subgraphs/name/nightmareinc/zarela-playground',
 	cache: new InMemoryCache({
 		typePolicies: {
 			Query: {
