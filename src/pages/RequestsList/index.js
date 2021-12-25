@@ -162,17 +162,21 @@ const RequestsList = () => {
 					return Math.floor((+request.totalContributed / +request.totalContributors) * 100) >= 70;
 				});
 			}
+
 			if (fulfilled) {
 				results = results.filter((request) => {
 					if (+request.totalContributors === 0) return false;
 					return +request.totalContributorsRemaining === 0;
 				});
 			}
+
 			if (mostConfirmed) {
 				results = results.filter((request) => {
+					if (+request.totalContributorsRemaining === 0) return false;
 					return Math.floor((+request.totalContributed / +request.totalContributedCount) * 100) >= 70;
 				});
 			}
+
 			if (orderBy) {
 				results = results.sort((a, b) => {
 					if (orderBy === 'bbit') {
