@@ -209,5 +209,4 @@ export const TagItem = styled.div`
 	}
 `;
 
-export default RequestCardWrapper;
 export { Typography };

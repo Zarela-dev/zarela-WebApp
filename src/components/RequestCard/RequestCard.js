@@ -1,5 +1,6 @@
 import React from 'react';
-import RequestCardWrapper, {
+import {
+	RequestCardWrapper,
 	ProgressTrackerWrapper,
 	ProgressTrackerTrack,
 	ProgressTrackerProcess,
@@ -23,7 +24,9 @@ const RequestCard = (props) => {
 		<RequestCardWrapper data-tour="request-list-one">
 			<Row width="100%" alignItems="flex-start">
 				<Col flex={'0 0 70px'} mr={[3]}>
-					<IdLabel variant="big" data-tour="request-list-two">{props.requestID}</IdLabel>
+					<IdLabel variant="big" data-tour="request-list-two">
+						{props.requestID}
+					</IdLabel>
 				</Col>
 				<Col flex={1}>
 					<Header variant="heading4" as="h4" data-tour="request-list-three">
