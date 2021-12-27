@@ -145,8 +145,15 @@ const ButtonWrapper = styled(Box)(
 			primary: {
 				background: 'unset',
 			},
+			disabled_primary: {
+				background: '#F4F3FE',
+			},
 			block: {
 				width: '100%',
+			},
+			disabled_block: {
+				width: '100%',
+				background: '#F4F3FE',
 			},
 			secondary: {
 				background: 'linear-gradient(180deg, #85CEEE 10.5%, #A687FD 86.82%)',
@@ -159,8 +166,9 @@ const ButtonWrapper = styled(Box)(
 					boxShadow: '0px 6px 20px 0px #51C5EA26',
 				},
 			},
-			disabled: {
+			disabled_secondary: {
 				background: '#F4F3FE',
+				padding: '2px',
 			},
 		},
 	})
@@ -275,7 +283,7 @@ const CustomizedButton = styled(RebassButton)(
 
 export const ThemeButton = (props) => {
 	return (
-		<ButtonWrapper variant={props.disabled ? 'disabled' : props.variant}>
+		<ButtonWrapper variant={!props.disabled ? props.variant : `disabled_${props.variant}`}>
 			{props.to ? (
 				<Link to={{ pathname: props.to }} target={props.target}>
 					<CustomizedButton
