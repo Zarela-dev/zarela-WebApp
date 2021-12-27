@@ -34,6 +34,8 @@ const FilterLabelContainer = ({
 	setModalShow,
 	selectedTotalBiobitOption,
 	setSelectedTotalBiobitOption,
+	selectedFulfilledOption,
+	setSelectedFulfilledOption,
 	applySearch,
 	range,
 	setRange,
@@ -65,7 +67,7 @@ const FilterLabelContainer = ({
 			{/* Slider */}
 			<FilterLabelItem
 				label={`BBIT ${range[0]} - ${range[1]}`}
-				condition={range[0] !== 0 || range[1] !== maxPrice}
+				condition={range[0] !== 0 && range[1] !== maxPrice}
 				onClick={() => {
 					setRange([0, maxPrice]);
 					applySearch.bbitFilter([0, maxPrice]);
@@ -110,9 +112,12 @@ const FilterLabelContainer = ({
 
 			{/* Fulfiled */}
 			<FilterLabelItem
-				label="Fulfiled"
-				condition={searchResults.params.fulfilled}
-				onClick={(e) => applySearch.fulfilled(false)}
+				label={selectedFulfilledOption.value}
+				condition={selectedFulfilledOption.value !== 'All'}
+				onClick={() => {
+					setSelectedFulfilledOption({ value: 'Default', label: 'Default' });
+					applySearch.order('requestID', 'desc');
+				}}
 			/>
 		</FilterWrapper>
 	);

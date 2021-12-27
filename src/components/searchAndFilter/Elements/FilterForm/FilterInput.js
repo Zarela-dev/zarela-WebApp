@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled, { css } from 'styled-components';
-import {FormGroup, Row, Col } from 'reactstrap';
+import { FormGroup, Row, Col } from 'reactstrap';
 import { Box } from 'rebass/styled-components';
 import { ThemeIcon } from './../../../Elements/Icon';
 import { BodyText } from './../../../Elements/Typography';
@@ -8,13 +8,19 @@ import calendarIcon from './../../../../assets/icons/calendar.svg';
 import Select from 'react-select';
 import Slider from '@material-ui/core/Slider';
 import Switch from '@mui/material/Switch';
+import infoIcon from './../../../../assets/icons/info-icon.svg';
+import { Tooltip } from '@material-ui/core';
 
 import { mainContext } from '../../../../state';
 
 const SliderWrapper = styled.div`
 	padding: 0 10px;
 `;
-
+const Span = styled.span`
+	bottom: 1px;
+	position: relative;
+	left: 3px;
+`;
 const CustomSlider = styled(Slider)({
 	width: 300,
 	color: '#422468',
@@ -133,6 +139,13 @@ const FilterInput = (props) => {
 			<FormGroup>
 				<BodyText variant="small" fontWeight="semiBold" m={0}>
 					{props.label}
+					{props.info && (
+						<Tooltip title={props.info} placement="top">
+							<Span aria-label={props.info}>
+								<ThemeIcon src={infoIcon} />
+							</Span>
+						</Tooltip>
+					)}
 				</BodyText>
 				<Select
 					classNamePrefix="select"
@@ -148,6 +161,13 @@ const FilterInput = (props) => {
 			<FormGroup>
 				<BodyText variant="small" fontWeight="semiBold" m={0}>
 					{props.label}
+					{props.info && (
+						<Tooltip title={props.info} placement="top">
+							<Span aria-label={props.info}>
+								<ThemeIcon src={infoIcon} />
+							</Span>
+						</Tooltip>
+					)}
 				</BodyText>
 				<SliderWrapper>
 					<CustomSlider
@@ -178,6 +198,13 @@ const FilterInput = (props) => {
 			<DatePickerWrapper>
 				<BodyText variant="small" fontWeight="semiBold" m={0}>
 					{props.label}
+					{props.info && (
+						<Tooltip title={props.info} placement="top">
+							<Span aria-label={props.info}>
+								<ThemeIcon src={infoIcon} />
+							</Span>
+						</Tooltip>
+					)}
 				</BodyText>
 				<DateSection>
 					<InputWrapper>
@@ -196,6 +223,13 @@ const FilterInput = (props) => {
 			<FormGroup className="d-flex flex-row w-100 justify-content-between align-items-center">
 				<BodyText variant="small" fontWeight="semiBold" m={0}>
 					{props.label}
+					{props.info && (
+						<Tooltip title={props.info} placement="top">
+							<Span aria-label={props.info}>
+								<ThemeIcon src={infoIcon} />
+							</Span>
+						</Tooltip>
+					)}
 				</BodyText>
 				<CustomSwitch checked={props.checked} onChange={props.onChange} />
 			</FormGroup>

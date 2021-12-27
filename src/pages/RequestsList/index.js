@@ -9,6 +9,7 @@ import Guide from './../../components/Guide/Guide';
 import { RequestDetailsDesktopSteps, RequestDetailsMobileSteps } from '../../guides';
 import BigNumber from 'bignumber.js';
 import SearchFilter from '../../components/searchAndFilter/SearchFilter';
+import isEqual from 'lodash/isEqual';
 
 const RequestsList = () => {
 	const { appState } = useContext(mainContext);
@@ -19,17 +20,20 @@ const RequestsList = () => {
 	const [dailyContributors, setDailyContributors] = useState(0);
 	const [isLoading, setLoading] = useState(true);
 	const [currentPage, setCurrentPage] = useState(1);
+	const defaultFilters = {
+		q: '',
+		orderBy: 'requestID',
+		orderDirection: 'desc',
+		bbitFilter: [],
+		dateFilter: [],
+		nearFinish: false,
+		fulfilled: false,
+		mostConfirmed: false,
+	};
+
 	const [searchResults, setSearchResults] = useState({
-		params: {
-			q: '',
-			orderBy: 'requestID',
-			orderDirection: 'desc',
-			bbitFilter: [],
-			dateFilter: [],
-			nearFinish: false,
-			fulfilled: false,
-			mostConfirmed: false,
-		},
+		params: defaultFilters,
+		hasActiveFilters: false,
 		data: [],
 	});
 
@@ -107,7 +111,7 @@ const RequestsList = () => {
 					bbitFilter: [],
 					dateFilter: [],
 					nearFinish: false,
-					fulfilled: false,
+					fulfilled: 'All',
 					mostConfirmed: false,
 				},
 				data: [],
@@ -163,11 +167,18 @@ const RequestsList = () => {
 				});
 			}
 
-			if (fulfilled) {
+			if (fulfilled === 'Fulfilled') {
 				results = results.filter((request) => {
 					if (+request.totalContributors === 0) return false;
 					return +request.totalContributorsRemaining === 0;
 				});
+			} else if (fulfilled === 'Avalible') {
+				results = results.filter((request) => {
+					if (+request.totalContributors === 0) return false;
+					return +request.totalContributorsRemaining !== 0;
+				});
+			} else {
+				// when all is selected result are not filtered
 			}
 
 			if (mostConfirmed) {
@@ -199,6 +210,7 @@ const RequestsList = () => {
 			setSearchResults((config) => {
 				return {
 					...config,
+					hasActiveFilters: !isEqual(defaultFilters, searchResults.params),
 					data: results,
 				};
 			});

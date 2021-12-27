@@ -27,7 +27,7 @@ const DynamicModal = (props) => {
 			<CustomModalHeader
 				close={
 					<CloseIconWrapper>
-						<ThemeIcon src={props.type === 'calendar' ? backIcon : close} mr={0} onClick={props.toggle} />
+						<ThemeIcon src={props.type === 'calendar' ? backIcon : close} mr={0} onClick={props.onClose} />
 					</CloseIconWrapper>
 				}
 			>

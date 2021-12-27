@@ -5,6 +5,9 @@ import FilterInput from './FilterInput';
 
 const FilterForm = ({
 	totalBiobitSelectOptions,
+	fulfilledSelectOptions,
+	selectedFulfilledOption,
+	setSelectedFulfilledOption,
 	selectedTotalBiobitOption,
 	setSelectedTotalBiobitOption,
 	range,
@@ -66,8 +69,26 @@ const FilterForm = ({
 			/>
 
 			<FilterInput
+				label="Fulfiled"
+				type="select"
+				info="Requests that have received as much contributions as required by the mage and can no longer receive contributions."
+				options={fulfilledSelectOptions}
+				onChange={(e) => {
+					applySearch.fulfilled(e.value);
+					setSelectedFulfilledOption(e);
+				}}
+				onKeyDown={(e) => {
+					if (e.key === 'Enter') {
+						setSelectedFulfilledOption({ value: e.target.value, label: e.target.value });
+					}
+				}}
+				value={selectedFulfilledOption}
+			/>
+
+			<FilterInput
 				label="Near finish"
 				type="switch"
+				info="Requests with only 30% remaining capacity for contribution."
 				checked={searchResults.params.nearFinish}
 				onChange={(e) => applySearch.nearFinish(e.target.checked)}
 			/>
@@ -75,19 +96,22 @@ const FilterForm = ({
 			<FilterInput
 				label="Most Confirmed"
 				type="switch"
+				info="Requests with more than 70% ratio on how many contributions the mage has accepted."
 				checked={searchResults.params.mostConfirmed}
 				onChange={(e) => applySearch.mostConfirmed(e.target.checked)}
 			/>
 
-			<FilterInput
-				label="Fulfiled"
-				type="switch"
-				checked={searchResults.params.fulfilled}
-				onChange={(e) => applySearch.fulfilled(e.target.checked)}
-			/>
-
-			<ThemeButton variant="block" size="block" onClick={() => setModalShow(false)}>
-				Submit
+			<ThemeButton
+				variant="block"
+				size="block"
+				onClick={() => setModalShow(false)}
+				disabled={searchResults.data.length === 0}
+			>
+				{searchResults.data.length > 0
+					? searchResults.hasActiveFilters
+						? `Show ${searchResults.data.length} results`
+						: 'Submit'
+					: 'No results found!'}
 			</ThemeButton>
 		</>
 	);

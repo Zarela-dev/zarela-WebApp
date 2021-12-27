@@ -9,6 +9,7 @@ import homepageBg from '../../assets/home-bg.jpg';
 import MobileLayout from '../../components/MobileLayout';
 import ZarelaDayBox from '../../components/ZarelaDayBox';
 import Pagination from '../../components/Pagination';
+import FallbackImage from '../../components/searchAndFilter/Elements/fallbackImage';
 
 const RequestsListWrapper = styled.div`
 	position: relative;
@@ -118,45 +119,43 @@ const Mobile = ({ requests, isLoading, appState, currentPage, setCurrentPage, pr
 					<RequestsListLayout>
 						<RequestsListContentWrapper>
 							{searchBox}
-							{isLoading
-								? [1, 2, 3].map((index) => {
+							{isLoading ? (
+								[1, 2, 3].map((index) => {
+									return (
+										<Card key={index}>
+											<CircleSection>
+												<Skeleton variant="circle" width={41.72} height={41.72} className={classes.root} />
+											</CircleSection>
+											<SquareSection>
+												<Skeleton variant="rect" width={'100%'} height={19} animation="wave" className={classes.root} />
+												<Skeleton variant="rect" width={'80%'} height={19.1} className={classes.root} />
+											</SquareSection>
+										</Card>
+									);
+								})
+							) : Object.values(currentTableData).length === 0 ? (
+								<FallbackImage />
+							) : (
+								Object.values(currentTableData)
+									.sort((a, b) => +b.requestID - +a.requestID)
+									.map((item) => {
 										return (
-											<Card key={index}>
-												<CircleSection>
-													<Skeleton variant="circle" width={41.72} height={41.72} className={classes.root} />
-												</CircleSection>
-												<SquareSection>
-													<Skeleton
-														variant="rect"
-														width={'100%'}
-														height={19}
-														animation="wave"
-														className={classes.root}
-													/>
-													<Skeleton variant="rect" width={'80%'} height={19.1} className={classes.root} />
-												</SquareSection>
-											</Card>
+											<RequestCardMobile
+												key={item.requestID}
+												requestID={item.requestID}
+												title={item.title}
+												description={item.description}
+												angelTokenPay={item.angelTokenPay}
+												laboratoryTokenPay={item.laboratoryTokenPay}
+												categories={item.categories}
+												timestamp={timeSince(item.timestamp)}
+												progress={(+item.totalContributed / +item.totalContributors) * 100}
+												contributors={`${item.totalContributed}/${item.totalContributors}`}
+												totalContributedCount={item.totalContributedCount}
+											/>
 										);
-								  })
-								: Object.values(currentTableData)
-										.sort((a, b) => +b.requestID - +a.requestID)
-										.map((item) => {
-											return (
-												<RequestCardMobile
-													key={item.requestID}
-													requestID={item.requestID}
-													title={item.title}
-													description={item.description}
-													angelTokenPay={item.angelTokenPay}
-													laboratoryTokenPay={item.laboratoryTokenPay}
-													categories={item.categories}
-													timestamp={timeSince(item.timestamp)}
-													progress={(+item.totalContributed / +item.totalContributors) * 100}
-													contributors={`${item.totalContributed}/${item.totalContributors}`}
-													totalContributedCount={item.totalContributedCount}
-												/>
-											);
-										})}
+									})
+							)}
 						</RequestsListContentWrapper>
 					</RequestsListLayout>
 					<Pagination

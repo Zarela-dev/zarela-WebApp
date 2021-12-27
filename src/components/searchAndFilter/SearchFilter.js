@@ -95,6 +95,7 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 	const [modalShow, setModalShow] = useState(false);
 	const [datePickerModalShow, setDatePickerModalShow] = useState(false);
 	const [selectedTotalBiobitOption, setSelectedTotalBiobitOption] = useState({ value: 'Default', label: 'Default' });
+	const [selectedFulfilledOption, setSelectedFulfilledOption] = useState({ value: 'All', label: 'All' });
 
 	const maxPrice = Object.values(requests).sort((a, b) => {
 		const aPrice = new BigNumber(a.totalTokenPay);
@@ -132,6 +133,12 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 		{ value: 'HighToLow', label: 'High to Low' },
 	];
 
+	const fulfilledSelectOptions = [
+		{ value: 'All', label: 'All' },
+		{ value: 'Fulfilled', label: 'Fulfilled' },
+		{ value: 'Avalible', label: 'Available' },
+	];
+
 	const handleChangeRange = (event, newValue) => {
 		setRange(newValue);
 		applySearch.bbitFilter(range);
@@ -140,6 +147,21 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 	const toggleModals = () => {
 		setModalShow(!modalShow);
 		setDatePickerModalShow(!datePickerModalShow);
+	};
+
+	const handleClose = () => {
+		setSelectedTotalBiobitOption({ value: 'Default', label: 'Default' });
+		setSelectedFulfilledOption({ value: 'All', label: 'All' });
+		applySearch.clear();
+		setRange([0, maxPrice]);
+		setSelectedDateRange([
+			{
+				startDate: null,
+				endDate: null,
+				key: 'selection',
+			},
+		]);
+		setModalShow(false);
 	};
 
 	const handleCalendarClear = () => {
@@ -185,6 +207,8 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 								setModalShow,
 								selectedTotalBiobitOption,
 								setSelectedTotalBiobitOption,
+								selectedFulfilledOption,
+								setSelectedFulfilledOption,
 								applySearch,
 								range,
 								setRange,
@@ -247,10 +271,11 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 					}
 				/>
 			)}
-
+			{/* filter form modal */}
 			<FormModal
 				modalShow={modalShow}
 				toggle={() => setModalShow(false)}
+				onClose={handleClose}
 				type="form"
 				className={appState.isMobile && 'search-modal search-modal-mobile'}
 				header={
@@ -259,24 +284,16 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 						clearText="Clear All"
 						justify="space-between"
 						width={appState.isMobile ? '210px' : '300px'}
-						onClear={() => {
-							setSelectedTotalBiobitOption({ value: 'Default', label: 'Default' });
-							applySearch.clear();
-							setRange([0, maxPrice]);
-							setSelectedDateRange([
-								{
-									startDate: null,
-									endDate: null,
-									key: 'selection',
-								},
-							]);
-						}}
+						onClear={handleClose}
 					/>
 				}
 				body={
 					<FilterForm
 						{...{
 							totalBiobitSelectOptions,
+							fulfilledSelectOptions,
+							selectedFulfilledOption,
+							setSelectedFulfilledOption,
 							selectedTotalBiobitOption,
 							setSelectedTotalBiobitOption,
 							range,
@@ -291,10 +308,14 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 					/>
 				}
 			/>
-
+			{/* calender modal */}
 			<FormModal
 				modalShow={datePickerModalShow}
-				toggle={toggleModals}
+				toggle={handleCalendarClear}
+				onClose={() => {
+					handleCalendarClear();
+					toggleModals();
+				}}
 				type="calendar"
 				width="fit-content"
 				className={appState.isMobile && 'search-modal search-modal-mobile'}

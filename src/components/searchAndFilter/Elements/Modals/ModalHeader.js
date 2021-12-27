@@ -11,7 +11,7 @@ const HeaderInner = styled.div`
 
 const ModalHeader = (props) => {
 	return (
-		<HeaderInner center={props.clearText ? false : true} justify={props.justify} width={props.width}>
+		<HeaderInner justify={props.justify} width={props.width}>
 			<BodyText variant="big" fontWeight="semiBold" m={0}>
 				{props.title}
 			</BodyText>
