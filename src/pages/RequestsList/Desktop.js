@@ -8,8 +8,6 @@ import maxWidthWrapper from '../../components/Elements/MaxWidth';
 import { timeSince } from '../../utils';
 import homepageBg from '../../assets/home-bg.jpg';
 import ZarelaDayBox from '../../components/ZarelaDayBox';
-import SearchBox from '../../components/searchAndFilter/SearchBox';
-// import GraphPagination from '../../components/Pagination/GraphPagination';
 import Pagination from '../../components/Pagination';
 
 const RequestsListWrapper = styled.div`

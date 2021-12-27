@@ -8,8 +8,6 @@ import { timeSince } from '../../utils';
 import homepageBg from '../../assets/home-bg.jpg';
 import MobileLayout from '../../components/MobileLayout';
 import ZarelaDayBox from '../../components/ZarelaDayBox';
-import SearchBox from '../../components/searchAndFilter/SearchBox';
-// import GraphPagination from '../../components/Pagination/GraphPagination';
 import Pagination from '../../components/Pagination';
 
 const RequestsListWrapper = styled.div`
@@ -104,7 +102,7 @@ const useStyles = makeStyles({
 
 const Mobile = ({ requests, isLoading, appState, currentPage, setCurrentPage, props, PAGE_SIZE, searchBox }) => {
 	const classes = useStyles(props);
-	
+
 	const currentTableData = useMemo(() => {
 		const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
 		const lastPageIndex = firstPageIndex + PAGE_SIZE;

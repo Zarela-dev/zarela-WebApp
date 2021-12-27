@@ -8,7 +8,7 @@ import Mobile from './Mobile';
 import Guide from './../../components/Guide/Guide';
 import { RequestDetailsDesktopSteps, RequestDetailsMobileSteps } from '../../guides';
 import BigNumber from 'bignumber.js';
-import SearchBox from '../../components/searchAndFilter/SearchBox';
+import SearchFilter from '../../components/searchAndFilter/SearchFilter';
 
 const RequestsList = () => {
 	const { appState } = useContext(mainContext);
@@ -282,7 +282,7 @@ const RequestsList = () => {
 						PAGE_SIZE,
 						currentPage,
 						setCurrentPage,
-						searchBox: <SearchBox {...{ requests, applySearch, searchResults }} />,
+						searchBox: <SearchFilter {...{ requests, applySearch, searchResults }} />,
 					}}
 				/>
 			) : (
@@ -296,7 +296,7 @@ const RequestsList = () => {
 						isLoading,
 						currentPage,
 						setCurrentPage,
-						searchBox: <SearchBox {...{ requests, applySearch, searchResults }} />,
+						searchBox: <SearchFilter {...{ requests, applySearch, searchResults }} />,
 					}}
 				/>
 			)}
