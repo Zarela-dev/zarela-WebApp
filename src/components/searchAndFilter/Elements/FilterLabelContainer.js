@@ -88,7 +88,7 @@ const FilterLabelContainer = ({
 					setSelectedDateRange([
 						{
 							startDate: null,
-							endDate: null,
+							endDate: new Date(''),
 							key: 'selection',
 						},
 					]);
@@ -109,13 +109,12 @@ const FilterLabelContainer = ({
 				condition={searchResults.params.nearFinish}
 				onClick={(e) => applySearch.nearFinish(false)}
 			/>
-
 			{/* Fulfiled */}
 			<FilterLabelItem
-				label={selectedFulfilledOption.value}
+				label={selectedFulfilledOption?.value}
 				condition={selectedFulfilledOption.value !== 'All'}
 				onClick={() => {
-					setSelectedFulfilledOption({ value: 'Default', label: 'Default' });
+					setSelectedFulfilledOption({ value: 'All', label: 'All' });
 					applySearch.order('requestID', 'desc');
 				}}
 			/>

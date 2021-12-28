@@ -92,10 +92,13 @@ const SearchSection = styled(Box)`
 
 const SearchFilter = ({ requests, applySearch, searchResults }) => {
 	const { appState, dispatch } = useContext(mainContext);
+	const [hasTransition, setHasTransition] = useState(true);
 	const [modalShow, setModalShow] = useState(false);
 	const [datePickerModalShow, setDatePickerModalShow] = useState(false);
 	const [selectedTotalBiobitOption, setSelectedTotalBiobitOption] = useState({ value: 'Default', label: 'Default' });
 	const [selectedFulfilledOption, setSelectedFulfilledOption] = useState({ value: 'All', label: 'All' });
+	const [badgeCount, setBadgeCount] = useState(0);
+	const [search, setSearch] = useState('');
 
 	const maxPrice = Object.values(requests).sort((a, b) => {
 		const aPrice = new BigNumber(a.totalTokenPay);
@@ -109,18 +112,19 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 		if (maxPrice) {
 			setRange([0, maxPrice]);
 		}
+		handleClose();
 	}, [maxPrice]);
 
 	const [selectedDateRange, setSelectedDateRange] = useState([
 		{
 			startDate: null,
-			endDate: null,
+			endDate: new Date(''),
 			key: 'selection',
 		},
 	]);
 
 	useEffect(() => {
-		if (selectedDateRange[0].endDate) {
+		if (selectedDateRange[0].startDate) {
 			const startDate = Date.parse(selectedDateRange[0].startDate) / 1000;
 			const endDate = Date.parse(selectedDateRange[0].endDate) / 1000;
 			applySearch.dateFilter([startDate, endDate]);
@@ -141,15 +145,46 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 
 	const handleChangeRange = (event, newValue) => {
 		setRange(newValue);
-		applySearch.bbitFilter(range);
 	};
 
 	const toggleModals = () => {
 		setModalShow(!modalShow);
 		setDatePickerModalShow(!datePickerModalShow);
+		setHasTransition(false);
 	};
 
+	const FilterCounterBadge = () => {
+		let count = 0;
+		if (searchResults.params.q !== '') {
+			count = count + 1;
+		}
+		if (selectedTotalBiobitOption.value !== 'Default') {
+			count = count + 1;
+		}
+		if (range[0] !== 0 || range[1] !== maxPrice) {
+			count = count + 1;
+		}
+		if (selectedDateRange[0].startDate) {
+			count = count + 1;
+		}
+		if (selectedFulfilledOption.value !== 'All') {
+			count = count + 1;
+		}
+		if (searchResults.params.nearFinish) {
+			count = count + 1;
+		}
+		if (searchResults.params.mostConfirmed) {
+			count = count + 1;
+		}
+		setBadgeCount(count);
+	};
+
+	useEffect(() => {
+		FilterCounterBadge();
+	}, [searchResults, maxPrice]);
+
 	const handleClose = () => {
+		setHasTransition(true);
 		setSelectedTotalBiobitOption({ value: 'Default', label: 'Default' });
 		setSelectedFulfilledOption({ value: 'All', label: 'All' });
 		applySearch.clear();
@@ -157,27 +192,53 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 		setSelectedDateRange([
 			{
 				startDate: null,
-				endDate: null,
+				endDate: new Date(''),
 				key: 'selection',
 			},
 		]);
 		setModalShow(false);
 	};
 
+	const handleClearAll = () => {
+		setHasTransition(true);
+		FilterCounterBadge();
+		setSelectedTotalBiobitOption({ value: 'Default', label: 'Default' });
+		setSelectedFulfilledOption({ value: 'All', label: 'All' });
+		applySearch.clear();
+		setRange([0, maxPrice]);
+		setSelectedDateRange([
+			{
+				startDate: null,
+				endDate: new Date(''),
+				key: 'selection',
+			},
+		]);
+	};
+
 	const handleCalendarClear = () => {
 		setSelectedDateRange([
 			{
 				startDate: null,
-				endDate: null,
+				endDate: new Date(''),
 				key: 'selection',
 			},
 		]);
 		applySearch.dateFilter([]);
 	};
 
+	useEffect(() => {
+		const timeoutId = setTimeout(() => applySearch.q(search), 1000);
+		return () => clearTimeout(timeoutId);
+	}, [search]);
+
+	useEffect(() => {
+		const timeoutId = setTimeout(() => applySearch.bbitFilter(range), 1000);
+		return () => clearTimeout(timeoutId);
+	}, [range]);
+
 	return (
 		<>
-			{appState.isMobile && <MobileModalTrigger onClick={() => setModalShow(true)} />}
+			{appState.isMobile && <MobileModalTrigger onClick={() => setModalShow(true)} count={badgeCount} />}
 			{!appState.isMobile && (
 				<RequestCardWrapper>
 					<Wrapper hasTopMargin={true}>
@@ -192,11 +253,18 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 								<Input
 									type="text"
 									placeholder="Start typing ..."
-									value={searchResults.params.q}
-									onChange={(e) => applySearch.q(e.target.value)}
+									value={search}
+									onChange={(e) => setSearch(e.target.value)}
 								/>
 								{searchResults.params.q !== '' && (
-									<SearchClear variant="big" src={searchClose} onClick={() => applySearch.q('')} />
+									<SearchClear
+										variant="big"
+										src={searchClose}
+										onClick={() => {
+											applySearch.q('');
+											setSearch('');
+										}}
+									/>
 								)}
 							</InputWrapper>
 						</SearchSection>
@@ -225,12 +293,12 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 			{appState.isMobile && (
 				<FormModal
 					modalShow={appState.isMobileSearchModalShow}
-					toggle={() =>
+					onClose={() => {
 						dispatch({
 							type: actionTypes.SET_MOBILE_SEARCH_MODAL_SHOW,
 							payload: false,
-						})
-					}
+						});
+					}}
 					type="form"
 					className="search-modal search-modal-mobile"
 					header={<ModalHeader title="Search" width="180px" />}
@@ -242,13 +310,18 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 									<Input
 										type="text"
 										placeholder="Start typing ..."
-										value={searchResults.params.q}
-										onChange={(e) => {
-											applySearch.q(e.target.value);
-										}}
+										value={search}
+										onChange={(e) => setSearch(e.target.value)}
 									/>
 									{searchResults.params.q !== '' && (
-										<SearchClear variant="normal" src={searchClose} onClick={() => applySearch.q('')} />
+										<SearchClear
+											variant="normal"
+											src={searchClose}
+											onClick={() => {
+												applySearch.q('');
+												setSearch('');
+											}}
+										/>
 									)}
 								</InputWrapper>
 							</SearchSection>
@@ -258,6 +331,8 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 									setModalShow,
 									selectedTotalBiobitOption,
 									setSelectedTotalBiobitOption,
+									selectedFulfilledOption,
+									setSelectedFulfilledOption,
 									applySearch,
 									range,
 									setRange,
@@ -276,6 +351,7 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 				modalShow={modalShow}
 				toggle={() => setModalShow(false)}
 				onClose={handleClose}
+				hasTransition={hasTransition}
 				type="form"
 				className={appState.isMobile && 'search-modal search-modal-mobile'}
 				header={
@@ -284,7 +360,7 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 						clearText="Clear All"
 						justify="space-between"
 						width={appState.isMobile ? '210px' : '300px'}
-						onClear={handleClose}
+						onClear={handleClearAll}
 					/>
 				}
 				body={
@@ -311,13 +387,15 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 			{/* calender modal */}
 			<FormModal
 				modalShow={datePickerModalShow}
+				hasTransition={hasTransition}
+				fade={false}
 				toggle={handleCalendarClear}
 				onClose={() => {
 					handleCalendarClear();
 					toggleModals();
 				}}
 				type="calendar"
-				width="fit-content"
+				width={appState.isMobile ? '100%' : 'fit-content'}
 				className={appState.isMobile && 'search-modal search-modal-mobile'}
 				header={<ModalHeader title="Calendar" width="180px" />}
 				body={

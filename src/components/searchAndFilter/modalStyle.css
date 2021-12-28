@@ -51,3 +51,14 @@ iframe {
 .search-modal-mobile {
 	margin: 0;
 }
+.MuiTooltip-popper > .MuiTooltip-tooltipPlacementTop {
+	color: #121213;
+	background: #fff;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 19.5px;
+	text-align: left;
+	box-shadow: 0px 2px 12px 2px rgba(0, 0, 0, 0.07);
+	border-radius: 8px;
+	padding: 16px;
+}
