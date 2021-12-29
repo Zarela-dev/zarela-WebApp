@@ -44,21 +44,13 @@ const Button = styled.button`
 		props.isMobile
 			? `${props.theme.spacing(1)} ${props.theme.spacing(1.1)}`
 			: `${props.theme.spacing(1)} ${props.theme.spacing(1.5)}`};
-	color: ${props => props.theme.colors.primary};
+	color: ${(props) => props.theme.colors.primary};
 	font-weight: bold;
 	font-size: ${(props) => (props.isMobile ? '14px' : '18px')};
 	line-height: ${(props) => (props.isMobile ? '10px' : '18px')};
 	border: none;
 	margin-right: ${(props) => props.theme.spacing(1.2)};
 `;
-
-const scrollToTop = () => {
-	const c = document.documentElement.scrollTop;
-	if (c > 0) {
-		window.requestAnimationFrame(scrollToTop);
-		window.scrollTo(0, c - c / 5);
-	}
-};
 
 const Pagination = (props) => {
 	const { onPageChange, totalCount, siblingCount = 1, currentPage, pageSize } = props;
@@ -69,6 +61,13 @@ const Pagination = (props) => {
 		siblingCount,
 		pageSize,
 	});
+
+	const scrollToTop = () => {
+		window.scrollTo({
+			top: 0,
+			behavior: 'smooth',
+		});
+	};
 
 	if (currentPage === 0 || paginationRange.length < 2) {
 		return null;

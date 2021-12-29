@@ -23,7 +23,16 @@ const CustomModal = styled(Modal)`
 
 const DynamicModal = (props) => {
 	return (
-		<CustomModal width={props.width} isOpen={props.modalShow} toggle={props.toggle} backdropClassName="custom-backdrop" className={props.className}>
+		<CustomModal
+			width={props.width}
+			isOpen={props.modalShow}
+			toggle={props.toggle}
+			backdropClassName="custom-backdrop"
+			className={props.className}
+			modalTransition={{ timeout: props.hasTransition ? 200 : 0 }}
+			backdropTransition={{ timeout: props.hasTransition ? 200 : 0 }}
+			fade={props.fade ?? props.hasTransition}
+		>
 			<CustomModalHeader
 				close={
 					<CloseIconWrapper>
