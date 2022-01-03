@@ -24,7 +24,7 @@ export const configureWeb3 = async (dispatch, web3Library) => {
 		);
 
 		dispatch({
-			type: actionTypes.SET_CONTRACT,
+			type: actionTypes.SET_ZARELA_CONTRACT,
 			payload: ZarelaContract,
 		});
 	} catch (error) {
@@ -49,7 +49,7 @@ export const configureFallbackWeb3 = async (dispatch) => {
 		});
 
 		dispatch({
-			type: actionTypes.SET_CONTRACT,
+			type: actionTypes.SET_ZARELA_CONTRACT,
 			payload: ZarelaContract,
 		});
 	} catch (error) {
