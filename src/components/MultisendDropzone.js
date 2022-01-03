@@ -1,35 +1,56 @@
 import React from 'react';
 
 import Dropzone from 'react-dropzone';
+import { Box } from 'rebass';
+import { BodyText } from './Elements/Typography';
 
-export default function App({ handleDrop, fileNames }) {
+export default function MultisendDropzone({ handleDrop, fileNames }) {
 	return (
-		<div className="App">
-			<Dropzone onDrop={handleDrop} accept=".csv">
+		<Box>
+			<Dropzone onDrop={handleDrop} accept=".csv" multiple={false}>
 				{({ getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject }) => {
 					const additionalClass = isDragAccept ? 'accept' : isDragReject ? 'reject' : '';
 
 					return (
-						<div
+						<Box
+							sx={{
+								background: '#F9F9F9',
+								border: '1px dashed #D7D7D7',
+								boxSizing: 'border-box',
+								borderRadius: 3,
+								width: '100%',
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+								height: ' 130px',
+							}}
 							{...getRootProps({
 								className: `dropzone ${additionalClass}`,
 							})}
 						>
 							<input {...getInputProps()} />
-							<span>{isDragActive ? '📂' : '📁'}</span>
-							<p>Drag'n'drop images, or click to select files</p>
-						</div>
+							<BodyText variant="big">
+								{`
+								Drag and drop the csv or click to select a file
+								or click to select a file
+								`}
+							</BodyText>
+						</Box>
 					);
 				}}
 			</Dropzone>
-			<div>
-				<strong>Files:</strong>
-				<ul>
-					{fileNames.map((fileName) => (
-						<li key={fileName}>{fileName}</li>
-					))}
-				</ul>
-			</div>
-		</div>
+			{fileNames.length ? (
+				<Box display={'flex'} mt={3}>
+					<BodyText variant="big">Selected:</BodyText>
+					<Box display="flex" flexDirection={'column'} mt={1} ml={2}>
+						{fileNames.map((fileName) => (
+							<BodyText sx={{ textAlign: 'left' }} variant="hint">
+								{fileName}
+							</BodyText>
+						))}
+					</Box>
+				</Box>
+			) : null}
+		</Box>
 	);
 }

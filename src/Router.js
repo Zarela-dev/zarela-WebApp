@@ -83,7 +83,6 @@ const AppRouter = () => {
 					<Route path="/wallet" component={Wallet} />
 					<Route path="/log" component={Log} />
 					<Route path="/settings" component={Settings} />
-					<Route path="/multisend/:stage" component={MultiSend} />
 					<Route path="/multisend" component={MultiSend} />
 					<Route component={NotFound} />
 				</Switch>
