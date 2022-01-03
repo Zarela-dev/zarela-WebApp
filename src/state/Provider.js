@@ -44,7 +44,7 @@ const AppProvider = ({ children }) => {
 					...state,
 					fallbackWeb3Instance: action.payload,
 				};
-			case actionTypes.SET_CONTRACT:
+			case actionTypes.SET_ZARELA_CONTRACT:
 				return {
 					...state,
 					contract: action.payload,
