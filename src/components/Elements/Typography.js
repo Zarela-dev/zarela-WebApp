@@ -81,6 +81,10 @@ const TextComponent = styled(Text)(
 				fontSize: [6, 6, 5],
 				lineHeight: [9, 9, 5],
 			},
+			regular: {
+				fontSize: [7, 6, 6],
+				lineHeight: [12, 12, 7],
+			},
 			small: {
 				fontSize: [7, 7, 6],
 				lineHeight: [12, 12, 7],
