@@ -10,7 +10,6 @@ export default function MultisendDropzone({ handleDrop, fileNames }) {
 			<Dropzone onDrop={handleDrop} accept=".csv" multiple={false}>
 				{({ getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject }) => {
 					const additionalClass = isDragAccept ? 'accept' : isDragReject ? 'reject' : '';
-
 					return (
 						<Box
 							sx={{
@@ -23,6 +22,7 @@ export default function MultisendDropzone({ handleDrop, fileNames }) {
 								justifyContent: 'center',
 								alignItems: 'center',
 								height: ' 130px',
+								padding: 4,
 							}}
 							{...getRootProps({
 								className: `dropzone ${additionalClass}`,
@@ -39,18 +39,6 @@ export default function MultisendDropzone({ handleDrop, fileNames }) {
 					);
 				}}
 			</Dropzone>
-			{fileNames.length ? (
-				<Box display={'flex'} mt={3}>
-					<BodyText variant="big">Selected:</BodyText>
-					<Box display="flex" flexDirection={'column'} mt={1} ml={2}>
-						{fileNames.map((fileName) => (
-							<BodyText sx={{ textAlign: 'left' }} variant="hint">
-								{fileName}
-							</BodyText>
-						))}
-					</Box>
-				</Box>
-			) : null}
 		</Box>
 	);
 }
