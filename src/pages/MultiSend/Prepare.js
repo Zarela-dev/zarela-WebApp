@@ -1,21 +1,12 @@
 import React from 'react';
 import { BodyText, Header, LinkText } from '../../components/Elements/Typography';
-import styled from 'styled-components';
 import MultisendDropzone from '../../components/MultisendDropzone';
 import convertCSV from 'convert-csv-to-json';
 import BigNumber from 'bignumber.js';
 import { Box } from 'rebass';
 import { toast } from '../../utils';
 import { ThemeButton } from '../../components/Elements/Button';
-
-const TextArea = styled.textarea`
-	background: #ffffff;
-	box-shadow: 0px 4px 20px rgba(52, 52, 52, 0.15);
-	border-radius: 16px;
-	width: 100%;
-	line-height: 2;
-	padding: ${(props) => props.theme.space[3]}px;
-`;
+import CodeMirror from '@uiw/react-codemirror';
 
 const Prepare = ({
 	data,
@@ -41,7 +32,6 @@ const Prepare = ({
 					amount: amount,
 				};
 			});
-			// console.log( reader.result)
 			setManualInput(reader.result);
 			setData(formatted);
 		};
@@ -49,6 +39,7 @@ const Prepare = ({
 		reader.readAsText(acceptedFiles[0]);
 		setFileNames(acceptedFiles.map((file) => file.name));
 	};
+	console.log(data);
 	return (
 		<div>
 			<Header variant="heading4" mb={2}>
@@ -57,16 +48,16 @@ const Prepare = ({
 			<BodyText variant={'big'} mb={5}>
 				There are two ways to enter addresses: either upload a file or manually type them in
 			</BodyText>
-			<TextArea
-				rows="10"
-				onChange={(e) => {
-					let convertedToCsv = convertCSV.fieldDelimiter(',').csvStringToJson(`address,amount\n` + e.target.value);
+			<CodeMirror
+				value={manualInput}
+				height="200px"
+				onChange={(value, viewUpdate) => {
+					let convertedToCsv = convertCSV.fieldDelimiter(',').csvStringToJson(`address,amount\n` + value);
 
 					setData(convertedToCsv);
-					setManualInput(e.target.value);
+					setManualInput(value);
 				}}
-				value={manualInput}
-			></TextArea>
+			/>
 			<Box
 				my={4}
 				sx={{
