@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import Web3Utils from 'web3-utils';
 
 export const validateAddresses = (data, setErrors) => {
@@ -21,10 +22,6 @@ export const validateAddresses = (data, setErrors) => {
 		return false;
 	});
 
-	console.log('addresses', addresses);
-	console.log('duplicates', duplicates, duplicateIDS);
-	console.log('invalids', invalids, invalidIDS);
-
 	if (invalids.length > 0 || duplicateIDS.length > 0) {
 		setErrors((state) => {
 			return {
@@ -33,6 +30,34 @@ export const validateAddresses = (data, setErrors) => {
 				invalids,
 				duplicateIDS,
 				invalidIDS,
+			};
+		});
+		return 'invalid';
+	}
+	setErrors(() => ({}));
+	return 'valid';
+};
+
+export const validateAmounts = (data, setErrors) => {
+	const DECIMALS = 1000000000;
+	const amounts = data.map((x) => x.amount);
+
+	let invalidAmountIDS = [];
+
+	const invalidAmounts = amounts.filter((x, index) => {
+		if (isNaN(x) || x.includes('e') || x <= 0 || new BigNumber(x).multipliedBy(DECIMALS).decimalPlaces() > 0) {
+			invalidAmountIDS.push(index + 1);
+			return true;
+		}
+		return false;
+	});
+
+	if (invalidAmounts.length > 0) {
+		setErrors((state) => {
+			return {
+				...state,
+				invalidAmounts,
+				invalidAmountIDS,
 			};
 		});
 		return 'invalid';

@@ -52,6 +52,7 @@ const MultiSendPage = () => {
 							data,
 							setData,
 							fileNames,
+							appState,
 							setFileNames,
 							manualInput,
 							setManualInput,

@@ -7,7 +7,7 @@ import { Box } from 'rebass';
 import { toast } from '../../utils';
 import { ThemeButton } from '../../components/Elements/Button';
 import CodeMirror from '@uiw/react-codemirror';
-import { validateAddresses } from './_validations';
+import { validateAddresses, validateAmounts } from './_validations';
 
 const Prepare = ({
 	data,
@@ -16,9 +16,7 @@ const Prepare = ({
 	setFileNames,
 	manualInput,
 	setManualInput,
-	method,
-	setMethod,
-	stage,
+	appState,
 	setStage,
 	errors,
 	setErrors,
@@ -42,7 +40,7 @@ const Prepare = ({
 		reader.readAsText(acceptedFiles[0]);
 		setFileNames(acceptedFiles.map((file) => file.name));
 	};
-	console.log(errors);
+
 	return (
 		<div>
 			<Header variant="heading4" mb={2}>
@@ -84,9 +82,14 @@ const Prepare = ({
 						boxSizing: 'border-box',
 						borderRadius: '8px',
 						padding: 4,
+						'& > div:not(:last-child)': {
+							borderBottom: '1px solid #FF5757',
+							paddingBottom: 3,
+							marginBottom: 3,
+						},
 					}}
 				>
-					{errors?.duplicateIDS.length > 0 ? (
+					{errors.duplicateIDS?.length > 0 ? (
 						<Box>
 							<Header variant="heading6" mb={2}>
 								Duplicate Addresses Found:
@@ -100,22 +103,40 @@ const Prepare = ({
 							</Box>
 						</Box>
 					) : null}
-					{errors?.invalidIDS.length > 0 ? (
-						<>
-							<Box my={3} sx={{ borderBottom: '1px solid #FF5757' }} />
-							<Box>
-								<Header variant="heading6" mb={2}>
-									Invalid Addresses Found:
-								</Header>
-								<Box display={'flex'} flexDirection={'column'}>
-									{errors.invalidIDS?.map((addressIndex, arrIndex) => (
-										<Box key={addressIndex}>
-											<BodyText variant="regular">{`${errors?.invalids[arrIndex]} on line ${addressIndex}`}</BodyText>
-										</Box>
-									))}
-								</Box>
+					{errors.invalidIDS?.length > 0 ? (
+						<Box>
+							<Header variant="heading6" mb={2}>
+								Invalid Addresses Found:
+							</Header>
+							<Box display={'flex'} flexDirection={'column'}>
+								{errors.invalidIDS?.map((addressIndex, arrIndex) => (
+									<Box key={addressIndex}>
+										<BodyText variant="regular">{`${errors?.invalids[arrIndex]} on line ${addressIndex}`}</BodyText>
+									</Box>
+								))}
 							</Box>
-						</>
+						</Box>
+					) : null}
+					{errors.invalidAmountIDS?.length > 0 ? (
+						<Box>
+							<Header variant="heading6" mb={2}>
+								Invalid Amount Found:
+							</Header>
+							<Box display={'flex'} flexDirection={'column'}>
+								{errors.invalidAmountIDS?.map((addressIndex, arrIndex) => (
+									<Box key={addressIndex}>
+										<BodyText variant="regular">{`"${errors.invalidAmounts[arrIndex]}" on line ${addressIndex}`}</BodyText>
+									</Box>
+								))}
+							</Box>
+						</Box>
+					) : null}
+					{errors.insufficientFunds === true ? (
+						<Box>
+							<Header variant="heading6" mb={2}>
+								Insufficient Funds
+							</Header>
+						</Box>
 					) : null}
 				</Box>
 			) : null}
@@ -124,8 +145,13 @@ const Prepare = ({
 					variant={'primary'}
 					size="large"
 					onClick={() => {
-						if (validateAddresses(data, setErrors) === 'valid') {
-							setStage('confirm');
+						if (validateAddresses(data, setErrors) === 'valid' && validateAmounts(data, setErrors) === 'valid') {
+							let balance = new BigNumber(appState.biobitBalance);
+							if (balance.gte(data.reduce((acc, curr) => acc.plus(new BigNumber(curr.amount)), new BigNumber(0)))) {
+								setStage('confirm');
+							} else {
+								setErrors((state) => ({ ...state, insufficientFunds: true }));
+							}
 						}
 					}}
 				>
