@@ -16,10 +16,12 @@ const MultiSendPage = () => {
 	const [method, setMethod] = useState('file');
 	const [sendable, setSendable] = useState(false);
 	const [isApproving, setApproving] = useState(false);
-	
+
 	const [stage, setStage] = useState('prepare');
 	const { appState } = useContext(mainContext);
 	const { account } = useWeb3React();
+
+	const [errors, setErrors] = useState({});
 
 	return (
 		<Box sx={{ width: '720px', margin: '-80px auto 0' }}>
@@ -57,6 +59,8 @@ const MultiSendPage = () => {
 							setMethod,
 							stage,
 							setStage,
+							errors,
+							setErrors,
 						}}
 					/>
 				) : stage === 'confirm' ? (

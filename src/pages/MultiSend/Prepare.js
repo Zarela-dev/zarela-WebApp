@@ -7,6 +7,7 @@ import { Box } from 'rebass';
 import { toast } from '../../utils';
 import { ThemeButton } from '../../components/Elements/Button';
 import CodeMirror from '@uiw/react-codemirror';
+import { validateAddresses } from './_validations';
 
 const Prepare = ({
 	data,
@@ -19,6 +20,8 @@ const Prepare = ({
 	setMethod,
 	stage,
 	setStage,
+	errors,
+	setErrors,
 }) => {
 	const handleDrop = (acceptedFiles) => {
 		const reader = new FileReader();
@@ -39,7 +42,7 @@ const Prepare = ({
 		reader.readAsText(acceptedFiles[0]);
 		setFileNames(acceptedFiles.map((file) => file.name));
 	};
-	console.log(data);
+	console.log(errors);
 	return (
 		<div>
 			<Header variant="heading4" mb={2}>
@@ -73,28 +76,56 @@ const Prepare = ({
 					<LinkText>Download Example CSV</LinkText>
 				</Box>
 			</Box>
-			{/* <Box
-				sx={{
-					background: '#FFF2F2',
-					border: '1px solid #FF5757',
-					boxSizing: 'border-box',
-					borderRadius: '8px',
-					padding: 4,
-				}}
-			>
-				some error
-			</Box> */}
+			{Object.keys(errors).length > 0 ? (
+				<Box
+					sx={{
+						background: '#FFF2F2',
+						border: '1px solid #FF5757',
+						boxSizing: 'border-box',
+						borderRadius: '8px',
+						padding: 4,
+					}}
+				>
+					{errors?.duplicateIDS.length > 0 ? (
+						<Box>
+							<Header variant="heading6" mb={2}>
+								Duplicate Addresses Found:
+							</Header>
+							<Box display={'flex'} flexDirection={'column'}>
+								{errors.duplicateIDS?.map((addressIndex, arrIndex) => (
+									<Box key={addressIndex}>
+										<BodyText variant="regular">{`${errors?.duplicates[arrIndex]} on line ${addressIndex}`}</BodyText>
+									</Box>
+								))}
+							</Box>
+						</Box>
+					) : null}
+					{errors?.invalidIDS.length > 0 ? (
+						<>
+							<Box my={3} sx={{ borderBottom: '1px solid #FF5757' }} />
+							<Box>
+								<Header variant="heading6" mb={2}>
+									Invalid Addresses Found:
+								</Header>
+								<Box display={'flex'} flexDirection={'column'}>
+									{errors.invalidIDS?.map((addressIndex, arrIndex) => (
+										<Box key={addressIndex}>
+											<BodyText variant="regular">{`${errors?.invalids[arrIndex]} on line ${addressIndex}`}</BodyText>
+										</Box>
+									))}
+								</Box>
+							</Box>
+						</>
+					) : null}
+				</Box>
+			) : null}
 			<Box mt={4} display="flex" justifyContent={'flex-end'}>
 				<ThemeButton
 					variant={'primary'}
 					size="large"
 					onClick={() => {
-						if (stage === 'prepare') {
-							if (data.length > 0) {
-								setStage('confirm');
-							} else {
-								toast('Please upload a file or enter addresses manually', 'error');
-							}
+						if (validateAddresses(data, setErrors) === 'valid') {
+							setStage('confirm');
 						}
 					}}
 				>
