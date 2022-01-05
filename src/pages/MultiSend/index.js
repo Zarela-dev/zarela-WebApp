@@ -36,10 +36,6 @@ const MultiSendPage = () => {
 				<BodyText variant="big" fontWeight={stage === 'send' ? 'bold' : 'regular'}>
 					Send
 				</BodyText>
-				<Box mx={2} width={160} sx={{ borderBottom: '1px dashed #EAEAEA', position: 'relative', top: '-10px' }} />
-				<BodyText variant="big" fontWeight={stage === 'success' ? 'bold' : 'regular'}>
-					Success
-				</BodyText>
 			</Box>
 			<Card
 				p={4}
@@ -75,19 +71,6 @@ const MultiSendPage = () => {
 					/>
 				) : stage === 'send' ? (
 					<Send
-						{...{
-							stage,
-							setStage,
-							appState,
-							data,
-							DECIMALS,
-							account,
-							txHash,
-							setTxHash,
-						}}
-					/>
-				) : stage === 'success' ? (
-					<Success
 						{...{
 							stage,
 							setStage,
