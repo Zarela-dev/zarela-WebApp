@@ -4,7 +4,6 @@ import MultisendDropzone from '../../components/MultisendDropzone';
 import convertCSV from 'convert-csv-to-json';
 import BigNumber from 'bignumber.js';
 import { Box } from 'rebass';
-import { toast } from '../../utils';
 import { ThemeButton } from '../../components/Elements/Button';
 import CodeMirror from '@uiw/react-codemirror';
 import { isEmpty, validateAddresses, validateAmounts } from './_validations';
@@ -147,7 +146,7 @@ const Prepare = ({
 					size="large"
 					onClick={() => {
 						if (validateAddresses(data, setErrors) === 'valid' && validateAmounts(data, setErrors) === 'valid') {
-							let balance = new BigNumber(appState.biobitBalance);
+							let balance = new BigNumber(appState.biobitBalance.replace(/,/g, ''));
 							if (balance.gte(data.reduce((acc, curr) => acc.plus(new BigNumber(curr.amount)), new BigNumber(0)))) {
 								setStage('confirm');
 							} else {

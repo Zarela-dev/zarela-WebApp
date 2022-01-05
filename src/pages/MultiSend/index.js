@@ -7,6 +7,7 @@ import { BodyText } from '../../components/Elements/Typography';
 import Prepare from './Prepare';
 import Confirm from './Confirm';
 import Send from './Send';
+import ConnectDialog from '../../components/Dialog/ConnectDialog';
 
 const MultiSendPage = () => {
 	const DECIMALS = 1000000000;
@@ -44,6 +45,7 @@ const MultiSendPage = () => {
 					borderRadius: '16px',
 				}}
 			>
+				{!account ? <ConnectDialog isOpen={true} /> : null}
 				{stage === 'prepare' ? (
 					<Prepare
 						{...{
