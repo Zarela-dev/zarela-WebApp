@@ -7,7 +7,6 @@ import { BodyText } from '../../components/Elements/Typography';
 import Prepare from './Prepare';
 import Confirm from './Confirm';
 import Send from './Send';
-import Success from './Success';
 
 const MultiSendPage = () => {
 	const DECIMALS = 1000000000;
