@@ -165,7 +165,7 @@ const ChainBadge = styled.div`
 	padding: 10px 20px;
 	padding-right: 10px;
 	line-height: 22px;
-	color: ${props => props.theme.colors.primary};
+	color: ${(props) => props.theme.colors.primary};
 `;
 const TitleSection = styled.div`
 	display: flex;
@@ -174,11 +174,11 @@ const TitleSection = styled.div`
 	padding: 0 18px;
 	justify-content: space-between;
 	align-items: center;
-	background-color: ${props => props.theme.colors.bgDisabled};
+	background-color: ${(props) => props.theme.colors.bgDisabled};
 	flex-wrap: wrap;
 `;
 const Title = styled.h1`
-	color: ${props => props.theme.colors.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 	font-size: 18px;
 	font-weight: 700;
 	white-space: nowrap;
@@ -253,12 +253,12 @@ const NotificationBadge = styled.div`
 	min-width: ${(props) => (props.isMobile ? '20px' : '25px')};
 	min-height: ${(props) => (props.isMobile ? '20px' : '25px')};
 	font-size: ${(props) => (props.isMobile ? '12px' : '16px')};
-	background-color: ${props => props.theme.colors.secondary};
+	background-color: ${(props) => props.theme.colors.secondary};
 	border-radius: ${(props) => (props.isMobile ? '10px' : '16px')};
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	color: ${props => props.theme.colors.textLabel};
+	color: ${(props) => props.theme.colors.textLabel};
 	position: absolute;
 	top: ${(props) => (props.isMobile ? '-3px' : '-10px')};
 `;
@@ -327,9 +327,7 @@ export default function Header({ isMobile }, props) {
 						<LeftMenu>
 							<NavItem isMobile={appState.isMobile}>
 								{GUIDES.find(
-									(page) =>
-										location.pathname === page ||
-										(location.pathname.startsWith(page) && page !== '/')
+									(page) => location.pathname === page || (location.pathname.startsWith(page) && page !== '/')
 								) &&
 									!location.pathname.startsWith('/inbox') &&
 									!location.pathname.startsWith('/request/create') && (
@@ -349,16 +347,20 @@ export default function Header({ isMobile }, props) {
 							<NavItem isMobile={appState.isMobile}>
 								<NavIcon src={bell} height="20px" onClick={() => setIsNotificationMenuOpen(true)} />
 								{appState.notificationCount !== 0 && (
-									<NotificationBadge isMobile={appState.isMobile}>
-										{appState.notificationCount}
-									</NotificationBadge>
+									<NotificationBadge isMobile={appState.isMobile}>{appState.notificationCount}</NotificationBadge>
 								)}
 							</NavItem>
 							<NavItem isMobile={appState.isMobile}>
-								<NavIcon src={search} height="20px" onClick={() => 	dispatch({
-													type: actionTypes.SET_MOBILE_SEARCH_MODAL_SHOW,
-													payload: true,
-												})} />
+								<NavIcon
+									src={search}
+									height="20px"
+									onClick={() =>
+										dispatch({
+											type: actionTypes.SET_MOBILE_SEARCH_MODAL_SHOW,
+											payload: true,
+										})
+									}
+								/>
 							</NavItem>
 							<NavItem isMobile={appState.isMobile}>
 								<NavIconApp src={menu} onClick={() => setMenuOpen(true)} />
@@ -406,10 +408,7 @@ export default function Header({ isMobile }, props) {
 									<Heading as="h4" variant="heading4">
 										Wallet
 									</Heading>
-									<Heading
-										as="h4"
-										variant="heading4"
-									>{`Balance: ${appState.biobitBalance} BBit`}</Heading>
+									<Heading as="h4" variant="heading4">{`Balance: ${appState.biobitBalance} BBit`}</Heading>
 								</WalletTitlebar>
 							) : routeGroup === 'log' ? (
 								<WalletTitlebar isMobile={appState.isMobile}>
@@ -459,55 +458,37 @@ export default function Header({ isMobile }, props) {
 						</Link>
 						<NavItem isMobile={appState.isMobile} to="/">
 							<ThemeIcon variant="layout" src={routeGroup === '' ? homeActive : home} mr={'0px'} />
-							<BodyText
-								variant="small"
-								fontWeight={routeGroup === '' ? 'semiBold' : 'normal'}
-								color="primary"
-							>
+							<BodyText variant="small" fontWeight={routeGroup === '' ? 'semiBold' : 'normal'} color="primary">
 								Home
 							</BodyText>
 						</NavItem>
 						<NavItem isMobile={appState.isMobile} to="/inbox">
 							<ThemeIcon variant="layout" mr={'0px'} src={routeGroup === 'inbox' ? inboxActive : inbox} />
-							<BodyText
-								variant="small"
-								fontWeight={routeGroup === 'inbox' ? 'semiBold' : 'normal'}
-								color="primary"
-							>
+							<BodyText variant="small" fontWeight={routeGroup === 'inbox' ? 'semiBold' : 'normal'} color="primary">
 								Inbox
 							</BodyText>
 						</NavItem>
 						<NavItem isMobile={appState.isMobile} to="/log/my_requests">
 							<ThemeIcon variant="layout" mr={'0px'} src={routeGroup === 'log' ? userActive : user} />
-							<BodyText
-								variant="small"
-								fontWeight={routeGroup === 'log' ? 'semiBold' : 'normal'}
-								color="primary"
-							>
+							<BodyText variant="small" fontWeight={routeGroup === 'log' ? 'semiBold' : 'normal'} color="primary">
 								Log
 							</BodyText>
 						</NavItem>
-						<NavItem
-							isMobile={appState.isMobile}
-							to={{ pathname: process.env.REACT_APP_EXPLORE_LINK }}
-							target="_blank"
-						>
+						<NavItem isMobile={appState.isMobile} to="/multisend">
+							<ThemeIcon variant="layout" mr={'0px'} src={routeGroup === 'multisend' ? userActive : user} />
+							<BodyText variant="small" fontWeight={routeGroup === 'multisend' ? 'semiBold' : 'normal'} color="primary">
+								Multisend
+							</BodyText>
+						</NavItem>
+						<NavItem isMobile={appState.isMobile} to={{ pathname: process.env.REACT_APP_EXPLORE_LINK }} target="_blank">
 							<ThemeIcon variant="layout" mr={'0px'} src={explore} />
 							<BodyText variant="small" fontWeight="normal" color="primary">
 								Explore
 							</BodyText>
 						</NavItem>
 						<NavItem isMobile={appState.isMobile} to="/wallet/account">
-							<ThemeIcon
-								variant="layout"
-								m="0 8px"
-								src={routeGroup === 'wallet' ? walletActive : wallet}
-							/>
-							<BodyText
-								variant="small"
-								fontWeight={routeGroup === 'wallet' ? 'semiBold' : 'normal'}
-								color="primary"
-							>
+							<ThemeIcon variant="layout" m="0 8px" src={routeGroup === 'wallet' ? walletActive : wallet} />
+							<BodyText variant="small" fontWeight={routeGroup === 'wallet' ? 'semiBold' : 'normal'} color="primary">
 								Wallet
 							</BodyText>
 							<ChainBadge onClick={(e) => e.preventDefault()}>{CURRENT_NETWORK_LABEL}</ChainBadge>
@@ -520,9 +501,7 @@ export default function Header({ isMobile }, props) {
 						<NavItem>
 							<ThemeIcon variant="layout" src={bell} onClick={() => setIsNotificationMenuOpen(true)} />
 							{appState.notificationCount !== 0 && (
-								<NotificationBadge isMobile={appState.isMobile}>
-									{appState.notificationCount}
-								</NotificationBadge>
+								<NotificationBadge isMobile={appState.isMobile}>{appState.notificationCount}</NotificationBadge>
 							)}
 						</NavItem>
 						{GUIDES.find(
