@@ -7,21 +7,20 @@ import { BodyText } from '../../components/Elements/Typography';
 import Prepare from './Prepare';
 import Confirm from './Confirm';
 import Send from './Send';
+import Success from './Success';
 
 const MultiSendPage = () => {
+	const DECIMALS = 1000000000;
 	const [data, setData] = useState([]);
 	const [fileNames, setFileNames] = useState([]);
 	const [manualInput, setManualInput] = useState('');
-
-	const [method, setMethod] = useState('file');
-	const [sendable, setSendable] = useState(false);
-	const [isApproving, setApproving] = useState(false);
 
 	const [stage, setStage] = useState('prepare');
 	const { appState } = useContext(mainContext);
 	const { account } = useWeb3React();
 
 	const [errors, setErrors] = useState({});
+	const [txHash, setTxHash] = useState(null);
 
 	return (
 		<Box sx={{ width: '720px', margin: '-80px auto 0' }}>
@@ -36,6 +35,10 @@ const MultiSendPage = () => {
 				<Box mx={2} width={160} sx={{ borderBottom: '1px dashed #EAEAEA', position: 'relative', top: '-10px' }} />
 				<BodyText variant="big" fontWeight={stage === 'send' ? 'bold' : 'regular'}>
 					Send
+				</BodyText>
+				<Box mx={2} width={160} sx={{ borderBottom: '1px dashed #EAEAEA', position: 'relative', top: '-10px' }} />
+				<BodyText variant="big" fontWeight={stage === 'success' ? 'bold' : 'regular'}>
+					Success
 				</BodyText>
 			</Box>
 			<Card
@@ -56,8 +59,6 @@ const MultiSendPage = () => {
 							setFileNames,
 							manualInput,
 							setManualInput,
-							method,
-							setMethod,
 							stage,
 							setStage,
 							errors,
@@ -77,13 +78,25 @@ const MultiSendPage = () => {
 						{...{
 							stage,
 							setStage,
-							isApproving,
-							setApproving,
 							appState,
 							data,
-							sendable,
-							setSendable,
+							DECIMALS,
 							account,
+							txHash,
+							setTxHash,
+						}}
+					/>
+				) : stage === 'success' ? (
+					<Success
+						{...{
+							stage,
+							setStage,
+							appState,
+							data,
+							DECIMALS,
+							account,
+							txHash,
+							setTxHash,
 						}}
 					/>
 				) : null}

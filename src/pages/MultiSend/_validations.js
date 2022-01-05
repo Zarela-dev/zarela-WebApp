@@ -65,3 +65,10 @@ export const validateAmounts = (data, setErrors) => {
 	setErrors(() => ({}));
 	return 'valid';
 };
+
+export const isEmpty = (data) => {
+	if (Object.keys(data).length === 0) {
+		return true;
+	}
+	return false;
+};

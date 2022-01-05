@@ -7,7 +7,7 @@ import { Box } from 'rebass';
 import { toast } from '../../utils';
 import { ThemeButton } from '../../components/Elements/Button';
 import CodeMirror from '@uiw/react-codemirror';
-import { validateAddresses, validateAmounts } from './_validations';
+import { isEmpty, validateAddresses, validateAmounts } from './_validations';
 
 const Prepare = ({
 	data,
@@ -143,6 +143,7 @@ const Prepare = ({
 			<Box mt={4} display="flex" justifyContent={'flex-end'}>
 				<ThemeButton
 					variant={'primary'}
+					disabled={isEmpty(data)}
 					size="large"
 					onClick={() => {
 						if (validateAddresses(data, setErrors) === 'valid' && validateAmounts(data, setErrors) === 'valid') {
