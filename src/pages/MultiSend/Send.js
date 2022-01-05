@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Box } from 'rebass';
 import { BodyText, Header } from '../../components/Elements/Typography';
 import { ThemeButton } from '../../components/Elements/Button';
@@ -6,7 +6,32 @@ import BigNumber from 'bignumber.js';
 import { toast } from '../../utils';
 import { CircularProgress } from '@mui/material';
 
-const Send = ({ stage, setStage, isApproving, setApproving, appState, data, sendable, setSendable, account }) => {
+const Send = ({ stage, setStage, appState, data, account, DECIMALS, txHash, setTxHash }) => {
+	const [isApproving, setIsApproving] = useState(true);
+	const [hasAllowance, setAllowance] = useState(false);
+	const [isSending, setSending] = useState(false);
+
+	useEffect(() => {
+		if (appState.contract !== null) {
+			appState.contract.methods
+				.allowance(account, process.env.REACT_APP_MULTISEND_CONTRACT_ADDRESS)
+				.call({ from: account })
+				.then((allowance) => {
+					if (
+						new BigNumber(allowance).gte(
+							data.reduce((acc, curr) => acc.plus(new BigNumber(curr.amount).multipliedBy(DECIMALS)), new BigNumber(0))
+						)
+					) {
+						setAllowance(true);
+						setIsApproving(false);
+					} else {
+						setIsApproving(false);
+						setAllowance(false);
+					}
+				});
+		}
+	}, [appState.contract]);
+
 	return (
 		<>
 			<Card
@@ -31,27 +56,31 @@ const Send = ({ stage, setStage, isApproving, setApproving, appState, data, send
 					<ThemeButton
 						variant="primary"
 						size={'large'}
-						disabled={isApproving === true}
+						disabled={
+							(hasAllowance === false && isApproving !== false) || isApproving === true || hasAllowance === true
+						}
 						onClick={() => {
 							if (appState.contract !== null) {
-								setApproving(true);
+								setIsApproving(true);
 								appState.contract.methods
 									.approve(
 										process.env.REACT_APP_MULTISEND_CONTRACT_ADDRESS,
 										data
 											.map((x) => x.amount)
 											.reduce((a, b) => a.plus(b), new BigNumber(0))
+											.multipliedBy(1000000000)
 											.toNumber()
 									)
 									.send({ from: account })
 									.then((res) => {
-										setSendable(true);
-										setApproving(false);
+										setIsApproving(false);
+										setAllowance(true);
 										toast(`Approval Successful`, 'success');
 									})
 									.catch((err) => {
-										console.log(err);
-										setApproving(false);
+										console.error(err);
+										setIsApproving(false);
+										setAllowance(false);
 									});
 							}
 						}}
@@ -81,32 +110,41 @@ const Send = ({ stage, setStage, isApproving, setApproving, appState, data, send
 					<ThemeButton
 						variant="primary"
 						size={'large'}
-						disabled={sendable === false}
+						disabled={hasAllowance === false || isSending === true}
 						onClick={() => {
 							if (appState.multisendContract !== null) {
+								setSending(true);
 								appState.multisendContract.methods
 									.MultiSendTokens(
 										process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS,
 										data.map((x) => x.address),
-										data.map((x) => x.toNumber())
+										data.map((x) => new BigNumber(x.amount).multipliedBy(DECIMALS).toNumber())
 									)
 									.send({ from: account })
 									.then((res) => {
-										console.log(res);
+										if (res.status === true) {
+											setTxHash(res.transactionHash);
+											setStage('success');
+										}
 									})
 									.catch((err) => {
+										setTxHash(null);
 										console.log(err);
+									})
+									.finally(() => {
+										setSending(false);
 									});
 							}
 						}}
 					>
-						Send
+						{isSending ? <CircularProgress size={20} /> : 'Send'}
 					</ThemeButton>
 				</Box>
 			</Card>
 			<Box mt={4} display="flex" justifyContent={'flex-start'}>
 				<ThemeButton
 					variant={'secondary'}
+					disabled={isSending === true}
 					size="large"
 					onClick={() => {
 						if (stage === 'send') {
