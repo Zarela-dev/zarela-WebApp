@@ -146,7 +146,7 @@ const Prepare = ({
 					size="large"
 					onClick={() => {
 						if (validateAddresses(data, setErrors) === 'valid' && validateAmounts(data, setErrors) === 'valid') {
-							let balance = new BigNumber(appState.biobitBalance);
+							let balance = new BigNumber(appState.biobitBalance.replace(/,/g, ''));
 							if (balance.gte(data.reduce((acc, curr) => acc.plus(new BigNumber(curr.amount)), new BigNumber(0)))) {
 								setStage('confirm');
 							} else {
