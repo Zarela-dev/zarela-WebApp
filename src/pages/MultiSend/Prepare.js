@@ -70,7 +70,9 @@ const Prepare = ({
 					<MultisendDropzone fileNames={fileNames} handleDrop={handleDrop} />
 				</Box>
 				<Box flex="1">
-					<LinkText>Download Example CSV</LinkText>
+					<LinkText as="a" target="_blank" href="https://zarela.net/sample/sample.csv">
+						Download Sample CSV
+					</LinkText>
 				</Box>
 			</Box>
 			{Object.keys(errors).length > 0 ? (
