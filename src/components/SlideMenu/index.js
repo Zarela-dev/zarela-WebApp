@@ -144,7 +144,7 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 											exact: true,
 										})}
 										to={item.path || { pathname: item.link }}
-										target={item.externalLink && item.target ? item.target : '_blank'}
+										target={item.externalLink && '_top'}
 										notification={item.notification}
 									>
 										{item.title}
@@ -189,7 +189,7 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 								onClick={onClose}
 								active={matchPath(pathname, { path: item.path, exact: true })}
 								to={item.path || { pathname: item.link }}
-								target={item.externalLink && item.target ? item.target : '_blank'}
+								target={item.externalLink && '_top'}
 								notification={item.notification}
 								replace={item.replace}
 								disabled={item.disabled}
