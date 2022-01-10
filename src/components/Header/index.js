@@ -487,11 +487,13 @@ export default function Header({ isMobile }, props) {
 								Log
 							</BodyText>
 						</NavItem>
-						<NavItem
-							isMobile={appState.isMobile}
-							to={{ pathname: process.env.REACT_APP_EXPLORE_LINK }}
-							target="_blank"
-						>
+						<NavItem isMobile={appState.isMobile} to="/multisend">
+							<ThemeIcon variant="layout" mr={'0px'} src={routeGroup === 'multisend' ? userActive : user} />
+							<BodyText variant="small" fontWeight={routeGroup === 'multisend' ? 'semiBold' : 'normal'} color="primary">
+								Multisend
+							</BodyText>
+						</NavItem>
+						<NavItem isMobile={appState.isMobile} to={{ pathname: process.env.REACT_APP_EXPLORE_LINK }}>
 							<ThemeIcon variant="layout" mr={'0px'} src={explore} />
 							<BodyText variant="small" fontWeight="normal" color="primary">
 								Explore

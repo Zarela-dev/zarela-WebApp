@@ -43,7 +43,6 @@ const MobileMenu = ({ isOpen, onClose, notifyOnClose, usage = 'toastify' }) => {
 		{
 			title: 'Explore',
 			link: process.env.REACT_APP_EXPLORE_LINK,
-			externalLink: true,
 			replace: '',
 			notifications: 0,
 		},
