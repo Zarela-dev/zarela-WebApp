@@ -490,7 +490,7 @@ export default function Header({ isMobile }, props) {
 						<NavItem
 							isMobile={appState.isMobile}
 							to={{ pathname: process.env.REACT_APP_EXPLORE_LINK }}
-							target="_blank"
+							target="_top"
 						>
 							<ThemeIcon variant="layout" mr={'0px'} src={explore} />
 							<BodyText variant="small" fontWeight="normal" color="primary">
