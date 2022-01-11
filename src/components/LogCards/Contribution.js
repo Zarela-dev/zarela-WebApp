@@ -31,6 +31,8 @@ import {
 } from './Elements';
 import { timeSince } from '../../utils';
 import useBiobit from '../../hooks/useBiobit';
+import { ThemeButton } from '../Elements/Button';
+import { useHistory } from 'react-router-dom';
 
 const LogCard = ({ data, account, paymentDay }) => {
 	const { requestID, title, angelTokenPay, laboratoryTokenPay, contributions } = data;
@@ -38,6 +40,7 @@ const LogCard = ({ data, account, paymentDay }) => {
 	const totalPending = contributions.filter((item) => item.status === false).length;
 	const totalConfirmed = contributions.filter((item) => item.status === true).length;
 	const allApproved = contributions.length === totalConfirmed;
+	const history = useHistory();
 	const getVariant = () => {
 		if (allApproved) return 'confirmed';
 		if (contributions.length !== totalConfirmed) return 'primary';
@@ -187,6 +190,13 @@ const LogCard = ({ data, account, paymentDay }) => {
 						</TableBulkRow>
 					</Table>
 				</Body>
+			) : null}
+			{isOpen && getVariant() === 'confirmed' ? (
+				<Row width="100%" pt={3} pb={2} justifyContent="flex-end">
+					<ThemeButton variant="primary" size="medium" to="/multisend">
+						Pay Angels
+					</ThemeButton>
+				</Row>
 			) : null}
 		</CompactRequestCard>
 	);
