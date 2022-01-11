@@ -91,19 +91,13 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 			file: yup.string().required('you must select a file to upload'),
 			angelAddress: yup.string().when('step', {
 				is: true,
-				then: yup
-					.string()
-					.matches(addressRegex, 'wrong Ethereum address')
-					.required('this filed can not be empty'),
+				then: yup.string().matches(addressRegex, 'wrong Ethereum address').required('this filed can not be empty'),
 				otherwise: yup.string().nullable(),
 			}),
 			hasHub: yup.boolean().nullable(),
 			hubAddress: yup.string().when('hasHub', {
 				is: true,
-				then: yup
-					.string()
-					.matches(addressRegex, 'wrong Ethereum address')
-					.required('this filed can not be empty'),
+				then: yup.string().matches(addressRegex, 'wrong Ethereum address').required('this filed can not be empty'),
 				otherwise: yup.string().nullable(),
 			}),
 			rewardGainer: yup.string().when('hubAddress', {
@@ -174,37 +168,15 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 			</Box>
 			<Box show={formik.values.step == 2}>
 				<TextField
-					placeholder={'Angel Address'}
-					label="Enter Angel Address"
+					placeholder={'Hub Address'}
+					hasTopMargin
+					label="Enter Hub Address"
 					type="text"
 					name={'angelAddress'}
 					error={formik.errors?.angelAddress}
 					value={formik.values.angelAddress}
 					onChange={(e) => {
 						formik.setFieldValue('angelAddress', e.target.value);
-					}}
-				/>
-				<SmallCheckbox
-					checked={formik.values.hasHub}
-					name="hasHub"
-					onChange={(e) => {
-						formik.setFieldValue('hasHub', e.target.checked);
-					}}
-				>
-					There is a hub engaged with this request?
-				</SmallCheckbox>
-			</Box>
-			<Box show={formik.values.step == 2 && formik.values.hasHub}>
-				<TextField
-					placeholder={'Hub Address'}
-					hasTopMargin
-					label="Enter Hub Address"
-					type="text"
-					name={'hubAddress'}
-					error={formik.errors?.hubAddress}
-					value={formik.values.hubAddress}
-					onChange={(e) => {
-						formik.setFieldValue('hubAddress', e.target.value);
 					}}
 				/>
 			</Box>
