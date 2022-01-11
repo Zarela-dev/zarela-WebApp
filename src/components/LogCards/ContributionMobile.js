@@ -3,7 +3,6 @@ import { MobileCompactRequestCard, MobileBody, MobileTable } from './Elements';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
 import checkedGreen from '../../assets/icons/check-green.svg';
 import pendingIcon from '../../assets/icons/pending.svg';
-import angelIcon from '../../assets/icons/angel.png';
 import hubIcon from '../../assets/icons/hub.png';
 import { timeSince } from '../../utils';
 import useBiobit from '../../hooks/useBiobit';
@@ -11,6 +10,7 @@ import { IdLabel } from './../Elements/IdLabel';
 import { BodyText } from './../Elements/Typography';
 import { Row, Col } from './../Elements/Flex';
 import { ThemeIcon } from './../Elements/Icon';
+import BN from 'bignumber.js';
 
 const LogCardMobile = ({ data, account, paymentDay }) => {
 	const [isOpen, setOpen] = useState(false);
@@ -92,31 +92,13 @@ const LogCardMobile = ({ data, account, paymentDay }) => {
 												</BodyText>
 											</Col>
 											<Col>
-												{rewardGainer === true ? (
-													<Row mb={1} type="role">
-														<ThemeIcon mr={2} height="auto !important" variant="small" src={angelIcon} />
-														<BodyText variant="extraSmall">{'Angel 50 BBIT'}</BodyText>
-														<BodyText
-															ml={2}
-															variant="extraSmall"
-															color={+paymentDay > zarelaDay ? 'success' : 'orange'}
-														>
-															{+paymentDay > zarelaDay ? 'Received' : 'Pending'}
-														</BodyText>
-													</Row>
-												) : (
-													<Row mb={1} type="role">
-														<ThemeIcon mr={2} height="auto !important" variant="small" src={hubIcon} />
-														<BodyText variant="extraSmall">{'Hub 50 BBIT'}</BodyText>
-														<BodyText
-															ml={2}
-															variant="extraSmall"
-															color={+paymentDay > zarelaDay ? 'success' : 'orange'}
-														>
-															{+paymentDay > zarelaDay ? 'Received' : 'Pending'}
-														</BodyText>
-													</Row>
-												)}
+												<Row mb={1} type="role">
+													<ThemeIcon mr={2} height="auto !important" variant="small" src={hubIcon} />
+													<BodyText variant="extraSmall">{'Hub 50 BBIT'}</BodyText>
+													<BodyText ml={2} variant="extraSmall" color={+paymentDay > zarelaDay ? 'success' : 'orange'}>
+														{+paymentDay > zarelaDay ? 'Received' : 'Pending'}
+													</BodyText>
+												</Row>
 											</Col>
 										</Row>
 										<Row my={2}>
@@ -126,19 +108,12 @@ const LogCardMobile = ({ data, account, paymentDay }) => {
 												</BodyText>
 											</Col>
 											<Col>
-												{angel.toLowerCase() === account.toLowerCase() && (
-													<Row mb={1}>
-														<ThemeIcon mr={2} height="auto !important" variant="small" src={angelIcon} />
-														<BodyText variant="extraSmall">{`Angel ${data.angelTokenPay} BBIT`}</BodyText>
-														<BodyText ml={2} variant="extraSmall" color={status ? 'success' : 'orange'}>
-															{status ? 'Received' : 'Pending'}
-														</BodyText>
-													</Row>
-												)}
 												{hub.toLowerCase() === account.toLowerCase() && (
 													<Row>
 														<ThemeIcon mr={2} height="auto !important" variant="small" src={hubIcon} />
-														<BodyText variant="extraSmall">{`Hub ${data.laboratoryTokenPay} BBIT`}</BodyText>
+														<BodyText variant="extraSmall">{`Hub ${new BN(data.laboratoryTokenPay)
+																		.plus(new BN(data.angelTokenPay))
+																		.toFormat()} BBIT`}</BodyText>
 														<BodyText ml={2} variant="extraSmall" color={status ? 'success' : 'orange'}>
 															{status ? 'Received' : 'Pending'}
 														</BodyText>
