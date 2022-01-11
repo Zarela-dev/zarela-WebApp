@@ -10,7 +10,7 @@ import { Row, Col } from './../Elements/Flex';
 import { ThemeIcon } from './../Elements/Icon';
 import { ThemeDivider } from './../Elements/Divider';
 import hubIcon from '../../assets/icons/hub.png';
-import angelIcon from '../../assets/icons/angel.png';
+import BN from 'bignumber.js';
 
 import {
 	CompactRequestCard,
@@ -150,31 +150,13 @@ const LogCard = ({ data, account, paymentDay }) => {
 												<TableCell>
 													<Row>
 														<Col>
-															{rewardGainer === true ? (
-																<Row mb={1}>
-																	<ThemeIcon height="auto !important" variant="big" src={angelIcon} />
-																	<BodyText variant="small">{'Angel 50 BBIT'}</BodyText>
-																	<BodyText
-																		ml={2}
-																		variant="small"
-																		color={+paymentDay > zarelaDay ? 'success' : 'orange'}
-																	>
-																		{+paymentDay > zarelaDay ? 'Received' : 'Pending'}
-																	</BodyText>
-																</Row>
-															) : (
-																<Row>
-																	<ThemeIcon height="auto !important" variant="big" src={hubIcon} />
-																	<BodyText variant="small">{'Hub 50 BBIT'}</BodyText>
-																	<BodyText
-																		ml={2}
-																		variant="small"
-																		color={+paymentDay > zarelaDay ? 'success' : 'orange'}
-																	>
-																		{+paymentDay > zarelaDay ? 'Received' : 'Pending'}
-																	</BodyText>
-																</Row>
-															)}
+															<Row mb={1}>
+																<ThemeIcon height="auto !important" variant="big" src={hubIcon} />
+																<BodyText variant="small">{'Angel 50 BBIT'}</BodyText>
+																<BodyText ml={2} variant="small" color={+paymentDay > zarelaDay ? 'success' : 'orange'}>
+																	{+paymentDay > zarelaDay ? 'Received' : 'Pending'}
+																</BodyText>
+															</Row>
 														</Col>
 													</Row>
 												</TableCell>
@@ -183,19 +165,12 @@ const LogCard = ({ data, account, paymentDay }) => {
 												<TableCell>
 													<Row>
 														<Col>
-															{angel.toLowerCase() === account.toLowerCase() && (
-																<Row mb={1}>
-																	<ThemeIcon height="auto !important" variant="big" src={angelIcon} />
-																	<BodyText variant="small">{`Angel ${data.angelTokenPay} BBIT`}</BodyText>
-																	<BodyText ml={2} variant="small" color={status ? 'success' : 'orange'}>
-																		{status ? 'Received' : 'Pending'}
-																	</BodyText>
-																</Row>
-															)}
 															{hub.toLowerCase() === account.toLowerCase() && (
 																<Row>
 																	<ThemeIcon height="auto !important" variant="big" src={hubIcon} />
-																	<BodyText variant="small">{`Hub ${data.laboratoryTokenPay} BBIT`}</BodyText>
+																	<BodyText variant="small">{`Hub ${new BN(data.laboratoryTokenPay)
+																		.plus(new BN(data.angelTokenPay))
+																		.toFormat()} BBIT`}</BodyText>
 																	<BodyText ml={2} variant="small" color={status ? 'success' : 'orange'}>
 																		{status ? 'Received' : 'Pending'}
 																	</BodyText>
