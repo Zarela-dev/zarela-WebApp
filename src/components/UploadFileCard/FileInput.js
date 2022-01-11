@@ -178,7 +178,7 @@ const FileInput = forwardRef(
 							<ThemeButton as="label" variant="primary" size="normal">
 								{buttonLabel}
 								{!disableUpload ? (
-									<input ref={ref} type="file" style={{ display: 'none' }} {...rest} />
+									<input ref={ref} accept='.zip,.rar' type="file" style={{ display: 'none' }} {...rest} />
 								) : null}
 							</ThemeButton>
 						)}
