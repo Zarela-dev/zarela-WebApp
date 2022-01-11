@@ -12,13 +12,11 @@ const Nav = styled.nav`
 	top: 0;
 	height: 100vh;
 	background: white;
-	transform: ${({ isOpen }) =>
-		isOpen ? 'translateX(0%)' : 'translateX(100%)'};
+	transform: ${({ isOpen }) => (isOpen ? 'translateX(0%)' : 'translateX(100%)')};
 	min-width: 276px;
 	border: 1.5px solid ${(props) => props.theme.colors.success};
 	border-radius: 8px 0px 0px 0px;
-	padding: ${(props) => props.theme.spacing(2)}
-		${(props) => props.theme.spacing(3)};
+	padding: ${(props) => props.theme.spacing(2)} ${(props) => props.theme.spacing(3)};
 	padding-right: ${(props) => (props.usage === 'notify' ? '0 !important' : '')};
 	overflow: auto;
 	overflow-x: hidden !important;
@@ -45,7 +43,7 @@ const Title = styled.h2`
 	font-size: 18px;
 	line-height: 20px;
 	text-align: center;
-	color: ${props => props.theme.colors.success};
+	color: ${(props) => props.theme.colors.success};
 	margin-top: 10px;
 `;
 
@@ -67,8 +65,7 @@ const Divider = styled.div`
 	height: 1px;
 	background: #4fcfa1;
 	border-radius: 12px;
-	margin: ${(props) => props.theme.spacing(2)} 0
-		${(props) => props.theme.spacing(4)};
+	margin: ${(props) => props.theme.spacing(2)} 0 ${(props) => props.theme.spacing(4)};
 `;
 
 const CTAWrapper = styled.div``;
@@ -87,7 +84,7 @@ const MenuItem = styled(Link)`
 	font-weight: ${(props) => (props.active ? 'bold' : 'normal')};
 	font-size: 18px;
 	line-height: 18px;
-	color: ${props => props.theme.colors.primary};
+	color: ${(props) => props.theme.colors.primary};
 	text-decoration: ${(props) => (props.active ? 'underline' : 'none')};
 	margin-bottom: ${(props) => props.theme.spacing(4)};
 	cursor: ${(props) => props.disabled && 'not-allowed'};
@@ -105,7 +102,7 @@ const MenuItemDisabled = styled.a.attrs((props) => {
 	font-weight: normal;
 	font-size: 18px;
 	line-height: 18px;
-	color: ${props => props.theme.colors.primary};
+	color: ${(props) => props.theme.colors.primary};
 	text-decoration: none;
 	margin-bottom: ${(props) => props.theme.spacing(4)};
 	cursor: ${(props) => props.disabled && 'not-allowed'};
@@ -123,7 +120,7 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 					<BackIcon src={backIcon} onClick={onClose} />
 				</HeaderRow>
 				<HeaderRow>
-					<Heading as='h5' variant='heading5' color='success'>
+					<Heading as="h5" variant="heading5" color="success">
 						{title}
 					</Heading>
 					<CTAWrapper>{cta}</CTAWrapper>
@@ -132,11 +129,7 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 			<Divider />
 
 			{usage === 'notify' ? (
-				<CustomContainer
-					enableMultiContainer
-					containerId={'notify'}
-					isMobile={appState.isMobile}
-				/>
+				<CustomContainer enableMultiContainer containerId={'notify'} isMobile={appState.isMobile} />
 			) : (
 				<MenuList>
 					{listItems.map((item) => {
@@ -151,7 +144,7 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 											exact: true,
 										})}
 										to={item.path || { pathname: item.link }}
-										target={item.externalLink && '_blank'}
+										target={item.externalLink && '_top'}
 										notification={item.notification}
 									>
 										{item.title}
@@ -196,7 +189,7 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 								onClick={onClose}
 								active={matchPath(pathname, { path: item.path, exact: true })}
 								to={item.path || { pathname: item.link }}
-								target={item.externalLink && '_blank'}
+								target={item.externalLink && '_top'}
 								notification={item.notification}
 								replace={item.replace}
 								disabled={item.disabled}
