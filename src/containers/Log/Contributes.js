@@ -101,8 +101,8 @@ const Contributes = (props) => {
 										title: requestInfo[1],
 										description: requestInfo[7],
 										requesterAddress: requestInfo[2],
-										angelTokenPay: convertToBiobit(requestInfo[3]),
-										laboratoryTokenPay: convertToBiobit(requestInfo[4]),
+										angelTokenPay: convertToBiobit(requestInfo[3], false),
+										laboratoryTokenPay: convertToBiobit(requestInfo[4], false),
 										totalContributors: requestInfo[5], // total contributors required
 										totalContributed: +requestInfo[5] - +requestInfo[8],
 										whitePaper: requestInfo[6],
