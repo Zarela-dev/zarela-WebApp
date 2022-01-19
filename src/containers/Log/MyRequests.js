@@ -54,17 +54,15 @@ const MyRequests = (props) => {
 							const requests = [];
 							try {
 								for (const currentRequest of userContributions) {
-									let requestInfo = await appState.contract.methods
-										.orders(currentRequest)
-										.call();
+									let requestInfo = await appState.contract.methods.orders(currentRequest).call();
 
 									const requestTemplate = {
 										requestID: requestInfo[0],
 										title: requestInfo[1],
 										description: requestInfo[7],
 										requesterAddress: requestInfo[2],
-										angelTokenPay: convertToBiobit(requestInfo[3]),
-										laboratoryTokenPay: convertToBiobit(requestInfo[4]),
+										angelTokenPay: convertToBiobit(requestInfo[3], false),
+										laboratoryTokenPay: convertToBiobit(requestInfo[4], false),
 										totalContributors: requestInfo[5], // total contributors required
 										totalContributed: +requestInfo[5] - +requestInfo[8],
 										whitePaper: requestInfo[6],
@@ -98,74 +96,38 @@ const MyRequests = (props) => {
 				return (
 					<Card key={index} isMobile={appState.isMobile}>
 						<CircleSection>
-							<Skeleton
-								variant='circle'
-								width={41.72}
-								height={41.72}
-								className={classes.root}
-							/>
+							<Skeleton variant="circle" width={41.72} height={41.72} className={classes.root} />
 						</CircleSection>
 						<SquareSection>
-							<Skeleton
-								variant='rect'
-								width={'100%'}
-								height={19}
-								animation='wave'
-								className={classes.root}
-							/>
-							<Skeleton
-								variant='rect'
-								width={'80%'}
-								height={19.1}
-								className={classes.root}
-							/>
+							<Skeleton variant="rect" width={'100%'} height={19} animation="wave" className={classes.root} />
+							<Skeleton variant="rect" width={'80%'} height={19.1} className={classes.root} />
 						</SquareSection>
 					</Card>
 				);
 			})
 		) : requests.length === 0 ? (
-			<NoRequestsFound message='You have not created any requests yet.' />
+			<NoRequestsFound message="You have not created any requests yet." />
 		) : (
-			requests.map((request) => (
-				<MyRequestMobile key={request.requestID} data={request} />
-			))
+			requests.map((request) => <MyRequestMobile key={request.requestID} data={request} />)
 		);
 	return isLoading ? (
 		[1, 2].map((index) => {
 			return (
 				<Card key={index} isMobile={appState.isMobile}>
 					<CircleSection>
-						<Skeleton
-							variant='circle'
-							width={72}
-							height={72}
-							className={classes.root}
-						/>
+						<Skeleton variant="circle" width={72} height={72} className={classes.root} />
 					</CircleSection>
 					<SquareSection>
-						<Skeleton
-							variant='rect'
-							width={'100%'}
-							height={33}
-							animation='wave'
-							className={classes.root}
-						/>
-						<Skeleton
-							variant='rect'
-							width={'33%'}
-							height={'33px'}
-							className={classes.root}
-						/>
+						<Skeleton variant="rect" width={'100%'} height={33} animation="wave" className={classes.root} />
+						<Skeleton variant="rect" width={'33%'} height={'33px'} className={classes.root} />
 					</SquareSection>
 				</Card>
 			);
 		})
 	) : requests.length === 0 ? (
-		<NoRequestsFound message='You have not created any requests yet.' />
+		<NoRequestsFound message="You have not created any requests yet." />
 	) : (
-		requests.map((request) => (
-			<MyRequest key={request.requestID} data={request} />
-		))
+		requests.map((request) => <MyRequest key={request.requestID} data={request} />)
 	);
 };
 

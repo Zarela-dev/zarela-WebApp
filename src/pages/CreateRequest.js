@@ -96,7 +96,6 @@ const CreateRequest = () => {
 					safeLaboratoryTokenPay = new BigNumber(values.laboratoryTokenPay);
 
 				/* to prevent the Mage from submitting the request with insufficient assets */
-				console.log(safeAngelTokenPay.plus(safeLaboratoryTokenPay).times(+values.instanceCount).toString());
 				debugger;
 				if (
 					safeAngelTokenPay
