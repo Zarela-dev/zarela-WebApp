@@ -44,9 +44,7 @@ const useBiobit = () => {
 		}, new BigNumber(0));
 
 		const USD = BIG_BBIT.times(BBIT_USD);
-		let BBIT_precision = BIG_BBIT.decimalPlaces()
-			? BIG_BBIT.integerValue().toString().length + PRECISION
-			: undefined;
+		let BBIT_precision = BIG_BBIT.decimalPlaces() ? BIG_BBIT.integerValue().toString().length + PRECISION : undefined;
 		let USD_precision = USD.decimalPlaces() !== 0 ? PRECISION : undefined;
 
 		if (BBIT_USD !== null && !error) return [BIG_BBIT.toPrecision(BBIT_precision), USD.toFixed(USD_precision)];

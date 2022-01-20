@@ -5,9 +5,13 @@ import { matchPath, useLocation, Link } from 'react-router-dom';
 import CustomContainer from './../../components/ToastifyContainer';
 import { mainContext } from '../../state';
 import { Header as Heading, BodyText } from './../Elements/Typography';
+import Footer from '../Footer';
+import { Box } from 'rebass';
 
 const Nav = styled.nav`
 	position: fixed;
+	display: flex;
+	flex-direction: column;
 	right: 0;
 	top: 0;
 	height: 100vh;
@@ -201,6 +205,8 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 					})}
 				</MenuList>
 			)}
+			<Box flex={1} />
+			<Footer />
 		</Nav>
 	);
 };

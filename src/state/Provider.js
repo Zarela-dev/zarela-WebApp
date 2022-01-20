@@ -2,13 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { convertToBiobit } from '../utils';
 import { actionTypes } from './actionTypes';
-import {
-	configureFallbackWeb3,
-	getZarelaCurrentDay,
-	getGasPrice,
-	getEthPrice,
-	configureWeb3,
-} from './actions';
+import { configureFallbackWeb3, getZarelaCurrentDay, getGasPrice, getEthPrice, configureWeb3 } from './actions';
 import { injectedConnector } from '../connectors';
 
 const appInitialState = {
@@ -22,6 +16,7 @@ const appInitialState = {
 
 	fallbackWeb3Instance: null,
 	contract: null,
+	multisendContract: null,
 	isMobile: null,
 	isMobileSearchModalShow: null,
 	guideIsOpen: null,
@@ -44,10 +39,15 @@ const AppProvider = ({ children }) => {
 					...state,
 					fallbackWeb3Instance: action.payload,
 				};
-			case actionTypes.SET_CONTRACT:
+			case actionTypes.SET_ZARELA_CONTRACT:
 				return {
 					...state,
 					contract: action.payload,
+				};
+			case actionTypes.SET_MULTISEND_CONTRACT:
+				return {
+					...state,
+					multisendContract: action.payload,
 				};
 			case actionTypes.SET_BBIT_BALANCE:
 				return {
@@ -83,7 +83,7 @@ const AppProvider = ({ children }) => {
 				return {
 					...state,
 					isMobileSearchModalShow: action.payload,
-				}
+				};
 			case actionTypes.SET_GUIDE_IS_OPEN:
 				return {
 					...state,
@@ -114,16 +114,14 @@ const AppProvider = ({ children }) => {
 		// to detect device anywhere in the component tree
 		dispatch({
 			type: actionTypes.SET_CLIENT_DEVICE,
-			payload: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-				navigator.userAgent
-			)
+			payload: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 				? true
 				: false,
 		});
 		dispatch({
 			type: actionTypes.SET_MOBILE_SEARCH_MODAL_SHOW,
-			payload: false
-		})
+			payload: false,
+		});
 		// to trigger guide to open from header in each page
 		dispatch({
 			type: actionTypes.SET_GUIDE_IS_OPEN,
@@ -192,9 +190,7 @@ const AppProvider = ({ children }) => {
 					.then(function (result) {
 						dispatch({
 							type: actionTypes.SET_ETHER_BALANCE,
-							payload: Number(
-								activeWeb3.utils.fromWei(result, 'ether')
-							).toFixed(4),
+							payload: Number(activeWeb3.utils.fromWei(result, 'ether')).toFixed(4),
 						});
 					})
 					.catch((error) => {

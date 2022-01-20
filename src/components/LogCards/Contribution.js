@@ -10,7 +10,7 @@ import { Row, Col } from './../Elements/Flex';
 import { ThemeIcon } from './../Elements/Icon';
 import { ThemeDivider } from './../Elements/Divider';
 import hubIcon from '../../assets/icons/hub.png';
-import angelIcon from '../../assets/icons/angel.png';
+import BN from 'bignumber.js';
 
 import {
 	CompactRequestCard,
@@ -31,6 +31,8 @@ import {
 } from './Elements';
 import { timeSince } from '../../utils';
 import useBiobit from '../../hooks/useBiobit';
+import { ThemeButton } from '../Elements/Button';
+import { useHistory } from 'react-router-dom';
 
 const LogCard = ({ data, account, paymentDay }) => {
 	const { requestID, title, angelTokenPay, laboratoryTokenPay, contributions } = data;
@@ -38,6 +40,7 @@ const LogCard = ({ data, account, paymentDay }) => {
 	const totalPending = contributions.filter((item) => item.status === false).length;
 	const totalConfirmed = contributions.filter((item) => item.status === true).length;
 	const allApproved = contributions.length === totalConfirmed;
+	const history = useHistory();
 	const getVariant = () => {
 		if (allApproved) return 'confirmed';
 		if (contributions.length !== totalConfirmed) return 'primary';
@@ -150,31 +153,13 @@ const LogCard = ({ data, account, paymentDay }) => {
 												<TableCell>
 													<Row>
 														<Col>
-															{rewardGainer === true ? (
-																<Row mb={1}>
-																	<ThemeIcon height="auto !important" variant="big" src={angelIcon} />
-																	<BodyText variant="small">{'Angel 50 BBIT'}</BodyText>
-																	<BodyText
-																		ml={2}
-																		variant="small"
-																		color={+paymentDay > zarelaDay ? 'success' : 'orange'}
-																	>
-																		{+paymentDay > zarelaDay ? 'Received' : 'Pending'}
-																	</BodyText>
-																</Row>
-															) : (
-																<Row>
-																	<ThemeIcon height="auto !important" variant="big" src={hubIcon} />
-																	<BodyText variant="small">{'Hub 50 BBIT'}</BodyText>
-																	<BodyText
-																		ml={2}
-																		variant="small"
-																		color={+paymentDay > zarelaDay ? 'success' : 'orange'}
-																	>
-																		{+paymentDay > zarelaDay ? 'Received' : 'Pending'}
-																	</BodyText>
-																</Row>
-															)}
+															<Row mb={1}>
+																<ThemeIcon height="auto !important" variant="big" src={hubIcon} />
+																<BodyText variant="small">{'Angel 50 BBIT'}</BodyText>
+																<BodyText ml={2} variant="small" color={+paymentDay > zarelaDay ? 'success' : 'orange'}>
+																	{+paymentDay > zarelaDay ? 'Received' : 'Pending'}
+																</BodyText>
+															</Row>
 														</Col>
 													</Row>
 												</TableCell>
@@ -183,19 +168,12 @@ const LogCard = ({ data, account, paymentDay }) => {
 												<TableCell>
 													<Row>
 														<Col>
-															{angel.toLowerCase() === account.toLowerCase() && (
-																<Row mb={1}>
-																	<ThemeIcon height="auto !important" variant="big" src={angelIcon} />
-																	<BodyText variant="small">{`Angel ${data.angelTokenPay} BBIT`}</BodyText>
-																	<BodyText ml={2} variant="small" color={status ? 'success' : 'orange'}>
-																		{status ? 'Received' : 'Pending'}
-																	</BodyText>
-																</Row>
-															)}
 															{hub.toLowerCase() === account.toLowerCase() && (
 																<Row>
 																	<ThemeIcon height="auto !important" variant="big" src={hubIcon} />
-																	<BodyText variant="small">{`Hub ${data.laboratoryTokenPay} BBIT`}</BodyText>
+																	<BodyText variant="small">{`Hub ${new BN(data.laboratoryTokenPay)
+																		.plus(new BN(data.angelTokenPay))
+																		.toFormat()} BBIT`}</BodyText>
 																	<BodyText ml={2} variant="small" color={status ? 'success' : 'orange'}>
 																		{status ? 'Received' : 'Pending'}
 																	</BodyText>
@@ -212,6 +190,13 @@ const LogCard = ({ data, account, paymentDay }) => {
 						</TableBulkRow>
 					</Table>
 				</Body>
+			) : null}
+			{isOpen && getVariant() === 'confirmed' ? (
+				<Row width="100%" pt={3} pb={2} justifyContent="flex-end">
+					<ThemeButton variant="primary" size="medium" to="/multisend">
+						Pay Angels
+					</ThemeButton>
+				</Row>
 			) : null}
 		</CompactRequestCard>
 	);

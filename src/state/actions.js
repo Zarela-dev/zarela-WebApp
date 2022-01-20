@@ -2,6 +2,7 @@ import getWeb3 from '../getFallbackWeb3';
 import { actionTypes } from './actionTypes';
 import axios from 'axios';
 import ZarelaContractABI from '../abi/ZarelaSmartContract.json';
+import MultisendContractABI from '../abi/MultisendSmartContract.json';
 
 export const getZarelaCurrentDay = (dispatch, contract) => {
 	contract.methods.zarelaDayCounter().call((error, data) => {
@@ -22,10 +23,18 @@ export const configureWeb3 = async (dispatch, web3Library) => {
 			ZarelaContractABI,
 			process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS
 		);
+		const MultisendContract = new web3Library.eth.Contract(
+			MultisendContractABI,
+			process.env.REACT_APP_MULTISEND_CONTRACT_ADDRESS
+		);
 
 		dispatch({
-			type: actionTypes.SET_CONTRACT,
+			type: actionTypes.SET_ZARELA_CONTRACT,
 			payload: ZarelaContract,
+		});
+		dispatch({
+			type: actionTypes.SET_MULTISEND_CONTRACT,
+			payload: MultisendContract,
 		});
 	} catch (error) {
 		console.error(`Failed to load web3, accounts, or contract. Check console for details.`, error);
@@ -49,7 +58,7 @@ export const configureFallbackWeb3 = async (dispatch) => {
 		});
 
 		dispatch({
-			type: actionTypes.SET_CONTRACT,
+			type: actionTypes.SET_ZARELA_CONTRACT,
 			payload: ZarelaContract,
 		});
 	} catch (error) {

@@ -118,9 +118,6 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 										<BodyText variant="small" fontWeight="bold" mr={2}>
 											{getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[0]} BBit
 										</BodyText>
-										<BodyText variant="extraSmall" fontWeight="semiBold">
-											({request.angelTokenPay} Angel + {request.laboratoryTokenPay} Hub)
-										</BodyText>
 										<BodyText variant="small" color="textToken" fontWeight="bold">{`~ $${
 											getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[1]
 										}`}</BodyText>

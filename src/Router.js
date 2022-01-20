@@ -17,6 +17,8 @@ import { mainContext } from './state';
 import { supportedChains } from './constants/index';
 import ChainError from './components/ChainError';
 import NotFound from './components/NotFoundPage';
+import MultiSend from './pages/MultiSend';
+import Footer from './components/Footer';
 
 const AppWrapper = styled.div`
 	padding-bottom: ${(props) => props.theme.space[4]}px;
@@ -82,8 +84,10 @@ const AppRouter = () => {
 					<Route path="/wallet" component={Wallet} />
 					<Route path="/log" component={Log} />
 					<Route path="/settings" component={Settings} />
+					<Route path="/multisend" component={MultiSend} />
 					<Route component={NotFound} />
 				</Switch>
+				{!appState.isMobile ? <Footer /> : null}
 			</AppWrapper>
 		</Router>
 	);

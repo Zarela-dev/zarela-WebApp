@@ -73,8 +73,7 @@ const RequestDetailsMobile = ({ setError, zpaperDownloadLink, error, request }) 
 							<Row>
 								<ThemeIcon variant="small" src={biobitIcon} />
 								<BodyText variant="hint" fontWeight="medium">
-									{getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[0]} (
-									{request.angelTokenPay} Angel + {request.laboratoryTokenPay} Hub)
+									{getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[0]}
 								</BodyText>
 								<BodyText variant="extraSmall" fontWeight="semiBold">{`~ $${
 									getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[1]
