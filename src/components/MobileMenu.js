@@ -41,7 +41,7 @@ const MobileMenu = ({ isOpen, onClose, notifyOnClose, usage = 'toastify' }) => {
 			notifications: 0,
 		},
 		{
-			title: 'Multisend',
+			title: 'Pay Angels',
 			path: '/multisend',
 			notifications: 0,
 		},

@@ -6,6 +6,8 @@ import home from '../../assets/icons/nav/home.svg';
 import inbox from '../../assets/icons/nav/inbox.svg';
 import user from '../../assets/icons/nav/profile.svg';
 import wallet from '../../assets/icons/nav/wallet.svg';
+import multisendIcon from '../../assets/icons/nav/multisend.svg';
+import multisendActiveIcon from '../../assets/icons/nav/multisend-active.svg';
 import homeActive from '../../assets/icons/nav/home-active.svg';
 import inboxActive from '../../assets/icons/nav/inbox-active.svg';
 import userActive from '../../assets/icons/nav/profile-active.svg';
@@ -475,9 +477,13 @@ export default function Header({ isMobile }, props) {
 							</BodyText>
 						</NavItem>
 						<NavItem isMobile={appState.isMobile} to="/multisend">
-							<ThemeIcon variant="layout" mr={'0px'} src={routeGroup === 'multisend' ? userActive : user} />
+							<ThemeIcon
+								variant="layout"
+								mr={'0px'}
+								src={routeGroup === 'multisend' ? multisendActiveIcon : multisendIcon}
+							/>
 							<BodyText variant="small" fontWeight={routeGroup === 'multisend' ? 'semiBold' : 'normal'} color="primary">
-								Multisend
+								Pay Angels
 							</BodyText>
 						</NavItem>
 						<NavItem isMobile={appState.isMobile} to={{ pathname: process.env.REACT_APP_EXPLORE_LINK }} target="_blank">
