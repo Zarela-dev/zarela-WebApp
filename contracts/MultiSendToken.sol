@@ -1,8 +1,5 @@
 pragma solidity ^0.4.16;
 
-/**
- * token contract functions
-*/
 contract Token {
     function balanceOf(address who) external view returns (uint256);
     function allowance(address owner, address spender) external view returns (uint256);
@@ -48,15 +45,12 @@ library SafeMath {
 
 contract MultiSend {
     using SafeMath for uint256;
-
     function MultiSendTokens(address _tokenAddress, address[] memory _addresses ,uint256[] memory _amount) public {
         require(_amount.length == _addresses.length);
         require(_addresses.length > 0);
         for(uint i ; i < _addresses.length ; i++){
             Token(_tokenAddress).transferFrom(msg.sender, _addresses[i], _amount[i]);
         }
-        
-    
     }
-    
+
 }
