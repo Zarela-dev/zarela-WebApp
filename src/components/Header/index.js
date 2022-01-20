@@ -39,6 +39,12 @@ import { Row, Col } from './../Elements/Flex';
 import { ThemeIcon } from './../Elements/Icon';
 import Badge from './../Elements/Badge';
 
+// hub logos
+import arenLogo from '../../assets/hubs/aren-hub.png';
+import cyberLogo from '../../assets/hubs/cyber-hub.png';
+import danaLogo from '../../assets/hubs/dana-hub.png';
+import parandLogo from '../../assets/hubs/parand-hub.png';
+
 const NavItem = styled(Link)`
 	position: relative;
 	height: 50px;
@@ -146,7 +152,7 @@ const NavBarRow = styled.div`
 `;
 
 const LogoApp = styled(Logo)`
-	height: 33px;
+	height: 44px;
 	margin-left: 0;
 `;
 
@@ -285,6 +291,35 @@ export default function Header({ isMobile }, props) {
 	const classes = useStyles(props);
 	const GUIDES = ['/', '/inbox', '/log', '/request'];
 
+	const getLogo = (isMobile) => {
+		const HUB_SLUG = process.env.REACT_APP_HUB_SLUG;
+		if (isMobile) {
+			if (HUB_SLUG === 'aren-hub') {
+				return <LogoApp src={arenLogo} alt="Aren Hub Logo" />;
+			} else if (HUB_SLUG === 'cyber-hub') {
+				return <LogoApp src={cyberLogo} alt="Cyber Hub Logo" />;
+			} else if (HUB_SLUG === 'dana-hub') {
+				return <LogoApp src={danaLogo} alt="Dana Hub Logo" />;
+			} else if (HUB_SLUG === 'parand-hub') {
+				return <LogoApp src={parandLogo} alt="Parand Hub Logo" />;
+			} else {
+				return <LogoApp src={logo} alt="Zarela Logo" />;
+			}
+		} else {
+			if (HUB_SLUG === 'aren-hub') {
+				return <Logo src={arenLogo} alt="Aren Hub Logo" />;
+			} else if (HUB_SLUG === 'cyber-hub') {
+				return <Logo src={cyberLogo} alt="Cyber Hub Logo" />;
+			} else if (HUB_SLUG === 'dana-hub') {
+				return <Logo src={danaLogo} alt="Dana Hub Logo" />;
+			} else if (HUB_SLUG === 'parand-hub') {
+				return <Logo src={parandLogo} alt="Parand Hub Logo" />;
+			} else {
+				return <Logo src={logo} alt="Zarela Logo" />;
+			}
+		}
+	};
+
 	useEffect(() => {
 		if (appState.contract !== null) {
 			if (account) {
@@ -322,9 +357,7 @@ export default function Header({ isMobile }, props) {
 				<HeaderWrapperApp routeGroup={routeGroup} isMobile={appState.isMobile}>
 					<NavBarRow isMobile={appState.isMobile}>
 						<RightMenu>
-							<Link to="/">
-								<LogoApp src={logo} />
-							</Link>
+							<Link to="/">{getLogo(true)}</Link>
 						</RightMenu>
 						<LeftMenu>
 							<NavItem isMobile={appState.isMobile}>
@@ -455,9 +488,7 @@ export default function Header({ isMobile }, props) {
 			<HeaderWrapper routeGroup={routeGroup} isMobile={appState.isMobile}>
 				<NavBarRow isMobile={appState.isMobile}>
 					<Row>
-						<Link to="/">
-							<Logo isMobile={appState.isMobile} src={logo} />
-						</Link>
+						<Link to="/">{getLogo(false)}</Link>
 						<NavItem isMobile={appState.isMobile} to="/">
 							<ThemeIcon variant="layout" src={routeGroup === '' ? homeActive : home} mr={'0px'} />
 							<BodyText variant="small" fontWeight={routeGroup === '' ? 'semiBold' : 'normal'} color="primary">
