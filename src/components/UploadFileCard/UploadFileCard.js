@@ -3,7 +3,7 @@ import { Card, CustomFileInput } from './FileCard';
 import { mainContext } from '../../state';
 import { Buffer } from 'buffer';
 import { useWeb3React } from '@web3-react/core';
-import { create } from 'ipfs-http-client';
+import { CID, create } from 'ipfs-http-client';
 import * as ethUtil from 'ethereumjs-util';
 import { encrypt } from 'eth-sig-util';
 import { toast, ZRNG } from '../../utils';
@@ -134,6 +134,7 @@ const UploadFileCard = (props) => {
 						});
 
 						console.log('directory1', directory1);
+						// console.log('getdir', await ipfs.dag.get());
 						console.log(
 							'sc',
 							request.requestID,

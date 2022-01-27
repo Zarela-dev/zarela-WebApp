@@ -23,6 +23,8 @@ import { ThemeIcon } from './../components/Elements/Icon';
 import { Row, Col } from './../components/Elements/Flex';
 import { ApproveBadge } from './../components/Elements/ApproveBadge';
 import { ThemeButton } from './../components/Elements/Button';
+import { CID, create } from 'ipfs-http-client';
+import JSZip from 'jszip';
 
 const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
@@ -236,44 +238,44 @@ const RequestListItem = ({
 	};
 	// files table selection methods END
 
-	const signalDownloadHandler = async (fileHash, fileMetaCID) => {
+	const signalDownloadHandler = async (fileHash, fileMetaCID, angelAddress) => {
 		setSubmitting(true);
 		setDialogMessage('Downloading file metadata from IPFS');
+		const ipfs = create(process.env.REACT_APP_IPFS);
 		const workerInstance = worker();
-		workerInstance.initDecrypt();
+		// workerInstance.initDecrypt();
+		console.log('fileHash', fileHash);
+		workerInstance.addEventListener('message', async (event) => {
+			if (event.data.type === 'feedback') {
+				setDialogMessage(event.data.message);
+			}
+		});
 
 		try {
-			/* fetch signal file metadata from IPFS */
-			const encryptedFileMetaRes = await axios.get(`${process.env.REACT_APP_IPFS_GET_LINK + fileMetaCID}`);
+			const filesData = await ipfs.dag.get(CID.parse(fileHash));
+			const files = filesData.value.contributions[requestID][angelAddress];
+			/* fetch encrypted file's encrypted secret key */
+			const encryptedKeys = await axios.get(`${process.env.REACT_APP_IPFS_GET_LINK + fileMetaCID}`);
 
 			const decryptedFileMeta = await window.ethereum.request({
 				method: 'eth_decrypt',
-				params: [encryptedFileMetaRes.data, account],
+				params: [encryptedKeys.data, account],
 			});
-
-			const { KEY, NONCE, FILE_NAME, FILE_EXT } = JSON.parse(decryptedFileMeta);
-
+			const { KEY, NONCE } = JSON.parse(decryptedFileMeta);
+			const zip = new JSZip();
+			for (let fileName in files) {
+				const decryptedFile = await workerInstance.decrypt(KEY, NONCE, files[fileName].path);
+				zip.file(fileName, decryptedFile);
+				clearSubmitDialog();
+			}
+			// saveAs(new Blob([decryptedFile]), `${fileName}`);
+			zip.generateAsync({ type: 'blob' }).then(function (content) {
+				// see FileSaver.js
+				saveAs(content, 'example.zip');
+				workerInstance.terminate();
+			});
 			setDialogMessage('Decrypting file metadata');
 			/* decrypt secret key using metamask*/
-
-			workerInstance.postMessage({
-				fileHash,
-				KEY,
-				NONCE,
-			});
-
-			workerInstance.addEventListener('message', async (event) => {
-				if (event.data.type === 'terminate') {
-					workerInstance.terminate();
-				}
-				if (event.data.type === 'feedback') {
-					setDialogMessage(event.data.message);
-				}
-				if (event.data.type === 'decrypted') {
-					saveAs(new Blob([event.data.decrypted_file]), `${FILE_NAME}.${FILE_EXT}`);
-					clearSubmitDialog();
-				}
-			});
 		} catch (error) {
 			clearSubmitDialog();
 			toast('there was an error decrypting your file, please contact support for more information.', 'error');

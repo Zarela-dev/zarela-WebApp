@@ -398,7 +398,7 @@ const RequestFilesTable = ({
 																		<FileName>{`File ${originalIndex} (${ipfsHash.substr(0, 10)}...)`}</FileName>
 																	</FileItemCol>
 																	<FileItemCol>
-																		<DownloadButton onClick={() => signalDownloadHandler(ipfsHash, AesEncryptedKey)}>
+																		<DownloadButton onClick={() => signalDownloadHandler(ipfsHash, AesEncryptedKey, angelAddress)}>
 																			<DownloadButtonImage src={downloadIcon} />
 																		</DownloadButton>
 																	</FileItemCol>
