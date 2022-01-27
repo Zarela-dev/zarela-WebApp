@@ -1,13 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Card, CustomFileInput, HelperText, ErrorText } from './FileCard';
+import { Card, CustomFileInput } from './FileCard';
 import { mainContext } from '../../state';
 import { Buffer } from 'buffer';
 import { useWeb3React } from '@web3-react/core';
 import { create } from 'ipfs-http-client';
 import * as ethUtil from 'ethereumjs-util';
-import Button from '../Elements/Button';
 import { encrypt } from 'eth-sig-util';
-import { toast, ZRNG, getFileNameWithExt } from '../../utils';
+import { toast, ZRNG } from '../../utils';
 import Dialog from '../Dialog';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import worker from 'workerize-loader!../../workers/encrypt.js';
@@ -32,16 +31,7 @@ const StickyButton = styled(ThemeButton)`
 const fileInputRef = React.createRef();
 
 const UploadFileCard = (props) => {
-	const {
-		buttonLabel,
-		label,
-		helperText,
-		error,
-		setError,
-		disableUpload,
-		request,
-		isMobile,
-	} = props;
+	const { buttonLabel, label, helperText, error, setError, disableUpload, request, isMobile } = props;
 	const [isContributing, setIsContributing] = useState(false);
 	const [isSubmittingFile, setSubmittingFile] = useState(false);
 	const [hasSpinner, setSpinner] = useState(false);
@@ -61,17 +51,12 @@ const UploadFileCard = (props) => {
 
 	useEffect(() => {
 		if (isSubmittingFile === false)
-			setDialogMessage(
-				<ContributionForm
-					ref={fileInputRef}
-					submitSignal={submitSignal}
-					fileInputProps={props}
-				/>
-			);
+			setDialogMessage(<ContributionForm ref={fileInputRef} submitSignal={submitSignal} fileInputProps={props} />);
 	}, [fileInputRef.current?.files]);
 
-	const submitSignal = (angelAddress, hubAddress, rewardGainer) => {
+	const submitSignal = async (angelAddress, hubAddress, rewardGainer) => {
 		const fileRef = { ...fileInputRef };
+		let uploadedFiles = [];
 
 		if (fileRef !== null) {
 			if (account) {
@@ -81,26 +66,20 @@ const UploadFileCard = (props) => {
 					setSpinner(true);
 					setClosable(false);
 					setDialogMessage('encrypting file');
-					const workerInstance = worker();
-
-					workerInstance.initEncrypt();
+					// workerInstance.initEncrypt();
 
 					const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
 					// generate KEY and NONCE for chacha20 encryption
 					const KEY = ZRNG();
 					const NONCE = ZRNG();
 
-					workerInstance.postMessage({
-						KEY,
-						NONCE,
-						file: fileRef.current.files[0],
-					});
-
-					workerInstance.addEventListener('message', async (event) => {
-						if (event.data.type === 'terminate') {
+					for (let index = 0; index < fileRef.current.files.length; index++) {
+						const file = fileRef.current.files[index];
+						try {
+							const workerInstance = worker();
+							uploadedFiles.push(await workerInstance.encrypt(KEY, NONCE, file));
 							workerInstance.terminate();
-						}
-						if (event.data.type === 'encryption:error') {
+						} catch (error) {
 							clearSubmitDialog();
 							console.error(error);
 							toast(
@@ -109,76 +88,96 @@ const UploadFileCard = (props) => {
 								'error'
 							);
 						}
-						if (event.data.type === 'encryption:feedback') {
-							setDialogMessage(event.data.message);
-						}
-						if (event.data.type === 'encryption') {
-							try {
-								const fileMeta = {
-									NONCE,
-									KEY,
-									FILE_EXT: getFileNameWithExt(fileRef)[1],
-									FILE_NAME: getFileNameWithExt(fileRef)[0],
-									FILE_MIMETYPE: getFileNameWithExt(fileRef)[2],
-								};
-								// AES key encryption using Metamask
-								const encryptedFileMeta = ethUtil.bufferToHex(
-									Buffer.from(
-										JSON.stringify(
-											encrypt(
-												request.encryptionPublicKey,
-												{ data: JSON.stringify(fileMeta) },
-												'x25519-xsalsa20-poly1305'
-											)
-										),
-										'utf8'
-									)
-								);
-								/* 
-									to download file later (in the inbox page) with proper name and extension,
-									here we store these meta information in an object on IPFS then we store this IPFS
-									hash on the blockchain using our SC contribute method.
-								*/
-								/* encrypted is an array */
-								const fileMetaResponse = await ipfs.add(encryptedFileMeta, {
-									pin: true,
-								});
+					}
+					console.log('result', uploadedFiles);
+					try {
+						const secretKeys = {
+							NONCE,
+							KEY,
+						};
+						// AES key encryption using Metamask
+						const encryptedSecretKeys = ethUtil.bufferToHex(
+							Buffer.from(
+								JSON.stringify(
+									encrypt(request.encryptionPublicKey, { data: JSON.stringify(secretKeys) }, 'x25519-xsalsa20-poly1305')
+								),
+								'utf8'
+							)
+						);
+						/*			
+							to download file later (in the inbox page) with proper name and extension,
+							here we store these meta information in an object on IPFS then we store this IPFS
+							hash on the blockchain using our SC contribute method.
+						*/
+						/* encrypted is an array */
+						const encryptedSecretKeysCID = await ipfs.add(encryptedSecretKeys, {
+							pin: false,
+							cidVersion: 1,
+						});
+						const folderStructure = {
+							contributions: {
+								[request.requestID]: {
+									[account]: {
+										encryptedSecretKeysCID,
+									},
+								},
+							},
+						};
 
-								setDialogMessage('Approve it from your Wallet');
-								appState.contract.methods
-									.contribute(
-										request.requestID,
-										angelAddress, // angel
-										hubAddress, // laboratory
-										rewardGainer === 'angel' ? true : false, // true: angel receives reward. false: laboratory receives reward.
-										request.requesterAddress,
-										event.data.ipfs_path, // encrypted file CID
-										fileMetaResponse.path // file metadata CID
-									)
-									.send(
-										{
-											from: account,
-										},
-										(error, result) => {
-											if (!error) {
-												clearSubmitDialog();
-												toast(`TX Hash: ${result}`, 'success', true, result, {
-													toastId: result,
-												});
-												if (fileInputRef.current !== null)
-													fileInputRef.current.value = null;
-											} else {
-												clearSubmitDialog();
-												toast(error.message, 'error');
-											}
-										}
-									);
-							} catch (error) {
-								clearSubmitDialog();
-								console.error(error);
-							}
-						}
-					});
+						uploadedFiles.forEach((file) => {
+							folderStructure.contributions[request.requestID][account][
+								`${file.fileMeta.FILE_NAME}.${file.fileMeta.FILE_EXT}`
+							] = file.fileContentCID;
+						});
+						const directory1 = await ipfs.dag.put(folderStructure, {
+							storeCodec: 'dag-cbor',
+						});
+
+						console.log('directory1', directory1);
+						console.log(
+							'sc',
+							request.requestID,
+							angelAddress, // angel
+							hubAddress, // laboratory
+							rewardGainer === 'angel' ? true : false, // true: angel receives reward. false: laboratory receives reward.
+							request.requesterAddress,
+							directory1.toString(), // encrypted file CID
+							encryptedSecretKeysCID.path // file metadata CID
+						);
+
+						setDialogMessage('Approve it from your Wallet');
+						appState.contract.methods
+							.contribute(
+								request.requestID,
+								angelAddress, // angel
+								hubAddress, // laboratory
+								rewardGainer === 'angel' ? true : false, // true: angel receives reward. false: laboratory receives reward.
+								request.requesterAddress,
+								directory1.toString(), // encrypted file CID
+								encryptedSecretKeysCID.path // file metadata CID
+								// note: after using dags in IPFS, we can remove this from Smart Contract parameters to reduce transaction fee.
+							)
+							.send(
+								{
+									from: account,
+								},
+								(error, result) => {
+									if (!error) {
+										clearSubmitDialog();
+										toast(`TX Hash: ${result}`, 'success', true, result, {
+											toastId: result,
+										});
+										if (fileInputRef.current !== null) fileInputRef.current.value = null;
+									} else {
+										clearSubmitDialog();
+										toast(error.message, 'error');
+									}
+								}
+							);
+					} catch (error) {
+						clearSubmitDialog();
+						console.error(error);
+					}
 				} else {
 					setError('please select files to upload');
 				}
@@ -194,19 +193,15 @@ const UploadFileCard = (props) => {
 					content={dialogMessage}
 					onClose={isClosable ? () => clearSubmitDialog() : false}
 					hasSpinner={hasSpinner}
-					type='success'
+					type="success"
 				/>
 				<StickyButton
-					variant='primary'
-					size='medium'
+					variant="primary"
+					size="medium"
 					onClick={() => {
 						setIsContributing(true);
 						setDialogMessage(
-							<ContributionForm
-								ref={fileInputRef}
-								submitSignal={submitSignal}
-								fileInputProps={props}
-							/>
+							<ContributionForm ref={fileInputRef} submitSignal={submitSignal} fileInputProps={props} />
 						);
 					}}
 				>
@@ -215,13 +210,13 @@ const UploadFileCard = (props) => {
 			</>
 		);
 	return (
-		<Card data-tour='request-details-three'>
+		<Card data-tour="request-details-three">
 			<Dialog
 				isOpen={isContributing}
 				content={dialogMessage}
 				onClose={isClosable ? () => clearSubmitDialog() : false}
 				hasSpinner={hasSpinner}
-				type='success'
+				type="success"
 			/>
 			<CustomFileInput
 				hasBorder
@@ -230,19 +225,17 @@ const UploadFileCard = (props) => {
 				label={label}
 				onClick={() => {
 					setIsContributing(true);
-					setDialogMessage(
-						<ContributionForm
-							ref={fileInputRef}
-							submitSignal={submitSignal}
-							fileInputProps={props}
-						/>
-					);
+					setDialogMessage(<ContributionForm ref={fileInputRef} submitSignal={submitSignal} fileInputProps={props} />);
 				}}
 			/>
-			<BodyText variant='timestamp' mt={5}>
+			<BodyText variant="timestamp" mt={5}>
 				{helperText}
 			</BodyText>
-			{error ? <BodyText variant='timestamp' color='error' mt={5}>{error}</BodyText> : null}
+			{error ? (
+				<BodyText variant="timestamp" color="error" mt={5}>
+					{error}
+				</BodyText>
+			) : null}
 		</Card>
 	);
 };
