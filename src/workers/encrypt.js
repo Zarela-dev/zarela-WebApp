@@ -33,8 +33,7 @@ export const encrypt = (KEY, NONCE, file) => {
 					},
 				});
 				resolve({
-					type: 'encryption',
-					fileContentCID: fileResponse,
+					fileContentCID: fileResponse.path,
 					fileMeta: {
 						FILE_EXT: fileExt,
 						FILE_NAME: fileTitle,
