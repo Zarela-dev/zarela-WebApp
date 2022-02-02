@@ -76,6 +76,7 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 	const addressRegex = new RegExp(/^0x[a-fA-F0-9]{40}$/);
 	const { account } = useWeb3React();
 	const [showConnectDialog, setConnectDialogVisibility] = useState(false);
+	const UPLOAD_SIZE_LIMIT = process.env.REACT_APP_UPLOAD_SIZE_LIMIT || 95000000;
 
 	const formik = useFormik({
 		initialValues: {
@@ -112,8 +113,17 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 				setConnectDialogVisibility(false);
 				const { angelAddress, hasHub, hubAddress, rewardGainer, step } = values;
 				if (step == 1) {
+					let fileSizes = 0;
+					for (let index = 0; index < ref.current.files.length; index++) {
+						const file = ref.current.files[index];
+						fileSizes += file.size;
+					}
 					if (ref.current?.files?.length > 0) {
-						formik.setFieldValue('step', 2);
+						if (fileSizes < UPLOAD_SIZE_LIMIT) {
+							formik.setFieldValue('step', 2);
+						} else {
+							formik.setFieldError('file', 'file size is too large');
+						}
 					} else {
 						formik.setFieldError('file', 'you must select a file to upload');
 					}
@@ -159,6 +169,7 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 					hasBorder
 					disableUpload={false}
 					label={'select your file here'}
+					multiple
 					fileSizeLimit="*File size must be smaller than 1GB"
 					buttonLabel="select file"
 					name="file"

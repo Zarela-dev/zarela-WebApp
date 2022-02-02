@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Text, Heading, Link as RebassLink } from 'rebass/styled-components';
-import { space, layout, color, compose, fontWeight } from 'styled-system';
+import { space, layout, color, compose, fontWeight, overflow } from 'styled-system';
 import { variant } from 'styled-system';
 import { Link as RouterLink } from 'react-router-dom';
 export const Typography = styled.div`
@@ -68,8 +68,8 @@ const HeadingComponent = styled(Heading)(
 	})
 );
 
-const TextComponent = styled(Text)(
-	compose(space, layout, color, fontWeight),
+export const TextComponent = styled(Text)(
+	compose(space, layout, color, fontWeight, overflow),
 	{
 		fontFamily: 'Krub',
 		textOverflow: (props) => props.textOverflow,
