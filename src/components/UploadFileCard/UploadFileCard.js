@@ -60,13 +60,12 @@ const UploadFileCard = (props) => {
 
 		if (fileRef !== null) {
 			if (account) {
-				if (fileRef.current.value !== null && fileRef.current.value !== '') {
+				if (fileRef.current.value !== null && fileRef.current.value !== '' && fileRef.current.files.length > 0) {
 					setIsContributing(true);
 					setSubmittingFile(true);
 					setSpinner(true);
 					setClosable(false);
 					setDialogMessage('encrypting file');
-					// workerInstance.initEncrypt();
 
 					const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
 					// generate KEY and NONCE for chacha20 encryption

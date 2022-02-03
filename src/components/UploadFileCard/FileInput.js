@@ -139,6 +139,7 @@ const DownLoadLink = styled.a`
 
 const DeleteIcon = styled.img`
 	width: 14px;
+	cursor: pointer;
 	margin-left: ${(props) => `${props.theme.space[3]}px`};
 `;
 
@@ -188,7 +189,7 @@ const FileItem = ({ filename, onDelete }) => {
 				>
 					{filename}
 				</TextComponent>
-				{/* <DeleteIcon onClick={typeof onDelete === 'function' && onDelete} src={deleteFileIcon} /> */}
+				<DeleteIcon onClick={typeof onDelete === 'function' && onDelete} src={deleteFileIcon} />
 			</Box>
 		</Box>
 	);
@@ -208,6 +209,8 @@ const FileInput = forwardRef(
 			icon,
 			onClick,
 			error,
+			files,
+			setFiles,
 			label,
 			multiple = false,
 			fileSizeLimit,
@@ -215,18 +218,21 @@ const FileInput = forwardRef(
 		},
 		ref
 	) => {
-		const [selectedFiles, setSelectedFiles] = useState([]);
-
-		useEffect(() => {
-			console.log(selectedFiles);
-		}, [selectedFiles]);
-
 		const showFilesList = (filesList) => {
 			if (filesList.length <= 1) return null;
 			let fileItems = [];
 			for (let index = 0; index < filesList.length; index++) {
 				const file = filesList[index];
-				fileItems.push(<FileItem key={file.name + index} filename={file.name} />);
+				fileItems.push(
+					<FileItem
+						key={file.name + index}
+						filename={file.name}
+						onDelete={() => {
+							const newFiles = filesList.filter((item) => item.name !== file.name);
+							setFiles(newFiles);
+						}}
+					/>
+				);
 			}
 			return fileItems;
 		};
@@ -311,7 +317,7 @@ const FileInput = forwardRef(
 							},
 						}}
 					>
-						{showFilesList(ref?.current?.files)}
+						{showFilesList(files)}
 					</Box>
 				) : null}
 				{downLoadLink && (

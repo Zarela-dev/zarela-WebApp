@@ -9,7 +9,7 @@ import { Scrollbar } from '../Elements/Scrollbar';
 const ListContainer = styled(Box)`
 	${Scrollbar};
 	overflow: auto;
-	max-height: 500px;
+	max-height: 37vh;
 	padding-right: ${({ theme }) => theme.space[3]}px;
 `;
 
@@ -18,7 +18,7 @@ const Icon = styled.img`
 	margin-right: ${(props) => props.theme.space[4]}px;
 `;
 
-const FileProgressItem = ({ status }) => {
+const FileProgressItem = ({ status, children }) => {
 	const StatusText = ({ status }) => {
 		switch (status) {
 			case 'uploading':
@@ -60,10 +60,11 @@ const FileProgressItem = ({ status }) => {
 							textOverflow: 'ellipsis',
 							whiteSpace: 'nowrap',
 							width: '80%',
+							textAlign: 'left'
 						}}
 						variant="small"
 					>
-						File_Name_sdawdxacdasdcsceccascxaxasxcdsvdc sdcaszxdcscsx sdcaszxdcscsx
+						{children}
 					</TextComponent>
 					<StatusText status={status} />
 				</Flex>
@@ -79,7 +80,15 @@ const FileProgressItem = ({ status }) => {
 	);
 };
 
-const FileUploadProgress = () => {
+const FileUploadProgress = ({ files }) => {
+	const showFiles = () => {
+		let result = [];
+		for (let index = 0; index < files.length; index++) {
+			const file = files[index];
+			result.push(<FileProgressItem>{file.name}</FileProgressItem>);
+		}
+		return result;
+	};
 	return (
 		<Box>
 			<Box mb={4}>
@@ -106,29 +115,7 @@ const FileUploadProgress = () => {
 					marginBottom: 3,
 				}}
 			></Box>
-			<ListContainer>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem status={'failed'}>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-				<FileProgressItem>fsd</FileProgressItem>
-			</ListContainer>
+			<ListContainer>{showFiles(files)}</ListContainer>
 		</Box>
 	);
 };

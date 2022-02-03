@@ -14,6 +14,7 @@ import hubIcon from '../../assets/icons/hub.png';
 import angelIconActive from '../../assets/icons/angel-active.png';
 import hubIconActive from '../../assets/icons/hub-active.png';
 import FileUploadProgress from './FileUploadProgress';
+import { useEffect } from 'react';
 
 const ModalBackIcon = styled.img`
 	position: absolute;
@@ -78,6 +79,11 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 	const { account } = useWeb3React();
 	const [showConnectDialog, setConnectDialogVisibility] = useState(false);
 	const UPLOAD_SIZE_LIMIT = process.env.REACT_APP_UPLOAD_SIZE_LIMIT || 95000000;
+	const [files, setFiles] = useState(Array.from(ref?.current?.files || []));
+
+	useEffect(() => {
+		console.log(files);
+	}, [files]);
 
 	const formik = useFormik({
 		initialValues: {
@@ -176,14 +182,17 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 					fileSizeLimit="*File size must be smaller than 1GB"
 					buttonLabel="select file"
 					name="file"
+					files={files}
+					setFiles={setFiles}
 					error={formik.errors.file}
-					onChange={() => formik.setFieldValue('file', ref.current.value)}
+					onChange={() => {
+						setFiles(Array.from(ref.current.files));
+						formik.setFieldValue('file', ref.current.value);
+					}}
 				/>
 			</Box>
 			<Box show={formik.values.step == 2}>
-				<FileUploadProgress>
-
-				</FileUploadProgress>
+				<FileUploadProgress files={files} />
 			</Box>
 			<Box show={formik.values.step == 3}>
 				<TextField
