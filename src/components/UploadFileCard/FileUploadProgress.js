@@ -85,7 +85,6 @@ const FileUploadProgress = ({ files }) => {
 		let result = [];
 		for (let index = 0; index < files.length; index++) {
 			const file = files[index];
-			console.log('file', file)
 			result.push(<FileProgressItem key={file.name + index} status={file.status}>{file.name}</FileProgressItem>);
 		}
 		return result;

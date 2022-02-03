@@ -253,7 +253,7 @@ const RequestListItem = ({
 
 		try {
 			const filesData = await ipfs.dag.get(CID.parse(fileHash));
-			const files = filesData.value.contributions[requestID][angelAddress];
+			const files = filesData.value[requestID].contributions[angelAddress].files;
 			/* fetch encrypted file's encrypted secret key */
 			const encryptedKeys = await axios.get(`${process.env.REACT_APP_IPFS_GET_LINK + fileMetaCID}`);
 
@@ -263,12 +263,12 @@ const RequestListItem = ({
 			});
 			const { KEY, NONCE } = JSON.parse(decryptedFileMeta);
 			const zip = new JSZip();
-			for (let fileName in files) {
-				const decryptedFile = await workerInstance.decrypt(KEY, NONCE, files[fileName].path);
-				zip.file(fileName, decryptedFile);
+			for (let i = 0; i < files.length; i++) {
+				let file = files[i];
+				const decryptedFile = await workerInstance.decrypt(KEY, NONCE, file.cid.toString());
+				zip.file(file.filename, decryptedFile);
 				clearSubmitDialog();
 			}
-			// saveAs(new Blob([decryptedFile]), `${fileName}`);
 			zip.generateAsync({ type: 'blob' }).then(function (content) {
 				// see FileSaver.js
 				saveAs(content, 'example.zip');

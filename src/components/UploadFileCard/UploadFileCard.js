@@ -86,7 +86,7 @@ const UploadFileCard = (props) => {
 							}
 						});
 						let fileCID = await workerInstance.encrypt(KEY, NONCE, file);
-						uploadedFiles.push(fileCID);
+						uploadedFiles.push([file.name, fileCID]);
 
 						workerInstance.terminate();
 					} catch (error) {
@@ -117,26 +117,20 @@ const UploadFileCard = (props) => {
 							hash on the blockchain using our SC contribute method.
 						*/
 					/* encrypted is an array */
-					const encryptedSecretKeysCID = await ipfs.dag.put(
-						{ encryptedSecretKeys },
-						{
-							storeCodec: 'dag-cbor',
-							pin: false,
-						}
-					);
+					const encryptedSecretKeysCID = await ipfs.add(encryptedSecretKeys, { cidVersion: 1 });
 					const directory = await ipfs.dag.put(
 						{
 							[request.requestID]: {
 								contributions: {
 									[account]: {
 										key: encryptedSecretKeysCID,
-										files: uploadedFiles.map((file) => ({ cid: CID.parse(file.fileContentCID) })),
+										files: uploadedFiles.map((file) => ({ filename: file[0], cid: CID.parse(file[1].fileContentCID) })),
 									},
 								},
 							},
 						},
 						{
-							storeCodec: 'dag-cbor',
+							storeCodec: 'dag-json',
 						}
 					);
 					setDirectory({
@@ -145,6 +139,7 @@ const UploadFileCard = (props) => {
 					});
 
 					console.log('container node', directory);
+					console.log('node key', encryptedSecretKeysCID);
 				} catch (error) {
 					clearSubmitDialog();
 					console.error(error);
@@ -157,19 +152,6 @@ const UploadFileCard = (props) => {
 
 	const submitSignal = async (angelAddress, hubAddress, rewardGainer, directory) => {
 		try {
-			console.log('dir', directory);
-			debugger;
-			console.log(
-				'result',
-				request.requestID,
-				angelAddress, // angel
-				hubAddress, // laboratory
-				rewardGainer === 'angel' ? true : false, // true: angel receives reward. false: laboratory receives reward.
-				request.requesterAddress,
-				directory.directory.toString(), // encrypted file CID
-				directory.key.toString()
-			);
-			debugger;
 			setSpinner(true);
 			setDialogMessage('Approve it from your Wallet');
 
@@ -181,7 +163,7 @@ const UploadFileCard = (props) => {
 					rewardGainer === 'angel' ? true : false, // true: angel receives reward. false: laboratory receives reward.
 					request.requesterAddress,
 					directory.directory.toString(), // encrypted file CID
-					directory.key.toString() // file metadata CID
+					'' // file metadata CID
 					// note: after using dags in IPFS, we can remove this from Smart Contract parameters to reduce transaction fee.
 				)
 				.send(
