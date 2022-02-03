@@ -243,8 +243,6 @@ const RequestListItem = ({
 		setDialogMessage('Downloading file metadata from IPFS');
 		const ipfs = create(process.env.REACT_APP_IPFS);
 		const workerInstance = worker();
-		// workerInstance.initDecrypt();
-		console.log('fileHash', fileHash);
 		workerInstance.addEventListener('message', async (event) => {
 			if (event.data.type === 'feedback') {
 				setDialogMessage(event.data.message);

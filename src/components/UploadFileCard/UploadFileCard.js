@@ -117,7 +117,7 @@ const UploadFileCard = (props) => {
 							hash on the blockchain using our SC contribute method.
 						*/
 					/* encrypted is an array */
-					const encryptedSecretKeysCID = await ipfs.add(encryptedSecretKeys, { cidVersion: 1 });
+					const encryptedSecretKeysCID = await ipfs.add(encryptedSecretKeys, { cidVersion: 1, pin: true });
 					const directory = await ipfs.dag.put(
 						{
 							[request.requestID]: {
@@ -131,6 +131,7 @@ const UploadFileCard = (props) => {
 						},
 						{
 							storeCodec: 'dag-json',
+							pin: true,
 						}
 					);
 					setDirectory({

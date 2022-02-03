@@ -23,7 +23,7 @@ export const encrypt = (KEY, NONCE, file) => {
 				const encryptedFile = chacha.encrypt(KEY, NONCE, buff);
 				postMessage({ type: 'encrypt:feedback', fileName: file.name, status: 'uploading' });
 				const fileResponse = await ipfs.add(encryptedFile, {
-					pin: false,
+					pin: true,
 					cidVersion: 1,
 					progress: (uploaded) => {
 						const uploadedPercent = Math.ceil((uploaded / fileSize) * 100);
