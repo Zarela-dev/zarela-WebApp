@@ -290,13 +290,16 @@ const RequestListItem = ({
 		} else {
 			// CODE SUPPORTING IPFS DAG_JSON
 			setSubmitting(true);
-			setDialogMessage('Downloading file metadata from IPFS');
+			setDialogMessage('Downloading encrypted keys from IPFS');
 			const ipfs = create(process.env.REACT_APP_IPFS);
 			const workerInstance = worker();
 
 			workerInstance.addEventListener('message', async (event) => {
 				if (event.data.type === 'feedback') {
 					setDialogMessage(event.data.message);
+				}
+				if (event.data.type === 'feedback:error') {
+					toast(event.data.message, 'error');
 				}
 			});
 
@@ -314,16 +317,20 @@ const RequestListItem = ({
 				const zip = new JSZip();
 				for (let i = 0; i < files.length; i++) {
 					let file = files[i];
-					const decryptedFile = await workerInstance.decrypt(KEY, NONCE, file.cid.toString());
+					const decryptedFile = await workerInstance.decrypt(
+						KEY,
+						NONCE,
+						file.cid.toString(),
+						`${i + 1}/${files.length}`
+					);
 					zip.file(file.filename, decryptedFile);
-					clearSubmitDialog();
 				}
 				zip.generateAsync({ type: 'blob' }).then(function (content) {
 					// see FileSaver.js
-					saveAs(content, 'example.zip');
+					saveAs(content, `${requestID}-${angelAddress}.zip`);
+					clearSubmitDialog();
 					workerInstance.terminate();
 				});
-				setDialogMessage('Decrypting file metadata');
 				/* decrypt secret key using metamask*/
 			} catch (error) {
 				clearSubmitDialog();
