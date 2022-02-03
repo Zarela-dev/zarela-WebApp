@@ -313,7 +313,7 @@ const RequestFilesTable = ({
 			{Object.keys(renderableData).map((hubAddress, index) => {
 				const uniqueAngels = [...new Set(renderableData[hubAddress].map((item) => item.angel))];
 				return (
-					<Row key={hubAddress} alignItems="flex-start" height="100%" bg="white">
+					<Row key={`${hubAddress}-${index}`} alignItems="flex-start" height="100%" bg="white">
 						<CellWrapper flex={'0 0 5%'}>
 							<Cell>
 								{isBulkApproved(hubAddress) === 'approved' ? (
@@ -376,7 +376,7 @@ const RequestFilesTable = ({
 														.filter((item) => item.angel === angelAddress)
 														.map(({ ipfsHash, status, originalIndex, AesEncryptedKey, timestamp }, fileIndex) => {
 															return (
-																<Row key={angelAddress}>
+																<Row key={ipfsHash}>
 																	<FileItemCol>
 																		{getFileStatus(originalIndex, status) === 'approved' ? (
 																			<ThemeIcon variant="big" src={confirmIcon} />
@@ -398,7 +398,9 @@ const RequestFilesTable = ({
 																		<FileName>{`File ${originalIndex} (${ipfsHash.substr(0, 10)}...)`}</FileName>
 																	</FileItemCol>
 																	<FileItemCol>
-																		<DownloadButton onClick={() => signalDownloadHandler(ipfsHash, AesEncryptedKey, angelAddress)}>
+																		<DownloadButton
+																			onClick={() => signalDownloadHandler(ipfsHash, AesEncryptedKey, angelAddress)}
+																		>
 																			<DownloadButtonImage src={downloadIcon} />
 																		</DownloadButton>
 																	</FileItemCol>

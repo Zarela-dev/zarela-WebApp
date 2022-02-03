@@ -168,6 +168,7 @@ const Inbox = () => {
 								setCleanSelected={setCleanSelected}
 								cleanSelected={cleanSelected}
 								angelTokenPay={item.angelTokenPay}
+								timestamp={item.timestamp}
 								laboratoryTokenPay={item.laboratoryTokenPay}
 								total={item.totalContributedCount}
 								contributors={`${item.totalContributed}/${item.totalContributors}`}
