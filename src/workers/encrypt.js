@@ -16,11 +16,12 @@ export const encrypt = (KEY, NONCE, file) => {
 			const reader = new FileReader();
 			reader.readAsArrayBuffer(file); // Read Provided File
 
+			postMessage({ type: 'encrypt:feedback', fileName: file.name, status: 'encrypting' });
 			reader.onloadend = async function () {
 				const buff = Buffer(reader.result); // Convert data into buffer
 
 				const encryptedFile = chacha.encrypt(KEY, NONCE, buff);
-				postMessage({ type: 'encryption:feedback', message: 'uploading file to IPFS' });
+				postMessage({ type: 'encrypt:feedback', fileName: file.name, status: 'uploading' });
 				const fileResponse = await ipfs.add(encryptedFile, {
 					pin: false,
 					cidVersion: 1,
@@ -32,6 +33,7 @@ export const encrypt = (KEY, NONCE, file) => {
 						});
 					},
 				});
+				postMessage({ type: 'encrypt:feedback', fileName: file.name, status: 'done' });
 				resolve({
 					fileContentCID: fileResponse.path,
 					fileMeta: {
@@ -42,6 +44,8 @@ export const encrypt = (KEY, NONCE, file) => {
 				});
 			};
 		} catch (uploadError) {
+			postMessage({ type: 'encrypt:feedback', fileName: file.name, status: 'failed' });
+
 			reject({
 				error: uploadError,
 			});

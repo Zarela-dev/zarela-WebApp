@@ -167,6 +167,7 @@ const FileItem = ({ filename, onDelete }) => {
 			<Box
 				sx={{
 					display: 'flex',
+					justifyContent: 'space-between',
 					flexWrap: 'nowrap',
 					height: 54,
 					padding: 3,

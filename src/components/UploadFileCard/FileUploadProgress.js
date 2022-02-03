@@ -29,9 +29,9 @@ const FileProgressItem = ({ status, children }) => {
 				return <TextComponent sx={{ fontSize: '14px', fontWeight: 500, color: '#34C889' }}>Done</TextComponent>;
 			case 'pending':
 				return <TextComponent sx={{ fontSize: '14px', fontWeight: 500, color: '#AEAEAE' }}>Pending</TextComponent>;
-			case 'decrypting':
+			case 'encrypting':
 				return (
-					<TextComponent sx={{ fontSize: '14px', fontWeight: 500, color: '#F8AF1A' }}>Decrypting ...</TextComponent>
+					<TextComponent sx={{ fontSize: '14px', fontWeight: 500, color: '#F8AF1A' }}>Encrypting ...</TextComponent>
 				);
 			case 'failed':
 				return <TextComponent sx={{ fontSize: '14px', fontWeight: 500, color: '#E74A26' }}>Failed</TextComponent>;
@@ -71,7 +71,7 @@ const FileProgressItem = ({ status, children }) => {
 			</Flex>
 			{status === 'failed' ? (
 				<Box flex="1">
-					<ThemeButton sx={{ marginLeft: 3, height: 54 }} variant="primary" size="block">
+					<ThemeButton disabled sx={{ marginLeft: 3, height: 54 }} variant="primary" size="block">
 						Retry
 					</ThemeButton>
 				</Box>
@@ -85,7 +85,8 @@ const FileUploadProgress = ({ files }) => {
 		let result = [];
 		for (let index = 0; index < files.length; index++) {
 			const file = files[index];
-			result.push(<FileProgressItem>{file.name}</FileProgressItem>);
+			console.log('file', file)
+			result.push(<FileProgressItem key={file.name + index} status={file.status}>{file.name}</FileProgressItem>);
 		}
 		return result;
 	};

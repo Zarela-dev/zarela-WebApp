@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SmallCheckbox } from '../Elements/Checkbox';
 import TextField from '../Elements/TextField';
-import Button, { ThemeButton } from '../Elements/Button';
+import { ThemeButton } from '../Elements/Button';
 import ConnectDialog from '../Dialog/ConnectDialog';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -74,16 +74,26 @@ const RewardGainerDescription = styled.p`
 	}
 `;
 
-const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref) => {
+const ContributionForm = React.forwardRef(({ submitSignal, uploadFiles, fileInputProps }, ref) => {
 	const addressRegex = new RegExp(/^0x[a-fA-F0-9]{40}$/);
 	const { account } = useWeb3React();
 	const [showConnectDialog, setConnectDialogVisibility] = useState(false);
 	const UPLOAD_SIZE_LIMIT = process.env.REACT_APP_UPLOAD_SIZE_LIMIT || 95000000;
 	const [files, setFiles] = useState(Array.from(ref?.current?.files || []));
+	const [directory, setDirectory] = useState({
+		directory: null,
+		key: null,
+	});
 
 	useEffect(() => {
-		console.log(files);
-	}, [files]);
+		return () => {
+			setFiles([]);
+			setDirectory({
+				directory: null,
+				key: null,
+			})
+		}
+	}, []);
 
 	const formik = useFormik({
 		initialValues: {
@@ -128,6 +138,7 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 					if (ref.current?.files?.length > 0) {
 						if (fileSizes < UPLOAD_SIZE_LIMIT) {
 							formik.setFieldValue('step', 2);
+							uploadFiles(files, setFiles, setDirectory);
 						} else {
 							formik.setFieldError('file', 'file size is too large');
 						}
@@ -135,7 +146,7 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 						formik.setFieldError('file', 'you must select a file to upload');
 					}
 				} else if (step == 2) {
-					console.log('foo');
+					if (files.filter((f) => f.status === 'done').length === files.length) formik.setFieldValue('step', 3);
 				} else if (step == 3) {
 					if (hasHub) {
 						if (
@@ -146,7 +157,7 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 						else formik.setFieldError('angelAddress', 'your connected account must be either hub or angel');
 					} else {
 						if (angelAddress.toLowerCase() === account.toLowerCase())
-							submitSignal(angelAddress, angelAddress, rewardGainer);
+							submitSignal(angelAddress, angelAddress, rewardGainer, directory);
 						else formik.setFieldError('angelAddress', "you need to enter your connected account's address");
 					}
 				} else if (step == 4) {
@@ -154,7 +165,7 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 						angelAddress.toLowerCase() === account.toLowerCase() ||
 						hubAddress.toLowerCase() === account.toLowerCase()
 					)
-						submitSignal(angelAddress, hubAddress, rewardGainer);
+						submitSignal(angelAddress, hubAddress, rewardGainer, directory);
 					else formik.setFieldError('angelAddress', 'your connected account must be either hub or angel');
 				} else {
 					return;
@@ -168,7 +179,7 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 			<ConnectDialog isOpen={!account && showConnectDialog} onClose={() => setConnectDialogVisibility(false)} />
 
 			<input type="hidden" name={'step'} value={formik.values.step} />
-			{formik.values.step > 1 && (
+			{formik.values.step > 1 && formik.values.step !== 2 && (
 				<ModalBackIcon src={backIcon} onClick={() => formik.setFieldValue('step', formik.values.step - 1)} />
 			)}
 			<Box show={formik.values.step == 1}>
@@ -186,7 +197,13 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 					setFiles={setFiles}
 					error={formik.errors.file}
 					onChange={() => {
-						setFiles(Array.from(ref.current.files));
+						setFiles(
+							Array.from(ref.current.files).map((i) => {
+								let temp = i;
+								temp.status = 'pending';
+								return temp;
+							})
+						);
 						formik.setFieldValue('file', ref.current.value);
 					}}
 				/>
@@ -246,7 +263,12 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 				</RewardGainerWrapper>
 			</Box>
 			<ButtonWrapper>
-				<ContinueButton size="medium" type="submit" variant="secondary">
+				<ContinueButton
+					disabled={formik.values.step === 2 && files.filter((f) => f.status === 'done').length !== files.length}
+					size="medium"
+					type="submit"
+					variant="secondary"
+				>
 					Continue
 				</ContinueButton>
 			</ButtonWrapper>
