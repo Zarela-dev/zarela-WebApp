@@ -13,6 +13,7 @@ import angelIcon from '../../assets/icons/angel.png';
 import hubIcon from '../../assets/icons/hub.png';
 import angelIconActive from '../../assets/icons/angel-active.png';
 import hubIconActive from '../../assets/icons/hub-active.png';
+import FileUploadProgress from './FileUploadProgress';
 
 const ModalBackIcon = styled.img`
 	position: absolute;
@@ -128,19 +129,21 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 						formik.setFieldError('file', 'you must select a file to upload');
 					}
 				} else if (step == 2) {
+					console.log('foo');
+				} else if (step == 3) {
 					if (hasHub) {
 						if (
 							angelAddress.toLowerCase() === account.toLowerCase() ||
 							hubAddress.toLowerCase() === account.toLowerCase()
 						)
-							formik.setFieldValue('step', 3);
+							formik.setFieldValue('step', 4);
 						else formik.setFieldError('angelAddress', 'your connected account must be either hub or angel');
 					} else {
 						if (angelAddress.toLowerCase() === account.toLowerCase())
 							submitSignal(angelAddress, angelAddress, rewardGainer);
 						else formik.setFieldError('angelAddress', "you need to enter your connected account's address");
 					}
-				} else if (step == 3) {
+				} else if (step == 4) {
 					if (
 						angelAddress.toLowerCase() === account.toLowerCase() ||
 						hubAddress.toLowerCase() === account.toLowerCase()
@@ -178,6 +181,11 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 				/>
 			</Box>
 			<Box show={formik.values.step == 2}>
+				<FileUploadProgress>
+
+				</FileUploadProgress>
+			</Box>
+			<Box show={formik.values.step == 3}>
 				<TextField
 					placeholder={'Hub Address'}
 					hasTopMargin
@@ -191,7 +199,7 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 					}}
 				/>
 			</Box>
-			<Box show={formik.values.step == 3}>
+			<Box show={formik.values.step == 4}>
 				<RewardGainerDescription>Which contributor would you like to gain the reward?</RewardGainerDescription>
 				<RewardGainerWrapper>
 					<RewardGainerItem
