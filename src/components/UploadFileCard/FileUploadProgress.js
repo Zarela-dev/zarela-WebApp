@@ -18,12 +18,14 @@ const Icon = styled.img`
 	margin-right: ${(props) => props.theme.space[4]}px;
 `;
 
-const FileProgressItem = ({ status, children }) => {
-	const StatusText = ({ status }) => {
+const FileProgressItem = ({ status, progress, children }) => {
+	const StatusText = ({ status, progress }) => {
 		switch (status) {
 			case 'uploading':
 				return (
-					<TextComponent sx={{ fontSize: '14px', fontWeight: 500, color: '#F8AF1A' }}>Uploading ...</TextComponent>
+					<TextComponent sx={{ fontSize: '14px', fontWeight: 500, color: '#F8AF1A' }}>
+						Uploading {progress && `${progress}%`}
+					</TextComponent>
 				);
 			case 'done':
 				return <TextComponent sx={{ fontSize: '14px', fontWeight: 500, color: '#34C889' }}>Done</TextComponent>;
@@ -60,13 +62,13 @@ const FileProgressItem = ({ status, children }) => {
 							textOverflow: 'ellipsis',
 							whiteSpace: 'nowrap',
 							width: '80%',
-							textAlign: 'left'
+							textAlign: 'left',
 						}}
 						variant="small"
 					>
 						{children}
 					</TextComponent>
-					<StatusText status={status} />
+					<StatusText status={status} progress={progress} />
 				</Flex>
 			</Flex>
 			{status === 'failed' ? (
@@ -85,7 +87,11 @@ const FileUploadProgress = ({ files }) => {
 		let result = [];
 		for (let index = 0; index < files.length; index++) {
 			const file = files[index];
-			result.push(<FileProgressItem key={file.name + index} status={file.status}>{file.name}</FileProgressItem>);
+			result.push(
+				<FileProgressItem key={file.name + index} status={file.status} progress={file.progress}>
+					{file.name}
+				</FileProgressItem>
+			);
 		}
 		return result;
 	};
@@ -104,7 +110,7 @@ const FileUploadProgress = ({ files }) => {
 			>
 				<Icon src={infoIcon} />
 				<BodyText fontWeight={700} variant="hint">
-					DO NOT CLOSE THIS WINDOW OR{' '}
+					Please DO NOT Close this window until all files are uploaded.
 				</BodyText>
 			</Flex>
 			<Box

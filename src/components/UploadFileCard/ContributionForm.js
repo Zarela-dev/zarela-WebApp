@@ -74,7 +74,7 @@ const RewardGainerDescription = styled.p`
 	}
 `;
 
-const ContributionForm = React.forwardRef(({ submitSignal, uploadFiles, fileInputProps }, ref) => {
+const ContributionForm = React.forwardRef(({ setClosable, submitSignal, uploadFiles, fileInputProps }, ref) => {
 	const addressRegex = new RegExp(/^0x[a-fA-F0-9]{40}$/);
 	const { account } = useWeb3React();
 	const [showConnectDialog, setConnectDialogVisibility] = useState(false);
@@ -91,8 +91,8 @@ const ContributionForm = React.forwardRef(({ submitSignal, uploadFiles, fileInpu
 			setDirectory({
 				directory: null,
 				key: null,
-			})
-		}
+			});
+		};
 	}, []);
 
 	const formik = useFormik({
@@ -138,7 +138,12 @@ const ContributionForm = React.forwardRef(({ submitSignal, uploadFiles, fileInpu
 					if (ref.current?.files?.length > 0) {
 						if (fileSizes < UPLOAD_SIZE_LIMIT) {
 							formik.setFieldValue('step', 2);
-							uploadFiles(files, setFiles, setDirectory);
+							try {
+								uploadFiles(files, setFiles, setDirectory);
+								setClosable(false);
+							} catch (e) {
+								throw new Error(e);
+							}
 						} else {
 							formik.setFieldError('file', 'file size is too large');
 						}

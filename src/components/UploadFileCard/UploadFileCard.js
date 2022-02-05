@@ -51,14 +51,25 @@ const UploadFileCard = (props) => {
 
 	useEffect(() => {
 		if (isSubmittingFile === false)
-			setDialogMessage(<ContributionForm ref={fileInputRef} submitSignal={submitSignal} fileInputProps={props} />);
-	}, [fileInputRef.current?.files]);
+			setDialogMessage(
+				<ContributionForm
+					ref={fileInputRef}
+					uploadFiles={uploadFiles}
+					submitSignal={submitSignal}
+					fileInputProps={props}
+					setClosable={setClosable}
+				/>
+			);
+	}, [isClosable]);
 
 	const uploadFiles = async (files, setFiles, setDirectory) => {
-		const setFileStatus = (fileName, status) => {
+		const setFileStatus = (fileName, status, progress) => {
 			setFiles((prevFiles) => {
 				return prevFiles.map((file) => {
-					if (file.name === fileName) file.status = status;
+					if (file.name === fileName) {
+						file.status = status;
+						if (progress !== undefined) file.progress = progress;
+					}
 					return file;
 				});
 			});
@@ -82,7 +93,7 @@ const UploadFileCard = (props) => {
 						const workerInstance = worker();
 						workerInstance.addEventListener('message', (e) => {
 							if (e.data.type === 'encrypt:feedback') {
-								setFileStatus(e.data.fileName, e.data.status);
+								setFileStatus(e.data.fileName, e.data.status, e.data.progress);
 							}
 						});
 						let fileCID = await workerInstance.encrypt(KEY, NONCE, file);
@@ -211,6 +222,7 @@ const UploadFileCard = (props) => {
 								uploadFiles={uploadFiles}
 								submitSignal={submitSignal}
 								fileInputProps={props}
+								setClosable={setClosable}
 							/>
 						);
 					}}
@@ -241,6 +253,7 @@ const UploadFileCard = (props) => {
 							uploadFiles={uploadFiles}
 							submitSignal={submitSignal}
 							fileInputProps={props}
+							setClosable={setClosable}
 						/>
 					);
 				}}

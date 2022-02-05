@@ -28,8 +28,10 @@ export const encrypt = (KEY, NONCE, file) => {
 					progress: (uploaded) => {
 						const uploadedPercent = Math.ceil((uploaded / fileSize) * 100);
 						postMessage({
-							type: 'encryption:feedback',
-							message: `uploading file to IPFS - ${uploadedPercent}%`,
+							type: 'encrypt:feedback',
+							fileName: file.name,
+							status: 'uploading',
+							progress: uploadedPercent,
 						});
 					},
 				});
