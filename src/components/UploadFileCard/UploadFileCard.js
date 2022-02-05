@@ -131,7 +131,7 @@ const UploadFileCard = (props) => {
 						},
 						{
 							storeCodec: 'dag-json',
-							pin: true,
+							// pin: true,
 						}
 					);
 					setDirectory({
@@ -164,7 +164,7 @@ const UploadFileCard = (props) => {
 					rewardGainer === 'angel' ? true : false, // true: angel receives reward. false: laboratory receives reward.
 					request.requesterAddress,
 					directory.directory.toString(), // encrypted file CID
-					'' // file metadata CID
+					directory.key.toString() // file metadata CID
 					// note: after using dags in IPFS, we can remove this from Smart Contract parameters to reduce transaction fee.
 				)
 				.send(

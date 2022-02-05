@@ -243,7 +243,7 @@ const RequestListItem = ({
 
 	const signalDownloadHandler = async (fileHash, fileMetaCID, angelAddress) => {
 		// legacy code support
-		if (timestamp < 1643914494650 && CID.parse(fileHash).version === 0) {
+		if (+timestamp * 1000 < 1644045813477 && CID.parse(fileHash).version === 0) {
 			console.log('LEGACY CODE IS RUNNING');
 			setSubmitting(true);
 			setDialogMessage('Downloading file metadata from IPFS');
@@ -289,6 +289,7 @@ const RequestListItem = ({
 			}
 		} else {
 			// CODE SUPPORTING IPFS DAG_JSON
+
 			setSubmitting(true);
 			setDialogMessage('Downloading encrypted keys from IPFS');
 			const ipfs = create(process.env.REACT_APP_IPFS);
@@ -305,9 +306,13 @@ const RequestListItem = ({
 
 			try {
 				const filesData = await ipfs.dag.get(CID.parse(fileHash));
+
 				const files = filesData.value[requestID].contributions[angelAddress].files;
+
 				/* fetch encrypted file's encrypted secret key */
-				const encryptedKeys = await axios.get(`${process.env.REACT_APP_IPFS_GET_LINK + fileMetaCID}`);
+				const encryptedKeys = await axios.get(
+					`${process.env.REACT_APP_IPFS_GET_LINK + filesData.value[requestID].contributions[angelAddress].key.path}`
+				);
 
 				const decryptedFileMeta = await window.ethereum.request({
 					method: 'eth_decrypt',
@@ -317,6 +322,7 @@ const RequestListItem = ({
 				const zip = new JSZip();
 				for (let i = 0; i < files.length; i++) {
 					let file = files[i];
+
 					const decryptedFile = await workerInstance.decrypt(
 						KEY,
 						NONCE,
