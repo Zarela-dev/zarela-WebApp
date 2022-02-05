@@ -96,20 +96,12 @@ const FileInputMobile = forwardRef(
 					</FileInputLabel>
 					{showSelected ? (
 						<FileInputTitle>
-							{icon === 'download' ? (
-								<FileInputIcon src={fileDownloadIcon} />
-							) : (
-								<FileInputIcon src={fileUploadIcon} />
-							)}
+							{icon === 'download' ? <FileInputIcon src={fileDownloadIcon} /> : <FileInputIcon src={fileUploadIcon} />}
 							<FileName>{getFileName(ref, formatLabel(label))}</FileName>
 						</FileInputTitle>
 					) : (
 						<FileInputTitle>
-							{icon === 'download' ? (
-								<FileInputIcon src={fileDownloadIcon} />
-							) : (
-								<FileInputIcon src={fileUploadIcon} />
-							)}
+							{icon === 'download' ? <FileInputIcon src={fileDownloadIcon} /> : <FileInputIcon src={fileUploadIcon} />}
 							<FileName>{formatLabel(label)}</FileName>
 						</FileInputTitle>
 					)}

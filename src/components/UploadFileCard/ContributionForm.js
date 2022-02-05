@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SmallCheckbox } from '../Elements/Checkbox';
 import TextField from '../Elements/TextField';
-import Button, { ThemeButton } from '../Elements/Button';
+import { ThemeButton } from '../Elements/Button';
 import ConnectDialog from '../Dialog/ConnectDialog';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -13,6 +13,8 @@ import angelIcon from '../../assets/icons/angel.png';
 import hubIcon from '../../assets/icons/hub.png';
 import angelIconActive from '../../assets/icons/angel-active.png';
 import hubIconActive from '../../assets/icons/hub-active.png';
+import FileUploadProgress from './FileUploadProgress';
+import { useEffect } from 'react';
 
 const ModalBackIcon = styled.img`
 	position: absolute;
@@ -72,10 +74,26 @@ const RewardGainerDescription = styled.p`
 	}
 `;
 
-const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref) => {
+const ContributionForm = React.forwardRef(({ setClosable, submitSignal, uploadFiles, fileInputProps }, ref) => {
 	const addressRegex = new RegExp(/^0x[a-fA-F0-9]{40}$/);
 	const { account } = useWeb3React();
 	const [showConnectDialog, setConnectDialogVisibility] = useState(false);
+	const UPLOAD_SIZE_LIMIT = process.env.REACT_APP_UPLOAD_SIZE_LIMIT || 95000000;
+	const [files, setFiles] = useState(Array.from(ref?.current?.files || []));
+	const [directory, setDirectory] = useState({
+		directory: null,
+		key: null,
+	});
+
+	useEffect(() => {
+		return () => {
+			setFiles([]);
+			setDirectory({
+				directory: null,
+				key: null,
+			});
+		};
+	}, []);
 
 	const formik = useFormik({
 		initialValues: {
@@ -112,30 +130,47 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 				setConnectDialogVisibility(false);
 				const { angelAddress, hasHub, hubAddress, rewardGainer, step } = values;
 				if (step == 1) {
+					let fileSizes = 0;
+					for (let index = 0; index < ref.current.files.length; index++) {
+						const file = ref.current.files[index];
+						fileSizes += file.size;
+					}
 					if (ref.current?.files?.length > 0) {
-						formik.setFieldValue('step', 2);
+						if (fileSizes < UPLOAD_SIZE_LIMIT) {
+							formik.setFieldValue('step', 2);
+							try {
+								uploadFiles(files, setFiles, setDirectory);
+								setClosable(false);
+							} catch (e) {
+								throw new Error(e);
+							}
+						} else {
+							formik.setFieldError('file', 'file size is too large');
+						}
 					} else {
 						formik.setFieldError('file', 'you must select a file to upload');
 					}
 				} else if (step == 2) {
+					if (files.filter((f) => f.status === 'done').length === files.length) formik.setFieldValue('step', 3);
+				} else if (step == 3) {
 					if (hasHub) {
 						if (
 							angelAddress.toLowerCase() === account.toLowerCase() ||
 							hubAddress.toLowerCase() === account.toLowerCase()
 						)
-							formik.setFieldValue('step', 3);
+							formik.setFieldValue('step', 4);
 						else formik.setFieldError('angelAddress', 'your connected account must be either hub or angel');
 					} else {
 						if (angelAddress.toLowerCase() === account.toLowerCase())
-							submitSignal(angelAddress, angelAddress, rewardGainer);
+							submitSignal(angelAddress, angelAddress, rewardGainer, directory);
 						else formik.setFieldError('angelAddress', "you need to enter your connected account's address");
 					}
-				} else if (step == 3) {
+				} else if (step == 4) {
 					if (
 						angelAddress.toLowerCase() === account.toLowerCase() ||
 						hubAddress.toLowerCase() === account.toLowerCase()
 					)
-						submitSignal(angelAddress, hubAddress, rewardGainer);
+						submitSignal(angelAddress, hubAddress, rewardGainer, directory);
 					else formik.setFieldError('angelAddress', 'your connected account must be either hub or angel');
 				} else {
 					return;
@@ -149,7 +184,7 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 			<ConnectDialog isOpen={!account && showConnectDialog} onClose={() => setConnectDialogVisibility(false)} />
 
 			<input type="hidden" name={'step'} value={formik.values.step} />
-			{formik.values.step > 1 && (
+			{formik.values.step > 1 && formik.values.step !== 2 && (
 				<ModalBackIcon src={backIcon} onClick={() => formik.setFieldValue('step', formik.values.step - 1)} />
 			)}
 			<Box show={formik.values.step == 1}>
@@ -159,14 +194,29 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 					hasBorder
 					disableUpload={false}
 					label={'select your file here'}
+					multiple
 					fileSizeLimit="*File size must be smaller than 1GB"
 					buttonLabel="select file"
 					name="file"
+					files={files}
+					setFiles={setFiles}
 					error={formik.errors.file}
-					onChange={() => formik.setFieldValue('file', ref.current.value)}
+					onChange={() => {
+						setFiles(
+							Array.from(ref.current.files).map((i) => {
+								let temp = i;
+								temp.status = 'pending';
+								return temp;
+							})
+						);
+						formik.setFieldValue('file', ref.current.value);
+					}}
 				/>
 			</Box>
 			<Box show={formik.values.step == 2}>
+				<FileUploadProgress files={files} />
+			</Box>
+			<Box show={formik.values.step == 3}>
 				<TextField
 					placeholder={'Hub Address'}
 					hasTopMargin
@@ -180,7 +230,7 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 					}}
 				/>
 			</Box>
-			<Box show={formik.values.step == 3}>
+			<Box show={formik.values.step == 4}>
 				<RewardGainerDescription>Which contributor would you like to gain the reward?</RewardGainerDescription>
 				<RewardGainerWrapper>
 					<RewardGainerItem
@@ -218,7 +268,12 @@ const ContributionForm = React.forwardRef(({ submitSignal, fileInputProps }, ref
 				</RewardGainerWrapper>
 			</Box>
 			<ButtonWrapper>
-				<ContinueButton size="medium" type="submit" variant="secondary">
+				<ContinueButton
+					disabled={formik.values.step === 2 && files.filter((f) => f.status === 'done').length !== files.length}
+					size="medium"
+					type="submit"
+					variant="secondary"
+				>
 					Continue
 				</ContinueButton>
 			</ButtonWrapper>

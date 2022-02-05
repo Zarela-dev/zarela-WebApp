@@ -1,10 +1,13 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import fileDownloadIcon from '../../assets/icons/file-download.svg';
 import fileUploadIcon from '../../assets/icons/file-upload.svg';
+import deleteFileIcon from '../../assets/icons/delete-file.svg';
 import { Error } from '../Elements/TextField';
 import { ThemeButton } from '../Elements/Button';
-import { BodyText } from './../Elements/Typography';
+import { BodyText, TextComponent } from './../Elements/Typography';
+import { Box } from 'rebass/styled-components';
+import { useEffect } from 'react';
 
 export const FileInputWithBorder = css`
 	background: #ffffff;
@@ -115,7 +118,7 @@ const ContentRow = styled.div`
 const DownLoadText = styled.span`
 	font-size: 12px;
 	line-height: 10px;
-	color: ${props => props.theme.colors.textPrimary};
+	color: ${(props) => props.theme.colors.textPrimary};
 	font-weight: ${(props) => (props.bold ? 'bold' : '')};
 `;
 
@@ -126,12 +129,18 @@ const LinkWrapper = styled.div`
 `;
 
 const DownLoadLink = styled.a`
-	color: ${props => props.theme.colors.secondary};
+	color: ${(props) => props.theme.colors.secondary};
 	font-size: 12px;
 	line-height: 10px;
 	font-weight: bold;
 	text-decoration: none;
 	cursor: pointer;
+`;
+
+const DeleteIcon = styled.img`
+	width: 14px;
+	cursor: pointer;
+	margin-left: ${(props) => `${props.theme.space[3]}px`};
 `;
 
 const LimitSizeMessage = styled.p`
@@ -145,6 +154,47 @@ const LimitSizeMessage = styled.p`
 		font-size: 12px;
 	}
 `;
+
+const FileItem = ({ filename, onDelete }) => {
+	return (
+		<Box
+			sx={{
+				borderRadius: 8,
+				flex: '0 0 33%',
+				paddingRight: 3,
+			}}
+		>
+			<Box
+				sx={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					flexWrap: 'nowrap',
+					height: 54,
+					padding: 3,
+					overflow: 'hidden',
+					background: '#F4F4F4',
+					marginBottom: 16,
+					textAlign: 'left',
+				}}
+			>
+				<TextComponent
+					variant="small"
+					textOverflow="ellipsis"
+					sx={{
+						whiteSpace: 'nowrap',
+						overflow: 'hidden',
+						fontSize: '14px !important',
+						fontWeight: '500 !important',
+						textOverflow: 'ellipsis',
+					}}
+				>
+					{filename}
+				</TextComponent>
+				<DeleteIcon onClick={typeof onDelete === 'function' && onDelete} src={deleteFileIcon} />
+			</Box>
+		</Box>
+	);
+};
 
 // #refactor_candidate
 const FileInput = forwardRef(
@@ -160,12 +210,33 @@ const FileInput = forwardRef(
 			icon,
 			onClick,
 			error,
+			files,
+			setFiles,
 			label,
+			multiple = false,
 			fileSizeLimit,
 			...rest
 		},
 		ref
 	) => {
+		const showFilesList = (filesList) => {
+			if (filesList.length <= 1) return null;
+			let fileItems = [];
+			for (let index = 0; index < filesList.length; index++) {
+				const file = filesList[index];
+				fileItems.push(
+					<FileItem
+						key={file.name + index}
+						filename={file.name}
+						onDelete={() => {
+							const newFiles = filesList.filter((item) => item.name !== file.name);
+							setFiles(newFiles);
+						}}
+					/>
+				);
+			}
+			return fileItems;
+		};
 		return (
 			<MainWrapper>
 				<FileInputWrapper hasBorder={hasBorder} className={className}>
@@ -178,7 +249,7 @@ const FileInput = forwardRef(
 							<ThemeButton as="label" variant="primary" size="normal">
 								{buttonLabel}
 								{!disableUpload ? (
-									<input ref={ref} accept='.zip,.rar' type="file" style={{ display: 'none' }} {...rest} />
+									<input multiple={multiple} ref={ref} type="file" style={{ display: 'none' }} {...rest} />
 								) : null}
 							</ThemeButton>
 						)}
@@ -190,7 +261,7 @@ const FileInput = forwardRef(
 									<FileInputIcon src={fileUploadIcon} />
 								)}
 								<FileName variant="big" fontWeight="semiBold">
-									{getFileName(ref, formatLabel(label))}
+									{multiple ? formatLabel(label) : getFileName(ref, formatLabel(label))}
 								</FileName>
 							</FileInputTitle>
 						) : (
@@ -213,6 +284,43 @@ const FileInput = forwardRef(
 					) : null}
 				</FileInputWrapper>
 				{fileSizeLimit && <LimitSizeMessage>{fileSizeLimit}</LimitSizeMessage>}
+				{multiple && ref?.current?.files.length > 1 ? (
+					<Box
+						mt={3}
+						sx={{
+							display: 'flex',
+							flexWrap: 'wrap',
+							justifyContent: 'flex-start',
+							borderRadius: 5,
+							maxHeight: 200,
+							border: '1px solid #D6D6D6',
+							paddingRight: 'calc(24px - 16px)',
+							paddingBottom: 'calc(24px - 16px)',
+							paddingTop: 4,
+							paddingLeft: 4,
+							overflow: 'auto',
+							'&::-webkit-scrollbar': {
+								width: 5,
+								background: 'transparent',
+							},
+							'&::-webkit-scrollbar-track': {
+								width: 5,
+								background: '#f5f5f5',
+								borderRadius: '0 5px 5px 0',
+							},
+							'&::-webkit-scrollbar-track-piece': {
+								background: 'transparent',
+							},
+							'&::-webkit-scrollbar-thumb': {
+								width: 2.5,
+								background: '#96c1d1',
+								borderRadius: '0 5px 5px 0',
+							},
+						}}
+					>
+						{showFilesList(files)}
+					</Box>
+				) : null}
 				{downLoadLink && (
 					<ContentRow>
 						<DownLoadText>
@@ -220,9 +328,7 @@ const FileInput = forwardRef(
 						</DownLoadText>
 						<LinkWrapper>
 							<DownLoadLink
-								href={`${
-									process.env.REACT_APP_IPFS_GET_LINK + downLoadLink
-								}?filename=Zpaper-sample.zip`}
+								href={`${process.env.REACT_APP_IPFS_GET_LINK + downLoadLink}?filename=Zpaper-sample.zip`}
 								target="_blank"
 							>
 								DownLoad

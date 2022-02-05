@@ -14,6 +14,8 @@ import caretDownIcon from '../assets/icons/caret-down.svg';
 import Dialog from './Dialog';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import worker from 'workerize-loader!../workers/decrypt.js';
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import legacyWorker from 'workerize-loader!../workers/legacy_decrypt.js';
 import { saveAs } from 'file-saver';
 import useBiobit from '../hooks/useBiobit';
 import { Header, BodyText } from './../components/Elements/Typography';
@@ -23,6 +25,8 @@ import { ThemeIcon } from './../components/Elements/Icon';
 import { Row, Col } from './../components/Elements/Flex';
 import { ApproveBadge } from './../components/Elements/ApproveBadge';
 import { ThemeButton } from './../components/Elements/Button';
+import { CID, create } from 'ipfs-http-client';
+import JSZip from 'jszip';
 
 const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
@@ -47,6 +51,7 @@ const RequestListItem = ({
 	angelTokenPay,
 	laboratoryTokenPay,
 	contributors,
+	timestamp,
 	pendingFiles,
 	cleanSelected,
 	setCleanSelected,
@@ -236,48 +241,108 @@ const RequestListItem = ({
 	};
 	// files table selection methods END
 
-	const signalDownloadHandler = async (fileHash, fileMetaCID) => {
-		setSubmitting(true);
-		setDialogMessage('Downloading file metadata from IPFS');
-		const workerInstance = worker();
-		workerInstance.initDecrypt();
+	const signalDownloadHandler = async (fileHash, fileMetaCID, angelAddress) => {
+		// legacy code support
+		if (+timestamp * 1000 < 1644045813477 && CID.parse(fileHash).version === 0) {
+			console.log('LEGACY CODE IS RUNNING');
+			setSubmitting(true);
+			setDialogMessage('Downloading file metadata from IPFS');
+			const workerInstance = legacyWorker();
+			workerInstance.initDecrypt();
 
-		try {
-			/* fetch signal file metadata from IPFS */
-			const encryptedFileMetaRes = await axios.get(`${process.env.REACT_APP_IPFS_GET_LINK + fileMetaCID}`);
+			try {
+				/* fetch signal file metadata from IPFS */
+				const encryptedFileMetaRes = await axios.get(`${process.env.REACT_APP_IPFS_GET_LINK + fileMetaCID}`);
 
-			const decryptedFileMeta = await window.ethereum.request({
-				method: 'eth_decrypt',
-				params: [encryptedFileMetaRes.data, account],
-			});
+				const decryptedFileMeta = await window.ethereum.request({
+					method: 'eth_decrypt',
+					params: [encryptedFileMetaRes.data, account],
+				});
 
-			const { KEY, NONCE, FILE_NAME, FILE_EXT } = JSON.parse(decryptedFileMeta);
+				const { KEY, NONCE, FILE_NAME, FILE_EXT } = JSON.parse(decryptedFileMeta);
 
-			setDialogMessage('Decrypting file metadata');
-			/* decrypt secret key using metamask*/
+				setDialogMessage('Decrypting file metadata');
+				/* decrypt secret key using metamask*/
 
-			workerInstance.postMessage({
-				fileHash,
-				KEY,
-				NONCE,
-			});
+				workerInstance.postMessage({
+					fileHash,
+					KEY,
+					NONCE,
+				});
+
+				workerInstance.addEventListener('message', async (event) => {
+					if (event.data.type === 'terminate') {
+						workerInstance.terminate();
+					}
+					if (event.data.type === 'feedback') {
+						setDialogMessage(event.data.message);
+					}
+					if (event.data.type === 'decrypted') {
+						saveAs(new Blob([event.data.decrypted_file]), `${FILE_NAME}.${FILE_EXT}`);
+						clearSubmitDialog();
+					}
+				});
+			} catch (error) {
+				clearSubmitDialog();
+				toast('there was an error decrypting your file, please contact support for more information.', 'error');
+				console.error(error);
+			}
+		} else {
+			// CODE SUPPORTING IPFS DAG_JSON
+
+			setSubmitting(true);
+			setDialogMessage('Downloading encrypted keys from IPFS');
+			const ipfs = create(process.env.REACT_APP_IPFS);
+			const workerInstance = worker();
 
 			workerInstance.addEventListener('message', async (event) => {
-				if (event.data.type === 'terminate') {
-					workerInstance.terminate();
-				}
 				if (event.data.type === 'feedback') {
 					setDialogMessage(event.data.message);
 				}
-				if (event.data.type === 'decrypted') {
-					saveAs(new Blob([event.data.decrypted_file]), `${FILE_NAME}.${FILE_EXT}`);
-					clearSubmitDialog();
+				if (event.data.type === 'feedback:error') {
+					toast(event.data.message, 'error');
 				}
 			});
-		} catch (error) {
-			clearSubmitDialog();
-			toast('there was an error decrypting your file, please contact support for more information.', 'error');
-			console.error(error);
+
+			try {
+				const filesData = await ipfs.dag.get(CID.parse(fileHash));
+
+				const files = filesData.value[requestID].contributions[angelAddress].files;
+
+				/* fetch encrypted file's encrypted secret key */
+				const encryptedKeys = await axios.get(
+					`${process.env.REACT_APP_IPFS_GET_LINK + filesData.value[requestID].contributions[angelAddress].key.path}`
+				);
+
+				const decryptedFileMeta = await window.ethereum.request({
+					method: 'eth_decrypt',
+					params: [encryptedKeys.data, account],
+				});
+				const { KEY, NONCE } = JSON.parse(decryptedFileMeta);
+				const zip = new JSZip();
+				for (let i = 0; i < files.length; i++) {
+					let file = files[i];
+
+					const decryptedFile = await workerInstance.decrypt(
+						KEY,
+						NONCE,
+						file.cid.toString(),
+						`${i + 1}/${files.length}`
+					);
+					zip.file(file.filename, decryptedFile);
+				}
+				zip.generateAsync({ type: 'blob' }).then(function (content) {
+					// see FileSaver.js
+					saveAs(content, `${requestID}-${angelAddress}.zip`);
+					clearSubmitDialog();
+					workerInstance.terminate();
+				});
+				/* decrypt secret key using metamask*/
+			} catch (error) {
+				clearSubmitDialog();
+				toast('there was an error decrypting your file, please contact support for more information.', 'error');
+				console.error(error);
+			}
 		}
 	};
 

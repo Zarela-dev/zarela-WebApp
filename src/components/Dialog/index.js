@@ -89,7 +89,7 @@ const Card = styled.div`
 	width: calc(100% - 36px);
 
 	@media only screen and (min-width: ${({ theme }) => theme.tablet_sm_breakpoint}) {
-		width: 680px;
+		width: 800px;
 	}
 `;
 
