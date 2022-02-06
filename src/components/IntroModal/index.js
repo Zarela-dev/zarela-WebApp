@@ -179,16 +179,16 @@ const IntroModal = () => {
 				<Spacer />
 				<Footer>
 					<SocialList>
-						<SocialLink href="https://www.instagram.com/zarela.io/?hl=en" target="_blank">
+						<SocialLink href="https://www.instagram.com/zarela.global/" target="_blank">
 							<SocialIcon src={instagramIcon} />
 						</SocialLink>
-						<SocialLink href="https://twitter.com/zarela_io" target="_blank">
+						<SocialLink href="https://twitter.com/ZarelaNet" target="_blank">
 							<SocialIcon src={twitterIcon} />
 						</SocialLink>
 						<SocialLink href="https://www.linkedin.com/company/zarela" target="_blank">
 							<SocialIcon src={linkedinIcon} />
 						</SocialLink>
-						<SocialLink href="https://discord.gg/tuWp4yGm" target="_blank">
+						<SocialLink href="https://discord.gg/FrbwnHqzTd" target="_blank">
 							<SocialIcon src={discordIcon} />
 						</SocialLink>
 					</SocialList>
