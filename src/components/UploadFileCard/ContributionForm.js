@@ -78,7 +78,8 @@ const ContributionForm = React.forwardRef(({ setClosable, submitSignal, uploadFi
 	const addressRegex = new RegExp(/^0x[a-fA-F0-9]{40}$/);
 	const { account } = useWeb3React();
 	const [showConnectDialog, setConnectDialogVisibility] = useState(false);
-	const UPLOAD_SIZE_LIMIT = process.env.REACT_APP_UPLOAD_SIZE_LIMIT || 95000000;
+	const TOTAL_MAX_UPLOAD_SIZE = process.env.REACT_APP_TOTAL_MAX_UPLOAD_SIZE || null;
+	const FILE_MAX_UPLOAD_SIZE = process.env.REACT_APP_FILE_MAX_UPLOAD_SIZE || null;
 	const [files, setFiles] = useState(Array.from(ref?.current?.files || []));
 	const [directory, setDirectory] = useState({
 		directory: null,
@@ -130,13 +131,45 @@ const ContributionForm = React.forwardRef(({ setClosable, submitSignal, uploadFi
 				setConnectDialogVisibility(false);
 				const { angelAddress, hasHub, hubAddress, rewardGainer, step } = values;
 				if (step == 1) {
-					let fileSizes = 0;
-					for (let index = 0; index < ref.current.files.length; index++) {
-						const file = ref.current.files[index];
-						fileSizes += file.size;
-					}
 					if (ref.current?.files?.length > 0) {
-						if (fileSizes < UPLOAD_SIZE_LIMIT) {
+						if (TOTAL_MAX_UPLOAD_SIZE) {
+							let totalFileSize = 0;
+							for (let index = 0; index < ref.current.files.length; index++) {
+								const file = ref.current.files[index];
+								totalFileSize += file.size;
+							}
+							if (totalFileSize < TOTAL_MAX_UPLOAD_SIZE) {
+								formik.setFieldValue('step', 2);
+								try {
+									uploadFiles(files, setFiles, setDirectory);
+									setClosable(false);
+								} catch (e) {
+									throw new Error(e);
+								}
+							} else {
+								formik.setFieldError('file', 'file size exceeds the limit');
+							}
+						} else if (FILE_MAX_UPLOAD_SIZE) {
+							let exceedsMaxSize = false;
+							for (let index = 0; index < ref.current.files.length; index++) {
+								const file = ref.current.files[index];
+								if (file.size > FILE_MAX_UPLOAD_SIZE) {
+									exceedsMaxSize = true;
+									break;
+								}
+							}
+							if (!exceedsMaxSize) {
+								formik.setFieldValue('step', 2);
+								try {
+									uploadFiles(files, setFiles, setDirectory);
+									setClosable(false);
+								} catch (e) {
+									throw new Error(e);
+								}
+							} else {
+								formik.setFieldError('file', 'total file size is too large');
+							}
+						} else {
 							formik.setFieldValue('step', 2);
 							try {
 								uploadFiles(files, setFiles, setDirectory);
@@ -144,8 +177,6 @@ const ContributionForm = React.forwardRef(({ setClosable, submitSignal, uploadFi
 							} catch (e) {
 								throw new Error(e);
 							}
-						} else {
-							formik.setFieldError('file', 'file size is too large');
 						}
 					} else {
 						formik.setFieldError('file', 'you must select a file to upload');
@@ -195,7 +226,7 @@ const ContributionForm = React.forwardRef(({ setClosable, submitSignal, uploadFi
 					disableUpload={false}
 					label={'select your file here'}
 					multiple
-					fileSizeLimit="*File size must be smaller than 1GB"
+					fileSizeLimit={FILE_MAX_UPLOAD_SIZE && `*File size must be smaller than ${FILE_MAX_UPLOAD_SIZE / 1000000} MB`}
 					buttonLabel="select file"
 					name="file"
 					files={files}
