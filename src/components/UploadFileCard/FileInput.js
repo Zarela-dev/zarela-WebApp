@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef } from 'react';
 import styled, { css } from 'styled-components';
 import fileDownloadIcon from '../../assets/icons/file-download.svg';
 import fileUploadIcon from '../../assets/icons/file-upload.svg';
@@ -7,7 +7,6 @@ import { Error } from '../Elements/TextField';
 import { ThemeButton } from '../Elements/Button';
 import { BodyText, TextComponent } from './../Elements/Typography';
 import { Box } from 'rebass/styled-components';
-import { useEffect } from 'react';
 
 export const FileInputWithBorder = css`
 	background: #ffffff;
@@ -220,7 +219,6 @@ const FileInput = forwardRef(
 		ref
 	) => {
 		const showFilesList = (filesList) => {
-			if (filesList.length <= 1) return null;
 			let fileItems = [];
 			for (let index = 0; index < filesList.length; index++) {
 				const file = filesList[index];
@@ -284,7 +282,7 @@ const FileInput = forwardRef(
 					) : null}
 				</FileInputWrapper>
 				{fileSizeLimit && <LimitSizeMessage>{fileSizeLimit}</LimitSizeMessage>}
-				{multiple && ref?.current?.files.length > 1 ? (
+				{multiple && files.length >= 1 ? (
 					<Box
 						mt={3}
 						sx={{
