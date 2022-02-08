@@ -7,43 +7,64 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { ThemeButton } from '../../components/Elements/Button';
+import { TableContainer } from '@mui/material';
 
-const Confirm = ({ data, stage, setStage }) => {
+const Confirm = ({ data, stage, setStage, isMobile }) => {
+	const customCellStyles = {
+		'&.MuiTableCell-root': {
+			padding: ['16px 8px !important', '16px 8px !important', 3],
+		},
+	};
 	return (
 		<Box>
-			<Table sx={{ minWidth: 650 }} aria-label="simple table">
-				<TableHead>
-					<TableRow>
-						<TableCell>Address</TableCell>
-						<TableCell align="right">Amount</TableCell>
-					</TableRow>
-				</TableHead>
-				<TableBody>
-					{data.map((row) => (
-						<TableRow key={row.address} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-							<TableCell component="th" scope="row">
-								{row.address}
+			<TableContainer>
+				<Table sx={{ minWidth: 650 }} aria-label="simple table">
+					<TableHead>
+						<TableRow>
+							<TableCell sx={customCellStyles}>Address</TableCell>
+							<TableCell sx={customCellStyles} align="right">
+								Amount
 							</TableCell>
-							<TableCell align="right">{row.amount}</TableCell>
 						</TableRow>
-					))}
-					<TableRow>
-						<TableCell component="th" scope="row">
-							Total Recipients: {data.length}
-						</TableCell>
-						<TableCell align="right">
-							{`${data
-								.map((x) => x.amount)
-								.reduce((a, b) => a.plus(new BigNumber(b)), new BigNumber(0))
-								.toNumber()} BBIT`}
-						</TableCell>
-					</TableRow>
-				</TableBody>
-			</Table>
+					</TableHead>
+					<TableBody>
+						{data.map((row) => (
+							<TableRow key={row.address} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+								<TableCell sx={customCellStyles} component="th" scope="row">
+									{row.address}
+								</TableCell>
+								<TableCell sx={customCellStyles} align="right">
+									{row.amount}
+								</TableCell>
+							</TableRow>
+						))}
+						<TableRow>
+							<TableCell sx={customCellStyles} component="th" scope="row">
+								Total Recipients: {data.length}
+							</TableCell>
+							<TableCell
+								sx={{
+									width: 300,
+									color: 'success.main',
+									'& .MuiSlider-thumb': {
+										borderRadius: '1px',
+									},
+								}}
+								align="right"
+							>
+								{`${data
+									.map((x) => x.amount)
+									.reduce((a, b) => a.plus(new BigNumber(b)), new BigNumber(0))
+									.toNumber()} BBIT`}
+							</TableCell>
+						</TableRow>
+					</TableBody>
+				</Table>
+			</TableContainer>
 			<Box mt={4} display="flex">
 				<ThemeButton
 					variant={'secondary'}
-					size="large"
+					size={isMobile ? 'medium' : 'large'}
 					onClick={() => {
 						if (stage === 'confirm') {
 							setStage('prepare');
@@ -55,7 +76,7 @@ const Confirm = ({ data, stage, setStage }) => {
 				<Box flex="1" />
 				<ThemeButton
 					variant={'primary'}
-					size="large"
+					size={isMobile ? 'medium' : 'large'}
 					onClick={() => {
 						if (stage === 'confirm') {
 							setStage('send');

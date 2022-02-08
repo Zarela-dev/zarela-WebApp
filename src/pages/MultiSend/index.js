@@ -3,7 +3,6 @@ import { mainContext } from '../../state';
 import { useWeb3React } from '@web3-react/core';
 import { Card, Box } from 'rebass';
 import { BodyText } from '../../components/Elements/Typography';
-
 import Prepare from './Prepare';
 import Confirm from './Confirm';
 import Send from './Send';
@@ -23,8 +22,8 @@ const MultiSendPage = () => {
 	const [txHash, setTxHash] = useState(null);
 
 	return (
-		<Box sx={{ width: '720px', margin: '-80px auto 0' }}>
-			<Box display={'flex'} mb={4} justifyContent={'center'}>
+		<Box sx={{ width: ['100%', '100%', 720], margin: '-80px auto 80px', paddingLeft: [3, 3, 0], paddingRight: [3, 3, 0] }}>
+			<Box display={'flex'} mb={4} px={3} justifyContent={'center'}>
 				<BodyText variant="big" fontWeight={stage === 'prepare' ? 'bold' : 'regular'}>
 					Prepare
 				</BodyText>
@@ -38,7 +37,7 @@ const MultiSendPage = () => {
 				</BodyText>
 			</Box>
 			<Card
-				p={4}
+				p={[3, 3, 4]}
 				sx={{
 					background: '#FFFFFF',
 					boxShadow: '0px 4px 20px rgba(52, 52, 52, 0.15)',
@@ -60,6 +59,7 @@ const MultiSendPage = () => {
 							setStage,
 							errors,
 							setErrors,
+							isMobile: appState.isMobile
 						}}
 					/>
 				) : stage === 'confirm' ? (
@@ -68,6 +68,7 @@ const MultiSendPage = () => {
 							stage,
 							setStage,
 							data,
+							isMobile: appState.isMobile
 						}}
 					/>
 				) : stage === 'send' ? (
@@ -81,6 +82,7 @@ const MultiSendPage = () => {
 							account,
 							txHash,
 							setTxHash,
+							isMobile: appState.isMobile
 						}}
 					/>
 				) : null}

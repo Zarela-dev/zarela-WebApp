@@ -17,6 +17,7 @@ const Prepare = ({
 	setManualInput,
 	appState,
 	setStage,
+	isMobile,
 	errors,
 	setErrors,
 }) => {
@@ -41,7 +42,7 @@ const Prepare = ({
 	};
 
 	return (
-		<div>
+		<Box>
 			<Header variant="heading4" mb={2}>
 				Get Started Here
 			</Header>
@@ -59,17 +60,18 @@ const Prepare = ({
 				}}
 			/>
 			<Box
-				my={4}
+				mt={4}
 				sx={{
 					display: 'flex',
 					flexWrap: 'nowrap',
+					flexDirection: ['column', 'column', 'row'],
 					alignItems: 'center',
 				}}
 			>
-				<Box flex="2" pr={3}>
+				<Box flex="2" pr={[0, 0, 3]}>
 					<MultisendDropzone fileNames={fileNames} handleDrop={handleDrop} />
 				</Box>
-				<Box flex="1">
+				<Box flex="1" marginTop={[3, 3, 0]}>
 					<LinkText as="a" target="_blank" href="https://zarela.net/sample/sample.csv">
 						Download Sample CSV
 					</LinkText>
@@ -145,7 +147,7 @@ const Prepare = ({
 				<ThemeButton
 					variant={'primary'}
 					disabled={isEmpty(data)}
-					size="large"
+					size={isMobile ? "medium" : "large"}
 					onClick={() => {
 						if (validateAddresses(data, setErrors) === 'valid' && validateAmounts(data, setErrors) === 'valid') {
 							let balance = new BigNumber(appState.biobitBalance.replace(/,/g, ''));
@@ -160,7 +162,7 @@ const Prepare = ({
 					Next
 				</ThemeButton>
 			</Box>
-		</div>
+		</Box>
 	);
 };
 
