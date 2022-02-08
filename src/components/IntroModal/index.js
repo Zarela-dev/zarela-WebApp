@@ -188,7 +188,7 @@ const IntroModal = () => {
 						<SocialLink href="https://www.linkedin.com/company/zarela" target="_blank">
 							<SocialIcon src={linkedinIcon} />
 						</SocialLink>
-						<SocialLink href="https://discord.gg/FrbwnHqzTd" target="_blank">
+						<SocialLink href="https://discord.gg/EGNQjWHhwW" target="_blank">
 							<SocialIcon src={discordIcon} />
 						</SocialLink>
 					</SocialList>
