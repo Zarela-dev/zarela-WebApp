@@ -7,7 +7,7 @@ import { toast } from '../../utils';
 import { CircularProgress } from '@mui/material';
 import successfulMultisend from '../../assets/icons/successful-multisend.svg';
 
-const Send = ({ stage, setStage, appState, data, account, DECIMALS, txHash, setTxHash }) => {
+const Send = ({ stage, setStage, appState, data, account, DECIMALS, txHash, setTxHash, isMobile }) => {
 	const [isApproving, setIsApproving] = useState(true);
 	const [hasAllowance, setAllowance] = useState(false);
 	const [isSending, setSending] = useState(false);
@@ -38,7 +38,7 @@ const Send = ({ stage, setStage, appState, data, account, DECIMALS, txHash, setT
 			{txHash === null ? (
 				<>
 					<Card
-						p={4}
+						p={[3, 3, 4]}
 						mb={4}
 						sx={{
 							background: '#F9F9F9',
@@ -58,7 +58,7 @@ const Send = ({ stage, setStage, appState, data, account, DECIMALS, txHash, setT
 						<Box display={'flex'} justifyContent={'flex-end'}>
 							<ThemeButton
 								variant="primary"
-								size={'large'}
+								size={isMobile ? 'medium' : 'large'}
 								disabled={
 									(hasAllowance === false && isApproving !== false) || isApproving === true || hasAllowance === true
 								}
@@ -93,7 +93,7 @@ const Send = ({ stage, setStage, appState, data, account, DECIMALS, txHash, setT
 						</Box>
 					</Card>
 					<Card
-						p={4}
+						p={[3, 3, 4]}
 						sx={{
 							background: '#F9F9F9',
 							borderRadius: '8px',
@@ -112,7 +112,7 @@ const Send = ({ stage, setStage, appState, data, account, DECIMALS, txHash, setT
 						<Box display={'flex'} justifyContent={'flex-end'}>
 							<ThemeButton
 								variant="primary"
-								size={'large'}
+								size={isMobile ? 'medium' : 'large'}
 								disabled={hasAllowance === false || isSending === true}
 								onClick={() => {
 									if (appState.multisendContract !== null) {
@@ -147,7 +147,7 @@ const Send = ({ stage, setStage, appState, data, account, DECIMALS, txHash, setT
 						<ThemeButton
 							variant={'secondary'}
 							disabled={isSending === true}
-							size="large"
+							size={isMobile ? 'medium' : 'large'}
 							onClick={() => {
 								if (stage === 'send') {
 									setStage('confirm');
@@ -171,6 +171,7 @@ const Send = ({ stage, setStage, appState, data, account, DECIMALS, txHash, setT
 						mt={3}
 						sx={{
 							background: '#F9F9F9',
+							flexDirection: 'column',
 							borderRadius: '8px',
 							display: 'flex',
 							flexWrap: 'wrap',
@@ -180,7 +181,7 @@ const Send = ({ stage, setStage, appState, data, account, DECIMALS, txHash, setT
 						}}
 					>
 						<BodyText variant={'hint'} fontWeight="bold">
-							{`Transaction hash: ${txHash}`}
+							{`Transaction hash: ${txHash.substring(0, 5).concat('...').concat(txHash.substring(60, 66))}`}
 						</BodyText>
 						<BodyText
 							variant="hint"
@@ -196,7 +197,12 @@ const Send = ({ stage, setStage, appState, data, account, DECIMALS, txHash, setT
 							View on Etherscan
 						</BodyText>
 					</Card>
-					<ThemeButton mt={4} variant="primary" size="large" onClick={() => window.location.reload()}>
+					<ThemeButton
+						mt={4}
+						variant="primary"
+						size={isMobile ? 'medium' : 'large'}
+						onClick={() => window.location.reload()}
+					>
 						start over
 					</ThemeButton>
 				</Box>
