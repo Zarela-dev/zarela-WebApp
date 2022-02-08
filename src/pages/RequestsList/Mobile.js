@@ -73,8 +73,9 @@ const RequestsListLayout = styled.section`
 `;
 
 const RequestsListContentWrapper = styled.section`
-	flex: 1 0;
+	flex: 1 0 100%;
 	padding: 0 ${(props) => props.theme.spacing(1.8)};
+	width: 100%;
 `;
 
 const Card = styled.div`
