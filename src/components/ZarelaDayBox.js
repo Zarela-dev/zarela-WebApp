@@ -86,7 +86,7 @@ const ZarelaDayBox = ({ currentDay = 0 }) => {
 				<Title>Current Zarela Day</Title>
 			</Row>
 			<Row>
-				<ZarelaDay>{`${currentDay}th`}</ZarelaDay>
+				<ZarelaDay>{`10th`}</ZarelaDay>
 				<ZarelaDaySubtitle>Day</ZarelaDaySubtitle>
 			</Row>
 			<Divider />
