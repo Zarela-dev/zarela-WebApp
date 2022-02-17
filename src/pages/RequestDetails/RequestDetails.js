@@ -61,8 +61,8 @@ const RequestDetailsPage = () => {
 									title: result[1],
 									description: result[7],
 									requesterAddress: result[2],
-									angelTokenPay: convertToBiobit(result[3]),
-									laboratoryTokenPay: convertToBiobit(result[4]),
+									angelTokenPay: convertToBiobit(result[3], false),
+									laboratoryTokenPay: convertToBiobit(result[4], false),
 									totalContributors: result[5], // total contributors required
 									totalContributed: +result[5] - +result[8],
 									whitePaper: result[6],
