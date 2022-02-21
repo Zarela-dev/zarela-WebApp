@@ -97,7 +97,7 @@ const NavIcon = styled.img`
 `;
 
 const Logo = styled.img`
-	height: 65px;
+	height: 32px;
 	margin-left: 20px;
 	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(1) : props.theme.spacing(4))};
 `;
@@ -144,7 +144,7 @@ const NavBarRow = styled.div`
 `;
 
 const LogoApp = styled(Logo)`
-	height: 33px;
+	height: 24px;
 	margin-left: 0;
 `;
 
