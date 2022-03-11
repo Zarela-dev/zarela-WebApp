@@ -45,6 +45,7 @@ const FilterLabelContainer = ({
 	searchResults,
 }) => {
 	const { appState } = useContext(mainContext);
+	
 	return (
 		<FilterWrapper>
 			{!appState.isMobile && (

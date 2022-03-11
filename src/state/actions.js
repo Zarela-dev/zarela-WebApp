@@ -92,7 +92,7 @@ export const getEthPrice = (dispatch) => {
 	/**
 	 * get ethereum price in USD
 	 */
-	const request = require('request');
+	// const request = require('request');
 
 	// axios
 	// 	.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD')
