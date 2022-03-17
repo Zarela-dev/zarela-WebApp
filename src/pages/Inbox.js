@@ -39,11 +39,14 @@ const Inbox = () => {
 	const [shouldRefresh, setShouldRefresh] = useState(false);
 	const [guideIsOpen, setGuideIsOpen] = useState(false);
 	const [cleanSelected, setCleanSelected] = useState(null);
+	const [isSendingTokens, setIsSendingTokens] = useState(false);
 
 	const handleConfirm = (requestID, originalIndexes) => {
+		setIsSendingTokens(true);
 		appState.contract.methods
 			.confirmContributor(requestID, originalIndexes)
 			.send({ from: account }, (error, txHash) => {
+				setIsSendingTokens(false);
 				if (!error) {
 					setPendingFile({
 						txHash,
@@ -159,6 +162,7 @@ const Inbox = () => {
 						.sort((a, b) => +b.requestID - +a.requestID)
 						.map((item, index) => (
 							<RequestListItem
+								isSendingTokens={isSendingTokens}
 								shouldRefresh={shouldRefresh}
 								showContributions={index === 0}
 								key={item.requestID}

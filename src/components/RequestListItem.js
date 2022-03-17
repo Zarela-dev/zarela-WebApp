@@ -43,6 +43,7 @@ const RequestListItem = ({
 	showContributions,
 	shouldRefresh,
 	requestID,
+	isSendingTokens,
 	title,
 	angelTokenPay,
 	laboratoryTokenPay,
@@ -452,7 +453,7 @@ const RequestListItem = ({
 							<ThemeButton
 								variant="primary"
 								size="large"
-								disabled={selected.length === 0}
+								disabled={selected.length === 0 || isSendingTokens}
 								onClick={() => {
 									handleConfirm(requestID, selected);
 								}}
