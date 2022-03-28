@@ -11,11 +11,12 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 // import ChainError from './components/ChainError';
 // import NotFound from './components/NotFoundPage';
 // import RequestsList from './pages/RequestsList';
-// import Header from './components/Header';
+import Header from './components/Header';
+import BottomNavigation from './components/BottomNavigation';
 // import IntroModal from './components/IntroModal';
-// import BottomNavigation from './components/BottomNavigation';
 import styled from 'styled-components';
 import ConnectorModal from './components/ConnectorModal';
+import { useStore } from './state/store';
 // import { mainContext } from './state';
 
 const AppWrapper = styled.div`
@@ -24,6 +25,10 @@ const AppWrapper = styled.div`
 
 const AppRouter = () => {
 	const provider = window.ethereum;
+	const { isMobile } = useStore((state) => ({
+		isMobile: state.isMobile,
+	}));
+	console.log('isMobile', isMobile);
 	// const { appState } = useContext(mainContext);
 	const metamaskChainId = provider?.request({ method: 'eth_chainId' });
 
@@ -39,15 +44,14 @@ const AppRouter = () => {
 	return (
 		<Router>
 			<AppWrapper>
-			{/* <ConnectorModal /> */}
-				{/* {appState.isMobile ? (
+				{isMobile ? (
 					<>
-						<Header isMobile={appState.isMobile} />
+						<Header isMobile={isMobile} />
 						<BottomNavigation />
 					</>
 				) : (
-					<Header isMobile={appState.isMobile ?? false} />
-				)} */}
+					<Header isMobile={isMobile ?? false} />
+				)}
 				<Switch>
 					{/* <Route exact path="/" component={RequestsList} /> */}
 					{/* <Route exact path="/request/create" component={CreateRequest} />

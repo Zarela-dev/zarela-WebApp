@@ -6,24 +6,19 @@ import { getConnectorHooks } from '../utils/getConnectorHooks';
 const useInitConnectors = () => {
 	const {
 		setStatus,
-		status,
+		connectorStatus: status,
 		setActiveConnector,
 		setConnectorInProgress,
 		activeConnector,
 		setContractManually,
 		connectorInProgress,
-	} = useStore((state) => ({
-		setStatus: state.setStatus,
-		status: state.status,
-		activeConnector: state.activeConnector,
-		setActiveConnector: state.setActiveConnector,
-		connectorInProgress: state.connectorInProgress,
-		setConnectorInProgress: state.setConnectorInProgress,
-		setContractManually: state.setContractManually,
-	}));
+		setIsMobile,
+		setCreateRequestFormData,
+	} = useStore();
 
 	const DEFAULT_CHAIN_ID = 3;
-	const { useError, useIsActivating, useIsActive } = getConnectorHooks(connectorInProgress);
+	console.log('here', connectorInProgress, activeConnector);
+	const { useError, useIsActivating, useIsActive } = getConnectorHooks(connectorInProgress || activeConnector);
 
 	const error = useError();
 	const isActivating = useIsActivating();
@@ -45,7 +40,7 @@ const useInitConnectors = () => {
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isActivating, isActive, error]);
+	}, [isActivating, isActive, error, connectorInProgress]);
 
 	useEffect(() => {
 		let injectedProvider = window.ethereum;
@@ -64,8 +59,17 @@ const useInitConnectors = () => {
 	}, []);
 
 	useEffect(() => {
-		console.log('status: --->', status, isActivating, isActive);
-	}, [status, isActivating, isActive]);
+		if (localStorage.getItem('create_request_values')) {
+			setCreateRequestFormData(JSON.parse(localStorage.getItem('create_request_values')));
+		}
+		setIsMobile(
+			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? true : false
+		);
+	}, []);
+
+	useEffect(() => {
+		console.log('status: --->', status, isActivating, isActive, connectorInProgress);
+	}, [status, isActivating, isActive, connectorInProgress]);
 };
 
 export default useInitConnectors;

@@ -35,7 +35,7 @@ export const connectorSlice = (set, get) => ({
 	contractPermission: 'r', // r: read, wr: write and read
 
 	isOpen: null,
-	walletAddress: null,
+	account: null,
 
 	activeConnector: null,
 	connectorInProgress: MMConnector,
@@ -135,7 +135,7 @@ export const connectorSlice = (set, get) => ({
 			console.error(new Error('Unsupported connector. Please use MetaMask, WalletConnect or Fallback Network.'));
 		}
 	},
-	setConnectorInProgress: (connectorInProgress) => set({ connectorInProgress }),
+	setConnectorInProgress: (connector) => set({ connectorInProgress: connector }),
 	setStatus: (connectorStatus, verboseMessage = null) =>
 		set({ connectorStatus, verboseConnectorStatus: verboseMessage }),
 });
