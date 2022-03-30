@@ -102,7 +102,7 @@ const useStyles = makeStyles({
 	},
 });
 
-const Mobile = ({ requests, isLoading, appState, currentPage, setCurrentPage, props, PAGE_SIZE, searchBox }) => {
+const Mobile = ({ requests, isLoading, /* appState,  */currentPage, setCurrentPage, props, PAGE_SIZE, searchBox }) => {
 	const classes = useStyles(props);
 
 	const currentTableData = useMemo(() => {
@@ -115,7 +115,7 @@ const Mobile = ({ requests, isLoading, appState, currentPage, setCurrentPage, pr
 		<>
 			<MobileLayout>
 				<RequestsListWrapper isLoading={isLoading}>
-					<ZarelaDayBox currentDay={appState.zarelaCurrentDay} />
+					{/* <ZarelaDayBox currentDay={appState.zarelaCurrentDay} /> */}
 					{!isLoading && <Background />}
 					<RequestsListLayout>
 						<RequestsListContentWrapper>

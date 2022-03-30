@@ -13,9 +13,11 @@ import { client } from './apolloClient';
 import useInitConnectors from './state/initConnectors';
 import { useEffect } from 'react';
 import { useStore } from './state/store';
+import InitContractMethods from './state/InitContractMethods';
 // import { useAppInit } from './state/sotre';
 
 function App() {
+	const { activeConnector } = useStore();
 	useInitConnectors();
 
 	return (
@@ -23,6 +25,7 @@ function App() {
 			<ThemeProvider>
 				<ErrorBoundary>
 					<ApolloProvider client={client}>
+						{activeConnector && <InitContractMethods />}
 						{/* <PendingFilesProvider> */}
 						<LocalStorageProvider>
 							{/* <NotificationProvider> */}

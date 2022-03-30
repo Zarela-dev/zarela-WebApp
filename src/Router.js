@@ -10,12 +10,12 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 // import { supportedChains } from './constants/index';
 // import ChainError from './components/ChainError';
 // import NotFound from './components/NotFoundPage';
-// import RequestsList from './pages/RequestsList';
+import RequestsList from './pages/RequestsList';
 import Header from './components/Header';
 import BottomNavigation from './components/BottomNavigation';
 // import IntroModal from './components/IntroModal';
 import styled from 'styled-components';
-import ConnectorModal from './components/ConnectorModal';
+// import ConnectorModal from './components/ConnectorModal';
 import { useStore } from './state/store';
 // import { mainContext } from './state';
 
@@ -53,7 +53,7 @@ const AppRouter = () => {
 					<Header isMobile={isMobile ?? false} />
 				)}
 				<Switch>
-					{/* <Route exact path="/" component={RequestsList} /> */}
+					<Route exact path="/" component={RequestsList} />
 					{/* <Route exact path="/request/create" component={CreateRequest} />
 					<Route exact path="/request/:id" component={RequestDetails} />
 					<Route exact path="/inbox" component={Inbox} />

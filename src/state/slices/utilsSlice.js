@@ -5,7 +5,9 @@ export const utilsSlice = (set, get) => ({
 	notificationCount: null,
 	createRequestFormData: null,
 	biobitBalance: null,
+	ethBalance: null,
 
+	setEthBalance: (balance) => set({ ethBalance: balance }),
 	setBiobitBalance: (biobitBalance) => set({ biobitBalance }),
 	setCreateRequestFormData: (data) => set({ createRequestFormData: data }),
 	setIsMobile: (isMobile) => set({ isMobile }),

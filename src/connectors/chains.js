@@ -26,7 +26,7 @@ export const CHAINS = {
 			process.env.REACT_APP_POCKET_KEY
 				? `https://eth-mainnet.gateway.pokt.network/v1/lb/${process.env.REACT_APP_POCKET_KEY}`
 				: undefined,
-			process.env.REACT_APP_INFURA_KEY ? `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}` : undefined,
+			// process.env.REACT_APP_INFURA_KEY ? `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}` : undefined,
 		].filter((url) => url !== undefined),
 		name: 'Mainnet',
 	},
@@ -38,7 +38,7 @@ export const CHAINS = {
 			process.env.REACT_APP_POCKET_KEY
 				? `https://eth-ropsten.gateway.pokt.network/v1/lb/${process.env.REACT_APP_POCKET_KEY}`
 				: undefined,
-			process.env.REACT_APP_INFURA_KEY ? `https://ropsten.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}` : undefined,
+			// process.env.REACT_APP_INFURA_KEY ? `https://ropsten.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}` : undefined,
 		].filter((url) => url !== undefined),
 		name: 'Ropsten',
 	},

@@ -6,6 +6,8 @@ import { Contract } from '@ethersproject/contracts';
 import ZarelaABI from '../../abi/ZarelaSmartContract.json';
 import { Web3Provider } from '@ethersproject/providers';
 import { getConnectorHooks } from '../../utils/getConnectorHooks';
+import { CHAINS } from '../../connectors/chains';
+import { ZARELA_CONTRACT_ADDRESS } from '../smartContractConstants';
 
 export const getActiveConnector = (state) => {
 	const activeConnector = state.activeConnector;
@@ -20,17 +22,26 @@ export const getActiveConnector = (state) => {
 	}
 };
 
-const STATUS = {
+export const STATUS = {
+	DISCONNECTED: 'DISCONNECTED',
+	NO_INJECTED_PROVIDER: 'NO_INJECTED_PROVIDER',
+	INJECTED_PROVIDER_FOUND: 'INJECTED_PROVIDER_FOUND',
+	INIT_CONNECTOR: 'INIT_CONNECTOR',
+	FAILED: 'FAILED',
+	CONNECTED: 'CONNECTED',
+};
+
+const STATUS_VERBOSE = {
 	DISCONNECTED: 'Disconnected',
 	NO_INJECTED_PROVIDER: 'No injected provider found.',
 	INJECTED_PROVIDER_FOUND: 'Injected provider detected',
 	INIT_CONNECTOR: 'Initializing ...',
 	FAILED: 'Failed to connect',
 	CONNECTED: 'Connected',
-}
+};
 
 export const connectorSlice = (set, get) => ({
-	contractAddress: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS,
+	contractAddress: null,
 	contract: null,
 	contractPermission: 'r', // r: read, wr: write and read
 
@@ -44,6 +55,7 @@ export const connectorSlice = (set, get) => ({
 	connectorHooks: {
 		useChainId: null,
 		useAccounts: null,
+		useProvider: null,
 		useAccount: null,
 		useError: null,
 		useIsActivating: null,
@@ -53,7 +65,21 @@ export const connectorSlice = (set, get) => ({
 		useENSNames: null,
 	},
 	setContract: (contract) => set({ contract }),
-	setContractManually: async (provider) => {
+	setContractManually: async function (provider) {
+		// make sure user is on the right network
+		const currentChainId = await provider.request({ method: 'eth_chainId' });
+
+		try {
+			if (Object.keys(CHAINS).findIndex((key) => +key === parseInt(currentChainId, 16)) === -1) {
+				await provider.request({
+					method: 'wallet_switchEthereumChain',
+					params: [{ chainId: '0x' + Number(3).toString(16) }],
+				});
+			}
+		} catch (error) {
+			console.error(error.message);
+		}
+
 		// provider.
 		let web3Provider = null,
 			contract_r = null;
@@ -68,31 +94,12 @@ export const connectorSlice = (set, get) => ({
 		}
 
 		try {
-			contract_r = new Contract(get().contractAddress, ZarelaABI, web3Provider.getSigner());
-			set({ contract: contract_r, contractPermission: 'r' });
+			let currentContract = ZARELA_CONTRACT_ADDRESS[parseInt(currentChainId, 16)];
+
+			contract_r = new Contract(currentContract, ZarelaABI, web3Provider);
+			set({ contract: contract_r, contractPermission: 'r', contractAddress: currentContract });
 		} catch (error) {
 			console.error(new Error('Error setting contract:'), error);
-		}
-
-		console.log('web3Provider', web3Provider);
-		console.log('web3Provider signer', web3Provider.getSigner());
-
-		console.log('contract', contract_r);
-
-		try {
-			const cats = await contract_r.contribute(
-				'95',
-				'0x55C24f8dB90f738f1E48acecf702f3a6e640c1Df', // angel
-				'0x55C24f8dB90f738f1E48acecf702f3a6e640c1Df', // laboratory
-				'angel',
-				'0x78Dfded703574fa6Dc8c704C86395Fb617219043',
-				'ipfs', // encrypted file CID
-				'ipfs' // file metadata CID
-			);
-
-			console.log('cats', cats);
-		} catch (error) {
-			console.log(new Error('error calling read-only contract methods'), error);
 		}
 	},
 	setActiveConnector: async (activeConnector) => {
@@ -137,5 +144,5 @@ export const connectorSlice = (set, get) => ({
 	},
 	setConnectorInProgress: (connector) => set({ connectorInProgress: connector }),
 	setStatus: (connectorStatus, verboseMessage = null) =>
-		set({ connectorStatus, verboseConnectorStatus: verboseMessage }),
+		set({ connectorStatus, verboseConnectorStatus: verboseMessage || STATUS_VERBOSE[connectorStatus] }),
 });

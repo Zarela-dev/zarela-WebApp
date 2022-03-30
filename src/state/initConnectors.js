@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useStore } from './store';
 import { NetworkConnector } from '../connectors/network';
 import { getConnectorHooks } from '../utils/getConnectorHooks';
+import { STATUS } from './slices/connectorSlice';
 
 const useInitConnectors = () => {
 	const {
@@ -27,16 +28,18 @@ const useInitConnectors = () => {
 	useEffect(() => {
 		if (error) {
 			console.log('error', error.message);
+			setStatus(STATUS.FAILED);
 		} else {
 			if (isActivating === true && isActive === false) {
-				setStatus('trying to activate network provider');
+				setStatus(STATUS.INIT_CONNECTOR);
 			} else if (isActivating === false && isActive === false) {
-				setStatus('no provider');
+				setStatus(STATUS.DISCONNECTED);
 			} else if (isActivating === false && isActive === true) {
-				setStatus('Connected');
+				setStatus(STATUS.CONNECTED);
 				if (connectorInProgress !== null) setActiveConnector(connectorInProgress);
 			} else {
 				console.log("no idea what's happening");
+				setStatus(STATUS.FAILED);
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -48,6 +51,11 @@ const useInitConnectors = () => {
 		if (injectedProvider !== undefined) {
 			setStatus("metamask installed trying to use it't provider");
 			setContractManually(injectedProvider);
+			injectedProvider.removeListener('chainChanged', setContractManually);
+			// to make sure that the setup happens again after chain changes
+			injectedProvider.on('chainChanged', (chainId) => {
+				window.location.reload();
+			});
 		} else if (injectedProvider === undefined) {
 			setStatus('Metamask not installed, trying to connect to fallback provider');
 			setConnectorInProgress(NetworkConnector);
@@ -62,6 +70,7 @@ const useInitConnectors = () => {
 		if (localStorage.getItem('create_request_values')) {
 			setCreateRequestFormData(JSON.parse(localStorage.getItem('create_request_values')));
 		}
+
 		setIsMobile(
 			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? true : false
 		);
