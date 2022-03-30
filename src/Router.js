@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 // import CreateRequest from './pages/CreateRequest';
-// import RequestDetails from './pages/RequestDetails/RequestDetails';
+import RequestDetails from './pages/RequestDetails/RequestDetails';
 // import Inbox from './pages/Inbox';
 // import Wallet from './pages/Wallet/Wallet';
 // import Log from './pages/Log/Log';
@@ -54,9 +54,9 @@ const AppRouter = () => {
 				)}
 				<Switch>
 					<Route exact path="/" component={RequestsList} />
-					{/* <Route exact path="/request/create" component={CreateRequest} />
 					<Route exact path="/request/:id" component={RequestDetails} />
-					<Route exact path="/inbox" component={Inbox} />
+					{/* <Route exact path="/inbox" component={Inbox} />
+					<Route exact path="/request/create" component={CreateRequest} />
 					<Route path="/wallet" component={Wallet} />
 					<Route path="/log" component={Log} />
 					<Route path="/settings" component={Settings} />

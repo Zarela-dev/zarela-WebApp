@@ -110,7 +110,7 @@ const RequestDetailsMobile = ({ setError, zpaperDownloadLink, error, request }) 
 					</HeaderInner>
 				</HeaderContainer>
 				<Col width="100%" p={[3]}>
-					<UploadFileCard
+					{/* <UploadFileCard
 						isMobile
 						showSelected
 						disableUpload
@@ -125,7 +125,7 @@ const RequestDetailsMobile = ({ setError, zpaperDownloadLink, error, request }) 
 						error={error}
 						setError={setError}
 						request={request}
-					/>
+					/> */}
 					<Row>
 						{request.categories?.split(',').map((item) => {
 							return <ThemeTag variant="display" item={item} />;

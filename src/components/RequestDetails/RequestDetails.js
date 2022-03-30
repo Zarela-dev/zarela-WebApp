@@ -170,7 +170,7 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 					fileLink={zpaperDownloadLink}
 				/>
 				<FileCardSpacer />
-				<UploadFileCard
+				{/* <UploadFileCard
 					showSelected
 					disableUpload
 					buttonLabel="Contribute"
@@ -184,7 +184,7 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 					error={error}
 					setError={setError}
 					request={request}
-				/>
+				/> */}
 			</FilesWrapper>
 		</PageWrapper>
 	);
