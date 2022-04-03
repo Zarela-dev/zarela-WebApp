@@ -6,7 +6,7 @@ import { CHAINS } from '../../connectors/chains';
 import { ZARELA_CONTRACT_ADDRESS } from '../smartContractConstants';
 import { detectWallet } from '../../utils/detectWallet';
 
-const setUpContract = async (provider, set) => {
+const setUpContract = async (provider, set, permission) => {
 	if (provider !== undefined) {
 		let currentChainId;
 
@@ -50,7 +50,8 @@ const setUpContract = async (provider, set) => {
 
 		try {
 			let currentContract = ZARELA_CONTRACT_ADDRESS[currentChainId];
-			contract_r = new Contract(currentContract, ZarelaABI, web3Provider);
+			let signerOrProvider = permission === 'wr' ? web3Provider.getSigner() : web3Provider;
+			contract_r = new Contract(currentContract, ZarelaABI, signerOrProvider);
 			set({ contract: contract_r, contractPermission: 'r' });
 		} catch (error) {
 			console.error(new Error('Error setting contract:'), error);
@@ -83,7 +84,6 @@ export const connectorSlice = (set, get) => ({
 	contractPermission: 'r', // r: read, wr: write and read
 
 	dialogOpen: false,
-	account: null,
 
 	activeConnector: null,
 	activeConnectorType: null,
@@ -91,12 +91,13 @@ export const connectorSlice = (set, get) => ({
 	connectorStatus: 'Disconnected',
 	verboseConnectorStatus: null,
 	setContract: (contract) => set({ contract }),
+	setActiveConnectorType: (activeConnectorType) => set({ activeConnectorType }),
 	setDialogOpen: (dialogOpen) => set({ dialogOpen }),
-	setContractManually: (provider) => {
-		setUpContract(provider, set);
+	setContractManually: async (provider) => {
+		await setUpContract(provider, set, 'r');
 	},
 	setActiveConnector: async (activeConnector) => {
-		await setUpContract(activeConnector.provider, set);
+		await setUpContract(activeConnector.provider, set, 'wr');
 		set({ activeConnector, connectorInProgress: null, activeConnectorType: detectWallet(activeConnector) });
 	},
 	setConnectorInProgress: (connector) => set({ connectorInProgress: connector }),

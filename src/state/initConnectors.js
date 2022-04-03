@@ -3,17 +3,12 @@ import { useStore } from './store';
 import { NetworkConnector } from '../connectors/network';
 import { getConnectorHooks } from '../utils/getConnectorHooks';
 import { STATUS } from './slices/connectorSlice';
-import { MMConnector } from '../connectors/metamask';
-import { WCConnector } from '../connectors/walletConnect';
-import { activateConnector } from '../utils/activateConnector';
 
 const useInitConnectors = () => {
 	const {
 		setStatus,
-		connectorStatus: status,
 		setActiveConnector,
 		setConnectorInProgress,
-		activeConnectorType,
 		activeConnector,
 		setContractManually,
 		connectorInProgress,
@@ -28,16 +23,6 @@ const useInitConnectors = () => {
 	const isActivating = useIsActivating();
 	const isActive = useIsActive();
 
-	// keep track of wallet connection status after revisit
-	useEffect(() => {
-		if (status === STATUS.CONNECTED) {
-			if (activeConnectorType === 'METAMASK') activateConnector(MMConnector, setActiveConnector);
-			else if (activeConnectorType === 'WALLETCONNECT') {
-				activateConnector(WCConnector, setActiveConnector);
-			}
-		}
-	}, [status]);
-
 	useEffect(() => {
 		if (error) {
 			console.log('error', error.message);
@@ -49,7 +34,11 @@ const useInitConnectors = () => {
 				setStatus(STATUS.DISCONNECTED);
 			} else if (isActivating === false && isActive === true) {
 				setStatus(STATUS.CONNECTED);
-				if (connectorInProgress !== null) setActiveConnector(connectorInProgress);
+				if (connectorInProgress !== null) {
+					setStatus(STATUS.INIT_CONNECTOR, "metamask installed trying to use it's provider");
+					setActiveConnector(connectorInProgress);
+					setStatus(STATUS.CONNECTED);
+				}
 			} else {
 				setStatus(STATUS.FAILED);
 			}
@@ -61,10 +50,9 @@ const useInitConnectors = () => {
 		let injectedProvider = window.ethereum;
 
 		if (injectedProvider !== undefined) {
-			setStatus(STATUS.INIT_CONNECTOR, "metamask installed trying to use it's provider");
 			setContractManually(injectedProvider);
-			setStatus(STATUS.CONNECTED);
 			injectedProvider.removeListener('chainChanged', setContractManually);
+
 			// to make sure that the setup happens again after chain changes
 			injectedProvider.on('chainChanged', (chainId) => {
 				window.location.reload();

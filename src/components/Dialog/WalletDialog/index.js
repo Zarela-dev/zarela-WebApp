@@ -7,9 +7,10 @@ import wcLogo from '../../../assets/icons/wallets/walletConnect.svg';
 import { MMConnector } from '../../../connectors/metamask';
 import { WCConnector } from '../../../connectors/walletConnect';
 import { STATUS } from '../../../state/slices/connectorSlice';
+import { activateConnector } from '../../../utils/activateConnector';
 
 const WalletDialog = ({ forceOpen, forceMetamask }) => {
-	const { account, connectorStatus, activeConnector, activeConnectorType, dialogOpen, setDialogOpen } = useStore();
+	const { connectorStatus, setActiveConnector, activeConnectorType, dialogOpen, setDialogOpen } = useStore();
 	const [view, setView] = useState('list');
 
 	const SUPPORTED_WALLETS = {
@@ -24,6 +25,15 @@ const WalletDialog = ({ forceOpen, forceMetamask }) => {
 			connector: WCConnector,
 		},
 	};
+	// keep track of wallet connection status after revisit
+	useEffect(() => {
+		if (connectorStatus === STATUS.CONNECTED && forceMetamask) {
+			if (activeConnectorType === 'METAMASK') activateConnector(MMConnector, setActiveConnector);
+			else if (activeConnectorType === 'WALLETCONNECT') {
+				activateConnector(WCConnector, setActiveConnector);
+			}
+		}
+	}, [connectorStatus]);
 
 	useEffect(() => {
 		if (connectorStatus === STATUS.DISCONNECTED) {
