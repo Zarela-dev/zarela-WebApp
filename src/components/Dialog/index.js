@@ -17,6 +17,10 @@ const getBorder = (type) => {
 		return css`
 			border: 1.5px solid #f72d76;
 		`;
+	if (type === 'new')
+		return css`
+			border: 1.5px solid #D13ADE;
+		`;
 	if (type === 'info')
 		return css`
 			border: 1.5px solid transparent;
@@ -98,7 +102,7 @@ const TitleWrapper = styled.div`
 	font-size: 18px;
 	line-height: 20px;
 	text-align: center;
-	color: ${(props) => props.theme.colors.success};
+	color: ${(props) => props.theme.colors.textPrimary};
 `;
 
 const CloseIconWrapper = styled.div`

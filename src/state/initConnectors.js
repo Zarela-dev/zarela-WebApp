@@ -18,12 +18,15 @@ const useInitConnectors = () => {
 	} = useStore();
 
 	const DEFAULT_CHAIN_ID = 3;
-	console.log('here', connectorInProgress, activeConnector);
 	const { useError, useIsActivating, useIsActive } = getConnectorHooks(connectorInProgress || activeConnector);
 
 	const error = useError();
 	const isActivating = useIsActivating();
 	const isActive = useIsActive();
+
+	// useEffect(() => {
+	// 	connectorInProgress && connectorInProgress.activate(DEFAULT_CHAIN_ID);
+	// }, [connectorInProgress]);
 
 	useEffect(() => {
 		if (error) {
@@ -38,7 +41,6 @@ const useInitConnectors = () => {
 				setStatus(STATUS.CONNECTED);
 				if (connectorInProgress !== null) setActiveConnector(connectorInProgress);
 			} else {
-				console.log("no idea what's happening");
 				setStatus(STATUS.FAILED);
 			}
 		}
@@ -49,15 +51,16 @@ const useInitConnectors = () => {
 		let injectedProvider = window.ethereum;
 
 		if (injectedProvider !== undefined) {
-			setStatus("metamask installed trying to use it't provider");
+			setStatus(STATUS.INIT_CONNECTOR, "metamask installed trying to use it's provider");
 			setContractManually(injectedProvider);
+			setStatus(STATUS.CONNECTED);
 			injectedProvider.removeListener('chainChanged', setContractManually);
 			// to make sure that the setup happens again after chain changes
 			injectedProvider.on('chainChanged', (chainId) => {
 				window.location.reload();
 			});
 		} else if (injectedProvider === undefined) {
-			setStatus('Metamask not installed, trying to connect to fallback provider');
+			setStatus(STATUS.INIT_CONNECTOR, 'Metamask not installed, trying to connect to fallback provider');
 			setConnectorInProgress(NetworkConnector);
 			NetworkConnector.activate(DEFAULT_CHAIN_ID);
 		} else {

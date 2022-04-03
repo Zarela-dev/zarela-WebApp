@@ -1,22 +1,3 @@
-function isExtendedChainInformation(chainInformation) {
-	return !!chainInformation.nativeCurrency;
-}
-
-export function getAddChainParameters(chainId) {
-	const chainInformation = CHAINS[chainId];
-	if (isExtendedChainInformation(chainInformation)) {
-		return {
-			chainId,
-			chainName: chainInformation.name,
-			nativeCurrency: chainInformation.nativeCurrency,
-			rpcUrls: chainInformation.urls,
-			blockExplorerUrls: chainInformation.blockExplorerUrls,
-		};
-	} else {
-		return chainId;
-	}
-}
-
 export const CHAINS = {
 	1: {
 		urls: [
@@ -53,3 +34,22 @@ export const RPCEndpoints = Object.keys(CHAINS).reduce((accumulator, chainId) =>
 
 	return accumulator;
 }, {});
+
+function isExtendedChainInformation(chainInformation) {
+	return !!chainInformation.nativeCurrency;
+}
+
+export function getAddChainParameters(chainId) {
+	const chainInformation = CHAINS[chainId];
+	if (isExtendedChainInformation(chainInformation)) {
+		return {
+			chainId,
+			chainName: chainInformation.name,
+			nativeCurrency: chainInformation.nativeCurrency,
+			rpcUrls: chainInformation.urls,
+			blockExplorerUrls: chainInformation.blockExplorerUrls,
+		};
+	} else {
+		return chainId;
+	}
+}

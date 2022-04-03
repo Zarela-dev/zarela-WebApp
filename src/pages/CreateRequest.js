@@ -11,10 +11,11 @@ import * as yup from 'yup';
 import { Persist } from 'formik-persist';
 import { getFileNameWithExt, toast } from '../utils';
 import Dialog from '../components/Dialog';
-import { useWeb3React } from '@web3-react/core';
 import NoMobileSupportMessage from '../components/NoMobileSupportMessage';
 import { actionTypes } from '../state';
 import BigNumber from 'bignumber.js';
+import { useStore } from '../state/store';
+import WalletDialog from '../components/Dialog/WalletDialog';
 
 const Wrapper = styled.div`
 	${maxWidthWrapper}
@@ -23,12 +24,11 @@ const Wrapper = styled.div`
 // #todo sync form data with localStorage
 const CreateRequest = () => {
 	const fileRef = useRef(null);
-	const { appState, dispatch } = useContext(mainContext);
 	const [showDialog, setDialog] = useState(false);
 	const history = useHistory();
 	const [isUploading, setUploading] = useState(false);
 	const [dialogMessage, setDialogMessage] = useState('');
-	const { account } = useWeb3React();
+	const { account, isMobile, contract, setCreateRequestFormData, biobitBalance } = useStore();
 
 	const clearSubmitDialog = () => {
 		setUploading(false);
@@ -101,7 +101,7 @@ const CreateRequest = () => {
 					safeAngelTokenPay
 						.plus(safeLaboratoryTokenPay)
 						.times(+values.instanceCount)
-						.gt(appState.biobitBalance)
+						.gt(biobitBalance)
 				) {
 					formik.setFieldError('angelTokenPay', validationErrors.notEnoughTokens);
 					formik.setSubmitting(false);
@@ -159,7 +159,7 @@ const CreateRequest = () => {
 
 										setDialogMessage('Approve it from your Wallet');
 
-										appState.contract.methods
+										contract
 											.submitNewRequest(
 												title,
 												desc,
@@ -175,7 +175,6 @@ const CreateRequest = () => {
 												{
 													from: account,
 													to: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS,
-													gasPrice: +appState.gas.average * Math.pow(10, 8),
 												},
 												(error, result) => {
 													if (!error) {
@@ -184,10 +183,7 @@ const CreateRequest = () => {
 															toastId: result,
 														});
 														history.replace(`/`);
-														dispatch({
-															type: actionTypes.SET_OLD_DATA_FORM,
-															payload: {},
-														});
+														setCreateRequestFormData({});
 														localStorage.removeItem('create_request_values');
 													} else {
 														clearSubmitDialog();
@@ -230,7 +226,7 @@ const CreateRequest = () => {
 	return (
 		<>
 			<Wrapper>
-				{appState.isMobile ? (
+				{isMobile ? (
 					<NoMobileSupportMessage />
 				) : (
 					<>
@@ -243,14 +239,15 @@ const CreateRequest = () => {
 							hasSpinner
 							type="success"
 						/>
-						<ConnectDialog
+						<WalletDialog />
+						{/* <ConnectDialog
 							isOpen={showDialog}
 							onClose={() => {
 								formik.setSubmitting(false);
 								setDialog(false);
 							}}
-						/>
-						<CreateRequestForm formik={formik} ref={fileRef} appState={appState} dispatch={dispatch}>
+						/> */}
+						<CreateRequestForm formik={formik} ref={fileRef}>
 							<Persist />
 						</CreateRequestForm>
 					</>

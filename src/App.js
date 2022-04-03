@@ -11,7 +11,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ApolloProvider } from '@apollo/client';
 import { client } from './apolloClient';
 import useInitConnectors from './state/initConnectors';
-import { useEffect } from 'react';
 import { useStore } from './state/store';
 import InitContractMethods from './state/InitContractMethods';
 // import { useAppInit } from './state/sotre';
@@ -19,7 +18,7 @@ import InitContractMethods from './state/InitContractMethods';
 function App() {
 	const { activeConnector } = useStore();
 	useInitConnectors();
-
+	
 	return (
 		<div className="App">
 			<ThemeProvider>

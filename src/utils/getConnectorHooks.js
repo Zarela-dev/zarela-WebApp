@@ -6,12 +6,16 @@ import { NetworkHooks } from '../connectors/network';
 import { WCHooks } from '../connectors/walletConnect';
 
 export const getConnectorHooks = (connector) => {
-	if (connector === null || connector === undefined) {
-		console.error('can not get connector hooks for null or undefined connector');
-		return {};
+	let hooks = MMHooks;
+	if (connector instanceof MetaMask) {
+		hooks = MMHooks;
+	} else if (connector instanceof WalletConnect) {
+		hooks = WCHooks;
+	} else if (connector instanceof Network) {
+		hooks = NetworkHooks;
+	} else {
+		console.warn(`can not get connector hooks for "${connector}" connector, using MetaMask hooks instead`);
+		hooks = MMHooks;
 	}
-	if (connector instanceof MetaMask) return MMHooks;
-	if (connector instanceof WalletConnect) return WCHooks;
-	if (connector instanceof Network) return NetworkHooks;
-	throw new Error('unsupported connector');
+	return hooks;
 };

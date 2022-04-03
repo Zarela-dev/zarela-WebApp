@@ -1,11 +1,12 @@
 import { formatUnits } from '@ethersproject/units';
 import { useEffect } from 'react';
 import { convertToBiobit } from '../utils';
+import { getConnectorHooks } from '../utils/getConnectorHooks';
 import { useStore } from './store';
 
 const InitContractMethods = () => {
-	const { contract, account, contractPermission, setBiobitBalance, setEthBalance, connectorHooks } = useStore();
-	const { useProvider } = connectorHooks;
+	const { contract, account, contractPermission, setBiobitBalance, setEthBalance, activeConnector } = useStore();
+	const { useProvider } = getConnectorHooks(activeConnector);
 	const provider = useProvider();
 
 	useEffect(() => {
