@@ -12,7 +12,6 @@ import { Persist } from 'formik-persist';
 import { getFileNameWithExt, toast } from '../utils';
 import Dialog from '../components/Dialog';
 import NoMobileSupportMessage from '../components/NoMobileSupportMessage';
-import { actionTypes } from '../state';
 import BigNumber from 'bignumber.js';
 import { useStore } from '../state/store';
 import WalletDialog from '../components/Dialog/WalletDialog';
@@ -96,7 +95,6 @@ const CreateRequest = () => {
 					safeLaboratoryTokenPay = new BigNumber(values.laboratoryTokenPay);
 
 				/* to prevent the Mage from submitting the request with insufficient assets */
-				debugger;
 				if (
 					safeAngelTokenPay
 						.plus(safeLaboratoryTokenPay)
@@ -239,7 +237,7 @@ const CreateRequest = () => {
 							hasSpinner
 							type="success"
 						/>
-						<WalletDialog />
+						<WalletDialog forceMetamask />
 						{/* <ConnectDialog
 							isOpen={showDialog}
 							onClose={() => {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import WalletItem from './WalletItem';
 import Dialog from '../index';
 import { useStore } from '../../../state/store';
@@ -6,12 +6,11 @@ import mmLogo from '../../../assets/icons/wallets/metamask.svg';
 import wcLogo from '../../../assets/icons/wallets/walletConnect.svg';
 import { MMConnector } from '../../../connectors/metamask';
 import { WCConnector } from '../../../connectors/walletConnect';
+import { STATUS } from '../../../state/slices/connectorSlice';
 
-const WalletDialog = () => {
-	const { account, activeConnector, connectorHooks, connectorStatus } = useStore();
+const WalletDialog = ({ forceOpen, forceMetamask }) => {
+	const { account, connectorStatus, activeConnector, activeConnectorType, dialogOpen, setDialogOpen } = useStore();
 	const [view, setView] = useState('list');
-
-	const [isOpen, setOpen] = useState(true);
 
 	const SUPPORTED_WALLETS = {
 		METAMASK: {
@@ -26,26 +25,40 @@ const WalletDialog = () => {
 		},
 	};
 
+	useEffect(() => {
+		if (connectorStatus === STATUS.DISCONNECTED) {
+			setDialogOpen(true);
+		} else if (connectorStatus === STATUS.CONNECTED && activeConnectorType === null) {
+			setDialogOpen(true);
+		} else if (connectorStatus === STATUS.CONNECTED && activeConnectorType !== 'METAMASK' && forceMetamask) {
+			setDialogOpen(true);
+		} else if (connectorStatus === STATUS.CONNECTED && activeConnectorType !== null) {
+			setDialogOpen(false);
+		}
+	}, [connectorStatus, activeConnectorType]);
+
 	return (
 		<Dialog
-			isOpen={isOpen}
-			onClose={() => setOpen(false)}
+			isOpen={forceOpen || dialogOpen}
 			title="Connect a Wallet"
 			type="new"
 			content={
 				<>
 					{view === 'list'
-						? Object.keys(SUPPORTED_WALLETS).map((key) => (
-								<WalletItem
-									key={SUPPORTED_WALLETS[key].name}
-									walletId={key}
-									view={'list'}
-									logo={SUPPORTED_WALLETS[key].logo}
-									name={SUPPORTED_WALLETS[key].name}
-									connector={SUPPORTED_WALLETS[key].connector}
-									changeView={(view) => setView(view)}
-								/>
-						  ))
+						? Object.keys(SUPPORTED_WALLETS).map((key) => {
+								return (
+									<WalletItem
+										key={SUPPORTED_WALLETS[key].name}
+										walletId={key}
+										disabled={forceMetamask && key !== 'METAMASK'}
+										view={'list'}
+										logo={SUPPORTED_WALLETS[key].logo}
+										name={SUPPORTED_WALLETS[key].name}
+										connector={SUPPORTED_WALLETS[key].connector}
+										changeView={(view) => setView(view)}
+									/>
+								);
+						  })
 						: Object.keys(SUPPORTED_WALLETS).map((key) => {
 								if (key === view)
 									return (

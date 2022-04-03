@@ -3,6 +3,9 @@ import { useStore } from './store';
 import { NetworkConnector } from '../connectors/network';
 import { getConnectorHooks } from '../utils/getConnectorHooks';
 import { STATUS } from './slices/connectorSlice';
+import { MMConnector } from '../connectors/metamask';
+import { WCConnector } from '../connectors/walletConnect';
+import { activateConnector } from '../utils/activateConnector';
 
 const useInitConnectors = () => {
 	const {
@@ -10,6 +13,7 @@ const useInitConnectors = () => {
 		connectorStatus: status,
 		setActiveConnector,
 		setConnectorInProgress,
+		activeConnectorType,
 		activeConnector,
 		setContractManually,
 		connectorInProgress,
@@ -24,9 +28,15 @@ const useInitConnectors = () => {
 	const isActivating = useIsActivating();
 	const isActive = useIsActive();
 
-	// useEffect(() => {
-	// 	connectorInProgress && connectorInProgress.activate(DEFAULT_CHAIN_ID);
-	// }, [connectorInProgress]);
+	// keep track of wallet connection status after revisit
+	useEffect(() => {
+		if (status === STATUS.CONNECTED) {
+			if (activeConnectorType === 'METAMASK') activateConnector(MMConnector, setActiveConnector);
+			else if (activeConnectorType === 'WALLETCONNECT') {
+				activateConnector(WCConnector, setActiveConnector);
+			}
+		}
+	}, [status]);
 
 	useEffect(() => {
 		if (error) {
@@ -78,10 +88,6 @@ const useInitConnectors = () => {
 			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? true : false
 		);
 	}, []);
-
-	useEffect(() => {
-		console.log('status: --->', status, isActivating, isActive, connectorInProgress);
-	}, [status, isActivating, isActive, connectorInProgress]);
 };
 
 export default useInitConnectors;

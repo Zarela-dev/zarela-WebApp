@@ -25,6 +25,17 @@ const setUpContract = async (provider, set) => {
 			throw new Error(error.message);
 		}
 
+		// handle disconnect event
+		try {
+			if (Object.keys(CHAINS).findIndex((key) => +key === currentChainId) === -1) {
+				await provider.on('disconnect', async (code, reason) => {
+					console.error(`Disconnected from provider: ${code} - ${reason}`);
+				});
+			}
+		} catch (error) {
+			console.error(error.message);
+		}
+
 		// make sure user is on the right network
 		try {
 			if (Object.keys(CHAINS).findIndex((key) => +key === currentChainId) === -1) {
@@ -39,7 +50,6 @@ const setUpContract = async (provider, set) => {
 
 		try {
 			let currentContract = ZARELA_CONTRACT_ADDRESS[currentChainId];
-			console.log('cuurnt chain', ZARELA_CONTRACT_ADDRESS, currentChainId);
 			contract_r = new Contract(currentContract, ZarelaABI, web3Provider);
 			set({ contract: contract_r, contractPermission: 'r' });
 		} catch (error) {
@@ -72,7 +82,7 @@ export const connectorSlice = (set, get) => ({
 	contract: null,
 	contractPermission: 'r', // r: read, wr: write and read
 
-	isOpen: null,
+	dialogOpen: false,
 	account: null,
 
 	activeConnector: null,
@@ -81,7 +91,10 @@ export const connectorSlice = (set, get) => ({
 	connectorStatus: 'Disconnected',
 	verboseConnectorStatus: null,
 	setContract: (contract) => set({ contract }),
-	setContractManually: (provider) => setUpContract(provider, set),
+	setDialogOpen: (dialogOpen) => set({ dialogOpen }),
+	setContractManually: (provider) => {
+		setUpContract(provider, set);
+	},
 	setActiveConnector: async (activeConnector) => {
 		await setUpContract(activeConnector.provider, set);
 		set({ activeConnector, connectorInProgress: null, activeConnectorType: detectWallet(activeConnector) });

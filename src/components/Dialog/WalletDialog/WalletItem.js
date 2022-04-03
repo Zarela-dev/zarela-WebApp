@@ -64,9 +64,15 @@ const DetailsState = ({ name, walletId, address, deactivate, change }) => {
 	);
 };
 
-const ActiveState = ({ name, logo, onClick }) => {
+const ActiveState = ({ name, logo, onClick, disabled }) => {
 	return (
-		<Card onClick={onClick}>
+		<Card
+			onClick={disabled ? () => {} : onClick}
+			sx={{
+				cursor: disabled ? 'not-allowed' : 'pointer',
+				opacity: disabled ? 0.5 : 1,
+			}}
+		>
 			<Box
 				sx={{
 					width: 10,
@@ -110,9 +116,15 @@ const InProgressState = ({ logo, name }) => {
 	);
 };
 
-const DefaultState = ({ name, logo, onClick }) => {
+const DefaultState = ({ name, logo, onClick, disabled }) => {
 	return (
-		<Card onClick={onClick}>
+		<Card
+			onClick={disabled ? () => {} : onClick}
+			sx={{
+				cursor: disabled ? 'not-allowed' : 'pointer',
+				opacity: disabled ? 0.5 : 1,
+			}}
+		>
 			<BodyText variant="small" fontWeight="600">
 				{name}
 			</BodyText>
@@ -128,7 +140,7 @@ const DefaultState = ({ name, logo, onClick }) => {
 	);
 };
 
-const WalletItem = ({ view, name, logo, changeView, walletId, connector }) => {
+const WalletItem = ({ view, name, logo, changeView, walletId, connector, disabled }) => {
 	const { activeConnector, connectorInProgress, connectorStatus, setActiveConnector } = useStore();
 	const { useAccount } = getConnectorHooks(activeConnector);
 	const account = useAccount();
@@ -143,6 +155,7 @@ const WalletItem = ({ view, name, logo, changeView, walletId, connector }) => {
 						<ActiveState
 							name={name}
 							logo={logo}
+							disabled={disabled}
 							onClick={() => {
 								changeView(walletId);
 							}}
@@ -153,8 +166,10 @@ const WalletItem = ({ view, name, logo, changeView, walletId, connector }) => {
 						<DefaultState
 							logo={logo}
 							name={name}
-							onClick={() => {
-								connector.activate(+process.env.REACT_APP_DEFAULT_CHAIN);
+							disabled={disabled}
+							onClick={async () => {
+								if (disabled) return;
+								await connector.activate(+process.env.REACT_APP_DEFAULT_CHAIN);
 								setActiveConnector(connector);
 							}}
 						/>
@@ -170,8 +185,8 @@ const WalletItem = ({ view, name, logo, changeView, walletId, connector }) => {
 						change={() => {
 							changeView('list');
 						}}
-						deactivate={() => {
-							connector.deactivate();
+						deactivate={async () => {
+							await connector.deactivate();
 							changeView('list');
 						}}
 					/>

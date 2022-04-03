@@ -24,14 +24,10 @@ const AppWrapper = styled.div`
 `;
 
 const AppRouter = () => {
-	const provider = window.ethereum;
 	const { isMobile } = useStore((state) => ({
 		isMobile: state.isMobile,
 	}));
-	console.log('isMobile', isMobile);
 	// const { appState } = useContext(mainContext);
-	const metamaskChainId = provider?.request({ method: 'eth_chainId' });
-
 	// if (!provider)
 	// 	return (
 	// 		<>
