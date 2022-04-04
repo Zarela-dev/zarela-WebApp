@@ -1,17 +1,17 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
 import RequestListItem from '../components/RequestListItem';
-import { mainContext } from '../state';
 import { pendingFilesContext } from '../state/pendingFilesProvider';
-import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { convertToBiobit, toast } from '../utils';
 import NoRequestsFound from '../components/NoRequestsFound';
 import Spinner from '../components/Spinner';
 import NoMobileSupportMessage from '../components/NoMobileSupportMessage';
 import Guide from './../components/Guide/Guide';
 import { InboxSteps } from '../guides';
+import { useStore } from '../state/store';
+import { getConnectorHooks } from '../utils/getConnectorHooks';
+import WalletDialog from '../components/Dialog/WalletDialog';
 
 const PageWrapper = styled.div``;
 
@@ -29,37 +29,34 @@ const SpinnerWrapper = styled.div`
 `;
 
 const Inbox = () => {
-	const { appState } = useContext(mainContext);
 	const PendingFiles = useContext(pendingFilesContext);
 	const { pendingFiles, setPendingFile, removePendingFile } = PendingFiles;
-	const { account } = useWeb3React();
 	const [requests, setRequests] = useState({});
 	const [isLoading, setLoading] = useState(false);
 	// to manually trigger a data fetch, after the signalsApproved event is triggered
 	const [shouldRefresh, setShouldRefresh] = useState(false);
 	const [guideIsOpen, setGuideIsOpen] = useState(false);
 	const [cleanSelected, setCleanSelected] = useState(null);
-	const [isSendingTokens, setIsSendingTokens] = useState(false);
+	const { activeConnector, isMobile, contract } = useStore();
+	const { useAccount } = getConnectorHooks(activeConnector);
+	const account = useAccount();
 
 	const handleConfirm = (requestID, originalIndexes) => {
-		setIsSendingTokens(true);
-		appState.contract.methods
-			.confirmContributor(requestID, originalIndexes)
-			.send({ from: account }, (error, txHash) => {
-				setIsSendingTokens(false);
-				if (!error) {
-					setPendingFile({
-						txHash,
-						requestID,
-						originalIndexes,
-					});
-					setCleanSelected(requestID);
-					toast(`TX Hash: ${txHash}`, 'success', true, txHash, {
-						toastId: txHash,
-					});
-				} else {
-					toast(error.message, 'error');
-				}
+		contract
+			.confirmContributor(requestID, originalIndexes, { from: account })
+			.then(({ hash: txHash }) => {
+				setPendingFile({
+					txHash,
+					requestID,
+					originalIndexes,
+				});
+				setCleanSelected(requestID);
+				toast(`TX Hash: ${txHash}`, 'success', true, txHash, {
+					toastId: txHash,
+				});
+			})
+			.catch((error) => {
+				toast(error.message, 'error');
 			});
 	};
 
@@ -70,45 +67,42 @@ const Inbox = () => {
 	}, [shouldRefresh]);
 
 	useEffect(() => {
-		if (appState.contract && removePendingFile !== undefined)
-			appState.contract.events.signalsApproved({}).on('data', ({ transactionHash }) => {
+		if (contract && removePendingFile !== undefined)
+			contract.on('signalsApproved', ({ transactionHash }) => {
 				removePendingFile(transactionHash);
 				setShouldRefresh(true);
 			});
-	}, [appState.contract, removePendingFile]);
+	}, [contract, removePendingFile]);
 
 	useEffect(() => {
-		if (appState.contract !== null) {
+		if (contract !== null) {
 			if (account) {
 				setLoading(true);
 
-				appState.contract.methods
-					.orderResult()
-					.call({ from: account })
+				contract
+					.orderResult({ from: account })
 					.then((result) => {
-						const myRequests = result[0];
-
+						const myRequests = result[0].map((item) => item.toNumber());
 						// fo fetch handle loading state we need make sure this runs synchronously (predictable)
 						const getAllRequests = new Promise(async (resolve, reject) => {
 							const requestsListObject = {};
 
 							for (const currentRequest of myRequests) {
-								await appState.contract.methods
+								await contract
 									.orders(currentRequest)
-									.call()
 									.then((result) => {
 										const requestTemplate = {
-											requestID: result[0],
+											requestID: result[0].toNumber(),
 											title: result[1],
 											description: result[7],
 											requesterAddress: result[2],
-											angelTokenPay: convertToBiobit(result[3], false),
-											laboratoryTokenPay: convertToBiobit(result[4], false),
-											totalContributors: result[5], // total contributors required
-											totalContributed: +result[5] - +result[8],
+											angelTokenPay: convertToBiobit(result[3].toNumber(), false),
+											laboratoryTokenPay: convertToBiobit(result[4].toNumber(), false),
+											totalContributors: result[5].toNumber(), // total contributors required
+											totalContributed: result[5].toNumber() - result[8].toNumber(),
 											whitePaper: result[6],
-											timestamp: result[10],
-											totalContributedCount: result[9],
+											timestamp: result[10].toNumber(),
+											totalContributedCount: result[9].toNumber(),
 										};
 										requestsListObject[requestTemplate.requestID] = requestTemplate;
 									})
@@ -130,7 +124,7 @@ const Inbox = () => {
 					});
 			}
 		}
-	}, [appState.contract, account]);
+	}, [contract, account]);
 
 	useEffect(() => {
 		if (Object.values(requests).filter((item) => item.totalContributedCount > 0).length)
@@ -142,16 +136,16 @@ const Inbox = () => {
 
 	return (
 		<PageWrapper>
-			{!appState.isMobile && guideIsOpen && <Guide steps={InboxSteps}></Guide>}
+			{!isMobile && guideIsOpen && <Guide steps={InboxSteps}></Guide>}
 			<ContentWrapper>
 				{/* 
 					because Metamask does not support decryption in mobile yet
 					we only have this page in the
 				*/}
-				{appState.isMobile ? (
+				{isMobile ? (
 					<NoMobileSupportMessage />
 				) : !account ? (
-					<ConnectDialog isOpen={true} />
+					<WalletDialog eagerConnect />
 				) : isLoading ? (
 					<SpinnerWrapper>
 						<Spinner />

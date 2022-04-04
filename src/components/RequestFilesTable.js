@@ -251,7 +251,7 @@ const RequestFilesTable = ({
 			}
 			return status;
 		},
-		[pendingFiles.pending]
+		[pendingFiles?.pending]
 	);
 
 	// filter data with hidden and blocked addresses

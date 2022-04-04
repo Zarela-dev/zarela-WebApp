@@ -18,22 +18,22 @@ import InitContractMethods from './state/InitContractMethods';
 function App() {
 	const { activeConnector } = useStore();
 	useInitConnectors();
-	
+
 	return (
 		<div className="App">
 			<ThemeProvider>
 				<ErrorBoundary>
 					<ApolloProvider client={client}>
 						{activeConnector && <InitContractMethods />}
-						{/* <PendingFilesProvider> */}
-						<LocalStorageProvider>
-							{/* <NotificationProvider> */}
-							<AppRouter />
-							<ToastifyContainer enableMultiContainer containerId={'toastify'} limit={3} />
-							<GlobalStyle />
-							{/* </NotificationProvider> */}
-						</LocalStorageProvider>
-						{/* </PendingFilesProvider> */}
+						<PendingFilesProvider>
+							<LocalStorageProvider>
+								{/* <NotificationProvider> */}
+								<AppRouter />
+								<ToastifyContainer enableMultiContainer containerId={'toastify'} limit={3} />
+								<GlobalStyle />
+								{/* </NotificationProvider> */}
+							</LocalStorageProvider>
+						</PendingFilesProvider>
 					</ApolloProvider>
 				</ErrorBoundary>
 			</ThemeProvider>

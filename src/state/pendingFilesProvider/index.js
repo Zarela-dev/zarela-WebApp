@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useReducer, useCallback, useContext } from 'react';
+import React, { useEffect, useState, useReducer, useCallback } from 'react';
 import { toast } from '../../utils';
 import { actionTypes } from './actionTypes';
 import { setPendingFile, initialize, removePendingFile } from './actions';
 import { useDeepCompareEffect } from 'use-deep-compare';
 import { lockerKey } from './lockrKey';
-import { mainContext } from '../../state';
 import * as lockr from 'lockr';
+import { useStore } from '../store';
 
 const initialState = {
 	pending: {},
@@ -29,8 +29,8 @@ const initialState = {
 const pendingFilesContext = React.createContext(initialState);
 
 const PendingFilesProvider = ({ children }) => {
-	const { appState } = useContext(mainContext);
 	const [readyForUpdate, setReadyForUpdate] = useState(false);
+	const { contract } = useStore();
 
 	const [pendingFiles, dispatch] = useReducer((state, action) => {
 		const { type } = action;
@@ -95,11 +95,11 @@ const PendingFilesProvider = ({ children }) => {
 	}, []);
 
 	useEffect(() => {
-		if (appState.contract)
-			appState.contract.events.signalsApproved({}).on('data', ({ transactionHash }) => {
+		if (contract)
+			contract.on('signalsApproved', ({ transactionHash }) => {
 				injectState(removePendingFile)(transactionHash);
 			});
-	}, [appState.contract, injectState]);
+	}, [contract, injectState]);
 
 	return (
 		<pendingFilesContext.Provider
