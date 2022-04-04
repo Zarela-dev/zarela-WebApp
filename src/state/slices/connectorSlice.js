@@ -5,6 +5,7 @@ import { Web3Provider } from '@ethersproject/providers';
 import { CHAINS } from '../../connectors/chains';
 import { ZARELA_CONTRACT_ADDRESS } from '../smartContractConstants';
 import { detectWallet } from '../../utils/detectWallet';
+import { Network } from '@web3-react/network';
 
 const setUpContract = async (provider, set, permission) => {
 	if (provider !== undefined) {
@@ -88,7 +89,7 @@ export const connectorSlice = (set, get) => ({
 	activeConnector: null,
 	activeConnectorType: null,
 	connectorInProgress: MMConnector,
-	connectorStatus: 'Disconnected',
+	connectorStatus: STATUS.DISCONNECTED,
 	verboseConnectorStatus: null,
 	setContract: (contract) => set({ contract }),
 	setActiveConnectorType: (activeConnectorType) => set({ activeConnectorType }),
@@ -97,7 +98,8 @@ export const connectorSlice = (set, get) => ({
 		await setUpContract(provider, set, 'r');
 	},
 	setActiveConnector: async (activeConnector) => {
-		await setUpContract(activeConnector.provider, set, 'wr');
+		let permission = activeConnector instanceof Network ? 'r' : 'wr';
+		await setUpContract(activeConnector.provider, set, permission);
 		set({ activeConnector, connectorInProgress: null, activeConnectorType: detectWallet(activeConnector) });
 	},
 	setConnectorInProgress: (connector) => set({ connectorInProgress: connector }),

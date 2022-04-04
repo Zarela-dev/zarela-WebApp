@@ -231,7 +231,7 @@ const RequestsList = () => {
 					setRequestsCount(result.toNumber());
 				})
 				.catch((error) => {
-					console.error(error.message);
+					console.log(error);
 				});
 
 			for (let i = 0; i < requestsCount; i++) {
@@ -243,7 +243,6 @@ const RequestsList = () => {
 
 						if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY) {
 							// filter categories and only show Zarela requests
-							console.log('calling  orders here');
 							contract
 								.orders(i)
 								.then((orderResult) => {
@@ -253,7 +252,7 @@ const RequestsList = () => {
 											requestID: orderResult[0].toNumber(),
 											title: orderResult[1],
 											// description: 'test',
-											description: orderResult[7],
+											description: orderResult[7].toString(),
 											requesterAddress: orderResult[2],
 											angelTokenPay: convertToBiobit(orderResult[3].toNumber(), false),
 											laboratoryTokenPay: convertToBiobit(orderResult[4].toNumber(), false),
@@ -273,10 +272,7 @@ const RequestsList = () => {
 										requestTemplate = {
 											requestID: orderResult[0].toNumber(),
 											title: orderResult[1],
-											// description: 'test',
-											// description: orderResult[7],
-											// description: utils.toUtf8String(utils.toUtf8Bytes(orderResult[7]), utils.Utf8ErrorFuncs.ignore),
-											description: utils.toUtf8String(orderResult[7], utils.Utf8ErrorFuncs.ignore),
+											description: utils.toUtf8String(error.value, utils.Utf8ErrorFuncs.ignore),
 											requesterAddress: orderResult[2],
 											angelTokenPay: convertToBiobit(orderResult[3].toNumber(), false),
 											laboratoryTokenPay: convertToBiobit(orderResult[4].toNumber(), false),

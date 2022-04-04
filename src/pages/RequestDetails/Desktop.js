@@ -4,15 +4,13 @@ import { timeSince } from '../../utils';
 
 const Desktop = ({ request, error, zpaperDownloadLink, setError }) => {
 	return (
-		<>
-			<RequestDetails
-				request={request}
-				timestamp={timeSince(request.timestamp)}
-				error={error}
-				setError={setError}
-				zpaperDownloadLink={zpaperDownloadLink}
-			/>
-		</>
+		<RequestDetails
+			request={request}
+			timestamp={timeSince(request.timestamp)}
+			error={error}
+			setError={setError}
+			zpaperDownloadLink={zpaperDownloadLink}
+		/>
 	);
 };
 

@@ -1,9 +1,9 @@
 export const CHAINS = {
 	1: {
 		urls: [
-			process.env.REACT_APP_ALCHEMY_KEY
-				? `https://eth-mainnet.alchemyapi.io/v2/${process.env.REACT_APP_ALCHEMY_KEY}`
-				: undefined,
+			// process.env.REACT_APP_ALCHEMY_KEY
+			// 	? `https://eth-mainnet.alchemyapi.io/v2/${process.env.REACT_APP_ALCHEMY_KEY}`
+			// 	: undefined,
 			process.env.REACT_APP_POCKET_KEY
 				? `https://eth-mainnet.gateway.pokt.network/v1/lb/${process.env.REACT_APP_POCKET_KEY}`
 				: undefined,
@@ -13,9 +13,9 @@ export const CHAINS = {
 	},
 	3: {
 		urls: [
-			process.env.REACT_APP_ALCHEMY_KEY
-				? `https://eth-ropsten.alchemyapi.io/v2/${process.env.REACT_APP_ALCHEMY_KEY}`
-				: undefined,
+			// process.env.REACT_APP_ALCHEMY_KEY
+			// 	? `https://eth-ropsten.alchemyapi.io/v2/${process.env.REACT_APP_ALCHEMY_KEY}`
+			// 	: undefined,
 			process.env.REACT_APP_POCKET_KEY
 				? `https://eth-ropsten.gateway.pokt.network/v1/lb/${process.env.REACT_APP_POCKET_KEY}`
 				: undefined,

@@ -55,7 +55,7 @@ const FilesWrapper = styled.div`
 	${maxWidthWrapper};
 	display: flex;
 	justify-content: space-between;
-	padding: ${({theme}) => theme.space[4]}px;
+	padding: ${({ theme }) => theme.space[4]}px;
 `;
 
 const FileCardSpacer = styled.div`
@@ -170,7 +170,7 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 					fileLink={zpaperDownloadLink}
 				/>
 				<FileCardSpacer />
-				{/* <UploadFileCard
+				<UploadFileCard
 					showSelected
 					disableUpload
 					buttonLabel="Contribute"
@@ -184,7 +184,7 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 					error={error}
 					setError={setError}
 					request={request}
-				/> */}
+				/>
 			</FilesWrapper>
 		</PageWrapper>
 	);

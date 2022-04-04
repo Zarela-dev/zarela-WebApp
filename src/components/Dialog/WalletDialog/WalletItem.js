@@ -8,6 +8,7 @@ import spinner from '../../../assets/loader/rolling.svg';
 import { ThemeButton } from '../../Elements/Button';
 import { getConnectorHooks } from '../../../utils/getConnectorHooks';
 import { addressClipper } from '../../../utils/normalizeAddress';
+import { activateConnector } from '../../../utils/activateConnector';
 
 const Card = styled(Box)`
 	display: flex;
@@ -169,8 +170,7 @@ const WalletItem = ({ view, name, logo, changeView, walletId, connector, disable
 							disabled={disabled}
 							onClick={async () => {
 								if (disabled) return;
-								await connector.activate(+process.env.REACT_APP_DEFAULT_CHAIN);
-								setActiveConnector(connector);
+								await activateConnector(connector, setActiveConnector);
 							}}
 						/>
 					)}

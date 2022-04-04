@@ -79,15 +79,13 @@ const RequestDetailsPage = () => {
 										timestamp: result[10].toNumber(),
 										categories,
 										totalContributedCount: result[9].toNumber(), // no of received signals
+										encryptionPublicKey: result[11],
 									};
 								} catch (error) {
 									requestTemplate = {
 										requestID: result[0].toNumber(),
 										title: result[1],
-										// description: 'test',
-										// description: result[7],
-										// description: utils.toUtf8String(utils.toUtf8Bytes(result[7]), utils.Utf8ErrorFuncs.ignore),
-										description: utils.toUtf8String(result[7], utils.Utf8ErrorFuncs.ignore),
+										description: utils.toUtf8String(error.value, utils.Utf8ErrorFuncs.ignore),
 										requesterAddress: result[2],
 										angelTokenPay: convertToBiobit(result[3].toNumber(), false),
 										laboratoryTokenPay: convertToBiobit(result[4].toNumber(), false),
@@ -99,6 +97,7 @@ const RequestDetailsPage = () => {
 										timestamp: result[10].toNumber(),
 										categories,
 										totalContributedCount: result[9].toNumber(), // no of received signals
+										encryptionPublicKey: result[11],
 									};
 								}
 								setRequest(requestTemplate);
@@ -112,7 +111,7 @@ const RequestDetailsPage = () => {
 				});
 		}
 	}, [id, contract]);
-
+	
 	return (
 		<Guide steps={steps}>
 			{isMobile ? (

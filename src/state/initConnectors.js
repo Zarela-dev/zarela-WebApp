@@ -8,15 +8,16 @@ const useInitConnectors = () => {
 	const {
 		setStatus,
 		setActiveConnector,
+		connectorStatus,
 		setConnectorInProgress,
 		activeConnector,
 		setContractManually,
+		activeConnectorType,
 		connectorInProgress,
 		setIsMobile,
 		setCreateRequestFormData,
 	} = useStore();
 
-	const DEFAULT_CHAIN_ID = 3;
 	const { useError, useIsActivating, useIsActive } = getConnectorHooks(connectorInProgress || activeConnector);
 
 	const error = useError();
@@ -24,27 +25,34 @@ const useInitConnectors = () => {
 	const isActive = useIsActive();
 
 	useEffect(() => {
-		if (error) {
-			console.log('error', error.message);
-			setStatus(STATUS.FAILED);
-		} else {
-			if (isActivating === true && isActive === false) {
-				setStatus(STATUS.INIT_CONNECTOR);
-			} else if (isActivating === false && isActive === false) {
-				setStatus(STATUS.DISCONNECTED);
-			} else if (isActivating === false && isActive === true) {
-				setStatus(STATUS.CONNECTED);
-				if (connectorInProgress !== null) {
-					setStatus(STATUS.INIT_CONNECTOR, "metamask installed trying to use it's provider");
-					setActiveConnector(connectorInProgress);
-					setStatus(STATUS.CONNECTED);
-				}
-			} else {
+		console.log('status', isActivating, isActive, connectorStatus, activeConnectorType);
+		const bootstrap = async () => {
+			if (error) {
+				console.log('error', error.message);
 				setStatus(STATUS.FAILED);
+			} else {
+				if (isActivating === true && isActive === false) {
+					setStatus(STATUS.INIT_CONNECTOR);
+				} else if (isActivating === false && isActive === false) {
+					setStatus(STATUS.DISCONNECTED);
+				} else if (isActivating === false && isActive === true) {
+					setStatus(STATUS.CONNECTED);
+					if (connectorInProgress !== null) {
+						setStatus(STATUS.INIT_CONNECTOR, "metamask installed trying to use it's provider");
+						try {
+							await setActiveConnector(connectorInProgress);
+							setStatus(STATUS.CONNECTED);
+						} catch (error) {
+							setStatus(STATUS.FAILED, "user denied or something");
+						}
+					}
+				} else {
+					setStatus(STATUS.FAILED);
+				}
 			}
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isActivating, isActive, error, connectorInProgress]);
+		};
+		bootstrap();
+	}, [isActivating, isActive, error, connectorInProgress, connectorStatus]);
 
 	useEffect(() => {
 		let injectedProvider = window.ethereum;
@@ -60,7 +68,12 @@ const useInitConnectors = () => {
 		} else if (injectedProvider === undefined) {
 			setStatus(STATUS.INIT_CONNECTOR, 'Metamask not installed, trying to connect to fallback provider');
 			setConnectorInProgress(NetworkConnector);
-			NetworkConnector.activate(DEFAULT_CHAIN_ID);
+			try {
+				NetworkConnector.activate(+process.env.REACT_APP_DEFAULT_CHAIN);
+			} catch (error) {
+				setStatus(STATUS.FAILED, 'could not connect to fallback nNetwork provider');
+				console.error(error.message);
+			}
 		} else {
 			console.log("no idea what's happening");
 		}

@@ -7,10 +7,9 @@ import wcLogo from '../../../assets/icons/wallets/walletConnect.svg';
 import { MMConnector } from '../../../connectors/metamask';
 import { WCConnector } from '../../../connectors/walletConnect';
 import { STATUS } from '../../../state/slices/connectorSlice';
-import { activateConnector } from '../../../utils/activateConnector';
 
 const WalletDialog = ({ forceOpen, forceMetamask }) => {
-	const { connectorStatus, setActiveConnector, activeConnectorType, dialogOpen, setDialogOpen } = useStore();
+	const { connectorStatus, activeConnectorType, dialogOpen, setDialogOpen } = useStore();
 	const [view, setView] = useState('list');
 
 	const SUPPORTED_WALLETS = {
@@ -25,16 +24,8 @@ const WalletDialog = ({ forceOpen, forceMetamask }) => {
 			connector: WCConnector,
 		},
 	};
-	// keep track of wallet connection status after revisit
-	useEffect(() => {
-		if (connectorStatus === STATUS.CONNECTED && forceMetamask) {
-			if (activeConnectorType === 'METAMASK') activateConnector(MMConnector, setActiveConnector);
-			else if (activeConnectorType === 'WALLETCONNECT') {
-				activateConnector(WCConnector, setActiveConnector);
-			}
-		}
-	}, [connectorStatus]);
 
+	// keep track of wallet connection status after revisit
 	useEffect(() => {
 		if (connectorStatus === STATUS.DISCONNECTED) {
 			setDialogOpen(true);
@@ -42,10 +33,12 @@ const WalletDialog = ({ forceOpen, forceMetamask }) => {
 			setDialogOpen(true);
 		} else if (connectorStatus === STATUS.CONNECTED && activeConnectorType !== 'METAMASK' && forceMetamask) {
 			setDialogOpen(true);
-		} else if (connectorStatus === STATUS.CONNECTED && activeConnectorType !== null) {
+		} else if (connectorStatus === STATUS.CONNECTED && activeConnectorType !== 'NETWORK') {
 			setDialogOpen(false);
+		} else {
+			setDialogOpen(true);
 		}
-	}, [connectorStatus, activeConnectorType]);
+	}, [connectorStatus, activeConnectorType, forceMetamask]);
 
 	return (
 		<Dialog
@@ -60,7 +53,7 @@ const WalletDialog = ({ forceOpen, forceMetamask }) => {
 									<WalletItem
 										key={SUPPORTED_WALLETS[key].name}
 										walletId={key}
-										disabled={forceMetamask && key !== 'METAMASK'}
+										disabled={forceMetamask === true && key !== 'METAMASK'}
 										view={'list'}
 										logo={SUPPORTED_WALLETS[key].logo}
 										name={SUPPORTED_WALLETS[key].name}

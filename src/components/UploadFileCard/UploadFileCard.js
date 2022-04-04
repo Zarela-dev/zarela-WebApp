@@ -1,8 +1,6 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CustomFileInput, HelperText, ErrorText } from './FileCard';
-import { mainContext } from '../../state';
 import { Buffer } from 'buffer';
-import { useWeb3React } from '@web3-react/core';
 import { create } from 'ipfs-http-client';
 import * as ethUtil from 'ethereumjs-util';
 import Button from '../Elements/Button';
@@ -32,23 +30,12 @@ const StickyButton = styled(ThemeButton)`
 const fileInputRef = React.createRef();
 
 const UploadFileCard = (props) => {
-	const {
-		buttonLabel,
-		label,
-		helperText,
-		error,
-		setError,
-		disableUpload,
-		request,
-		isMobile,
-	} = props;
+	const { buttonLabel, label, helperText, error, setError, disableUpload, request, isMobile } = props;
 	const [isContributing, setIsContributing] = useState(false);
 	const [isSubmittingFile, setSubmittingFile] = useState(false);
 	const [hasSpinner, setSpinner] = useState(false);
 	const [isClosable, setClosable] = useState(true);
 	const [dialogMessage, setDialogMessage] = useState('');
-	const { account } = useWeb3React();
-	const { appState } = useContext(mainContext);
 
 	const clearSubmitDialog = () => {
 		setIsContributing(false);
@@ -61,20 +48,13 @@ const UploadFileCard = (props) => {
 
 	useEffect(() => {
 		if (isSubmittingFile === false)
-			setDialogMessage(
-				<ContributionForm
-					ref={fileInputRef}
-					submitSignal={submitSignal}
-					fileInputProps={props}
-				/>
-			);
+			setDialogMessage(<ContributionForm ref={fileInputRef} submitSignal={submitSignal} fileInputProps={props} />);
 	}, [fileInputRef.current?.files]);
 
-	const submitSignal = (angelAddress, hubAddress, rewardGainer) => {
+	const submitSignal = (angelAddress, hubAddress, rewardGainer, _account, _contract) => {
 		const fileRef = { ...fileInputRef };
-
 		if (fileRef !== null) {
-			if (account) {
+			if (_account) {
 				if (fileRef.current.value !== null && fileRef.current.value !== '') {
 					setIsContributing(true);
 					setSubmittingFile(true);
@@ -145,7 +125,7 @@ const UploadFileCard = (props) => {
 								});
 
 								setDialogMessage('Approve it from your Wallet');
-								appState.contract.methods
+								_contract
 									.contribute(
 										request.requestID,
 										angelAddress, // angel
@@ -153,26 +133,21 @@ const UploadFileCard = (props) => {
 										rewardGainer === 'angel' ? true : false, // true: angel receives reward. false: laboratory receives reward.
 										request.requesterAddress,
 										event.data.ipfs_path, // encrypted file CID
-										fileMetaResponse.path // file metadata CID
+										fileMetaResponse.path, // file metadata CID
+										{ from: _account }
 									)
-									.send(
-										{
-											from: account,
-										},
-										(error, result) => {
-											if (!error) {
-												clearSubmitDialog();
-												toast(`TX Hash: ${result}`, 'success', true, result, {
-													toastId: result,
-												});
-												if (fileInputRef.current !== null)
-													fileInputRef.current.value = null;
-											} else {
-												clearSubmitDialog();
-												toast(error.message, 'error');
-											}
-										}
-									);
+									.then((result) => {
+										clearSubmitDialog();
+										toast(`TX Hash: ${result}`, 'success', true, result, {
+											toastId: result,
+										});
+										if (fileInputRef.current !== null) fileInputRef.current.value = null;
+									})
+									.catch((error) => {
+										console.error(error);
+										clearSubmitDialog();
+										toast(error.message || error, 'error');
+									});
 							} catch (error) {
 								clearSubmitDialog();
 								console.error(error);
@@ -182,6 +157,8 @@ const UploadFileCard = (props) => {
 				} else {
 					setError('please select files to upload');
 				}
+			} else {
+				toast('no account found', 'error');
 			}
 		}
 	};
@@ -194,19 +171,15 @@ const UploadFileCard = (props) => {
 					content={dialogMessage}
 					onClose={isClosable ? () => clearSubmitDialog() : false}
 					hasSpinner={hasSpinner}
-					type='success'
+					type="success"
 				/>
 				<StickyButton
-					variant='primary'
-					size='medium'
+					variant="primary"
+					size="medium"
 					onClick={() => {
 						setIsContributing(true);
 						setDialogMessage(
-							<ContributionForm
-								ref={fileInputRef}
-								submitSignal={submitSignal}
-								fileInputProps={props}
-							/>
+							<ContributionForm ref={fileInputRef} submitSignal={submitSignal} fileInputProps={props} />
 						);
 					}}
 				>
@@ -215,13 +188,13 @@ const UploadFileCard = (props) => {
 			</>
 		);
 	return (
-		<Card data-tour='request-details-three'>
+		<Card data-tour="request-details-three">
 			<Dialog
 				isOpen={isContributing}
 				content={dialogMessage}
 				onClose={isClosable ? () => clearSubmitDialog() : false}
 				hasSpinner={hasSpinner}
-				type='success'
+				type="success"
 			/>
 			<CustomFileInput
 				hasBorder
@@ -230,19 +203,17 @@ const UploadFileCard = (props) => {
 				label={label}
 				onClick={() => {
 					setIsContributing(true);
-					setDialogMessage(
-						<ContributionForm
-							ref={fileInputRef}
-							submitSignal={submitSignal}
-							fileInputProps={props}
-						/>
-					);
+					setDialogMessage(<ContributionForm ref={fileInputRef} submitSignal={submitSignal} fileInputProps={props} />);
 				}}
 			/>
-			<BodyText variant='timestamp' mt={5}>
+			<BodyText variant="timestamp" mt={5}>
 				{helperText}
 			</BodyText>
-			{error ? <BodyText variant='timestamp' color='error' mt={5}>{error}</BodyText> : null}
+			{error ? (
+				<BodyText variant="timestamp" color="error" mt={5}>
+					{error}
+				</BodyText>
+			) : null}
 		</Card>
 	);
 };
