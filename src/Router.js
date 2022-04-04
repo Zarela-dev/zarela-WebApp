@@ -5,7 +5,7 @@ import CreateRequest from './pages/CreateRequest';
 import RequestDetails from './pages/RequestDetails/RequestDetails';
 // import Inbox from './pages/Inbox';
 // import Wallet from './pages/Wallet/Wallet';
-// import Log from './pages/Log/Log';
+import Log from './pages/Log/Log';
 // import Settings from './pages/Settings';
 // import { supportedChains } from './constants/index';
 // import ChainError from './components/ChainError';
@@ -52,10 +52,10 @@ const AppRouter = () => {
 					<Route exact path="/" component={RequestsList} />
 					<Route exact path="/request/create" component={CreateRequest} />
 					<Route exact path="/request/:id" component={RequestDetails} />
-					{/* <Route exact path="/inbox" component={Inbox} />
-					<Route path="/wallet" component={Wallet} />
 					<Route path="/log" component={Log} />
-					<Route path="/settings" component={Settings} />
+					{/* <Route path="/settings" component={Settings} />
+					<Route exact path="/inbox" component={Inbox} />
+					<Route path="/wallet" component={Wallet} />
 					<Route component={NotFound} /> */}
 				</Switch>
 			</AppWrapper>

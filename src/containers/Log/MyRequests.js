@@ -64,7 +64,7 @@ const MyRequests = (props) => {
 										angelTokenPay: convertToBiobit(requestInfo[3].toNumber(), false),
 										laboratoryTokenPay: convertToBiobit(requestInfo[4].toNumber(), false),
 										totalContributors: requestInfo[5].toNumber(), // total contributors required
-										totalContributed: +requestInfo[5].toNumber() - +requestInfo[8].toNumber(),
+										totalContributed: requestInfo[5].toNumber() - requestInfo[8].toNumber(),
 										whitePaper: requestInfo[6],
 										timestamp: requestInfo[10].toNumber(),
 										totalContributedCount: requestInfo[9].toNumber(),

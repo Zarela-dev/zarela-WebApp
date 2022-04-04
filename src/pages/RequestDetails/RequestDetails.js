@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router';
-import { mainContext } from '../../state';
 import { convertToBiobit } from '../../utils';
 import Mobile from './Mobile';
 import Desktop from './Desktop';

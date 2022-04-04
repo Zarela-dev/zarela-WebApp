@@ -1,7 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { useWeb3React } from '@web3-react/core';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { mainContext } from '../../state';
 import { Tabs } from '../../components/Tabs';
 import MyRequests from '../../containers/Log/MyRequests';
 import Contributes from '../../containers/Log/Contributes';
@@ -9,6 +7,9 @@ import ConnectDialog from '../../components/Dialog/ConnectDialog';
 import MobileLayout from '../../components/MobileLayout';
 import Guide from '../../components/Guide/Guide';
 import { LogSteps } from '../../guides';
+import { useStore } from '../../state/store';
+import { getConnectorHooks } from '../../utils/getConnectorHooks';
+import WalletDialog from '../../components/Dialog/WalletDialog';
 
 const Wrapper = styled.div``;
 
@@ -22,8 +23,9 @@ const LogInnerContainer = styled.div`
 `;
 
 const Log = () => {
-	const { account } = useWeb3React();
-	const { appState } = useContext(mainContext);
+	const { isMobile, activeConnector } = useStore();
+	const { useAccount } = getConnectorHooks(activeConnector);
+	const account = useAccount();
 
 	const [guideIsOpen, setGuideIsOpen] = useState(false);
 
@@ -38,12 +40,12 @@ const Log = () => {
 			{guideIsOpen && <Guide steps={LogSteps}></Guide>}
 			<MobileLayout>
 				{!account ? (
-					<ConnectDialog isOpen={true} />
+					<WalletDialog eagerConnect />
 				) : (
 					<Tabs
-						route='log'
+						route="log"
 						data-tour={'requests'}
-						isMobile={appState.isMobile}
+						isMobile={isMobile}
 						data={[
 							{
 								label: 'My Requests',
