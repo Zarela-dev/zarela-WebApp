@@ -60,7 +60,7 @@ const RequestDetailsMobile = ({ setError, zpaperDownloadLink, error, request }) 
 					<HeaderInner>
 						<Row width="100%" alignItems="flex-start">
 							<Col flex={'0 0 70px'} mr={[3]}>
-								{request.requestID && <IdLabel>{request.requestID}</IdLabel>}
+								{request.requestID !== undefined && <IdLabel>{request.requestID}</IdLabel>}
 							</Col>
 							<Col>
 								<Header variant="heading5">{request.title}</Header>

@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useWeb3React } from '@web3-react/core';
-import { mainContext } from '../../state';
 import { convertToBiobit } from '../../utils';
 import MyRequest from '../../components/LogCards/MyRequest';
 import MyRequestMobile from '../../components/LogCards/MyRequestMobile';
 import NoRequestsFound from '../../components/NoRequestsFound';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
+import { useStore } from '../../state/store';
+import { getConnectorHooks } from '../../utils/getConnectorHooks';
 
 const Card = styled.div`
 	width: 100%;
@@ -34,18 +34,18 @@ const useStyles = makeStyles({
 });
 
 const MyRequests = (props) => {
-	const { account } = useWeb3React();
-	const { appState } = useContext(mainContext);
 	const [requests, setRequests] = useState([]);
 	const [isLoading, setLoading] = useState(true);
 	const classes = useStyles(props);
+	const { contract, activeConnector, isMobile } = useStore();
+	const { useAccount } = getConnectorHooks(activeConnector);
+	const account = useAccount();
 
 	useEffect(() => {
-		if (appState.contract !== null) {
+		if (contract !== null) {
 			if (account) {
-				appState.contract.methods
-					.orderResult()
-					.call({ from: account })
+				contract
+					.orderResult({ from: account })
 					.then((result) => {
 						const userContributionsSet = new Set(result[0]);
 						const userContributions = [...userContributionsSet];
@@ -54,20 +54,20 @@ const MyRequests = (props) => {
 							const requests = [];
 							try {
 								for (const currentRequest of userContributions) {
-									let requestInfo = await appState.contract.methods.orders(currentRequest).call();
+									let requestInfo = await contract.orders(currentRequest);
 
 									const requestTemplate = {
-										requestID: requestInfo[0],
+										requestID: requestInfo[0].toNumber(),
 										title: requestInfo[1],
 										description: requestInfo[7],
 										requesterAddress: requestInfo[2],
-										angelTokenPay: convertToBiobit(requestInfo[3], false),
-										laboratoryTokenPay: convertToBiobit(requestInfo[4], false),
-										totalContributors: requestInfo[5], // total contributors required
-										totalContributed: +requestInfo[5] - +requestInfo[8],
+										angelTokenPay: convertToBiobit(requestInfo[3].toNumber(), false),
+										laboratoryTokenPay: convertToBiobit(requestInfo[4].toNumber(), false),
+										totalContributors: requestInfo[5].toNumber(), // total contributors required
+										totalContributed: +requestInfo[5].toNumber() - +requestInfo[8].toNumber(),
 										whitePaper: requestInfo[6],
-										timestamp: requestInfo[10],
-										totalContributedCount: requestInfo[9],
+										timestamp: requestInfo[10].toNumber(),
+										totalContributedCount: requestInfo[9].toNumber(),
 									};
 									requests.push(requestTemplate);
 								}
@@ -88,13 +88,13 @@ const MyRequests = (props) => {
 					});
 			}
 		}
-	}, [appState.contract, account]);
+	}, [contract, account]);
 
-	if (appState.isMobile)
+	if (isMobile)
 		return isLoading ? (
 			[1, 2, 3].map((index) => {
 				return (
-					<Card key={index} isMobile={appState.isMobile}>
+					<Card key={index} isMobile={isMobile}>
 						<CircleSection>
 							<Skeleton variant="circle" width={41.72} height={41.72} className={classes.root} />
 						</CircleSection>
@@ -113,7 +113,7 @@ const MyRequests = (props) => {
 	return isLoading ? (
 		[1, 2].map((index) => {
 			return (
-				<Card key={index} isMobile={appState.isMobile}>
+				<Card key={index} isMobile={isMobile}>
 					<CircleSection>
 						<Skeleton variant="circle" width={72} height={72} className={classes.root} />
 					</CircleSection>
