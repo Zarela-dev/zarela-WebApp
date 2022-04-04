@@ -139,7 +139,7 @@ const LogCard = ({ data, account, paymentDay }) => {
 							{contributions.map(
 								({ originalIndex, timestamp, zarelaDay, status, angel, hub, rewardGainer, ...rest }, rowIndex) => {
 									return (
-										<TableRow key={originalIndex}>
+										<TableRow key={timestamp}>
 											<TableCellWrapper>
 												<TableCell>{`${rowIndex + 1}. File #${originalIndex}`}</TableCell>
 											</TableCellWrapper>

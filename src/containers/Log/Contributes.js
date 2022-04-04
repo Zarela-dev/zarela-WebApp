@@ -1,13 +1,13 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useWeb3React } from '@web3-react/core';
 import LogCard from '../../components/LogCards/Contribution';
 import LogCardMobile from '../../components/LogCards/ContributionMobile';
-import { mainContext } from './../../state';
 import { convertToBiobit } from '../../utils';
 import NoRequestsFound from '../../components/NoRequestsFound';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
+import { useStore } from '../../state/store';
+import { getConnectorHooks } from '../../utils/getConnectorHooks';
 
 const Card = styled.div`
 	width: 100%;
@@ -34,34 +34,36 @@ const useStyles = makeStyles({
 });
 
 const Contributes = (props) => {
-	const { appState } = useContext(mainContext);
 	const [requests, setRequests] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [paymentDay, setPaymentDay] = useState(null);
-	const { account } = useWeb3React();
 	const classes = useStyles(props);
+	const { contract, activeConnector, isMobile } = useStore();
+	const { useAccount } = getConnectorHooks(activeConnector);
+	const account = useAccount();
 
 	useEffect(() => {
-		if (appState.contract !== null) {
+		if (contract !== null) {
 			if (account) {
-				appState.contract.methods
-					.orderResult()
-					.call({ from: account })
+				contract
+					.orderResult({ from: account })
 					.then((result) => {
-						const userContributionsSet = new Set([...result[1], ...result[2]]);
+						const userContributionsSet = new Set([
+							...result[1].map((item) => item.toNumber()),
+							...result[2].map((item) => item.toNumber()),
+						]);
 						const userContributions = [...userContributionsSet];
-
 						const getAllRequests = new Promise(async (resolve, reject) => {
 							const requests = [];
 							const getRequestFiles = (requestContributions) => {
 								let angels = requestContributions[0];
 								let hubs = requestContributions[1];
-								let timestamps = requestContributions[2];
+								let timestamps = requestContributions[2].map((item) => item.toNumber());
 								let rewardGainer = requestContributions[3];
 								let status = requestContributions[4];
-								let zarelaDay = requestContributions[5];
-
+								let zarelaDay = requestContributions[5].map((item) => item.toNumber());
 								let formatted = {};
+
 								angels.forEach((angelAddress, originalIndex) => {
 									formatted[originalIndex] = {
 										originalIndex,
@@ -78,7 +80,7 @@ const Contributes = (props) => {
 								Object.keys(formatted).forEach((originalIndex) => {
 									const { angel, hub } = formatted[originalIndex];
 									if (angel.toLowerCase() === account.toLowerCase() || hub.toLowerCase() === account.toLowerCase()) {
-										userContributionIndexes.push(originalIndex);
+										userContributionIndexes.push(+originalIndex);
 									}
 								});
 
@@ -91,23 +93,21 @@ const Contributes = (props) => {
 
 							try {
 								for (const currentRequest of userContributions) {
-									let requestInfo = await appState.contract.methods.orders(currentRequest).call();
-									let contributions = await appState.contract.methods
-										.getOrderData(currentRequest)
-										.call({ from: account });
+									let requestInfo = await contract.orders(currentRequest);
+									let contributions = await contract.getOrderData(currentRequest, { from: account });
 									// #to-do improve readability
 									const requestTemplate = {
-										requestID: requestInfo[0],
+										requestID: requestInfo[0].toNumber(),
 										title: requestInfo[1],
 										description: requestInfo[7],
 										requesterAddress: requestInfo[2],
-										angelTokenPay: convertToBiobit(requestInfo[3], false),
-										laboratoryTokenPay: convertToBiobit(requestInfo[4], false),
-										totalContributors: requestInfo[5], // total contributors required
-										totalContributed: +requestInfo[5] - +requestInfo[8],
+										angelTokenPay: convertToBiobit(requestInfo[3].toNumber(), false),
+										laboratoryTokenPay: convertToBiobit(requestInfo[4].toNumber(), false),
+										totalContributors: requestInfo[5].toNumber(), // total contributors required
+										totalContributed: requestInfo[5].toNumber() - requestInfo[8].toNumber(),
 										whitePaper: requestInfo[6],
-										timestamp: requestInfo[10],
-										totalContributedCount: requestInfo[9],
+										timestamp: requestInfo[10].toNumber(),
+										totalContributedCount: requestInfo[9].toNumber(),
 										// files contributed on this request filtered by current user
 										contributions: getRequestFiles(contributions),
 									};
@@ -128,32 +128,28 @@ const Contributes = (props) => {
 					.catch((error) => {
 						console.error(error.message);
 					});
-				appState.contract.methods
+				contract
 					.paymentDay()
-					.call()
 					.then((response) => {
-						setPaymentDay(response);
+						setPaymentDay(response.toNumber());
 					})
 					.catch((err) => {
 						console.error(err);
 					});
-				appState.contract.methods
+				contract
 					.lastRewardableIndex()
-					.call()
 					.then((response) => {
-						console.log('lastRewardableIndex', response);
+						console.log('lastRewardableIndex', response.toNumber());
 					})
 					.catch((err) => {
 						console.error(err);
 					});
 
-				appState.contract.methods
+				contract
 					.indexOfAddressPendingReward()
-					.call()
 					.then((indexOfAddress) => {
-						appState.contract.methods
+						contract
 							.paymentQueue(+indexOfAddress + 1)
-							.call()
 							.then((response) => {
 								console.log('paymentQueue', response);
 							})
@@ -166,25 +162,24 @@ const Contributes = (props) => {
 						console.error(err);
 					});
 
-				appState.contract.methods
+				contract
 					.dailyRewardPerContributor(15)
-					.call()
 					.then((response) => {
-						console.log('dailyRewardPerContributor', response / 1000000000);
+						console.log('dailyRewardPerContributor', response.toNumber() / 1000000000);
 					})
 					.catch((err) => {
 						console.error(err);
 					});
 			}
 		}
-	}, [account, appState.contract]);
+	}, [account, contract]);
 
 	const message = 'you have not contributed on any requests yet.';
-	if (appState.isMobile)
+	if (isMobile)
 		return isLoading || paymentDay === null ? (
 			[1, 2, 3].map((index) => {
 				return (
-					<Card key={index} isMobile={appState.isMobile}>
+					<Card key={index} isMobile={isMobile}>
 						<CircleSection>
 							<Skeleton variant="circle" width={41.72} height={41.72} className={classes.root} />
 						</CircleSection>
@@ -198,14 +193,14 @@ const Contributes = (props) => {
 		) : requests.length === 0 ? (
 			<NoRequestsFound message={message} />
 		) : (
-			requests.map((request) => (
-				<LogCardMobile paymentDay={paymentDay} key={request.requestID} account={account} data={request} />
+			requests.map((request, index) => (
+				<LogCardMobile paymentDay={paymentDay} key={index} account={account} data={request} />
 			))
 		);
 	return isLoading || paymentDay === null ? (
 		[1, 2, 3].map((index) => {
 			return (
-				<Card key={index} isMobile={appState.isMobile}>
+				<Card key={index} isMobile={isMobile}>
 					<CircleSection>
 						<Skeleton variant="circle" width={72} height={72} className={classes.root} />
 					</CircleSection>
@@ -219,9 +214,7 @@ const Contributes = (props) => {
 	) : requests.length === 0 ? (
 		<NoRequestsFound message={message} />
 	) : (
-		requests.map((request) => (
-			<LogCard key={request.requestID} account={account} data={request} paymentDay={paymentDay} />
-		))
+		requests.map((request, index) => <LogCard key={index} account={account} data={request} paymentDay={paymentDay} />)
 	);
 };
 
