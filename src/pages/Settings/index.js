@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
-import { mainContext } from '../../state';
+import React from 'react';
 import { Tabs } from '../../components/Tabs';
 import Contacts from './../../components/SettingCard/Contacts';
 import Blocked from './../../components/SettingCard/Blocked';
 import Hidden from './../../components/SettingCard/Hidden';
 import styled from 'styled-components';
+import { useStore } from '../../state/store';
 
 const LogInnerContainer = styled.div`
 	padding: 0;
@@ -16,17 +16,17 @@ const LogInnerContainer = styled.div`
 `;
 
 const Settings = () => {
-	const { appState } = useContext(mainContext);
+	const { isMobile } = useStore();
 	return (
 		<Tabs
 			route="settings"
-			isMobile={appState.isMobile}
+			isMobile={isMobile}
 			data={[
 				{
 					label: 'Contacts',
 					component: (
 						<LogInnerContainer elevated>
-							<Contacts isMobile={appState.isMobile} />
+							<Contacts isMobile={isMobile} />
 						</LogInnerContainer>
 					),
 				},
@@ -34,7 +34,7 @@ const Settings = () => {
 					label: 'Blocked',
 					component: (
 						<LogInnerContainer elevated>
-							<Blocked isMobile={appState.isMobile} />
+							<Blocked isMobile={isMobile} />
 						</LogInnerContainer>
 					),
 				},
@@ -42,7 +42,7 @@ const Settings = () => {
 					label: 'Hidden',
 					component: (
 						<LogInnerContainer elevated>
-							<Hidden isMobile={appState.isMobile} />
+							<Hidden isMobile={isMobile} />
 						</LogInnerContainer>
 					),
 				},
