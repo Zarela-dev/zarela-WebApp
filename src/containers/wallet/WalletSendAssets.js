@@ -1,10 +1,7 @@
-import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useHistory } from 'react-router';
-import { useWeb3React } from '@web3-react/core';
-import { mainContext } from '../../state';
 import { TokenList, Token } from './WalletAccount/AccountChoices';
 import { Content, Column } from './WalletAccount/Layout';
 import biobitIcon from '../../assets/icons/biobit-black.svg';
@@ -14,6 +11,10 @@ import { toast } from '../../utils';
 import { BodyText } from './../../components/Elements/Typography';
 import { ThemeButton } from './../../components/Elements/Button';
 import { ThemeIcon } from './../../components/Elements/Icon';
+import { useStore } from '../../state/store';
+import { getConnectorHooks } from '../../utils/getConnectorHooks';
+import { utils } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 
 const WalletInput = styled(Textfield)`
 	min-width: ${(props) => (props.isMobile === true ? '100%' : '510px')};
@@ -27,9 +28,12 @@ const Wrapper = styled.form`
 
 /* #todo #fancy if the requested amount is more than user balance, give error */
 const WalletSendAssets = (mobile) => {
-	const { appState } = useContext(mainContext);
+	const { isMobile, contract, activeConnector, biobitBalance, ethBalance } = useStore();
+	const { useProvider, useAccount } = getConnectorHooks(activeConnector);
+	const provider = useProvider();
+	const account = useAccount();
+
 	const history = useHistory();
-	const { account } = useWeb3React();
 	const formik = useFormik({
 		initialValues: {
 			token: 'Biobit',
@@ -43,7 +47,7 @@ const WalletSendAssets = (mobile) => {
 		}),
 		onSubmit: (values) => {
 			if (values.token === 'Biobit') {
-				appState.contract.methods
+				contract.methods
 					.transfer(values.address, +values.amount * Math.pow(10, 9))
 					.send({ from: account }, (error, result) => {
 						if (!error) {
@@ -57,11 +61,14 @@ const WalletSendAssets = (mobile) => {
 						}
 					});
 			} else {
-				appState.fallbackWeb3Instance.eth
+				provider
 					.sendTransaction({
 						to: values.address,
 						from: account,
-						value: appState.fallbackWeb3Instance.utils.toWei(values.amount, 'ether'),
+						value: /* fallbackWeb3Instance.utils.toWei(values.amount, 'ether'), */ utils.formatUnits(
+							BigNumber.from(values.amount),
+							'ether'
+						),
 					})
 					.then(({ transactionHash }) => {
 						console.log(transactionHash);
@@ -74,7 +81,7 @@ const WalletSendAssets = (mobile) => {
 	});
 
 	const getBalanceHint = () => {
-		return `Available: ${formik.values.token === 'Biobit' ? +appState.biobitBalance : +appState.etherBalance} ${
+		return `Available: ${formik.values.token === 'Biobit' ? +biobitBalance : +ethBalance} ${
 			formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'
 		}`;
 	};
@@ -87,7 +94,7 @@ const WalletSendAssets = (mobile) => {
 	};
 
 	return (
-		<Wrapper onSubmit={formik.handleSubmit} isMobile={appState.isMobile}>
+		<Wrapper onSubmit={formik.handleSubmit} isMobile={isMobile}>
 			<Content>
 				<Column>
 					<BodyText variant="small" mb={3}>
@@ -116,7 +123,7 @@ const WalletSendAssets = (mobile) => {
 						</Token>
 					</TokenList>
 					<WalletInput
-						isMobile={appState.isMobile}
+						isMobile={isMobile}
 						label={"Recipient's Address"}
 						placeholder={"Please enter the Recipient's address"}
 						adornment={navigator.clipboard && navigator.clipboard?.readText ? 'Paste' : null} // #todo
@@ -130,7 +137,7 @@ const WalletSendAssets = (mobile) => {
 						error={formik.errors?.address}
 					/>
 					<WalletInput
-						isMobile={appState.isMobile}
+						isMobile={isMobile}
 						label={'Amount'}
 						placeholder={'Enter amount'}
 						hint={getBalanceHint()} // will change based on token chosen
@@ -139,10 +146,7 @@ const WalletSendAssets = (mobile) => {
 							{
 								content: 'Max',
 								onClick: async () => {
-									const value =
-										formik.values.token === 'Biobit'
-											? +appState.biobitBalance
-											: +appState.etherBalance;
+									const value = formik.values.token === 'Biobit' ? +biobitBalance : +ethBalance;
 									await formik.setFieldValue('amount', value);
 								},
 							},
@@ -152,7 +156,7 @@ const WalletSendAssets = (mobile) => {
 						value={formik.values.amount}
 						error={formik.errors?.amount}
 					/>
-					{appState.isMobile ? (
+					{isMobile ? (
 						<ThemeButton
 							variant="primary"
 							size="normal"

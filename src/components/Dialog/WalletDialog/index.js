@@ -11,6 +11,7 @@ import { activateConnector } from '../../../utils/activateConnector';
 
 const WalletDialog = ({ forceOpen, forceMetamask, eagerConnect }) => {
 	const { connectorStatus, activeConnectorType, dialogOpen, setDialogOpen, setActiveConnector } = useStore();
+
 	const [view, setView] = useState('list');
 
 	const SUPPORTED_WALLETS = {

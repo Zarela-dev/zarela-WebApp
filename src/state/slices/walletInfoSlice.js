@@ -1,6 +1,6 @@
 export const walletInfoSlice = (set, get) => ({
-	BBITBalance: null,
-	ETHBalance: null,
-	setBBITBalance: (BBITBalance) => set({ BBITBalance }),
-	setETHBalance: (ETHBalance) => set({ ETHBalance }),
+	bbitBalance: null,
+	ethBalance: null,
+	setBbitBalance: (bbitBalance) => set({ bbitBalance }),
+	setEthBalance: (ethBalance) => set({ ethBalance }),
 });

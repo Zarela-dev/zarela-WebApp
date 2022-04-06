@@ -279,7 +279,7 @@ export default function Header({ isMobile }, props) {
 	const classes = useStyles(props);
 	const GUIDES = ['/', '/inbox', '/log', '/request'];
 
-	const { contract, account, setNotificationCount, setGuideIsOpen, notificationCount, biobitBalance } = useStore();
+	const { contract, account, setNotificationCount, setGuideIsOpen, notificationCount, bbitBalance } = useStore();
 
 	useEffect(() => {
 		if (contract !== null) {
@@ -390,7 +390,7 @@ export default function Header({ isMobile }, props) {
 									<Heading as="h4" variant="heading4">
 										Wallet
 									</Heading>
-									<Heading as="h4" variant="heading4">{`Balance: ${biobitBalance} BBit`}</Heading>
+									<Heading as="h4" variant="heading4">{`Balance: ${bbitBalance} BBit`}</Heading>
 								</WalletTitlebar>
 							) : routeGroup === 'log' ? (
 								<WalletTitlebar isMobile={isMobile}>
@@ -523,7 +523,7 @@ export default function Header({ isMobile }, props) {
 						{routeGroup === 'wallet' ? (
 							<WalletTitlebar>
 								<Title>Wallet</Title>
-								<Balance>{`Balance: ${biobitBalance} BBit`}</Balance>
+								<Balance>{`Balance: ${bbitBalance} BBit`}</Balance>
 							</WalletTitlebar>
 						) : routeGroup === 'log' ? (
 							<WalletTitlebar isMobile={isMobile}>

@@ -1,17 +1,19 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { mainContext } from '../../state';
-import { useWeb3React } from '@web3-react/core';
 import { WalletDesktop } from './WalletDesktop';
 import { WalletMobile } from './WalletMobile';
 import { ETHERSCAN_BASE_URL } from '../../constants';
+import { useStore } from '../../state/store';
+import { getConnectorHooks } from '../../utils/getConnectorHooks';
 
 const Wallet = () => {
-	const { appState } = useContext(mainContext);
 	const [logs, setLogs] = useState([]);
 	const [isLoading, setLoading] = useState(false);
-	const { account, library } = useWeb3React();
 	const PAGE_SIZE = 30;
+	const { isMobile, contract, activeConnector } = useStore();
+	const { useAccount, useProvider } = getConnectorHooks(activeConnector);
+	const provider = useProvider();
+	const account = useAccount();
 
 	useEffect(() => {
 		if (account) {
@@ -59,8 +61,7 @@ const Wallet = () => {
 									also the inputs are overridden by txlist.
 								*/
 								if (tokentxRes.data.message === 'OK') {
-									const smartContactAddress =
-										process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS.toLowerCase();
+									const smartContactAddress = process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS.toLowerCase();
 
 									const txlist = txListRes.data.result;
 									const tokentx = tokentxRes.data.result;
@@ -81,10 +82,7 @@ const Wallet = () => {
 									txlist.forEach((item) => {
 										result.push({
 											...item,
-											value:
-												tokentxFormatted[item.hash]?.value ||
-												txlistFormatted[item.hash]?.value ||
-												0,
+											value: tokentxFormatted[item.hash]?.value || txlistFormatted[item.hash]?.value || 0,
 										});
 										/* 
 											we exclude the data that is already present on txlist to prevent duplication
@@ -93,30 +91,13 @@ const Wallet = () => {
 										delete tokentxFormatted[item.hash];
 									});
 
-									async function hasZarelaContract(txObject) {
-										const getCode = library
-											? library.eth.getCode
-											: appState.fallbackWeb3Instance.eth.getCode;
-										/* 
-											to detect if the address is a contract so we can filter it
-											(we don't want to show txs from other dApps or our previous smart contracts)
-										*/
-										let from = await getCode(txObject.from);
-										let to = await getCode(txObject.to);
-
-										if (
-											(from !== '0x' && txObject.from === smartContactAddress) ||
-											(to !== '0x' && txObject.to === smartContactAddress)
-										) {
-											return true;
-										} else {
-											return false;
-										}
+									async function isZarelaContract(txObject) {
+										return txObject.from === smartContactAddress || txObject.to === smartContactAddress ? true : false;
 									}
 
 									const mergeResults = async () => {
 										for (const txItem of Object.values(tokentxFormatted)) {
-											const hasZarela = await hasZarelaContract(txItem);
+											const hasZarela = await isZarelaContract(txItem);
 
 											// to prevent the appearance of transactions that are not made
 											// to/from Zarela smart contract
@@ -158,7 +139,7 @@ const Wallet = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [account]);
 
-	if (appState.isMobile) {
+	if (isMobile) {
 		return <WalletMobile {...{ account, logs, isLoading, PAGE_SIZE }} />;
 	} else {
 		return <WalletDesktop {...{ account, logs, isLoading, PAGE_SIZE }} />;

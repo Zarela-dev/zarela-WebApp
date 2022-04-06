@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import CreateRequest from './pages/CreateRequest';
 import RequestDetails from './pages/RequestDetails/RequestDetails';
 import Inbox from './pages/Inbox';
-// import Wallet from './pages/Wallet/Wallet';
+import Wallet from './pages/Wallet/Wallet';
 import Log from './pages/Log/Log';
 import Settings from './pages/Settings';
 // import { supportedChains } from './constants/index';
@@ -55,8 +55,8 @@ const AppRouter = () => {
 					<Route path="/log" component={Log} />
 					<Route exact path="/inbox" component={Inbox} />
 					<Route path="/settings" component={Settings} />
-					{/* <Route path="/wallet" component={Wallet} />
-					<Route component={NotFound} /> */}
+					<Route path="/wallet" component={Wallet} />
+					{/* <Route component={NotFound} /> */}
 				</Switch>
 			</AppWrapper>
 		</Router>

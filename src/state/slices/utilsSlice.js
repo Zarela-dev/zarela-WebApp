@@ -4,11 +4,7 @@ export const utilsSlice = (set, get) => ({
 	guideIsOpen: null,
 	notificationCount: null,
 	createRequestFormData: null,
-	biobitBalance: null,
-	ethBalance: null,
 
-	setEthBalance: (balance) => set({ ethBalance: balance }),
-	setBiobitBalance: (biobitBalance) => set({ biobitBalance }),
 	setCreateRequestFormData: (data) => set({ createRequestFormData: data }),
 	setIsMobile: (isMobile) => set({ isMobile }),
 	setIsMobileSearchModalShow: (isMobileSearchModalShow) => set((state) => ({ ...state, isMobileSearchModalShow })),
