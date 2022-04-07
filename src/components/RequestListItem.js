@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState, useContext } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import _ from 'lodash';
@@ -6,9 +6,7 @@ import { Spacer } from './Elements/Spacer';
 import biobitIcon from '../assets/icons/biobit-black.svg';
 import contributorIcon from '../assets/icons/user-blue.svg';
 import RequestFilesTable from './RequestFilesTable';
-import { mainContext } from '../state';
 import { arraySymmetricDiff, arrayIntersection, toast } from '../utils';
-import { useWeb3React } from '@web3-react/core';
 import caretUpIcon from '../assets/icons/caret-up.svg';
 import caretDownIcon from '../assets/icons/caret-down.svg';
 import Dialog from './Dialog';

@@ -1,4 +1,3 @@
-import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { space, layout, color, compose, fontWeight } from 'styled-system';
 import { Box } from 'rebass/styled-components';
@@ -6,7 +5,7 @@ import filterIcon from './../../../assets/icons/filter.svg';
 import { ThemeIcon } from '../../Elements/Icon';
 import { timeConverter } from '../../../utils/helpers';
 import FilterLabelItem from './FilterLabelItem';
-import { mainContext } from '../../../state';
+import { useStore } from '../../../state/store';
 
 const FilterButton = styled(Box)(compose(space, layout, color, fontWeight), {
 	border: '1px solid #838383',
@@ -44,11 +43,10 @@ const FilterLabelContainer = ({
 	setSelectedDateRange,
 	searchResults,
 }) => {
-	const { appState } = useContext(mainContext);
-	
+	const { isMobile } = useStore();
 	return (
 		<FilterWrapper>
-			{!appState.isMobile && (
+			{!isMobile && (
 				<FilterButton as="div" color="filterText" mt={3} mr={2} onClick={() => setModalShow(!modalShow)}>
 					<ThemeIcon variant="big" src={filterIcon} />
 					Filters and Sort

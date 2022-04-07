@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Tour from 'reactour';
 import styled from 'styled-components';
 import Next from './../../assets/icons/next.svg';
@@ -7,10 +7,10 @@ import CloseSvg from './../../assets/icons/close-purple.svg';
 import { Button } from '../Elements/Button';
 import './styles.css';
 import { useLocation } from 'react-router-dom';
-import { useWeb3React } from '@web3-react/core';
-import { actionTypes, mainContext } from '../../state';
+import WalletDialog from '../Dialog/WalletDialog';
+import { useStore } from '../../state/store';
+
 // import { SaveGuideToLocalStorage } from '../../state/actions';
-import ConnectDialog from '../Dialog/ConnectDialog';
 
 const Wrapper = styled.div``;
 const NavButton = styled.div`
@@ -84,16 +84,11 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 	const [currentStep, setCurrentStep] = useState(0);
 	const location = useLocation();
 	const [showConnectDialog, setShowConnectDialog] = useState(false);
-	return <>{children}</>;
-	const { account } = useWeb3React();
-	const { appState, dispatch } = useContext(mainContext);
+	const { isMobile, setGuideIsOpen, guideIsOpen } = useStore();
 
 	const handleTimeOut = (timer) => {
 		setTimeout(() => {
-			dispatch({
-				type: actionTypes.SET_GUIDE_IS_OPEN,
-				payload: true,
-			});
+			setGuideIsOpen(true);
 		}, timer);
 	};
 
@@ -108,19 +103,14 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 
 	return (
 		<>
-			{showConnectDialog ? <ConnectDialog isOpen={true} /> : null}
+			{showConnectDialog ? <WalletDialog /> : null}
 			<Wrapper>
 				<CustomizedTour
-					isMobile={appState.isMobile}
+					isMobile={isMobile}
 					steps={steps}
 					currentStep={currentStep}
-					isOpen={appState.guideIsOpen}
-					onRequestClose={() =>
-						dispatch({
-							type: actionTypes.SET_GUIDE_IS_OPEN,
-							payload: false,
-						})
-					}
+					isOpen={guideIsOpen}
+					onRequestClose={() => setGuideIsOpen(false)}
 					closeWithMask={false}
 					disableDotsNavigation={true}
 					showButtons={true}
@@ -164,15 +154,15 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 					}
 					disableKeyboardNavigation={['esc']}
 				></CustomizedTour>
-				{appState.guideIsOpen && (
+				{guideIsOpen && (
 					<Overlay
-						isMobile={appState.isMobile}
+						isMobile={isMobile}
 						onClick={() => {
 							// SaveGuideToLocalStorage(dispatch, location.pathname.split('/')[1]);
 							document.body.style.overflowY = 'auto';
 						}}
 					>
-						<Close isMobile={appState.isMobile}>
+						<Close isMobile={isMobile}>
 							<CloseIcon src={CloseSvg} />
 						</Close>
 					</Overlay>

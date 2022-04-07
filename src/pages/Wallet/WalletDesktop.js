@@ -4,7 +4,6 @@ import { Tabs } from '../../components/Tabs';
 import WalletTransactions from './../../containers/wallet/WalletTransactions';
 import WalletAccount from './../../containers/wallet/WalletAccount';
 import WalletSendAssets from './../../containers/wallet/WalletSendAssets';
-import ConnectDialog from '../../components/Dialog/ConnectDialog';
 import { Row } from '../../components/Elements/Flex';
 import WalletDialog from '../../components/Dialog/WalletDialog';
 

@@ -1,7 +1,5 @@
-import React, { /*  useContext,  */ useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDeepCompareEffect } from 'use-deep-compare';
-// import { useWeb3React } from '@web3-react/core';
-// import { mainContext } from '../../state';
 import { convertToBiobit } from '../../utils';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
@@ -14,8 +12,6 @@ import { useStore } from '../../state/store';
 import { utils } from 'ethers';
 
 const RequestsList = () => {
-	// const { appState } = useContext(mainContext);
-	// const { account } = useWeb3React();
 	const { contract, isMobile } = useStore();
 	const PAGE_SIZE = 5;
 	const [requests, setRequests] = useState({});
@@ -331,7 +327,7 @@ const RequestsList = () => {
 						PAGE_SIZE,
 						currentPage,
 						setCurrentPage,
-						// searchBox: <SearchFilter {...{ requests, applySearch, searchResults }} />,
+						searchBox: <SearchFilter {...{ requests, applySearch, searchResults }} />,
 					}}
 				/>
 			) : (
@@ -343,7 +339,7 @@ const RequestsList = () => {
 						isLoading,
 						currentPage,
 						setCurrentPage,
-						// searchBox: <SearchFilter {...{ requests, applySearch, searchResults }} />,
+						searchBox: <SearchFilter {...{ requests, applySearch, searchResults }} />,
 					}}
 				/>
 			)}

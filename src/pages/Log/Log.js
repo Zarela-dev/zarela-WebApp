@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Tabs } from '../../components/Tabs';
 import MyRequests from '../../containers/Log/MyRequests';
 import Contributes from '../../containers/Log/Contributes';
-import ConnectDialog from '../../components/Dialog/ConnectDialog';
 import MobileLayout from '../../components/MobileLayout';
 import Guide from '../../components/Guide/Guide';
 import { LogSteps } from '../../guides';

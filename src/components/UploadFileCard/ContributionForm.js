@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import { SmallCheckbox } from '../Elements/Checkbox';
 import TextField from '../Elements/TextField';
 import Button, { ThemeButton } from '../Elements/Button';
-import ConnectDialog from '../Dialog/ConnectDialog';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import styled from 'styled-components';
