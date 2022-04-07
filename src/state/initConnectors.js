@@ -102,7 +102,7 @@ const useInitConnectors = () => {
 				} else if (isActivating === false && isActive === true) {
 					await setStatus(STATUS.CONNECTED);
 				} else {
-					setStatus(STATUS.FAILED);
+					await setStatus(STATUS.FAILED);
 				}
 			}
 		};
@@ -115,7 +115,7 @@ const useInitConnectors = () => {
 				let permission = activeConnector instanceof Network ? 'r' : 'wr';
 				setUpContract(activeConnector.provider, { setContract }, permission);
 			} catch (error) {
-				setStatus(STATUS.FAILED, 'user denied or something');
+				console.log('failed to setup contract', error)
 			}
 		}
 	}, [connectorStatus]);

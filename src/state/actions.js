@@ -80,14 +80,6 @@ export const getGasPrice = (dispatch) => {
 		});
 };
 
-export const SaveGuideToLocalStorage = (dispatch, route) => {
-	localStorage.setItem('guide/' + route, true);
-	dispatch({
-		type: actionTypes.SET_GUIDE_IS_OPEN,
-		payload: false,
-	});
-};
-
 export const getEthPrice = (dispatch) => {
 	/**
 	 * get ethereum price in USD

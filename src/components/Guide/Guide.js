@@ -10,8 +10,6 @@ import { useLocation } from 'react-router-dom';
 import WalletDialog from '../Dialog/WalletDialog';
 import { useStore } from '../../state/store';
 
-// import { SaveGuideToLocalStorage } from '../../state/actions';
-
 const Wrapper = styled.div``;
 const NavButton = styled.div`
 	color: ${(props) => props.theme.colors.primary};
@@ -92,6 +90,12 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 		}, timer);
 	};
 
+	const SaveGuideToLocalStorage = (route) => {
+		localStorage.setItem('guide/' + route, true);
+		setGuideIsOpen(false);
+		document.body.style.overflowY = 'auto';
+	};
+
 	useEffect(() => {
 		if (!localStorage.getItem('guide/' + location.pathname.split('/')[1])) {
 			handleTimeOut(3000);
@@ -145,8 +149,7 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 						<SubmitRequestButton
 							onClick={() => {
 								// setCurrentStep(0);
-								document.body.style.overflowY = 'auto';
-								// SaveGuideToLocalStorage(dispatch, location.pathname.split('/')[1]);
+								SaveGuideToLocalStorage(location.pathname.split('/')[1]);
 							}}
 						>
 							Done
@@ -158,8 +161,7 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 					<Overlay
 						isMobile={isMobile}
 						onClick={() => {
-							// SaveGuideToLocalStorage(dispatch, location.pathname.split('/')[1]);
-							document.body.style.overflowY = 'auto';
+							SaveGuideToLocalStorage(location.pathname.split('/')[1]);
 						}}
 					>
 						<Close isMobile={isMobile}>

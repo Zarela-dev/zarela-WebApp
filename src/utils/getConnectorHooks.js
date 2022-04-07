@@ -14,7 +14,6 @@ export const getConnectorHooks = (connector) => {
 	} else if (connector instanceof Network) {
 		hooks = NetworkHooks;
 	} else {
-		console.warn(`can not get connector hooks for "${connector}" connector, using MetaMask hooks instead`);
 		hooks = MMHooks;
 	}
 	return hooks;

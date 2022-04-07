@@ -70,7 +70,7 @@ const RequestDetailsPage = () => {
 										requesterAddress: result[2],
 										angelTokenPay: convertToBiobit(result[3].toNumber(), false),
 										laboratoryTokenPay: convertToBiobit(result[4].toNumber(), false),
-										totalTokenPay: convertToBiobit(new BigNumber(result[3].toNumber()).plus(result[4]), false),
+										totalTokenPay: convertToBiobit(new BigNumber(result[3].toNumber()).plus(result[4].toNumber()), false),
 										totalContributors: result[5].toNumber(), // total contributors required
 										totalContributed: result[5].toNumber() - result[8].toNumber(),
 										totalContributorsRemaining: result[8].toNumber(), // total contributors remaining (able to contribute)
@@ -88,7 +88,7 @@ const RequestDetailsPage = () => {
 										requesterAddress: result[2],
 										angelTokenPay: convertToBiobit(result[3].toNumber(), false),
 										laboratoryTokenPay: convertToBiobit(result[4].toNumber(), false),
-										totalTokenPay: convertToBiobit(new BigNumber(result[3].toNumber()).plus(result[4]), false),
+										totalTokenPay: convertToBiobit(new BigNumber(result[3].toNumber()).plus(result[4].toNumber()), false),
 										totalContributors: result[5].toNumber(), // total contributors required
 										totalContributed: result[5].toNumber() - result[8].toNumber(),
 										totalContributorsRemaining: result[8].toNumber(), // total contributors remaining (able to contribute)

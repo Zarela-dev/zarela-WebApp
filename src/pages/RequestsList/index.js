@@ -253,7 +253,7 @@ const RequestsList = () => {
 											angelTokenPay: convertToBiobit(orderResult[3].toNumber(), false),
 											laboratoryTokenPay: convertToBiobit(orderResult[4].toNumber(), false),
 											totalTokenPay: convertToBiobit(
-												new BigNumber(orderResult[3].toNumber()).plus(orderResult[4]),
+												new BigNumber(orderResult[3].toNumber()).plus(orderResult[4].toNumber()),
 												false
 											),
 											totalContributors: orderResult[5].toNumber(), // total contributors required
@@ -273,7 +273,7 @@ const RequestsList = () => {
 											angelTokenPay: convertToBiobit(orderResult[3].toNumber(), false),
 											laboratoryTokenPay: convertToBiobit(orderResult[4].toNumber(), false),
 											totalTokenPay: convertToBiobit(
-												new BigNumber(orderResult[3].toNumber()).plus(orderResult[4]),
+												new BigNumber(orderResult[3].toNumber()).plus(orderResult[4].toNumber()),
 												false
 											),
 											totalContributors: orderResult[5].toNumber(), // total contributors required
