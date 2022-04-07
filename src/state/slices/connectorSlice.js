@@ -1,66 +1,5 @@
 import { MMConnector } from '../../connectors/metamask';
-import { Contract } from '@ethersproject/contracts';
-import ZarelaABI from '../../abi/ZarelaSmartContract.json';
-import { Web3Provider } from '@ethersproject/providers';
-import { CHAINS } from '../../connectors/chains';
-import { ZARELA_CONTRACT_ADDRESS } from '../smartContractConstants';
 import { detectWallet } from '../../utils/detectWallet';
-import { Network } from '@web3-react/network';
-
-const setUpContract = async (provider, set, permission) => {
-	if (provider !== undefined) {
-		let currentChainId;
-
-		// provider
-		let web3Provider = null,
-			contract_r = null;
-		try {
-			web3Provider = new Web3Provider(provider);
-		} catch (error) {
-			console.error(error.message);
-		}
-
-		try {
-			currentChainId = (await web3Provider.getNetwork()).chainId;
-		} catch (error) {
-			throw new Error(error.message);
-		}
-
-		// handle disconnect event
-		try {
-			if (Object.keys(CHAINS).findIndex((key) => +key === currentChainId) === -1) {
-				await provider.on('disconnect', async (code, reason) => {
-					console.error(`Disconnected from provider: ${code} - ${reason}`);
-				});
-			}
-		} catch (error) {
-			console.error(error.message);
-		}
-
-		// make sure user is on the right network
-		try {
-			if (Object.keys(CHAINS).findIndex((key) => +key === currentChainId) === -1) {
-				await provider.request({
-					method: 'wallet_switchEthereumChain',
-					params: [{ chainId: '0x' + Number(3).toString(16) }],
-				});
-			}
-		} catch (error) {
-			console.error(error.message);
-		}
-
-		try {
-			let currentContract = ZARELA_CONTRACT_ADDRESS[currentChainId];
-			let signerOrProvider = permission === 'wr' ? web3Provider.getSigner() : web3Provider;
-			contract_r = new Contract(currentContract, ZarelaABI, signerOrProvider);
-			set({ contract: contract_r, contractPermission: 'r' });
-		} catch (error) {
-			console.error(new Error('Error setting contract:'), error);
-		}
-	} else {
-		console.error('provider is undefined, can not setup contract');
-	}
-};
 
 export const STATUS = {
 	DISCONNECTED: 'DISCONNECTED',
@@ -91,15 +30,10 @@ export const connectorSlice = (set, get) => ({
 	connectorInProgress: MMConnector,
 	connectorStatus: STATUS.DISCONNECTED,
 	verboseConnectorStatus: null,
-	setContract: (contract) => set({ contract }),
+	setContract: (contract, permission) => set({ contract, contractPermission: permission }),
 	setActiveConnectorType: (activeConnectorType) => set({ activeConnectorType }),
 	setDialogOpen: (dialogOpen) => set({ dialogOpen }),
-	setContractManually: async (provider) => {
-		await setUpContract(provider, set, 'r');
-	},
 	setActiveConnector: async (activeConnector) => {
-		let permission = activeConnector instanceof Network ? 'r' : 'wr';
-		await setUpContract(activeConnector.provider, set, permission);
 		set({ activeConnector, connectorInProgress: null, activeConnectorType: detectWallet(activeConnector) });
 	},
 	setConnectorInProgress: (connector) => set({ connectorInProgress: connector }),

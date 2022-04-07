@@ -10,7 +10,14 @@ import { STATUS } from '../../../state/slices/connectorSlice';
 import { activateConnector } from '../../../utils/activateConnector';
 
 const WalletDialog = ({ forceOpen, forceMetamask, eagerConnect }) => {
-	const { connectorStatus, activeConnectorType, dialogOpen, setDialogOpen, setActiveConnector } = useStore();
+	const {
+		connectorStatus,
+		activeConnectorType,
+		dialogOpen,
+		setConnectorInProgress,
+		setDialogOpen,
+		setActiveConnector,
+	} = useStore();
 
 	const [view, setView] = useState('list');
 
@@ -31,9 +38,10 @@ const WalletDialog = ({ forceOpen, forceMetamask, eagerConnect }) => {
 	useEffect(() => {
 		if (eagerConnect)
 			if (connectorStatus === STATUS.CONNECTED && forceMetamask) {
-				if (activeConnectorType === 'METAMASK') activateConnector(MMConnector, setActiveConnector);
+				if (activeConnectorType === 'METAMASK')
+					activateConnector(MMConnector, setActiveConnector, setConnectorInProgress);
 				else if (activeConnectorType === 'WALLETCONNECT') {
-					activateConnector(WCConnector, setActiveConnector);
+					activateConnector(WCConnector, setActiveConnector, setConnectorInProgress);
 				}
 			}
 	}, [connectorStatus]);

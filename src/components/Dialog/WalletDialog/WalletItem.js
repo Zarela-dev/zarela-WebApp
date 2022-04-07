@@ -142,7 +142,8 @@ const DefaultState = ({ name, logo, onClick, disabled }) => {
 };
 
 const WalletItem = ({ view, name, logo, changeView, walletId, connector, disabled }) => {
-	const { activeConnector, connectorInProgress, connectorStatus, setActiveConnector } = useStore();
+	const { activeConnector, connectorInProgress, connectorStatus, setConnectorInProgress, setActiveConnector } =
+		useStore();
 	const { useAccount } = getConnectorHooks(activeConnector);
 	const account = useAccount();
 	const isActive = detectWallet(activeConnector) === walletId;
@@ -170,7 +171,7 @@ const WalletItem = ({ view, name, logo, changeView, walletId, connector, disable
 							disabled={disabled}
 							onClick={async () => {
 								if (disabled) return;
-								await activateConnector(connector, setActiveConnector);
+								await activateConnector(connector, setActiveConnector, setConnectorInProgress);
 							}}
 						/>
 					)}
