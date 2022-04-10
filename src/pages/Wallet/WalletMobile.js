@@ -1,13 +1,12 @@
-import React, { useContext } from 'react';
 import styled from 'styled-components';
 import TitleBar from '../../components/TitleBar/TitleBar';
 import { Tabs } from '../../components/Tabs';
-import { mainContext } from '../../state';
 import MobileLayout from '../../components/MobileLayout';
 import WalletTransactionsMobile from './../../containers/wallet/WalletTransactionsMobile';
 import WalletAccountMobile from './../../containers/wallet/WalletAccount/Mobile';
 import WalletSendAssets from './../../containers/wallet/WalletSendAssets';
-import ConnectDialog from '../../components/Dialog/ConnectDialog';
+import { useStore } from '../../state/store';
+import WalletDialog from '../../components/Dialog/WalletDialog';
 
 const Wrapper = styled.div``;
 
@@ -15,10 +14,8 @@ const WalletInnerContainer = styled.div`
 	padding: 0;
 	margin: 0;
 	background: ${(props) => (props.elevated ? '#FFFFFF' : '#F4F8FE')};
-	border: ${(props) =>
-		props.elevated ? '0.5px solid rgba(133, 206, 238, 0.5)' : 'none'};
-	box-shadow: ${(props) =>
-		props.elevated ? '0px 4px 18px rgba(223, 236, 255, 0.3)' : 'none'};
+	border: ${(props) => (props.elevated ? '0.5px solid rgba(133, 206, 238, 0.5)' : 'none')};
+	box-shadow: ${(props) => (props.elevated ? '0px 4px 18px rgba(223, 236, 255, 0.3)' : 'none')};
 	border-radius: 8px;
 `;
 
@@ -34,27 +31,25 @@ const WalletTitlebar = styled(TitleBar)`
 `;
 
 export const WalletMobile = ({ data, account, logs, isLoading, PAGE_SIZE }) => {
-	const { appState } = useContext(mainContext);
+	const { isMobile } = useStore();
 
 	return !account ? (
 		<Wrapper>
-			<WalletTitlebar isMobile={appState.isMobile}></WalletTitlebar>
-			{!account ? <ConnectDialog isOpen={true} /> : null}
+			<WalletTitlebar isMobile={isMobile}></WalletTitlebar>
+			{!account ? <WalletDialog /> : null}
 		</Wrapper>
 	) : (
 		<Wrapper>
 			<MobileLayout>
 				<Tabs
-					route='wallet'
-					isMobile={appState.isMobile}
+					route="wallet"
+					isMobile={isMobile}
 					data={[
 						{
 							label: 'Account',
 							component: (
 								<WalletInnerContainer elevated>
-									<WalletAccountMobile
-										address={account ? account : 'please connect to Metamask'}
-									/>
+									<WalletAccountMobile address={account ? account : 'please connect to Metamask'} />
 								</WalletInnerContainer>
 							),
 						},
@@ -70,12 +65,7 @@ export const WalletMobile = ({ data, account, logs, isLoading, PAGE_SIZE }) => {
 							label: 'Transactions',
 							component: (
 								<WalletInnerContainer>
-									<WalletTransactionsMobile
-										isLoading={isLoading}
-										account={account}
-										data={logs}
-										PAGE_SIZE={PAGE_SIZE}
-									/>
+									<WalletTransactionsMobile isLoading={isLoading} account={account} data={logs} PAGE_SIZE={PAGE_SIZE} />
 								</WalletInnerContainer>
 							),
 						},

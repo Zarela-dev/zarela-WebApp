@@ -55,7 +55,7 @@ const FilesWrapper = styled.div`
 	${maxWidthWrapper};
 	display: flex;
 	justify-content: space-between;
-	padding: ${({theme}) => theme.space[4]}px;
+	padding: ${({ theme }) => theme.space[4]}px;
 `;
 
 const FileCardSpacer = styled.div`
@@ -80,7 +80,7 @@ const RequestDetails = ({ setError, zpaperDownloadLink, error, request }) => {
 				<HeaderInner>
 					<Row width="100%" alignItems="flex-start">
 						<Col flex={'0 0 70px'} mr={[3]}>
-							{request.requestID && <IdLabel>{request.requestID}</IdLabel>}
+							{request.requestID !== undefined && <IdLabel>{request.requestID}</IdLabel>}
 						</Col>
 						<Col flex={1}>
 							<Row>

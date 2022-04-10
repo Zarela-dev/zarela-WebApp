@@ -10,6 +10,7 @@ import homepageBg from '../../assets/home-bg.jpg';
 import ZarelaDayBox from '../../components/ZarelaDayBox';
 import Pagination from '../../components/Pagination';
 import FallbackImage from '../../components/searchAndFilter/Elements/fallbackImage';
+import { useStore } from '../../state/store';
 
 const RequestsListWrapper = styled.div`
 	position: relative;
@@ -112,22 +113,26 @@ const useStyles = makeStyles({
 
 const Desktop = ({
 	requests,
-	appState,
-	account,
 	PAGE_SIZE,
 	currentPage,
 	setCurrentPage,
 	isLoading,
 	props,
 	searchBox,
+	zarelaDay,
+	account,
+	isConnecting,
+	setIsConnecting,
 }) => {
 	const classes = useStyles(props);
+	const { ethBalance, bbitBalance } = useStore();
 
 	const currentTableData = useMemo(() => {
 		const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
 		const lastPageIndex = firstPageIndex + PAGE_SIZE;
 		return Object.values(requests).slice(firstPageIndex, lastPageIndex);
 	}, [currentPage, PAGE_SIZE, requests]);
+
 	return (
 		<RequestsListWrapper isLoading={isLoading}>
 			{!isLoading && <Background />}
@@ -143,8 +148,14 @@ const Desktop = ({
 				) : (
 					<FixedWrapper>
 						<RequestListSidebarWrapper>
-							<ZarelaDayBox currentDay={appState.zarelaCurrentDay} />
-							<TokenInfoSidebar data={appState} account={account} />
+							<ZarelaDayBox currentDay={zarelaDay} />
+							<TokenInfoSidebar
+								ethBalance={ethBalance}
+								biobitBalance={bbitBalance}
+								account={account}
+								isConnecting={isConnecting}
+								setIsConnecting={setIsConnecting}
+							/>
 						</RequestListSidebarWrapper>
 					</FixedWrapper>
 				)}

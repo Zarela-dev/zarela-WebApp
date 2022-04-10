@@ -60,7 +60,7 @@ const RequestDetailsMobile = ({ setError, zpaperDownloadLink, error, request }) 
 					<HeaderInner>
 						<Row width="100%" alignItems="flex-start">
 							<Col flex={'0 0 70px'} mr={[3]}>
-								{request.requestID && <IdLabel>{request.requestID}</IdLabel>}
+								{request.requestID !== undefined && <IdLabel>{request.requestID}</IdLabel>}
 							</Col>
 							<Col>
 								<Header variant="heading5">{request.title}</Header>
@@ -73,8 +73,8 @@ const RequestDetailsMobile = ({ setError, zpaperDownloadLink, error, request }) 
 							<Row>
 								<ThemeIcon variant="small" src={biobitIcon} />
 								<BodyText variant="hint" fontWeight="medium">
-									{getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[0]} (
-									{request.angelTokenPay} Angel + {request.laboratoryTokenPay} Hub)
+									{getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[0]} ({request.angelTokenPay} Angel +{' '}
+									{request.laboratoryTokenPay} Hub)
 								</BodyText>
 								<BodyText variant="extraSmall" fontWeight="semiBold">{`~ $${
 									getBBIT(request.angelTokenPay, request.laboratoryTokenPay)[1]

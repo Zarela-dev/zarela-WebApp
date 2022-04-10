@@ -12,6 +12,7 @@ import infoIcon from './../../../../assets/icons/info-icon.svg';
 import { Tooltip } from '@material-ui/core';
 
 import { mainContext } from '../../../../state';
+import { useStore } from '../../../../state/store';
 
 const SliderWrapper = styled.div`
 	padding: 0 10px;
@@ -133,7 +134,7 @@ const CalendarMobileIcon = styled(ThemeIcon)`
 `;
 
 const FilterInput = (props) => {
-	const { appState } = useContext(mainContext);
+	const { isMobile } = useStore();
 	if (props.type === 'select') {
 		return (
 			<FormGroup>
@@ -209,7 +210,7 @@ const FilterInput = (props) => {
 				<DateSection>
 					<InputWrapper>
 						<Input placeholder={props.placeholder} value={props.value} onFocus={props.onFocus} />
-						{appState.isMobile ? (
+						{isMobile ? (
 							<CalendarMobileIcon variant="normal" src={calendarIcon} />
 						) : (
 							<CalendarIcon variant="big" src={calendarIcon} />

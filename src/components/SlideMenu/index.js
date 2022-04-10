@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import backIcon from '../../assets/icons/left-arrow.svg';
 import { matchPath, useLocation, Link } from 'react-router-dom';
 import CustomContainer from './../../components/ToastifyContainer';
-import { mainContext } from '../../state';
 import { Header as Heading, BodyText } from './../Elements/Typography';
+import { useStore } from '../../state/store';
 
 const Nav = styled.nav`
 	position: fixed;
@@ -111,7 +111,7 @@ const MenuItemDisabled = styled.a.attrs((props) => {
 
 const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 	const { pathname } = useLocation();
-	const { appState } = useContext(mainContext);
+	const { isMobile } = useStore();
 
 	return (
 		<Nav isOpen={isOpen} usage={usage}>
@@ -129,7 +129,7 @@ const SlideMenu = ({ isOpen, onClose, title, listItems, cta, usage }) => {
 			<Divider />
 
 			{usage === 'notify' ? (
-				<CustomContainer enableMultiContainer containerId={'notify'} isMobile={appState.isMobile} />
+				<CustomContainer enableMultiContainer containerId={'notify'} isMobile={isMobile} />
 			) : (
 				<MenuList>
 					{listItems.map((item) => {

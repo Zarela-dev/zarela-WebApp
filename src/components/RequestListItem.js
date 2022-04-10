@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState, useContext } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import _ from 'lodash';
@@ -6,9 +6,7 @@ import { Spacer } from './Elements/Spacer';
 import biobitIcon from '../assets/icons/biobit-black.svg';
 import contributorIcon from '../assets/icons/user-blue.svg';
 import RequestFilesTable from './RequestFilesTable';
-import { mainContext } from '../state';
 import { arraySymmetricDiff, arrayIntersection, toast } from '../utils';
-import { useWeb3React } from '@web3-react/core';
 import caretUpIcon from '../assets/icons/caret-up.svg';
 import caretDownIcon from '../assets/icons/caret-down.svg';
 import Dialog from './Dialog';
@@ -23,6 +21,8 @@ import { ThemeIcon } from './../components/Elements/Icon';
 import { Row, Col } from './../components/Elements/Flex';
 import { ApproveBadge } from './../components/Elements/ApproveBadge';
 import { ThemeButton } from './../components/Elements/Button';
+import { useStore } from '../state/store';
+import { getConnectorHooks } from '../utils/getConnectorHooks';
 
 const Wrapper = styled.div`
 	background: ${(props) => (props.seen ? '#EDFBF8' : '#EAF2FF')};
@@ -55,12 +55,13 @@ const RequestListItem = ({
 	fulfilled,
 	setAnyOpenBox,
 }) => {
+	const { contract, activeConnector } = useStore();
+	const { useAccount } = getConnectorHooks(activeConnector);
+	const { account } = useAccount();
 	const [isOpen, setOpen] = useState(false);
 	const [unapprovedCount, setUnapprovedCount] = useState(0);
 	const [selected, setSelected] = useState([]);
-	const { appState } = useContext(mainContext);
 	const [formattedData, setFormattedData] = useState({});
-	const { account } = useWeb3React();
 	const [isSubmitting, setSubmitting] = useState(false);
 	const [dialogMessage, setDialogMessage] = useState('');
 	const getBBIT = useBiobit();
@@ -92,7 +93,7 @@ const RequestListItem = ({
 		setDialogMessage('');
 	};
 
-	// files table selection methods START
+	// files table selection START
 	const changeAll = (type) => {
 		const originalIndexes = [];
 		const indexesAlreadyConfirmed = [];
@@ -235,7 +236,7 @@ const RequestListItem = ({
 		if (type === 'check') setSelected((values) => [...values, originalIndex]);
 		if (type === 'uncheck') setSelected((values) => values.filter((item) => +item !== +originalIndex));
 	};
-	// files table selection methods END
+	// files table selection END
 
 	const signalDownloadHandler = async (fileHash, fileMetaCID) => {
 		setSubmitting(true);
@@ -292,13 +293,15 @@ const RequestListItem = ({
 	}, [cleanSelected]);
 
 	useEffect(() => {
-		if (appState.contract !== null) {
-			appState.contract.methods.getOrderData(requestID).call((orderInfoError, orderInfo) => {
-				if (!orderInfoError) {
-					appState.contract.methods.ownerSpecificData(requestID).call({ from: account }, (fileError, files) => {
-						if (!fileError) {
+		if (contract !== null) {
+			contract
+				.getOrderData(requestID)
+				.then((orderInfo) => {
+					contract
+						.ownerSpecificData(requestID, { from: account })
+						.then((files) => {
 							let angels = orderInfo[0]; // angels
-							let timestamp = orderInfo[2];
+							let timestamp = orderInfo[2].map((item) => item.toNumber());
 							let status = orderInfo[4];
 							let hubs = orderInfo[1];
 							// let whoGainedReward = orderInfo[3];
@@ -352,17 +355,15 @@ const RequestListItem = ({
 							});
 
 							setFormattedData(formatted);
-						} else {
-							console.error(fileError);
-						}
-					});
-				} else {
-					console.error(orderInfoError.message);
-				}
-			});
+						})
+						.catch((error) => {
+							console.error(error.message);
+						});
+				})
+				.catch((error) => {});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [appState.contract, shouldRefresh]);
+	}, [contract, shouldRefresh]);
 
 	useEffect(() => {
 		setOpen(showContributions);

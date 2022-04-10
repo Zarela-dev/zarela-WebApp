@@ -1,20 +1,18 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
-import { mainContext } from '../state';
+import React, { useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { create } from 'ipfs-http-client';
 import styled from 'styled-components';
 import CreateRequestForm from '../components/createRequest/CreateRequestForm';
 import maxWidthWrapper from '../components/Elements/MaxWidth';
-import ConnectDialog from '../components/Dialog/ConnectDialog';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { Persist } from 'formik-persist';
 import { getFileNameWithExt, toast } from '../utils';
 import Dialog from '../components/Dialog';
-import { useWeb3React } from '@web3-react/core';
 import NoMobileSupportMessage from '../components/NoMobileSupportMessage';
-import { actionTypes } from '../state';
 import BigNumber from 'bignumber.js';
+import { useStore } from '../state/store';
+import WalletDialog from '../components/Dialog/WalletDialog';
+import { getConnectorHooks } from '../utils/getConnectorHooks';
 
 const Wrapper = styled.div`
 	${maxWidthWrapper}
@@ -23,12 +21,13 @@ const Wrapper = styled.div`
 // #todo sync form data with localStorage
 const CreateRequest = () => {
 	const fileRef = useRef(null);
-	const { appState, dispatch } = useContext(mainContext);
-	const [showDialog, setDialog] = useState(false);
 	const history = useHistory();
 	const [isUploading, setUploading] = useState(false);
 	const [dialogMessage, setDialogMessage] = useState('');
-	const { account } = useWeb3React();
+	const { isMobile, contract, setCreateRequestFormData, biobitBalance, activeConnector } = useStore();
+	const { useProvider, useAccount } = getConnectorHooks(activeConnector);
+	const MMProvider = useProvider();
+	const account = useAccount();
 
 	const clearSubmitDialog = () => {
 		setUploading(false);
@@ -96,12 +95,11 @@ const CreateRequest = () => {
 					safeLaboratoryTokenPay = new BigNumber(values.laboratoryTokenPay);
 
 				/* to prevent the Mage from submitting the request with insufficient assets */
-				debugger;
 				if (
 					safeAngelTokenPay
 						.plus(safeLaboratoryTokenPay)
 						.times(+values.instanceCount)
-						.gt(appState.biobitBalance)
+						.gt(biobitBalance)
 				) {
 					formik.setFieldError('angelTokenPay', validationErrors.notEnoughTokens);
 					formik.setSubmitting(false);
@@ -111,7 +109,6 @@ const CreateRequest = () => {
 						formik.setSubmitting(false);
 					} else {
 						if (account) {
-							setDialog(false);
 							if (fileRef.current.value !== null && fileRef.current.value !== '') {
 								const { title, desc, instanceCount, category } = values;
 
@@ -120,7 +117,7 @@ const CreateRequest = () => {
 									setDialogMessage(
 										'to secure your files, you need to provide your encryption public key (using Metamask)'
 									);
-									const encryptionPublicKey = await window.ethereum.request({
+									const encryptionPublicKey = await MMProvider.provider.request({
 										method: 'eth_getEncryptionPublicKey',
 										params: [account], // you must have access to the specified account
 									});
@@ -159,7 +156,7 @@ const CreateRequest = () => {
 
 										setDialogMessage('Approve it from your Wallet');
 
-										appState.contract.methods
+										contract
 											.submitNewRequest(
 												title,
 												desc,
@@ -169,32 +166,25 @@ const CreateRequest = () => {
 												instanceCount,
 												category.map((item) => item.value).join(','),
 												process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY,
-												encryptionPublicKey
-											)
-											.send(
+												encryptionPublicKey,
 												{
 													from: account,
-													to: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS,
-													gasPrice: +appState.gas.average * Math.pow(10, 8),
-												},
-												(error, result) => {
-													if (!error) {
-														clearSubmitDialog();
-														toast(`TX Hash: ${result}`, 'success', true, result, {
-															toastId: result,
-														});
-														history.replace(`/`);
-														dispatch({
-															type: actionTypes.SET_OLD_DATA_FORM,
-															payload: {},
-														});
-														localStorage.removeItem('create_request_values');
-													} else {
-														clearSubmitDialog();
-														toast(error.message, 'error');
-													}
+													// to: process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS,
 												}
-											);
+											)
+											.then((tx) => {
+												clearSubmitDialog();
+												toast(`TX Hash: ${tx.hash}`, 'success', true, tx, {
+													toastId: tx.hash,
+												});
+												history.replace(`/`);
+												setCreateRequestFormData({});
+												localStorage.removeItem('create_request_values');
+											})
+											.catch((error) => {
+												clearSubmitDialog();
+												toast(error.message, 'error');
+											});
 									} catch (error) {
 										console.error(error);
 									}
@@ -210,8 +200,6 @@ const CreateRequest = () => {
 							} else {
 								formik.setFieldError('zpaper', 'please select files to upload');
 							}
-						} else {
-							setDialog(true);
 						}
 					}
 				}
@@ -219,18 +207,10 @@ const CreateRequest = () => {
 		},
 	});
 
-	useEffect(() => {
-		if (account > 0) {
-			setDialog(false);
-			formik.setSubmitting(false);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [account]);
-
 	return (
 		<>
 			<Wrapper>
-				{appState.isMobile ? (
+				{isMobile ? (
 					<NoMobileSupportMessage />
 				) : (
 					<>
@@ -243,16 +223,8 @@ const CreateRequest = () => {
 							hasSpinner
 							type="success"
 						/>
-						<ConnectDialog
-							isOpen={showDialog}
-							onClose={() => {
-								formik.setSubmitting(false);
-								setDialog(false);
-							}}
-						/>
-						<CreateRequestForm formik={formik} ref={fileRef} appState={appState} dispatch={dispatch}>
-							<Persist />
-						</CreateRequestForm>
+						<WalletDialog forceMetamask />
+						<CreateRequestForm formik={formik} ref={fileRef}></CreateRequestForm>
 					</>
 				)}
 			</Wrapper>

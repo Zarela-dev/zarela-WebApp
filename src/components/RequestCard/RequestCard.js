@@ -47,8 +47,8 @@ const RequestCard = (props) => {
 					{props.description.length < 320 ? props.description : props.description.substr(0, 320) + '...'}
 				</BodyText>
 				<Row>
-					{props.categories.split(',').map((item) => {
-						return <ThemeTag variant="display" item={item} />;
+					{props.categories.split(',').map((item, itemIndex) => {
+						return <ThemeTag key={item + itemIndex} variant="display" item={item} />;
 					})}
 				</Row>
 			</Col>

@@ -12,6 +12,7 @@ import { CopyableText } from './CopyableText';
 import { actionTypes, mainContext } from '../state';
 import { ThemeIcon } from './../components/Elements/Icon';
 import { BodyText } from './../components/Elements/Typography';
+import { useStore } from '../state/store';
 
 const Container = styled.div`
 	display: flex;
@@ -47,14 +48,10 @@ const NotifySuccess = styled.div`
 `;
 
 const Message = ({ text, copyable, textToCopy, closeToast, toastProps, usage = 'toastify' }) => {
-	const { appState, dispatch } = useContext(mainContext);
-
+	const { notificationCount, setNotificationCount } = useStore();
 	useEffect(() => {
 		if (usage === 'notify') {
-			dispatch({
-				type: actionTypes.SET_NOTIFICATION_COUNT,
-				payload: +appState.notificationCount + 1,
-			});
+			setNotificationCount(+notificationCount + 1);
 		}
 	}, [text]);
 	return (

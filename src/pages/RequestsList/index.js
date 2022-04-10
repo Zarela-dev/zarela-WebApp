@@ -1,7 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDeepCompareEffect } from 'use-deep-compare';
-import { useWeb3React } from '@web3-react/core';
-import { mainContext } from '../../state';
 import { convertToBiobit } from '../../utils';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
@@ -10,12 +8,19 @@ import { RequestDetailsDesktopSteps, RequestDetailsMobileSteps } from '../../gui
 import BigNumber from 'bignumber.js';
 import SearchFilter from '../../components/searchAndFilter/SearchFilter';
 import isEqual from 'lodash/isEqual';
+import { useStore } from '../../state/store';
+import { utils } from 'ethers';
+import { getConnectorHooks } from '../../utils/getConnectorHooks';
+import WalletDialog from '../../components/Dialog/WalletDialog';
 
 const RequestsList = () => {
-	const { appState } = useContext(mainContext);
-	const { account } = useWeb3React();
+	const { contract, isMobile, activeConnector } = useStore();
+	const [isConnecting, setIsConnecting] = useState(false);
+	const { useAccount } = getConnectorHooks(activeConnector);
+	const account = useAccount();
 	const PAGE_SIZE = 5;
 	const [requests, setRequests] = useState({});
+	const [zarelaDay, setZarelaDay] = useState(0);
 	const [requestsCount, setRequestsCount] = useState(0);
 	const [dailyContributors, setDailyContributors] = useState(0);
 	const [isLoading, setLoading] = useState(true);
@@ -221,78 +226,126 @@ const RequestsList = () => {
 	}, [searchResults, isLoading]);
 
 	useEffect(() => {
-		if (appState.contract !== null) {
-			appState.contract.methods.orderSize().call((error, result) => {
-				if (!error) {
-					setRequestsCount(result);
-				} else {
-					console.error(error.message);
-				}
-			});
+		if (contract !== null) {
+			contract
+				.zarelaDayCounter()
+				.then((dayCounter) => {
+					setZarelaDay(dayCounter);
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+
+			contract
+				.orderSize()
+				.then((result) => {
+					setRequestsCount(result.toNumber());
+				})
+				.catch((error) => {
+					console.log(error);
+				});
 
 			for (let i = 0; i < requestsCount; i++) {
-				appState.contract.methods.Categories(i).call((error, result) => {
-					if (!error) {
-						let categories = result[0];
-						let businessCategory = result[1];
+				contract
+					.Categories(i)
+					.then((catsResult) => {
+						let categories = catsResult[0];
+						let businessCategory = catsResult[1].toNumber();
 
-						if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY)
+						if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY) {
 							// filter categories and only show Zarela requests
-							appState.contract.methods.orders(i).call((error, result) => {
-								if (!error) {
-									const requestTemplate = {
-										requestID: result[0],
-										title: result[1],
-										description: result[7],
-										requesterAddress: result[2],
-										angelTokenPay: convertToBiobit(result[3], false),
-										laboratoryTokenPay: convertToBiobit(result[4], false),
-										totalTokenPay: convertToBiobit(new BigNumber(result[3]).plus(result[4]), false),
-										totalContributors: result[5], // total contributors required
-										totalContributed: +result[5] - +result[8],
-										totalContributorsRemaining: result[8], // total contributors remaining (able to contribute)
-										whitePaper: result[6],
-										timestamp: result[10],
-										categories,
-										totalContributedCount: result[9], // no of received signals
-									};
+							contract
+								.orders(i)
+								.then((orderResult) => {
+									let requestTemplate = {};
+									try {
+										requestTemplate = {
+											requestID: orderResult[0].toNumber(),
+											title: orderResult[1],
+											// description: 'test',
+											description: orderResult[7].toString(),
+											requesterAddress: orderResult[2],
+											angelTokenPay: convertToBiobit(orderResult[3].toNumber(), false),
+											laboratoryTokenPay: convertToBiobit(orderResult[4].toNumber(), false),
+											totalTokenPay: convertToBiobit(
+												new BigNumber(orderResult[3].toNumber()).plus(orderResult[4].toNumber()),
+												false
+											),
+											totalContributors: orderResult[5].toNumber(), // total contributors required
+											totalContributed: orderResult[5].toNumber() - orderResult[8].toNumber(),
+											totalContributorsRemaining: orderResult[8].toNumber(), // total contributors remaining (able to contribute)
+											whitePaper: orderResult[6],
+											timestamp: orderResult[10].toNumber(),
+											categories,
+											totalContributedCount: orderResult[9].toNumber(), // no of received signals
+										};
+									} catch (error) {
+										requestTemplate = {
+											requestID: orderResult[0].toNumber(),
+											title: orderResult[1],
+											description: utils.toUtf8String(error.value, utils.Utf8ErrorFuncs.ignore),
+											requesterAddress: orderResult[2],
+											angelTokenPay: convertToBiobit(orderResult[3].toNumber(), false),
+											laboratoryTokenPay: convertToBiobit(orderResult[4].toNumber(), false),
+											totalTokenPay: convertToBiobit(
+												new BigNumber(orderResult[3].toNumber()).plus(orderResult[4].toNumber()),
+												false
+											),
+											totalContributors: orderResult[5].toNumber(), // total contributors required
+											totalContributed: orderResult[5].toNumber() - orderResult[8].toNumber(),
+											totalContributorsRemaining: orderResult[8].toNumber(), // total contributors remaining (able to contribute)
+											whitePaper: orderResult[6],
+											timestamp: orderResult[10].toNumber(),
+											categories,
+											totalContributedCount: orderResult[9].toNumber(), // no of received signals
+										};
+									}
 									setRequests((requests) => ({
 										...requests,
 										[requestTemplate.requestID]: requestTemplate,
 									}));
 									if (i === +requestsCount - 1) setLoading(false);
-								} else {
+								})
+								.catch((error) => {
 									console.error(error.message);
-								}
-							});
-					} else {
+								});
+						}
+					})
+					.catch((error) => {
 						console.error(error.message);
-					}
-				});
+					});
 			}
 		}
-	}, [appState.contract, requestsCount]);
+	}, [contract, requestsCount]);
 
 	useEffect(() => {
-		if (appState.contract) {
-			appState.contract.methods.todayContributionsCount().call((error, result) => {
-				if (!error) setDailyContributors(result);
-				else console.error(error.message);
-			});
+		if (contract) {
+			contract
+				.todayContributionsCount()
+				.then((result) => {
+					setDailyContributors(result);
+				})
+				.catch((error) => {
+					console.error(error.message);
+				});
 		}
-	}, [appState.contract]);
+	}, [contract]);
 
 	return (
-		<Guide steps={appState.isMobile ? RequestDetailsMobileSteps : RequestDetailsDesktopSteps} isLoading={isLoading}>
-			{appState.isMobile ? (
+		<Guide steps={isMobile ? RequestDetailsMobileSteps : RequestDetailsDesktopSteps} isLoading={isLoading}>
+			{isConnecting && <WalletDialog onClose={() => setIsConnecting(false)} />}
+			{isMobile ? (
 				<Mobile
 					{...{
 						requests: searchResults.data,
-						appState,
 						isLoading,
 						PAGE_SIZE,
 						currentPage,
 						setCurrentPage,
+						zarelaDay,
+						account,
+						isConnecting,
+						setIsConnecting,
 						searchBox: <SearchFilter {...{ requests, applySearch, searchResults }} />,
 					}}
 				/>
@@ -300,13 +353,15 @@ const RequestsList = () => {
 				<Desktop
 					{...{
 						requests: searchResults.data,
-						appState,
-						account,
 						dailyContributors,
 						PAGE_SIZE,
 						isLoading,
 						currentPage,
 						setCurrentPage,
+						zarelaDay,
+						account,
+						isConnecting,
+						setIsConnecting,
 						searchBox: <SearchFilter {...{ requests, applySearch, searchResults }} />,
 					}}
 				/>

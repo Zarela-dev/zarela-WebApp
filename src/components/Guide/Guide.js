@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Tour from 'reactour';
 import styled from 'styled-components';
 import Next from './../../assets/icons/next.svg';
@@ -7,24 +7,22 @@ import CloseSvg from './../../assets/icons/close-purple.svg';
 import { Button } from '../Elements/Button';
 import './styles.css';
 import { useLocation } from 'react-router-dom';
-import { useWeb3React } from '@web3-react/core';
-import { actionTypes, mainContext } from '../../state';
-import { SaveGuideToLocalStorage } from '../../state/actions';
-import ConnectDialog from '../Dialog/ConnectDialog';
+import WalletDialog from '../Dialog/WalletDialog';
+import { useStore } from '../../state/store';
 
 const Wrapper = styled.div``;
 const NavButton = styled.div`
-	color: ${props => props.theme.colors.primary};
+	color: ${(props) => props.theme.colors.primary};
 	font-weight: bolder;
 	font-size: 16px;
 `;
 
 const ArrowIcon = styled.img`
-	fill: ${props => props.theme.colors.primary};
+	fill: ${(props) => props.theme.colors.primary};
 `;
 
 const Overlay = styled.div`
-	color: ${props => props.theme.colors.error};
+	color: ${(props) => props.theme.colors.error};
 	width: ${(props) => (props.isMobile ? '32px' : '55px')};
 	height: ${(props) => (props.isMobile ? '32px' : '55px')};
 	z-index: 999999;
@@ -46,14 +44,14 @@ const Close = styled.div`
 	width: ${(props) => (props.isMobile ? '27px' : '48px')};
 	height: ${(props) => (props.isMobile ? '27px' : '48px')};
 	border-radius: ${(props) => (props.isMobile ? '15px' : '25px')};
-	background-color: ${props => props.theme.colors.bgWhite};
+	background-color: ${(props) => props.theme.colors.bgWhite};
 	display: flex;
 	justify-content: center;
 	align-items: center;
 `;
 
 const CloseIcon = styled.img`
-	color: ${props => props.theme.colors.primary};
+	color: ${(props) => props.theme.colors.primary};
 `;
 
 const SubmitRequestButton = styled.a`
@@ -84,16 +82,18 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 	const [currentStep, setCurrentStep] = useState(0);
 	const location = useLocation();
 	const [showConnectDialog, setShowConnectDialog] = useState(false);
-	const { account } = useWeb3React();
-	const { appState, dispatch } = useContext(mainContext);
+	const { isMobile, setGuideIsOpen, guideIsOpen } = useStore();
 
 	const handleTimeOut = (timer) => {
 		setTimeout(() => {
-			dispatch({
-				type: actionTypes.SET_GUIDE_IS_OPEN,
-				payload: true,
-			});
+			setGuideIsOpen(true);
 		}, timer);
+	};
+
+	const SaveGuideToLocalStorage = (route) => {
+		localStorage.setItem('guide/' + route, true);
+		setGuideIsOpen(false);
+		document.body.style.overflowY = 'auto';
 	};
 
 	useEffect(() => {
@@ -107,19 +107,14 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 
 	return (
 		<>
-			{showConnectDialog ? <ConnectDialog isOpen={true} /> : null}
+			{showConnectDialog ? <WalletDialog /> : null}
 			<Wrapper>
 				<CustomizedTour
-					isMobile={appState.isMobile}
+					isMobile={isMobile}
 					steps={steps}
 					currentStep={currentStep}
-					isOpen={appState.guideIsOpen}
-					onRequestClose={() =>
-						dispatch({
-							type: actionTypes.SET_GUIDE_IS_OPEN,
-							payload: false,
-						})
-					}
+					isOpen={guideIsOpen}
+					onRequestClose={() => setGuideIsOpen(false)}
 					closeWithMask={false}
 					disableDotsNavigation={true}
 					showButtons={true}
@@ -154,8 +149,7 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 						<SubmitRequestButton
 							onClick={() => {
 								// setCurrentStep(0);
-								document.body.style.overflowY = 'auto';
-								SaveGuideToLocalStorage(dispatch, location.pathname.split('/')[1]);
+								SaveGuideToLocalStorage(location.pathname.split('/')[1]);
 							}}
 						>
 							Done
@@ -163,15 +157,14 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 					}
 					disableKeyboardNavigation={['esc']}
 				></CustomizedTour>
-				{appState.guideIsOpen && (
+				{guideIsOpen && (
 					<Overlay
-						isMobile={appState.isMobile}
+						isMobile={isMobile}
 						onClick={() => {
-							SaveGuideToLocalStorage(dispatch, location.pathname.split('/')[1]);
-							document.body.style.overflowY = 'auto';
+							SaveGuideToLocalStorage(location.pathname.split('/')[1]);
 						}}
 					>
-						<Close isMobile={appState.isMobile}>
+						<Close isMobile={isMobile}>
 							<CloseIcon src={CloseSvg} />
 						</Close>
 					</Overlay>

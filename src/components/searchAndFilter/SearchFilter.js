@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { css } from 'styled-components';
 import { Header as Heading } from '../Elements/Typography';
@@ -15,7 +15,7 @@ import FormModal from './Elements/Modals/DynamicModal';
 import ModalHeader from './Elements/Modals/ModalHeader';
 import CalendarForm from './Elements/FilterForm/CalendarForm';
 import MobileModalTrigger from './Elements/Modals/MobileModalTrigger';
-import { mainContext, actionTypes } from '../../state';
+import { useStore } from '../../state/store';
 
 export const RequestCardWrapper = styled.div`
 	display: flex;
@@ -91,7 +91,16 @@ const SearchSection = styled(Box)`
 `;
 
 const SearchFilter = ({ requests, applySearch, searchResults }) => {
-	const { appState, dispatch } = useContext(mainContext);
+	const { isMobile, isMobileSearchModalShow, setIsMobileSearchModalShow } = useStore(
+		useCallback(
+			(store) => ({
+				isMobile: store.isMobile,
+				setIsMobileSearchModalShow: store.setIsMobileSearchModalShow,
+				isMobileSearchModalShow: store.isMobileSearchModalShowF,
+			}),
+			[]
+		)
+	);
 	const [hasTransition, setHasTransition] = useState(true);
 	const [modalShow, setModalShow] = useState(false);
 	const [datePickerModalShow, setDatePickerModalShow] = useState(false);
@@ -238,8 +247,8 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 
 	return (
 		<>
-			{appState.isMobile && <MobileModalTrigger onClick={() => setModalShow(true)} count={badgeCount} />}
-			{!appState.isMobile && (
+			{isMobile && <MobileModalTrigger onClick={() => setModalShow(true)} count={badgeCount} />}
+			{!isMobile && (
 				<RequestCardWrapper>
 					<Wrapper hasTopMargin={true}>
 						<Label>
@@ -290,14 +299,11 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 				</RequestCardWrapper>
 			)}
 
-			{appState.isMobile && (
+			{isMobile && (
 				<FormModal
-					modalShow={appState.isMobileSearchModalShow}
+					modalShow={isMobileSearchModalShow}
 					onClose={() => {
-						dispatch({
-							type: actionTypes.SET_MOBILE_SEARCH_MODAL_SHOW,
-							payload: false,
-						});
+						setIsMobileSearchModalShow(false);
 					}}
 					type="form"
 					className="search-modal search-modal-mobile"
@@ -353,13 +359,13 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 				onClose={handleClose}
 				hasTransition={hasTransition}
 				type="form"
-				className={appState.isMobile && 'search-modal search-modal-mobile'}
+				className={isMobile && 'search-modal search-modal-mobile'}
 				header={
 					<ModalHeader
 						title="Filters and Sort"
 						clearText="Clear All"
 						justify="space-between"
-						width={appState.isMobile ? '210px' : '300px'}
+						width={isMobile ? '210px' : '300px'}
 						onClear={handleClearAll}
 					/>
 				}
@@ -395,8 +401,8 @@ const SearchFilter = ({ requests, applySearch, searchResults }) => {
 					toggleModals();
 				}}
 				type="calendar"
-				width={appState.isMobile ? '100%' : 'fit-content'}
-				className={appState.isMobile && 'search-modal search-modal-mobile'}
+				width={isMobile ? '100%' : 'fit-content'}
+				className={isMobile && 'search-modal search-modal-mobile'}
 				header={<ModalHeader title="Calendar" width="180px" />}
 				body={
 					<CalendarForm

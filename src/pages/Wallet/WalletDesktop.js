@@ -4,8 +4,8 @@ import { Tabs } from '../../components/Tabs';
 import WalletTransactions from './../../containers/wallet/WalletTransactions';
 import WalletAccount from './../../containers/wallet/WalletAccount';
 import WalletSendAssets from './../../containers/wallet/WalletSendAssets';
-import ConnectDialog from '../../components/Dialog/ConnectDialog';
 import { Row } from '../../components/Elements/Flex';
+import WalletDialog from '../../components/Dialog/WalletDialog';
 
 const Wrapper = styled.div``;
 
@@ -37,7 +37,7 @@ const EtherscanAttributionLink = styled.a`
 
 export const WalletDesktop = ({ account, logs, isLoading, PAGE_SIZE }) => {
 	return !account ? (
-		<Row>{!account ? <ConnectDialog isOpen={true} /> : null}</Row>
+		<Row>{!account ? <WalletDialog /> : null}</Row>
 	) : (
 		<Wrapper>
 			<Tabs
