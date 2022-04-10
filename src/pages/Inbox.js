@@ -40,8 +40,10 @@ const Inbox = () => {
 	const { activeConnector, isMobile, contract } = useStore();
 	const { useAccount } = getConnectorHooks(activeConnector);
 	const account = useAccount();
+	const [isSendingTokens, setIsSendingTokens] = useState(false);
 
 	const handleConfirm = (requestID, originalIndexes) => {
+		setIsSendingTokens(true);
 		contract
 			.confirmContributor(requestID, originalIndexes, { from: account })
 			.then(({ hash: txHash }) => {
@@ -57,6 +59,9 @@ const Inbox = () => {
 			})
 			.catch((error) => {
 				toast(error.message, 'error');
+			})
+			.finally(() => {
+				setIsSendingTokens(false);
 			});
 	};
 
