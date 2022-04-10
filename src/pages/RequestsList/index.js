@@ -10,11 +10,17 @@ import SearchFilter from '../../components/searchAndFilter/SearchFilter';
 import isEqual from 'lodash/isEqual';
 import { useStore } from '../../state/store';
 import { utils } from 'ethers';
+import { getConnectorHooks } from '../../utils/getConnectorHooks';
+import WalletDialog from '../../components/Dialog/WalletDialog';
 
 const RequestsList = () => {
-	const { contract, isMobile } = useStore();
+	const { contract, isMobile, activeConnector } = useStore();
+	const [isConnecting, setIsConnecting] = useState(false);
+	const { useAccount } = getConnectorHooks(activeConnector);
+	const account = useAccount();
 	const PAGE_SIZE = 5;
 	const [requests, setRequests] = useState({});
+	const [zarelaDay, setZarelaDay] = useState(0);
 	const [requestsCount, setRequestsCount] = useState(0);
 	const [dailyContributors, setDailyContributors] = useState(0);
 	const [isLoading, setLoading] = useState(true);
@@ -222,6 +228,15 @@ const RequestsList = () => {
 	useEffect(() => {
 		if (contract !== null) {
 			contract
+				.zarelaDayCounter()
+				.then((dayCounter) => {
+					setZarelaDay(dayCounter);
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+
+			contract
 				.orderSize()
 				.then((result) => {
 					setRequestsCount(result.toNumber());
@@ -284,7 +299,6 @@ const RequestsList = () => {
 											categories,
 											totalContributedCount: orderResult[9].toNumber(), // no of received signals
 										};
-										console.error(error);
 									}
 									setRequests((requests) => ({
 										...requests,
@@ -319,6 +333,7 @@ const RequestsList = () => {
 
 	return (
 		<Guide steps={isMobile ? RequestDetailsMobileSteps : RequestDetailsDesktopSteps} isLoading={isLoading}>
+			{isConnecting && <WalletDialog onClose={() => setIsConnecting(false)} />}
 			{isMobile ? (
 				<Mobile
 					{...{
@@ -327,6 +342,10 @@ const RequestsList = () => {
 						PAGE_SIZE,
 						currentPage,
 						setCurrentPage,
+						zarelaDay,
+						account,
+						isConnecting,
+						setIsConnecting,
 						searchBox: <SearchFilter {...{ requests, applySearch, searchResults }} />,
 					}}
 				/>
@@ -339,6 +358,10 @@ const RequestsList = () => {
 						isLoading,
 						currentPage,
 						setCurrentPage,
+						zarelaDay,
+						account,
+						isConnecting,
+						setIsConnecting,
 						searchBox: <SearchFilter {...{ requests, applySearch, searchResults }} />,
 					}}
 				/>

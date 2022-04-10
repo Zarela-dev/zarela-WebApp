@@ -1,9 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
-// import { useWeb3React } from '@web3-react/core';
-// import { convertToBiobit } from '../utils';
-// import { actionTypes } from './actionTypes';
-// import { configureFallbackWeb3, getZarelaCurrentDay, getGasPrice, getEthPrice, configureWeb3 } from './actions';
-// import { injectedConnector } from '../connectors';
+import React from 'react';
 
 const appInitialState = {
 	error: null,

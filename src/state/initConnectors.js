@@ -110,7 +110,7 @@ const useInitConnectors = () => {
 	}, [isActivating, isActive, error, connectorStatus]);
 
 	useEffect(() => {
-		if (connectorStatus === STATUS.CONNECTED) {
+		if (connectorStatus === STATUS.CONNECTED && activeConnector) {
 			try {
 				let permission = activeConnector instanceof Network ? 'r' : 'wr';
 				setUpContract(activeConnector.provider, { setContract }, permission);

@@ -28,7 +28,7 @@ const Wrapper = styled.form`
 
 /* #todo #fancy if the requested amount is more than user balance, give error */
 const WalletSendAssets = (mobile) => {
-	const { isMobile, contract, activeConnector, biobitBalance, ethBalance } = useStore();
+	const { isMobile, contract, activeConnector, bbitBalance, ethBalance } = useStore();
 	const { useProvider, useAccount } = getConnectorHooks(activeConnector);
 	const provider = useProvider();
 	const account = useAccount();
@@ -81,7 +81,7 @@ const WalletSendAssets = (mobile) => {
 	});
 
 	const getBalanceHint = () => {
-		return `Available: ${formik.values.token === 'Biobit' ? +biobitBalance : +ethBalance} ${
+		return `Available: ${formik.values.token === 'Biobit' ? +bbitBalance : +ethBalance} ${
 			formik.values.token === 'Biobit' ? 'BBIT' : 'ETH'
 		}`;
 	};
@@ -146,7 +146,7 @@ const WalletSendAssets = (mobile) => {
 							{
 								content: 'Max',
 								onClick: async () => {
-									const value = formik.values.token === 'Biobit' ? +biobitBalance : +ethBalance;
+									const value = formik.values.token === 'Biobit' ? +bbitBalance : +ethBalance;
 									await formik.setFieldValue('amount', value);
 								},
 							},

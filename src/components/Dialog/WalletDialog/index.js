@@ -8,16 +8,28 @@ import { MMConnector } from '../../../connectors/metamask';
 import { WCConnector } from '../../../connectors/walletConnect';
 import { STATUS } from '../../../state/slices/connectorSlice';
 import { activateConnector } from '../../../utils/activateConnector';
+import { getConnectorHooks } from '../../../utils/getConnectorHooks';
+import { convertToBiobit } from '../../../utils';
+import { utils } from 'ethers';
+import BigNumber from 'bignumber.js';
 
-const WalletDialog = ({ forceOpen, forceMetamask, eagerConnect }) => {
+const WalletDialog = ({ forceOpen, forceMetamask, eagerConnect, onClose }) => {
 	const {
 		connectorStatus,
 		activeConnectorType,
 		dialogOpen,
+		contract,
+		activeConnector,
 		setConnectorInProgress,
 		setDialogOpen,
 		setActiveConnector,
+		setBbitBalance,
+		bbitBalance,
+		setEthBalance,
 	} = useStore();
+	const { useAccount, useProvider } = getConnectorHooks(activeConnector);
+	const provider = useProvider();
+	const account = useAccount();
 
 	const [view, setView] = useState('list');
 
@@ -33,6 +45,30 @@ const WalletDialog = ({ forceOpen, forceMetamask, eagerConnect }) => {
 			connector: WCConnector,
 		},
 	};
+
+	useEffect(() => {
+		if (contract !== null && account) {
+			if (provider)
+				provider
+					.getBalance(account)
+					.then((balance) => {
+						setEthBalance(new BigNumber(utils.formatUnits(balance, 'ether')).toFixed(4).toString());
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+			contract
+				.balanceOf(account)
+				.then(async (balance) => {
+					console.log('bbitBalance', bbitBalance);
+					await setBbitBalance(convertToBiobit(balance.toNumber(), false));
+					console.log('bbitBalance', bbitBalance);
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+		}
+	}, [account, contract]);
 
 	// keep track of wallet connection status after revisit
 	useEffect(() => {
@@ -65,6 +101,7 @@ const WalletDialog = ({ forceOpen, forceMetamask, eagerConnect }) => {
 			isOpen={forceOpen || dialogOpen}
 			title="Connect a Wallet"
 			type="new"
+			onClose={onClose}
 			content={
 				<>
 					{view === 'list'

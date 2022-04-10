@@ -7,7 +7,7 @@ import { Spacer } from '../Elements/Spacer';
 import { Header, BodyText } from './../Elements/Typography';
 import { ThemeDivider } from './../Elements/Divider';
 
-const Sidebar = ({ biobitBalance, ethBalance, account }) => {
+const Sidebar = ({ biobitBalance, ethBalance, account, isConnecting, setIsConnecting }) => {
 	return (
 		<SidebarCard data-tour="request-list-nine">
 			<HeaderWrapper>
@@ -44,7 +44,7 @@ const Sidebar = ({ biobitBalance, ethBalance, account }) => {
 				<Header variant="heading5">Wallet Info</Header>
 				<Spacer />
 			</HeaderWrapper>
-			<Row hiddenInfo={account === null}>
+			<Row hiddenInfo={!account}>
 				<Subtitle>
 					<BodyText variant="small" color="textInfo" fontWeight="bold">
 						BBit Balance
@@ -54,7 +54,7 @@ const Sidebar = ({ biobitBalance, ethBalance, account }) => {
 					{biobitBalance || 'Unavailable Info'}
 				</BodyText>
 			</Row>
-			<Row hiddenInfo={account === null}>
+			<Row hiddenInfo={!account}>
 				<Subtitle>
 					<BodyText variant="small" color="textInfo" fontWeight="bold">
 						Ether Balance
@@ -64,19 +64,16 @@ const Sidebar = ({ biobitBalance, ethBalance, account }) => {
 					{ethBalance || 'Unavailable Info'}
 				</BodyText>
 			</Row>
-			{/* {account === undefined ? (
+			{!account ? (
 				<>
-					<BodyText variant='extraSmall' mb={2}>
+					<BodyText variant="extraSmall" mb={2}>
 						connect your wallet to see more data
 					</BodyText>
-					<ConnectButton
-						variant='primary'
-						onClick={() => activate(injectedConnector)}
-					>
+					<ConnectButton variant="primary" onClick={() => { setIsConnecting(true)}}>
 						connect
 					</ConnectButton>
 				</>
-			) : null} */}
+			) : null}
 		</SidebarCard>
 	);
 };

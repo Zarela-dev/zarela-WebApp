@@ -34,6 +34,7 @@ import { Row, Col } from './../Elements/Flex';
 import { ThemeIcon } from './../Elements/Icon';
 import Badge from './../Elements/Badge';
 import { useStore } from '../../state/store';
+import BigNumber from 'bignumber.js';
 
 const NavItem = styled(Link)`
 	position: relative;
@@ -390,7 +391,11 @@ export default function Header({ isMobile }, props) {
 									<Heading as="h4" variant="heading4">
 										Wallet
 									</Heading>
-									<Heading as="h4" variant="heading4">{`Balance: ${bbitBalance} BBit`}</Heading>
+									{bbitBalance ? (
+										<Heading as="h4" variant="heading4">{`Balance: ${new BigNumber(bbitBalance).toFormat(
+											3
+										)} BBit`}</Heading>
+									) : null}
 								</WalletTitlebar>
 							) : routeGroup === 'log' ? (
 								<WalletTitlebar isMobile={isMobile}>
@@ -523,7 +528,7 @@ export default function Header({ isMobile }, props) {
 						{routeGroup === 'wallet' ? (
 							<WalletTitlebar>
 								<Title>Wallet</Title>
-								<Balance>{`Balance: ${bbitBalance} BBit`}</Balance>
+								<Balance>{`Balance: ${new BigNumber(bbitBalance).toFormat(3)} BBit`}</Balance>
 							</WalletTitlebar>
 						) : routeGroup === 'log' ? (
 							<WalletTitlebar isMobile={isMobile}>

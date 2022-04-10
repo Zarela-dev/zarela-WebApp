@@ -111,9 +111,22 @@ const useStyles = makeStyles({
 	},
 });
 
-const Desktop = ({ requests, PAGE_SIZE, currentPage, setCurrentPage, isLoading, props, searchBox }) => {
+const Desktop = ({
+	requests,
+	PAGE_SIZE,
+	currentPage,
+	setCurrentPage,
+	isLoading,
+	props,
+	searchBox,
+	zarelaDay,
+	account,
+	isConnecting,
+	setIsConnecting,
+}) => {
 	const classes = useStyles(props);
-	const { ethBalance, biobitBalance, account } = useStore();
+	const { ethBalance, bbitBalance } = useStore();
+
 	const currentTableData = useMemo(() => {
 		const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
 		const lastPageIndex = firstPageIndex + PAGE_SIZE;
@@ -135,8 +148,14 @@ const Desktop = ({ requests, PAGE_SIZE, currentPage, setCurrentPage, isLoading, 
 				) : (
 					<FixedWrapper>
 						<RequestListSidebarWrapper>
-							{/* <ZarelaDayBox currentDay={appState.zarelaCurrentDay} /> */}
-							<TokenInfoSidebar ethBalance={ethBalance} biobitBalance={biobitBalance} account={account} />
+							<ZarelaDayBox currentDay={zarelaDay} />
+							<TokenInfoSidebar
+								ethBalance={ethBalance}
+								biobitBalance={bbitBalance}
+								account={account}
+								isConnecting={isConnecting}
+								setIsConnecting={setIsConnecting}
+							/>
 						</RequestListSidebarWrapper>
 					</FixedWrapper>
 				)}
