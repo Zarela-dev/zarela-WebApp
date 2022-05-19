@@ -14,7 +14,7 @@ if you want to learn more and develop your own application on top of Zarela smar
 current version that you are viewing is our MVP. this codebase is the bare minimum requirement for this platform to work correctly. however there's a lot of room for improvement in UX and performance.
 
 
-if you have any questions please drop by our discord server at [discord](https://discord.gg/EGNQjWHhwW)
+if you have any questions please drop by our [discord server](https://discord.gg/EGNQjWHhwW)
 
 if you have a feature request or found a bug consider creating an issue on github
 
