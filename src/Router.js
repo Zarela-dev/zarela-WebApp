@@ -38,7 +38,7 @@ const AppRouter = () => {
 							setChainError(true);
 						}
 					} else {
-						if (parseInt(currentChainId, 16) !== supportedChains.ROPSTEN) {
+						if (parseInt(currentChainId, 16) !== supportedChains.GOERLI) {
 							setChainError(true);
 						}
 					}

@@ -21,9 +21,9 @@ export const NETWORK_LABELS = {
 export const CURRENT_NETWORK_LABEL =
 	process.env.NODE_ENV === 'production' && process.env.REACT_APP_IS_TEST_NET !== 'true'
 		? NETWORK_LABELS[supportedChains.MAINNET]
-		: NETWORK_LABELS[supportedChains.ROPSTEN];
+		: NETWORK_LABELS[supportedChains.GOERLI];
 
 export const ETHERSCAN_BASE_URL =
 	process.env.NODE_ENV === 'production' && process.env.REACT_APP_IS_TEST_NET !== 'true'
 		? process.env.REACT_APP_ETHERSCAN_MAINNET_API_LINK
-		: process.env.REACT_APP_ETHERSCAN_ROPSTEN_API_LINK;
+		: process.env.REACT_APP_ETHERSCAN_TESTNET_API_LINK;
