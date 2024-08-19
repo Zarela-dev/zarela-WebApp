@@ -38,8 +38,8 @@ const AppRouter = () => {
 							setChainError(true);
 						}
 					} else {
-						if (parseInt(currentChainId, 16) !== supportedChains.ROPSTEN) {
-							setChainError(true);
+						if (parseInt(currentChainId, 11155111) !== supportedChains.SEPOLIA) {
+							setChainError(false);
 						}
 					}
 				});

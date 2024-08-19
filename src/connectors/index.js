@@ -5,5 +5,5 @@ export const injectedConnector = new InjectedConnector({
 	supportedChainIds:
 		process.env.NODE_ENV === 'production' && process.env.REACT_APP_IS_TEST_NET !== 'true'
 			? [supportedChains.MAINNET]
-			: [supportedChains.ROPSTEN],
+			: [supportedChains.SEPOLIA],
 });
