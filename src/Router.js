@@ -23,36 +23,48 @@ const AppWrapper = styled.div`
 `;
 
 const AppRouter = () => {
-	const provider = window.ethereum;
-	const { appState } = useContext(mainContext);
-	const { error, chainId } = useWeb3React();
-	const metamaskChainId = provider?.request({ method: 'eth_chainId' });
-	const [hasChainError, setChainError] = useState(error instanceof UnsupportedChainIdError);
+    const provider = window.ethereum;
+    const { appState } = useContext(mainContext);
+    const { error, chainId } = useWeb3React();
+    const [hasChainError, setChainError] = useState(error instanceof UnsupportedChainIdError);
 
-	useEffect(() => {
-		if (provider) {
-			try {
-				metamaskChainId.then((currentChainId) => {
-					if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_IS_TEST_NET !== 'true') {
-						if (parseInt(currentChainId, 16) !== supportedChains.MAINNET) {
-							setChainError(true);
-						}
-					} else {
-						if (parseInt(currentChainId, 11155111) !== supportedChains.SEPOLIA) {
-							setChainError(false);
-						}
-					}
-				});
-				// watch for network changes
-				provider.on('chainChanged', async (_chainId) => {
-					window.location.reload();
-				});
-			} catch (error) {
-				console.error(error);
-			}
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [error, chainId, provider]);
+    useEffect(() => {
+        if (provider) {
+            const checkChain = async () => {
+                try {
+                    let currentChainIdHex = null;
+                    if (typeof provider.request === 'function') {
+                        // Modern EIP-1193 providers
+                        currentChainIdHex = await provider.request({ method: 'eth_chainId' });
+                    } else if (provider.chainId) {
+                        // Some legacy providers expose chainId directly
+                        currentChainIdHex = provider.chainId;
+                    }
+
+                    if (currentChainIdHex != null) {
+                        if (parseInt(currentChainIdHex, 16) !== supportedChains.MAINNET) {
+                            setChainError(true);
+                        } else {
+                            setChainError(false);
+                        }
+                    }
+                } catch (err) {
+                    // If the provider does not support eth_chainId, do not block the app
+                    console.error('Unable to read chainId from provider:', err);
+                }
+
+                // watch for network changes if supported
+                if (typeof provider.on === 'function') {
+                    provider.on('chainChanged', async (_chainId) => {
+                        window.location.reload();
+                    });
+                }
+            };
+
+            checkChain();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [error, chainId, provider]);
 
 	if (!provider)
 		return (

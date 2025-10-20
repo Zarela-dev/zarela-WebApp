@@ -222,7 +222,7 @@ export const TableCell = styled.div`
 	width: 100%;
 	font-weight: normal;
 	cursor: ${(props) => (props.pointer ? 'pointer' : 'normal')};
-	color: ${(props) => (props.isBlocked ? '${props => props.theme.colors.secondary};' : props.theme.colors.textPrimary)};
+    color: ${(props) => (props.isBlocked ? props.theme.colors.secondary : props.theme.colors.textPrimary)};
 
 	${TableCellWrapper}:not(:last-child) & {
 		border-right: 1px solid rgba(60, 135, 170, 0.6);
@@ -356,11 +356,7 @@ const RoleIcon = styled.img`
 	box-sizing: content-box;
 `;
 
-const RoleIconMobile = styled.img`
-	width: 24px;
-	padding: 0 ${(props) => props.theme.spacing(1.5)};
-	box-sizing: content-box;
-`;
+// removed unused RoleIconMobile
 
 export const RoleLabel = styled.p`
 	font-size: 16px;

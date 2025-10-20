@@ -11,15 +11,12 @@ import inboxActive from '../../assets/icons/nav/inbox-active.svg';
 import userActive from '../../assets/icons/nav/profile-active.svg';
 import walletActive from '../../assets/icons/nav/wallet-active.svg';
 import setting from '../../assets/icons/nav/settings.svg';
-import explore from '../../assets/icons/nav/explore.svg';
 import menu from '../../assets/icons/menu.svg';
 import chainIdTag from '../../assets/icons/chainid-tag.svg';
 import help from './../../assets/icons/nav/question-mark.svg';
 import bell from './../../assets/icons/nav/notification-bell.svg';
 import search from './../../assets/icons/nav/search.svg';
 import { Link } from 'react-router-dom';
-import { Typography } from '../Elements/Typography';
-import { Button } from '../Elements/Button';
 import { convertToBiobit, toast } from '../../utils';
 import MobileMenu from '../MobileMenu';
 import NotificationMenu from '../NotificationMenu';
@@ -33,9 +30,9 @@ import TitleBar from '../../components/TitleBar/TitleBar';
 import { CURRENT_NETWORK_LABEL } from '../../constants';
 import { ThemeButton } from './../Elements/Button';
 import { Header as Heading, BodyText } from './../Elements/Typography';
-import { Row, Col } from './../Elements/Flex';
+import { Row } from './../Elements/Flex';
 import { ThemeIcon } from './../Elements/Icon';
-import Badge from './../Elements/Badge';
+// removed unused Badge import
 
 const NavItem = styled(Link)`
 	position: relative;
@@ -53,32 +50,9 @@ const NavItem = styled(Link)`
 	opacity: ${(props) => (props.disabled ? 0.4 : 1)};
 `;
 
-const NavItemDisabled = styled.a.attrs((props) => {
-	return {
-		...props,
-	};
-})`
-	position: relative;
-	height: 50px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	align-content: center;
-	justify-content: center;
-	text-decoration: none;
-	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(0) : props.theme.spacing(2.5))};
-	margin-left: ${(props) => (props.isMobile ? props.theme.spacing(2) : props.theme.spacing(2.5))};
-	outline: none !important;
-	cursor: ${(props) => props.disabled && 'not-allowed'};
-	opacity: ${(props) => (props.disabled ? 0.4 : 1)};
-`;
+// removed unused NavItemDisabled
 
-const NavLink = styled(Typography)`
-	color: ${(props) => props.theme.color.navLinkColor};
-	font-weight: 500;
-	font-size: ${(props) => props.theme.body};
-	white-space: nowrap;
-`;
+// removed unused NavLink
 
 const RightMenu = styled.div`
 	display: flex;
@@ -102,9 +76,7 @@ const Logo = styled.img`
 	margin-right: ${(props) => (props.isMobile ? props.theme.spacing(1) : props.theme.spacing(4))};
 `;
 
-const SubmitRequestButton = styled(Link)`
-	${Button};
-`;
+// removed unused SubmitRequestButton
 
 const HeaderWrapper = styled.header`
 	position: sticky;
@@ -185,14 +157,7 @@ const Title = styled.h1`
 	margin-left: 0px;
 `;
 
-const SubmitRequestButtonSubHeader = styled(Link)`
-	${Button};
-	white-space: nowrap;
-	margin-right: 0;
-	height: 35px;
-	font-size: 14px;
-	padding: 10px 24px;
-`;
+// removed unused SubmitRequestButtonSubHeader
 
 const BoxWrapper = styled.div`
 	position: absolute;
@@ -307,12 +272,12 @@ export default function Header({ isMobile }, props) {
 		[sticky]
 	);
 
-	useEffect(() => {
-		dispatch({
-			type: actionTypes.SET_NOTIFICATION_COUNT,
-			payload: 0,
-		});
-	}, [isNotificationMenuOpen]);
+    useEffect(() => {
+        dispatch({
+            type: actionTypes.SET_NOTIFICATION_COUNT,
+            payload: 0,
+        });
+    }, [isNotificationMenuOpen, dispatch]);
 
 	if (isMobile) {
 		return (
@@ -487,16 +452,7 @@ export default function Header({ isMobile }, props) {
 								Log
 							</BodyText>
 						</NavItem>
-						<NavItem
-							isMobile={appState.isMobile}
-							to={{ pathname: process.env.REACT_APP_EXPLORE_LINK }}
-							target="_top"
-						>
-							<ThemeIcon variant="layout" mr={'0px'} src={explore} />
-							<BodyText variant="small" fontWeight="normal" color="primary">
-								Explore
-							</BodyText>
-						</NavItem>
+                        {/* Explore nav item removed */}
 						<NavItem isMobile={appState.isMobile} to="/wallet/account">
 							<ThemeIcon
 								variant="layout"

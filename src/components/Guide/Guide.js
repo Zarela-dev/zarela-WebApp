@@ -7,10 +7,9 @@ import CloseSvg from './../../assets/icons/close-purple.svg';
 import { Button } from '../Elements/Button';
 import './styles.css';
 import { useLocation } from 'react-router-dom';
-import { useWeb3React } from '@web3-react/core';
 import { actionTypes, mainContext } from '../../state';
 import { SaveGuideToLocalStorage } from '../../state/actions';
-import ConnectDialog from '../Dialog/ConnectDialog';
+// Connect dialog removed as it was unused here
 
 const Wrapper = styled.div``;
 const NavButton = styled.div`
@@ -81,14 +80,12 @@ const CustomizedTour = styled(Tour)`
 `;
 
 const Guide = React.memo(({ steps, children, isLoading }) => {
-	const [currentStep, setCurrentStep] = useState(0);
-	const location = useLocation();
-	const [showConnectDialog, setShowConnectDialog] = useState(false);
-	const { account } = useWeb3React();
-	const { appState, dispatch } = useContext(mainContext);
+    const [currentStep, setCurrentStep] = useState(0);
+    const location = useLocation();
+    const { appState, dispatch } = useContext(mainContext);
 
-	const handleTimeOut = (timer) => {
-		setTimeout(() => {
+	const handleTimeOut = (timer, ref) => {
+		ref.current = setTimeout(() => {
 			dispatch({
 				type: actionTypes.SET_GUIDE_IS_OPEN,
 				payload: true,
@@ -97,17 +94,20 @@ const Guide = React.memo(({ steps, children, isLoading }) => {
 	};
 
 	useEffect(() => {
+		const timeoutRef = { current: null };
 		if (!localStorage.getItem('guide/' + location.pathname.split('/')[1])) {
-			handleTimeOut(3000);
+			handleTimeOut(3000, timeoutRef);
 		} else if (location.pathname.split('/')[1] === '' && !isLoading) {
-			handleTimeOut(3000);
+			handleTimeOut(3000, timeoutRef);
 		}
+		return () => {
+			if (timeoutRef.current) clearTimeout(timeoutRef.current);
+		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
 		<>
-			{showConnectDialog ? <ConnectDialog isOpen={true} /> : null}
 			<Wrapper>
 				<CustomizedTour
 					isMobile={appState.isMobile}

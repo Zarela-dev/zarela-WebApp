@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileInputLink, FileInputWrapper, FileInputTitle, FileInputIcon } from '../UploadFileCard/FileInput';
+import { FileInputWrapper, FileInputTitle, FileInputIcon } from '../UploadFileCard/FileInput';
 import { Card, HelperText } from '../UploadFileCard/FileCard';
 import styled from 'styled-components';
 import fileDownloadIcon from '../../assets/icons/file-download.svg';

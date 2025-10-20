@@ -133,32 +133,34 @@ const RequestsList = () => {
 					throw Error('Search query must be at least 3 characters long');
 				}
 			}
-			if (bbitFilter.length === 2) {
-				if (bbitFilter[0] >= 0 && bbitFilter[1] >= 0) {
-					results = results.filter((request) => {
-						return (
-							new BigNumber(request.totalTokenPay).gte(bbitFilter[0]) &&
-							new BigNumber(request.totalTokenPay).lte(bbitFilter[1])
-						);
-					});
-				} else {
-					throw Error('Invalid BBIT filter');
-				}
-			}
+            if (Array.isArray(bbitFilter) && bbitFilter.length === 2) {
+                const [minBBIT, maxBBIT] = bbitFilter;
+                const minOk = Number.isFinite(+minBBIT) && +minBBIT >= 0;
+                const maxOk = Number.isFinite(+maxBBIT) && +maxBBIT >= 0;
+                if (minOk && maxOk) {
+                    results = results.filter((request) => {
+                        const total = new BigNumber(request.totalTokenPay);
+                        return total.gte(+minBBIT) && total.lte(+maxBBIT);
+                    });
+                }
+            }
 
-			if (dateFilter.length === 2) {
-				if (dateFilter[0] === dateFilter[1]) {
-					results = results.filter((request) => {
-						return +request.timestamp >= dateFilter[0] && +request.timestamp <= dateFilter[0] + 86400;
-					});
-				} else if (dateFilter[0] >= 0 && dateFilter[1] >= 0) {
-					results = results.filter((request) => {
-						return +request.timestamp >= dateFilter[0] && +request.timestamp <= dateFilter[1];
-					});
-				} else {
-					throw Error('Invalid date filter');
-				}
-			}
+            if (Array.isArray(dateFilter) && dateFilter.length === 2) {
+                const [start, end] = dateFilter;
+                const startOk = Number.isFinite(+start) && +start >= 0;
+                const endOk = Number.isFinite(+end) && +end >= 0;
+                if (startOk && endOk) {
+                    if (+start === +end) {
+                        results = results.filter((request) => {
+                            return +request.timestamp >= +start && +request.timestamp <= +start + 86400;
+                        });
+                    } else {
+                        results = results.filter((request) => {
+                            return +request.timestamp >= +start && +request.timestamp <= +end;
+                        });
+                    }
+                }
+            }
 
 			if (nearFinish) {
 				results = results.filter((request) => {

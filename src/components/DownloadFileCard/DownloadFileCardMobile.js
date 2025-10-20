@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileInputLink, FileInputWrapper, FileInputTitle, FileInputIcon } from '../UploadFileCard/FileInputMobile';
+import { FileInputWrapper, FileInputTitle, FileInputIcon } from '../UploadFileCard/FileInputMobile';
 import { Card, HelperText } from '../UploadFileCard/FileCard';
 import styled from 'styled-components';
 import loaderImage from '../../assets/loader/rolling.svg';

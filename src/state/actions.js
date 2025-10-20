@@ -63,21 +63,34 @@ export const configureFallbackWeb3 = async (dispatch) => {
 };
 
 export const getGasPrice = (dispatch) => {
-	axios
-		.get('https://ethgasstation.info/api/ethgasAPI.json', {
-			params: {
-				'api-key': process.env.REACT_APP_GASSTATION_API_KEY,
-			},
-		})
-		.then((res) => {
-			dispatch({
-				type: actionTypes.SET_GAS,
-				payload: res.data,
-			});
-		})
-		.catch((error) => {
-			console.log(error);
-		});
+    // Use Etherscan Gas Oracle V2 to avoid CORS issues from ethgasstation
+    axios
+        .get('https://api.etherscan.io/v2/api', {
+            params: {
+                module: 'gastracker',
+                action: 'gasoracle',
+                chainid: 1, // Ethereum mainnet
+                apikey: process.env.REACT_APP_ETHEREUM_API_KEY,
+            },
+        })
+        .then((res) => {
+            const result = res?.data?.result;
+            if (result) {
+                // Normalize to the structure the app expects
+                const normalized = {
+                    safeLow: Number(result.SafeGasPrice),
+                    average: Number(result.ProposeGasPrice),
+                    fast: Number(result.FastGasPrice),
+                };
+                dispatch({
+                    type: actionTypes.SET_GAS,
+                    payload: normalized,
+                });
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 };
 
 export const SaveGuideToLocalStorage = (dispatch, route) => {

@@ -12,7 +12,7 @@ import profileIcon_active from '../assets/icons/nav/profile-active.svg';
 import walletIcon_active from '../assets/icons/nav/wallet-active.svg';
 import homeIcon_active from '../assets/icons/nav/home-active.svg';
 import navBackground from '../assets/images/navbar.png';
-import { ThemeIcon } from '../components/Elements/Icon';
+import { ThemeIcon } from './Elements/Icon';
 
 const Nav = styled.nav`
 	position: fixed;
@@ -48,10 +48,7 @@ const NavItem = styled(Link)`
 	height: 50px;
 `;
 
-const NavIcon = styled.img`
-	width: 24px;
-	cursor: pointer;
-`;
+// removed unused NavIcon
 
 const NavBadge = styled.div`
 	height: 20px;
@@ -108,9 +105,7 @@ const CreateRequestButton = styled(GenericLinkButton).attrs((props) => {
 	}
 `;
 
-const CreateRequestIcon = styled.img`
-	width: 20px;
-`;
+// removed unused CreateRequestIcon
 
 const bottomNavItems = [
 	{
