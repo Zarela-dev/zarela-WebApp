@@ -3,6 +3,7 @@ import { useDeepCompareEffect } from 'use-deep-compare';
 import { useWeb3React } from '@web3-react/core';
 import { mainContext } from '../../state';
 import { convertToBiobit } from '../../utils';
+import appCache from '../../utils/cache';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
 import Guide from './../../components/Guide/Guide';
@@ -224,13 +225,21 @@ const RequestsList = () => {
 
 	useEffect(() => {
 		if (appState.contract !== null) {
-			appState.contract.methods.orderSize().call((error, result) => {
-				if (!error) {
-					setRequestsCount(result);
-				} else {
-					console.error(error.message);
-				}
-			});
+			// Check cache first
+			const cachedOrderSize = appCache.get(account || 'anonymous', 'orderSize');
+			if (cachedOrderSize) {
+				setRequestsCount(cachedOrderSize);
+			} else {
+				appState.contract.methods.orderSize().call((error, result) => {
+					if (!error) {
+						// Cache the result
+						appCache.set(account || 'anonymous', 'orderSize', result);
+						setRequestsCount(result);
+					} else {
+						console.error('Error calling orderSize:', error.message);
+					}
+				});
+			}
 
 			for (let i = 0; i < requestsCount; i++) {
 				appState.contract.methods.Categories(i).call((error, result) => {
@@ -277,10 +286,21 @@ const RequestsList = () => {
 
 	useEffect(() => {
 		if (appState.contract) {
-			appState.contract.methods.todayContributionsCount().call((error, result) => {
-				if (!error) setDailyContributors(result);
-				else console.error(error.message);
-			});
+			// Check cache first
+			const cachedDailyContributors = appCache.get(account || 'anonymous', 'dailyContributors');
+			if (cachedDailyContributors) {
+				setDailyContributors(cachedDailyContributors);
+			} else {
+				appState.contract.methods.todayContributionsCount().call((error, result) => {
+					if (!error) {
+						// Cache the result
+						appCache.set(account || 'anonymous', 'dailyContributors', result);
+						setDailyContributors(result);
+					} else {
+						console.error('Error calling todayContributionsCount:', error.message);
+					}
+				});
+			}
 		}
 	}, [appState.contract]);
 

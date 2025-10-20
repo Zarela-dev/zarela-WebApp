@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { convertToBiobit } from '../utils';
+import appCache from '../utils/cache';
 import { actionTypes } from './actionTypes';
 import {
 	configureFallbackWeb3,
@@ -170,14 +171,29 @@ const AppProvider = ({ children }) => {
 	useEffect(() => {
 		// populate homepage sidebar values
 		if (account !== undefined && appState.contract) {
+			// Check cache first
+			const cachedBBitBalance = appCache.get(account, 'bbitBalance');
+			if (cachedBBitBalance) {
+				dispatch({
+					type: actionTypes.SET_BBIT_BALANCE,
+					payload: cachedBBitBalance,
+				});
+				return;
+			}
+
 			appState.contract.methods.balanceOf(account).call((error, result) => {
 				if (!error) {
+					const balance = convertToBiobit(+result);
+					
+					// Cache the result
+					appCache.set(account, 'bbitBalance', balance);
+					
 					dispatch({
 						type: actionTypes.SET_BBIT_BALANCE,
-						payload: convertToBiobit(+result),
+						payload: balance,
 					});
 				} else {
-					console.error(error.message);
+					console.error('Error getting BBIT balance:', error.message);
 				}
 			});
 		}
@@ -186,20 +202,40 @@ const AppProvider = ({ children }) => {
 	useEffect(() => {
 		const activeWeb3 = library || appState.fallbackWeb3Instance;
 		if (activeWeb3 && appState.contract) {
-			if (account)
-				activeWeb3.eth
-					.getBalance(account)
-					.then(function (result) {
-						dispatch({
-							type: actionTypes.SET_ETHER_BALANCE,
-							payload: Number(
-								activeWeb3.utils.fromWei(result, 'ether')
-							).toFixed(4),
-						});
-					})
-					.catch((error) => {
-						console.error(error.message);
+			if (account) {
+				// Check cache first
+				const cachedBalance = appCache.get(account, 'etherBalance');
+				if (cachedBalance) {
+					dispatch({
+						type: actionTypes.SET_ETHER_BALANCE,
+						payload: cachedBalance,
 					});
+					return;
+				}
+
+				// Add delay to prevent overwhelming MetaMask with RPC calls
+				const timeoutId = setTimeout(() => {
+					activeWeb3.eth
+						.getBalance(account)
+						.then(function (result) {
+							const balance = Number(activeWeb3.utils.fromWei(result, 'ether')).toFixed(4);
+							
+							// Cache the result
+							appCache.set(account, 'etherBalance', balance);
+							
+							dispatch({
+								type: actionTypes.SET_ETHER_BALANCE,
+								payload: balance,
+							});
+						})
+						.catch((error) => {
+							console.error('Error getting balance:', error.message);
+							// Don't break the app if balance call fails
+						});
+				}, 1000); // 1 second delay to prevent circuit breaker
+
+				return () => clearTimeout(timeoutId);
+			}
 		}
 	}, [account, library, appState.contract, appState.fallbackWeb3Instance]);
 
@@ -210,6 +246,11 @@ const AppProvider = ({ children }) => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [active, window.ethereum?.selectedAddress]);
+
+	// Clear cache when wallet changes
+	useEffect(() => {
+		appCache.clear();
+	}, [account]);
 
 	useEffect(() => {
 		getEthPrice(dispatch);

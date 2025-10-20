@@ -5,6 +5,7 @@ import LogCard from '../../components/LogCards/Contribution';
 import LogCardMobile from '../../components/LogCards/ContributionMobile';
 import { mainContext } from './../../state';
 import { convertToBiobit } from '../../utils';
+import appCache from '../../utils/cache';
 import NoRequestsFound from '../../components/NoRequestsFound';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
@@ -44,6 +45,14 @@ const Contributes = (props) => {
 	useEffect(() => {
 		if (appState.contract !== null) {
 			if (account) {
+				// Check cache first
+				const cachedMyContributions = appCache.get(account, 'myContributions');
+				if (cachedMyContributions) {
+					setRequests(cachedMyContributions);
+					setIsLoading(false);
+					return;
+				}
+
 				appState.contract.methods
 					.orderResult()
 					.call({ from: account })
@@ -121,6 +130,8 @@ const Contributes = (props) => {
 						});
 
 						getAllRequests.then((requestsList) => {
+							// Cache the result
+							appCache.set(account, 'myContributions', requestsList);
 							setRequests(requestsList);
 							setIsLoading(false);
 						});

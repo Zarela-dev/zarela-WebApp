@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { mainContext } from '../../state';
 import { convertToBiobit } from '../../utils';
+import appCache from '../../utils/cache';
 import MyRequest from '../../components/LogCards/MyRequest';
 import MyRequestMobile from '../../components/LogCards/MyRequestMobile';
 import NoRequestsFound from '../../components/NoRequestsFound';
@@ -43,6 +44,14 @@ const MyRequests = (props) => {
 	useEffect(() => {
 		if (appState.contract !== null) {
 			if (account) {
+				// Check cache first
+				const cachedMyRequests = appCache.get(account, 'myRequests');
+				if (cachedMyRequests) {
+					setRequests(cachedMyRequests);
+					setLoading(false);
+					return;
+				}
+
 				appState.contract.methods
 					.orderResult()
 					.call({ from: account })
@@ -79,6 +88,8 @@ const MyRequests = (props) => {
 						});
 
 						getAllRequests.then((requestsList) => {
+							// Cache the result
+							appCache.set(account, 'myRequests', requestsList);
 							setRequests(requestsList);
 							setLoading(false);
 						});

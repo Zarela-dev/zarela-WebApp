@@ -8,9 +8,14 @@ const getWeb3 = async () =>
 			if (window.ethereum) {
 				const web3 = new Web3(window.ethereum);
 				try {
+					// Test the connection first
+					await web3.eth.getBlockNumber();
 					resolve(web3);
 				} catch (error) {
-					reject(error);
+					console.log('MetaMask RPC failed, using public RPC fallback');
+					// Fallback to public RPC if MetaMask fails
+					const fallbackWeb3 = new Web3('https://eth.llamarpc.com');
+					resolve(fallbackWeb3);
 				}
 			}
 			// Legacy dapp browsers
@@ -18,6 +23,12 @@ const getWeb3 = async () =>
 				// Use Mist/MetaMask's provider.
 				const web3 = window.web3;
 				console.log('Injected web3 detected.');
+				resolve(web3);
+			}
+			// No wallet, use public RPC
+			else {
+				console.log('No wallet detected, using public RPC');
+				const web3 = new Web3('https://eth.llamarpc.com');
 				resolve(web3);
 			}
 		});
