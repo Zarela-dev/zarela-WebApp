@@ -293,10 +293,11 @@ const RequestListItem = ({
 
 	useEffect(() => {
 		if (appState.contract !== null) {
-			appState.contract.methods.getOrderData(requestID).call((orderInfoError, orderInfo) => {
-				if (!orderInfoError) {
-					appState.contract.methods.ownerSpecificData(requestID).call({ from: account }, (fileError, files) => {
-						if (!fileError) {
+			// Use promise-based calls for Web3 v4 compatibility
+			appState.contract.methods.getOrderData(requestID).call()
+				.then((orderInfo) => {
+					return appState.contract.methods.ownerSpecificData(requestID).call({ from: account })
+						.then((files) => {
 							let angels = orderInfo[0]; // angels
 							let timestamp = orderInfo[2];
 							let status = orderInfo[4];
@@ -349,20 +350,17 @@ const RequestListItem = ({
 										}
 									}
 								});
-							});
-
-							setFormattedData(formatted);
-						} else {
-							console.error(fileError);
-						}
 					});
-				} else {
-					console.error(orderInfoError.message);
-				}
+
+					setFormattedData(formatted);
+				});
+			})
+			.catch((error) => {
+				console.error('Error fetching order data:', error.message || error);
 			});
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [appState.contract, shouldRefresh]);
+	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [appState.contract, shouldRefresh]);
 
 	useEffect(() => {
 		setOpen(showContributions);

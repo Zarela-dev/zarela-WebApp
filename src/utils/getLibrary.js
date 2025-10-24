@@ -1,15 +1,8 @@
 import Web3 from 'web3';
 
 export default function getLibrary(provider) {
-	const library = new Web3(
-		provider,
-		typeof provider.chainId === 'number'
-			? provider.chainId
-			: typeof provider.chainId === 'string'
-			? parseInt(provider.chainId)
-			: 'any'
-	);
-
-	library.pollingInterval = 15000;
+	// Web3 v4 only accepts provider as first argument
+	// chainId and pollingInterval are no longer used
+	const library = new Web3(provider);
 	return library;
 }

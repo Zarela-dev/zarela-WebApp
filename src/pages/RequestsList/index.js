@@ -230,57 +230,58 @@ const RequestsList = () => {
 			if (cachedOrderSize) {
 				setRequestsCount(cachedOrderSize);
 			} else {
-				appState.contract.methods.orderSize().call((error, result) => {
-					if (!error) {
+				// Use promise-based call instead of callback for Web3 v4 compatibility
+				appState.contract.methods.orderSize().call()
+					.then((result) => {
 						// Cache the result
 						appCache.set(account || 'anonymous', 'orderSize', result);
 						setRequestsCount(result);
-					} else {
-						console.error('Error calling orderSize:', error.message);
-					}
-				});
+					})
+					.catch((error) => {
+						console.error('Error calling orderSize:', error.message || error);
+						console.error('Contract address:', process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS);
+					});
 			}
 
-			for (let i = 0; i < requestsCount; i++) {
-				appState.contract.methods.Categories(i).call((error, result) => {
-					if (!error) {
-						let categories = result[0];
-						let businessCategory = result[1];
+		// Use promise-based calls for Web3 v4 compatibility
+		for (let i = 0; i < requestsCount; i++) {
+			appState.contract.methods.Categories(i).call()
+				.then((result) => {
+					let categories = result[0];
+					let businessCategory = result[1];
 
-						if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY)
-							// filter categories and only show Zarela requests
-							appState.contract.methods.orders(i).call((error, result) => {
-								if (!error) {
-									const requestTemplate = {
-										requestID: result[0],
-										title: result[1],
-										description: result[7],
-										requesterAddress: result[2],
-										angelTokenPay: convertToBiobit(result[3], false),
-										laboratoryTokenPay: convertToBiobit(result[4], false),
-										totalTokenPay: convertToBiobit(new BigNumber(result[3]).plus(result[4]), false),
-										totalContributors: result[5], // total contributors required
-										totalContributed: +result[5] - +result[8],
-										totalContributorsRemaining: result[8], // total contributors remaining (able to contribute)
-										whitePaper: result[6],
-										timestamp: result[10],
-										categories,
-										totalContributedCount: result[9], // no of received signals
-									};
-									setRequests((requests) => ({
-										...requests,
-										[requestTemplate.requestID]: requestTemplate,
-									}));
-									if (i === +requestsCount - 1) setLoading(false);
-								} else {
-									console.error(error.message);
-								}
+					if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY) {
+						// filter categories and only show Zarela requests
+						return appState.contract.methods.orders(i).call()
+							.then((orderResult) => {
+								const requestTemplate = {
+									requestID: orderResult[0],
+									title: orderResult[1],
+									description: orderResult[7],
+									requesterAddress: orderResult[2],
+									angelTokenPay: convertToBiobit(orderResult[3], false),
+									laboratoryTokenPay: convertToBiobit(orderResult[4], false),
+									totalTokenPay: convertToBiobit(new BigNumber(orderResult[3]).plus(orderResult[4]), false),
+									totalContributors: orderResult[5], // total contributors required
+									totalContributed: +orderResult[5] - +orderResult[8],
+									totalContributorsRemaining: orderResult[8], // total contributors remaining (able to contribute)
+									whitePaper: orderResult[6],
+									timestamp: orderResult[10],
+									categories,
+									totalContributedCount: orderResult[9], // no of received signals
+								};
+								setRequests((requests) => ({
+									...requests,
+									[requestTemplate.requestID]: requestTemplate,
+								}));
+								if (i === +requestsCount - 1) setLoading(false);
 							});
-					} else {
-						console.error(error.message);
 					}
+				})
+				.catch((error) => {
+					console.error('Error in Categories or orders call:', error.message || error);
 				});
-			}
+		}
 		}
 	}, [appState.contract, requestsCount]);
 
@@ -291,15 +292,17 @@ const RequestsList = () => {
 			if (cachedDailyContributors) {
 				setDailyContributors(cachedDailyContributors);
 			} else {
-				appState.contract.methods.todayContributionsCount().call((error, result) => {
-					if (!error) {
+				// Use promise-based call instead of callback for Web3 v4 compatibility
+				appState.contract.methods.todayContributionsCount().call()
+					.then((result) => {
 						// Cache the result
 						appCache.set(account || 'anonymous', 'dailyContributors', result);
 						setDailyContributors(result);
-					} else {
-						console.error('Error calling todayContributionsCount:', error.message);
-					}
-				});
+					})
+					.catch((error) => {
+						console.error('Error calling todayContributionsCount:', error.message || error);
+						console.error('Contract address:', process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS);
+					});
 			}
 		}
 	}, [appState.contract]);

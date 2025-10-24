@@ -34,7 +34,9 @@ import { Row } from './../Elements/Flex';
 import { ThemeIcon } from './../Elements/Icon';
 // removed unused Badge import
 
-const NavItem = styled(Link)`
+const NavItem = styled(Link).withConfig({
+	shouldForwardProp: (prop) => prop !== 'isMobile',
+})`
 	position: relative;
 	height: 50px;
 	display: flex;
@@ -91,7 +93,9 @@ const HeaderWrapper = styled.header`
 	margin-bottom: ${(props) => (props.routeGroup === '' ? 0 : props.routeGroup === 'request' ? 0 : '130px')};
 `;
 
-const HeaderWrapperApp = styled(HeaderWrapper)`
+const HeaderWrapperApp = styled(HeaderWrapper).withConfig({
+	shouldForwardProp: (prop) => prop !== 'isMobile',
+})`
 	position: sticky;
 	top: 0;
 	z-index: ${(props) => props.theme.z_header};
@@ -101,7 +105,9 @@ const HeaderWrapperApp = styled(HeaderWrapper)`
 	margin-bottom: ${(props) => (props.routeGroup === '' ? '70px' : props.routeGroup === 'request' ? 0 : '100px')};
 `;
 
-const NavBarRow = styled.div`
+const NavBarRow = styled.div.withConfig({
+	shouldForwardProp: (prop) => prop !== 'isMobile',
+})`
 	max-width: 100vw;
 	display: flex;
 	flex-direction: row;
@@ -251,15 +257,16 @@ export default function Header({ isMobile }, props) {
 	useEffect(() => {
 		if (appState.contract !== null) {
 			if (account) {
-				appState.contract.methods.userMap(account).call((error, result) => {
-					if (!error) {
+				// Use promise-based call for Web3 v4 compatibility
+				appState.contract.methods.userMap(account).call()
+					.then((result) => {
 						const formatter = (value) => convertToBiobit(value);
 						setTotalRevenueFromRequester(formatter(result[1]));
 						setTotalRevenueFromZarela(formatter(result[0]));
-					} else {
-						toast(error.message, 'error');
-					}
-				});
+					})
+					.catch((error) => {
+						toast(error.message || 'Error fetching user data', 'error');
+					});
 			}
 		}
 	}, [account, appState.contract]);

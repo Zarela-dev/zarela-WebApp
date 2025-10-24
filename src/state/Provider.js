@@ -181,8 +181,9 @@ const AppProvider = ({ children }) => {
 				return;
 			}
 
-			appState.contract.methods.balanceOf(account).call((error, result) => {
-				if (!error) {
+			// Use promise-based call instead of callback for Web3 v4 compatibility
+			appState.contract.methods.balanceOf(account).call()
+				.then((result) => {
 					const balance = convertToBiobit(+result);
 					
 					// Cache the result
@@ -192,10 +193,12 @@ const AppProvider = ({ children }) => {
 						type: actionTypes.SET_BBIT_BALANCE,
 						payload: balance,
 					});
-				} else {
-					console.error('Error getting BBIT balance:', error.message);
-				}
-			});
+				})
+				.catch((error) => {
+					console.error('Error getting BBIT balance:', error.message || error);
+					console.error('Contract address:', process.env.REACT_APP_ZARELA_CONTRACT_ADDRESS);
+					console.error('Account:', account);
+				});
 		}
 	}, [account, appState.contract]);
 

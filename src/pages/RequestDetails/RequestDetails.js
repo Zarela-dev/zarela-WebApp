@@ -47,39 +47,38 @@ const RequestDetailsPage = () => {
 
 	useEffect(() => {
 		if (appState.contract !== null) {
-			appState.contract.methods.Categories(id).call((error, result) => {
-				if (!error) {
+			// Use promise-based calls for Web3 v4 compatibility
+			appState.contract.methods.Categories(id).call()
+				.then((result) => {
 					let categories = result[0];
 					let businessCategory = result[1];
 
-					if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY)
+					if (+businessCategory === +process.env.REACT_APP_ZARELA_BUSINESS_CATEGORY) {
 						// filter categories and only show Zarela requests
-						appState.contract.methods.orders(id).call((error, result) => {
-							if (!error) {
+						return appState.contract.methods.orders(id).call()
+							.then((orderResult) => {
 								const requestTemplate = {
-									requestID: result[0],
-									title: result[1],
-									description: result[7],
-									requesterAddress: result[2],
-									angelTokenPay: convertToBiobit(result[3], false),
-									laboratoryTokenPay: convertToBiobit(result[4], false),
-									totalContributors: result[5], // total contributors required
-									totalContributed: +result[5] - +result[8],
-									whitePaper: result[6],
-									timestamp: result[10],
+									requestID: orderResult[0],
+									title: orderResult[1],
+									description: orderResult[7],
+									requesterAddress: orderResult[2],
+									angelTokenPay: convertToBiobit(orderResult[3], false),
+									laboratoryTokenPay: convertToBiobit(orderResult[4], false),
+									totalContributors: orderResult[5], // total contributors required
+									totalContributed: +orderResult[5] - +orderResult[8],
+									whitePaper: orderResult[6],
+									timestamp: orderResult[10],
 									categories,
-									encryptionPublicKey: result[11],
-									totalContributedCount: result[9],
+									encryptionPublicKey: orderResult[11],
+									totalContributedCount: orderResult[9],
 								};
 								setRequest(requestTemplate);
-							} else {
-								console.error(error.message);
-							}
-						});
-				} else {
-					console.error(error.message);
-				}
-			});
+							});
+					}
+				})
+				.catch((error) => {
+					console.error('Error fetching request details:', error.message || error);
+				});
 		}
 	}, [id, appState.contract]);
 
