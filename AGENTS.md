@@ -146,3 +146,5 @@ Paste this under “Errors Collected” below for each issue:
 - Constants/networks: `src/constants/index.js`
 - Wallet history: `src/pages/Wallet/Wallet.js`
 - Env template: `.env.example`
+
+the latest running version report can be found at REVIVE.md
