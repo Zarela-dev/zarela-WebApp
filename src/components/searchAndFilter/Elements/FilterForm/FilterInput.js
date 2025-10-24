@@ -7,7 +7,7 @@ import { BodyText } from './../../../Elements/Typography';
 import calendarIcon from './../../../../assets/icons/calendar.svg';
 import Select from 'react-select';
 import Slider from '@material-ui/core/Slider';
-import Switch from '@mui/material/Switch';
+import Switch from '@material-ui/core/Switch';
 import infoIcon from './../../../../assets/icons/info-icon.svg';
 import { Tooltip } from '@material-ui/core';
 

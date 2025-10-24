@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { css } from 'styled-components/macro';
+import styled, { css } from 'styled-components';
 import { ThemeProvider } from 'styled-components';
 
 const theme = (darkMode) => {

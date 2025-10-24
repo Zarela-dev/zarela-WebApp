@@ -1,16 +1,26 @@
+// Load polyfills FIRST before any other imports
+import { Buffer } from 'buffer';
+
+// Make Buffer available globally
+if (typeof global !== 'undefined') {
+    global.Buffer = Buffer;
+}
+if (typeof window !== 'undefined') {
+    window.Buffer = Buffer;
+}
+if (typeof globalThis !== 'undefined') {
+    globalThis.Buffer = Buffer;
+}
+
+// Process polyfill will be handled by webpack configuration
+
 import React from 'react';
-import process from 'process/browser';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import TagManager from 'react-gtm-module';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
-
-// Ensure `process` exists in browser for libraries expecting Node's process
-if (typeof window !== 'undefined' && typeof window.process === 'undefined') {
-    window.process = process;
-}
 
 if (process.env.NODE_ENV === 'production') {
 	if (process.env.REACT_APP_IS_TEST_NET !== 'false') {
