@@ -18,9 +18,11 @@ RUN apk add --no-cache \
 WORKDIR /app
 
 # Copy package files for dependency installation
-COPY package.json package-lock.json* ./
+COPY package.json ./
 
-# Install all dependencies with caching
+# Install all dependencies
+# Note: Not using package-lock.json in Docker to avoid git dependency issues
+# This ensures clean install without lock file conflicts
 RUN npm install --legacy-peer-deps && \
     npm cache clean --force
 
