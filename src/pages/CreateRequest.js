@@ -124,15 +124,16 @@ const CreateRequest = () => {
 										method: 'eth_getEncryptionPublicKey',
 										params: [account], // you must have access to the specified account
 									});
-								setDialogMessage('uploading to ipfs');
+							setDialogMessage('uploading to ipfs');
 
-								// Create IPFS instance with Pinata authentication
-								const ipfs = create({
-									url: process.env.REACT_APP_IPFS,
-									headers: {
-										authorization: `Bearer ${process.env.REACT_APP_PINATA_JWT}`
-									}
-								});
+							// Create IPFS instance with Infura authentication
+							const auth = 'Basic ' + btoa(process.env.REACT_APP_INFURA_PROJECT_ID + ':' + process.env.REACT_APP_INFURA_PROJECT_SECRET);
+							const ipfs = create({
+								url: process.env.REACT_APP_IPFS,
+								headers: {
+									authorization: auth
+								}
+							});
 
 									try {
 										// since it may take quite a while for a request to fulfill, we pin it

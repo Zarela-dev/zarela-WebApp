@@ -30,11 +30,12 @@ const RequestDetailsPage = () => {
 	const [error, setError] = useState(false);
 	const [zpaperDownloadLink, setZpaperLink] = useState(null);
 	
-	// Configure IPFS client with Pinata authentication
+	// Configure IPFS client with Infura authentication
+	const auth = 'Basic ' + btoa(process.env.REACT_APP_INFURA_PROJECT_ID + ':' + process.env.REACT_APP_INFURA_PROJECT_SECRET);
 	const ipfs = create({
 		url: process.env.REACT_APP_IPFS,
 		headers: {
-			authorization: `Bearer ${process.env.REACT_APP_PINATA_JWT}`
+			authorization: auth
 		}
 	});
 

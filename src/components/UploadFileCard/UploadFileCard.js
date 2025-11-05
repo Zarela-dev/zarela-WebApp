@@ -83,15 +83,16 @@ const UploadFileCard = (props) => {
 					setDialogMessage('encrypting file');
 					const workerInstance = worker();
 
-				workerInstance.initEncrypt();
+			workerInstance.initEncrypt();
 
-				// Configure IPFS client with Pinata authentication
-				const ipfs = create({
-					url: process.env.REACT_APP_IPFS,
-					headers: {
-						authorization: `Bearer ${process.env.REACT_APP_PINATA_JWT}`
-					}
-				});
+			// Configure IPFS client with Infura authentication
+			const auth = 'Basic ' + btoa(process.env.REACT_APP_INFURA_PROJECT_ID + ':' + process.env.REACT_APP_INFURA_PROJECT_SECRET);
+			const ipfs = create({
+				url: process.env.REACT_APP_IPFS,
+				headers: {
+					authorization: auth
+				}
+			});
 					// generate KEY and NONCE for chacha20 encryption
 					const KEY = ZRNG();
 					const NONCE = ZRNG();

@@ -7,13 +7,14 @@ export const initEncrypt = () => {
 		const { KEY, NONCE, file } = event.data;
 		const fileSize = file.size;
 		
-		// Configure IPFS client with Pinata authentication
-		const ipfs = create({
-			url: process.env.REACT_APP_IPFS,
-			headers: {
-				authorization: `Bearer ${process.env.REACT_APP_PINATA_JWT}`
-			}
-		});
+	// Configure IPFS client with Infura authentication
+	const auth = 'Basic ' + btoa(process.env.REACT_APP_INFURA_PROJECT_ID + ':' + process.env.REACT_APP_INFURA_PROJECT_SECRET);
+	const ipfs = create({
+		url: process.env.REACT_APP_IPFS,
+		headers: {
+			authorization: auth
+		}
+	});
 
 		try {
 			const reader = new FileReader();
