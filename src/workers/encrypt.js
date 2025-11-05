@@ -6,7 +6,14 @@ export const initEncrypt = () => {
 	onmessage = function (event) {
 		const { KEY, NONCE, file } = event.data;
 		const fileSize = file.size;
-		const ipfs = create(process.env.REACT_APP_IPFS); // Connect to IPFS
+		
+		// Configure IPFS client with Pinata authentication
+		const ipfs = create({
+			url: process.env.REACT_APP_IPFS,
+			headers: {
+				authorization: `Bearer ${process.env.REACT_APP_PINATA_JWT}`
+			}
+		});
 
 		try {
 			const reader = new FileReader();

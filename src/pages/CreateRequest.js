@@ -124,9 +124,15 @@ const CreateRequest = () => {
 										method: 'eth_getEncryptionPublicKey',
 										params: [account], // you must have access to the specified account
 									});
-									setDialogMessage('uploading to ipfs');
+								setDialogMessage('uploading to ipfs');
 
-									const ipfs = create(process.env.REACT_APP_IPFS); // create IPFS instance, connecting to desired node
+								// Create IPFS instance with Pinata authentication
+								const ipfs = create({
+									url: process.env.REACT_APP_IPFS,
+									headers: {
+										authorization: `Bearer ${process.env.REACT_APP_PINATA_JWT}`
+									}
+								});
 
 									try {
 										// since it may take quite a while for a request to fulfill, we pin it

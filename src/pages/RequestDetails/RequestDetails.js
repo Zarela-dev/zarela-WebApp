@@ -29,7 +29,14 @@ const RequestDetailsPage = () => {
 	const { appState } = useContext(mainContext);
 	const [error, setError] = useState(false);
 	const [zpaperDownloadLink, setZpaperLink] = useState(null);
-	const ipfs = create(process.env.REACT_APP_IPFS);
+	
+	// Configure IPFS client with Pinata authentication
+	const ipfs = create({
+		url: process.env.REACT_APP_IPFS,
+		headers: {
+			authorization: `Bearer ${process.env.REACT_APP_PINATA_JWT}`
+		}
+	});
 
 	useEffect(() => {
 		if (request.whitePaper) {
