@@ -1,62 +1,17 @@
-# Node modules (will be installed in container)
 node_modules
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Build output
-build
-dist
-.cache
-
-# Environment files
-# Note: .env is NOT ignored - docker-compose reads it from host
-# Only variant .env files are ignored to prevent conflicts
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Git files
+npm-debug.log
 .git
 .gitignore
-.gitattributes
-
-# Documentation
-*.md
-!README.md
-AGENTS.md
-REVIVE.md
-CONTRIBUTING.md
-
-# IDE and editor files
+README.md
+.env
+.env.local
+.env.production
+.env.backup*
+build
+dist
+.DS_Store
+coverage
 .vscode
 .idea
-*.swp
-*.swo
-*~
-.DS_Store
-
-# Test files
-coverage
-.nyc_output
-__tests__
-**/*.test.js
-**/*.spec.js
-
-# CI/CD
-.github
-.gitlab-ci.yml
-.travis.yml
-
-# Docker files
-Dockerfile*
-docker-compose*.yml
-.dockerignore
-
-# Misc
-.eslintcache
-.prettierrc
-.editorconfig
-truffle-config*.js
-
+*.log
+.cache

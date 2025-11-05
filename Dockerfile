@@ -18,12 +18,10 @@ RUN apk add --no-cache \
 WORKDIR /app
 
 # Copy package files for dependency installation
-COPY package.json ./
+COPY package.json package-lock.json* ./
 
-# Install all dependencies
-# Note: Not using package-lock.json in Docker to avoid git dependency issues
-# This ensures clean install without lock file conflicts
-RUN npm install --legacy-peer-deps --loglevel verbose && \
+# Install all dependencies with caching
+RUN npm install --legacy-peer-deps && \
     npm cache clean --force
 
 # Copy source code
@@ -61,9 +59,7 @@ RUN npm run build
 # ============================================
 FROM nginx:1.21-alpine
 
-# Install curl for healthchecks
-RUN apk add --no-cache curl && \
-    rm -rf /var/cache/apk/*
+# Lightweight production image - no extra tools needed
 
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
@@ -78,9 +74,5 @@ RUN chown -R nginx:nginx /usr/share/nginx/html && \
 # Expose port 80
 EXPOSE 80
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost/ || exit 1
-
-# Start nginx (runs as root, nginx will handle user switching internally)
+# Start nginx
 CMD ["nginx", "-g", "daemon off;"]

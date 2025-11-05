@@ -17,30 +17,11 @@ services:
         - DISABLE_ESLINT_PLUGIN=true
     image: zarela-webapp:latest
     ports:
-      - "80:80"
-      - "443:443"
+      - "8080:80"
+      - "8443:443"
     restart: unless-stopped
     networks:
       - zarela-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/"]
-      interval: 30s
-      timeout: 3s
-      retries: 3
-      start_period: 5s
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 512M
-        reservations:
-          cpus: '0.5'
-          memory: 256M
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
 
 networks:
   zarela-network:
