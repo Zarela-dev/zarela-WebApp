@@ -1,0 +1,84 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║        UPDATE IPFS TO PUBLIC GLOBAL NODES ✅                          ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+🎯 GOAL: Switch from Zarela's private IPFS to free public IPFS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 OPTION 1: Use the Update Script (Easiest)
+
+   ./scripts/update-ipfs-config.sh
+
+   Then choose option 1 (Infura + Cloudflare - Recommended)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 OPTION 2: Manual Update
+
+   Edit your .env file and replace:
+
+   FROM:
+   REACT_APP_IPFS=https://ipfs.zarela.io/
+   REACT_APP_IPFS_GET_LINK=https://get-ipfs.zarela.io/ipfs/
+
+   TO:
+   REACT_APP_IPFS=https://ipfs.infura.io:5001
+   REACT_APP_IPFS_GET_LINK=https://cloudflare-ipfs.com/ipfs/
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 PUBLIC IPFS OPTIONS:
+
+┌─────────────────────────────────────────────────────────────────┐
+│ FOR UPLOADING (REACT_APP_IPFS)                                 │
+├─────────────────────────────────────────────────────────────────┤
+│ ✅ Infura (Recommended):                                        │
+│    https://ipfs.infura.io:5001                                  │
+│    • Free: 5GB storage, 100K requests/month                     │
+│    • Reliable, no API key needed                                │
+│                                                                   │
+│ 🏠 Local Daemon (Full control):                                 │
+│    http://localhost:5001                                        │
+│    • Unlimited, requires: ipfs daemon                           │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│ FOR DOWNLOADING (REACT_APP_IPFS_GET_LINK)                      │
+├─────────────────────────────────────────────────────────────────┤
+│ ✅ Cloudflare (Recommended):                                    │
+│    https://cloudflare-ipfs.com/ipfs/                            │
+│    • Fast global CDN, unlimited downloads                       │
+│                                                                   │
+│ 🌍 IPFS.io Official:                                            │
+│    https://ipfs.io/ipfs/                                        │
+│    • Standard gateway, widely used                              │
+│                                                                   │
+│ 📌 Pinata:                                                       │
+│    https://gateway.pinata.cloud/ipfs/                           │
+│    • Good performance                                           │
+└─────────────────────────────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔄 AFTER UPDATING .env:
+
+   If using Docker:
+   docker compose down
+   docker compose up --build -d
+
+   If running locally:
+   npm start
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ RECOMMENDED CONFIGURATION (Copy-Paste Ready):
+
+   REACT_APP_IPFS=https://ipfs.infura.io:5001
+   REACT_APP_IPFS_GET_LINK=https://cloudflare-ipfs.com/ipfs/
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📖 FOR MORE DETAILS: Read IPFS-SETUP.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

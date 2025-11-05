@@ -28,7 +28,15 @@ export const configureWeb3 = async (dispatch, web3Library) => {
 		}
 
 		// Get current network to validate we're on Mainnet
-		const chainId = await web3Library.eth.getChainId();
+		// In Web3 v1.2.2, we use net.getId() or eth.net.getId()
+		let chainId;
+		try {
+			// Try modern API first
+			chainId = await web3Library.eth.net.getId();
+		} catch (err) {
+			// Fallback for older versions
+			chainId = await web3Library.eth.getChainId();
+		}
 		console.log('Connected to network with chainId:', chainId);
 		
 		if (Number(chainId) !== 1) {
@@ -73,7 +81,21 @@ export const configureFallbackWeb3 = async (dispatch) => {
 		}
 
 		// Get current network to validate we're on Mainnet
-		const chainId = await web3.eth.getChainId();
+		// In Web3 v1.2.2, we use net.getId() or eth.net.getId()
+		let chainId;
+		try {
+			// Try modern API first
+			chainId = await web3.eth.net.getId();
+		} catch (err) {
+			// Fallback for older versions
+			try {
+				chainId = await web3.eth.getChainId();
+			} catch (err2) {
+				// If all else fails, assume Mainnet since we're using Mainnet RPC
+				chainId = 1;
+				console.warn('Could not determine chainId, assuming Mainnet (1)');
+			}
+		}
 		console.log('Fallback Web3 connected to Mainnet with chainId:', chainId);
 
 		// Verify contract exists at address
@@ -107,14 +129,20 @@ export const configureFallbackWeb3 = async (dispatch) => {
 };
 
 export const getGasPrice = (dispatch) => {
-    // Use Etherscan Gas Oracle V2 to avoid CORS issues from ethgasstation
+    // Use Etherscan Gas Oracle API - standard endpoint works better than v2
+    const apiKey = process.env.REACT_APP_ETHEREUM_API_KEY;
+    
+    if (!apiKey) {
+        console.warn('REACT_APP_ETHEREUM_API_KEY not set, skipping gas price fetch');
+        return;
+    }
+    
     axios
-        .get('https://api.etherscan.io/v2/api', {
+        .get('https://api.etherscan.io/api', {
             params: {
                 module: 'gastracker',
                 action: 'gasoracle',
-                chainid: 1, // Ethereum mainnet
-                apikey: process.env.REACT_APP_ETHEREUM_API_KEY,
+                apikey: apiKey,
             },
         })
         .then((res) => {
@@ -122,7 +150,7 @@ export const getGasPrice = (dispatch) => {
             if (result) {
                 // Normalize to the structure the app expects
                 const normalized = {
-                    safeLow: Number(result.SafeGasPrice),
+                    safeLow: Number(result.SafeGasPrice || result.suggestBaseFee),
                     average: Number(result.ProposeGasPrice),
                     fast: Number(result.FastGasPrice),
                 };
@@ -130,10 +158,14 @@ export const getGasPrice = (dispatch) => {
                     type: actionTypes.SET_GAS,
                     payload: normalized,
                 });
+                console.log('Gas prices fetched successfully:', normalized);
+            } else {
+                console.warn('Etherscan API returned no gas price data');
             }
         })
         .catch((error) => {
-            console.log(error);
+            console.warn('Failed to fetch gas prices from Etherscan:', error.message);
+            // Don't break the app if gas price fetch fails
         });
 };
 

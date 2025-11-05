@@ -18,6 +18,10 @@ help: ## Show this help message
 	@echo "=================================="
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(GREEN)%-15s$(NC) %s\n", $$1, $$2}'
 
+dev: ## Start local development server with Node 14
+	@echo "$(BLUE)Starting development server with Node 14...$(NC)"
+	@export PATH="/tmp/node-v14.21.3-darwin-x64/bin:$$PATH" && npm run start
+
 build: ## Build the Docker image
 	@echo "$(BLUE)Building Zarela WebApp image...$(NC)"
 	docker-compose build
