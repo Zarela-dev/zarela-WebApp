@@ -1,0 +1,26 @@
+{
+  "name": "ipfs-proxy",
+  "version": "1.0.0",
+  "description": "Express.js proxy server for IPFS to eliminate CORS issues",
+  "main": "ipfs-proxy.js",
+  "scripts": {
+    "start": "node ipfs-proxy.js",
+    "dev": "nodemon ipfs-proxy.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "http-proxy-middleware": "^2.0.9"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "ipfs",
+    "proxy",
+    "cors",
+    "express"
+  ],
+  "author": "Zarela IPFS Proxy",
+  "license": "MIT"
+}

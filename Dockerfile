@@ -7,13 +7,15 @@
 # ============================================
 FROM node:14-alpine AS builder
 
-# Install system dependencies needed for native modules
-RUN apk add --no-cache \
-    git \
-    python3 \
-    make \
-    g++ \
-    && rm -rf /var/cache/apk/*
+# ---- Fix slow/blocked Alpine mirrors ----
+RUN sed -i 's|dl-cdn.alpinelinux.org|mirrors.ustc.edu.cn|g' /etc/apk/repositories && \
+    apk update && \
+    apk add --no-cache \
+        git \
+        python3 \
+        make \
+        g++ && \
+    rm -rf /var/cache/apk/*
 
 WORKDIR /app
 
@@ -63,7 +65,8 @@ RUN npm run build
 # ============================================
 FROM nginx:1.21-alpine
 
-# Lightweight production image - no extra tools needed
+# Use the same mirror to prevent Alpine DNS issues
+RUN sed -i 's|dl-cdn.alpinelinux.org|mirrors.ustc.edu.cn|g' /etc/apk/repositories && apk update
 
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
