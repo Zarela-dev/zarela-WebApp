@@ -8,7 +8,7 @@
 FROM node:14-alpine AS builder
 
 # ---- Fix slow/blocked Alpine mirrors ----
-RUN sed -i 's|dl-cdn.alpinelinux.org|mirrors.ustc.edu.cn|g' /etc/apk/repositories && \
+RUN sed -i 's|dl-cdn.alpinelinux.org|alpine.global.ssl.fastly.net|g' /etc/apk/repositories && \
     apk update && \
     apk add --no-cache \
         git \

@@ -1,4 +1,52 @@
+version: '3.8'
+
 services:
+  # IPFS Backend Service (runs IPFS inside container)
+  ipfs-backend:
+    image: ipfs/kubo:latest
+    container_name: zarela-ipfs-backend
+    ports:
+      - "6001:5001"  # IPFS API
+      - "6002:8080"  # IPFS Gateway
+    volumes:
+      - ipfs-data:/data/ipfs
+    restart: unless-stopped
+    networks:
+      - zarela-network
+    environment:
+      - IPFS_PROFILE=server
+    entrypoint: ""  # Clear the default entrypoint to run our command directly
+    command: ["sh", "-c", "if [ ! -f /data/ipfs/config ]; then ipfs init && ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '[\"*\"]' && ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '[\"GET\", \"POST\", \"PUT\", \"DELETE\", \"OPTIONS\"]' && ipfs config --json API.HTTPHeaders.Access-Control-Allow-Headers '[\"Content-Type\", \"Authorization\", \"X-Requested-With\"]' && ipfs config Addresses.API '/ip4/0.0.0.0/tcp/5001' && ipfs config Addresses.Gateway '/ip4/0.0.0.0/tcp/8080'; fi; ipfs daemon --enable-pubsub-experiment"]
+
+  # IPFS Express Proxy Service
+  ipfs-proxy:
+    container_name: zarela-ipfs-proxy
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    image: zarela-ipfs-proxy:latest
+    ports:
+      - "5001:5001"  # IPFS API proxy
+      - "8080:8080"  # IPFS Gateway proxy
+    environment:
+      - IPFS_API_HOST=ipfs-backend
+      - IPFS_GATEWAY_HOST=ipfs-backend
+      - IPFS_API_PORT=5001
+      - IPFS_GATEWAY_PORT=8080
+    depends_on:
+      ipfs-backend:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - zarela-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Zarela WebApp Service
   zarela-webapp:
     container_name: zarela-webapp
     build:
@@ -8,8 +56,8 @@ services:
         - REACT_APP_ZARELA_CONTRACT_ADDRESS=${REACT_APP_ZARELA_CONTRACT_ADDRESS}
         - REACT_APP_ETHERSCAN_MAINNET_API_LINK=${REACT_APP_ETHERSCAN_MAINNET_API_LINK}
         - REACT_APP_ETHEREUM_API_KEY=${REACT_APP_ETHEREUM_API_KEY}
-        - REACT_APP_IPFS=${REACT_APP_IPFS}
-        - REACT_APP_IPFS_GET_LINK=${REACT_APP_IPFS_GET_LINK}
+        - REACT_APP_IPFS=${REACT_APP_IPFS:-http://ipfs-proxy:5001}
+        - REACT_APP_IPFS_GET_LINK=${REACT_APP_IPFS_GET_LINK:-http://ipfs-proxy:8080/ipfs/}
         - REACT_APP_INFURA_PROJECT_ID=${REACT_APP_INFURA_PROJECT_ID}
         - REACT_APP_INFURA_PROJECT_SECRET=${REACT_APP_INFURA_PROJECT_SECRET}
         - REACT_APP_ETHERSCAN_LINK=${REACT_APP_ETHERSCAN_LINK:-https://etherscan.io/tx/}
@@ -18,13 +66,22 @@ services:
         - DISABLE_ESLINT_PLUGIN=true
     image: zarela-webapp:latest
     ports:
-      - "8080:80"
-      - "8443:443"
+      - "3000:80"  # Web interface (HTTP)
+      - "9443:443" # Web interface (HTTPS)
+    depends_on:
+      ipfs-proxy:
+        condition: service_healthy
     restart: unless-stopped
     networks:
       - zarela-network
 
+# Network
 networks:
   zarela-network:
     driver: bridge
     name: zarela-network
+
+# Volumes
+volumes:
+  ipfs-data:
+    driver: local

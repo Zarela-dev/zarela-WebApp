@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  ipfs-backend:
+    image: ipfs/kubo:latest
+    container_name: standalone-ipfs-backend
+    ports:
+      - "6001:5001"  # IPFS API
+      - "6002:8080"  # IPFS Gateway
+    volumes:
+      - ipfs-data:/data/ipfs
+    environment:
+      - IPFS_PROFILE=server
+    restart: unless-stopped
+    networks:
+      - ipfs-network
+    command: ["daemon", "--enable-pubsub-experiment"]
+    
+
+  ipfs-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: standalone-ipfs-proxy
+    ports:
+      - "5001:5001"  # IPFS API proxy
+      - "8080:8080"  # IPFS Gateway proxy
+    environment:
+      - IPFS_API_HOST=ipfs-backend
+      - IPFS_GATEWAY_HOST=ipfs-backend
+      - IPFS_API_PORT=5001
+      - IPFS_GATEWAY_PORT=8080
+      - NODE_ENV=production
+    depends_on:
+      - ipfs-backend
+    restart: unless-stopped
+    networks:
+      - ipfs-network
+
+networks:
+  ipfs-network:
+    driver: bridge
+
+volumes:
+  ipfs-data:
+    driver: local
