@@ -10,7 +10,7 @@ services:
       - "6002:8080"  # IPFS Gateway
     volumes:
       - ipfs-data:/data/ipfs
-    restart: unless-stopped
+    restart: always
     networks:
       - zarela-network
     environment:
@@ -34,17 +34,10 @@ services:
       - IPFS_API_PORT=5001
       - IPFS_GATEWAY_PORT=8080
     depends_on:
-      ipfs-backend:
-        condition: service_healthy
-    restart: unless-stopped
+      - ipfs-backend
+    restart: always
     networks:
       - zarela-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
 
   # Zarela WebApp Service
   zarela-webapp:
@@ -69,9 +62,8 @@ services:
       - "3000:80"  # Web interface (HTTP)
       - "9443:443" # Web interface (HTTPS)
     depends_on:
-      ipfs-proxy:
-        condition: service_healthy
-    restart: unless-stopped
+      - ipfs-proxy
+    restart: always
     networks:
       - zarela-network
 

@@ -65,9 +65,6 @@ RUN npm run build
 # ============================================
 FROM nginx:1.21-alpine
 
-# Use the same mirror to prevent Alpine DNS issues
-RUN sed -i 's|dl-cdn.alpinelinux.org|mirrors.ustc.edu.cn|g' /etc/apk/repositories && apk update
-
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
